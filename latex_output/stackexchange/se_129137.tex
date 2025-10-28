@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\title{Use of \textbackslash{}&quot;without loss of generality\textbackslash{}&quot;}
+\author{Stack Exchange}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Tags:} terminology, proof-writing
+
+\section*{Question}
+Why do we use "without loss of generality" when writing proofs? Is it necessary or convention? What "synonym" can be used?
+
+\section*{Answer}
+I think this is great question, as the mathematical use of "without loss of generality" often varies from its literal meaning. The literal meaning is when you rephrase a general statement $P(x)$ is true for all $x \in S$, using another set (which is easier to work with) $P(z)$ is true for all $z \in T$, where $P$ is some property of elements in $S$ and $T$, and it can be shown (or is known) that $S=T$. For example: We want to show that $P(x)$ is true for all $x \in \mathbb{Z}$. Without loss of generality, we can assume that $x=z+1$ for some $z \in \mathbb{Z}$. [In this case, $S=\mathbb{Z}$ and $T=\{z+1:z \in \mathbb{Z}\}$.] We want to show that $P(x)$ is true for all $x \in \mathbb{Z}$. Without loss of generality, we can assume that $x=5q+r$ where $q,r \in \mathbb{Z}$ and $0 \leq r < q$. [In this case, $S=\mathbb{Z}$ and $T=\{5q+r:q \in \mathbb{Z} \text{ and } r \in \mathbb{Z} \text{ and } 0 \leq r < q\}$.] In the above instances, indeed no generality has been lost, since in each case we can prove $S=T$ (or, more likely, it would be assumed that the reader can deduce that $S=T$). I.e., proving that $P(z)$ holds for $z \in T$ is the same as proving that $P(x)$ holds for $x \in S$. The above cases are examples of clear-cut legitimate usage of "without loss of generality", but there is a widespread second use. Wikipedia writes: The term is used before an assumption in a proof which narrows the premise to some special case; it is implied that the proof for that case can be easily applied to all others (or that all other cases are equivalent). Thus, given a proof of the conclusion in the special case, it is trivial to adapt it to prove the conclusion in all other cases. [emphasis mine.] So, paradoxically, "without loss of generality" is often used to highlight when the author has deliberately lost generality in order to simplify the proof. Thus, we are rephrasing a general statement: $P(x)$ is true for all $x \in S$, as $P(z)$ is true for all $z \in T$, and if $x \in S$, then there exists $z \in T$ for which $P(x)$ is true if $P(z)$ is true. For example: Let $S$ be a set of groups of order $n$. We want to show $P(G)$ is true for all $G \in S$. Without loss of generality, assume the underlying set of $G$ is $\{0,1,\ldots n-1\}$ for some $n \geq 1$. [Here, $T$ is a set of groups with underlying set $\{0,1,\ldots n-1\}$ that are isomorphic to groups in $S$, and the reader is assumed to be able to deduce that property $P$ is preserved by isomorphism.] My personal preference is to replace the second case with: "It is sufficient to prove $P(z)$ for $z \in T$, since [[for some reason]] it follows that $P(x)$ is true for all $x \in S$."
+
+\vspace{1em}
+\noindent\textit{Score: 82}
+\end{document}

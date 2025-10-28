@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\title{Could I be using proof by contradiction too much?}
+\author{Stack Exchange}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Tags:} proof-writing
+
+\section*{Question}
+Lately, I've developed a habit of proving almost everything by contradiction. Even for theorems for which direct proofs are the clear choice, I'd just start by writing "Assume not" then prove it directly, thereby reaching a "contradiction." Is this a bad habit? I don't know why, but there's something incredibly satisfying about proof by contradiction.
+
+\section*{Answer}
+One general reason to avoid proof by contradiction is the following. When you prove something by contradiction, all you learn is that the statement you wanted to prove is true. When you prove something directly, you learn every intermediate implication you had to prove along the way. More explicitly, if you want to prove that $p \Rightarrow q$ by contradiction, you assume $p$ and $\neg q$ and derive a contradiction. None of the intermediate implications along the way can be reused because your premises were contradictory. If you want to prove that $p \Rightarrow q$ directly, say by proving that $p \Rightarrow p_1$ and $p_1 \Rightarrow p_2$ and so on until $p_n \Rightarrow q$, then you've also proven that $p_i \Rightarrow p_{i+1}$ for all of the relevant $i$. Many of these statements might be more useful than the original statement you were trying to prove. Another general reason to avoid a proof by contradiction is that it is often not explicit. For example, if you want to prove that something exists by contradiction, you can show that the assumption that it doesn't exist leads to a contradiction. But this doesn't necessarily give you a method for constructing the actual thing, which you might learn more from trying to do. A third reason is that frequently, or so it seems to me, a proof by contradiction is really a proof by contrapositive, where you assume $\neg q$ and derive $\neg p$. This feels like a proof by contradiction except that you never make use of the hypothesis $p$ except at the very end, and pretending that these are proofs by contradiction will make you blind to the fact that any intermediate implications you prove in a proof by contrapositive are still valid.
+
+\vspace{1em}
+\noindent\textit{Score: 66}
+\end{document}

@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\title{Strategies to denest nested radicals $\sqrt{a+b\sqrt{c}}$}
+\author{Stack Exchange}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Tags:} algebra-precalculus, proof-writing, radicals, nested-radicals
+
+\section*{Question}
+I have recently read some passage about nested radicals, I'm deeply impressed by them. Simple nested radicals $\sqrt{2+\sqrt{2}}$,$\sqrt{3-2\sqrt{2}}$ which the later can be denested into $1-\sqrt{2}$. This may be able to see through easily, but how can we denest such a complicated one $\sqrt{61-24\sqrt{5}}(=4-3\sqrt{5})$? And Is there any ways to judge if a radical in $\sqrt{a+b\sqrt{c}}$ form can be denested? Mr. Srinivasa Ramanujan even suggested some CRAZY nested radicals such as: $$\sqrt[3]{\sqrt{2}-1},\sqrt{\sqrt[3]{28}-\sqrt[3]{27}},\sqrt{\sqrt[3]{5}-\sqrt[3]{4}}, \sqrt[3]{\cos{\frac{2\pi}{7}}}+\sqrt[3]{\cos{\frac{4\pi}{7}}}+\sqrt[3]{\cos{\frac{8\pi}{7}}},\sqrt[6]{7\sqrt[3]{20}-19},...$$ Amazing, these all can be denested. I believe there must be some strategies to denest them, but I don't know how. I'm a just a beginner, can anyone give me some ideas? Thank you.
+
+\section*{Answer}
+There do exist general denesting algorithms employing Galois theory, but for the simple case of quadratic algebraic numbers we can employ a simple rule that I discovered as a teenager. $$\bbox[1px,border:1px solid #0a0]{\bbox[8px,border:1px solid #0a0]{\rm {\bf Simple\ Denesting\ Rule}\!:\ \ \color{blue}{subtract\ out}\ \sqrt{norm},\, \ then\ \ \color{brown}{divide\ out}\ \sqrt{trace}\ }}\qquad\ \ $$ Recall $\rm\: w = a + b\sqrt{n}\: $ has norm $\rm =\: w\:\cdot\: w' = (a + b\sqrt{n})\ \cdot\: (a - b\sqrt{n})\ =\: a^2 - n\, b^2 $ and, $ $ furthermore, $\rm\ w^{\phantom{|^|}}$ has $ $ trace $\rm\: = w+w' = (a + b\sqrt{n}) + (a - b\sqrt{n})\: =\: 2a$ Here $\:61-24\sqrt{5}\:$ has norm $= 29^2.\:$ $\rm \color{blue}{Subtracting\ out}\ \sqrt{norm}\ = 29\ $ yields $\ \color{#0a0}{32\:\!-2\:\!4\sqrt{5}}\:$ and $\rm\color{#0a0}{this}$ has $\rm\ \sqrt{trace}\: =\: 8,\ \ thus, \ \ \color{brown}{dividing \ it \ out}\, $ of $\rm\color{#0a0}{this}$ yields the sqrt: $\,\pm( 4\,-\,3\sqrt{5}).$ See here for a simple proof of the rule, and see here for many examples of its use.
+
+\vspace{1em}
+\noindent\textit{Score: 75}
+\end{document}

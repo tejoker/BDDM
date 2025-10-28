@@ -1,0 +1,356 @@
+🎯 RÉFÉRENCE RAPIDE DES COMMANDES
+==================================
+
+INSTALLATION
+------------
+# Linux/Mac
+./install.sh
+
+# Windows
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+
+
+ACTIVATION ENVIRONNEMENT
+-------------------------
+# Linux/Mac
+source venv/bin/activate
+
+# Windows
+venv\Scripts\activate
+
+
+TESTS & VÉRIFICATION
+--------------------
+# Test complet de tous les composants
+python test.py
+
+# Test d'un scraper spécifique
+python scrapers/stackexchange_scraper.py
+python scrapers/proofwiki_scraper.py
+
+
+SCRAPING
+--------
+# Test rapide (~2k items, 5 min)
+python main.py
+
+# Échantillon (~5k items, 10 min)
+python production_scraping.py sample
+
+# Production complète (600k+ items, heures)
+python production_scraping.py production
+
+# Personnalisé (modifier dans le fichier)
+python production_scraping.py custom
+
+
+ANALYSE
+-------
+# Statistiques complètes du dataset
+python analyze.py
+
+# Voir structure des fichiers
+ls -lh math_dataset/raw/
+ls -lh math_dataset/processed/
+
+
+MANIPULATION PYTHON
+-------------------
+# Charger et explorer données
+python3 << 'PYTHON'
+import json
+
+# Charger un batch
+with open('math_dataset/raw/stackexchange/batch_*.json') as f:
+    data = json.load(f)
+    print(f"{len(data)} items")
+    print(data[0])  # Premier item
+PYTHON
+
+# Compter items par source
+python3 << 'PYTHON'
+import json
+from pathlib import Path
+from collections import Counter
+
+items = []
+for f in Path('math_dataset/raw').rglob('*.json'):
+    items.extend(json.load(open(f)))
+
+sources = Counter(item['source'] for item in items)
+print(f"Total: {len(items)}")
+for source, count in sources.items():
+    print(f"  {source}: {count}")
+PYTHON
+
+
+NETTOYAGE
+---------
+# Supprimer dataset pour recommencer
+rm -rf math_dataset/
+
+# Supprimer logs
+rm scraping.log
+
+# Supprimer cache Python
+find . -type d -name __pycache__ -exec rm -rf {} +
+
+
+EXPORT PERSONNALISÉ
+-------------------
+# Fusionner tous les batches en un fichier
+python3 << 'PYTHON'
+from utils.storage import DataStorage
+
+storage = DataStorage('./math_dataset')
+storage.merge_to_single_file('all_data.json')
+storage.export_by_format()
+PYTHON
+
+# Filtrer par langue
+python3 << 'PYTHON'
+import json
+from pathlib import Path
+
+# Charger tout
+items = []
+for f in Path('math_dataset/raw').rglob('*.json'):
+    items.extend(json.load(open(f)))
+
+# Filtrer français uniquement
+fr_items = [item for item in items if item.get('language') == 'fr']
+
+# Sauvegarder
+with open('dataset_fr_only.json', 'w', encoding='utf-8') as f:
+    json.dump(fr_items, f, indent=2, ensure_ascii=False)
+
+print(f"Items français: {len(fr_items)}/{len(items)}")
+PYTHON
+
+# Filtrer par tag
+python3 << 'PYTHON'
+import json
+from pathlib import Path
+
+items = []
+for f in Path('math_dataset/raw').rglob('*.json'):
+    items.extend(json.load(open(f)))
+
+# Seulement items avec tag "induction"
+induction_items = [
+    item for item in items 
+    if 'induction' in item.get('tags', [])
+]
+
+print(f"Items avec induction: {len(induction_items)}")
+PYTHON
+
+
+MONITORING SCRAPING
+-------------------
+# Suivre logs en temps réel
+tail -f scraping.log
+
+# Voir statistiques pendant scraping
+watch -n 5 'python3 -c "
+from utils.storage import DataStorage
+s = DataStorage(\"./math_dataset\")
+print(s.get_stats())
+"'
+
+# Compter items collectés
+find math_dataset/raw -name "*.json" -exec cat {} \; | grep -o '"id"' | wc -l
+
+
+DÉPANNAGE
+---------
+# Vérifier version Python
+python3 --version
+
+# Vérifier packages installés
+pip list | grep -E "aiohttp|beautifulsoup|lxml"
+
+# Tester connexion Stack Exchange API
+curl "https://api.stackexchange.com/2.3/questions?site=math.stackexchange.com&pagesize=1"
+
+# Tester accès ProofWiki
+curl -I https://proofwiki.org
+
+
+OPTIMISATION
+------------
+# Augmenter limite Stack Exchange avec clé API
+# Éditer scrapers/stackexchange_scraper.py:
+# scraper = StackExchangeScraper(api_key="VOTRE_CLE")
+
+# Ajuster filtres qualité
+# Éditer utils/cleaner.py:
+# cleaner = DataCleaner(min_length=100, max_length=3000)
+
+# Scraper moins/plus par source
+# Dans main.py ou production_scraping.py:
+# max_per_source=10000  # ou None pour tout
+
+
+PRÉPARATION POUR LEAN
+---------------------
+# Après scraping, préparer données pour fine-tuning
+
+# 1. Analyser structures de preuve
+python3 << 'PYTHON'
+import json
+from pathlib import Path
+from collections import Counter
+
+items = []
+for f in Path('math_dataset/raw').rglob('*.json'):
+    items.extend(json.load(open(f)))
+
+structures = Counter()
+for item in items:
+    struct = item.get('proof_structure', {})
+    ptype = struct.get('type', 'unknown')
+    structures[ptype] += 1
+
+print("Structures de preuve:")
+for ptype, count in structures.most_common():
+    print(f"  {ptype}: {count}")
+PYTHON
+
+# 2. Extraire patterns pour templates Lean
+# TODO: Parser formules mathématiques
+# TODO: Identifier correspondances Lean
+# TODO: Créer paires (texte, code Lean)
+
+
+WORKFLOW COMPLET
+----------------
+# 1. Installation
+./install.sh
+
+# 2. Test
+python test.py
+
+# 3. Scraping test
+python main.py
+
+# 4. Vérification
+python analyze.py
+
+# 5. Production
+python production_scraping.py production
+
+# 6. Export final
+python3 -c "
+from utils.storage import DataStorage
+s = DataStorage('./math_dataset')
+s.export_by_format()
+"
+
+# 7. Prêt pour fine-tuning !
+# Fichiers: math_dataset/processed/{train,validation,test}.jsonl
+
+
+COMMANDES GIT
+-------------
+# Initialiser repo
+git init
+git add .
+git commit -m "Initial commit: Math scraper"
+
+# Pousser sur GitHub
+git remote add origin YOUR_REPO_URL
+git push -u origin main
+
+# .gitignore déjà configuré pour ignorer:
+# - math_dataset/
+# - venv/
+# - *.log
+# - __pycache__/
+
+
+ASTUCES
+-------
+# Lancer en arrière-plan (Linux/Mac)
+nohup python production_scraping.py production > output.log 2>&1 &
+
+# Vérifier processus
+ps aux | grep python
+
+# Arrêter proprement
+pkill -SIGINT python  # ou Ctrl+C dans terminal
+
+# Reprendre après interruption
+python production_scraping.py production
+# (les doublons sont automatiquement évités)
+
+
+MÉTRIQUES QUALITÉ
+-----------------
+# Vérifier pourcentage avec formules math
+python3 << 'PYTHON'
+import json
+from pathlib import Path
+
+items = []
+for f in Path('math_dataset/raw').rglob('*.json'):
+    items.extend(json.load(open(f)))
+
+with_math = sum(1 for item in items if '$' in str(item))
+print(f"Avec formules: {with_math}/{len(items)} ({100*with_math/len(items):.1f}%)")
+PYTHON
+
+# Vérifier items complets
+python3 << 'PYTHON'
+import json
+from pathlib import Path
+
+items = []
+for f in Path('math_dataset/raw').rglob('*.json'):
+    items.extend(json.load(open(f)))
+
+complete = sum(1 for item in items if 
+    ('question' in item and 'answer' in item) or
+    ('theorem' in item and 'proof' in item))
+    
+print(f"Items complets: {complete}/{len(items)} ({100*complete/len(items):.1f}%)")
+PYTHON
+
+
+QUESTIONS FRÉQUENTES
+--------------------
+Q: Combien de temps pour scraper tout ?
+A: 5-20 heures selon connexion. Mode échantillon = 10 min.
+
+Q: Puis-je interrompre ?
+A: Oui ! Ctrl+C sauvegarde ce qui est collecté.
+
+Q: Ça prend combien d'espace ?
+A: ~3 GB pour production complète.
+
+Q: Comment éviter les doublons ?
+A: Automatique via index.json.
+
+Q: Puis-je ajouter d'autres sources ?
+A: Oui ! Voir ARCHITECTURE.md section "Extensibilité".
+
+Q: Rate limit dépassé ?
+A: Attendre ou obtenir clé API Stack Exchange.
+
+
+RESSOURCES
+----------
+Documentation:
+  - START_HERE.md       : Guide démarrage
+  - README.md           : Documentation complète  
+  - QUICKSTART.md       : 5 minutes chrono
+  - ARCHITECTURE.md     : Détails techniques
+  - PROJECT_STRUCTURE.txt : Organisation projet
+  - COMMANDS_REFERENCE.txt : Ce fichier
+
+Liens utiles:
+  - Stack Exchange API: https://api.stackexchange.com/docs
+  - Lean docs: https://leanprover.github.io
+  - DeepSeek-Prover: https://github.com/deepseek-ai/DeepSeek-Prover

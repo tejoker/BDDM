@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\title{Can every proof by contradiction also be shown without contradiction?}
+\author{Stack Exchange}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Tags:} logic, proof-writing, propositional-calculus, proof-theory
+
+\section*{Question}
+Are there some proofs that can only be shown by contradiction or can everything that can be shown by contradiction also be shown without contradiction? What are the advantages/disadvantages of proving by contradiction? As an aside, how is proving by contradiction viewed in general by 'advanced' mathematicians. Is it a bit of an 'easy way out' when it comes to trying to show something or is it perfectly fine? I ask because one of our tutors said something to that effect and said that he isn't fond of proof by contradiction.
+
+\section*{Answer}
+To determine what can and cannot be proved by contradiction, we have to formalize a notion of proof. As a piece of notation, we let $\bot$ represent an identically false proposition. Then $\lnot A$, the negation of $A$, is equivalent to $A \to \bot$, and we take the latter to be the definition of the former in terms of $\bot$. There are two key logical principles that express different parts of what we call "proof by contradiction": The principle of explosion: for any statement $A$, we can take "$\bot$ implies $A$" as an axiom. This is also called ex falso quodlibet. The law of the excluded middle: for any statement $A$, we can take "$A$ or $\lnot A$" as an axiom. In proof theory, there are three well known systems: Minimal logic has neither of the two principles above, but it has basic proof rules for manipulating logical connectives (other than negation) and quantifiers. This system corresponds most closely to "direct proof", because it does not let us leverage a negation for any purpose. Intuitionistic logic includes minimal logic and the principle of explosion Classical logic includes intuitionistic logic and the law of the excluded middle It is known that there are statements that are provable in intuitionistic logic but not in minimal logic, and there are statements that are provable in classical logic that are not provable in intuitionistic logic. In this sense, the principle of explosion allows us to prove things that would not be provable without it, and the law of the excluded middle allows us to prove things we could not prove even with the principle of explosion. So there are statements that are provable by contradiction that are not provable directly. The scheme "If $A$ implies a contradiction, then $\lnot A$ must hold" is true even in intuitionistic logic, because $\lnot A$ is just an abbreviation for $A \to \bot$, and so that scheme just says "if $A \to \bot$ then $A \to \bot$". But in intuitionistic logic, if we prove $\lnot A \to \bot$, this only shows that $\lnot \lnot A$ holds. The extra strength in classical logic is that the law of the excluded middle shows that $\lnot \lnot A$ implies $A$, which means that in classical logic if we can prove $\lnot A$ implies a contradiction then we know that $A$ holds. In other words: even in intuitionistic logic, if a statement implies a contradiction then the negation of the statement is true, but in classical logic we also have that if the negation of a statement implies a contradiction then the original statement is true, and the latter is not provable in intuitionistic logic, and in particular is not provable directly.
+
+\vspace{1em}
+\noindent\textit{Score: 388}
+\end{document}

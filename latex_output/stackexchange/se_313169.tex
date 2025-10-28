@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\title{How do I prove that a function is well defined?}
+\author{Stack Exchange}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Tags:} functions, logic, proof-writing
+
+\section*{Question}
+How do you in general prove that a function is well-defined? $$f:X\to Y:x\mapsto f(x)$$ I learned that I need to prove that every point has exactly one image. Does that mean that I need to prove the following two things: Every element in the domain maps to an element in the codomain: $$x\in X \implies f(x)\in Y$$ The same element in the domain maps to the same element in the codomain: $$x=y\implies f(x)=f(y)$$ At the moment I'm trying to prove this function is well-defined: $$f:(\Bbb Z/12\mathbb Z)^∗→(\Bbb Z/4\Bbb Z)^∗:[x]_{12}↦[x]_4 ,$$ but I'm more interested in the general procedure.
+
+\section*{Answer}
+When we write $f\colon X\to Y$ we say three things: $f\subseteq X\times Y$. The domain of $f$ is $X$. Whenever $\langle x,y_1\rangle,\langle x,y_2\rangle\in f$ then $y_1=y_2$. In this case whenever $\langle x,y\rangle\in f$ we denote $y$ by $f(x)$. So to say that something is well-defined is to say that all three things are true. If we know some of these we only need to verify the rest, for example if we know that $f$ has the third property (so it is a function) we need to verify its domain is $X$ and the range is a subset of $Y$. If we know those things we need to verify the third condition. But, and that's important, if we do not know that $f$ satisfies the third condition we cannot write $f(x)$ because that term assumes that there is a unique definition for that element of $Y$.
+
+\vspace{1em}
+\noindent\textit{Score: 82}
+\end{document}

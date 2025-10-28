@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\title{Proof for triangle inequality for vectors}
+\author{Stack Exchange}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{Tags:} inequality, vector-spaces, proof-writing, inner-products
+
+\section*{Question}
+Generally,the length of the sum of two vectors is not equal to the sum of their lengths. To see this consider the vectors $u$ and $v$ as shown below. By considering $u$ and $v$ as two sides of a triangle, we can see that the lengths of the third side is $\| u + v \|$ and we have $\| u + v \| \leq \|u\| + \|v\|$. Under what circumstance equality occurs and how can one prove that?
+
+\section*{Answer}
+I have noticed that the answer has been written down in the comments. Just to have an answer I am writing this one down. Consider $\|u+v\|^2=(u+v) \cdot (u+v)$ where $u \cdot v$ represents the standard inner product/scalar product.Therefore $$\|u+v\|^2=\|u\|^2+2 (u \cdot v) + \|v\|^2 .$$ By the Cauchy-Schwarz Inequality we have $$u \cdot v \leq \|u\| \cdot \|v\|.$$ So, $$\|u+v \|^2= \|u\|^2+2(u \cdot v)+ \|v \|^2 \leq \|u\|^2+ 2 \|u\| \cdot \|v\| + \|v\|^2=(\|u\|+ \|v\|)^2 ,$$ i.e., $$\|u+v\|^2 \leq (\|u\|+ \|v\|)^2 \implies \|u+v\| \leq \|u \|+ \|v\| .$$ The Cauchy-Schwarz Inequality holds for any inner Product, so the triangle inequality holds irrespective of how you define the norm of the vector to be, i.e., the way you define scalar product in that vector space. In this case, the equality holds when vectors are parallel i.e, $u=kv$, $k \in \mathbb{R}^+$ because $u \cdot v= \|u \| \cdot \|v\| \cos \theta$ when $\cos \theta=1$, the equality of the Cauchy-Schwarz inequality holds.
+
+\vspace{1em}
+\noindent\textit{Score: 44}
+\end{document}

@@ -1,0 +1,24 @@
+# Math Scraper Dependencies
+
+# HTTP and Web Scraping
+aiohttp==3.9.1
+beautifulsoup4==4.12.2
+lxml>=5.0.0
+html5lib==1.1
+
+# Data Processing
+pandas>=2.2.0
+numpy>=1.26.0
+
+# Utilities
+python-dateutil==2.8.2
+tqdm==4.66.1
+
+# Testing (optional)
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# Development (optional)
+black==23.11.0
+flake8==6.1.0
+mypy==1.7.1
