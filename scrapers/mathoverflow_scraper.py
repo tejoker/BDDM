@@ -6,7 +6,7 @@ Research-level mathematics Q&A (uses Stack Exchange API)
 import aiohttp
 import asyncio
 import logging
-from typing import List, Dict
+from typing import List, Dict, Optional
 import html
 
 logger = logging.getLogger(__name__)
@@ -18,9 +18,10 @@ class MathOverflowScraper:
     BASE_URL = "https://api.stackexchange.com/2.3"
     SITE = "mathoverflow.net"
     
-    def __init__(self):
+    def __init__(self, api_key: Optional[str] = None):
         self.session = None
         self.current_page = 1  # Track pagination state
+        self.api_key = api_key  # Optional API key for higher limits
     
     async def scrape(self, max_items: int = None, start_page: int = None) -> List[Dict]:
         """
@@ -76,10 +77,18 @@ class MathOverflowScraper:
             'filter': 'withbody',  # Include question body
         }
         
+        if self.api_key:
+            params['key'] = self.api_key
+        
         try:
             async with self.session.get(url, params=params) as response:
                 if response.status != 200:
-                    logger.warning(f"MathOverflow API returned {response.status}")
+                    error_text = await response.text()
+                    logger.warning(f"MathOverflow API returned {response.status}: {error_text}")
+                    print(f"MathOverflow API returned {response.status}")
+                    print(f"URL: {url}")
+                    print(f"Params: {params}")
+                    print(f"Response: {error_text[:200]}")
                     return []
                 
                 data = await response.json()
@@ -128,6 +137,9 @@ class MathOverflowScraper:
             'site': self.SITE,
             'filter': 'withbody'  # Include body
         }
+        
+        if self.api_key:
+            params['key'] = self.api_key
         
         try:
             async with self.session.get(url, params=params) as response:

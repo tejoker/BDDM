@@ -9,6 +9,10 @@ env/
 ENV/
 math/
 
+# Environment variables (API keys)
+.env
+.env.local
+
 # Data and outputs
 samples_en/
 samples_fr/

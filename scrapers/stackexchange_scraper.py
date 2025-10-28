@@ -109,7 +109,12 @@ class StackExchangeScraper:
                 ]
                 return filtered
             else:
-                logger.warning(f"Erreur HTTP {response.status}")
+                error_text = await response.text()
+                logger.warning(f"Erreur HTTP {response.status}: {error_text}")
+                print(f"Erreur HTTP {response.status}")
+                print(f"URL: {url}")
+                print(f"Params: {params}")
+                print(f"Response: {error_text[:200]}")
                 return []
     
     async def _process_question(self, session: aiohttp.ClientSession, question: Dict) -> Optional[Dict]:

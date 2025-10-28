@@ -5,6 +5,8 @@ Simple script to collect math exercise samples from English sources
 
 import asyncio
 import json
+import os
+from pathlib import Path
 from scrapers.stackexchange_scraper import StackExchangeScraper
 from scrapers.proofwiki_scraper import ProofWikiScraper
 from scrapers.arxiv_full_scraper import ArxivFullScraper
@@ -12,6 +14,20 @@ from scrapers.wikipedia_scraper import WikipediaMathScraper
 from scrapers.nlab_scraper import NLabScraper
 from scrapers.mathoverflow_scraper import MathOverflowScraper
 from utils.storage import DataStorage
+
+
+def load_api_key():
+    """Load Stack Exchange API key from .env file"""
+    env_file = Path(__file__).parent / '.env'
+    if env_file.exists():
+        with open(env_file) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    if key.strip() == 'STACKEXCHANGE_API_KEY':
+                        return value.strip()
+    return os.environ.get('STACKEXCHANGE_API_KEY')
 
 
 async def collect_samples(se_items=10, pw_items=10, wiki_items=10, 
@@ -31,6 +47,14 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
     """
     storage = DataStorage('samples_en')
     
+    # Load API key
+    api_key = load_api_key()
+    if api_key:
+        print("✅ Using Stack Exchange API key (10,000 requests/day)")
+    else:
+        print("⚠️  No API key found - using anonymous mode (300 requests/day)")
+        print("   Create .env file with STACKEXCHANGE_API_KEY to get higher limits")
+    
     print("="*70)
     print("COLLECTING ENGLISH MATH EXERCISES & PROOFS")
     print("🔄 Using ROUND-ROBIN strategy to maximize API usage")
@@ -42,7 +66,7 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
         sources.append({
             'name': 'Stack Exchange',
             'emoji': '📚',
-            'scraper': StackExchangeScraper(),
+            'scraper': StackExchangeScraper(api_key=api_key),
             'target': se_items,
             'collected': [],
             'batch_size': 80,  # Use SE rate limit efficiently
@@ -53,7 +77,7 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
         sources.append({
             'name': 'MathOverflow',
             'emoji': '🎓',
-            'scraper': MathOverflowScraper(),
+            'scraper': MathOverflowScraper(api_key=api_key),
             'target': mo_items,
             'collected': [],
             'batch_size': 80,  # Same API as SE
