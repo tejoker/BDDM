@@ -71,8 +71,8 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': StackExchangeScraper(api_key=api_key),
             'target': se_items,
             'collected': [],
-            'batch_size_base': 80,  # Base batch size
-            'batch_size_max': 200,  # Maximum for large collections
+            'batch_size_base': 200,  # Maximum performance: 2.5x boost
+            'batch_size_max': 300,  # Peak batch size
             'speed_tier': 'fast',
             'page': 1
         })
@@ -84,8 +84,8 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': MathOverflowScraper(api_key=api_key),
             'target': mo_items,
             'collected': [],
-            'batch_size_base': 80,  # Base batch size
-            'batch_size_max': 200,  # Maximum for large collections
+            'batch_size_base': 200,  # Maximum performance: 2.5x boost
+            'batch_size_max': 300,  # Peak batch size
             'speed_tier': 'fast',
             'page': 1
         })
@@ -97,8 +97,8 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': ProofWikiScraper(),
             'target': pw_items,
             'collected': [],
-            'batch_size_base': 50,  # Base batch size
-            'batch_size_max': 100,  # Maximum for large collections
+            'batch_size_base': 150,  # Maximum performance: 3x boost
+            'batch_size_max': 200,  # Peak batch size
             'speed_tier': 'medium',
             'page': 1
         })
@@ -110,8 +110,8 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': WikipediaMathScraper(use_category_graph=True),  # 🌟 CATEGORY MODE: 10,000+ articles!
             'target': wiki_items,
             'collected': [],
-            'batch_size_base': 100,  # Base batch size
-            'batch_size_max': 200,  # Maximum for large collections
+            'batch_size_base': 250,  # Maximum performance: 2.5x boost
+            'batch_size_max': 400,  # Peak batch size
             'speed_tier': 'fast',
             'page': 1
         })
@@ -123,8 +123,8 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': NLabScraper(),
             'target': nlab_items,
             'collected': [],
-            'batch_size_base': 30,  # Base batch size
-            'batch_size_max': 75,  # Maximum for large collections (2.5x boost!)
+            'batch_size_base': 75,  # Maximum performance: 2.5x boost
+            'batch_size_max': 150,  # Peak batch size (no more bottleneck!)
             'speed_tier': 'slow',
             'page': 1
         })
@@ -136,8 +136,8 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': ArxivFullScraper(),
             'target': arxiv_full_items,
             'collected': [],
-            'batch_size_base': 10,  # Base batch size
-            'batch_size_max': 20,  # Maximum (careful with downloads)
+            'batch_size_base': 25,  # Maximum performance: 2.5x boost
+            'batch_size_max': 40,  # Peak batch size (careful with bandwidth)
             'speed_tier': 'slow',
             'page': 1
         })
@@ -149,8 +149,8 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': ProjectEulerScraper(),
             'target': euler_items,
             'collected': [],
-            'batch_size_base': 50,  # Base batch size
-            'batch_size_max': 150,  # Maximum (3x boost, no anti-scraping!)
+            'batch_size_base': 150,  # Maximum performance: 3x boost
+            'batch_size_max': 250,  # Peak batch size (no limits!)
             'speed_tier': 'fast',
             'page': 1
         })
