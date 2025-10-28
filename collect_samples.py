@@ -17,7 +17,8 @@ from utils.storage import DataStorage
 async def collect_samples(se_items=10, pw_items=10, wiki_items=10, 
                          nlab_items=10, mo_items=10, arxiv_full_items=0):
     """
-    Collect sample exercises and proofs from English sources
+    Collect sample exercises and proofs from English sources using round-robin strategy
+    to maximize API rate limit usage.
     
     Args:
         se_items: Number of Stack Exchange Q&A to collect
@@ -32,64 +33,124 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
     
     print("="*70)
     print("COLLECTING ENGLISH MATH EXERCISES & PROOFS")
+    print("🔄 Using ROUND-ROBIN strategy to maximize API usage")
     print("="*70)
     
-    # Stack Exchange - Questions with accepted answers
+    # Initialize scrapers and target counts
+    sources = []
     if se_items > 0:
-        print(f"\n📚 Stack Exchange: Collecting {se_items} Q&A...")
-        se_scraper = StackExchangeScraper()
-        se_data = await se_scraper.scrape(max_items=se_items)
-        print(f"   ✓ Collected {len(se_data)} questions with answers")
-    else:
-        se_data = []
+        sources.append({
+            'name': 'Stack Exchange',
+            'emoji': '📚',
+            'scraper': StackExchangeScraper(),
+            'target': se_items,
+            'collected': [],
+            'batch_size': 80,  # Use SE rate limit efficiently
+            'page': 1
+        })
     
-    # ProofWiki - Theorems with proofs
-    if pw_items > 0:
-        print(f"\n📐 ProofWiki: Collecting {pw_items} theorems...")
-        pw_scraper = ProofWikiScraper()
-        pw_data = await pw_scraper.scrape(max_items=pw_items)
-        print(f"   ✓ Collected {len(pw_data)} theorems with proofs")
-    else:
-        pw_data = []
-    
-    # Wikipedia - Math encyclopedia
-    if wiki_items > 0:
-        print(f"\n📖 Wikipedia: Collecting {wiki_items} articles...")
-        wiki_scraper = WikipediaMathScraper()
-        wiki_data = await wiki_scraper.scrape(max_items=wiki_items)
-        print(f"   ✓ Collected {len(wiki_data)} math articles")
-    else:
-        wiki_data = []
-    
-    # nLab - Category theory and higher math
-    if nlab_items > 0:
-        print(f"\n🔬 nLab: Collecting {nlab_items} articles...")
-        nlab_scraper = NLabScraper()
-        nlab_data = await nlab_scraper.scrape(max_items=nlab_items)
-        print(f"   ✓ Collected {len(nlab_data)} nLab articles")
-    else:
-        nlab_data = []
-    
-    # MathOverflow - Research-level Q&A
     if mo_items > 0:
-        print(f"\n🎓 MathOverflow: Collecting {mo_items} Q&A...")
-        mo_scraper = MathOverflowScraper()
-        mo_data = await mo_scraper.scrape(max_items=mo_items)
-        print(f"   ✓ Collected {len(mo_data)} research-level Q&A")
-    else:
-        mo_data = []
+        sources.append({
+            'name': 'MathOverflow',
+            'emoji': '🎓',
+            'scraper': MathOverflowScraper(),
+            'target': mo_items,
+            'collected': [],
+            'batch_size': 80,  # Same API as SE
+            'page': 1
+        })
     
-    # ArXiv Full - ACTUAL theorem-proof pairs from LaTeX sources
+    if pw_items > 0:
+        sources.append({
+            'name': 'ProofWiki',
+            'emoji': '📐',
+            'scraper': ProofWikiScraper(),
+            'target': pw_items,
+            'collected': [],
+            'batch_size': 50,  # Moderate batch for ProofWiki
+            'page': 1
+        })
+    
+    if wiki_items > 0:
+        sources.append({
+            'name': 'Wikipedia',
+            'emoji': '📖',
+            'scraper': WikipediaMathScraper(),
+            'target': wiki_items,
+            'collected': [],
+            'batch_size': 22,  # Limited by hardcoded topics
+            'page': 1
+        })
+    
+    if nlab_items > 0:
+        sources.append({
+            'name': 'nLab',
+            'emoji': '🔬',
+            'scraper': NLabScraper(),
+            'target': nlab_items,
+            'collected': [],
+            'batch_size': 30,  # Moderate batch for nLab
+            'page': 1
+        })
+    
     if arxiv_full_items > 0:
-        print(f"\n🔬 ArXiv FULL: Downloading LaTeX sources from {arxiv_full_items} papers...")
-        print(f"   ⚠️  WARNING: This downloads tar.gz files (~{arxiv_full_items * 2}MB)")
-        print(f"   ⏱️  Estimated time: ~{arxiv_full_items * 5 / 60:.1f} minutes")
-        arxiv_full_scraper = ArxivFullScraper()
-        arxiv_full_data = await arxiv_full_scraper.scrape(max_items=arxiv_full_items)
-        print(f"   ✓ Extracted {len(arxiv_full_data)} theorem-proof pairs")
-        print(f"   📊 Success rate: {len(arxiv_full_data)/max(arxiv_full_items, 1):.1f} proofs per paper")
-    else:
-        arxiv_full_data = []
+        sources.append({
+            'name': 'ArXiv FULL',
+            'emoji': '🔬',
+            'scraper': ArxivFullScraper(),
+            'target': arxiv_full_items,
+            'collected': [],
+            'batch_size': 10,  # Smaller batches due to download size
+            'page': 1
+        })
+    
+    # Round-robin collection
+    print("\n🔄 Starting round-robin collection...")
+    round_num = 1
+    
+    while any(len(src['collected']) < src['target'] for src in sources):
+        print(f"\n{'='*70}")
+        print(f"ROUND {round_num}")
+        print(f"{'='*70}")
+        
+        for source in sources:
+            # Skip if already collected enough
+            if len(source['collected']) >= source['target']:
+                continue
+            
+            remaining = source['target'] - len(source['collected'])
+            batch_size = min(source['batch_size'], remaining)
+            
+            print(f"\n{source['emoji']} {source['name']}: Fetching {batch_size} items "
+                  f"({len(source['collected'])}/{source['target']} collected)...")
+            
+            try:
+                # Fetch batch
+                batch_data = await source['scraper'].scrape(max_items=batch_size)
+                source['collected'].extend(batch_data)
+                
+                print(f"   ✓ Got {len(batch_data)} items (total: {len(source['collected'])}/{source['target']})")
+                
+            except Exception as e:
+                print(f"   ✗ Error: {e}")
+                await asyncio.sleep(1)
+        
+        round_num += 1
+        
+        # Small delay between rounds
+        await asyncio.sleep(0.5)
+    
+    # Extract collected data
+    se_data = next((s['collected'] for s in sources if s['name'] == 'Stack Exchange'), [])
+    mo_data = next((s['collected'] for s in sources if s['name'] == 'MathOverflow'), [])
+    pw_data = next((s['collected'] for s in sources if s['name'] == 'ProofWiki'), [])
+    wiki_data = next((s['collected'] for s in sources if s['name'] == 'Wikipedia'), [])
+    nlab_data = next((s['collected'] for s in sources if s['name'] == 'nLab'), [])
+    arxiv_full_data = next((s['collected'] for s in sources if s['name'] == 'ArXiv FULL'), [])
+    
+    print("\n" + "="*70)
+    print("COLLECTION COMPLETE")
+    print("="*70)
     
     # Save
     print("\n💾 Saving data...")

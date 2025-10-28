@@ -20,12 +20,17 @@ class MathOverflowScraper:
     
     def __init__(self):
         self.session = None
+        self.current_page = 1  # Track pagination state
     
-    async def scrape(self, max_items: int = None) -> List[Dict]:
+    async def scrape(self, max_items: int = None, start_page: int = None) -> List[Dict]:
         """
         Scrape MathOverflow for research-level math questions with answers
         
         Similar to Stack Exchange but higher level content
+        
+        Args:
+            max_items: Maximum number of items to collect in this call
+            start_page: Page to start from (if None, uses self.current_page)
         """
         all_items = []
         
@@ -33,7 +38,7 @@ class MathOverflowScraper:
             self.session = session
             
             # Get questions with accepted answers
-            page = 1
+            page = start_page if start_page is not None else self.current_page
             max_items = max_items or 20
             
             while len(all_items) < max_items:
@@ -51,6 +56,9 @@ class MathOverflowScraper:
                 
                 page += 1
                 await asyncio.sleep(0.1)  # Rate limiting
+        
+        # Update current page for next call
+        self.current_page = page
         
         logger.info(f"MathOverflow scraping terminé: {len(all_items[:max_items])} items")
         return all_items[:max_items]

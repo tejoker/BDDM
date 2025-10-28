@@ -23,8 +23,9 @@ class StackExchangeScraper:
         self.api_key = api_key  # Optionnel mais augmente les limites
         self.rate_limit_remaining = 10000
         self.backoff_until = None
+        self.current_page = 1  # Track pagination state
         
-    async def scrape(self, max_items: int = None) -> List[Dict]:
+    async def scrape(self, max_items: int = None, start_page: int = None) -> List[Dict]:
         """
         Scrape questions avec réponses acceptées
         
@@ -32,9 +33,13 @@ class StackExchangeScraper:
         - Questions avec réponse acceptée
         - Tags: proof, proof-theory, induction, etc.
         - Score minimum pour qualité
+        
+        Args:
+            max_items: Maximum number of items to collect in this call
+            start_page: Page to start from (if None, uses self.current_page)
         """
         all_items = []
-        page = 1
+        page = start_page if start_page is not None else self.current_page
         max_pages = (max_items // 100) + 1 if max_items else 100
         
         async with aiohttp.ClientSession() as session:
@@ -67,6 +72,9 @@ class StackExchangeScraper:
                     logger.error(f"Erreur page {page}: {e}")
                     await asyncio.sleep(5)
                     continue
+        
+        # Update current page for next call
+        self.current_page = page
         
         logger.info(f"Stack Exchange scraping terminé: {len(all_items)} items")
         return all_items
