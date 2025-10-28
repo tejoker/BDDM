@@ -13,9 +13,7 @@ from scrapers.arxiv_full_scraper import ArxivFullScraper
 from scrapers.wikipedia_scraper import WikipediaMathScraper
 from scrapers.nlab_scraper import NLabScraper
 from scrapers.mathoverflow_scraper import MathOverflowScraper
-from scrapers.mathbooks_scraper import MathBooksScraper
-from scrapers.aops_scraper import AoPSScraper
-from scrapers.tricki_scraper import TrickiScraper
+from scrapers.project_euler_scraper import ProjectEulerScraper
 from utils.storage import DataStorage
 
 
@@ -33,9 +31,8 @@ def load_api_key():
     return os.environ.get('STACKEXCHANGE_API_KEY')
 
 
-async def collect_samples(se_items=10, pw_items=10, wiki_items=10, 
-                         nlab_items=10, mo_items=10, arxiv_full_items=0,
-                         mathbooks_items=0, aops_items=0, tricki_items=0):
+async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
+                         mo_items=10, arxiv_full_items=0, euler_items=0):
     """
     Collect sample exercises and proofs from English sources using round-robin strategy
     to maximize API rate limit usage.
@@ -43,14 +40,12 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
     Args:
         se_items: Number of Stack Exchange Q&A to collect
         pw_items: Number of ProofWiki theorems to collect
-        wiki_items: Number of Wikipedia articles to collect
+        wiki_items: Number of Wikipedia articles to collect (now supports 200+ topics!)
         nlab_items: Number of nLab articles to collect
         mo_items: Number of MathOverflow Q&A to collect
         arxiv_full_items: Number of ArXiv papers to download FULL LaTeX sources from
                          (extracts actual theorem-proof pairs from LaTeX)
-        mathbooks_items: Number of math book theorem-proof pairs to collect (Springer/Cambridge Open)
-        aops_items: Number of AoPS competition problems to collect (⚠️  anti-scraping!)
-        tricki_items: Number of Tricki.org technique articles to collect
+        euler_items: Number of Project Euler problems to collect (800+ available, no blocking!)
     """
     storage = DataStorage('samples_en')
     
@@ -106,10 +101,10 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
         sources.append({
             'name': 'Wikipedia',
             'emoji': '📖',
-            'scraper': WikipediaMathScraper(),
+            'scraper': WikipediaMathScraper(use_category_graph=True),  # 🌟 CATEGORY MODE: 10,000+ articles!
             'target': wiki_items,
             'collected': [],
-            'batch_size': 22,  # Limited by hardcoded topics
+            'batch_size': 100,  # Can fetch 100 at a time with category graph
             'page': 1
         })
     
@@ -135,36 +130,14 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
             'page': 1
         })
     
-    if mathbooks_items > 0:
+    if euler_items > 0:
         sources.append({
-            'name': 'MathBooks',
-            'emoji': '📚',
-            'scraper': MathBooksScraper(),
-            'target': mathbooks_items,
+            'name': 'Project Euler',
+            'emoji': '🧮',
+            'scraper': ProjectEulerScraper(),
+            'target': euler_items,
             'collected': [],
-            'batch_size': 5,  # Small batches for books
-            'page': 1
-        })
-    
-    if aops_items > 0:
-        sources.append({
-            'name': 'AoPS',
-            'emoji': '🏆',
-            'scraper': AoPSScraper(),
-            'target': aops_items,
-            'collected': [],
-            'batch_size': 5,  # Very small batches due to anti-scraping
-            'page': 1
-        })
-    
-    if tricki_items > 0:
-        sources.append({
-            'name': 'Tricki',
-            'emoji': '🎯',
-            'scraper': TrickiScraper(),
-            'target': tricki_items,
-            'collected': [],
-            'batch_size': 10,  # Moderate batches
+            'batch_size': 50,  # Good batch size, no anti-scraping
             'page': 1
         })
     
@@ -327,20 +300,55 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
 if __name__ == "__main__":
     import sys
     
-    # Parse arguments: SE PW Wiki nLab MathOverflow ArXiv_FULL MathBooks AoPS Tricki
-    se_count = int(sys.argv[1]) if len(sys.argv) > 1 else 10
-    pw_count = int(sys.argv[2]) if len(sys.argv) > 2 else 10
-    wiki_count = int(sys.argv[3]) if len(sys.argv) > 3 else 10
-    nlab_count = int(sys.argv[4]) if len(sys.argv) > 4 else 5
-    mo_count = int(sys.argv[5]) if len(sys.argv) > 5 else 10
-    arxiv_full_count = int(sys.argv[6]) if len(sys.argv) > 6 else 0
-    mathbooks_count = int(sys.argv[7]) if len(sys.argv) > 7 else 0
-    aops_count = int(sys.argv[8]) if len(sys.argv) > 8 else 0
-    tricki_count = int(sys.argv[9]) if len(sys.argv) > 9 else 0
+    # Special keywords
+    if len(sys.argv) > 1:
+        # Check for "all" keyword - collect maximum from all sources
+        if sys.argv[1].lower() == 'all':
+            target = int(sys.argv[2]) if len(sys.argv) > 2 else 1000
+            print(f"\n🌟 ALL mode: Collecting {target} items from EACH source\n")
+            se_count = target
+            pw_count = min(target, 20000)  # ProofWiki limited
+            wiki_count = target  # Can use category graph for more
+            nlab_count = min(target, 15000)  # nLab limited
+            mo_count = target
+            arxiv_full_count = target // 5  # Fewer since each gives ~5 proofs
+            euler_count = min(target, 800)  # Project Euler limited to 800
+        
+        # Check for "max" keyword - get EVERYTHING from ONE source
+        elif sys.argv[1].lower() == 'max':
+            source = sys.argv[2] if len(sys.argv) > 2 else 'se'
+            print(f"\n🎯 MAX mode: Collecting MAXIMUM from {source.upper()}\n")
+            
+            se_count = 500000 if source.lower() in ['se', 'stackexchange'] else 0
+            pw_count = 20000 if source.lower() in ['pw', 'proofwiki'] else 0
+            wiki_count = 10000 if source.lower() in ['wiki', 'wikipedia'] else 0
+            nlab_count = 15000 if source.lower() == 'nlab' else 0
+            mo_count = 50000 if source.lower() in ['mo', 'mathoverflow'] else 0
+            arxiv_full_count = 100000 if source.lower() in ['arxiv', 'arxiv_full'] else 0
+            euler_count = 800 if source.lower() in ['euler', 'project_euler'] else 0
+        
+        else:
+            # Normal mode with individual counts
+            se_count = int(sys.argv[1]) if len(sys.argv) > 1 else 10
+            pw_count = int(sys.argv[2]) if len(sys.argv) > 2 else 10
+            wiki_count = int(sys.argv[3]) if len(sys.argv) > 3 else 10
+            nlab_count = int(sys.argv[4]) if len(sys.argv) > 4 else 5
+            mo_count = int(sys.argv[5]) if len(sys.argv) > 5 else 10
+            arxiv_full_count = int(sys.argv[6]) if len(sys.argv) > 6 else 0
+            euler_count = int(sys.argv[7]) if len(sys.argv) > 7 else 0
+    else:
+        # Default values
+        se_count = 10
+        pw_count = 10
+        wiki_count = 10
+        nlab_count = 5
+        mo_count = 10
+        arxiv_full_count = 0
+        euler_count = 0
     
-    print(f"Collecting: {se_count} SE, {pw_count} PW, {wiki_count} Wiki, "
+    print(f"\n🎯 Target: {se_count} SE, {pw_count} PW, {wiki_count} Wiki, "
           f"{nlab_count} nLab, {mo_count} MO, {arxiv_full_count} ArXiv(FULL), "
-          f"{mathbooks_count} Books, {aops_count} AoPS, {tricki_count} Tricki\n")
+          f"{euler_count} Project Euler\n")
     
     if arxiv_full_count > 0:
         print("⚠️  WARNING: ArXiv FULL will download LaTeX sources!")
@@ -349,19 +357,28 @@ if __name__ == "__main__":
         print(f"   - Expected proofs: ~{arxiv_full_count * 5}")
         print()
     
-    if mathbooks_count > 0:
-        print("📚 MathBooks scraper is a TEMPLATE - needs PDF/EPUB parsing")
+    if euler_count > 0:
+        print("🧮 Project Euler: 800 computational math problems, NO blocking!")
+        print(f"   - Fast collection (~0.5 sec per problem)")
+        print(f"   - High quality competition-level problems")
         print()
     
-    if aops_count > 0:
-        print("⚠️  WARNING: AoPS has STRONG anti-scraping!")
-        print("   - Will be very SLOW (5-10 sec per problem)")
-        print("   - May encounter CAPTCHAs or IP blocks")
-        print("   - Template implementation - needs anti-scraping bypass")
-        print()
+    # Run the collection
+    asyncio.run(collect_samples(se_count, pw_count, wiki_count, 
+                               nlab_count, mo_count, arxiv_full_count, euler_count))
     
-    total = asyncio.run(collect_samples(se_count, pw_count, wiki_count, 
-                                       nlab_count, mo_count, arxiv_full_count,
-                                       mathbooks_count, aops_count, tricki_count))
-    
-    print(f"\n🎉 Collection complete! {total} items ready for training.")
+    print(f"\n✨ Examples of usage:")
+    print(f"  Small test:  ./math/bin/python collect_samples.py 50 30 100 20 50 5 20")
+    print(f"  Medium:      ./math/bin/python collect_samples.py 1000 500 200 200 500 50 100")
+    print(f"  Large:       ./math/bin/python collect_samples.py 10000 5000 200 1000 5000 1000 500")
+    print(f"\n  🌟 ALL mode:  ./math/bin/python collect_samples.py all 1000")
+    print(f"     (Collects 1000 from each source)")
+    print(f"\n  🎯 MAX mode:  ./math/bin/python collect_samples.py max se")
+    print(f"     (Collects MAXIMUM from Stack Exchange only)")
+    print(f"     Sources: se, pw, wiki, nlab, mo, arxiv, euler")
+    print(f"\n  🔍 Selective: ./math/bin/python collect_samples.py 1000 0 0 0 0 0 0")
+    print(f"     (Only Stack Exchange with 1000 items, all others skipped)")
+    print(f"\n  Parameters: SE PW Wiki nLab MO ArXiv_FULL Euler")
+    print(f"  - Wikipedia: 200+ hardcoded topics")
+    print(f"  - Wikipedia (category mode): Can fetch 10,000+ articles!")
+    print(f"  - Project Euler: 800 problems (no anti-scraping!)")

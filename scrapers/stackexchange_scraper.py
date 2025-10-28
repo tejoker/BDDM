@@ -19,11 +19,12 @@ class StackExchangeScraper:
     BASE_URL = "https://api.stackexchange.com/2.3"
     SITE = "math.stackexchange.com"
     
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, competition_math: bool = False):
         self.api_key = api_key  # Optionnel mais augmente les limites
         self.rate_limit_remaining = 10000
         self.backoff_until = None
         self.current_page = 1  # Track pagination state
+        self.competition_math = competition_math  # Filter for competition math if True
         
     async def scrape(self, max_items: int = None, start_page: int = None) -> List[Dict]:
         """
@@ -97,9 +98,11 @@ class StackExchangeScraper:
             'sort': 'votes',
             'site': self.SITE,
             'filter': 'withbody',  # Inclure le corps
-            # Remove strict tag filter to get more results
-            # 'tagged': 'proof-writing',  # Too restrictive!
         }
+        
+        # Add competition-math tags if enabled
+        if self.competition_math:
+            params['tagged'] = 'contest-math;competition-math;olympiad'
         
         if self.api_key:
             params['key'] = self.api_key
