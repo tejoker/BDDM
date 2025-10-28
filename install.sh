@@ -16,13 +16,13 @@ echo "✓ Python détecté: $(python3 --version)"
 # Créer environnement virtuel
 echo ""
 echo "📦 Création de l'environnement virtuel..."
-python3 -m venv venv
+python3 -m venv math
 
 # Activer environnement
 if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
-    source venv/Scripts/activate
+    source math/Scripts/activate
 else
-    source venv/bin/activate
+    source math/bin/activate
 fi
 
 echo "✓ Environnement virtuel créé"
@@ -50,13 +50,11 @@ echo "================================"
 echo "✅ Installation terminée !"
 echo ""
 echo "Commandes disponibles:"
-echo "  python main.py              # Scraper ~2k items (test)"
-echo "  python test.py              # Tests unitaires"
-echo "  python analyze.py           # Analyser données"
-echo "  python production_scraping.py sample    # 5k items"
-echo "  python production_scraping.py production # Production complète"
+echo "  ./math/bin/python collect_samples.py 20 20 22 20 20 10  # Collect samples"
+echo "  ./math/bin/python normalize_data.py                     # Normalize data"
+echo "  ./math/bin/python analyze.py                            # Analyze data"
 echo ""
 echo "Documentation:"
-echo "  - README.md       : Documentation complète"
-echo "  - QUICKSTART.md   : Guide rapide 5 minutes"
-echo "  - ARCHITECTURE.md : Explication technique"
+echo "  - START_HERE.md              : Getting started guide"
+echo "  - COLLECTION_UNIFIED.md      : Collection guide"
+echo "  - FULL_COLLECTION_ESTIMATES.md : Storage/time estimates"
