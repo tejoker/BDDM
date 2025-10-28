@@ -3,7 +3,7 @@
 Project Euler Scraper
 Scrapes mathematical/computational problems and solutions from Project Euler
 
-Project Euler: 800+ problems with increasing difficulty
+Project Euler: 956 problems with increasing difficulty
 - Problems are public
 - Solutions available after solving
 - No anti-scraping (respectful rate limiting)
@@ -81,8 +81,8 @@ class ProjectEulerScraper:
         try:
             async with self.session.get(url) as response:
                 if response.status != 200:
-                    # Fallback: just use sequential IDs
-                    return list(range(1, 801))
+                    # Fallback: just use sequential IDs (updated to 956)
+                    return list(range(1, 957))
                 
                 html = await response.text()
                 soup = BeautifulSoup(html, 'html.parser')
@@ -94,12 +94,12 @@ class ProjectEulerScraper:
                     if match:
                         problem_ids.append(int(match.group(1)))
                 
-                return sorted(problem_ids) if problem_ids else list(range(1, 801))
+                return sorted(problem_ids) if problem_ids else list(range(1, 957))
         
         except Exception as e:
             print(f"  Error fetching problem list: {e}")
-            # Fallback to sequential IDs
-            return list(range(1, 801))
+            # Fallback to sequential IDs (updated to 956)
+            return list(range(1, 957))
     
     async def _scrape_problem(self, problem_id: int) -> Dict:
         """Scrape a single Project Euler problem"""

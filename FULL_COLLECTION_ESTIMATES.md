@@ -5,13 +5,13 @@
 If you fetch **everything available** from all sources:
 
 ### 📊 Total Counts
-- **~1,235,800 items** total (up from ~1,185,000!)
+- **~1,095,956-1,585,956 items** total (up from ~1,185,000!)
 - **~12-52 GB** storage (JSON format)
 - **~20-80 GB** if exported to LaTeX
 
 **New additions:**
 - ✅ **Wikipedia**: 22 → 10,000-50,000 articles (category graph!)
-- ✅ **Project Euler**: +800 competition problems (no blocking!)
+- ✅ **Project Euler**: +956 competition problems (updated 2025, was 800)
 
 ---
 
@@ -59,14 +59,15 @@ If you fetch **everything available** from all sources:
   - Undergraduate to graduate level
 
 ### 🧮 Competition Mathematics
-**~800 items** | **~2 MB**
+**~956 items** | **~2.4 MB**
 
-- **Project Euler**: ~800 computational problems
+- **Project Euler**: ~956 computational problems
   - High-quality competition-level problems
   - Computational mathematics and number theory
   - NO anti-scraping protection! ✅
   - Fast collection (~0.5 sec per problem)
   - Problems include: algorithms, sequences, number theory, optimization
+  - Updated 2025: Now 956 problems (was 800)
 
 ### 🔬 Research Papers (FULL LaTeX Proofs)
 **~500,000 items** | **~10-50 GB**
@@ -96,8 +97,8 @@ If you fetch **everything available** from all sources:
 | nLab | 15,000 | ~1.4 KB | ~20 MB | ~21 hours |
 | **ArXiv FULL** | **500,000** | **~20-100 KB** | **~10-50 GB** | **~700 hours** |
 | **Wikipedia** | **10,000-50,000** | **~1.7 KB** | **~17-85 MB** | **~5-25 hours** |
-| **Project Euler** | **800** | **~2.5 KB** | **~2 MB** | **~0.5 hours** |
-| **TOTAL** | **~1,095,800-1,585,800** | — | **~12-52 GB** | **~960-980 hours** |
+| **Project Euler** | **956** | **~2.5 KB** | **~2.4 MB** | **~0.5 hours** |
+| **TOTAL** | **~1,095,956-1,585,956** | — | **~12-52 GB** | **~960-980 hours** |
 
 *Estimated with rate limiting and API delays
 
@@ -146,9 +147,9 @@ If you fetch **everything available** from all sources:
 # nLab: 15,000 items
 # ArXiv FULL: 100,000 papers → ~500,000 theorem-proof pairs
 # Wikipedia: 10,000-50,000 articles (category graph)
-# Project Euler: 800 problems
+# Project Euler: 956 problems (updated 2025!)
 ```
-- **~1,095,800-1,585,800 items** in ~960-980 hours (~40 days continuous)
+- **~1,095,956-1,585,956 items** in ~960-980 hours (~40 days continuous)
 - **~12-52 GB** storage
 - Requires robust error handling and resume capability
 - Consider running in batches
