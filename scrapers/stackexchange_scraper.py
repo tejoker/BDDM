@@ -40,7 +40,8 @@ class StackExchangeScraper:
         """
         all_items = []
         page = start_page if start_page is not None else self.current_page
-        max_pages = (max_items // 100) + 1 if max_items else 100
+        # Calculate max pages from current position, not from 0
+        max_pages = page + ((max_items // 50) + 2) if max_items else page + 100
         empty_pages = 0  # Track consecutive empty pages
         
         async with aiohttp.ClientSession() as session:
