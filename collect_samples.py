@@ -131,17 +131,31 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
     # Round-robin collection
     print("\n🔄 Starting round-robin collection...")
     round_num = 1
+    max_rounds = 500  # Safety limit to prevent infinite loops
     
-    while any(len(src['collected']) < src['target'] for src in sources):
+    # Track consecutive failures per source
+    for source in sources:
+        source['consecutive_failures'] = 0
+        source['max_failures'] = 5  # Give up after 5 consecutive failures
+    
+    while any(len(src['collected']) < src['target'] and src['consecutive_failures'] < src['max_failures'] 
+              for src in sources) and round_num <= max_rounds:
         print(f"\n{'='*70}")
         print(f"ROUND {round_num}")
         print(f"{'='*70}")
+        
+        active_sources = 0
         
         for source in sources:
             # Skip if already collected enough
             if len(source['collected']) >= source['target']:
                 continue
             
+            # Skip if too many consecutive failures
+            if source['consecutive_failures'] >= source['max_failures']:
+                continue
+            
+            active_sources += 1
             remaining = source['target'] - len(source['collected'])
             batch_size = min(source['batch_size'], remaining)
             
@@ -151,13 +165,26 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
             try:
                 # Fetch batch
                 batch_data = await source['scraper'].scrape(max_items=batch_size)
-                source['collected'].extend(batch_data)
                 
-                print(f"   ✓ Got {len(batch_data)} items (total: {len(source['collected'])}/{source['target']})")
+                if len(batch_data) == 0:
+                    source['consecutive_failures'] += 1
+                    print(f"   ⚠️  Got 0 items (failure {source['consecutive_failures']}/{source['max_failures']})")
+                    if source['consecutive_failures'] >= source['max_failures']:
+                        print(f"   ❌ Giving up on {source['name']} after {source['consecutive_failures']} failures")
+                else:
+                    source['consecutive_failures'] = 0  # Reset on success
+                    source['collected'].extend(batch_data)
+                    print(f"   ✓ Got {len(batch_data)} items (total: {len(source['collected'])}/{source['target']})")
                 
             except Exception as e:
-                print(f"   ✗ Error: {e}")
+                source['consecutive_failures'] += 1
+                print(f"   ✗ Error: {e} (failure {source['consecutive_failures']}/{source['max_failures']})")
                 await asyncio.sleep(1)
+        
+        # Break if no active sources
+        if active_sources == 0:
+            print("\n⚠️  No more active sources, stopping collection.")
+            break
         
         round_num += 1
         
