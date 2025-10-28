@@ -62,7 +62,7 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
     print("🔄 Using ROUND-ROBIN strategy to maximize API usage")
     print("="*70)
     
-    # Initialize scrapers and target counts
+    # Initialize scrapers and target counts with ADAPTIVE batch sizing
     sources = []
     if se_items > 0:
         sources.append({
@@ -71,7 +71,9 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': StackExchangeScraper(api_key=api_key),
             'target': se_items,
             'collected': [],
-            'batch_size': 80,  # Use SE rate limit efficiently
+            'batch_size_base': 80,  # Base batch size
+            'batch_size_max': 200,  # Maximum for large collections
+            'speed_tier': 'fast',
             'page': 1
         })
     
@@ -82,7 +84,9 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': MathOverflowScraper(api_key=api_key),
             'target': mo_items,
             'collected': [],
-            'batch_size': 80,  # Same API as SE
+            'batch_size_base': 80,  # Base batch size
+            'batch_size_max': 200,  # Maximum for large collections
+            'speed_tier': 'fast',
             'page': 1
         })
     
@@ -93,7 +97,9 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': ProofWikiScraper(),
             'target': pw_items,
             'collected': [],
-            'batch_size': 50,  # Moderate batch for ProofWiki
+            'batch_size_base': 50,  # Base batch size
+            'batch_size_max': 100,  # Maximum for large collections
+            'speed_tier': 'medium',
             'page': 1
         })
     
@@ -104,7 +110,9 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': WikipediaMathScraper(use_category_graph=True),  # 🌟 CATEGORY MODE: 10,000+ articles!
             'target': wiki_items,
             'collected': [],
-            'batch_size': 100,  # Can fetch 100 at a time with category graph
+            'batch_size_base': 100,  # Base batch size
+            'batch_size_max': 200,  # Maximum for large collections
+            'speed_tier': 'fast',
             'page': 1
         })
     
@@ -115,7 +123,9 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': NLabScraper(),
             'target': nlab_items,
             'collected': [],
-            'batch_size': 30,  # Moderate batch for nLab
+            'batch_size_base': 30,  # Base batch size
+            'batch_size_max': 75,  # Maximum for large collections (2.5x boost!)
+            'speed_tier': 'slow',
             'page': 1
         })
     
@@ -126,7 +136,9 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': ArxivFullScraper(),
             'target': arxiv_full_items,
             'collected': [],
-            'batch_size': 10,  # Smaller batches due to download size
+            'batch_size_base': 10,  # Base batch size
+            'batch_size_max': 20,  # Maximum (careful with downloads)
+            'speed_tier': 'slow',
             'page': 1
         })
     
@@ -137,7 +149,9 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             'scraper': ProjectEulerScraper(),
             'target': euler_items,
             'collected': [],
-            'batch_size': 50,  # Good batch size, no anti-scraping
+            'batch_size_base': 50,  # Base batch size
+            'batch_size_max': 150,  # Maximum (3x boost, no anti-scraping!)
+            'speed_tier': 'fast',
             'page': 1
         })
     
@@ -170,7 +184,24 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             
             active_sources += 1
             remaining = source['target'] - len(source['collected'])
-            batch_size = min(source['batch_size'], remaining)
+            
+            # 🎯 ADAPTIVE BATCH SIZING
+            # Scale batch size based on remaining items and source speed
+            if remaining > 5000:
+                # Large collection: use maximum batch size
+                batch_size = source['batch_size_max']
+            elif remaining > 1000:
+                # Medium collection: use 1.5x base
+                batch_size = int(source['batch_size_base'] * 1.5)
+            elif remaining > 100:
+                # Small collection: use base size
+                batch_size = source['batch_size_base']
+            else:
+                # Finishing up: use smaller batches (50% of base)
+                batch_size = max(10, int(source['batch_size_base'] * 0.5))
+            
+            # Don't exceed remaining items
+            batch_size = min(batch_size, remaining)
             
             print(f"\n{source['emoji']} {source['name']}: Fetching {batch_size} items "
                   f"({len(source['collected'])}/{source['target']} collected)...")
