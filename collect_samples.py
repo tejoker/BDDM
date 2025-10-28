@@ -13,6 +13,9 @@ from scrapers.arxiv_full_scraper import ArxivFullScraper
 from scrapers.wikipedia_scraper import WikipediaMathScraper
 from scrapers.nlab_scraper import NLabScraper
 from scrapers.mathoverflow_scraper import MathOverflowScraper
+from scrapers.mathbooks_scraper import MathBooksScraper
+from scrapers.aops_scraper import AoPSScraper
+from scrapers.tricki_scraper import TrickiScraper
 from utils.storage import DataStorage
 
 
@@ -31,7 +34,8 @@ def load_api_key():
 
 
 async def collect_samples(se_items=10, pw_items=10, wiki_items=10, 
-                         nlab_items=10, mo_items=10, arxiv_full_items=0):
+                         nlab_items=10, mo_items=10, arxiv_full_items=0,
+                         mathbooks_items=0, aops_items=0, tricki_items=0):
     """
     Collect sample exercises and proofs from English sources using round-robin strategy
     to maximize API rate limit usage.
@@ -44,6 +48,9 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
         mo_items: Number of MathOverflow Q&A to collect
         arxiv_full_items: Number of ArXiv papers to download FULL LaTeX sources from
                          (extracts actual theorem-proof pairs from LaTeX)
+        mathbooks_items: Number of math book theorem-proof pairs to collect (Springer/Cambridge Open)
+        aops_items: Number of AoPS competition problems to collect (⚠️  anti-scraping!)
+        tricki_items: Number of Tricki.org technique articles to collect
     """
     storage = DataStorage('samples_en')
     
@@ -128,6 +135,39 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
             'page': 1
         })
     
+    if mathbooks_items > 0:
+        sources.append({
+            'name': 'MathBooks',
+            'emoji': '📚',
+            'scraper': MathBooksScraper(),
+            'target': mathbooks_items,
+            'collected': [],
+            'batch_size': 5,  # Small batches for books
+            'page': 1
+        })
+    
+    if aops_items > 0:
+        sources.append({
+            'name': 'AoPS',
+            'emoji': '🏆',
+            'scraper': AoPSScraper(),
+            'target': aops_items,
+            'collected': [],
+            'batch_size': 5,  # Very small batches due to anti-scraping
+            'page': 1
+        })
+    
+    if tricki_items > 0:
+        sources.append({
+            'name': 'Tricki',
+            'emoji': '🎯',
+            'scraper': TrickiScraper(),
+            'target': tricki_items,
+            'collected': [],
+            'batch_size': 10,  # Moderate batches
+            'page': 1
+        })
+    
     # Round-robin collection
     print("\n🔄 Starting round-robin collection...")
     round_num = 1
@@ -198,6 +238,9 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
     wiki_data = next((s['collected'] for s in sources if s['name'] == 'Wikipedia'), [])
     nlab_data = next((s['collected'] for s in sources if s['name'] == 'nLab'), [])
     arxiv_full_data = next((s['collected'] for s in sources if s['name'] == 'ArXiv FULL'), [])
+    mathbooks_data = next((s['collected'] for s in sources if s['name'] == 'MathBooks'), [])
+    aops_data = next((s['collected'] for s in sources if s['name'] == 'AoPS'), [])
+    tricki_data = next((s['collected'] for s in sources if s['name'] == 'Tricki'), [])
     
     print("\n" + "="*70)
     print("COLLECTION COMPLETE")
@@ -211,8 +254,13 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
     storage.save_batch(nlab_data, 'nlab')
     storage.save_batch(mo_data, 'mathoverflow')
     storage.save_batch(arxiv_full_data, 'arxiv_full')
+    storage.save_batch(mathbooks_data, 'mathbooks')
+    storage.save_batch(aops_data, 'aops')
+    storage.save_batch(tricki_data, 'tricki')
     
-    total = len(se_data) + len(pw_data) + len(wiki_data) + len(nlab_data) + len(mo_data) + len(arxiv_full_data)
+    total = (len(se_data) + len(pw_data) + len(wiki_data) + len(nlab_data) + 
+             len(mo_data) + len(arxiv_full_data) + len(mathbooks_data) + 
+             len(aops_data) + len(tricki_data))
     print(f"\n✅ DONE! Collected {total} items total:")
     print(f"   - {len(se_data)} Stack Exchange Q&A with accepted answers")
     print(f"   - {len(pw_data)} ProofWiki theorems with proofs")
@@ -220,6 +268,9 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
     print(f"   - {len(nlab_data)} nLab articles")
     print(f"   - {len(mo_data)} MathOverflow Q&A")
     print(f"   - {len(arxiv_full_data)} ArXiv FULL theorem-proof pairs (from LaTeX)")
+    print(f"   - {len(mathbooks_data)} MathBooks theorem-proof pairs")
+    print(f"   - {len(aops_data)} AoPS competition problems")
+    print(f"   - {len(tricki_data)} Tricki technique articles")
     print(f"\n📁 Saved to: samples_en/")
     
     # Show examples
@@ -255,22 +306,41 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10,
         print(f"Theorem: {ex['theorem'][:100]}...")
         print(f"Proof: {ex['proof'][:100]}...")
     
+    if mathbooks_data:
+        ex = mathbooks_data[0]
+        print(f"\n[MathBooks] {ex['book_title']}")
+        print(f"Theorem {ex['theorem_number']}: {ex['theorem_name']}")
+    
+    if aops_data:
+        ex = aops_data[0]
+        print(f"\n[AoPS] {ex['competition']}")
+        print(f"Problem {ex['problem_number']}: {ex['problem_statement'][:100]}...")
+    
+    if tricki_data:
+        ex = tricki_data[0]
+        print(f"\n[Tricki] {ex['title']}")
+        print(f"Technique: {ex['description'][:100]}...")
+    
     return total
 
 
 if __name__ == "__main__":
     import sys
     
-    # Parse arguments: SE PW Wiki nLab MathOverflow ArXiv_FULL
+    # Parse arguments: SE PW Wiki nLab MathOverflow ArXiv_FULL MathBooks AoPS Tricki
     se_count = int(sys.argv[1]) if len(sys.argv) > 1 else 10
     pw_count = int(sys.argv[2]) if len(sys.argv) > 2 else 10
     wiki_count = int(sys.argv[3]) if len(sys.argv) > 3 else 10
     nlab_count = int(sys.argv[4]) if len(sys.argv) > 4 else 5
     mo_count = int(sys.argv[5]) if len(sys.argv) > 5 else 10
     arxiv_full_count = int(sys.argv[6]) if len(sys.argv) > 6 else 0
+    mathbooks_count = int(sys.argv[7]) if len(sys.argv) > 7 else 0
+    aops_count = int(sys.argv[8]) if len(sys.argv) > 8 else 0
+    tricki_count = int(sys.argv[9]) if len(sys.argv) > 9 else 0
     
     print(f"Collecting: {se_count} SE, {pw_count} PW, {wiki_count} Wiki, "
-          f"{nlab_count} nLab, {mo_count} MO, {arxiv_full_count} ArXiv(FULL)\n")
+          f"{nlab_count} nLab, {mo_count} MO, {arxiv_full_count} ArXiv(FULL), "
+          f"{mathbooks_count} Books, {aops_count} AoPS, {tricki_count} Tricki\n")
     
     if arxiv_full_count > 0:
         print("⚠️  WARNING: ArXiv FULL will download LaTeX sources!")
@@ -279,7 +349,19 @@ if __name__ == "__main__":
         print(f"   - Expected proofs: ~{arxiv_full_count * 5}")
         print()
     
+    if mathbooks_count > 0:
+        print("📚 MathBooks scraper is a TEMPLATE - needs PDF/EPUB parsing")
+        print()
+    
+    if aops_count > 0:
+        print("⚠️  WARNING: AoPS has STRONG anti-scraping!")
+        print("   - Will be very SLOW (5-10 sec per problem)")
+        print("   - May encounter CAPTCHAs or IP blocks")
+        print("   - Template implementation - needs anti-scraping bypass")
+        print()
+    
     total = asyncio.run(collect_samples(se_count, pw_count, wiki_count, 
-                                       nlab_count, mo_count, arxiv_full_count))
+                                       nlab_count, mo_count, arxiv_full_count,
+                                       mathbooks_count, aops_count, tricki_count))
     
     print(f"\n🎉 Collection complete! {total} items ready for training.")
