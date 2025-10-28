@@ -45,7 +45,7 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
         mo_items: Number of MathOverflow Q&A to collect
         arxiv_full_items: Number of ArXiv papers to download FULL LaTeX sources from
                          (extracts actual theorem-proof pairs from LaTeX)
-        euler_items: Number of Project Euler problems to collect (800+ available, no blocking!)
+        euler_items: Number of Project Euler problems to collect (956 available, no blocking!)
     """
     storage = DataStorage('samples_en')
     
@@ -312,7 +312,7 @@ if __name__ == "__main__":
             nlab_count = min(target, 15000)  # nLab limited
             mo_count = target
             arxiv_full_count = target // 5  # Fewer since each gives ~5 proofs
-            euler_count = min(target, 800)  # Project Euler limited to 800
+            euler_count = min(target, 956)  # Project Euler limited to 956
         
         # Check for "max" keyword - get EVERYTHING from ONE source
         elif sys.argv[1].lower() == 'max':
@@ -325,7 +325,7 @@ if __name__ == "__main__":
             nlab_count = 15000 if source.lower() == 'nlab' else 0
             mo_count = 50000 if source.lower() in ['mo', 'mathoverflow'] else 0
             arxiv_full_count = 100000 if source.lower() in ['arxiv', 'arxiv_full'] else 0
-            euler_count = 800 if source.lower() in ['euler', 'project_euler'] else 0
+            euler_count = 956 if source.lower() in ['euler', 'project_euler'] else 0
         
         else:
             # Normal mode with individual counts
@@ -358,7 +358,7 @@ if __name__ == "__main__":
         print()
     
     if euler_count > 0:
-        print("🧮 Project Euler: 800 computational math problems, NO blocking!")
+        print("🧮 Project Euler: 956 computational math problems, NO blocking!")
         print(f"   - Fast collection (~0.5 sec per problem)")
         print(f"   - High quality competition-level problems")
         print()
@@ -376,9 +376,8 @@ if __name__ == "__main__":
     print(f"\n  🎯 MAX mode:  ./math/bin/python collect_samples.py max se")
     print(f"     (Collects MAXIMUM from Stack Exchange only)")
     print(f"     Sources: se, pw, wiki, nlab, mo, arxiv, euler")
-    print(f"\n  🔍 Selective: ./math/bin/python collect_samples.py 1000 0 0 0 0 0 0")
+    print(f"  🔍 Selective: ./math/bin/python collect_samples.py 1000 0 0 0 0 0 0")
     print(f"     (Only Stack Exchange with 1000 items, all others skipped)")
     print(f"\n  Parameters: SE PW Wiki nLab MO ArXiv_FULL Euler")
-    print(f"  - Wikipedia: 200+ hardcoded topics")
-    print(f"  - Wikipedia (category mode): Can fetch 10,000+ articles!")
-    print(f"  - Project Euler: 800 problems (no anti-scraping!)")
+    print(f"  - Wikipedia: Uses CATEGORY GRAPH mode by default (10,000-50,000 articles!)")
+    print(f"  - Project Euler: 956 problems (updated 2025, no anti-scraping!)")
