@@ -41,19 +41,23 @@ class MathOverflowScraper:
             # Get questions with accepted answers
             page = start_page if start_page is not None else self.current_page
             max_items = max_items or 20
+            empty_pages = 0  # Track consecutive empty pages
             
             while len(all_items) < max_items:
                 items = await self._fetch_page(page)
                 
                 if not items:
-                    break
+                    empty_pages += 1
+                    # Stop if 3 consecutive empty pages
+                    if empty_pages >= 3:
+                        break
+                    page += 1
+                    continue
                 
+                empty_pages = 0  # Reset on successful page
                 all_items.extend(items)
                 
                 logger.info(f"MathOverflow - Page {page}: {len(all_items)} items total")
-                
-                if len(items) < 100:  # No more pages
-                    break
                 
                 page += 1
                 await asyncio.sleep(0.1)  # Rate limiting
@@ -70,7 +74,7 @@ class MathOverflowScraper:
         
         params = {
             'page': page,
-            'pagesize': 30,
+            'pagesize': 100,  # Increased from 30 to get more results
             'order': 'desc',
             'sort': 'votes',  # High-quality content
             'site': self.SITE,

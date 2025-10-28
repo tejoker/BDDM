@@ -41,6 +41,7 @@ class StackExchangeScraper:
         all_items = []
         page = start_page if start_page is not None else self.current_page
         max_pages = (max_items // 100) + 1 if max_items else 100
+        empty_pages = 0  # Track consecutive empty pages
         
         async with aiohttp.ClientSession() as session:
             while page <= max_pages:
@@ -48,7 +49,14 @@ class StackExchangeScraper:
                     questions = await self._fetch_questions(session, page)
                     
                     if not questions:
-                        break
+                        empty_pages += 1
+                        # Stop if 3 consecutive empty pages
+                        if empty_pages >= 3:
+                            break
+                        page += 1
+                        continue
+                    
+                    empty_pages = 0  # Reset counter on successful page
                     
                     # Pour chaque question, récupérer la réponse acceptée
                     for question in questions:
@@ -88,7 +96,8 @@ class StackExchangeScraper:
             'sort': 'votes',
             'site': self.SITE,
             'filter': 'withbody',  # Inclure le corps
-            'tagged': 'proof-writing',  # Tag correct sur Math SE
+            # Remove strict tag filter to get more results
+            # 'tagged': 'proof-writing',  # Too restrictive!
         }
         
         if self.api_key:
@@ -103,9 +112,10 @@ class StackExchangeScraper:
                 items = data.get('items', [])
                 
                 # Filter in code: only questions with accepted answer and min score
+                # Relaxed filter - just need accepted answer and decent score
                 filtered = [
                     item for item in items 
-                    if item.get('accepted_answer_id') and item.get('score', 0) >= 5
+                    if item.get('accepted_answer_id') and item.get('score', 0) >= 3
                 ]
                 return filtered
             else:
