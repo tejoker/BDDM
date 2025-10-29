@@ -8,6 +8,12 @@ import asyncio
 import logging
 from typing import List, Dict
 import re
+import sys
+from pathlib import Path
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils.user_agents import get_rotating_headers
 
 logger = logging.getLogger(__name__)
 
@@ -133,21 +139,20 @@ class WikipediaMathScraper:
         "Symplectic geometry", "Lie group", "Algebraic group"
     ]
     
-    def __init__(self, use_category_graph: bool = False):
+    def __init__(self, use_category_graph: bool = False, skip_ids: set = None):
         self.session = None
         self.use_category_graph = use_category_graph  # If True, fetch from category tree
         self.visited_pages = set()  # Track visited to avoid duplicates
+        self.skip_ids = skip_ids or set()  # IDs to skip (already collected)
     
     async def scrape(self, max_items: int = None) -> List[Dict]:
         """Scrape Wikipedia math articles"""
         all_items = []
         max_items = max_items or 20
-        
-        # Wikipedia requires User-Agent header to avoid 403 errors
-        headers = {
-            'User-Agent': 'MathScraper/1.0 (Educational Research; nicolasbigeard@example.com)'
-        }
-        
+
+        # Use rotating User-Agent headers to avoid blocking
+        headers = get_rotating_headers(include_academic=True)
+
         async with aiohttp.ClientSession(headers=headers) as session:
             self.session = session
             
@@ -163,16 +168,22 @@ class WikipediaMathScraper:
             for topic in topics:
                 if topic in self.visited_pages:
                     continue
-                    
+
+                # Check if already collected (by ID)
+                expected_id = f"wikipedia_{topic.replace(' ', '_')}"
+                if expected_id in self.skip_ids:
+                    self.visited_pages.add(topic)
+                    continue
+
                 item = await self._scrape_article(topic)
                 if item:
                     all_items.append(item)
                     self.visited_pages.add(topic)
                     if len(all_items) % 50 == 0:
                         print(f"   Collected {len(all_items)} articles...")
-                
+
                 await asyncio.sleep(0.5)  # Rate limiting
-                
+
                 if len(all_items) >= max_items:
                     break
         
@@ -221,14 +232,23 @@ class WikipediaMathScraper:
             try:
                 async with self.session.get(self.API_URL, params=params, timeout=aiohttp.ClientTimeout(total=10)) as response:
                     if response.status != 200:
+                        logger.warning(f"Category fetch failed for '{category}' with status {response.status}")
+                        if response.status == 429:
+                            logger.error("RATE LIMIT HIT during category fetching")
                         continue
-                    
+
                     data = await response.json()
+
+                    # Check for API errors
+                    if 'error' in data:
+                        logger.error(f"Category API error for '{category}': {data['error']}")
+                        continue
+
                     members = data.get('query', {}).get('categorymembers', [])
-                    
+
                     for member in members:
                         title = member['title']
-                        
+
                         if title.startswith('Category:'):
                             # Add subcategory to visit
                             if title not in visited_categories:
@@ -237,10 +257,14 @@ class WikipediaMathScraper:
                             # It's an article
                             if title not in article_titles:
                                 article_titles.append(title)
-                    
+
                     await asyncio.sleep(0.3)  # Rate limiting
-            
+
+            except aiohttp.ClientError as e:
+                logger.error(f"Network error fetching category '{category}': {e}")
+                continue
             except Exception as e:
+                logger.error(f"Unexpected error fetching category '{category}': {e}")
                 continue
         
         return article_titles[:max_items * 2]  # Return extra to filter during scraping
@@ -256,37 +280,67 @@ class WikipediaMathScraper:
             'explaintext': '1',  # String not bool
             'clcategories': 'Category:Mathematics'
         }
-        
-        headers = {
-            'User-Agent': 'MathScraperBot/1.0 (Educational Research)'
-        }
-        
-        try:
-            async with self.session.get(self.API_URL, params=params, headers=headers) as response:
-                if response.status != 200:
-                    return None
-                
+
+        # Retry with exponential backoff for rate limits
+        max_retries = 3
+        base_delay = 2  # seconds
+
+        for attempt in range(max_retries):
+            try:
+                # Use session headers (already set with rotating User-Agent)
+                async with self.session.get(self.API_URL, params=params) as response:
+                    if response.status == 429:
+                        # Rate limit hit - wait and retry
+                        retry_after = response.headers.get('Retry-After')
+                        if retry_after:
+                            wait_time = int(retry_after)
+                        else:
+                            wait_time = base_delay * (2 ** attempt)  # Exponential backoff
+
+                        logger.warning(f"RATE LIMIT (429) for '{title}' - waiting {wait_time}s (attempt {attempt + 1}/{max_retries})")
+                        await asyncio.sleep(wait_time)
+                        continue  # Retry
+
+                    if response.status != 200:
+                        logger.warning(f"Wikipedia API returned status {response.status} for '{title}'")
+                        logger.warning(f"Response headers: {dict(response.headers)}")
+                        return None
+
                 data = await response.json()
-                pages = data.get('query', {}).get('pages', {})
-                
-                if not pages:
+
+                # Check for API errors
+                if 'error' in data:
+                    logger.error(f"Wikipedia API error for '{title}': {data['error']}")
                     return None
-                
+
+                pages = data.get('query', {}).get('pages', {})
+
+                if not pages:
+                    logger.debug(f"No pages returned for '{title}'")
+                    return None
+
                 # Get the page content
                 page = list(pages.values())[0]
-                
+
+                # Check if page exists
+                if 'missing' in page:
+                    logger.debug(f"Page '{title}' does not exist")
+                    return None
+
                 if 'extract' not in page:
+                    logger.warning(f"No extract in page for '{title}'. Page keys: {list(page.keys())}")
                     return None
-                
+
                 extract = page['extract']
-                
+
                 if len(extract) < 100:
+                    logger.debug(f"Extract too short for '{title}': {len(extract)} chars")
                     return None
-                
+
                 # Get categories
                 categories = page.get('categories', [])
                 tags = [cat['title'].replace('Category:', '') for cat in categories[:5]]
-                
+
                 return {
                     'id': f"wikipedia_{title.replace(' ', '_')}",
                     'source': 'wikipedia',
@@ -299,10 +353,20 @@ class WikipediaMathScraper:
                         'type': 'encyclopedia'
                     }
                 }
-        
-        except Exception as e:
-            logger.debug(f"Error scraping {title}: {e}")
-            return None
+
+            except aiohttp.ClientError as e:
+                logger.error(f"Network error scraping '{title}': {e}")
+                if attempt < max_retries - 1:
+                    await asyncio.sleep(base_delay * (2 ** attempt))
+                    continue
+                return None
+            except Exception as e:
+                logger.error(f"Unexpected error scraping '{title}': {e}", exc_info=True)
+                return None
+
+        # If we exhausted all retries
+        logger.error(f"Failed to scrape '{title}' after {max_retries} attempts")
+        return None
 
 
 # Test

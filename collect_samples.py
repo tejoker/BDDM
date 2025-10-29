@@ -6,7 +6,9 @@ Simple script to collect math exercise samples from English sources
 import asyncio
 import json
 import os
+import logging
 from pathlib import Path
+from datetime import datetime
 from scrapers.stackexchange_scraper import StackExchangeScraper
 from scrapers.proofwiki_scraper import ProofWikiScraper
 from scrapers.arxiv_full_scraper import ArxivFullScraper
@@ -15,6 +17,17 @@ from scrapers.nlab_scraper import NLabScraper
 from scrapers.mathoverflow_scraper import MathOverflowScraper
 from scrapers.project_euler_scraper import ProjectEulerScraper
 from utils.storage import DataStorage
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler('scraper.log')
+    ]
+)
+logger = logging.getLogger(__name__)
 
 
 def load_api_key():
@@ -31,8 +44,47 @@ def load_api_key():
     return os.environ.get('STACKEXCHANGE_API_KEY')
 
 
+def load_checkpoint(checkpoint_path):
+    """Load checkpoint from previous interrupted collection"""
+    if not checkpoint_path.exists():
+        return None
+    
+    try:
+        with open(checkpoint_path) as f:
+            checkpoint = json.load(f)
+            print(f"✅ Found checkpoint from {checkpoint['started_at']}")
+            print(f"   Last updated: {checkpoint['last_updated']}")
+            print(f"   Round: {checkpoint['round']}")
+            return checkpoint
+    except (json.JSONDecodeError, KeyError) as e:
+        print(f"⚠️  Corrupted checkpoint file: {e}")
+        return None
+
+
+def save_checkpoint(checkpoint_path, session_id, started_at, round_num, sources):
+    """Save current progress to checkpoint file"""
+    checkpoint = {
+        'session_id': session_id,
+        'started_at': started_at,
+        'last_updated': datetime.now().isoformat(),
+        'round': round_num,
+        'sources': {}
+    }
+    
+    for source in sources:
+        checkpoint['sources'][source['name'].lower().replace(' ', '_')] = {
+            'collected': len(source['collected']),
+            'target': source['target'],
+            'page': source.get('page', 1)
+        }
+    
+    with open(checkpoint_path, 'w') as f:
+        json.dump(checkpoint, f, indent=2)
+
+
+
 async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
-                         mo_items=10, arxiv_full_items=0, euler_items=0):
+                         mo_items=10, arxiv_full_items=0, euler_items=0, resume=False):
     """
     Collect sample exercises and proofs from English sources using round-robin strategy
     to maximize API rate limit usage.
@@ -46,8 +98,27 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
         arxiv_full_items: Number of ArXiv papers to download FULL LaTeX sources from
                          (extracts actual theorem-proof pairs from LaTeX)
         euler_items: Number of Project Euler problems to collect (956 available, no blocking!)
+        resume: Whether to resume from previous checkpoint (default: False)
     """
     storage = DataStorage('samples_en')
+    checkpoint_path = Path('samples_en') / 'checkpoint.json'
+    
+    # Session info
+    session_id = datetime.now().strftime('%Y%m%d_%H%M%S')
+    started_at = datetime.now().isoformat()
+    
+    # Try to load checkpoint if resume requested
+    checkpoint = None
+    if resume and checkpoint_path.exists():
+        checkpoint = load_checkpoint(checkpoint_path)
+        if checkpoint:
+            print(f"♻️  RESUMING from checkpoint (session: {checkpoint['session_id']})")
+        else:
+            print("⚠️  Failed to load checkpoint, starting fresh...")
+            resume = False
+    elif resume:
+        print("⚠️  No checkpoint found, starting fresh...")
+        resume = False
     
     # Load API key
     api_key = load_api_key()
@@ -61,111 +132,163 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
     print("COLLECTING ENGLISH MATH EXERCISES & PROOFS")
     print("🔄 Using ROUND-ROBIN strategy to maximize API usage")
     print("="*70)
-    
+
+    # Get already collected IDs to skip
+    skip_ids = {
+        'proofwiki': storage.get_collected_ids('proofwiki'),
+        'wikipedia': storage.get_collected_ids('wikipedia')
+    }
+    logger.info(f"Skipping {len(skip_ids['proofwiki'])} already collected ProofWiki items")
+    logger.info(f"Skipping {len(skip_ids['wikipedia'])} already collected Wikipedia items")
+
     # Initialize scrapers and target counts with ADAPTIVE batch sizing
     sources = []
     if se_items > 0:
+        source_key = 'stack_exchange'
+        collected_count = checkpoint['sources'][source_key]['collected'] if (checkpoint and source_key in checkpoint['sources']) else 0
+        page = checkpoint['sources'][source_key].get('page', 1) if (checkpoint and source_key in checkpoint['sources']) else 1
+        
         sources.append({
             'name': 'Stack Exchange',
             'emoji': '📚',
             'scraper': StackExchangeScraper(api_key=api_key),
             'target': se_items,
-            'collected': [],
+            'collected': [],  # Will skip already collected items via storage index
+            'initial_collected': collected_count,  # Track starting point
             'batch_size_base': 200,  # Maximum performance: 2.5x boost
             'batch_size_max': 300,  # Peak batch size
             'speed_tier': 'fast',
-            'page': 1
+            'page': page
         })
     
     if mo_items > 0:
+        source_key = 'mathoverflow'
+        collected_count = checkpoint['sources'][source_key]['collected'] if (checkpoint and source_key in checkpoint['sources']) else 0
+        page = checkpoint['sources'][source_key].get('page', 1) if (checkpoint and source_key in checkpoint['sources']) else 1
+        
         sources.append({
             'name': 'MathOverflow',
             'emoji': '🎓',
             'scraper': MathOverflowScraper(api_key=api_key),
             'target': mo_items,
             'collected': [],
+            'initial_collected': collected_count,
             'batch_size_base': 200,  # Maximum performance: 2.5x boost
             'batch_size_max': 300,  # Peak batch size
             'speed_tier': 'fast',
-            'page': 1
+            'page': page
         })
     
     if pw_items > 0:
+        source_key = 'proofwiki'
+        collected_count = checkpoint['sources'][source_key]['collected'] if (checkpoint and source_key in checkpoint['sources']) else 0
+        page = checkpoint['sources'][source_key].get('page', 1) if (checkpoint and source_key in checkpoint['sources']) else 1
+
         sources.append({
             'name': 'ProofWiki',
             'emoji': '📐',
-            'scraper': ProofWikiScraper(),
+            'scraper': ProofWikiScraper(skip_ids=skip_ids['proofwiki']),
             'target': pw_items,
             'collected': [],
+            'initial_collected': collected_count,
             'batch_size_base': 150,  # Maximum performance: 3x boost
             'batch_size_max': 200,  # Peak batch size
             'speed_tier': 'medium',
-            'page': 1
+            'page': page
         })
     
     if wiki_items > 0:
+        source_key = 'wikipedia'
+        collected_count = checkpoint['sources'][source_key]['collected'] if (checkpoint and source_key in checkpoint['sources']) else 0
+        page = checkpoint['sources'][source_key].get('page', 1) if (checkpoint and source_key in checkpoint['sources']) else 1
+
         sources.append({
             'name': 'Wikipedia',
             'emoji': '📖',
-            'scraper': WikipediaMathScraper(use_category_graph=True),  # 🌟 CATEGORY MODE: 10,000+ articles!
+            'scraper': WikipediaMathScraper(use_category_graph=True, skip_ids=skip_ids['wikipedia']),  # 🌟 CATEGORY MODE: 10,000+ articles!
             'target': wiki_items,
             'collected': [],
+            'initial_collected': collected_count,
             'batch_size_base': 250,  # Maximum performance: 2.5x boost
             'batch_size_max': 400,  # Peak batch size
             'speed_tier': 'fast',
-            'page': 1
+            'page': page
         })
     
     if nlab_items > 0:
+        source_key = 'nlab'
+        collected_count = checkpoint['sources'][source_key]['collected'] if (checkpoint and source_key in checkpoint['sources']) else 0
+        page = checkpoint['sources'][source_key].get('page', 1) if (checkpoint and source_key in checkpoint['sources']) else 1
+        
         sources.append({
             'name': 'nLab',
             'emoji': '🔬',
             'scraper': NLabScraper(),
             'target': nlab_items,
             'collected': [],
+            'initial_collected': collected_count,
             'batch_size_base': 75,  # Maximum performance: 2.5x boost
             'batch_size_max': 150,  # Peak batch size (no more bottleneck!)
             'speed_tier': 'slow',
-            'page': 1
+            'page': page
         })
     
     if arxiv_full_items > 0:
+        source_key = 'arxiv_full'
+        collected_count = checkpoint['sources'][source_key]['collected'] if (checkpoint and source_key in checkpoint['sources']) else 0
+        page = checkpoint['sources'][source_key].get('page', 1) if (checkpoint and source_key in checkpoint['sources']) else 1
+        
         sources.append({
             'name': 'ArXiv FULL',
             'emoji': '🔬',
             'scraper': ArxivFullScraper(),
             'target': arxiv_full_items,
             'collected': [],
+            'initial_collected': collected_count,
             'batch_size_base': 25,  # Maximum performance: 2.5x boost
             'batch_size_max': 40,  # Peak batch size (careful with bandwidth)
             'speed_tier': 'slow',
-            'page': 1
+            'page': page
         })
     
     if euler_items > 0:
+        source_key = 'project_euler'
+        collected_count = checkpoint['sources'][source_key]['collected'] if (checkpoint and source_key in checkpoint['sources']) else 0
+        page = checkpoint['sources'][source_key].get('page', 1) if (checkpoint and source_key in checkpoint['sources']) else 1
+        
         sources.append({
             'name': 'Project Euler',
             'emoji': '🧮',
             'scraper': ProjectEulerScraper(),
             'target': euler_items,
             'collected': [],
+            'initial_collected': collected_count,
             'batch_size_base': 150,  # Maximum performance: 3x boost
             'batch_size_max': 250,  # Peak batch size (no limits!)
             'speed_tier': 'fast',
-            'page': 1
+            'page': page
         })
     
     # Round-robin collection
     print("\n🔄 Starting round-robin collection...")
-    round_num = 1
+    starting_round = checkpoint['round'] + 1 if checkpoint else 1
+    round_num = starting_round
     max_rounds = 500  # Safety limit to prevent infinite loops
     
     # Track consecutive failures per source
     for source in sources:
         source['consecutive_failures'] = 0
         source['max_failures'] = 5  # Give up after 5 consecutive failures
+        
+        # Adjust target to account for already collected items
+        total_collected = source['initial_collected'] + len(source['collected'])
+        if total_collected >= source['target']:
+            print(f"✅ {source['name']}: Already collected {source['initial_collected']}/{source['target']} (skipping)")
+            source['target'] = 0  # Skip this source
+        elif source['initial_collected'] > 0:
+            print(f"♻️  {source['name']}: Resuming from {source['initial_collected']}/{source['target']} collected")
     
-    while any(len(src['collected']) < src['target'] and src['consecutive_failures'] < src['max_failures'] 
+    while any(len(src['collected']) + src['initial_collected'] < src['target'] and src['consecutive_failures'] < src['max_failures'] 
               for src in sources) and round_num <= max_rounds:
         print(f"\n{'='*70}")
         print(f"ROUND {round_num}")
@@ -174,8 +297,11 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
         active_sources = 0
         
         for source in sources:
+            # Calculate total collected (previous + current session)
+            total_collected = source['initial_collected'] + len(source['collected'])
+            
             # Skip if already collected enough
-            if len(source['collected']) >= source['target']:
+            if total_collected >= source['target']:
                 continue
             
             # Skip if too many consecutive failures
@@ -183,7 +309,7 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
                 continue
             
             active_sources += 1
-            remaining = source['target'] - len(source['collected'])
+            remaining = source['target'] - total_collected
             
             # 🎯 ADAPTIVE BATCH SIZING
             # Scale batch size based on remaining items and source speed
@@ -204,7 +330,7 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
             batch_size = min(batch_size, remaining)
             
             print(f"\n{source['emoji']} {source['name']}: Fetching {batch_size} items "
-                  f"({len(source['collected'])}/{source['target']} collected)...")
+                  f"({total_collected}/{source['target']} collected)...")
             
             try:
                 # Fetch batch
@@ -218,12 +344,19 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
                 else:
                     source['consecutive_failures'] = 0  # Reset on success
                     source['collected'].extend(batch_data)
-                    print(f"   ✓ Got {len(batch_data)} items (total: {len(source['collected'])}/{source['target']})")
+                    total_collected = source['initial_collected'] + len(source['collected'])
+                    print(f"   ✓ Got {len(batch_data)} items (total: {total_collected}/{source['target']})")
                 
             except Exception as e:
                 source['consecutive_failures'] += 1
                 print(f"   ✗ Error: {e} (failure {source['consecutive_failures']}/{source['max_failures']})")
                 await asyncio.sleep(1)
+        
+        # Save checkpoint after each round
+        try:
+            save_checkpoint(checkpoint_path, session_id, started_at, round_num, sources)
+        except Exception as e:
+            print(f"⚠️  Failed to save checkpoint: {e}")
         
         # Break if no active sources
         if active_sources == 0:
@@ -331,6 +464,12 @@ async def collect_samples(se_items=10, pw_items=10, wiki_items=10, nlab_items=5,
 if __name__ == "__main__":
     import sys
     
+    # Check for --resume flag
+    resume_mode = '--resume' in sys.argv
+    if resume_mode:
+        sys.argv.remove('--resume')
+        print("\n♻️  RESUME MODE: Will continue from checkpoint if available\n")
+    
     # Special keywords
     if len(sys.argv) > 1:
         # Check for "all" keyword - collect maximum from all sources
@@ -396,7 +535,14 @@ if __name__ == "__main__":
     
     # Run the collection
     asyncio.run(collect_samples(se_count, pw_count, wiki_count, 
-                               nlab_count, mo_count, arxiv_full_count, euler_count))
+                               nlab_count, mo_count, arxiv_full_count, euler_count, 
+                               resume=resume_mode))
+    
+    # Delete checkpoint on successful completion
+    checkpoint_path = Path('samples_en') / 'checkpoint.json'
+    if checkpoint_path.exists():
+        checkpoint_path.unlink()
+        print("\n✅ Checkpoint cleared (collection completed)")
     
     print(f"\n✨ Examples of usage:")
     print(f"  Small test:  ./math/bin/python collect_samples.py 50 30 100 20 50 5 20")
@@ -407,8 +553,11 @@ if __name__ == "__main__":
     print(f"\n  🎯 MAX mode:  ./math/bin/python collect_samples.py max se")
     print(f"     (Collects MAXIMUM from Stack Exchange only)")
     print(f"     Sources: se, pw, wiki, nlab, mo, arxiv, euler")
-    print(f"  🔍 Selective: ./math/bin/python collect_samples.py 1000 0 0 0 0 0 0")
+    print(f"\n  🔍 Selective: ./math/bin/python collect_samples.py 1000 0 0 0 0 0 0")
     print(f"     (Only Stack Exchange with 1000 items, all others skipped)")
+    print(f"\n  ♻️  Resume:    ./math/bin/python collect_samples.py --resume")
+    print(f"     (Resume from checkpoint after interruption)")
+    print(f"     Note: --resume can be combined with any mode above")
     print(f"\n  Parameters: SE PW Wiki nLab MO ArXiv_FULL Euler")
     print(f"  - Wikipedia: Uses CATEGORY GRAPH mode by default (10,000-50,000 articles!)")
     print(f"  - Project Euler: 956 problems (updated 2025, no anti-scraping!)")

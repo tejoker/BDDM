@@ -9,6 +9,12 @@ import logging
 from typing import List, Dict, Optional
 from bs4 import BeautifulSoup
 import re
+import sys
+from pathlib import Path
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils.user_agents import get_rotating_headers
 
 logger = logging.getLogger(__name__)
 
@@ -30,15 +36,19 @@ class ProofWikiScraper:
         "Category:Logic",
     ]
     
-    def __init__(self):
+    def __init__(self, skip_ids: set = None):
         self.visited_urls = set()
         self.session = None
+        self.skip_ids = skip_ids or set()  # IDs to skip (already collected)
     
     async def scrape(self, max_items: int = None) -> List[Dict]:
         """Scrape ProofWiki pour théorèmes et preuves"""
         all_items = []
-        
-        async with aiohttp.ClientSession() as session:
+
+        # Use rotating User-Agent headers to avoid blocking
+        headers = get_rotating_headers(include_academic=True)
+
+        async with aiohttp.ClientSession(headers=headers) as session:
             self.session = session
             
             # Récupérer les URLs des pages de théorèmes
@@ -50,18 +60,23 @@ class ProofWikiScraper:
             for i, url in enumerate(theorem_urls):
                 if max_items and len(all_items) >= max_items:
                     break
-                
+
+                # Check if already collected (by ID)
+                expected_id = f"pw_{url.split('/')[-1]}"
+                if expected_id in self.skip_ids:
+                    continue
+
                 try:
                     item = await self._scrape_theorem_page(url)
                     if item:
                         all_items.append(item)
-                    
+
                     if (i + 1) % 50 == 0:
                         logger.info(f"ProofWiki: {len(all_items)} items collectés")
-                    
+
                     # Rate limiting respectueux
                     await asyncio.sleep(0.5)
-                    
+
                 except Exception as e:
                     logger.warning(f"Erreur scraping {url}: {e}")
                     continue
@@ -85,7 +100,7 @@ class ProofWikiScraper:
                 if response.status == 200:
                     html = await response.text()
                     soup = BeautifulSoup(html, 'html.parser')
-                    
+
                     # Extraire les liens vers les théorèmes
                     for link in soup.find_all('a', href=True):
                         href = link['href']
@@ -94,11 +109,19 @@ class ProofWikiScraper:
                             if full_url not in self.visited_urls:
                                 urls.append(full_url)
                                 self.visited_urls.add(full_url)
-                                
+
                                 if max_items and len(urls) >= max_items * 2:
                                     break
+
+                    logger.info(f"Found {len(urls)} theorem URLs from Special:AllPages")
+                else:
+                    logger.warning(f"Failed to fetch Special:AllPages: status {response.status}")
+                    if response.status == 403:
+                        logger.error("ACCESS FORBIDDEN (403): ProofWiki may have blocked our IP")
+        except aiohttp.ClientError as e:
+            logger.error(f"Network error fetching URLs: {e}")
         except Exception as e:
-            logger.error(f"Erreur récupération URLs: {e}")
+            logger.error(f"Unexpected error fetching URLs: {e}", exc_info=True)
         
         # Méthode 2: Via catégories spécifiques si pas assez d'URLs
         if len(urls) < 100:
@@ -142,30 +165,44 @@ class ProofWikiScraper:
         try:
             async with self.session.get(url) as response:
                 if response.status != 200:
+                    logger.warning(f"ProofWiki returned status {response.status} for '{url}'")
+                    logger.warning(f"Response headers: {dict(response.headers)}")
+                    if response.status == 429:
+                        logger.error("RATE LIMIT HIT: ProofWiki is throttling requests")
+                    elif response.status == 403:
+                        logger.error("ACCESS FORBIDDEN (403): ProofWiki may have blocked our IP")
+                    elif response.status == 503:
+                        logger.error("SERVICE UNAVAILABLE (503): ProofWiki may be down or blocking")
                     return None
-                
+
                 html = await response.text()
                 soup = BeautifulSoup(html, 'html.parser')
-                
+
                 # Extraire le titre
                 title = soup.find('h1', {'id': 'firstHeading'})
                 title_text = title.get_text() if title else ''
-                
+
+                if not title_text:
+                    logger.debug(f"No title found for '{url}'")
+                    return None
+
                 # Extraire le contenu principal
                 content = soup.find('div', {'id': 'mw-content-text'})
                 if not content:
+                    logger.warning(f"No content div found for '{url}'")
                     return None
-                
+
                 # Extraire théorème et preuve
                 theorem_text = self._extract_theorem(content)
                 proof_text = self._extract_proof(content)
-                
+
                 if not theorem_text and not proof_text:
+                    logger.debug(f"No theorem or proof found for '{url}'")
                     return None
-                
+
                 # Extraire les catégories/tags
                 tags = self._extract_categories(soup)
-                
+
                 return {
                     'id': f"pw_{url.split('/')[-1]}",
                     'source': 'proofwiki',
@@ -179,9 +216,12 @@ class ProofWikiScraper:
                         'has_theorem': bool(theorem_text)
                     }
                 }
-                
+
+        except aiohttp.ClientError as e:
+            logger.error(f"Network error scraping '{url}': {e}")
+            return None
         except Exception as e:
-            logger.warning(f"Erreur traitement {url}: {e}")
+            logger.error(f"Unexpected error scraping '{url}': {e}", exc_info=True)
             return None
     
     def _extract_theorem(self, content) -> str:

@@ -98,6 +98,23 @@ class DataStorage:
         # Utiliser hash du contenu principal
         content = str(item.get('question', '')) + str(item.get('theorem', ''))
         return hashlib.md5(content.encode()).hexdigest()[:16]
+
+    def get_collected_ids(self, source: str = None) -> set:
+        """
+        Get set of all collected item IDs, optionally filtered by source
+
+        Args:
+            source: If provided, only return IDs from this source
+
+        Returns:
+            Set of item IDs that have already been collected
+        """
+        if source:
+            return {
+                item_id for item_id, info in self.index['items'].items()
+                if info.get('source') == source
+            }
+        return set(self.index['items'].keys())
     
     def get_stats(self) -> Dict:
         """Obtenir statistiques de stockage"""

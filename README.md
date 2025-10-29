@@ -38,12 +38,40 @@ cd BDDM
 ./math/bin/python collect_samples.py max wiki   # 10k-50k articles
 ```
 
+### ♻️ Resume Capability (NEW!)
+
+**Collection stopped? No problem!** The pipeline now supports resumable collection:
+
+```bash
+# Start a long collection
+./math/bin/python collect_samples.py all 10000
+
+# If stopped (Ctrl+C, network issue, etc.), just resume:
+./math/bin/python collect_samples.py --resume
+
+# Resume works with any mode:
+./math/bin/python collect_samples.py --resume all 5000
+./math/bin/python collect_samples.py --resume max se
+```
+
+**How it works:**
+- 🔄 Checkpoint saved after every round
+- 💾 Tracks collected counts per source
+- 🚫 Duplicates prevented via content hash
+- ✅ Automatic checkpoint cleanup on completion
+- 📍 Resume from exact stopping point
+
+**Checkpoint location**: `samples_en/checkpoint.json`
+
+---
+
 **Command format**: `SE PW Wiki nLab MO ArXiv_FULL Euler`
 
 **Flexible modes**:
 - `all N`: Collect N items from each source
 - `max SOURCE`: Collect maximum from single source (se/pw/wiki/nlab/mo/arxiv/euler)
 - Selective: `1000 0 0 0 0 0 0` for Stack Exchange only
+- Resume: `--resume` flag continues from checkpoint
 
 ---
 
@@ -251,7 +279,87 @@ wiki_scraper = WikipediaScraper(use_category_graph=False)  # Hardcoded mode
 
 ---
 
-## 🐛 Troubleshooting
+## � Data Organization
+
+All collected data is stored in `samples_en/` directory:
+
+```
+samples_en/
+├── index.json                    # Master index (duplicate tracking)
+├── checkpoint.json               # Resume checkpoint (if interrupted)
+└── raw/                          # Raw collected data by source
+    ├── stackexchange/
+    │   ├── batch_20250128_153945.json
+    │   └── batch_20250128_165832.json
+    ├── proofwiki/
+    │   └── batch_20250128_154120.json
+    ├── wikipedia/
+    ├── nlab/
+    ├── mathoverflow/
+    ├── arxiv_full/
+    └── project_euler/
+```
+
+### File Structure
+
+**`index.json`** - Master tracking file
+```json
+{
+  "items": {
+    "hash_abc123": {
+      "source": "stackexchange",
+      "added_at": "2025-01-28T16:00:00"
+    }
+  },
+  "stats": {
+    "stackexchange": {
+      "count": 500,
+      "files": ["batch_20250128_153945.json"]
+    }
+  }
+}
+```
+
+**`batch_YYYYMMDD_HHMMSS.json`** - Data batch
+```json
+[
+  {
+    "title": "Proving that square root of 2 is irrational",
+    "question": "How do I prove...",
+    "answer": "Assume √2 is rational...",
+    "score": 42,
+    "tags": ["proof-writing", "number-theory"]
+  }
+]
+```
+
+**`checkpoint.json`** - Resume state
+```json
+{
+  "session_id": "20250128_160000",
+  "started_at": "2025-01-28T16:00:00",
+  "last_updated": "2025-01-28T16:15:00",
+  "round": 5,
+  "sources": {
+    "stack_exchange": {
+      "collected": 400,
+      "target": 1000,
+      "page": 6
+    }
+  }
+}
+```
+
+### Duplicate Detection
+
+- **Method**: MD5 hash of content (question+answer or theorem+proof)
+- **Tracking**: `index.json` stores all item hashes
+- **Benefit**: Can resume without re-downloading same data
+- **Cross-source**: Detects duplicates even across different sources
+
+---
+
+## �🐛 Troubleshooting
 
 ### "Too many requests" error
 - **Cause**: Stack Exchange rate limit
