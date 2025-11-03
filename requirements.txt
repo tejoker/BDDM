@@ -1,24 +1,44 @@
-# Math Scraper Dependencies
+# BDDM v3.0 Dependencies
 
-# HTTP and Web Scraping
-aiohttp==3.9.1
-beautifulsoup4==4.12.2
+# ===== Core Parsing =====
+# XML parsing (Stack Exchange, MathOverflow, Wikipedia dumps)
 lxml>=5.0.0
+
+# HTML parsing (legacy scrapers, content extraction)
+beautifulsoup4==4.12.2
 html5lib==1.1
 
-# Data Processing
+# Data processing
 pandas>=2.2.0
-numpy>=1.26.0
 
-# Utilities
-python-dateutil==2.8.2
+# ===== Dump-Based Parsers (v3) =====
+# HuggingFace datasets (Proof-Pile, ArXiv)
+datasets>=2.14.0
+
+# Git repository access (Lean, Isabelle, Coq)
+gitpython>=3.1.40
+
+# Kaggle API (ArXiv dataset download)
+kaggle>=1.5.16
+
+# ===== Legacy Web Scrapers (Deprecated) =====
+# HTTP requests
+aiohttp==3.9.1
+requests>=2.31.0
+
+# ===== Utilities =====
+# Progress bars
 tqdm==4.66.1
 
-# Testing (optional)
+# Date handling
+python-dateutil==2.8.2
+
+# ===== Optional Development =====
+# Testing
 pytest==7.4.3
 pytest-asyncio==0.21.1
 
-# Development (optional)
+# Code formatting
 black==23.11.0
 flake8==6.1.0
 mypy==1.7.1

@@ -22,6 +22,18 @@ test_output/
 *.jsonl
 *.log
 
+# v3 Dump files and caches
+dumps/
+*.xml
+*.xml.bz2
+*.7z
+*.tar.gz
+*.zip
+arxiv_latex_cache/
+arxiv_cache/
+*.db
+checkpoint.json
+
 # Zone Identifier files (Windows)
 *.Zone.Identifier
 
