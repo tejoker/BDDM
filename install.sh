@@ -89,7 +89,7 @@ except Exception as e:
 
 # Test v3 parsers
 try:
-    from parsers.base_parser import BaseParser
+    from parsers.base_parser import BaseDumpParser
     from parsers.stackexchange_dump_parser import StackExchangeDumpParser
     from parsers.oeis_parser import OEISParser
 except Exception as e:
