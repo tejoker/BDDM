@@ -54,7 +54,7 @@ cd ../..
 
 echo ""
 echo "4/11: Downloading ArXiv metadata (Kaggle)..."
-echo "    Note: Requires Kaggle CLI: pip install kaggle"
+echo "    Note: Requires Kaggle CLI"
 echo "    Size: ~3GB metadata + optional 1.1TB sources"
 cd "$DUMPS_DIR"
 mkdir -p arxiv
@@ -64,8 +64,9 @@ then
     kaggle datasets download -d Cornell-University/arxiv
     unzip arxiv.zip
 else
-    echo "    Kaggle CLI not found. Please install: pip install kaggle"
-    echo "    Then download manually from: https://www.kaggle.com/datasets/Cornell-University/arxiv"
+    echo "    Kaggle CLI not found."
+    echo "    Install: ./math/bin/pip install kaggle"
+    echo "    Or download manually from: https://www.kaggle.com/datasets/Cornell-University/arxiv"
 fi
 cd ../..
 
@@ -138,7 +139,13 @@ if python3 -c "import datasets" 2>/dev/null; then
     echo "    datasets library found"
 else
     echo "    Installing datasets library..."
-    pip install datasets
+    if [ -d "math/bin" ]; then
+        ./math/bin/pip install datasets
+    else
+        echo "    Warning: Virtual environment not found at ./math/"
+        echo "    Please run ./install.sh first, then run this script again"
+        echo "    Or manually install: ./math/bin/pip install datasets"
+    fi
 fi
 
 echo ""
