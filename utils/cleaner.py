@@ -1,6 +1,5 @@
 """
-Data Cleaner
-Nettoyage et normalisation des données mathématiques
+Data Cleaner for mathematical content
 """
 
 import re
@@ -12,9 +11,9 @@ logger = logging.getLogger(__name__)
 
 
 class DataCleaner:
-    """Nettoyeur de données mathématiques"""
-    
-    # Patterns LaTeX courants à préserver
+    """Mathematical data cleaner"""
+
+    # LaTeX patterns to preserve
     LATEX_PATTERNS = [
         r'\$[^\$]+\$',  # Inline math
         r'\$\$[^\$]+\$\$',  # Display math
@@ -22,7 +21,7 @@ class DataCleaner:
         r'\\((.*?)\\)',  # Inline math alt
     ]
     
-    # Mots-clés de structures de preuve
+    # Proof structure keywords
     PROOF_KEYWORDS = {
         'fr': [
             'démonstration', 'preuve', 'montrons', 'supposons',
@@ -44,176 +43,174 @@ class DataCleaner:
     
     def clean(self, item: Dict) -> Optional[Dict]:
         """
-        Nettoyer et valider un item
-        Retourne None si l'item ne passe pas les filtres de qualité
+        Clean and validate an item.
+        Returns None if item doesn't pass quality filters.
         """
         try:
             cleaned_item = item.copy()
-            
-            # Nettoyer chaque champ texte
+
+            # Clean each text field
             for field in ['question', 'answer', 'theorem', 'proof', 'title']:
                 if field in cleaned_item:
                     cleaned_item[field] = self._clean_text(cleaned_item[field])
-            
-            # Validation qualité
+
+            # Validate quality
             if not self._is_valid(cleaned_item):
                 return None
-            
-            # Détecter langue
+
+            # Detect language
             cleaned_item['language'] = self._detect_language(cleaned_item)
-            
-            # Extraire structures de preuve
+
+            # Extract proof structure
             cleaned_item['proof_structure'] = self._extract_proof_structure(cleaned_item)
-            
+
             return cleaned_item
-            
+
         except Exception as e:
-            logger.warning(f"Erreur nettoyage: {e}")
+            logger.warning(f"Cleaning error: {e}")
             return None
     
     def _clean_text(self, text: str) -> str:
-        """Nettoyer un texte mathématique"""
+        """Clean mathematical text"""
         if not text:
             return ''
-        
-        # Décoder HTML entities
+
+        # Decode HTML entities
         text = unescape(text)
-        
-        # Préserver formules LaTeX (marquer temporairement)
+
+        # Preserve LaTeX formulas (mark temporarily)
         latex_placeholders = {}
         for i, pattern in enumerate(self.LATEX_PATTERNS):
             for match in re.finditer(pattern, text, re.DOTALL):
                 placeholder = f"__LATEX_{i}_{len(latex_placeholders)}__"
                 latex_placeholders[placeholder] = match.group(0)
                 text = text.replace(match.group(0), placeholder)
-        
-        # Nettoyer caractères spéciaux mais garder ponctuation math
-        text = re.sub(r'\s+', ' ', text)  # Normaliser espaces
-        text = re.sub(r'[\r\n]+', ' ', text)  # Supprimer sauts de ligne multiples
-        
-        # Enlever URLs
+
+        # Clean special characters but keep math punctuation
+        text = re.sub(r'\s+', ' ', text)
+        text = re.sub(r'[\r\n]+', ' ', text)
+
+        # Remove URLs
         text = re.sub(r'http[s]?://\S+', '', text)
-        
-        # Enlever tags HTML restants
+
+        # Remove remaining HTML tags
         text = re.sub(r'<[^>]+>', '', text)
-        
-        # Nettoyer artefacts LaTeX sans formules
+
+        # Clean LaTeX artifacts
         text = re.sub(r'\\newline', ' ', text)
         text = re.sub(r'\\\\', ' ', text)
-        
-        # Restaurer formules LaTeX
+
+        # Restore LaTeX formulas
         for placeholder, original in latex_placeholders.items():
             text = text.replace(placeholder, original)
-        
-        # Nettoyer espaces finaux
+
+        # Clean trailing spaces
         text = ' '.join(text.split())
-        
+
         return text.strip()
     
     def _is_valid(self, item: Dict) -> bool:
         """
-        Valider la qualité d'un item
-        Critères:
-        - Longueur minimale/maximale
-        - Présence de contenu mathématique
-        - Pas de spam/garbage
+        Validate item quality.
+        Criteria:
+        - Min/max length
+        - Mathematical content presence
+        - No spam/garbage
         """
-        # Récupérer contenu principal
+        # Get main content
         content = ''
         if 'question' in item and 'answer' in item:
             content = item['question'] + ' ' + item['answer']
         elif 'theorem' in item and 'proof' in item:
             content = item['theorem'] + ' ' + item['proof']
         else:
-            # Pas de structure reconnue
             return False
-        
-        # Vérifier longueur
+
+        # Check length
         if len(content) < self.min_length:
             return False
-        
+
         if len(content) > self.max_length:
-            # Tronquer plutôt que rejeter
-            logger.debug(f"Item tronqué: {len(content)} chars")
-        
-        # Vérifier présence de contenu mathématique
+            logger.debug(f"Item truncated: {len(content)} chars")
+
+        # Check for mathematical content
         has_math = any([
             '$' in content,
             '\\(' in content,
             '\\[' in content,
             any(symbol in content for symbol in ['∈', '∀', '∃', '→', '≤', '≥', '∑', '∫'])
         ])
-        
-        # Ou mots-clés mathématiques
+
+        # Or mathematical keywords
         has_math_keywords = any([
-            word in content.lower() 
-            for word in ['theorem', 'proof', 'lemma', 'proposition', 
+            word in content.lower()
+            for word in ['theorem', 'proof', 'lemma', 'proposition',
                         'démonstration', 'théorème', 'equation', 'function']
         ])
-        
+
         if not (has_math or has_math_keywords):
             return False
-        
-        # Vérifier ratio caractères alphanumériques (éviter garbage)
+
+        # Check alphanumeric ratio (avoid garbage)
         alphanum_ratio = sum(c.isalnum() or c.isspace() for c in content) / len(content)
         if alphanum_ratio < 0.6:
             return False
-        
+
         return True
     
     def _detect_language(self, item: Dict) -> str:
-        """Détecter la langue du contenu"""
+        """Detect content language"""
         content = ''
         for field in ['question', 'answer', 'theorem', 'proof', 'title']:
             if field in item:
                 content += ' ' + str(item[field])
-        
+
         content_lower = content.lower()
-        
-        # Compter mots-clés français vs anglais
+
+        # Count French vs English keywords
         fr_count = sum(1 for word in self.PROOF_KEYWORDS['fr'] if word in content_lower)
         en_count = sum(1 for word in self.PROOF_KEYWORDS['en'] if word in content_lower)
-        
+
         if fr_count > en_count:
             return 'fr'
         elif en_count > fr_count:
             return 'en'
-        
-        # Fallback sur métadonnées
+
+        # Fallback to metadata
         if 'metadata' in item and 'language' in item['metadata']:
             return item['metadata']['language']
-        
-        return 'en'  # Par défaut
+
+        return 'en'
     
     def _extract_proof_structure(self, item: Dict) -> Dict:
         """
-        Extraire la structure de la preuve
-        Identifier: récurrence, absurde, directe, etc.
+        Extract proof structure.
+        Identify: induction, contradiction, direct, etc.
         """
         structure = {
             'type': 'direct',
             'techniques': [],
             'steps': []
         }
-        
-        # Récupérer texte de la preuve
+
+        # Get proof text
         proof_text = ''
         if 'proof' in item:
             proof_text = item['proof']
         elif 'answer' in item:
             proof_text = item['answer']
-        
+
         if not proof_text:
             return structure
-        
+
         proof_lower = proof_text.lower()
-        
-        # Détecter type de preuve
+
+        # Detect proof type
         if any(word in proof_lower for word in ['récurrence', 'induction', 'récurence']):
             structure['type'] = 'induction'
             structure['techniques'].append('mathematical_induction')
-            
-            # Chercher cas de base et hérédité
+
+            # Look for base case and inductive step
             if 'cas de base' in proof_lower or 'base case' in proof_lower:
                 structure['steps'].append('base_case')
             if 'hérédité' in proof_lower or 'inductive step' in proof_lower:
@@ -226,30 +223,30 @@ class DataCleaner:
         elif any(word in proof_lower for word in ['contraposée', 'contrapositive']):
             structure['type'] = 'contrapositive'
             structure['techniques'].append('contrapositive')
-        
-        # Techniques additionnelles
+
+        # Additional techniques
         if any(word in proof_lower for word in ['factorisation', 'factor']):
             structure['techniques'].append('factorization')
-        
+
         if any(word in proof_lower for word in ['substitution']):
             structure['techniques'].append('substitution')
-        
+
         if any(word in proof_lower for word in ['intégration', 'integration', 'integr']):
             structure['techniques'].append('integration')
-        
+
         if any(word in proof_lower for word in ['dérivée', 'derivative', 'deriv']):
             structure['techniques'].append('differentiation')
-        
+
         return structure
     
     def normalize_for_lean(self, item: Dict) -> Dict:
         """
-        Pré-traiter pour future conversion en Lean
-        Standardiser notations mathématiques
+        Preprocess for future conversion to Lean.
+        Standardize mathematical notations.
         """
         normalized = item.copy()
-        
-        # Normaliser notations ensemblistes
+
+        # Normalize set notations
         replacements = {
             '∈': 'in',
             '∉': 'not_in',

@@ -284,7 +284,3 @@ However, **dump-based parsing is strongly recommended** for production use.
 - Check [README.md](README.md) for detailed documentation
 - See parser source code in `parsers/` directory
 - Each parser has a `__main__` block for testing
-
----
-
-**Built with the goal of advancing mathematical AI research**
