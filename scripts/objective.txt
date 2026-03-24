@@ -18,3 +18,156 @@ The Goal for your AI: Use your pipeline to formalize the Frobenius Theorem or th
 Missing - Neural Tangent Kernels (NTK): There is no formal proof in Lean that infinitely wide neural networks converge to Gaussian processes.
 Missing - Advanced Convergence: Formal proofs for the convergence of modern optimization algorithms (like Adam) in non-convex landscapes.The Strategy for your PipelineDo not ask your MCTS to invent new math. Ask it to translate textbook math into Lean 4. 
 You take a standard graduate textbook on Stochastic Calculus, extract a known, human-proven lemma (e.g., "The quadratic variation of standard Brownian motion is $t$"), define the types manually, and let your URM loop figure out the exact sequence of Lean tactics to make the compiler accept it.
+
+
+
+
+Next Steps — DESol Pipeline
+[DONE] 1. Commit the knowledge inventory
+knowledge/mathlib_inventory.toon committed to master.
+
+---
+
+2. Layer 1 premise injection — inject mathlib_inventory.toon into the system prompt
+BEFORE writing any SDE Lean file, add premise grounding to ponder_loop.py.
+Without this, the model will hallucinate Mathlib theorem names and Lean will silently
+reject every tactic. This is the #1 failure mode for non-trivial proof states.
+
+What to build:
+- Add an optional `premise_context: str` parameter to run_ponder_loop()
+- When provided, append it to SYSTEM_PROMPT as a "Tools available" block
+- Add a load_premise_context(toon_path, namespace_filter) helper that reads
+  mathlib_inventory.toon and returns only the nodes relevant to the current proof domain
+- Wire it into prove_with_ponder.py and mcts_search.py via a --premise-file flag
+
+Example injected block:
+  "Available Mathlib premises for this proof state:
+   - HasIndepIncrements (ProbabilityTheory): def HasIndepIncrements (X : T → Ω → E) ...
+   - IsGaussianProcess (ProbabilityTheory): def IsGaussianProcess (X : T → Ω → E) ...
+   ..."
+
+Validation: run smoke_test.py, confirm system prompt contains the injected block.
+
+---
+
+3. Layer 2 theorem name validator — reject hallucinated names before dojo.run_tac
+Add a validate_tactic_names() step between tactic extraction and dojo.run_tac.
+Uses `lake env lean` with `#check <name>` to verify each theorem name the model
+proposes exists in Mathlib before passing the tactic to LeanDojo.
+
+What to build:
+- validate_lean_name(name: str, project_root: Path) -> bool
+  runs: echo "#check <name>" | lake env lean
+  returns True if no error, False if unknown identifier
+- In prove_with_ponder.py: call this on each extracted tactic name before run_tac
+  if validation fails, treat it as a LeanError and trigger the retry with
+  "The theorem <name> does not exist in Mathlib. Use a verified name."
+- Cache results per session (same name checked many times across MCTS branches)
+
+This converts silent hallucination failures into explicit, recoverable errors.
+
+---
+
+4. Write Desol/SDE/Basic.lean — sorry-stubbed proof sketch
+Only after steps 2 and 3 are in place.
+Create the file with 4 lemmas in dependency order, typed against actual Mathlib imports.
+
+Dependency order (leaf → root):
+
+  lemma 1: gaussian_process_zero_mean
+    — a process with HasGaussianLaw and integral mean = 0
+
+  lemma 2: indep_increments_characterization
+    — combining HasIndepIncrements + IsGaussianProcess
+      to state a Wiener-like process property
+
+  lemma 3: wiener_process_variance
+    — variance of increment X(t) - X(s) equals t - s
+
+  lemma 4: wiener_martingale
+    — the process is a Martingale under its natural filtration
+
+Each ends with `by sorry`. They must all type-check.
+Run `lake build` after every lemma addition. A sorry is fine. A type error is a blocker.
+Do not move to the next lemma until the current one compiles cleanly.
+
+---
+
+5. Run prove_with_ponder on lemma 1 (simplest leaf)
+
+  conda activate desol-py311
+  python scripts/prove_with_ponder.py \
+    --project-root . \
+    --file Desol/SDE/Basic.lean \
+    --theorem gaussian_process_zero_mean \
+    --premise-file knowledge/mathlib_inventory.toon \
+    --max-steps 10 \
+    --max-attempts-per-state 3
+
+What to watch:
+- Does LeanDojo open the theorem state without error?
+  NO  → theorem statement is wrong or Mathlib import missing. Fix the .lean file.
+- Does the model propose only hallucinated theorem names?
+  YES → Layer 2 validator is working; check what names it is trying and update
+        the premise injection with more specific entries.
+- Does the proof close in <20 steps?
+  YES → beachhead confirmed viable. Move to lemma 2.
+  NO  → diagnose before tuning any parameters (see step 6).
+
+---
+
+6. Record telemetry and diagnose
+Check logs/ after each run. Record per attempt:
+- halt_reason (tactic / confidence / timeout)
+- turns used vs ACT budget
+- tactics Lean accepted vs rejected
+- which theorem names the validator blocked
+
+Failure triage:
+  statement problem  → type error or LeanDojo open failure → fix .lean file
+  vocabulary problem → validator blocks most names → expand premise injection entries
+  model problem      → names are valid but tactics are wrong → note it, do not tune yet
+  budget problem     → proof state advances but times out → only tune after the above are ruled out
+
+---
+
+7. Iterate lemma by lemma up the dependency chain
+Once lemma 1 closes: run lemma 2, then 3, then 4 in order.
+After each failure, apply the failure triage from step 6 before changing anything else.
+
+---
+
+8. Update mathlib_inventory.toon as you discover things
+Every time you find a wrong namespace, missing lemma, or unexpected type signature,
+update knowledge/mathlib_inventory.toon immediately. It is the living source of truth
+for premise injection. Stale entries mean the model gets wrong hints, which is worse
+than no hints.
+
+---
+
+9. After first end-to-end success — write a one-paragraph postmortem
+Answer:
+- What was the hardest part of the Lean scaffolding (not the pipeline)?
+- Where did the model hallucinate despite premise injection?
+- What would need to change to reach lemma 4 (the martingale property)?
+
+This determines the next investment: more premises, better statement writing, or
+Layer 3 (dense retrieval / ReProver-style premise selection).
+
+---
+
+10. Phase 2 planning — only after a working end-to-end loop
+Once one real SDE lemma is closed by the pipeline, revisit:
+- Layer 3: integrate ReProver-style dense retrieval against a local Mathlib embedding
+  index. This is the full premise selection system (~2-3 weeks). Do it with evidence,
+  not aspiration.
+- Whether to upgrade HasIndepIncrements + IsGaussianProcess to IsBrownian once
+  PR #36616 lands in Mathlib master.
+- Whether to define quadraticVariation manually (Mathlib contribution territory).
+- Whether the multi-lemma sequencer needs a script or the sorry-stub file scales.
+
+---
+CONSTRAINT: lake build must pass before any pipeline run.
+CONSTRAINT: premise injection (step 2) must be in place before any SDE proof attempt.
+CONSTRAINT: diagnose before tuning — never change pipeline parameters to fix a
+            statement problem or a vocabulary problem.

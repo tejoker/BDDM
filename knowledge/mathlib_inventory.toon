@@ -1,0 +1,34 @@
+lean_toolchain: leanprover/lean4:v4.15.0
+mathlib_branch: master
+surveyed_date: 2026-03-24
+
+# status values: exists | in_pr | missing
+
+nodes[21]{name,status,namespace,file,notes}:
+ BrownianMotion,in_pr,ProbabilityTheory,,IsPreBrownian/IsBrownian predicates on (ℝ≥0→Ω→ℝ). PRs #36616 #36803 #36472. Not merged.
+ HasIndepIncrements,exists,ProbabilityTheory,Mathlib/Probability/Independence/Process/HasIndepIncrements.lean,Increments X(t+1)-X(t) jointly independent. PR #36718 merged. Closed under linear maps.
+ IsGaussianProcess,exists,ProbabilityTheory,Mathlib/Probability/Distributions/Gaussian/IsGaussianProcess/Def.lean,Finite-dim distributions are Gaussian. Closed under linear maps/scaling/restriction.
+ HasGaussianLaw,exists,ProbabilityTheory,Mathlib/Probability/Distributions/Gaussian/HasGaussianLaw/Def.lean,Single RV has Gaussian law. All moments exist.
+ IsGaussian,exists,ProbabilityTheory,Mathlib/Probability/Distributions/Gaussian/,Measure-level Gaussian. Characteristic function criterion.
+ Martingale,exists,MeasureTheory,Mathlib/Probability/Martingale/Basic.lean,StronglyAdapted + conditional expectation equality. Submartingale/Supermartingale also exist.
+ martingalePart,exists,MeasureTheory,Mathlib/Probability/Martingale/Centering.lean,Doob decomposition. Any adapted integrable process = martingalePart + predictablePart.
+ predictablePart,exists,MeasureTheory,Mathlib/Probability/Martingale/Centering.lean,See martingalePart.
+ OptionalStopping,exists,MeasureTheory,Mathlib/Probability/Martingale/,Optional stopping theorem. Doob upcrossing inequalities also exist.
+ Filtration,exists,MeasureTheory,Mathlib/Probability/Process/Filtration.lean,Monotone σ-algebra sequences. Natural/right-continuous/σ-finite variants.
+ Adapted,exists,MeasureTheory,Mathlib/Probability/Process/Adapted.lean,StronglyAdapted preferred in modern Mathlib.
+ ProgMeasurable,exists,MeasureTheory,Mathlib/Probability/Process/,Progressive measurability for continuous-time processes.
+ StoppingTime,exists,MeasureTheory,Mathlib/Probability/Process/Stopping.lean,Hitting times in HittingTime.lean.
+ quadraticVariation,missing,,,No formalization started. Blocks ItoIsometry and ItoLemma. Needs finite variation first.
+ ItoIntegral,missing,,,No formalization started. Depends on quadraticVariation.
+ ItoIsometry,missing,,,E[(∫f dB)²]=E[∫f² dt]. Depends on ItoIntegral.
+ ItoLemma,missing,,,Change of variables for Ito processes. Depends on ItoIntegral + quadraticVariation.
+ IsPicardLindelof,exists,IsPicardLindelof,Mathlib/Analysis/ODE/PicardLindelof.lean,ODE only on Banach spaces. Existence + Lipschitz dependence on initial conditions. NO SDE variant.
+ PicardLindelof_SDE,missing,,,dX_t=b dt+σ dB_t. Depends on ItoIntegral.
+ SobolevSpace_W12,exists,MeasureTheory,Mathlib/Analysis/SobolevSpace/,Basic W^{1,2} exists. Fractional spaces and Rellich-Kondrachov in arbitrary dims incomplete.
+ LerayHopf,missing,,,Blocked by Sobolev embeddings + weak derivatives + nonlinear distribution theory.
+
+beachheads[4]{rank,name,blocking_deps,tactic_depth,rationale}:
+ 1,Wiener process characterization,,low-medium,HasIndepIncrements+IsGaussianProcess+zero mean+variance=t. All types in master today.
+ 2,Martingale property from indep increments,,medium,HasIndepIncrements+Martingale both in master. Stepping stone toward quadratic variation.
+ 3,Doob decomposition uniqueness,,medium,martingalePart+predictablePart fully in master. Proof is linearity+adaptedness.
+ 4,quadratic_variation_brownian_motion,"BrownianMotion(in_pr),quadraticVariation(missing)",high,Original objective.txt target. Currently blocked by missing Mathlib types.

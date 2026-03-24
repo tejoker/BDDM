@@ -15,6 +15,7 @@ import re
 import sys
 import time
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Callable
 
 from dotenv import load_dotenv
@@ -64,6 +65,71 @@ CONFIDENCE_RE = re.compile(
 )
 
 ApiLogHook = Callable[[dict[str, Any]], None]
+
+
+def load_premise_context(toon_path: str | Path, namespace_filter: str = "") -> str:
+    """Load compact premise bullets from a .toon inventory file.
+
+    The parser is intentionally light-weight: it expects inventory rows under a `nodes[...]`
+    block with comma-separated columns:
+      name,status,namespace,file,notes
+    """
+    path = Path(toon_path)
+    if not path.exists():
+        raise FileNotFoundError(f"premise file not found: {path}")
+
+    ns_filter = namespace_filter.strip().lower()
+    lines = path.read_text(encoding="utf-8").splitlines()
+
+    in_nodes = False
+    bullets: list[str] = []
+
+    for raw in lines:
+        line = raw.strip()
+        if not line:
+            continue
+        if line.startswith("nodes["):
+            in_nodes = True
+            continue
+        if in_nodes and line.startswith("beachheads["):
+            break
+        if not in_nodes:
+            continue
+        if line.startswith("#"):
+            continue
+
+        parts = [p.strip() for p in line.split(",", 4)]
+        if len(parts) < 5:
+            continue
+
+        name, status, namespace, _file, notes = parts
+        if status.lower() != "exists":
+            continue
+        if ns_filter and ns_filter not in namespace.lower() and ns_filter not in notes.lower():
+            continue
+
+        summary = notes.split(".")[0].strip()
+        if summary:
+            bullets.append(f"- {name} ({namespace}): {summary}.")
+        else:
+            bullets.append(f"- {name} ({namespace}).")
+
+    if not bullets:
+        return ""
+
+    return "\n".join(bullets)
+
+
+def build_system_prompt(*, premise_context: str = "") -> str:
+    base = SYSTEM_PROMPT
+    ctx = premise_context.strip()
+    if not ctx:
+        return base
+    return (
+        f"{base}\n\n"
+        "Available Mathlib premises for this proof state:\n"
+        f"{ctx}"
+    )
 
 
 @dataclass
@@ -228,6 +294,7 @@ def run_ponder_loop(
     min_act_turns: int = 2,
     max_act_turns: int = 8,
     trivial_state_chars: int = 80,
+    premise_context: str = "",
     api_log_hook: ApiLogHook | None = None,
 ) -> PonderResult:
     if not lean_state.strip():
@@ -248,7 +315,7 @@ def run_ponder_loop(
         raise ValueError("act_budget must be >= 1")
 
     messages: list[dict[str, str]] = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": build_system_prompt(premise_context=premise_context)},
         {
             "role": "user",
             "content": (
@@ -340,6 +407,7 @@ def generate_tactic_options(
     model: str,
     num_options: int = 5,
     temperature: float = 0.4,
+    premise_context: str = "",
     api_log_hook: ApiLogHook | None = None,
 ) -> list[str]:
     """Generate a distinct tactic list for macro-search expansion."""
@@ -347,7 +415,18 @@ def generate_tactic_options(
         raise ValueError("num_options must be >= 1")
 
     messages = [
-        {"role": "system", "content": TACTIC_OPTIONS_SYSTEM_PROMPT},
+        {
+            "role": "system",
+            "content": (
+                TACTIC_OPTIONS_SYSTEM_PROMPT
+                if not premise_context.strip()
+                else (
+                    f"{TACTIC_OPTIONS_SYSTEM_PROMPT}\n\n"
+                    "Available Mathlib premises for this proof state:\n"
+                    f"{premise_context.strip()}"
+                )
+            ),
+        },
         {
             "role": "user",
             "content": TACTIC_OPTIONS_USER_PROMPT.format(count=num_options, state=lean_state),
@@ -418,6 +497,18 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Print collected <think> blocks before the tactic",
     )
+    parser.add_argument(
+        "--premise-file",
+        type=str,
+        default="",
+        help="Path to .toon knowledge inventory for premise injection",
+    )
+    parser.add_argument(
+        "--premise-namespace",
+        type=str,
+        default="ProbabilityTheory",
+        help="Namespace filter applied when loading premise-file",
+    )
     return parser
 
 
@@ -441,6 +532,12 @@ def main() -> int:
     client = Mistral(api_key=api_key)
 
     fixed_budget = args.max_turns if args.max_turns > 0 else None
+    premise_context = ""
+    if args.premise_file:
+        premise_context = load_premise_context(
+            args.premise_file,
+            namespace_filter=args.premise_namespace,
+        )
 
     try:
         result = run_ponder_loop(
@@ -453,6 +550,7 @@ def main() -> int:
             min_act_turns=args.min_act_turns,
             max_act_turns=args.max_act_turns,
             trivial_state_chars=args.trivial_state_chars,
+            premise_context=premise_context,
         )
     except Exception as exc:
         print(f"[fail] ponder loop failed: {exc}")
