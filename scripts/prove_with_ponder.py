@@ -5,11 +5,13 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import shutil
 import sys
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+import subprocess
 
 from dotenv import load_dotenv
 from git import Repo as GitRepo
@@ -22,9 +24,31 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from ponder_loop import run_ponder_loop
+from ponder_loop import load_premise_context, run_ponder_loop
 
 _SNAPSHOT_CACHE: dict[str, tuple[Path, Path]] = {}
+_NAME_VALIDATION_CACHE: dict[tuple[str, str], bool] = {}
+_TACTIC_NAME_RE = re.compile(r"\b([A-Za-z_][A-Za-z0-9_']*(?:\.[A-Za-z_][A-Za-z0-9_']*)+)\b")
+_TACTIC_KEYWORDS = {
+    "by",
+    "exact",
+    "apply",
+    "refine",
+    "intro",
+    "intros",
+    "rw",
+    "simp",
+    "simpa",
+    "at",
+    "with",
+    "fun",
+    "have",
+    "show",
+    "constructor",
+    "cases",
+    "induction",
+    "where",
+}
 
 
 @dataclass
@@ -35,6 +59,47 @@ class StepRecord:
     model_turns: int
     result: str
     detail: str = ""
+
+
+def extract_tactic_theorem_names(tactic: str) -> list[str]:
+    found: list[str] = []
+    seen: set[str] = set()
+    for name in _TACTIC_NAME_RE.findall(tactic):
+        head = name.split(".", 1)[0].lower()
+        if head in _TACTIC_KEYWORDS:
+            continue
+        if name in seen:
+            continue
+        seen.add(name)
+        found.append(name)
+    return found
+
+
+def validate_lean_name(name: str, project_root: Path) -> bool:
+    """Return True if `#check <name>` succeeds in lake env lean."""
+    key = (str(project_root.resolve()), name)
+    if key in _NAME_VALIDATION_CACHE:
+        return _NAME_VALIDATION_CACHE[key]
+
+    cmd = [
+        "lake",
+        "env",
+        "lean",
+        "-T0",
+        "-E",
+        f"#check {name}",
+    ]
+    proc = subprocess.run(
+        cmd,
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    # `#check` succeeds only when the identifier elaborates correctly in context.
+    ok = proc.returncode == 0
+    _NAME_VALIDATION_CACHE[key] = ok
+    return ok
 
 
 def _create_snapshot_repo(project_root: Path) -> tuple[Path, Path]:
@@ -90,6 +155,7 @@ def prove_with_ponder(
     confidence_threshold: float = 0.9,
     temperature: float = 0.2,
     dojo_timeout: int = 600,
+    premise_context: str = "",
 ) -> tuple[bool, list[StepRecord], str]:
     repo, tmp_root = _prepare_leandojo_repo(project_root)
     theorem = Theorem(repo, file_path, theorem_name)
@@ -125,6 +191,7 @@ def prove_with_ponder(
                             min_act_turns=ponder_min_act_turns,
                             max_act_turns=ponder_max_act_turns,
                             confidence_threshold=confidence_threshold,
+                            premise_context=premise_context,
                         )
                     except TimeoutError as exc:
                         records.append(
@@ -140,6 +207,45 @@ def prove_with_ponder(
                         failed_attempts.append(("<no tactic>", f"ponder timeout: {exc}"))
                         continue
                     tactic = ponder_result.tactic.strip()
+
+                    if re.fullmatch(r"\s*sorry\s*", tactic):
+                        err = "Tactic is 'sorry': proof is incomplete. Propose a real tactic."
+                        records.append(
+                            StepRecord(
+                                step=step,
+                                attempt=attempt,
+                                tactic=tactic,
+                                model_turns=ponder_result.turns,
+                                result="lean-error",
+                                detail=err,
+                            )
+                        )
+                        failed_attempts.append((tactic, err))
+                        continue
+
+                    invalid_name = None
+                    for candidate_name in extract_tactic_theorem_names(tactic):
+                        if not validate_lean_name(candidate_name, project_root):
+                            invalid_name = candidate_name
+                            break
+
+                    if invalid_name is not None:
+                        err = (
+                            f"The theorem {invalid_name} does not exist in Mathlib. "
+                            "Use a verified name."
+                        )
+                        records.append(
+                            StepRecord(
+                                step=step,
+                                attempt=attempt,
+                                tactic=tactic,
+                                model_turns=ponder_result.turns,
+                                result="lean-error",
+                                detail=err,
+                            )
+                        )
+                        failed_attempts.append((tactic, err))
+                        continue
 
                     outcome = dojo.run_tac(current_state, tactic)
 
@@ -240,6 +346,16 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--confidence-threshold", type=float, default=0.9)
     parser.add_argument("--temperature", type=float, default=0.2)
     parser.add_argument("--dojo-timeout", type=int, default=600)
+    parser.add_argument(
+        "--premise-file",
+        default="",
+        help="Path to .toon knowledge inventory for premise injection",
+    )
+    parser.add_argument(
+        "--premise-namespace",
+        default="ProbabilityTheory",
+        help="Namespace filter applied when loading premise-file",
+    )
     return parser
 
 
@@ -260,6 +376,12 @@ def main() -> int:
 
     project_root = Path(args.project_root).resolve()
     file_path = Path(args.file)
+    premise_context = ""
+    if args.premise_file:
+        premise_context = load_premise_context(
+            args.premise_file,
+            namespace_filter=args.premise_namespace,
+        )
 
     client = Mistral(api_key=api_key)
 
@@ -277,6 +399,7 @@ def main() -> int:
         confidence_threshold=args.confidence_threshold,
         temperature=args.temperature,
         dojo_timeout=args.dojo_timeout,
+        premise_context=premise_context,
     )
 
     for r in records:

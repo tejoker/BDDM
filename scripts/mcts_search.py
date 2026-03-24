@@ -31,7 +31,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from ponder_loop import generate_tactic_options
+from ponder_loop import generate_tactic_options, load_premise_context
 from prove_with_ponder import _prepare_leandojo_repo
 
 VALUE_RE = re.compile(r"<value>([01](?:\.\d+)?)</value>", re.IGNORECASE)
@@ -81,6 +81,7 @@ class SearchStats:
     iterations: int = 0
     expanded_nodes: int = 0
     evaluated_nodes: int = 0
+    cache_hits: int = 0
 
 
 @dataclass
@@ -276,6 +277,7 @@ def expand_leaf(
     dojo: Dojo,
     client: Mistral,
     model: str,
+    premise_context: str = "",
     branch_min: int = 3,
     branch_max: int = 5,
 ) -> list[MCTSNode]:
@@ -289,6 +291,7 @@ def expand_leaf(
         model=model,
         num_options=n_options,
         temperature=0.5,
+        premise_context=premise_context,
     )
 
     children: list[MCTSNode] = []
@@ -335,6 +338,7 @@ def expand_leaf_fallback(
     leaf: MCTSNode,
     client: Mistral,
     model: str,
+    premise_context: str = "",
     branch_min: int = 3,
     branch_max: int = 5,
 ) -> list[MCTSNode]:
@@ -352,6 +356,7 @@ def expand_leaf_fallback(
         model=model,
         num_options=n_options,
         temperature=0.5,
+        premise_context=premise_context,
     )
 
     children: list[MCTSNode] = []
@@ -406,6 +411,7 @@ def run_mcts(
     theorem_name: str,
     client: Mistral,
     model: str,
+    premise_context: str = "",
     iterations: int = 30,
     exploration_c: float = 1.4,
     branch_min: int = 3,
@@ -432,6 +438,10 @@ def run_mcts(
                 tactic_from_parent=None,
             )
 
+            # Cache: state_text hash -> evaluated value. Avoids redundant API calls
+            # when different tactic paths converge to the same Lean proof state.
+            _value_cache: dict[str, float] = {}
+
             for _ in range(iterations):
                 stats.iterations += 1
 
@@ -445,6 +455,7 @@ def run_mcts(
                         dojo=dojo,
                         client=client,
                         model=model,
+                        premise_context=premise_context,
                         branch_min=branch_min,
                         branch_max=branch_max,
                     )
@@ -456,12 +467,18 @@ def run_mcts(
                 if eval_node.is_terminal and eval_node.terminal_reason == "proof-finished":
                     value = 1.0
                 else:
-                    value = evaluate_state_value(
-                        state_text=eval_node.state_text,
-                        client=client,
-                        model=model,
-                    )
-                    stats.evaluated_nodes += 1
+                    cache_key = eval_node.state_text.strip()
+                    if cache_key in _value_cache:
+                        value = _value_cache[cache_key]
+                        stats.cache_hits += 1
+                    else:
+                        value = evaluate_state_value(
+                            state_text=eval_node.state_text,
+                            client=client,
+                            model=model,
+                        )
+                        _value_cache[cache_key] = value
+                        stats.evaluated_nodes += 1
 
                 backpropagate(path, value)
 
@@ -478,6 +495,7 @@ def run_mcts_fallback(
     theorem_name: str,
     client: Mistral,
     model: str,
+    premise_context: str = "",
     iterations: int = 30,
     exploration_c: float = 1.4,
     branch_min: int = 3,
@@ -506,6 +524,7 @@ def run_mcts_fallback(
                 leaf=leaf,
                 client=client,
                 model=model,
+                premise_context=premise_context,
                 branch_min=branch_min,
                 branch_max=branch_max,
             )
@@ -592,6 +611,16 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Apply known LeanDojo ExtractData compatibility patches before preflight",
     )
+    parser.add_argument(
+        "--premise-file",
+        default="",
+        help="Path to .toon knowledge inventory for premise injection",
+    )
+    parser.add_argument(
+        "--premise-namespace",
+        default="ProbabilityTheory",
+        help="Namespace filter applied when loading premise-file",
+    )
     return parser
 
 
@@ -614,6 +643,12 @@ def main() -> int:
         return 1
 
     client = Mistral(api_key=api_key)
+    premise_context = ""
+    if args.premise_file:
+        premise_context = load_premise_context(
+            args.premise_file,
+            namespace_filter=args.premise_namespace,
+        )
 
     if args.auto_patch_leandojo:
         changed, patch_msg = patch_leandojo_extractdata_compat()
@@ -651,6 +686,7 @@ def main() -> int:
                 theorem_name=args.theorem,
                 client=client,
                 model=model,
+                premise_context=premise_context,
                 iterations=args.iterations,
                 exploration_c=args.exploration_c,
                 branch_min=args.branch_min,
@@ -664,6 +700,7 @@ def main() -> int:
                 theorem_name=args.theorem,
                 client=client,
                 model=model,
+                premise_context=premise_context,
                 iterations=args.iterations,
                 exploration_c=args.exploration_c,
                 branch_min=args.branch_min,
@@ -677,7 +714,7 @@ def main() -> int:
 
     print(f"[ok] mode={mode} iterations={stats.iterations}")
     print(f"[info] root_visits={root.visits} root_mean_value={root.mean_value:.4f}")
-    print(f"[info] expanded_nodes={stats.expanded_nodes} evaluated_nodes={stats.evaluated_nodes}")
+    print(f"[info] expanded_nodes={stats.expanded_nodes} evaluated_nodes={stats.evaluated_nodes} cache_hits={stats.cache_hits}")
     print("[info] best_tactic_path:")
     if not best_path:
         print("(empty)")
