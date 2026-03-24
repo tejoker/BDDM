@@ -1,0 +1,5 @@
+/.lake
+/.env
+/.venv
+__pycache__/
+

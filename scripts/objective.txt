@@ -1,0 +1,20 @@
+1. Stochastic Calculus & SDE FoundationsWhile Mathlib recently added basic probability theory, Markov kernels, and martingales, the actual machinery to solve SDEs is missing.
+Missing - Itô Calculus: Lean currently lacks a robust, generalized formalization of Itô's Lemma. You cannot prove SDE stability without this.
+Missing - Stochastic Integrals: The construction of the Itô integral (and Stratonovich integral) for continuous semi-martingales is highly incomplete.
+The Goal for your AI: Have your AI prove basic properties of Brownian motion (Wiener processes) or formalize the Picard-Lindelöf theorem for the existence and uniqueness of solutions to basic 1D SDEs.
+
+2. Advanced Partial Differential Equations
+Mathlib has basic topology, measure theory, and some 1D calculus, but it hits a wall when dealing with modern, multidimensional fluid dynamics.
+Missing - Advanced Sobolev Spaces: While basic $W^{1,2}$ spaces exist, fractional Sobolev spaces and strict embedding theorems (like the Rellich-Kondrachov theorem in arbitrary dimensions) are full of holes.
+Missing - Theory of Distributions: To do PDEs, you need weak derivatives. The Schwartz space of test functions is there, but the full, rigorous algebraic manipulation of distributions for non-linear PDEs is lacking.
+The Goal for your AI: Point your AI at formalizing Leray-Hopf weak solutions. This is the absolute prerequisite before anyone can even begin to formulate the Navier-Stokes Millennium problem in Lean.
+
+3. Differential Geometry and Complex AnalysisIf you want to move away from applied physics and into pure math, this is the biggest gap in the library right now.
+Missing - Complex Manifolds: Mathlib has topological spaces and some basic real manifolds, but complex manifolds (and Kähler geometry) are essentially nonexistent.
+Missing - Geometric Analysis: The mathematical machinery required to formally state Ricci Flow (the tool Perelman used to solve the Poincaré Conjecture) is missing.
+The Goal for your AI: Use your pipeline to formalize the Frobenius Theorem or the Poincare Lemma for differential forms.
+
+4. Statistical Learning Theory (SLT)While a massive update just dropped in February 2026 adding Dudley's entropy integral and basic Gaussian processes, deep learning theory is still a barren wasteland in Lean.
+Missing - Neural Tangent Kernels (NTK): There is no formal proof in Lean that infinitely wide neural networks converge to Gaussian processes.
+Missing - Advanced Convergence: Formal proofs for the convergence of modern optimization algorithms (like Adam) in non-convex landscapes.The Strategy for your PipelineDo not ask your MCTS to invent new math. Ask it to translate textbook math into Lean 4. 
+You take a standard graduate textbook on Stochastic Calculus, extract a known, human-proven lemma (e.g., "The quadratic variation of standard Brownian motion is $t$"), define the types manually, and let your URM loop figure out the exact sequence of Lean tactics to make the compiler accept it.

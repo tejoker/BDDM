@@ -1,0 +1,3 @@
+lean-dojo==4.20.0
+mistralai==2.1.3
+python-dotenv==1.2.2

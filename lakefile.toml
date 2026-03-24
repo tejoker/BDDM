@@ -1,0 +1,10 @@
+name = "desol"
+version = "0.1.0"
+defaultTargets = ["desol"]
+
+[[lean_lib]]
+name = "Desol"
+
+[[lean_exe]]
+name = "desol"
+root = "Main"
