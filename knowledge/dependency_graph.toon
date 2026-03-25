@@ -1,0 +1,27 @@
+lean_toolchain: leanprover/lean4:v4.29.0-rc7
+graph_type: lemma_dependency
+source_file: Desol/SDE/Basic.lean
+
+# Each lemma block lists its Mathlib dependencies and a proof path hint.
+# Parsed by load_premise_context — nodes with status=exists are injected
+# into the URM system prompt as available premises.
+
+nodes[12]{name,status,namespace,file,notes}:
+ IsGaussianProcess,exists,ProbabilityTheory,Mathlib/Probability/Distributions/Gaussian/IsGaussianProcess/Def.lean,Type definition for Gaussian processes. Used in gaussian_process_zero_mean + all downstream lemmas.
+ HasGaussianLaw,exists,ProbabilityTheory,Mathlib/Probability/Distributions/Gaussian/HasGaussianLaw/Def.lean,Moment bounds for individual Gaussian RVs. Provides finite first and second moments.
+ MeasureTheory.Integrable,exists,MeasureTheory,Mathlib/MeasureTheory/Function/Integrable.lean,L1 integrability predicate. Conclusion type for gaussian_process_zero_mean and wiener_process_variance.
+ HasIndepIncrements,exists,ProbabilityTheory,Mathlib/Probability/Independence/Process/HasIndepIncrements.lean,Independence structure for process increments. Core axiom for indep_increments_characterization and wiener_process_variance.
+ Martingale,exists,MeasureTheory,Mathlib/Probability/Martingale/Basic.lean,Martingale definition. Used in indep_increments_characterization and wiener_martingale.
+ Filtration,exists,MeasureTheory,Mathlib/Probability/Process/Filtration.lean,Canonical filtration for adapted processes. Required by wiener_martingale.
+ Adapted,exists,MeasureTheory,Mathlib/Probability/Process/Adapted.lean,Adaptedness predicate for stochastic processes. Required by wiener_martingale.
+ MeasureTheory.integral,exists,MeasureTheory,Mathlib/MeasureTheory/Integral/Bochner.lean,Bochner integral notation. Used in wiener_martingale variance conclusion.
+ IsGaussian,exists,ProbabilityTheory,Mathlib/Probability/Distributions/Gaussian/,Measure-level Gaussian. Supports Gaussian closure under linear operations.
+ MeasureTheory.Measure.volume,exists,MeasureTheory,Mathlib/MeasureTheory/Measure/Lebesgue.lean,Lebesgue measure instance. Used as default measure in integral conclusions.
+ MeasureTheory.Integrable.pow,exists,MeasureTheory,Mathlib/MeasureTheory/Function/Integrable.lean,Integrability of powers. Needed for (X t - X s)^2 integrability in wiener_process_variance.
+ iIndepFun,exists,ProbabilityTheory,Mathlib/Probability/Independence/Basic.lean,Joint independence of functions. Underlying mechanism for HasIndepIncrements.
+
+lemma_deps[4]{lemma,file_loc,lean_deps,proof_hint}:
+ gaussian_process_zero_mean,Desol/SDE/Basic.lean:13,"IsGaussianProcess,HasGaussianLaw,MeasureTheory.Integrable","Use IsGaussianProcess to get Gaussian marginals at each t. Apply HasGaussianLaw finite-moment theorem. Conclude Integrable."
+ indep_increments_characterization,Desol/SDE/Basic.lean:24,"HasIndepIncrements,IsGaussianProcess,Martingale","Isolate disjoint time windows via HasIndepIncrements. Apply Gaussian closure under finite sums. Show shifted increments remain Gaussian."
+ wiener_process_variance,Desol/SDE/Basic.lean:37,"HasIndepIncrements,IsGaussianProcess,MeasureTheory.Integrable,MeasureTheory.Integrable.pow","Combine independence and Gaussianity. Apply Gaussian second-moment bound. Conclude (X t - X s)^2 integrable."
+ wiener_martingale,Desol/SDE/Basic.lean:50,"HasIndepIncrements,IsGaussianProcess,Adapted,Filtration,Martingale,MeasureTheory.integral","Sum increment variances via independence. Use zero-mean + Gaussianity for martingale property. Derive linear variance growth constant c."
