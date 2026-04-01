@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DESol — LaTeX → Lean (local)</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --text: #e6edf3;
+      --muted: #8b9cb3;
+      --accent: #3d9a66;
+      --warn: #c9a24a;
+      --err: #d06b6b;
+      --border: #2d3a4d;
+      --font: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", "Consolas", monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    h1 { font-weight: 600; font-size: 1.35rem; letter-spacing: -0.02em; margin: 0 0 0.35rem; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.75rem; }
+    .drop {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      background: var(--panel);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .drop:hover, .drop.dragover { border-color: var(--accent); background: #1e2a3a; }
+    .drop strong { color: var(--accent); }
+    .drop input { display: none; }
+    .opts {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem 1.25rem;
+      margin-top: 1.25rem;
+      font-size: 0.85rem;
+    }
+    .opts label { display: flex; flex-direction: column; gap: 0.25rem; color: var(--muted); }
+    .opts input[type="number"], .opts input[type="text"] {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.45rem 0.5rem;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+    }
+    .opts input[type="checkbox"] { width: auto; margin-top: 0.35rem; }
+    button.primary {
+      margin-top: 1.25rem;
+      background: var(--accent);
+      color: #0a0f12;
+      border: none;
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    .panel {
+      margin-top: 2rem;
+      padding: 1.25rem;
+      background: var(--panel);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .panel h2 { font-size: 1rem; margin: 0 0 0.75rem; font-weight: 600; }
+    .status { font-family: var(--mono); font-size: 0.8rem; color: var(--warn); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-weight: 500; }
+    .ok { color: var(--accent); }
+    .bad { color: var(--err); }
+    .muted { color: var(--muted); }
+    pre.log {
+      margin: 0;
+      max-height: 320px;
+      overflow: auto;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #b8c5d6;
+      background: var(--bg);
+      padding: 0.75rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    details { margin-top: 0.75rem; }
+    details summary { cursor: pointer; color: var(--muted); font-size: 0.85rem; }
+    .lake { margin-top: 1rem; }
+    .lake code { font-size: 0.72rem; }
+    .actions { margin-top: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+    button.link {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.45rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    button.link:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-block { margin-top: 0.5rem; }
+    .copy-block pre { margin: 0; font-size: 0.72rem; max-height: 200px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>DESol — LaTeX → Lean</h1>
+    <p class="sub">Local only. Drop a <strong>.tex</strong> file or a <strong>.zip</strong> of sources (same layout as arXiv: multiple <code>.tex</code> files; main file is detected like <code>find_main_tex</code>). API keys stay on the server.</p>
+
+    <div class="drop" id="drop">
+      <input type="file" id="file" accept=".tex,.zip,application/zip" />
+      <p><strong>Click or drop</strong> — <span id="fname">no file selected</span></p>
+    </div>
+
+    <div class="opts">
+      <label>Max theorems (0 = all)
+        <input type="number" id="max_theorems" value="0" min="0" />
+      </label>
+      <label>Repair rounds
+        <input type="number" id="repair_rounds" value="5" min="1" />
+      </label>
+      <label>Parallel theorems
+        <input type="number" id="parallel_theorems" value="2" min="1" />
+      </label>
+      <label>Retrieval index path
+        <input type="text" id="retrieval_index" value="data/mathlib_embeddings" />
+      </label>
+      <label>Dojo timeout (s)
+        <input type="number" id="dojo_timeout" value="600" min="30" />
+      </label>
+      <label style="flex-direction: row; align-items: center; gap: 0.5rem;">
+        <input type="checkbox" id="translate_only" />
+        Translate only (skip proof search)
+      </label>
+    </div>
+
+    <button class="primary" id="go" disabled>Run pipeline</button>
+
+    <div class="panel" id="out" hidden>
+      <h2>Job</h2>
+      <p class="status" id="progress"></p>
+      <div class="actions" id="actions" hidden>
+        <a id="dl" href="#" download><button type="button" class="link">Download .lean</button></a>
+        <button type="button" class="link" id="copy_all">Copy full Lean output</button>
+      </div>
+
+      <h2 style="margin-top: 1.25rem;">Summary</h2>
+      <div id="table_wrap"></div>
+
+      <h2 style="margin-top: 1.25rem;">Lake build</h2>
+      <div class="lake" id="lake"></div>
+
+      <details id="log_wrap">
+        <summary>Show full pipeline log</summary>
+        <pre class="log" id="full_log"></pre>
+      </details>
+    </div>
+  </div>
+
+  <script>
+    const drop = document.getElementById("drop");
+    const fileInput = document.getElementById("file");
+    const fname = document.getElementById("fname");
+    const go = document.getElementById("go");
+    const out = document.getElementById("out");
+    const progressEl = document.getElementById("progress");
+    const tableWrap = document.getElementById("table_wrap");
+    const fullLog = document.getElementById("full_log");
+    const lakeEl = document.getElementById("lake");
+    const actions = document.getElementById("actions");
+    const dl = document.getElementById("dl");
+    const copyAll = document.getElementById("copy_all");
+
+    let selected = null;
+    let leanTextCache = "";
+
+    drop.addEventListener("click", () => fileInput.click());
+    drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("dragover"); });
+    drop.addEventListener("dragleave", () => drop.classList.remove("dragover"));
+    drop.addEventListener("drop", (e) => {
+      e.preventDefault();
+      drop.classList.remove("dragover");
+      const f = e.dataTransfer.files[0];
+      if (f) setFile(f);
+    });
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files[0]) setFile(fileInput.files[0]);
+    });
+
+    function setFile(f) {
+      selected = f;
+      fname.textContent = f.name;
+      go.disabled = !/\.(tex|zip)$/i.test(f.name);
+    }
+
+    function esc(s) {
+      const d = document.createElement("div");
+      d.textContent = s ?? "";
+      return d.innerHTML;
+    }
+
+    go.addEventListener("click", async () => {
+      if (!selected) return;
+      go.disabled = true;
+      out.hidden = false;
+      progressEl.textContent = "Uploading…";
+      tableWrap.innerHTML = "";
+      lakeEl.innerHTML = "";
+      fullLog.textContent = "";
+      actions.hidden = true;
+      leanTextCache = "";
+
+      const fd = new FormData();
+      fd.append("file", selected);
+      fd.append("max_theorems", document.getElementById("max_theorems").value);
+      fd.append("translate_only", document.getElementById("translate_only").checked);
+      fd.append("repair_rounds", document.getElementById("repair_rounds").value);
+      fd.append("parallel_theorems", document.getElementById("parallel_theorems").value);
+      fd.append("retrieval_index", document.getElementById("retrieval_index").value);
+      fd.append("retrieval_top_k", "12");
+      fd.append("temperature", "0.2");
+      fd.append("dojo_timeout", document.getElementById("dojo_timeout").value);
+      fd.append("api_rate", "4");
+
+      let res;
+      try {
+        res = await fetch("/api/jobs", { method: "POST", body: fd });
+      } catch (e) {
+        progressEl.textContent = "Network error: " + e;
+        go.disabled = false;
+        return;
+      }
+      if (!res.ok) {
+        progressEl.textContent = "Failed to start: " + (await res.text());
+        go.disabled = false;
+        return;
+      }
+      const { job_id } = await res.json();
+      progressEl.textContent = "Job " + job_id;
+
+      let pollHandle = null;
+      async function tick() {
+        const r = await fetch("/api/jobs/" + job_id);
+        const j = await r.json();
+        progressEl.textContent = (j.status || "") + " — " + (j.progress || "");
+
+        if (j.status === "failed") {
+          if (pollHandle) clearInterval(pollHandle);
+          progressEl.textContent = "Failed: " + (j.error || "unknown");
+          fullLog.textContent = j.full_log || "";
+          go.disabled = false;
+          return;
+        }
+        if (j.status === "completed") {
+          if (pollHandle) clearInterval(pollHandle);
+          progressEl.textContent = "Completed";
+          fullLog.textContent = j.full_log || "";
+          const rows = (j.structured || []).map((row) => {
+            const tr = row.translation.validated ? "ok" : "bad";
+            const pr = row.proved ? "ok" : "bad";
+            const parts = [];
+            if (row.prove_summary) parts.push(row.prove_summary);
+            if (!row.translation.validated && row.translation.last_error) parts.push(row.translation.last_error);
+            const sum = parts.join(" — ") || (row.skipped ? "skipped" : "");
+            return "<tr><td>" + esc(row.name) + "</td><td>" + esc(row.kind) + "</td><td class='" + tr + "'>" +
+              (row.translation.validated ? "yes" : "no") + "</td><td class='" + pr + "'>" +
+              (row.proved ? "yes" : "no") + "</td><td>" + esc(sum) + "</td><td>" + esc(row.exception || "") + "</td></tr>";
+          });
+          const body = rows.length
+            ? rows.join("")
+            : "<tr><td colspan='6'>No theorem environments found (or empty run).</td></tr>";
+          tableWrap.innerHTML = "<table><thead><tr><th>Name</th><th>Kind</th><th>Translated</th><th>Proved</th><th>Notes</th><th>Exception</th></tr></thead><tbody>" +
+            body + "</tbody></table>";
+
+          const exit = j.lake_exit_code;
+          const lakeOk = exit === 0;
+          const exitLabel = exit === null || exit === undefined ? "skipped" : String(exit);
+          const lakeClass = exit === null || exit === undefined ? "muted" : (lakeOk ? "ok" : "bad");
+          lakeEl.innerHTML = "<p class='" + lakeClass + "'><strong>lake build</strong> " +
+            (exit === null || exit === undefined ? "(no .lean output)" : "exit " + esc(exitLabel)) + "</p>" +
+            "<pre class='log'>" + esc((j.lake_stdout || "") + (j.lake_stderr ? "\n" + j.lake_stderr : "")) + "</pre>";
+
+          if (j.out_lean) {
+            dl.href = "/api/jobs/" + job_id + "/lean";
+            actions.hidden = false;
+            try {
+              const lr = await fetch("/api/jobs/" + job_id + "/lean");
+              leanTextCache = await lr.text();
+            } catch (_) { leanTextCache = ""; }
+          } else {
+            actions.hidden = true;
+            leanTextCache = "";
+          }
+
+          go.disabled = false;
+        }
+      }
+      await tick();
+      pollHandle = setInterval(tick, 2000);
+    });
+
+    copyAll.addEventListener("click", async () => {
+      if (leanTextCache) {
+        await navigator.clipboard.writeText(leanTextCache);
+        copyAll.textContent = "Copied";
+        setTimeout(() => { copyAll.textContent = "Copy full Lean output"; }, 2000);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -19,7 +19,15 @@ from pathlib import Path
 from typing import Any, Callable
 
 from dotenv import load_dotenv
-from mistralai.client import Mistral
+try:
+    from mistralai import Mistral
+except ImportError:
+    from mistralai.client import Mistral  # type: ignore[no-redef]
+
+try:
+    from premise_retrieval import PremiseRetriever
+except Exception:
+    PremiseRetriever = None  # type: ignore[assignment]
 
 SYSTEM_PROMPT = (
     "You are Leanstral. You must think deeply about the current Lean 4 state before acting. "
@@ -58,6 +66,8 @@ TACTIC_OPTIONS_USER_PROMPT = (
 
 THINK_RE = re.compile(r"<think>(.*?)</think>", re.IGNORECASE | re.DOTALL)
 TACTIC_RE = re.compile(r"<tactic>(.*?)</tactic>", re.IGNORECASE | re.DOTALL)
+DRAFT_RE = re.compile(r"<draft>(.*?)</draft>", re.IGNORECASE | re.DOTALL)
+LEAN_CODEBLOCK_RE = re.compile(r"```(?:lean|lean4)?\s*(.*?)```", re.IGNORECASE | re.DOTALL)
 CONTINUE_RE = re.compile(r"<continue\s*/?>|<continue>\s*</continue>", re.IGNORECASE | re.DOTALL)
 CONFIDENCE_RE = re.compile(
     r"confidence\s*[:=]\s*([01](?:\.\d+)?)",
@@ -65,6 +75,7 @@ CONFIDENCE_RE = re.compile(
 )
 
 ApiLogHook = Callable[[dict[str, Any]], None]
+_RETRIEVER_CACHE: dict[str, Any] = {}
 
 
 def load_premise_context(toon_path: str | Path, namespace_filter: str = "") -> str:
@@ -130,6 +141,71 @@ def build_system_prompt(*, premise_context: str = "") -> str:
         "Available Mathlib premises for this proof state:\n"
         f"{ctx}"
     )
+
+
+def _get_retriever(index_path: str | Path) -> Any | None:
+    """Load and cache retriever from an index path."""
+    if PremiseRetriever is None:
+        return None
+    key = str(Path(index_path).resolve())
+    if key in _RETRIEVER_CACHE:
+        return _RETRIEVER_CACHE[key]
+
+    retriever = PremiseRetriever.load(key)
+    _RETRIEVER_CACHE[key] = retriever
+    return retriever
+
+
+def retrieve_premise_context(
+    *,
+    lean_state: str,
+    retrieval_index_path: str | Path,
+    top_k: int = 12,
+    use_tier_preference: bool = False,
+    kg_root: str | Path = "output/kg",
+) -> str:
+    """Retrieve top-k Mathlib premises for a given Lean state.
+    
+    Args:
+        lean_state: Current Lean proof state
+        retrieval_index_path: Path to embedding index
+        top_k: Number of results to return
+        use_tier_preference: If True, prefer trusted/conditional KG layer results
+        kg_root: Root path for KG manifests (used if use_tier_preference=True)
+    """
+    retriever = _get_retriever(retrieval_index_path)
+    if retriever is None:
+        return ""
+
+    # Use tier-aware retrieval if requested and available
+    if use_tier_preference:
+        try:
+            from premise_retrieval import load_kg_tier_names
+            trusted_names, conditional_names = load_kg_tier_names(kg_root)
+            results = retriever.query_with_tier_preference(
+                lean_state, 
+                kg_trusted_names=trusted_names if trusted_names else None,
+                kg_conditional_names=conditional_names if conditional_names else None,
+                top_k=top_k
+            )
+        except (ImportError, Exception):
+            # Fallback to regular query if tier-aware fails
+            results = retriever.query(lean_state, top_k=top_k)
+    else:
+        results = retriever.query(lean_state, top_k=top_k)
+
+    if not results:
+        return ""
+
+    bullets: list[str] = []
+    for hit in results:
+        stmt = " ".join(hit.statement.split())
+        if len(stmt) > 180:
+            stmt = stmt[:177] + "..."
+        # Add trust tier annotation if present
+        tier_suffix = f" [tier: {hit.trust_tier}]" if hasattr(hit, 'trust_tier') and hit.trust_tier != "unknown" else ""
+        bullets.append(f"- {hit.name} ({hit.namespace}): {stmt}{tier_suffix}")
+    return "\n".join(bullets)
 
 
 @dataclass
@@ -216,6 +292,31 @@ def _extract_tactics(text: str) -> list[str]:
     return [m.strip() for m in TACTIC_RE.findall(text) if m.strip()]
 
 
+def _extract_drafts(text: str) -> list[str]:
+    return [m.strip() for m in DRAFT_RE.findall(text) if m.strip()]
+
+
+def _extract_best_effort_draft(text: str) -> str:
+    """Parse a draft with tolerant fallbacks when tags are missing."""
+    drafts = _extract_drafts(text)
+    if drafts:
+        return drafts[0]
+
+    tactics = _extract_tactics(text)
+    if tactics:
+        return "\n".join(tactics)
+
+    code_blocks = [m.strip() for m in LEAN_CODEBLOCK_RE.findall(text) if m.strip()]
+    if code_blocks:
+        return code_blocks[0]
+
+    raw = text.strip()
+    if raw:
+        return raw
+
+    raise RuntimeError("Model returned an empty draft")
+
+
 def _has_continue(text: str) -> bool:
     return bool(CONTINUE_RE.search(text))
 
@@ -295,6 +396,8 @@ def run_ponder_loop(
     max_act_turns: int = 8,
     trivial_state_chars: int = 80,
     premise_context: str = "",
+    retrieval_index_path: str = "",
+    retrieval_top_k: int = 12,
     api_log_hook: ApiLogHook | None = None,
 ) -> PonderResult:
     if not lean_state.strip():
@@ -314,8 +417,31 @@ def run_ponder_loop(
     if act_budget < 1:
         raise ValueError("act_budget must be >= 1")
 
+    retrieved_context = ""
+    if retrieval_index_path:
+        retrieved_context = retrieve_premise_context(
+            lean_state=lean_state,
+            retrieval_index_path=retrieval_index_path,
+            top_k=retrieval_top_k,
+            use_tier_preference=True,
+        )
+
+    effective_premise_context = premise_context.strip()
+    if retrieved_context:
+        if effective_premise_context:
+            effective_premise_context = (
+                f"{effective_premise_context}\n"
+                "- - -\n"
+                f"{retrieved_context}"
+            )
+        else:
+            effective_premise_context = retrieved_context
+
     messages: list[dict[str, str]] = [
-        {"role": "system", "content": build_system_prompt(premise_context=premise_context)},
+        {
+            "role": "system",
+            "content": build_system_prompt(premise_context=effective_premise_context),
+        },
         {
             "role": "user",
             "content": (
@@ -408,22 +534,44 @@ def generate_tactic_options(
     num_options: int = 5,
     temperature: float = 0.4,
     premise_context: str = "",
+    retrieval_index_path: str = "",
+    retrieval_top_k: int = 12,
     api_log_hook: ApiLogHook | None = None,
 ) -> list[str]:
     """Generate a distinct tactic list for macro-search expansion."""
     if num_options < 1:
         raise ValueError("num_options must be >= 1")
 
+    retrieved_context = ""
+    if retrieval_index_path:
+        retrieved_context = retrieve_premise_context(
+            lean_state=lean_state,
+            retrieval_index_path=retrieval_index_path,
+            top_k=retrieval_top_k,
+            use_tier_preference=True,
+        )
+
+    effective_premise_context = premise_context.strip()
+    if retrieved_context:
+        if effective_premise_context:
+            effective_premise_context = (
+                f"{effective_premise_context}\n"
+                "- - -\n"
+                f"{retrieved_context}"
+            )
+        else:
+            effective_premise_context = retrieved_context
+
     messages = [
         {
             "role": "system",
             "content": (
                 TACTIC_OPTIONS_SYSTEM_PROMPT
-                if not premise_context.strip()
+                if not effective_premise_context
                 else (
                     f"{TACTIC_OPTIONS_SYSTEM_PROMPT}\n\n"
                     "Available Mathlib premises for this proof state:\n"
-                    f"{premise_context.strip()}"
+                    f"{effective_premise_context}"
                 )
             ),
         },
@@ -455,6 +603,152 @@ def generate_tactic_options(
             break
 
     return tactics
+
+
+def generate_full_proof_draft(
+    *,
+    lean_state: str,
+    client: Mistral,
+    model: str,
+    informal_proof_hint: str = "",
+    temperature: float = 0.2,
+    premise_context: str = "",
+    retrieval_index_path: str = "",
+    retrieval_top_k: int = 12,
+    api_log_hook: ApiLogHook | None = None,
+) -> str:
+    """Generate a full proof draft as a sequence of Lean tactics.
+
+    Contract: return exactly one <draft>...</draft> block containing newline-separated
+    tactics executable via run_tac.
+    """
+    retrieved_context = ""
+    if retrieval_index_path:
+        retrieved_context = retrieve_premise_context(
+            lean_state=lean_state,
+            retrieval_index_path=retrieval_index_path,
+            top_k=retrieval_top_k,
+            use_tier_preference=True,
+        )
+
+    effective_premise_context = premise_context.strip()
+    if retrieved_context:
+        if effective_premise_context:
+            effective_premise_context = (
+                f"{effective_premise_context}\n"
+                "- - -\n"
+                f"{retrieved_context}"
+            )
+        else:
+            effective_premise_context = retrieved_context
+
+    system_prompt = (
+        "You are Leanstral in full-draft mode. "
+        "Output exactly one <draft>...</draft> block containing newline-separated Lean tactics. "
+        "Each line must be directly executable with run_tac on the current goal state. "
+        "Do not include theorem declarations, comments, markdown, or prose."
+    )
+
+    user_parts = [f"Current Lean 4 proof state:\n{lean_state}"]
+    if informal_proof_hint.strip():
+        user_parts.append(f"Informal proof hint:\n{informal_proof_hint.strip()}")
+    if effective_premise_context:
+        user_parts.append(
+            "Available Mathlib premises for this proof state:\n"
+            f"{effective_premise_context}"
+        )
+    user_parts.append(
+        "Return one executable proof draft now. "
+        "Prefer short robust tactics and verified theorem names."
+    )
+
+    _response, text = _chat_complete(
+        client=client,
+        model=model,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": "\n\n".join(user_parts)},
+        ],
+        temperature=temperature,
+        max_tokens=900,
+        purpose="generate_full_proof_draft",
+        api_log_hook=api_log_hook,
+    )
+
+    return _extract_best_effort_draft(text)
+
+
+def repair_full_proof_draft(
+    *,
+    lean_state: str,
+    current_draft: str,
+    error_feedback: str,
+    client: Mistral,
+    model: str,
+    informal_proof_hint: str = "",
+    temperature: float = 0.2,
+    premise_context: str = "",
+    retrieval_index_path: str = "",
+    retrieval_top_k: int = 12,
+    api_log_hook: ApiLogHook | None = None,
+) -> str:
+    """Repair a previous full proof draft using structured Lean error feedback."""
+    retrieved_context = ""
+    if retrieval_index_path:
+        retrieved_context = retrieve_premise_context(
+            lean_state=lean_state,
+            retrieval_index_path=retrieval_index_path,
+            top_k=retrieval_top_k,
+            use_tier_preference=True,
+        )
+
+    effective_premise_context = premise_context.strip()
+    if retrieved_context:
+        if effective_premise_context:
+            effective_premise_context = (
+                f"{effective_premise_context}\n"
+                "- - -\n"
+                f"{retrieved_context}"
+            )
+        else:
+            effective_premise_context = retrieved_context
+
+    system_prompt = (
+        "You are Leanstral in proof-repair mode. "
+        "Repair the failing draft and return exactly one <draft>...</draft> block with newline-separated tactics. "
+        "Every line must be executable via run_tac. Output no prose."
+    )
+
+    user_parts = [
+        f"Current Lean 4 proof state:\n{lean_state}",
+        f"Current failing draft:\n{current_draft}",
+        f"Lean error feedback:\n{error_feedback}",
+    ]
+    if informal_proof_hint.strip():
+        user_parts.append(f"Original informal proof hint:\n{informal_proof_hint.strip()}")
+    if effective_premise_context:
+        user_parts.append(
+            "Available Mathlib premises for this proof state:\n"
+            f"{effective_premise_context}"
+        )
+    user_parts.append(
+        "Fix only what is necessary so the script advances farther than before."
+    )
+
+    _response, text = _chat_complete(
+        client=client,
+        model=model,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": "\n\n".join(user_parts)},
+        ],
+        temperature=temperature,
+        max_tokens=1000,
+        purpose="repair_full_proof_draft",
+        api_log_hook=api_log_hook,
+    )
+
+    return _extract_best_effort_draft(text)
 
 
 def _read_lean_state(args: argparse.Namespace) -> str:
@@ -509,6 +803,18 @@ def build_parser() -> argparse.ArgumentParser:
         default="ProbabilityTheory",
         help="Namespace filter applied when loading premise-file",
     )
+    parser.add_argument(
+        "--retrieval-index",
+        type=str,
+        default="",
+        help="Path to premise retrieval index JSON (top-k retrieved names/statements).",
+    )
+    parser.add_argument(
+        "--retrieval-top-k",
+        type=int,
+        default=12,
+        help="Number of retrieved premises injected into the prompt.",
+    )
     return parser
 
 
@@ -551,6 +857,8 @@ def main() -> int:
             max_act_turns=args.max_act_turns,
             trivial_state_chars=args.trivial_state_chars,
             premise_context=premise_context,
+            retrieval_index_path=args.retrieval_index,
+            retrieval_top_k=args.retrieval_top_k,
         )
     except Exception as exc:
         print(f"[fail] ponder loop failed: {exc}")
