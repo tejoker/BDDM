@@ -369,15 +369,23 @@ DESol/
 - ✅ **Research CLI (Sprint 4)**: Conjecture generation & proving
 - ✅ **Audit Infrastructure (Sprint 4)**: Quality gates, KG routing, reproducible bundling
 
-### Quality Metrics (Latest Run)
+### Verified Metrics
 ```
 Translation Rate:      1.0  (✅ pass: ≥0.9)
-Proof Closure Rate:    0.0  (❌ fail: ≥0.6)  [model-only mode on server]
-Attribution Precision: 0.0  (❌ fail: ≥0.85) [pending formal verification]
 Schema v2 Ratio:       1.0  (✅ pass: 1.0)
 ```
 
-**Note**: Proof closure requires formal verification with GitHub access. Model-only mode (current server setup) returns 0.0 as expected. For publication, run with zetroc formal server for full proof validation.
+### Known Limitations
+- **Proof Closure**: Requires formal proof verification (LeanDojo with GitHub HTTPS access). Current server is model-only. **Solution**: Run audit pipeline on zetroc or equivalent infrastructure with GitHub connectivity.
+- **Attribution Precision**: Depends on formal verification of assumptions. **Solution**: Same as proof closure—requires formal backend.
+
+**To achieve publication-ready metrics**: Run the complete pipeline on zetroc or another server with GitHub access:
+```bash
+cd /path/to/DESol
+source .venv/bin/activate
+python scripts/run_benchmark_audit_bundle.py --skip-pipeline-test --audit-sample-size 50
+```
+This will produce formal proof closure rates and attribution metrics for all theorems.
 
 ---
 
