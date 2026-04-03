@@ -308,6 +308,7 @@ def prove_one(
             proof_mode=proof_mode,
             rounds_used=len(records),
             time_s=elapsed,
+            had_exception=False,
         )
         if paper_id:
             upsert_ledger_entry(paper_id, ledger_entry)
@@ -357,6 +358,7 @@ def prove_one(
             error_message=str(e),
             proof_mode=proof_mode,
             time_s=elapsed,
+            had_exception=True,
         )
         if paper_id:
             upsert_ledger_entry(paper_id, ledger_entry)

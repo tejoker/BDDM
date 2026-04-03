@@ -225,38 +225,49 @@ def run_hydra_extraction(
     mathlib_root: Path,
     cache_path: Path,
     sample_files: int = 50,
+    batch_size: int = 10,
 ) -> dict[str, str | None]:
-    """Use HyDRA to extract informal concept synonyms from Mathlib docstrings.
+    """Extract informal concept synonyms from Mathlib docstrings via Mistral API.
 
-    Returns additional {ConceptName: lean_replacement} entries to merge into concept_map.
-    Requires ontopipe to be installed and a valid LLM API key.
+    Prompts the configured Mistral model to identify informal math concept names
+    (e.g. "HilbertSpace", "BanachSpace") and their Lean 4 / Mathlib4 equivalents
+    from batches of docstring text. No external dependencies beyond mistralai.
+
+    Returns {ConceptName: lean_replacement_or_None} to merge into concept_map.
+    Requires MISTRAL_API_KEY in environment or .env file.
     """
+    import os
+
+    # Resolve API key and model from environment / .env.
     try:
-        from ontopipe import ontopipe, generate_kg  # type: ignore
-        from ontopipe.models import Ontology  # type: ignore
+        from dotenv import load_dotenv
+        load_dotenv()
     except ImportError:
-        print(
-            "[hydra] ontopipe not installed — skipping Phase 2. "
-            "Install with: cd ontology-hydra && uv sync",
-            file=sys.stderr,
-        )
+        pass
+
+    api_key = os.environ.get("MISTRAL_API_KEY", "")
+    if not api_key:
+        print("[hydra] MISTRAL_API_KEY not set — skipping Phase 2.", file=sys.stderr)
         return {}
 
-    # Build or reload ontology for the domain.
+    model = os.environ.get("MISTRAL_MODEL", "labs-leanstral-2603")
+
+    try:
+        from mistralai import Mistral
+    except ImportError:
+        try:
+            from mistralai.client import MistralClient as Mistral  # type: ignore
+        except ImportError:
+            print("[hydra] mistralai package not installed — skipping Phase 2.", file=sys.stderr)
+            return {}
+
     cache_path.mkdir(parents=True, exist_ok=True)
-    ontology_path = cache_path / "mathlib_ontology.json"
+    cache_file = cache_path / "hydra_synonyms.json"
+    if cache_file.exists():
+        print("[hydra] Loading cached synonyms from prior run...", file=sys.stderr)
+        return json.loads(cache_file.read_text(encoding="utf-8"))
 
-    if ontology_path.exists():
-        print("[hydra] Loading cached ontology...", file=sys.stderr)
-        ontology = Ontology.from_json_file(ontology_path)
-    else:
-        print("[hydra] Generating ontology for 'lean4_mathlib_typeclasses'...", file=sys.stderr)
-        ontology = ontopipe(
-            domain="lean4_mathlib_typeclasses",
-            cache_path=cache_path,
-        )
-
-    # Collect docstrings from Mathlib source (fast sample).
+    # Collect docstrings from Mathlib source.
     lean_files = sorted(mathlib_root.rglob("*.lean"))[:sample_files]
     doc_chunks: list[str] = []
     doc_re = re.compile(r"/--\s*([\s\S]*?)\s*-/", re.MULTILINE)
@@ -267,30 +278,60 @@ def run_hydra_extraction(
             continue
         for m in doc_re.finditer(text):
             chunk = m.group(1).strip()
-            if len(chunk) > 50:  # skip trivially short docs
-                doc_chunks.append(chunk[:800])
+            if len(chunk) > 50:
+                doc_chunks.append(chunk[:600])
 
     if not doc_chunks:
-        print("[hydra] No docstrings found — skipping KG generation.", file=sys.stderr)
+        print("[hydra] No docstrings found in mathlib_root — skipping.", file=sys.stderr)
         return {}
 
-    print(f"[hydra] Running KG extraction on {len(doc_chunks)} docstring chunks...", file=sys.stderr)
-    kg = generate_kg(
-        texts=doc_chunks,
-        ontology=ontology,
-        cache_path=cache_path / "mathlib_kg.json",
-        kg_name="mathlib_typeclasses",
-        epochs=1,
-        batch_size=1,
+    print(
+        f"[hydra] Extracting concept synonyms from {len(doc_chunks)} docstring chunks "
+        f"using {model} ...",
+        file=sys.stderr,
     )
 
-    # Extract concept synonyms from triplets where predicate is "isA" or "equivalentTo".
+    client = Mistral(api_key=api_key)
     synonyms: dict[str, str | None] = {}
-    for triplet in (kg.triplets or []):
-        if triplet.predicate in ("isA", "equivalentTo", "hasAlternativeName"):
-            synonyms[triplet.subject] = triplet.object
+
+    _SYSTEM = (
+        "You are a Lean 4 / Mathlib expert. "
+        "Given informal math docstring text, extract pairs of (InformalName, Lean4Name) "
+        "where InformalName is a math concept name that appears in the text and "
+        "Lean4Name is its Mathlib4 typeclass or structure name. "
+        "If a concept has no direct Mathlib4 equivalent, use null for Lean4Name. "
+        "Reply with a JSON object only: {\"InformalName\": \"Lean4Name or null\", ...}. "
+        "No explanation, no markdown fences."
+    )
+
+    for i in range(0, len(doc_chunks), batch_size):
+        batch = doc_chunks[i : i + batch_size]
+        user_text = "\n\n---\n\n".join(batch)
+        try:
+            resp = client.chat.complete(
+                model=model,
+                messages=[
+                    {"role": "system", "content": _SYSTEM},
+                    {"role": "user", "content": user_text},
+                ],
+                temperature=0.0,
+                max_tokens=512,
+            )
+            raw = resp.choices[0].message.content.strip()
+            # Strip markdown fences if model wraps them.
+            raw = re.sub(r"^```[a-z]*\n?", "", raw)
+            raw = re.sub(r"\n?```$", "", raw)
+            parsed = json.loads(raw)
+            if isinstance(parsed, dict):
+                for k, v in parsed.items():
+                    if isinstance(k, str) and k not in synonyms:
+                        synonyms[k] = str(v) if v is not None else None
+        except Exception as exc:
+            print(f"[hydra] batch {i//batch_size} failed: {exc}", file=sys.stderr)
+            continue
 
     print(f"[hydra] Extracted {len(synonyms)} concept synonyms.", file=sys.stderr)
+    cache_file.write_text(json.dumps(synonyms, indent=2, ensure_ascii=False), encoding="utf-8")
     return synonyms
 
 

@@ -1,0 +1,204 @@
+{
+  "split": "test",
+  "n_problems": 244,
+  "k": 1,
+  "pass_at_1": 0.28688524590163933,
+  "pass_at_k": 0.28688524590163933,
+  "total_solved": 70,
+  "total_attempts": 244,
+  "elapsed_seconds": 6572.4,
+  "timestamp": "20260402T164945",
+  "baselines": {
+    "ReProver (GPT-4 + best-first)": 0.273,
+    "HyperTree Proof Search (Meta)": 0.33,
+    "LLM-Step (Llama-2)": 0.22,
+    "Aesop (tactic, no LLM)": 0.04
+  },
+  "per_problem_sample": [
+    {
+      "id": "mathd_algebra_478",
+      "name": "mathd_algebra_478",
+      "solved": true,
+      "best_proof": "subst h\u2082 h\u2083\nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "subst h\u2082 h\u2083\nlinarith",
+          "error": "",
+          "elapsed_s": 37.52,
+          "rounds": 2
+        }
+      ]
+    },
+    {
+      "id": "numbertheory_4x3m7y3neq2003",
+      "name": "numbertheory_4x3m7y3neq2003",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "omega",
+          "error": "no proof found in 6 rounds; last_lean_error=omega could not prove the goal:",
+          "error_category": "search_exhausted",
+          "failure_stage": "search_exhausted",
+          "tactics_tried": 1,
+          "last_lean_error": "omega could not prove the goal:",
+          "elapsed_s": 20.46,
+          "rounds": 6
+        }
+      ]
+    },
+    {
+      "id": "aime_1983_p1",
+      "name": "aime_1983_p1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "Reached ACT cap act_budget=3 without receiving <tactic>.",
+          "error_category": "tactic_error",
+          "failure_stage": "ponder",
+          "tactics_tried": 0,
+          "last_lean_error": "",
+          "elapsed_s": 13.84,
+          "rounds": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12_2001_p5",
+      "name": "amc12_2001_p5",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "Reached ACT cap act_budget=3 without receiving <tactic>.",
+          "error_category": "tactic_error",
+          "failure_stage": "ponder",
+          "tactics_tried": 0,
+          "last_lean_error": "",
+          "elapsed_s": 16.37,
+          "rounds": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_141",
+      "name": "mathd_algebra_141",
+      "solved": true,
+      "best_proof": "nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "nlinarith",
+          "error": "",
+          "elapsed_s": 16.52,
+          "rounds": 1
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_3",
+      "name": "mathd_numbertheory_3",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "norm_num",
+          "error": "no proof found in 6 rounds; last_lean_error=unexpected token 'in'; expected ','",
+          "error_category": "search_exhausted",
+          "failure_stage": "search_exhausted",
+          "tactics_tried": 1,
+          "last_lean_error": "unexpected token 'in'; expected ','",
+          "elapsed_s": 14.54,
+          "rounds": 6
+        }
+      ]
+    },
+    {
+      "id": "imo_1969_p2",
+      "name": "imo_1969_p2",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "Reached ACT cap act_budget=3 without receiving <tactic>.",
+          "error_category": "tactic_error",
+          "failure_stage": "ponder",
+          "tactics_tried": 0,
+          "last_lean_error": "",
+          "elapsed_s": 13.68,
+          "rounds": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_44",
+      "name": "mathd_algebra_44",
+      "solved": true,
+      "best_proof": "constructor\nlinarith\nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "constructor\nlinarith\nlinarith",
+          "error": "",
+          "elapsed_s": 39.03,
+          "rounds": 3
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_209",
+      "name": "mathd_algebra_209",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "have h3 : \u03c3.1 10 = 2 := by rw [\u2190 h\u2080]; exact \u03c3.apply_symm_apply 2\nsimp [h3, h\u2082, Equiv.toFun_eq_coe, Equiv.invFun_eq_coe] at *",
+          "error": "Reached ACT cap act_budget=3 without receiving <tactic>.",
+          "error_category": "tactic_error",
+          "failure_stage": "ponder",
+          "tactics_tried": 2,
+          "last_lean_error": "",
+          "elapsed_s": 58.21,
+          "rounds": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_1124",
+      "name": "mathd_numbertheory_1124",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "elapsed_s": 16.26,
+          "rounds": 1
+        }
+      ]
+    }
+  ],
+  "note": "Full per_problem results omitted for size. Run benchmark to reproduce."
+}

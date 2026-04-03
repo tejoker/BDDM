@@ -27,6 +27,12 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+try:
+    from premise_retrieval import PremiseEntry, PremiseRetriever
+    _HAS_RETRIEVAL = True
+except ImportError:
+    _HAS_RETRIEVAL = False
+
 
 _TOKEN_RE = re.compile(r"[A-Za-z0-9_'.]+")
 
@@ -135,8 +141,10 @@ def suggest_bridge_candidates(
     ledger_root: Path,
     max_candidates: int = 3,
 ) -> list[BridgeCandidate]:
-    """Suggest candidate theorem bridges ranked by token overlap.
+    """Suggest candidate theorem bridges ranked by semantic similarity.
 
+    Uses embedding-based retrieval (sentence-transformers via PremiseRetriever)
+    when available, falling back to token-overlap scoring otherwise.
     Candidates are sourced from FULLY_PROVEN or INTERMEDIARY_PROVEN entries.
     """
     if not assumption_expr:
@@ -146,31 +154,64 @@ def suggest_bridge_candidates(
     if not ledger_root.exists():
         return []
 
-    a_tokens = _norm_tokens(assumption_expr)
-    if not a_tokens:
-        return []
-
-    scored: list[BridgeCandidate] = []
+    # Collect eligible entries with their metadata.
+    eligible: list[tuple[str, str, str, str]] = []  # (theorem_name, paper_id, status, statement)
     for paper_id, row in _iter_ledger_entries(ledger_root):
         status = str(row.get("status", ""))
         if status not in {"FULLY_PROVEN", "INTERMEDIARY_PROVEN"}:
             continue
-
         theorem_name = str(row.get("theorem_name", "")).strip()
         statement = str(row.get("lean_statement", "")).strip()
         if not theorem_name:
             continue
+        eligible.append((theorem_name, paper_id, status, statement))
 
+    if not eligible:
+        return []
+
+    # Embedding path: build a tiny PremiseRetriever over the eligible entries.
+    if _HAS_RETRIEVAL:
+        try:
+            entries = [
+                PremiseEntry(name=name, statement=stmt or name, namespace="", source_file=paper_id)
+                for name, paper_id, _status, stmt in eligible
+            ]
+            retriever = PremiseRetriever.build(entries, encoder_name=None)
+            hits = retriever.query(assumption_expr, top_k=max(1, max_candidates))
+            # Map hits back to BridgeCandidate using the eligible index.
+            name_to_meta = {name: (paper_id, status) for name, paper_id, status, _ in eligible}
+            scored: list[BridgeCandidate] = []
+            for hit in hits:
+                meta = name_to_meta.get(hit.name)
+                if meta is None:
+                    continue
+                scored.append(
+                    BridgeCandidate(
+                        theorem_name=hit.name,
+                        paper_id=meta[0],
+                        status=meta[1],
+                        score=float(hit.score),
+                    )
+                )
+            return scored[: max(1, max_candidates)]
+        except Exception as exc:
+            logger.debug("Embedding retrieval failed, falling back to token overlap: %s", exc)
+
+    # Token-overlap fallback.
+    a_tokens = _norm_tokens(assumption_expr)
+    if not a_tokens:
+        return []
+
+    fallback: list[BridgeCandidate] = []
+    for theorem_name, paper_id, status, statement in eligible:
         t_tokens = _norm_tokens(theorem_name + " " + statement)
         if not t_tokens:
             continue
-
         overlap = len(a_tokens.intersection(t_tokens))
         if overlap == 0:
             continue
-
         score = overlap / max(1.0, len(a_tokens))
-        scored.append(
+        fallback.append(
             BridgeCandidate(
                 theorem_name=theorem_name,
                 paper_id=paper_id,
@@ -179,8 +220,8 @@ def suggest_bridge_candidates(
             )
         )
 
-    scored.sort(key=lambda c: c.score, reverse=True)
-    return scored[: max(1, max_candidates)]
+    fallback.sort(key=lambda c: c.score, reverse=True)
+    return fallback[: max(1, max_candidates)]
 
 
 def build_bridge_plan(

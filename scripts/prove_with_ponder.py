@@ -34,6 +34,8 @@ except ImportError:
     from mistralai.client import Mistral  # type: ignore[no-redef]
 
 try:
+    if os.environ.get("DESOL_FORCE_REPL_DOJO", "0") == "1":
+        raise ModuleNotFoundError("DESOL_FORCE_REPL_DOJO override")
     from lean_dojo import Dojo, LeanGitRepo, Theorem
     from lean_dojo.interaction.dojo import LeanError, ProofFinished, ProofGivenUp, TacticState
 
@@ -417,7 +419,14 @@ def _open_dojo(
                 raise RuntimeError(msg) from e
             raise
 
-    return Dojo(project_root, file_path, theorem_name, timeout=dojo_timeout), None
+    # REPLDojo path (lean_repl_dojo.py available, LeanDojo not installed)
+    # Dojo is aliased to REPLDojo in the import block above.
+    return Dojo(  # type: ignore[call-arg]
+        project_root=project_root,
+        file_path=file_path,
+        theorem_name=theorem_name,
+        timeout=dojo_timeout,
+    ), None
 
 
 def _estimate_theorem_difficulty(

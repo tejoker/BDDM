@@ -43,6 +43,7 @@ import argparse
 import json
 import logging
 import os
+import re
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -63,7 +64,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 # HuggingFace dataset for miniF2F Lean 4.
-_HF_DATASET = "Matharena/minif2f_lean4"
+_HF_DATASET = "cat-searcher/minif2f-lean4"
 
 # Known pass@1 baselines for comparison (test split).
 BASELINES = {
@@ -74,12 +75,35 @@ BASELINES = {
 }
 
 
+def _categorize_error(error_text: str) -> str:
+    """Map raw error text to a compact diagnostic category."""
+    e = (error_text or "").lower()
+    if not e:
+        return "none"
+    if "service unavailable" in e or "status 500" in e or "internal_server_error" in e:
+        return "api_unavailable"
+    if "theorem '" in e and "not found in source" in e:
+        return "theorem_name_parse"
+    if "timeout" in e:
+        return "lean_timeout"
+    if "unsolved goals" in e:
+        return "unsolved_goals"
+    if "invalid field" in e or "unknown constant" in e:
+        return "invalid_symbol"
+    if "tactic" in e:
+        return "tactic_error"
+    if "no proof found" in e:
+        return "search_exhausted"
+    return "other"
+
+
 @dataclass
 class ProblemResult:
     problem_id: str
     informal_name: str
     split: str
     lean_statement: str
+    lean_header: str = ""
     attempts: list[dict[str, Any]] = field(default_factory=list)
 
     @property
@@ -148,65 +172,258 @@ def _load_minif2f(split: str, n_problems: int | None = None) -> list[dict[str, A
 
 
 def _extract_lean_statement(row: dict[str, Any]) -> str:
-    """Extract the Lean 4 theorem statement from a miniF2F row."""
-    # Try common field names across dataset versions.
+    """Extract the Lean 4 theorem/lemma statement from a miniF2F row.
+
+    Some rows contain commented fallback blocks like:
+      -- theorem foo ... := sorry
+    In that case we recover the declaration by stripping the `--` prefixes.
+    """
     for key in ("formal_statement", "lean4_formal_statement", "statement", "lean_statement"):
         val = row.get(key, "")
-        if val and isinstance(val, str) and "theorem" in val.lower():
-            return val.strip()
-    # Last resort: concatenate all string fields.
+        if not val or not isinstance(val, str):
+            continue
+
+        s = val.strip()
+        low = s.lower()
+        if "theorem" in low or "lemma" in low:
+            if s.startswith("--"):
+                uncommented: list[str] = []
+                for line in s.splitlines():
+                    stripped = line.lstrip()
+                    if stripped.startswith("--"):
+                        uncommented.append(stripped[2:].lstrip())
+                candidate = "\n".join(uncommented).strip()
+                if "theorem" in candidate.lower() or "lemma" in candidate.lower():
+                    return candidate
+            return s
+
     return " ".join(str(v) for v in row.values() if isinstance(v, str))
+
+
+def _extract_header(row: dict[str, Any]) -> str:
+    """Extract the import header from a miniF2F row, if present."""
+    return str(row.get("header", "")).strip()
+
+
+def _write_bench_file(
+    project_root: Path,
+    lean_statement: str,
+    lean_header: str = "",
+    worker_id: int = 0,
+) -> Path:
+    """Write a miniF2F problem to a per-worker scratch Lean file.
+
+    Each worker gets its own file (Bench0.lean, Bench1.lean, …) to avoid
+    concurrent write conflicts when multiple problems run in parallel.
+    """
+    stmt = lean_statement.strip()
+    stmt = re.sub(r":=\s*(?:by\b.*|sorry\s*)$", "", stmt, flags=re.DOTALL).rstrip()
+    stmt = stmt + " := by\n  sorry"
+
+    # miniF2F headers can target a different Mathlib snapshot and break on
+    # modern versions. Default to a broad import for compatibility.
+    use_dataset_header = os.environ.get("DESOL_USE_MINIF2F_HEADER", "0") == "1"
+    header = lean_header if (use_dataset_header and lean_header) else "import Mathlib"
+    content = header + "\n\n" + stmt + "\n"
+    bench_path = project_root / "Desol" / f"Bench{worker_id}.lean"
+    bench_path.write_text(content, encoding="utf-8")
+    return bench_path
+
+
+def _extract_theorem_name(lean_statement: str) -> str:
+    """Extract the theorem name from a Lean 4 statement."""
+    m = re.search(r"(?:theorem|lemma)\s+([\w']+)", lean_statement)
+    return m.group(1) if m else "bench_placeholder"
 
 
 def _attempt_proof(
     *,
-    problem_id: str,
     lean_statement: str,
+    lean_header: str = "",
     client: Any,
     model: str,
     attempt_idx: int,
+    worker_id: int = 0,
+    project_root: Path,
     retrieval_index_path: str = "",
+    retrieval_top_k: int = 12,
     max_ponder_rounds: int = 6,
+    lean_timeout: int = 90,
+    max_api_retries: int = 2,
+    mode: str = "ponder",
+    mcts_iterations: int = 12,
+    mcts_repair_variants: int = 3,
+    mcts_max_depth: int = 5,
 ) -> dict[str, Any]:
-    """Run one proof attempt using the ponder loop.
+    """Run one proof attempt with a real Lean execution loop.
+
+    Architecture:
+      1. Write the miniF2F theorem to Desol/Bench.lean.
+      2. Open a REPLDojo session to get the real initial proof state.
+      3. Loop: call ponder loop with current state → get tactic →
+         execute tactic via REPLDojo → advance state or stop.
+      4. Return success=True if ProofFinished is returned by REPLDojo.
 
     Returns a dict with keys: attempt, success, proof, error, elapsed_s.
     """
-    from ponder_loop import ponder_loop, load_premise_context
+    import threading
+    from ponder_loop import run_ponder_loop
+
+    # Import REPLDojo from the local scripts directory.
+    sys.path.insert(0, str(project_root / "scripts"))
+    from lean_repl_dojo import REPLDojo, ProofFinished, TacticState, LeanError
 
     t0 = time.time()
-    premise_context = ""
-    if retrieval_index_path:
+    tactic_history: list[str] = []
+    last_lean_error = ""
+    failure_stage = "init"
+
+    # MCTS-draft path: delegate entirely to run_draft_mcts.
+    if mode == "mcts-draft":
         try:
-            premise_context = load_premise_context(
-                lean_statement, retrieval_index_path=retrieval_index_path
+            from mcts_search import run_draft_mcts
+            bench_file = _write_bench_file(project_root, lean_statement, lean_header, worker_id)
+            theorem_name = _extract_theorem_name(lean_statement)
+            ok, _records, summary = run_draft_mcts(
+                project_root=project_root,
+                file_path=bench_file.relative_to(project_root),
+                theorem_name=theorem_name,
+                client=client,
+                model=model,
+                iterations=mcts_iterations,
+                repair_variants=mcts_repair_variants,
+                max_depth=mcts_max_depth,
+                dojo_timeout=lean_timeout,
+                retrieval_index_path=retrieval_index_path,
+                retrieval_top_k=retrieval_top_k,
             )
+            proof = ""
+            if ok and _records:
+                proof = "\n".join(str(r.get("tactic", "")) for r in _records if r.get("tactic"))
+            return {
+                "attempt": attempt_idx,
+                "success": ok,
+                "proof": proof,
+                "error": "" if ok else summary,
+                "error_category": _categorize_error(summary) if not ok else "none",
+                "elapsed_s": round(time.time() - t0, 2),
+                "mode": "mcts-draft",
+            }
         except Exception as exc:
-            logger.debug("premise retrieval failed: %s", exc)
+            return {
+                "attempt": attempt_idx,
+                "success": False,
+                "proof": "",
+                "error": str(exc),
+                "error_category": _categorize_error(str(exc)),
+                "elapsed_s": round(time.time() - t0, 2),
+                "mode": "mcts-draft",
+            }
 
     try:
-        result = ponder_loop(
-            goal=lean_statement,
-            client=client,
-            model=model,
-            max_rounds=max_ponder_rounds,
-            premise_context=premise_context,
-        )
-        success = bool(result.get("proof_found") or result.get("success"))
-        proof = result.get("proof") or result.get("tactic") or ""
-        error = result.get("error") or ""
-    except Exception as exc:
-        success = False
-        proof = ""
-        error = str(exc)
+        bench_file = _write_bench_file(project_root, lean_statement, lean_header, worker_id)
+        theorem_name = _extract_theorem_name(lean_statement)
 
-    return {
-        "attempt": attempt_idx,
-        "success": success,
-        "proof": proof,
-        "error": error,
-        "elapsed_s": round(time.time() - t0, 2),
-    }
+        with REPLDojo(
+            project_root=project_root,
+            file_path=bench_file.relative_to(project_root),
+            theorem_name=theorem_name,
+            timeout=lean_timeout,
+        ) as (dojo, state):
+
+            for _round in range(max_ponder_rounds):
+                failure_stage = "ponder"
+                current_state_text = state.pp if isinstance(state, TacticState) else str(state)
+
+                # Ask ponder loop for the next tactic given the current state.
+                last_exc: Exception | None = None
+                ponder_result = None
+                for retry_idx in range(max_api_retries + 1):
+                    try:
+                        ponder_result = run_ponder_loop(
+                            lean_state=current_state_text,
+                            client=client,
+                            model=model,
+                            max_turns=3,  # cheap inner budget per round
+                            retrieval_index_path=retrieval_index_path,
+                            retrieval_top_k=retrieval_top_k,
+                        )
+                        break
+                    except Exception as exc:
+                        last_exc = exc
+                        msg = str(exc)
+                        transient = "status 500" in msg.lower() or "service unavailable" in msg.lower()
+                        if not transient or retry_idx >= max_api_retries:
+                            raise
+                        # Exponential backoff for transient API failures.
+                        backoff_s = 1.5 * (2 ** retry_idx)
+                        logger.warning(
+                            "Transient API failure (retry %d/%d): %s",
+                            retry_idx + 1,
+                            max_api_retries,
+                            msg,
+                        )
+                        time.sleep(backoff_s)
+
+                if ponder_result is None:
+                    raise RuntimeError(f"Ponder loop failed without result: {last_exc}")
+
+                tactic = getattr(ponder_result, "tactic", "").strip()
+                if not tactic:
+                    break
+
+                tactic_history.append(tactic)
+                failure_stage = "lean_exec"
+                outcome = dojo.run_tac(state, tactic)
+
+                if isinstance(outcome, ProofFinished):
+                    return {
+                        "attempt": attempt_idx,
+                        "success": True,
+                        "proof": "\n".join(tactic_history),
+                        "error": "",
+                        "elapsed_s": round(time.time() - t0, 2),
+                        "rounds": _round + 1,
+                    }
+                elif isinstance(outcome, TacticState):
+                    state = outcome  # advance to new proof state
+                else:
+                    # LeanError or ProofGivenUp — this tactic failed
+                    err = getattr(outcome, "error", str(outcome))
+                    last_lean_error = str(err)
+                    logger.debug("round %d tactic failed: %s | %s", _round, tactic, err)
+                    break
+
+        final_error = f"no proof found in {max_ponder_rounds} rounds"
+        if last_lean_error:
+            final_error = f"{final_error}; last_lean_error={last_lean_error}"
+        return {
+            "attempt": attempt_idx,
+            "success": False,
+            "proof": "\n".join(tactic_history),
+            "error": final_error,
+            "error_category": _categorize_error(final_error),
+            "failure_stage": "search_exhausted",
+            "tactics_tried": len(tactic_history),
+            "last_lean_error": last_lean_error,
+            "elapsed_s": round(time.time() - t0, 2),
+            "rounds": max_ponder_rounds,
+        }
+
+    except Exception as exc:
+        err = str(exc)
+        return {
+            "attempt": attempt_idx,
+            "success": False,
+            "proof": "\n".join(tactic_history),
+            "error": err,
+            "error_category": _categorize_error(err),
+            "failure_stage": failure_stage,
+            "tactics_tried": len(tactic_history),
+            "last_lean_error": last_lean_error,
+            "elapsed_s": round(time.time() - t0, 2),
+            "rounds": 0,
+        }
 
 
 def run_benchmark(
@@ -215,13 +432,24 @@ def run_benchmark(
     k: int,
     n_problems: int | None,
     model: str,
+    project_root: str = ".",
     retrieval_index_path: str = "",
+    retrieval_top_k: int = 12,
     max_ponder_rounds: int = 6,
+    lean_timeout: int = 90,
+    max_api_retries: int = 2,
     workers: int = 4,
     out_dir: str = "output",
+    mode: str = "ponder",
+    mcts_iterations: int = 12,
+    mcts_repair_variants: int = 3,
+    mcts_max_depth: int = 5,
 ) -> BenchmarkResult:
     """Run the full miniF2F benchmark and return structured results."""
-    from mistralai import Mistral
+    try:
+        from mistralai import Mistral
+    except ImportError:
+        from mistralai.client import Mistral  # type: ignore[no-redef]
 
     api_key = os.environ.get("MISTRAL_API_KEY") or os.environ.get("LEANSTRAL_API_KEY")
     if not api_key:
@@ -230,6 +458,7 @@ def run_benchmark(
         )
     client = Mistral(api_key=api_key)
 
+    root = Path(project_root).resolve()
     problems_raw = _load_minif2f(split, n_problems)
     t_start = time.time()
 
@@ -238,24 +467,46 @@ def run_benchmark(
         pid = str(row.get("id") or row.get("name") or row.get("informal_name") or "unknown")
         informal = str(row.get("informal_name") or row.get("name") or pid)
         stmt = _extract_lean_statement(row)
+        header = _extract_header(row)
         results.append(ProblemResult(
             problem_id=pid,
             informal_name=informal,
             split=split,
             lean_statement=stmt,
+            lean_header=header,
         ))
 
     logger.info("Starting %d problems × %d attempts = %d total", len(results), k, len(results) * k)
 
+    import threading
+    _thread_id_counter: dict[int, int] = {}
+    _thread_id_lock = threading.Lock()
+
+    def _get_worker_id() -> int:
+        tid = threading.get_ident()
+        with _thread_id_lock:
+            if tid not in _thread_id_counter:
+                _thread_id_counter[tid] = len(_thread_id_counter)
+            return _thread_id_counter[tid]
+
     def _run_one(pr: ProblemResult, attempt_idx: int) -> tuple[ProblemResult, dict[str, Any]]:
         attempt = _attempt_proof(
-            problem_id=pr.problem_id,
             lean_statement=pr.lean_statement,
+            lean_header=pr.lean_header,
             client=client,
             model=model,
             attempt_idx=attempt_idx,
+            worker_id=_get_worker_id(),
+            project_root=root,
             retrieval_index_path=retrieval_index_path,
+            retrieval_top_k=retrieval_top_k,
             max_ponder_rounds=max_ponder_rounds,
+            lean_timeout=lean_timeout,
+            max_api_retries=max_api_retries,
+            mode=mode,
+            mcts_iterations=mcts_iterations,
+            mcts_repair_variants=mcts_repair_variants,
+            mcts_max_depth=mcts_max_depth,
         )
         return pr, attempt
 
@@ -331,13 +582,49 @@ def main() -> int:
         "--model", default=os.environ.get("LEANSTRAL_MODEL", "mistral-large-latest"),
         help="Mistral model name"
     )
-    p.add_argument("--retrieval-index", default="", help="Path to premise retrieval index")
+    p.add_argument(
+        "--retrieval-index",
+        default=os.environ.get("DESOL_RETRIEVAL_INDEX", "data/mathlib_embeddings"),
+        help="Path to premise retrieval index (default: data/mathlib_embeddings)"
+    )
+    p.add_argument(
+        "--retrieval-top-k", type=int, default=12,
+        help="Number of premises to retrieve per goal (default: 12)"
+    )
     p.add_argument(
         "--max-ponder-rounds", type=int, default=6,
-        help="Max think rounds in ponder loop per attempt"
+        help="Max ponder rounds per tactic step"
+    )
+    p.add_argument(
+        "--lean-timeout", type=int, default=90,
+        help="Seconds allowed for each lake build call (default 90)"
+    )
+    p.add_argument(
+        "--max-api-retries", type=int, default=2,
+        help="Retries for transient API failures (HTTP 500/service unavailable)"
+    )
+    p.add_argument(
+        "--project-root", default=".",
+        help="DESol project root containing lakefile.toml (default: cwd)"
     )
     p.add_argument("--workers", type=int, default=4, help="Parallel worker threads")
     p.add_argument("--out-dir", default="output", help="Output directory for results JSON")
+    p.add_argument(
+        "--mode", choices=["ponder", "mcts-draft"], default="ponder",
+        help="Proof search mode: ponder (default) or mcts-draft (MCTS tree search)",
+    )
+    p.add_argument(
+        "--mcts-iterations", type=int, default=12,
+        help="MCTS iterations per problem (mcts-draft mode only, default 12)",
+    )
+    p.add_argument(
+        "--mcts-repair-variants", type=int, default=3,
+        help="Repair variants per MCTS node (mcts-draft mode only, default 3)",
+    )
+    p.add_argument(
+        "--mcts-max-depth", type=int, default=5,
+        help="Max MCTS depth in repair rounds (mcts-draft mode only, default 5)",
+    )
     args = p.parse_args()
 
     bench = run_benchmark(
@@ -345,10 +632,18 @@ def main() -> int:
         k=args.k,
         n_problems=args.n_problems,
         model=args.model,
+        project_root=args.project_root,
         retrieval_index_path=args.retrieval_index,
+        retrieval_top_k=args.retrieval_top_k,
         max_ponder_rounds=args.max_ponder_rounds,
+        lean_timeout=args.lean_timeout,
+        max_api_retries=args.max_api_retries,
         workers=args.workers,
         out_dir=args.out_dir,
+        mode=args.mode,
+        mcts_iterations=args.mcts_iterations,
+        mcts_repair_variants=args.mcts_repair_variants,
+        mcts_max_depth=args.mcts_max_depth,
     )
 
     print()

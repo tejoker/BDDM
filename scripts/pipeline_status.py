@@ -160,6 +160,8 @@ class TheoremLedgerEntry:
     rounds_used: int = 0
     time_s: float = 0.0
     timestamp: str = ""
+    validation_gates: dict[str, bool] = field(default_factory=dict)
+    gate_failures: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)
@@ -203,6 +205,152 @@ def _derive_theorem_trust(
 
     promotion_ok = status == VerificationStatus.FULLY_PROVEN
     return TrustClass.TRUST_INTERNAL_PROVED, "internal_verified_pipeline", promotion_ok
+
+
+def _all_assumptions_grounded(assumptions: list[Assumption]) -> bool:
+    if not assumptions:
+        return True
+    return all(
+        a.grounding
+        in {
+            GroundingStatus.GROUNDED_MATHLIB,
+            GroundingStatus.GROUNDED_INTERNAL_KG,
+            GroundingStatus.GROUNDED_EXTERNAL_PAPER,
+        }
+        for a in assumptions
+    )
+
+
+def _auto_reproducible_env(project_root: Path | None) -> bool:
+    if project_root is None:
+        return False
+    commit = _get_pipeline_commit(project_root)
+    lean_ver = _get_lean_version(project_root)
+    return commit != "unknown" and lean_ver != "unknown"
+
+
+def evaluate_promotion_gates(
+    *,
+    status: VerificationStatus,
+    proved: bool,
+    step_verdict: StepVerdict,
+    assumptions: list[Assumption],
+    provenance: ProvenanceLink | None,
+    project_root: Path | None,
+    translation_fidelity_score: float | None,
+    status_alignment_score: float | None,
+    dependency_trust_complete: bool | None,
+    reproducible_env: bool | None,
+) -> tuple[VerificationStatus, dict[str, bool], list[str]]:
+    """Evaluate strict promotion gates and optionally downgrade FULLY_PROVEN.
+
+    FULLY_PROVEN requires independent gate evidence beyond raw proof closure.
+    """
+    min_fidelity = float(os.environ.get("DESOL_MIN_TRANSLATION_FIDELITY", "0.80"))
+    min_alignment = float(os.environ.get("DESOL_MIN_STATUS_ALIGNMENT", "0.80"))
+
+    gates = {
+        "lean_proof_closed": proved,
+        "step_verdict_verified": step_verdict == StepVerdict.VERIFIED,
+        "assumptions_grounded": _all_assumptions_grounded(assumptions),
+        "provenance_linked": bool(
+            provenance
+            and provenance.paper_id
+            and (provenance.section or provenance.label or provenance.cited_refs)
+        ),
+        "translation_fidelity_ok": (
+            translation_fidelity_score is not None and translation_fidelity_score >= min_fidelity
+        ),
+        "status_alignment_ok": (
+            status_alignment_score is not None and status_alignment_score >= min_alignment
+        ),
+        "dependency_trust_complete": (
+            dependency_trust_complete
+            if dependency_trust_complete is not None
+            else all(a.trust_class != TrustClass.TRUST_PLACEHOLDER for a in assumptions)
+        ),
+        "reproducible_env": (
+            reproducible_env
+            if reproducible_env is not None
+            else _auto_reproducible_env(project_root)
+        ),
+    }
+
+    failures = [k for k, ok in gates.items() if not ok]
+    final_status = status
+    if status == VerificationStatus.FULLY_PROVEN and failures:
+        final_status = VerificationStatus.INTERMEDIARY_PROVEN
+
+    return final_status, gates, failures
+
+
+def _clamp01(x: float) -> float:
+    return max(0.0, min(1.0, float(x)))
+
+
+def infer_quality_scores(
+    *,
+    proved: bool,
+    step_records: list[Any],
+    error_message: str,
+    lean_statement: str,
+    translation_fidelity_score: float | None = None,
+    status_alignment_score: float | None = None,
+    translation_validated: bool | None = None,
+    translation_rounds_used: int | None = None,
+    translation_uncertainty_flags: list[str] | None = None,
+    translation_confidence: float | None = None,
+    had_exception: bool = False,
+) -> tuple[float, float]:
+    """Infer gate scores automatically from available translation/proof metadata."""
+    fidelity = translation_fidelity_score
+    alignment = status_alignment_score
+
+    if fidelity is None:
+        if translation_confidence is not None:
+            fidelity = _clamp01(translation_confidence)
+        elif translation_validated is not None:
+            base = 0.90 if translation_validated else 0.30
+            rounds = max(0, int(translation_rounds_used or 0) - 1)
+            penalty_rounds = min(0.20, 0.05 * rounds)
+            flags = translation_uncertainty_flags or []
+            penalty_flags = min(0.20, 0.04 * len(flags))
+            fidelity = _clamp01(base - penalty_rounds - penalty_flags)
+        else:
+            stmt_l = (lean_statement or "").strip().lower()
+            if stmt_l.startswith("theorem ") or stmt_l.startswith("lemma "):
+                fidelity = 0.80
+            elif stmt_l:
+                fidelity = 0.65
+            else:
+                fidelity = 0.40
+
+    if alignment is None:
+        record_results: list[str] = []
+        for rec in step_records:
+            if isinstance(rec, dict):
+                record_results.append(str(rec.get("result", "")).strip().lower())
+            else:
+                record_results.append(str(getattr(rec, "result", "")).strip().lower())
+
+        if proved:
+            if "proof-finished" in record_results:
+                alignment = 0.95
+            elif "state-advanced" in record_results:
+                alignment = 0.85
+            else:
+                alignment = 0.75
+        else:
+            if had_exception:
+                alignment = 0.65
+            elif any(r in {"lean-error", "proof-given-up"} for r in record_results):
+                alignment = 0.88
+            elif error_message.strip():
+                alignment = 0.80
+            else:
+                alignment = 0.70
+
+    return _clamp01(fidelity), _clamp01(alignment)
 
 
 # ---------------------------------------------------------------------------
@@ -728,6 +876,116 @@ def ground_assumptions(
     return grounded_out
 
 
+def _elan_env() -> dict:
+    env = os.environ.copy()
+    env["PATH"] = str(Path.home() / ".elan" / "bin") + ":" + env.get("PATH", "")
+    return env
+
+
+def ground_assumption(
+    assumption: "Assumption",
+    *,
+    ledger_root: Path | None = None,
+    project_root: Path | None = None,
+    lean_timeout: int = 30,
+    cited_refs: list[str] | None = None,
+) -> "Assumption":
+    """Execute the grounding policy for a single assumption.
+
+    Policy order (stops at first success):
+      1. Mathlib check via `lake env lean -E "#check <expr>"`.
+      2. Internal KG match: scan ledger for a FULLY_PROVEN theorem whose
+         lean_statement is token-similar to the assumption lean_expr.
+      3. Cited reference mining: scan ledger entries whose paper_id matches
+         any entry in cited_refs and check token-similarity.
+      4. Falls through to UNGROUNDED.
+
+    Returns a copy of the assumption with updated grounding fields.
+    """
+    lean_expr = assumption.lean_expr
+
+    # Step 1 — Mathlib check
+    if project_root is not None:
+        expr_to_check = lean_expr.strip()
+        m = re.match(r"\(\w+\s*:\s*(.+)\)$", expr_to_check)
+        if m:
+            expr_to_check = m.group(1).strip()
+        try:
+            proc = subprocess.run(
+                ["lake", "env", "lean", "-E", f"#check ({expr_to_check})"],
+                cwd=project_root,
+                capture_output=True,
+                text=True,
+                timeout=lean_timeout,
+                env=_elan_env(),
+            )
+            out = (proc.stdout or "") + (proc.stderr or "")
+            if proc.returncode == 0 and "error" not in out.lower():
+                assumption.grounding = GroundingStatus.GROUNDED_MATHLIB
+                assumption.grounding_source = "mathlib_check"
+                return assumption
+        except Exception:
+            pass
+
+    if ledger_root is not None and Path(ledger_root).exists():
+        assumption_tokens = set(re.findall(r'[A-Za-z0-9_]+', lean_expr))
+
+        def _rows_from_file(p: Path) -> list[dict]:
+            try:
+                raw = json.loads(p.read_text(encoding="utf-8"))
+            except Exception:
+                return []
+            if isinstance(raw, list):
+                return raw
+            if isinstance(raw, dict) and isinstance(raw.get("entries"), list):
+                return raw["entries"]
+            return []
+
+        def _token_match(entry: dict) -> bool:
+            stmt = entry.get("lean_statement", "")
+            entry_tokens = set(re.findall(r'[A-Za-z0-9_]+', stmt))
+            overlap = assumption_tokens & entry_tokens
+            return len(overlap) / max(1, len(assumption_tokens)) > 0.4
+
+        # Step 2 — Internal KG match (any FULLY_PROVEN entry in ledger)
+        for p in Path(ledger_root).glob("*.json"):
+            for entry in _rows_from_file(p):
+                if not isinstance(entry, dict):
+                    continue
+                if entry.get("status") != VerificationStatus.FULLY_PROVEN.value:
+                    continue
+                if _token_match(entry):
+                    assumption.grounding = GroundingStatus.GROUNDED_INTERNAL_KG
+                    assumption.grounding_source = f"internal_kg:{entry.get('theorem_name', '')}"
+                    return assumption
+
+        # Step 3 — Cited reference mining
+        if cited_refs:
+            cited_set = {str(r).strip().lower() for r in cited_refs if r}
+            for p in Path(ledger_root).glob("*.json"):
+                # Match ledger file stem against cited paper IDs.
+                stem = p.stem.lower().replace("_", "/")
+                if not any(stem == c or stem in c or c in stem for c in cited_set):
+                    continue
+                for entry in _rows_from_file(p):
+                    if not isinstance(entry, dict):
+                        continue
+                    if entry.get("status") not in {
+                        VerificationStatus.FULLY_PROVEN.value,
+                        VerificationStatus.INTERMEDIARY_PROVEN.value,
+                    }:
+                        continue
+                    if _token_match(entry):
+                        assumption.grounding = GroundingStatus.GROUNDED_EXTERNAL_PAPER
+                        assumption.grounding_source = (
+                            f"cited_ref:{p.stem}:{entry.get('theorem_name', '')}"
+                        )
+                        return assumption
+
+    # Step 4 — fall through
+    return assumption
+
+
 def _ledger_path(paper_id: str, output_root: Path | None = None) -> Path:
     safe = paper_id.replace("/", "_").replace(":", "_")
     base = output_root if output_root is not None else _LEDGER_DIR
@@ -872,6 +1130,15 @@ def build_ledger_entry(
     provenance: ProvenanceLink | None = None,
     project_root: Path | None = None,
     ledger_root: Path | None = None,
+    translation_fidelity_score: float | None = None,
+    status_alignment_score: float | None = None,
+    dependency_trust_complete: bool | None = None,
+    reproducible_env: bool | None = None,
+    translation_validated: bool | None = None,
+    translation_rounds_used: int | None = None,
+    translation_uncertainty_flags: list[str] | None = None,
+    translation_confidence: float | None = None,
+    had_exception: bool = False,
 ) -> TheoremLedgerEntry:
     """Build a TheoremLedgerEntry from raw pipeline step_records."""
     step_obligations, first_failing = reconstruct_step_obligations(
@@ -909,10 +1176,39 @@ def build_ledger_entry(
         error=error_message,
     )
 
+    auto_fidelity, auto_alignment = infer_quality_scores(
+        proved=proved,
+        step_records=step_records,
+        error_message=error_message,
+        lean_statement=lean_statement,
+        translation_fidelity_score=translation_fidelity_score,
+        status_alignment_score=status_alignment_score,
+        translation_validated=translation_validated,
+        translation_rounds_used=translation_rounds_used,
+        translation_uncertainty_flags=translation_uncertainty_flags,
+        translation_confidence=translation_confidence,
+        had_exception=had_exception,
+    )
+
+    status, validation_gates, gate_failures = evaluate_promotion_gates(
+        status=status,
+        proved=proved,
+        step_verdict=step_verdict,
+        assumptions=assumptions,
+        provenance=provenance,
+        project_root=project_root,
+        translation_fidelity_score=auto_fidelity,
+        status_alignment_score=auto_alignment,
+        dependency_trust_complete=dependency_trust_complete,
+        reproducible_env=reproducible_env,
+    )
+
     theorem_trust_class, theorem_trust_ref, promotion_gate = _derive_theorem_trust(
         assumptions=assumptions,
         status=status,
     )
+    if gate_failures:
+        theorem_trust_ref = theorem_trust_ref + ";gate_failures=" + ",".join(gate_failures)
 
     return TheoremLedgerEntry(
         theorem_name=theorem_name,
@@ -934,4 +1230,6 @@ def build_ledger_entry(
         rounds_used=rounds_used,
         time_s=round(time_s, 2),
         timestamp=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        validation_gates=validation_gates,
+        gate_failures=gate_failures,
     )

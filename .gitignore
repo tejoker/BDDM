@@ -32,10 +32,23 @@ wheels/
 .installed.cfg
 *.egg
 
-# Test and temporary scripts
+# Temporary scripts and one-off notes
 /run_zetroc_formal_proof.sh
 /PHASE_*.md
 /SPRINT_*.md
+*_IMPLEMENTATION.md
+*_ANALYSIS.md
+*_DIAGNOSIS.md
+
+# Lean scratch files generated during proof search
+Desol/_tmp_*.lean
+Desol/Bench*.lean
+
+# Runtime artifacts
+hello_world_api_telemetry.json
+proof_batch_results.json
+quick_report_remote.json
+*.step*.log
 
 # IDE
 .vscode/

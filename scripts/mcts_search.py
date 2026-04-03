@@ -37,18 +37,7 @@ from pathlib import Path
 from typing import Any, Callable, Sequence
 
 from dotenv import load_dotenv
-
-try:
-    from lean_dojo import Dojo, Theorem
-    from lean_dojo.interaction.dojo import LeanError, ProofFinished, ProofGivenUp, TacticState
-except ImportError:
-    # Fallback to REPLDojo if LeanDojo unavailable
-    Dojo = None
-    Theorem = None
-    LeanError = None
-    ProofFinished = None
-    ProofGivenUp = None
-    TacticState = None
+from lean_repl_dojo import LeanError, ProofFinished, ProofGivenUp, REPLDojo, TacticState
 
 try:
     from mistralai import Mistral
@@ -66,7 +55,7 @@ from ponder_loop import (
     load_premise_context,
     repair_full_proof_draft,
 )
-from prove_with_ponder import _execute_draft, _open_dojo, _prepare_leandojo_repo
+from prove_with_ponder import _execute_draft, _open_dojo
 
 # Configure logging
 logging.basicConfig(
@@ -686,7 +675,7 @@ def backpropagate(path: list[MCTSNode], value: float) -> None:
 def expand_leaf(
     *,
     leaf: MCTSNode,
-    dojo: Dojo,
+    dojo: Any,
     client: Mistral,
     model: str,
     premise_context: str = "",
@@ -754,9 +743,13 @@ def expand_leaf(
                 first_visit_time=time.time(),
             )
             children.append(child)
+            # Record a positive calibration sample for this node's value estimate
+            collect_calibration_sample(score=leaf.mean_value, outcome=1)
             continue
 
         if isinstance(outcome, (LeanError, ProofGivenUp)):
+            # Record a negative calibration sample
+            collect_calibration_sample(score=leaf.mean_value, outcome=0)
             continue
 
     leaf.children.extend(children)
@@ -933,17 +926,22 @@ def run_mcts(
     use_tactics_estimate: bool = True,
 ) -> tuple[MCTSNode, SearchStats]:
     """Run MCTS with improved value estimation (Phase 3.1 + 3.2)."""
-    if prepared_repo is None:
-        repo, tmp_root = _prepare_leandojo_repo(project_root)
-    else:
-        repo, tmp_root = prepared_repo, prepared_tmp_root
-    theorem = Theorem(repo, file_path, theorem_name)
+    del prepared_repo, prepared_tmp_root
+
+    rel_file_path = file_path
+    if file_path.is_absolute():
+        rel_file_path = file_path.relative_to(project_root)
+
     stats = SearchStats(start_time=time.time())
 
-    try:
-        with Dojo(theorem, timeout=dojo_timeout) as (dojo, initial_state):
-            if not isinstance(initial_state, TacticState):
-                raise RuntimeError(f"Unexpected initial state type: {type(initial_state).__name__}")
+    with REPLDojo(
+        project_root=project_root,
+        file_path=rel_file_path,
+        theorem_name=theorem_name,
+        timeout=dojo_timeout,
+    ) as (dojo, initial_state):
+        if not isinstance(initial_state, TacticState):
+            raise RuntimeError(f"Unexpected initial state type: {type(initial_state).__name__}")
 
             root = MCTSNode(
                 state=initial_state,
@@ -1031,13 +1029,8 @@ def run_mcts(
 
                 backpropagate(path, value)
 
-            stats.end_time = time.time()
-            return root, stats
-    finally:
-        if tmp_root is not None:
-            import shutil
-
-            shutil.rmtree(tmp_root, ignore_errors=True)
+        stats.end_time = time.time()
+        return root, stats
 
 
 def run_mcts_fallback(
@@ -1842,43 +1835,33 @@ def run_mcts_parallel(
     return best_root, merged_stats, results
 
 
-def leandojo_preflight(
+def repldojo_preflight(
     *,
     project_root: Path,
     file_path: Path,
     theorem_name: str,
     dojo_timeout: int,
 ) -> PreflightResult:
-    """Check whether LeanDojo can trace and open the theorem state."""
-    if Dojo is None or Theorem is None or TacticState is None:
-        return PreflightResult(False, "LeanDojo is not installed in this environment")
-
-    repo, tmp_root = _prepare_leandojo_repo(project_root)
-    theorem = Theorem(repo, file_path, theorem_name)
-    keep_tmp = False
+    """Check whether REPLDojo can open the theorem state."""
+    rel_file_path = file_path
+    if file_path.is_absolute():
+        rel_file_path = file_path.relative_to(project_root)
 
     try:
-        with Dojo(theorem, timeout=dojo_timeout) as (_dojo, state):
+        with REPLDojo(
+            project_root=project_root,
+            file_path=rel_file_path,
+            theorem_name=theorem_name,
+            timeout=dojo_timeout,
+        ) as (_dojo, state):
             if isinstance(state, TacticState):
-                keep_tmp = True
-                return PreflightResult(
-                    True,
-                    "LeanDojo preflight passed",
-                    prepared_repo=repo,
-                    tmp_root=tmp_root,
-                )
+                return PreflightResult(True, "REPLDojo preflight passed")
             return PreflightResult(
                 False,
-                f"LeanDojo returned unexpected initial state type: {type(state).__name__}",
+                f"REPLDojo returned unexpected initial state type: {type(state).__name__}",
             )
     except Exception as exc:
-        return PreflightResult(False, f"LeanDojo preflight failed: {exc}")
-    finally:
-        # Keep prepared snapshot alive when preflight succeeds to avoid duplicating copy+trace work.
-        if tmp_root is not None and not keep_tmp:
-            import shutil
-
-            shutil.rmtree(tmp_root, ignore_errors=True)
+        return PreflightResult(False, f"REPLDojo preflight failed: {exc}")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -1942,9 +1925,9 @@ Examples:
         help=f"Number of parallel processes (default: {DEFAULT_PROCESSES})",
     )
 
-    # Model and LeanDojo setup
+    # Model and backend setup
     parser.add_argument("--model", default="", help="Mistral model ID")
-    parser.add_argument("--dojo-timeout", type=int, default=600, help="LeanDojo timeout in seconds")
+    parser.add_argument("--dojo-timeout", type=int, default=600, help="REPLDojo timeout in seconds")
 
     # Premise injection
     parser.add_argument(
@@ -1973,18 +1956,18 @@ Examples:
     parser.add_argument(
         "--skip-preflight",
         action="store_true",
-        help="Skip LeanDojo preflight check",
+        help="Skip REPLDojo preflight check",
     )
     parser.add_argument(
         "--fallback-mode",
         choices=["none", "model"],
         default="model",
-        help="Fallback strategy if LeanDojo unavailable",
+        help="Fallback strategy if REPLDojo backend fails",
     )
     parser.add_argument(
         "--auto-patch-leandojo",
         action="store_true",
-        help="Auto-patch LeanDojo for newer Lean versions",
+        help="Deprecated: patch helper for legacy LeanDojo environments",
     )
 
     # Analysis and export options
@@ -2041,20 +2024,12 @@ def main() -> int:
         print(f"{status} {patch_msg}")
 
     # Determine execution mode
-    mode = "leandojo"
+    mode = "repldojo"
     prepared_repo: Any | None = None
     prepared_tmp_root: Path | None = None
-
-    if Dojo is None or Theorem is None or TacticState is None:
-        if args.fallback_mode == "model":
-            mode = "model"
-            print("[warn] LeanDojo unavailable; using model-only MCTS fallback")
-        else:
-            print("[fail] LeanDojo unavailable and fallback-mode=none")
-            return 1
     
     if not args.skip_preflight:
-        preflight = leandojo_preflight(
+        preflight = repldojo_preflight(
             project_root=Path(args.project_root).resolve(),
             file_path=Path(args.file),
             theorem_name=args.theorem,

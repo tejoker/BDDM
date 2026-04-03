@@ -366,17 +366,40 @@ class PremiseRetriever:
             if len(t) >= 5 and any(c.isupper() for c in t)
         ]
 
+        # Phase 2 enhancement: Extract namespace hints from goal text
+        goal_lower = goal.lower()
+        namespace_hints = {
+            "nat": any(kw in goal_lower for kw in ["nat", "∀ n", "∀ n :", "n : ℕ", "prime", "divisible"]),
+            "real": any(kw in goal_lower for kw in ["real", "ℝ", "sqrt", "log", "sin", "cos"]),
+            "algebra": any(kw in goal_lower for kw in ["ring", "field", "module", "vector"]),
+            "data": any(kw in goal_lower for kw in ["list", "finset", "multiset", "array"]),
+        }
+
         q = self._encode_query(goal)
         scored: list[tuple[int, float]] = []
         for i, emb in enumerate(self.embeddings):
             base = _dot(q, emb)
             boost = 0.0
-            if lean_idents:
-                name_lower = self.entries[i].name.lower()
-                for ident in lean_idents:
-                    if ident.lower() in name_lower:
-                        boost = 0.5
-                        break
+            
+            # Phase 2: Enhanced name matching
+            name_lower = self.entries[i].name.lower()
+            namespace_lower = self.entries[i].namespace.lower()
+            
+            # Exact lemma name matches get highest boost
+            for ident in lean_idents:
+                if ident.lower() == name_lower.split(".")[-1]:  # Match against final part of name
+                    boost += 1.5
+                elif ident.lower() in name_lower:
+                    boost += 0.5
+            
+            # Namespace heuristics: prefer matching namespaces
+            for ns_hint, present in namespace_hints.items():
+                if present and ns_hint in namespace_lower:
+                    boost += 0.3
+                elif present and ns_hint not in namespace_lower and "mathlib" in namespace_lower:
+                    # Down-weight mismatched namespaces
+                    boost -= 0.1
+            
             scored.append((i, base + boost))
         scored.sort(key=lambda x: x[1], reverse=True)
 

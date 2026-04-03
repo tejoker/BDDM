@@ -30,12 +30,31 @@ except Exception:
     PremiseRetriever = None  # type: ignore[assignment]
 
 SYSTEM_PROMPT = (
-    "You are Leanstral. You must think deeply about the current Lean 4 state before acting. "
+    "You are Leanstral. You must think deeply about the current Lean 4 proof state before acting. "
     "Output your reasoning inside <think> tags. "
     "Inside every <think> block, include a confidence score line formatted exactly as 'CONFIDENCE: <number between 0.0 and 1.0>'. "
+    "When provided with available Mathlib premises, ALWAYS use their exact names — never invent or abbreviate lemma names. "
     "If you need more time to think, output <continue>. "
     "If you are ready to execute, output exactly one tactic inside <tactic> tags. "
-    "Do not output anything outside these tags."
+    "Do not output anything outside these tags.\n\n"
+    "ABSOLUTE RULES — violating these wastes the entire search budget:\n"
+    "- NEVER output `sorry` or `admit`. A proof containing sorry is not a proof.\n"
+    "- NEVER call `rewrite [lemma]` unless you have verified the lemma's LHS pattern appears verbatim in the goal.\n"
+    "- NEVER call `linarith` or `omega` unless the goal is a linear (in)equality over integers or naturals.\n"
+    "- NEVER invent a lemma name. If a lemma is not in the retrieved premises list, do not use it.\n\n"
+    "STRUCTURED REASONING PROCESS:\n"
+    "1. Parse the goal: identify the statement type (equation, inequality, exists, forall, etc.)\n"
+    "2. Examine retrieved premises: which lemma names EXACTLY match the goal structure?\n"
+    "3. Check hypothesis context: are any hypotheses directly applicable?\n"
+    "4. Before choosing rewrite: confirm the LHS pattern is literally present in the goal string\n"
+    "5. Before choosing linarith/omega: confirm the goal is a linear numeric (in)equality\n"
+    "6. Select one tactic: the highest-confidence choice that satisfies all rules above\n\n"
+    "SUCCESSFUL PROOF EXAMPLES:\n"
+    "Example 1 - Simple arithmetic: Goal: n²≥0 | Retrieved: sq_nonneg | Tactic: exact sq_nonneg n\n"
+    "Example 2 - Linear finisher: Goal: a + b ≤ c (integers) | Tactic: linarith\n"
+    "Example 3 - Reflexivity: Goal: x=x | Tactic: rfl\n"
+    "Example 4 - Ring normalization: Goal: algebraic equality | Tactic: ring\n"
+    "Example 5 - Induction: Goal: ∀ n, P n | Tactic: induction n with | zero => ... | succ n ih => ...\n"
 )
 
 CONTINUE_PROMPT = "Continue your train of thought."
@@ -437,17 +456,61 @@ def run_ponder_loop(
         else:
             effective_premise_context = retrieved_context
 
+    # Phase 3: Analyze goal structure for better reasoning
+    goal_structure_hint = ""
+    state_lower = lean_state.lower()
+    if "⊢" in lean_state or "goal" in state_lower:
+        # Extract the target from turnstile
+        if "⊢" in lean_state:
+            target = lean_state.split("⊢")[-1].strip()
+        else:
+            target = lean_state
+        
+        # Identify goal type
+        if "=" in target or "==" in target:
+            goal_structure_hint = "[Goal type: EQUALITY]"
+        elif "∀" in target or "forall" in state_lower:
+            goal_structure_hint = "[Goal type: UNIVERSAL_QUANTIFIER]"
+        elif "∃" in target or "exists" in state_lower:
+            goal_structure_hint = "[Goal type: EXISTENTIAL]"
+        elif any(kw in target for kw in ["<", ">", "≤", "≥", "≠"]):
+            goal_structure_hint = "[Goal type: INEQUALITY_OR_COMPARISON]"
+        elif "true" in target.lower() or target.strip() == "":
+            goal_structure_hint = "[Goal type: TRIVIAL_OR_TRUE]"
+        else:
+            goal_structure_hint = "[Goal type: GENERAL_PROPOSITION]"
+    
+    # Format proof state with explicit sections and goal hints
+    formatted_state = (
+        "Current Lean 4 proof state:\n"
+        f"{goal_structure_hint}\n"
+        "=" * 50 + "\n"
+        f"{lean_state}\n"
+        "=" * 50
+    )
+    
+    system_content = build_system_prompt(premise_context=effective_premise_context)
+    if effective_premise_context:
+        system_content = (
+            f"{system_content}\n\n"
+            "CRITICAL REMINDERS:\n"
+            "- Use ONLY the provided Mathlib premises; reference by exact name\n"
+            "- Do NOT invent lemma names\n"
+            "- Match the goal structure: equality goals → use lemmas about equality\n"
+            "- For trivial goals: prefer immediate tactics (rfl, norm_num, decide)\n"
+            "- For inequalities: consider linarith, omega, ring_nf tactics"
+        )
+    
     messages: list[dict[str, str]] = [
         {
             "role": "system",
-            "content": build_system_prompt(premise_context=effective_premise_context),
+            "content": system_content,
         },
         {
             "role": "user",
             "content": (
-                "Current Lean 4 proof state:\n"
-                f"{lean_state}\n\n"
-                "Follow the format rules strictly and decide your next action."
+                f"{formatted_state}\n\n"
+                "Using the structured reasoning process, generate the next tactic."
             ),
         },
     ]
@@ -605,6 +668,51 @@ def generate_tactic_options(
     return tactics
 
 
+def _exact_match_premise_lookup(lean_state: str, retrieval_index_path: str) -> str:
+    """Return a bullet list of premises whose name exactly ends with any capitalised
+    identifier found in the goal.  These are guaranteed-real Mathlib names so the
+    model can copy them without hallucinating.
+
+    Example: goal contains `Nat.Prime` → finds `Nat.Prime`, `Nat.Prime.dvd_mul`, etc.
+    Only runs when a retrieval index is loaded; returns "" otherwise.
+    """
+    if not retrieval_index_path:
+        return ""
+    retriever = _get_retriever(retrieval_index_path)
+    if retriever is None:
+        return ""
+
+    # Extract camelCase / dotted identifiers that look like Lean names (≥5 chars,
+    # contains at least one uppercase letter or a dot).
+    TOKEN_RE = re.compile(r"[A-Za-z][A-Za-z0-9_.']+"   )
+    candidates = [
+        t for t in TOKEN_RE.findall(lean_state)
+        if len(t) >= 5 and (any(c.isupper() for c in t) or "." in t)
+    ]
+    if not candidates:
+        return ""
+
+    # Build a lowercase suffix set for fast matching.
+    hits: list[str] = []
+    seen: set[str] = set()
+    for entry in retriever.entries:
+        name_lower = entry.name.lower()
+        for cand in candidates:
+            cand_lower = cand.lower()
+            # Exact suffix match: entry name ends with the candidate token.
+            if name_lower == cand_lower or name_lower.endswith("." + cand_lower):
+                if entry.name not in seen:
+                    seen.add(entry.name)
+                    stmt = entry.statement[:80].strip() if entry.statement else ""
+                    hits.append(f"- {entry.name}: {stmt}" if stmt else f"- {entry.name}")
+                if len(hits) >= 20:
+                    break
+        if len(hits) >= 20:
+            break
+
+    return "\n".join(hits)
+
+
 def generate_full_proof_draft(
     *,
     lean_state: str,
@@ -646,8 +754,31 @@ def generate_full_proof_draft(
         "You are Leanstral in full-draft mode. "
         "Output exactly one <draft>...</draft> block containing newline-separated Lean tactics. "
         "Each line must be directly executable with run_tac on the current goal state. "
-        "Do not include theorem declarations, comments, markdown, or prose."
+        "Do not include theorem declarations, comments, markdown, or prose.\n\n"
+        "ABSOLUTE RULES:\n"
+        "- NEVER write `sorry` or `admit` on any line. A draft containing sorry is rejected.\n"
+        "- Only use lemma names that appear in the retrieved premises list. "
+        "Do not invent or abbreviate lemma names.\n"
+        "- Only use `rewrite [lemma]` if the lemma's LHS pattern is literally present in the goal.\n"
+        "- Only use `linarith` or `omega` if the goal is a linear (in)equality over integers or naturals."
     )
+
+    # Inject exact-match lemma hits for any capitalized identifiers in the goal.
+    exact_hits = _exact_match_premise_lookup(lean_state, retrieval_index_path)
+    if exact_hits:
+        if effective_premise_context:
+            effective_premise_context = (
+                "Exact-match lemmas for identifiers in this goal "
+                "(these names are verified to exist in Mathlib):\n"
+                f"{exact_hits}\n\n"
+                f"{effective_premise_context}"
+            )
+        else:
+            effective_premise_context = (
+                "Exact-match lemmas for identifiers in this goal "
+                "(these names are verified to exist in Mathlib):\n"
+                f"{exact_hits}"
+            )
 
     user_parts = [f"Current Lean 4 proof state:\n{lean_state}"]
     if informal_proof_hint.strip():
@@ -659,7 +790,8 @@ def generate_full_proof_draft(
         )
     user_parts.append(
         "Return one executable proof draft now. "
-        "Prefer short robust tactics and verified theorem names."
+        "Use only lemma names from the premises list above. "
+        "Do not write sorry."
     )
 
     _response, text = _chat_complete(
@@ -713,11 +845,40 @@ def repair_full_proof_draft(
         else:
             effective_premise_context = retrieved_context
 
+    # Detect whether the previous draft's failure was sorry-related.
+    _sorry_failure = "sorry" in (error_feedback or "").lower()
+
     system_prompt = (
         "You are Leanstral in proof-repair mode. "
         "Repair the failing draft and return exactly one <draft>...</draft> block with newline-separated tactics. "
-        "Every line must be executable via run_tac. Output no prose."
+        "Every line must be executable via run_tac. Output no prose.\n\n"
+        "ABSOLUTE RULES:\n"
+        "- NEVER write `sorry` or `admit`. The previous draft was rejected because it contained sorry.\n"
+        if _sorry_failure else
+        "You are Leanstral in proof-repair mode. "
+        "Repair the failing draft and return exactly one <draft>...</draft> block with newline-separated tactics. "
+        "Every line must be executable via run_tac. Output no prose.\n\n"
+        "ABSOLUTE RULES:\n"
+        "- NEVER write `sorry` or `admit`.\n"
+        "- Only use lemma names from the retrieved premises list. Do not invent names.\n"
+        "- Only use `rewrite [lemma]` if the lemma's LHS appears literally in the goal.\n"
+        "- Only use `linarith`/`omega` if the goal is a linear numeric (in)equality."
     )
+
+    # Inject exact-match hits for the repair prompt too.
+    exact_hits = _exact_match_premise_lookup(lean_state, retrieval_index_path)
+    if exact_hits:
+        if effective_premise_context:
+            effective_premise_context = (
+                "Exact-match lemmas (verified to exist in Mathlib):\n"
+                f"{exact_hits}\n\n"
+                f"{effective_premise_context}"
+            )
+        else:
+            effective_premise_context = (
+                "Exact-match lemmas (verified to exist in Mathlib):\n"
+                f"{exact_hits}"
+            )
 
     user_parts = [
         f"Current Lean 4 proof state:\n{lean_state}",
@@ -732,7 +893,7 @@ def repair_full_proof_draft(
             f"{effective_premise_context}"
         )
     user_parts.append(
-        "Fix only what is necessary so the script advances farther than before."
+        "Fix only what is necessary. Use only lemma names from the list above. Do not write sorry."
     )
 
     _response, text = _chat_complete(
