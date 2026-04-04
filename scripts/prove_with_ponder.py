@@ -963,86 +963,24 @@ def main() -> int:
             informal_proof_hint=informal_hint,
         )
     elif args.mode == "mcts-draft":
-        from mcts_search import run_draft_mcts, run_draft_mcts_parallel
+        # mcts-draft is a legacy alias — use state-level MCTS instead
+        from mcts_search import run_state_mcts
 
-        cpu_target = max(0.1, min(args.mcts_cpu_target, 1.0))
-        auto_workers = max(1, int(mp.cpu_count() * cpu_target))
-        worker_count = args.mcts_parallel_workers if args.mcts_parallel_workers > 0 else auto_workers
-
-        difficulty = _estimate_theorem_difficulty(
+        ok, tactics, summary = run_state_mcts(
             project_root=project_root,
-            file_path=file_path,
-            theorem_name=args.theorem,
-            dojo_timeout=args.dojo_timeout,
-        )
-        tuned_workers, tuned_iterations, tuned_variants, tuned_depth, tuning_reason = _adapt_mcts_params(
-            profile=args.mcts_profile,
-            base_workers=worker_count,
+            theorem_statement=f"-- {args.theorem}",  # statement inferred from file
+            client=client,
+            model=model,
             iterations=args.mcts_iterations,
-            repair_variants=args.mcts_repair_variants,
+            n_tactics=args.mcts_repair_variants,
             max_depth=args.mcts_max_depth,
-            difficulty=difficulty,
+            temperature=args.temperature,
+            premise_context=premise_context,
+            retrieval_index_path=args.retrieval_index,
+            retrieval_top_k=args.retrieval_top_k,
         )
-
-        if tuned_workers > 1:
-            ok, raw_records, summary, worker_results = run_draft_mcts_parallel(
-                project_root=project_root,
-                file_path=file_path,
-                theorem_name=args.theorem,
-                api_key=api_key,
-                model=model,
-                total_iterations=tuned_iterations,
-                num_workers=tuned_workers,
-                repair_variants=tuned_variants,
-                max_depth=tuned_depth,
-                exploration_c=args.mcts_exploration_c,
-                temperature=args.temperature,
-                dojo_timeout=args.dojo_timeout,
-                premise_context=premise_context,
-                retrieval_index_path=args.retrieval_index,
-                retrieval_top_k=args.retrieval_top_k,
-                informal_proof_hint=informal_hint,
-            )
-            worker_summary_bits = [
-                (
-                    f"worker {w.worker_id}: "
-                    f"ok={w.ok}, best_value={w.best_value:.3f}, "
-                    f"records={len(w.records)}"
-                    + (f", error={w.error}" if w.error else "")
-                )
-                for w in sorted(worker_results, key=lambda x: x.worker_id)
-            ]
-            if worker_summary_bits:
-                summary = summary + " | " + " ; ".join(worker_summary_bits)
-        else:
-            ok, raw_records, summary = run_draft_mcts(
-                project_root=project_root,
-                file_path=file_path,
-                theorem_name=args.theorem,
-                client=client,
-                model=model,
-                iterations=tuned_iterations,
-                repair_variants=tuned_variants,
-                max_depth=tuned_depth,
-                exploration_c=args.mcts_exploration_c,
-                temperature=args.temperature,
-                dojo_timeout=args.dojo_timeout,
-                premise_context=premise_context,
-                retrieval_index_path=args.retrieval_index,
-                retrieval_top_k=args.retrieval_top_k,
-                informal_proof_hint=informal_hint,
-            )
-        summary = (
-            summary
-            + " | "
-            + (
-                f"profile={args.mcts_profile} ({tuning_reason}), "
-                f"difficulty={difficulty.level}:{difficulty.score:.2f}, "
-                f"goals={difficulty.goals}, state_chars={difficulty.state_chars}, hyps={difficulty.hypotheses}, "
-                f"workers={tuned_workers}, iterations={tuned_iterations}, "
-                f"variants={tuned_variants}, depth={tuned_depth}"
-            )
-        )
+        raw_records = [{"tactic": t, "result": "state-advanced", "step": i, "attempt": 0,
+                        "model_turns": 1, "detail": ""} for i, t in enumerate(tactics)]
         records = [
             StepRecord(
                 step=int(r.get("step", 0)),

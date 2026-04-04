@@ -72,11 +72,23 @@ def _paper_id_from_path(path: Path) -> str:
     return path.stem
 
 
+def _adversarial_clean(row: dict[str, Any]) -> bool:
+    """Return False if the adversarial translation check flagged this theorem."""
+    flags = row.get("adversarial_flags", []) or []
+    if not isinstance(flags, list):
+        flags = [flags]
+    fatal = {"trivially_true", "verdict:wrong"}
+    return not any(
+        f in fatal or (isinstance(f, str) and f.startswith("verdict:wrong"))
+        for f in flags
+    )
+
+
 def _classification(row: dict[str, Any]) -> str:
     status = str(row.get("status", "UNRESOLVED"))
     promotion_ok = bool(row.get("promotion_gate_passed", False))
 
-    if status == "FULLY_PROVEN" and promotion_ok:
+    if status == "FULLY_PROVEN" and promotion_ok and _adversarial_clean(row):
         return "trusted"
     if status == "INTERMEDIARY_PROVEN":
         return "conditional"
@@ -95,6 +107,7 @@ def _row_to_kg_node(row: dict[str, Any], paper_id: str, meta: dict[str, Any]) ->
         "trust_class": row.get("trust_class", "TRUST_PLACEHOLDER"),
         "trust_reference": row.get("trust_reference", ""),
         "promotion_gate_passed": bool(row.get("promotion_gate_passed", False)),
+        "adversarial_flags": row.get("adversarial_flags", []),
         "assumptions": row.get("assumptions", []),
         "first_failing_step": row.get("first_failing_step", -1),
         "proof_mode": row.get("proof_mode", ""),

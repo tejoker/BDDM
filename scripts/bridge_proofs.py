@@ -533,7 +533,7 @@ def execute_bridge_chain(
                     logger.debug("proof_callback failed: %s", exc)
 
             if tactic_proof and tactic_proof != "sorry":
-                er = execute_bridge_proof_lean(lean_stmt, tactic_proof, lean_timeout_s=lean_timeout_s)
+                er = execute_bridge_proof_lean(lean_stmt, tactic_proof, timeout_s=int(lean_timeout_s))
                 entailment_results.append(er)
                 if er.entailed:
                     newly_grounded.append(lean_stmt)

@@ -515,12 +515,7 @@ def run_pipeline(
         records: list = []
         exc_str = ""
         try:
-            from mcts_search import run_draft_mcts, run_draft_mcts_parallel
-            from prove_with_ponder import (
-                _adapt_mcts_params,
-                _estimate_theorem_difficulty,
-                prove_with_full_draft_repair,
-            )
+            from prove_with_ponder import prove_with_full_draft_repair
 
             sig = tr.lean_signature
             sig_clean = re.sub(r":=\s*by\b.*$", "", sig, flags=re.DOTALL).strip()
@@ -551,106 +546,22 @@ def run_pipeline(
                 )
 
             def _run_mcts() -> tuple[bool, list, str]:
-                cpu_target = max(0.1, min(mcts_cpu_target, 1.0))
-                auto_workers = max(1, int(mp.cpu_count() * cpu_target))
-                worker_count = mcts_parallel_workers if mcts_parallel_workers > 0 else auto_workers
-
-                difficulty = _estimate_theorem_difficulty(
+                # mcts-draft legacy path — use state-MCTS
+                from mcts_search import run_state_mcts
+                ok_mcts, tactics, summ = run_state_mcts(
                     project_root=project_root,
-                    file_path=tmp_lean.relative_to(project_root),
-                    theorem_name=lean_id,
-                    dojo_timeout=dojo_timeout,
-                )
-                tuned_workers, tuned_iterations, tuned_variants, tuned_depth, tuning_reason = _adapt_mcts_params(
-                    profile=mcts_profile,
-                    base_workers=worker_count,
+                    theorem_statement=sig_clean,
+                    client=client,
+                    model=model,
                     iterations=mcts_iterations,
-                    repair_variants=mcts_repair_variants,
+                    n_tactics=mcts_repair_variants,
                     max_depth=mcts_max_depth,
-                    difficulty=difficulty,
+                    temperature=temperature,
+                    premise_context=static_premise_context,
+                    retrieval_index_path=retrieval_index_path,
+                    retrieval_top_k=retrieval_top_k,
                 )
-
-                if tuned_workers > 1:
-                    api_key = os.getenv("MISTRAL_API_KEY", "").strip()
-                    if api_key:
-                        ok_mcts, recs, summ, worker_results = run_draft_mcts_parallel(
-                            project_root=project_root,
-                            file_path=tmp_lean.relative_to(project_root),
-                            theorem_name=lean_id,
-                            api_key=api_key,
-                            model=model,
-                            total_iterations=tuned_iterations,
-                            num_workers=tuned_workers,
-                            repair_variants=tuned_variants,
-                            max_depth=tuned_depth,
-                            exploration_c=mcts_exploration_c,
-                            temperature=temperature,
-                            dojo_timeout=dojo_timeout,
-                            premise_context=static_premise_context,
-                            retrieval_index_path=retrieval_index_path,
-                            retrieval_top_k=retrieval_top_k,
-                            informal_proof_hint=entry.proof,
-                        )
-                        worker_summary_bits = [
-                            (
-                                f"worker {w.worker_id}: "
-                                f"ok={w.ok}, best_value={w.best_value:.3f}, "
-                                f"records={len(w.records)}"
-                                + (f", error={w.error}" if w.error else "")
-                            )
-                            for w in sorted(worker_results, key=lambda x: x.worker_id)
-                        ]
-                        if worker_summary_bits:
-                            summ = summ + " | " + " ; ".join(worker_summary_bits)
-                    else:
-                        ok_mcts, recs, summ = run_draft_mcts(
-                            project_root=project_root,
-                            file_path=tmp_lean.relative_to(project_root),
-                            theorem_name=lean_id,
-                            client=client,
-                            model=model,
-                            iterations=tuned_iterations,
-                            repair_variants=tuned_variants,
-                            max_depth=tuned_depth,
-                            exploration_c=mcts_exploration_c,
-                            temperature=temperature,
-                            dojo_timeout=dojo_timeout,
-                            premise_context=static_premise_context,
-                            retrieval_index_path=retrieval_index_path,
-                            retrieval_top_k=retrieval_top_k,
-                            informal_proof_hint=entry.proof,
-                        )
-                        summ = summ + " | parallel requested but MISTRAL_API_KEY unavailable for process workers"
-                else:
-                    ok_mcts, recs, summ = run_draft_mcts(
-                        project_root=project_root,
-                        file_path=tmp_lean.relative_to(project_root),
-                        theorem_name=lean_id,
-                        client=client,
-                        model=model,
-                        iterations=tuned_iterations,
-                        repair_variants=tuned_variants,
-                        max_depth=tuned_depth,
-                        exploration_c=mcts_exploration_c,
-                        temperature=temperature,
-                        dojo_timeout=dojo_timeout,
-                        premise_context=static_premise_context,
-                        retrieval_index_path=retrieval_index_path,
-                        retrieval_top_k=retrieval_top_k,
-                        informal_proof_hint=entry.proof,
-                    )
-
-                summ = (
-                    summ
-                    + " | "
-                    + (
-                        f"profile={mcts_profile} ({tuning_reason}), "
-                        f"difficulty={difficulty.level}:{difficulty.score:.2f}, "
-                        f"goals={difficulty.goals}, state_chars={difficulty.state_chars}, hyps={difficulty.hypotheses}, "
-                        f"workers={tuned_workers}, iterations={tuned_iterations}, "
-                        f"variants={tuned_variants}, depth={tuned_depth}"
-                    )
-                )
+                recs = [{"tactic": t, "result": "state-advanced"} for t in tactics] if ok_mcts else []
                 return ok_mcts, recs, summ
 
             if prove_mode == "full-draft":

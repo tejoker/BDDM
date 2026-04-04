@@ -229,6 +229,67 @@ def _auto_reproducible_env(project_root: Path | None) -> bool:
     return commit != "unknown" and lean_ver != "unknown"
 
 
+def independent_lean_verify(
+    *,
+    lean_statement: str,
+    proof_text: str,
+    project_root: Path,
+    timeout: int = 60,
+) -> tuple[bool, str]:
+    """Independently re-verify a proof by writing it to a temp file and running lake build.
+
+    This is separate from the 'proved' flag produced during proof search — it provides
+    an independent check that the proof is reproducible without the search-time cache.
+
+    Returns (success, detail).
+    """
+    import tempfile, shutil as _shutil
+    if not proof_text.strip() or not lean_statement.strip():
+        return False, "empty proof or statement"
+
+    # Build a minimal .lean file
+    imports = "import Mathlib\nimport Aesop\n\n"
+    # Strip any existing :=  by ... from statement, add proof
+    stmt = lean_statement.strip()
+    if ":= by" in stmt:
+        stmt = stmt[:stmt.index(":= by")].rstrip()
+    if stmt.endswith(":="):
+        stmt = stmt[:-2].rstrip()
+
+    lean_src = imports + stmt + " := by\n"
+    for line in proof_text.strip().splitlines():
+        lean_src += "  " + line + "\n"
+
+    tmp_dir = Path(tempfile.mkdtemp(prefix="desol_verify_"))
+    try:
+        # Copy lakefile and toolchain so lake can find Mathlib
+        for fname in ["lakefile.toml", "lean-toolchain", "lake-manifest.json"]:
+            src = project_root / fname
+            if src.exists():
+                _shutil.copy2(src, tmp_dir / fname)
+
+        verify_lean = tmp_dir / "Verify.lean"
+        verify_lean.write_text(lean_src, encoding="utf-8")
+
+        result = subprocess.run(
+            ["lake", "build", "Verify"],
+            cwd=tmp_dir,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            env=_elan_env(),
+        )
+        success = result.returncode == 0 and "sorry" not in lean_src
+        detail = (result.stdout + result.stderr).strip()[:300]
+        return success, detail
+    except subprocess.TimeoutExpired:
+        return False, f"timeout after {timeout}s"
+    except Exception as exc:
+        return False, str(exc)
+    finally:
+        _shutil.rmtree(tmp_dir, ignore_errors=True)
+
+
 def evaluate_promotion_gates(
     *,
     status: VerificationStatus,
@@ -241,16 +302,31 @@ def evaluate_promotion_gates(
     status_alignment_score: float | None,
     dependency_trust_complete: bool | None,
     reproducible_env: bool | None,
+    lean_statement: str = "",
+    proof_text: str = "",
+    run_independent_verify: bool = False,
 ) -> tuple[VerificationStatus, dict[str, bool], list[str]]:
     """Evaluate strict promotion gates and optionally downgrade FULLY_PROVEN.
 
     FULLY_PROVEN requires independent gate evidence beyond raw proof closure.
+    When run_independent_verify=True, 'lean_proof_closed' is checked by a
+    fresh lake build in a temp dir, not just the search-time 'proved' flag.
     """
     min_fidelity = float(os.environ.get("DESOL_MIN_TRANSLATION_FIDELITY", "0.80"))
     min_alignment = float(os.environ.get("DESOL_MIN_STATUS_ALIGNMENT", "0.80"))
 
+    # Independent verification: re-run lake build in a clean temp dir
+    if run_independent_verify and proved and project_root and lean_statement and proof_text:
+        lean_closed, _detail = independent_lean_verify(
+            lean_statement=lean_statement,
+            proof_text=proof_text,
+            project_root=project_root,
+        )
+    else:
+        lean_closed = proved
+
     gates = {
-        "lean_proof_closed": proved,
+        "lean_proof_closed": lean_closed,
         "step_verdict_verified": step_verdict == StepVerdict.VERIFIED,
         "assumptions_grounded": _all_assumptions_grounded(assumptions),
         "provenance_linked": bool(
@@ -947,7 +1023,23 @@ def ground_assumption(
             overlap = assumption_tokens & entry_tokens
             return len(overlap) / max(1, len(assumption_tokens)) > 0.4
 
-        # Step 2 — Internal KG match (any FULLY_PROVEN entry in ledger)
+        # Step 2 — Internal KG match: scan ledger JSONs + KG trusted layer (incl. Mathlib seed).
+        # KG trusted files are JSONL (one entry per line); ledger files are JSON with "entries" list.
+        def _rows_from_jsonl(p: Path) -> list[dict]:
+            rows = []
+            try:
+                for line in p.read_text(encoding="utf-8").splitlines():
+                    line = line.strip()
+                    if line:
+                        try:
+                            rows.append(json.loads(line))
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+            return rows
+
+        # Ledger JSONs
         for p in Path(ledger_root).glob("*.json"):
             for entry in _rows_from_file(p):
                 if not isinstance(entry, dict):
@@ -958,6 +1050,35 @@ def ground_assumption(
                     assumption.grounding = GroundingStatus.GROUNDED_INTERNAL_KG
                     assumption.grounding_source = f"internal_kg:{entry.get('theorem_name', '')}"
                     return assumption
+
+        # KG trusted layer: output/kg/trusted/*.jsonl (includes mathlib_seed.jsonl)
+        # Search parent of ledger_root for kg/trusted/ — conventional layout.
+        kg_trusted_dirs = [
+            Path(ledger_root).parent / "kg" / "trusted",
+            Path(ledger_root).parent.parent / "kg" / "trusted",
+        ]
+        for kg_dir in kg_trusted_dirs:
+            if not kg_dir.exists():
+                continue
+            for p in kg_dir.glob("*.jsonl"):
+                for entry in _rows_from_jsonl(p):
+                    if not isinstance(entry, dict):
+                        continue
+                    if entry.get("status") not in {
+                        VerificationStatus.FULLY_PROVEN.value,
+                        "FULLY_PROVEN",
+                    }:
+                        continue
+                    if _token_match(entry):
+                        # Distinguish Mathlib seed from internal proofs.
+                        source = entry.get("trust_class", "")
+                        if source == "TRUST_MATHLIB":
+                            assumption.grounding = GroundingStatus.GROUNDED_MATHLIB
+                            assumption.grounding_source = f"mathlib_seed:{entry.get('theorem_name', '')}"
+                        else:
+                            assumption.grounding = GroundingStatus.GROUNDED_INTERNAL_KG
+                            assumption.grounding_source = f"kg_trusted:{entry.get('theorem_name', '')}"
+                        return assumption
 
         # Step 3 — Cited reference mining
         if cited_refs:
@@ -1190,6 +1311,7 @@ def build_ledger_entry(
         had_exception=had_exception,
     )
 
+    run_indep = os.environ.get("DESOL_INDEPENDENT_VERIFY", "0") == "1"
     status, validation_gates, gate_failures = evaluate_promotion_gates(
         status=status,
         proved=proved,
@@ -1201,6 +1323,9 @@ def build_ledger_entry(
         status_alignment_score=auto_alignment,
         dependency_trust_complete=dependency_trust_complete,
         reproducible_env=reproducible_env,
+        lean_statement=lean_statement,
+        proof_text=proof_text,
+        run_independent_verify=run_indep,
     )
 
     theorem_trust_class, theorem_trust_ref, promotion_gate = _derive_theorem_trust(

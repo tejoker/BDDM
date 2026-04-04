@@ -336,51 +336,25 @@ def _attempt_proof(
                 "mode": mode,
             }
 
-    # MCTS-draft and hierarchical paths.
+    # mcts-draft and hierarchical are legacy aliases — forward to state-mcts equivalents.
     if mode in ("mcts-draft", "hierarchical"):
-        try:
-            from mcts_search import run_draft_mcts, run_hierarchical_mcts
-            bench_file = _write_bench_file(project_root, lean_statement, lean_header, worker_id)
-            theorem_name = _extract_theorem_name(lean_statement)
-            common_kwargs = dict(
-                project_root=project_root,
-                file_path=bench_file.relative_to(project_root),
-                theorem_name=theorem_name,
-                client=client,
-                model=model,
-                iterations=mcts_iterations,
-                repair_variants=mcts_repair_variants,
-                max_depth=mcts_max_depth,
-                dojo_timeout=lean_timeout,
-                retrieval_index_path=retrieval_index_path,
-                retrieval_top_k=retrieval_top_k,
-            )
-            if mode == "hierarchical":
-                ok, _records, summary = run_hierarchical_mcts(**common_kwargs)
-            else:
-                ok, _records, summary = run_draft_mcts(**common_kwargs)
-            proof = ""
-            if ok and _records:
-                proof = "\n".join(str(r.get("tactic", "")) for r in _records if r.get("tactic"))
-            return {
-                "attempt": attempt_idx,
-                "success": ok,
-                "proof": proof,
-                "error": "" if ok else summary,
-                "error_category": _categorize_error(summary) if not ok else "none",
-                "elapsed_s": round(time.time() - t0, 2),
-                "mode": mode,
-            }
-        except Exception as exc:
-            return {
-                "attempt": attempt_idx,
-                "success": False,
-                "proof": "",
-                "error": str(exc),
-                "error_category": _categorize_error(str(exc)),
-                "elapsed_s": round(time.time() - t0, 2),
-                "mode": mode,
-            }
+        _fwd_mode = "hierarchical-state" if mode == "hierarchical" else "state-mcts"
+        return _attempt_proof(
+            lean_statement=lean_statement,
+            lean_header=lean_header,
+            attempt_idx=attempt_idx,
+            mode=_fwd_mode,
+            client=client,
+            model=model,
+            project_root=project_root,
+            mcts_iterations=mcts_iterations,
+            mcts_repair_variants=mcts_repair_variants,
+            mcts_max_depth=mcts_max_depth,
+            lean_timeout=lean_timeout,
+            retrieval_index_path=retrieval_index_path,
+            retrieval_top_k=retrieval_top_k,
+            worker_id=worker_id,
+        )
 
     try:
         bench_file = _write_bench_file(project_root, lean_statement, lean_header, worker_id)

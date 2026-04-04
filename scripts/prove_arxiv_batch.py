@@ -247,44 +247,22 @@ def prove_one(
             records = [{"tactic": t, "result": "state-advanced"} for t in tactics] if ok else []
             last_error = summary if not ok else ""
         elif proof_mode in ("mcts-draft", "hierarchical"):
-            from mcts_search import run_draft_mcts, run_hierarchical_mcts, run_mcts_fallback
-            try:
-                _mcts_fn = run_hierarchical_mcts if proof_mode == "hierarchical" else run_draft_mcts
-                ok, raw_records, summary = _mcts_fn(
-                    project_root=project_root,
-                    file_path=rel_file,
-                    theorem_name=thm.full_name,
-                    client=client,
-                    model=model,
-                    iterations=mcts_iterations,
-                    repair_variants=mcts_repair_variants,
-                    max_depth=mcts_max_depth,
-                    retrieval_index_path=retrieval_index,
-                )
-                proved = ok
-                records = raw_records
-                last_error = summary if not ok else ""
-            except Exception as mcts_exc:
-                msg = str(mcts_exc)
-                if "No proof backend available" in msg or "Backend initialization failed" in msg:
-                    # Fall back to model-only MCTS to collect calibration traces.
-                    logger.warning(f"Backend unavailable, falling back to model-only: {msg}")
-                    _root, stats = run_mcts_fallback(
-                        theorem_name=thm.full_name,
-                        initial_state_text=thm.declaration,
-                        client=client,
-                        model=model,
-                        retrieval_index_path=retrieval_index,
-                        iterations=max(3, mcts_iterations),
-                        use_tactics_estimate=True,
-                    )
-                    proved = False
-                    records = _value_samples_to_step_records(stats.value_samples)
-                    last_error = (
-                        "Backend unavailable (toolchain/git issue); ran model-only fallback for value calibration traces"
-                    )
-                else:
-                    raise
+            # mcts-draft/hierarchical are legacy aliases — use state-MCTS equivalents
+            from mcts_search import run_hierarchical_state_mcts, run_state_mcts
+            _smcts_fn = run_hierarchical_state_mcts if proof_mode == "hierarchical" else run_state_mcts
+            ok, tactics, summary = _smcts_fn(
+                project_root=project_root,
+                theorem_statement=thm.declaration,
+                client=client,
+                model=model,
+                iterations=mcts_iterations,
+                n_tactics=mcts_repair_variants,
+                max_depth=mcts_max_depth,
+                retrieval_index_path=retrieval_index,
+            )
+            proved = ok
+            records = [{"tactic": t, "result": "state-advanced"} for t in tactics] if ok else []
+            last_error = summary if not ok else ""
         else:
             from prove_with_ponder import prove_with_full_draft_repair
             proved, records, last_error = prove_with_full_draft_repair(
@@ -346,25 +324,6 @@ def prove_one(
             print(f"    error   in {elapsed:.1f}s: {e}", flush=True)
 
         fallback_records: list[dict] = []
-        if proof_mode == "mcts-draft":
-            # Do not emit synthetic placeholder scores.
-            # Try to capture real model-only value samples; if unavailable, keep empty.
-            try:
-                from mcts_search import run_mcts_fallback
-
-                _root, fb_stats = run_mcts_fallback(
-                    theorem_name=thm.full_name,
-                    initial_state_text=thm.declaration,
-                    client=client,
-                    model=model,
-                    retrieval_index_path=retrieval_index,
-                    iterations=max(2, min(6, mcts_iterations)),
-                    use_tactics_estimate=True,
-                )
-                if fb_stats.value_samples:
-                    fallback_records = _value_samples_to_step_records(fb_stats.value_samples)
-            except Exception:
-                fallback_records = []
 
         ledger_entry = build_ledger_entry(
             theorem_name=thm.full_name,

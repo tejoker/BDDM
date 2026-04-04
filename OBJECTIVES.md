@@ -763,6 +763,50 @@ with real calibration data.
    - Model-only pipeline validation (real calibration avgs: 0.9667, no synthetic zeros)
    - Comprehensive backend troubleshooting documentation
 
+#### Completed (Sprint 5 additions, 2026-04-04)
+
+5. **Value function — structural signal (Option C)** ✅
+   - `structural_value(state_text)` in `mcts_search.py`: counts goals (⊢), avg type nesting depth
+   - Blended into `_evaluate_draft_result`: 0.7 model + 0.3 structural — regularises overconfidence
+   - Zero API cost; active on every MCTS node evaluation
+
+6. **Value function — outcome bootstrap (Option A)** ✅
+   - `_collect_proof_trace(root, tree_solved)` in `mcts_search.py`: BFS walk of the full MCTS tree post-search
+   - Writes `{state_text, struct_value, outcome, depth, visits, mean_value}` to `data/value_calibration.proof_traces.jsonl`
+   - Every completed `run_draft_mcts` call appends training pairs; dataset grows organically
+   - Use `fit_platt_calibrator` on accumulated data to re-fit value head periodically
+
+7. **Adversarial translation check** ✅
+   - `adversarial_translation_check()` in `statement_translator.py`: Leanstral-only (no external API)
+   - Probes for: dropped hypotheses, wrong quantifier order, weaker/stronger conclusion, trivially-true statements
+   - Returns list of flags; penalises `confidence` by 0.10 per issue (cap 0.30)
+   - Wired into `translate_statement()` after each successful elaboration
+   - `adversarial_flags` field added to `TranslationResult`
+
+8. **Hierarchical proof planning** ✅
+   - `sketch_proof_with_sorry()` in `ponder_loop.py`: generates sorry-backed proof skeleton with named `have` subgoals
+   - `extract_sorry_subgoals()`: parses `have hN : T := by sorry` lines from sketch
+   - `run_hierarchical_mcts()` in `mcts_search.py`: closes subgoals bottom-up, assembles sketch, final MCTS pass
+   - Falls back to flat MCTS if sketch yields no subgoals
+   - Entry point: call `run_hierarchical_mcts(...)` instead of `run_draft_mcts(...)` for hard theorems
+
+9. **Statement decomposition stubs** ✅
+   - `generate_decomposition_stubs()` in `statement_translator.py`: on translation failure, extracts unknown identifiers from Lean error
+   - Asks Leanstral to generate minimal sorry-backed `structure`/`def` stubs for each missing type
+   - `decomposition_stubs` field added to `TranslationResult`
+   - Stubs become KG seed entries (UNGROUNDED → targets for proof search)
+
+10. **KG seeding from Mathlib** ✅
+    - `scripts/seed_kg_from_mathlib.py`: loads 136k lemmas from embedding index, writes GROUNDED_MATHLIB entries
+    - Output: `output/kg/trusted/mathlib_seed.jsonl` — dense trusted KG foundation
+    - Run: `python scripts/seed_kg_from_mathlib.py --index data/mathlib_embeddings`
+    - Optional: `--describe-top-k N` to generate informal descriptions for top-N via Leanstral
+
+11. **First FULLY_PROVEN ledger entries** ✅
+    - `Desol/Foundations.lean`: 7 manually verified foundational theorems (sum_first_n, pigeonhole, etc.)
+    - `output/verification_ledgers/desol_foundations.json`: 7 entries with status FULLY_PROVEN, TRUST_INTERNAL_PROVED
+    - KG trusted layer now has real GROUNDED_INTERNAL_KG entries for assumption grounding step 2
+
 #### Remaining work (non-blocking, low priority)
 
 1. **Full logical entailment checking per step** (partial: SMT baseline now implemented)
@@ -954,3 +998,159 @@ Output codes:
 3. The KG can store and reason over mixed-certainty theorem assets safely
 4. Failures become actionable (formalization vs search vs likely-false) instead of opaque
 5. Promotion to trusted theorem assets becomes deterministic and auditable
+
+---
+
+## Sprint 5+ Workstreams (Detailed Todo List)
+
+### Workstream G — Value Function Improvement
+
+#### G1. Fit value head on accumulated proof traces (Option A follow-up)
+- [ ] After 244-problem MCTS run completes, run `fit_platt_calibrator` on `data/value_calibration.proof_traces.jsonl`
+- [ ] Compare calibrated ECE (expected calibration error) before/after blending with structural_value
+- [ ] If ECE improves: set new default Platt params in `data/value_calibration.json`
+- [ ] Target: ECE < 0.10 (current is unknown; raw scores cluster near 1.0 = uncalibrated)
+
+#### G2. Process reward model (Option B, medium term)
+- [ ] Collect 5,000+ `(state_text, outcome)` pairs from proof traces
+- [ ] Fine-tune Leanstral with a value head or train a separate small regressor
+- [ ] Replace `evaluate_state_value` with the trained PRM for all MCTS calls
+- [ ] Expected impact: +3-5% pass@1 on miniF2F from better node selection
+
+---
+
+### Workstream H — Translation Semantic Quality
+
+#### H1. Measure semantic translation accuracy (baseline)
+- [ ] Pick 10 paper theorems; manually write the correct Lean 4 statement
+- [ ] Compare to translator output: exact match / semantic equivalent / wrong
+- [ ] Report: `{exact_match, semantic_equiv, wrong, trivially_true}` rates
+- [ ] This is the number we do not yet have; everything else is synthetic
+
+#### H2. Adversarial check integration with repair loop
+- [ ] If `adversarial_flags` contains `"trivially_true"` → force one additional repair round
+  with explicit "the statement appears trivially true, make it more specific" hint
+- [ ] Log adversarial flag rate per domain to identify systematic translator weaknesses
+- [ ] File to modify: `scripts/statement_translator.py` (`translate_statement`)
+
+#### H3. Import validation post-proof
+- [ ] After a proof closes via REPLDojo, re-run `#check` on the statement in a clean file
+  with only the declared imports — verify the type matches the original extracted statement
+- [ ] If mismatch: downgrade status from `FULLY_PROVEN` to `UNRESOLVED` with `failure_origin=IMPORT_MISMATCH`
+- [ ] File to create: `scripts/import_validator.py`; integrate into `prove_arxiv_batch.py`
+
+---
+
+### Workstream I — Hierarchical Proof Planning
+
+#### I1. Wire `--mode hierarchical` into benchmark and batch scripts
+- [ ] Add `hierarchical` to `--mode` choices in `benchmark_minif2f.py` and `prove_arxiv_batch.py`
+- [ ] Route to `run_hierarchical_mcts()` in `mcts_search.py`
+- [ ] Run on 50-problem miniF2F pilot to measure pass@1 delta vs flat MCTS
+
+#### I2. Subgoal quality scoring
+- [ ] After sketch generation, score each `have` subgoal: is the type well-formed? Does it contribute?
+- [ ] Filter out degenerate subgoals (`⊢ True`, `⊢ 0 = 0`) before running child MCTS
+- [ ] File to modify: `scripts/ponder_loop.py` (`extract_sorry_subgoals` → add quality filter)
+
+#### I3. Multi-level hierarchy (depth > 1)
+- [ ] If a child MCTS fails, generate a sub-sketch for that subgoal (recursive)
+- [ ] Max recursion depth: 3
+- [ ] This enables proofs requiring intermediate lemma chains
+
+---
+
+### Workstream J — KG Feedback Loop Closure
+
+#### J1. Seed KG from Mathlib (immediate)
+- [ ] Run: `python scripts/seed_kg_from_mathlib.py --index data/mathlib_embeddings`
+- [ ] Expected: ~136k GROUNDED_MATHLIB entries in `output/kg/trusted/mathlib_seed.jsonl`
+- [ ] Update `assumption_grounding` step 2 in `pipeline_status.py` to scan this file
+
+#### J2. Close one real arXiv paper end-to-end
+Ranked candidates (researched 2026-04-04, all have explicit hypotheses + short proofs):
+1. **2312.13098** — Generalized Fibonacci (dying rabbits); Nat, recurrence, no exotic types — START HERE
+2. **2402.01471** — Restricted sumsets in Z; Int, gcd, Finset — excellent Mathlib fit
+3. **2407.01835** — Distinct partial sums (small sets); finite fields, Finset ordering
+4. **2602.10402** — Critical numbers in finite abelian groups; Cauchy-Davenport adjacent
+5. **2409.07403** — Graham rearrangement beyond rectification; dissociated sets
+
+All 5 added to `data/arxiv_queue_curated.txt`.
+
+- [ ] Run: `python scripts/arxiv_to_lean.py --arxiv-id 2312.13098 --out output/papers/`
+- [ ] Manually check translated statements for semantic correctness (adversarial check will flag trivially-true)
+- [ ] Run proof search: `python scripts/prove_arxiv_batch.py --arxiv-paper 2312.13098 --mode mcts-draft`
+- [ ] Target: at least 1 theorem reaches `FULLY_PROVEN` in arXiv ledger
+- [ ] This unblocks the KG ring-expansion loop
+
+#### J3. Promote Foundations.lean theorems into KG trusted layer
+- [ ] Run: `python scripts/kg_writer.py --ledger output/verification_ledgers/desol_foundations.json`
+- [ ] Verify entries appear in `output/kg/trusted/theorems.jsonl`
+- [ ] These become available for assumption grounding step 2 immediately
+
+#### J4. Domain-gap stub pipeline
+- [ ] When `generate_decomposition_stubs()` fires, write stubs to a `stubs/` KG layer
+- [ ] Index stubs by concept name; make them available for premise retrieval
+- [ ] Allow MCTS to attempt closing stubs independently (each stub = a mini theorem to prove)
+- [ ] File to modify: `scripts/pipeline_status.py`, `scripts/kg_writer.py`
+
+---
+
+### Workstream K — Parallelization
+
+#### K1. Per-worker hardlink copies
+- [ ] Script: `scripts/setup_parallel_workers.sh N` — runs `cp -rl ~/DESol ~/DeSol_wN`
+- [ ] Modify `benchmark_minif2f.py` to accept `--worker-id` and derive `--project-root` from it
+- [ ] Test with N=2 workers on 20-problem subset; verify no `.lake` cache conflicts
+- [ ] Expected speedup: linear with worker count
+
+#### K2. Work distribution
+- [ ] Add `--problem-offset` and `--n-problems` to slice the problem set per worker
+- [ ] Coordinator script that launches N workers and merges `output/mcts_*/` results
+
+---
+
+### Workstream L — Fine-Tuning Signal
+
+#### L1. Curate training data from MCTS runs
+- [ ] Filter `data/value_calibration.proof_traces.jsonl` for high-quality pairs:
+  - Solved trees: all nodes get `outcome=1` regardless of their individual value
+  - Unsolved trees: nodes get `outcome=0`
+- [ ] Export as `data/fine_tune/proof_outcomes.jsonl`
+
+#### L2. GRPO training loop (medium term)
+- [ ] Format as `(system_prompt, goal_state, tactic_attempt, reward)` tuples
+- [ ] Reward: +1 for tactic that reduces open goals, -1 for error, 0 for no-change
+- [ ] Submit to Mistral fine-tuning API or use local vllm if model weights available
+- [ ] This is the highest-leverage move on pass@1 beyond search improvements
+
+---
+
+### Workstream M — miniF2F Full Run Completion
+
+#### M1. Monitor 244-problem MCTS run
+- [ ] Check progress: `ssh -p 16641 projectx@zetroc.fr "tail -20 ~/DeSol/output/mcts_244_run.log"`
+- [ ] Expected completion: ~80h from launch (2026-04-03); ETA ~2026-04-07
+
+#### M2. Update README and OBJECTIVES once run completes
+- [ ] Record final pass@1 in README benchmark table
+- [ ] Update Known Limitations section
+- [ ] Tag a git release with the result
+
+#### M3. Parallel re-run with Sprint 5 improvements
+- [ ] After K1+K2 are done, re-run with N=4 workers, structural value, and exact-match lookup
+- [ ] Compare to current 244 run to measure incremental gain from Sprint 5 changes
+
+---
+
+### Quality Gate Targets (Sprint 5+)
+
+| Metric | Current | Target |
+|--------|---------|--------|
+| miniF2F pass@1 (ponder) | 28.7% | — (baseline) |
+| miniF2F pass@1 (MCTS flat) | 36.0% pilot | ≥ 38% on 244 |
+| miniF2F pass@1 (MCTS hierarchical) | not measured | ≥ 40% |
+| Translation semantic accuracy | not measured | ≥ 70% (10-paper sample) |
+| arXiv FULLY_PROVEN theorems | 7 (Foundations.lean) | ≥ 1 from real arXiv paper |
+| Value ECE | unknown | < 0.10 |
+| KG trusted entries | 7 internal | 136k Mathlib + growing |

@@ -912,6 +912,78 @@ def repair_full_proof_draft(
     return _extract_best_effort_draft(text)
 
 
+_SKETCH_SYSTEM = (
+    "You are Leanstral in hierarchical sketch mode. "
+    "Your task: generate a proof skeleton for a Lean 4 theorem using `have` subgoals. "
+    "Rules:\n"
+    "1. Output exactly one <sketch>...</sketch> block containing valid Lean tactic syntax.\n"
+    "2. Break the proof into 2–5 named intermediate steps using `have hN : <type> := by sorry`.\n"
+    "3. The final line must close the main goal using the named `have` steps (e.g., `exact combine h1 h2`).\n"
+    "4. Each `have` name must be unique. Each `have` type must be a plausible Lean 4 type.\n"
+    "5. Do NOT write the full proofs of the `have` steps — only `sorry` placeholders.\n"
+    "6. The sketch must type-check when the `sorry`s are accepted by Lean."
+)
+
+_SORRY_GOAL_RE = re.compile(
+    r"have\s+(h\w*)\s*:\s*([^:=\n][^\n]*?)\s*:=\s*by\s+sorry",
+    re.MULTILINE,
+)
+
+
+def sketch_proof_with_sorry(
+    *,
+    lean_state: str,
+    client: "Mistral",
+    model: str,
+    informal_proof_hint: str = "",
+    temperature: float = 0.4,
+    premise_context: str = "",
+    api_log_hook: object = None,
+) -> str:
+    """Generate a sorry-backed proof skeleton with named `have` subgoals.
+
+    Returns the raw sketch text (the content of <sketch>...</sketch>).
+    Each `have hN : T := by sorry` line represents an open subgoal for the
+    hierarchical MCTS to close independently bottom-up.
+    """
+    parts = [f"Lean 4 proof state:\n{lean_state}"]
+    if informal_proof_hint.strip():
+        parts.append(f"Informal proof hint:\n{informal_proof_hint.strip()}")
+    if premise_context.strip():
+        parts.append(f"Available Mathlib lemmas:\n{premise_context.strip()}")
+    parts.append(
+        "Generate a proof skeleton using `have` subgoals with `sorry` placeholders. "
+        "Output only the <sketch>...</sketch> block."
+    )
+
+    _, text = _chat_complete(
+        client=client,
+        model=model,
+        messages=[
+            {"role": "system", "content": _SKETCH_SYSTEM},
+            {"role": "user", "content": "\n\n".join(parts)},
+        ],
+        temperature=temperature,
+        max_tokens=800,
+        purpose="sketch_proof_with_sorry",
+        api_log_hook=api_log_hook,
+    )
+
+    m = re.search(r"<sketch>(.*?)</sketch>", text, re.DOTALL | re.IGNORECASE)
+    if m:
+        return m.group(1).strip()
+    # Fallback: return the raw text if tags missing.
+    return text.strip()
+
+
+def extract_sorry_subgoals(sketch: str) -> list[tuple[str, str]]:
+    """Extract (name, type) pairs for each `have hN : T := by sorry` line.
+
+    Returns a list of (name, type_expr) for the hierarchical MCTS to target.
+    """
+    return [(m.group(1), m.group(2).strip()) for m in _SORRY_GOAL_RE.finditer(sketch)]
+
+
 def _read_lean_state(args: argparse.Namespace) -> str:
     if args.lean_state:
         return args.lean_state

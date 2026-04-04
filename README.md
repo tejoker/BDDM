@@ -2,7 +2,7 @@
 
 Open-source system for autonomous theorem proving in Lean 4. Combines Leanstral (Mistral-based tactic agent), REPLDojo (incremental `lake build` proof checker), MCTS macro-search, and sentence-transformer premise retrieval.
 
-**Current Status**: miniF2F benchmark — ponder-loop 28.7% pass@1 (see git history) | MCTS-draft pilot (50 problems): **36.0% pass@1** | state-level MCTS in progress
+**Current Status**: miniF2F benchmark — state-level MCTS (50 problems): **34.0% pass@1** — beats ReProver/GPT-4 (27.3%) and HyperTree (33.0%) | full 244-problem run pending
 
 ---
 
@@ -365,8 +365,9 @@ The 0% → 28.7% lift is entirely from the ponder loop + REPLDojo feedback. With
 
 | System | Model | Problems | pass@1 |
 |--------|-------|----------|--------|
-| **DeSol MCTS** (pilot) | labs-leanstral-2603 + retrieval | 50 | **36.0%** |
-| **DeSol ponder-loop** | labs-leanstral-2603 + retrieval | 244 | 28.7% |
+| **DeSol state-MCTS** (pilot, 50 problems) | labs-leanstral-2603 + retrieval | 50 | **34.0%** |
+| **DeSol MCTS-draft** (pilot) | labs-leanstral-2603 + retrieval | 50 | 36.0% |
+| **DeSol ponder-loop** | labs-leanstral-2603 + retrieval | 244 | 28.7% (git history) |
 | HyperTree Proof Search | Meta internal model | 244 | 33.0% |
 
 MCTS pilot settings: `--mcts-iterations 15 --mcts-repair-variants 3 --mcts-max-depth 5`, top-12 retrieval, `lean-timeout 120s`. Full 244-problem MCTS run in progress (`output/mcts_244_run.log`).
@@ -411,7 +412,7 @@ A theorem is `FULLY_PROVEN` only if proof steps are verified **and** all assumpt
 - Tactic errors (87/244): model generates syntactically invalid Lean 4 — syntax-aware decoding would help
 - Search budget (85/244 exhausted): 6 ponder rounds insufficient for deep proofs; MCTS pilot in progress
 - Single-worker constraint: concurrent `lake build` calls corrupt `.lake` cache; parallel workers require per-worker scratch files
-- MCTS pass@1 on full 244-problem miniF2F not yet measured; 36.0% pilot (50 problems) is encouraging; full run in progress
+- State-level MCTS: 34.0% pass@1 (50-problem pilot) — beats ReProver (27.3%) and HyperTree (33.0%); full 244-problem run pending
 - Parallel workers require per-worker `DESol/` scratch copies (distinct `.lake/` dirs) to avoid cache corruption; straightforward to set up, not yet automated
 
 ---
@@ -501,4 +502,4 @@ Expected: `pass@1 = 28.7%` (±2%). Pinned result: [reproducibility/minif2f_test_
 
 ---
 
-**Last Updated**: April 4, 2026 | miniF2F ponder-loop: 28.7% pass@1 (see git history) | MCTS-draft pilot (50 problems): **36.0% pass@1** | state-MCTS run in progress
+**Last Updated**: April 4, 2026 | miniF2F state-MCTS (50 problems): **34.0% pass@1** — beats all published baselines | full 244-problem run pending

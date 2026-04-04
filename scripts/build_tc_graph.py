@@ -221,24 +221,80 @@ _HARDCODED_CONCEPT_MAP: dict[str, str | None] = {
 }
 
 
+def _toon_pack(chunks: list[str], max_chars: int = 8000) -> list[str]:
+    """TOON (Token-Optimized ONe-shot) packing.
+
+    Greedily packs as many docstring chunks as possible into each prompt string
+    up to max_chars, using a compact separator.  Produces fewer, larger API calls
+    than fixed batch_size splitting.
+    """
+    batches: list[str] = []
+    buf: list[str] = []
+    buf_len = 0
+    sep = "\n||\n"
+    sep_len = len(sep)
+    for chunk in chunks:
+        c = chunk.strip()
+        addition = len(c) + (sep_len if buf else 0)
+        if buf and buf_len + addition > max_chars:
+            batches.append(sep.join(buf))
+            buf = [c]
+            buf_len = len(c)
+        else:
+            buf.append(c)
+            buf_len += addition
+    if buf:
+        batches.append(sep.join(buf))
+    return batches
+
+
+def _validate_lean_name(name: str, project_root: Path) -> bool:
+    """Run #check on a Lean4 name to confirm it exists in Mathlib."""
+    if not name or "." not in name and not name[0].isupper():
+        return False
+    src = f"import Mathlib\n#check @{name}\n"
+    try:
+        r = subprocess.run(
+            ["lake", "env", "lean", "--stdin"],
+            input=src,
+            capture_output=True,
+            text=True,
+            timeout=15,
+            cwd=project_root,
+        )
+        return r.returncode == 0 and "error" not in r.stderr.lower()
+    except Exception:
+        return False
+
+
 def run_hydra_extraction(
     mathlib_root: Path,
     cache_path: Path,
     sample_files: int = 50,
-    batch_size: int = 10,
-) -> dict[str, str | None]:
-    """Extract informal concept synonyms from Mathlib docstrings via Mistral API.
+    batch_size: int = 25,          # kept for CLI compat; TOON packing ignores this
+    project_root: Path | None = None,
+    validate_names: bool = False,  # set True to #check each extracted Lean name
+) -> dict[str, dict]:
+    """Extract concept synonym graph from Mathlib docstrings via Mistral API.
 
-    Prompts the configured Mistral model to identify informal math concept names
-    (e.g. "HilbertSpace", "BanachSpace") and their Lean 4 / Mathlib4 equivalents
-    from batches of docstring text. No external dependencies beyond mistralai.
+    Uses TOON (Token-Optimized ONe-shot) batching: packs as many docstring
+    chunks as possible into each API call to minimise token overhead.
 
-    Returns {ConceptName: lean_replacement_or_None} to merge into concept_map.
-    Requires MISTRAL_API_KEY in environment or .env file.
+    Returns a graph dict:
+        {
+          "InformalName": {
+              "lean4_name": "Mathlib.Foo.Bar" | null,
+              "aliases": ["alternate informal names ..."],
+              "validated": true | false,   # whether lean4_name passed #check
+          },
+          ...
+        }
+
+    Also writes output/kg/hydra_graph.json for use by the TC graph and
+    statement_translator.
     """
     import os
 
-    # Resolve API key and model from environment / .env.
     try:
         from dotenv import load_dotenv
         load_dotenv()
@@ -262,12 +318,12 @@ def run_hydra_extraction(
             return {}
 
     cache_path.mkdir(parents=True, exist_ok=True)
-    cache_file = cache_path / "hydra_synonyms.json"
+    cache_file = cache_path / "hydra_graph.json"
     if cache_file.exists():
-        print("[hydra] Loading cached synonyms from prior run...", file=sys.stderr)
+        print("[hydra] Loading cached graph from prior run...", file=sys.stderr)
         return json.loads(cache_file.read_text(encoding="utf-8"))
 
-    # Collect docstrings from Mathlib source.
+    # Collect docstrings
     lean_files = sorted(mathlib_root.rglob("*.lean"))[:sample_files]
     doc_chunks: list[str] = []
     doc_re = re.compile(r"/--\s*([\s\S]*?)\s*-/", re.MULTILINE)
@@ -278,61 +334,84 @@ def run_hydra_extraction(
             continue
         for m in doc_re.finditer(text):
             chunk = m.group(1).strip()
-            if len(chunk) > 50:
-                doc_chunks.append(chunk[:600])
+            if len(chunk) > 40:
+                doc_chunks.append(chunk[:500])   # trim aggressively for TOON
 
     if not doc_chunks:
-        print("[hydra] No docstrings found in mathlib_root — skipping.", file=sys.stderr)
+        print("[hydra] No docstrings found — skipping.", file=sys.stderr)
         return {}
 
+    packed_batches = _toon_pack(doc_chunks, max_chars=6000)
     print(
-        f"[hydra] Extracting concept synonyms from {len(doc_chunks)} docstring chunks "
-        f"using {model} ...",
+        f"[hydra] {len(doc_chunks)} chunks → {len(packed_batches)} TOON batches "
+        f"(~{len(doc_chunks)//max(1,len(packed_batches)):.0f} chunks/call) using {model}",
         file=sys.stderr,
     )
 
     client = Mistral(api_key=api_key)
-    synonyms: dict[str, str | None] = {}
+    graph: dict[str, dict] = {}
 
     _SYSTEM = (
         "You are a Lean 4 / Mathlib expert. "
-        "Given informal math docstring text, extract pairs of (InformalName, Lean4Name) "
-        "where InformalName is a math concept name that appears in the text and "
-        "Lean4Name is its Mathlib4 typeclass or structure name. "
-        "If a concept has no direct Mathlib4 equivalent, use null for Lean4Name. "
-        "Reply with a JSON object only: {\"InformalName\": \"Lean4Name or null\", ...}. "
-        "No explanation, no markdown fences."
+        "Given informal math docstring excerpts separated by '||', extract concept entries. "
+        "For each informal math concept name found, output one JSON entry:\n"
+        '  "InformalName": {"lean4_name": "Mathlib.Foo.Bar or null", "aliases": ["alt name", ...]}\n'
+        "lean4_name must be the precise Mathlib4 fully-qualified typeclass or structure name, or null. "
+        "aliases are other informal names for the same concept. "
+        "Reply with a single JSON object only. No markdown, no explanation."
     )
 
-    for i in range(0, len(doc_chunks), batch_size):
-        batch = doc_chunks[i : i + batch_size]
-        user_text = "\n\n---\n\n".join(batch)
+    for i, batch_text in enumerate(packed_batches):
         try:
             resp = client.chat.complete(
                 model=model,
                 messages=[
                     {"role": "system", "content": _SYSTEM},
-                    {"role": "user", "content": user_text},
+                    {"role": "user", "content": batch_text},
                 ],
                 temperature=0.0,
-                max_tokens=512,
+                max_tokens=1024,
             )
             raw = resp.choices[0].message.content.strip()
-            # Strip markdown fences if model wraps them.
             raw = re.sub(r"^```[a-z]*\n?", "", raw)
             raw = re.sub(r"\n?```$", "", raw)
             parsed = json.loads(raw)
             if isinstance(parsed, dict):
                 for k, v in parsed.items():
-                    if isinstance(k, str) and k not in synonyms:
-                        synonyms[k] = str(v) if v is not None else None
+                    if not isinstance(k, str) or k in graph:
+                        continue
+                    lean4 = v.get("lean4_name") if isinstance(v, dict) else None
+                    aliases = v.get("aliases", []) if isinstance(v, dict) else []
+                    graph[k] = {
+                        "lean4_name": str(lean4) if lean4 else None,
+                        "aliases": [str(a) for a in aliases if isinstance(a, str)],
+                        "validated": False,
+                    }
         except Exception as exc:
-            print(f"[hydra] batch {i//batch_size} failed: {exc}", file=sys.stderr)
+            print(f"[hydra] batch {i} failed: {exc}", file=sys.stderr)
             continue
 
-    print(f"[hydra] Extracted {len(synonyms)} concept synonyms.", file=sys.stderr)
-    cache_file.write_text(json.dumps(synonyms, indent=2, ensure_ascii=False), encoding="utf-8")
-    return synonyms
+    # Optional #check validation of extracted Lean names
+    if validate_names and project_root:
+        validated = 0
+        for entry in graph.values():
+            lean4 = entry.get("lean4_name")
+            if lean4:
+                entry["validated"] = _validate_lean_name(lean4, project_root)
+                if entry["validated"]:
+                    validated += 1
+        print(f"[hydra] Validated {validated}/{len(graph)} lean4_names via #check", file=sys.stderr)
+
+    print(f"[hydra] Extracted {len(graph)} concept graph nodes.", file=sys.stderr)
+    cache_file.write_text(json.dumps(graph, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    # Also write a flat synonym map for backward compat with statement_translator
+    flat = {k: v["lean4_name"] for k, v in graph.items()}
+    (cache_path / "hydra_synonyms.json").write_text(
+        json.dumps(flat, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+
+    return graph
 
 
 # ---------------------------------------------------------------------------
