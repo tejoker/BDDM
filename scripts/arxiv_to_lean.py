@@ -198,6 +198,7 @@ def pipeline_results_to_json(results: list[PipelineResult]) -> list[dict]:
                     "lean_signature": r.translation.lean_signature,
                     "confidence": r.translation.confidence,
                     "uncertainty_flags": r.translation.uncertainty_flags,
+                    "adversarial_flags": getattr(r.translation, "adversarial_flags", []),
                 },
                 "proved": r.proved,
                 "skipped": r.skipped,
@@ -473,6 +474,29 @@ def run_pipeline(
             with _print_lock:
                 print(f"         translate: {status}  rounds={tr.rounds_used}")
 
+        # Adversarial check enforcement: if the translation is flagged as wrong or
+        # trivially true, treat it as unvalidated to avoid proving a bad statement.
+        adv_flags = getattr(tr, "adversarial_flags", []) or []
+        adv_verdict_wrong = any(f.startswith("verdict:wrong") for f in adv_flags)
+        adv_trivially_true = "trivially_true" in adv_flags
+        if adv_verdict_wrong or adv_trivially_true:
+            reason = (
+                f"adversarial_check_failed:{','.join(adv_flags)}"
+            )
+            with _print_lock:
+                print(f"         adversarial: BLOCKED — {reason}")
+            return PipelineResult(
+                entry=entry,
+                translation=tr,
+                proved=False,
+                proof_body="",
+                skipped=True,
+                prove_summary=reason,
+            )
+        if adv_flags:
+            with _print_lock:
+                print(f"         adversarial: WARNING — {adv_flags} (proceeding with penalty)")
+
         if translate_only or not tr.validated:
             reason = "translate-only mode" if translate_only else "translation not validated"
             return PipelineResult(
@@ -631,6 +655,28 @@ def run_pipeline(
 
             if prove_mode == "full-draft":
                 proved, records, proof_summary = _run_full_draft()
+            elif prove_mode in ("state-mcts", "hierarchical-state"):
+                try:
+                    from mcts_search import run_hierarchical_state_mcts, run_state_mcts
+                    _smcts_fn = run_hierarchical_state_mcts if prove_mode == "hierarchical-state" else run_state_mcts
+                    proved, tactics, proof_summary = _smcts_fn(
+                        project_root=project_root,
+                        theorem_statement=sig_clean,
+                        client=client,
+                        model=model,
+                        iterations=mcts_iterations,
+                        n_tactics=mcts_repair_variants,
+                        max_depth=mcts_max_depth,
+                        repl_timeout=float(dojo_timeout),
+                        premise_context=static_premise_context,
+                        retrieval_index_path=retrieval_index_path,
+                        retrieval_top_k=retrieval_top_k,
+                    )
+                    records = [{"tactic": t, "result": "state-advanced"} for t in tactics] if proved else []
+                except Exception as smcts_exc:
+                    proved = False
+                    records = []
+                    proof_summary = f"{prove_mode} exception: {smcts_exc}"
             elif prove_mode == "mcts-draft":
                 try:
                     proved, records, proof_summary = _run_mcts()
@@ -856,9 +902,9 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument("--repair-rounds", type=int, default=5)
     p.add_argument(
         "--prove-mode",
-        choices=["full-draft", "mcts-draft", "auto"],
+        choices=["full-draft", "mcts-draft", "auto", "state-mcts", "hierarchical-state"],
         default="auto",
-        help="Proof mode per theorem: full-draft, mcts-draft, or auto (mcts then full-draft fallback)",
+        help="Proof mode per theorem: full-draft, mcts-draft, auto, state-mcts, or hierarchical-state",
     )
     p.add_argument(
         "--premise-file",

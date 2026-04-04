@@ -230,10 +230,27 @@ def prove_one(
     last_error = ""
 
     try:
-        if proof_mode == "mcts-draft":
-            from mcts_search import run_draft_mcts, run_mcts_fallback
+        if proof_mode in ("state-mcts", "hierarchical-state"):
+            from mcts_search import run_hierarchical_state_mcts, run_state_mcts
+            _smcts_fn = run_hierarchical_state_mcts if proof_mode == "hierarchical-state" else run_state_mcts
+            ok, tactics, summary = _smcts_fn(
+                project_root=project_root,
+                theorem_statement=thm.declaration,
+                client=client,
+                model=model,
+                iterations=mcts_iterations,
+                n_tactics=mcts_repair_variants,
+                max_depth=mcts_max_depth,
+                retrieval_index_path=retrieval_index,
+            )
+            proved = ok
+            records = [{"tactic": t, "result": "state-advanced"} for t in tactics] if ok else []
+            last_error = summary if not ok else ""
+        elif proof_mode in ("mcts-draft", "hierarchical"):
+            from mcts_search import run_draft_mcts, run_hierarchical_mcts, run_mcts_fallback
             try:
-                ok, raw_records, summary = run_draft_mcts(
+                _mcts_fn = run_hierarchical_mcts if proof_mode == "hierarchical" else run_draft_mcts
+                ok, raw_records, summary = _mcts_fn(
                     project_root=project_root,
                     file_path=rel_file,
                     theorem_name=thm.full_name,
@@ -470,8 +487,8 @@ def main() -> int:
     p.add_argument("--max-theorems", type=int, default=0, help="Limit theorems per file (0 = all)")
     p.add_argument(
         "--mode",
-        choices=["full-draft", "mcts-draft"],
-        default="full-draft",
+        choices=["full-draft", "mcts-draft", "hierarchical", "state-mcts", "hierarchical-state"],
+        default="state-mcts",
         help="Proof mode: linear repair loop or draft-level MCTS tree search",
     )
     p.add_argument("--mcts-iterations", type=int, default=12, help="MCTS iterations per theorem")

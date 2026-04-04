@@ -2,7 +2,7 @@
 
 Open-source system for autonomous theorem proving in Lean 4. Combines Leanstral (Mistral-based tactic agent), REPLDojo (incremental `lake build` proof checker), MCTS macro-search, and sentence-transformer premise retrieval.
 
-**Current Status**: miniF2F benchmark — **28.7% pass@1** on 244 test problems (beats ReProver/GPT-4 at 27.3%) | MCTS pilot (50 problems): **36.0% pass@1** — full 244-problem MCTS run in progress
+**Current Status**: miniF2F benchmark — ponder-loop 28.7% pass@1 (see git history) | MCTS-draft pilot (50 problems): **36.0% pass@1** | state-level MCTS in progress
 
 ---
 
@@ -501,4 +501,4 @@ Expected: `pass@1 = 28.7%` (±2%). Pinned result: [reproducibility/minif2f_test_
 
 ---
 
-**Last Updated**: April 3, 2026 | miniF2F: **28.7% pass@1** (244 problems, ponder-loop) | **36.0% pass@1** (MCTS pilot, 50 problems) — full MCTS run in progress
+**Last Updated**: April 4, 2026 | miniF2F ponder-loop: 28.7% pass@1 (see git history) | MCTS-draft pilot (50 problems): **36.0% pass@1** | state-MCTS run in progress

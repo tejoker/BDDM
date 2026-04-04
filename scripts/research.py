@@ -80,7 +80,7 @@ def main() -> int:
     promote.add_argument("--out-lean", default="output/research/generated_conjectures.lean")
     promote.add_argument("--namespace", default="ResearchConjectures")
     promote.add_argument("--paper-id", default="research/conjectures")
-    promote.add_argument("--mode", choices=["full-draft", "mcts-draft"], default="mcts-draft")
+    promote.add_argument("--mode", choices=["full-draft", "mcts-draft", "state-mcts", "hierarchical-state"], default="state-mcts")
     promote.add_argument("--repair-rounds", type=int, default=5)
     promote.add_argument("--retrieval-index", default="data/mathlib_embeddings")
     promote.add_argument("--kg-root", default="output/kg")

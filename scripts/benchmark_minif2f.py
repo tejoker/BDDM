@@ -131,16 +131,26 @@ class BenchmarkResult:
     timestamp: str
     per_problem: list[dict[str, Any]] = field(default_factory=list)
     baselines: dict[str, float] = field(default_factory=dict)
+    # Normalisation metrics — needed for apples-to-apples comparison with literature
+    total_api_calls: int = 0
+    total_tokens_in: int = 0
+    total_tokens_out: int = 0
+    seconds_per_problem: float = 0.0
+    api_calls_per_problem: float = 0.0
 
     def summary_lines(self) -> list[str]:
         lines = [
             f"miniF2F benchmark — split={self.split} k={self.k} n={self.n_problems}",
             f"  pass@1 : {self.pass_at_1:.1%}",
             f"  pass@{self.k} : {self.pass_at_k:.1%}  ({self.total_solved}/{self.n_problems} solved)",
-            f"  elapsed: {self.elapsed_seconds:.1f}s",
-            "",
-            "Baselines (pass@1, test split):",
+            f"  elapsed: {self.elapsed_seconds:.1f}s  ({self.seconds_per_problem:.1f}s/problem)",
+            f"  api_calls: {self.total_api_calls}  ({self.api_calls_per_problem:.1f}/problem)",
         ]
+        if self.total_tokens_in or self.total_tokens_out:
+            lines.append(
+                f"  tokens: {self.total_tokens_in} in / {self.total_tokens_out} out"
+            )
+        lines += ["", "Baselines (pass@1, test split):"]
         for name, val in BASELINES.items():
             marker = " <-- we beat this!" if self.pass_at_1 > val else ""
             lines.append(f"  {val:.1%}  {name}{marker}")
@@ -278,13 +288,61 @@ def _attempt_proof(
     last_lean_error = ""
     failure_stage = "init"
 
-    # MCTS-draft path: delegate entirely to run_draft_mcts.
-    if mode == "mcts-draft":
+    # State-level MCTS (flat or hierarchical) — real proof states via leanprover-community/repl
+    if mode in ("state-mcts", "hierarchical-state"):
         try:
-            from mcts_search import run_draft_mcts
+            from mcts_search import run_hierarchical_state_mcts, run_state_mcts
+            from premise_retrieval import PremiseRetriever
+            premise_ctx = ""
+            if retrieval_index_path:
+                try:
+                    retriever = PremiseRetriever(index_path=retrieval_index_path)
+                    entries = retriever.query(lean_statement, top_k=retrieval_top_k)
+                    premise_ctx = "\n".join(f"- {e.full_name}" for e in entries)
+                except Exception:
+                    pass
+            _mcts_fn = run_hierarchical_state_mcts if mode == "hierarchical-state" else run_state_mcts
+            ok, tactics, summary = _mcts_fn(
+                project_root=project_root,
+                theorem_statement=lean_statement,
+                client=client,
+                model=model,
+                iterations=mcts_iterations,
+                n_tactics=mcts_repair_variants,
+                max_depth=mcts_max_depth,
+                repl_timeout=float(lean_timeout),
+                premise_context=premise_ctx,
+                retrieval_index_path=retrieval_index_path,
+                retrieval_top_k=retrieval_top_k,
+            )
+            return {
+                "attempt": attempt_idx,
+                "success": ok,
+                "proof": "\n".join(tactics),
+                "error": "" if ok else summary,
+                "error_category": _categorize_error(summary) if not ok else "none",
+                "elapsed_s": round(time.time() - t0, 2),
+                "mode": mode,
+                "api_calls": 0,  # not yet tracked in state-mcts
+            }
+        except Exception as exc:
+            return {
+                "attempt": attempt_idx,
+                "success": False,
+                "proof": "",
+                "error": str(exc),
+                "error_category": _categorize_error(str(exc)),
+                "elapsed_s": round(time.time() - t0, 2),
+                "mode": mode,
+            }
+
+    # MCTS-draft and hierarchical paths.
+    if mode in ("mcts-draft", "hierarchical"):
+        try:
+            from mcts_search import run_draft_mcts, run_hierarchical_mcts
             bench_file = _write_bench_file(project_root, lean_statement, lean_header, worker_id)
             theorem_name = _extract_theorem_name(lean_statement)
-            ok, _records, summary = run_draft_mcts(
+            common_kwargs = dict(
                 project_root=project_root,
                 file_path=bench_file.relative_to(project_root),
                 theorem_name=theorem_name,
@@ -297,6 +355,10 @@ def _attempt_proof(
                 retrieval_index_path=retrieval_index_path,
                 retrieval_top_k=retrieval_top_k,
             )
+            if mode == "hierarchical":
+                ok, _records, summary = run_hierarchical_mcts(**common_kwargs)
+            else:
+                ok, _records, summary = run_draft_mcts(**common_kwargs)
             proof = ""
             if ok and _records:
                 proof = "\n".join(str(r.get("tactic", "")) for r in _records if r.get("tactic"))
@@ -307,7 +369,7 @@ def _attempt_proof(
                 "error": "" if ok else summary,
                 "error_category": _categorize_error(summary) if not ok else "none",
                 "elapsed_s": round(time.time() - t0, 2),
-                "mode": "mcts-draft",
+                "mode": mode,
             }
         except Exception as exc:
             return {
@@ -317,7 +379,7 @@ def _attempt_proof(
                 "error": str(exc),
                 "error_category": _categorize_error(str(exc)),
                 "elapsed_s": round(time.time() - t0, 2),
-                "mode": "mcts-draft",
+                "mode": mode,
             }
 
     try:
@@ -537,6 +599,21 @@ def run_benchmark(
     ) / max(1, len(results))
     atk = total_solved / max(1, len(results))
 
+    # Aggregate normalisation metrics from all attempt records
+    total_api_calls = sum(
+        a.get("api_calls", 0)
+        for r in results for a in r.attempts
+    )
+    total_tokens_in = sum(
+        a.get("tokens_in", 0)
+        for r in results for a in r.attempts
+    )
+    total_tokens_out = sum(
+        a.get("tokens_out", 0)
+        for r in results for a in r.attempts
+    )
+    n = max(1, len(results))
+
     ts = datetime.now(tz=timezone.utc).strftime("%Y%m%dT%H%M%S")
     bench = BenchmarkResult(
         split=split,
@@ -559,6 +636,11 @@ def run_benchmark(
             for r in results
         ],
         baselines=BASELINES,
+        total_api_calls=total_api_calls,
+        total_tokens_in=total_tokens_in,
+        total_tokens_out=total_tokens_out,
+        seconds_per_problem=round(elapsed / n, 1),
+        api_calls_per_problem=round(total_api_calls / n, 1),
     )
 
     out_path = Path(out_dir)
@@ -610,8 +692,8 @@ def main() -> int:
     p.add_argument("--workers", type=int, default=4, help="Parallel worker threads")
     p.add_argument("--out-dir", default="output", help="Output directory for results JSON")
     p.add_argument(
-        "--mode", choices=["ponder", "mcts-draft"], default="ponder",
-        help="Proof search mode: ponder (default) or mcts-draft (MCTS tree search)",
+        "--mode", choices=["ponder", "mcts-draft", "hierarchical", "state-mcts", "hierarchical-state"], default="ponder",
+        help="Proof search mode: ponder, mcts-draft, hierarchical, state-mcts, or hierarchical-state (sketch+state-MCTS per subgoal)",
     )
     p.add_argument(
         "--mcts-iterations", type=int, default=12,

@@ -162,6 +162,8 @@ _TRANSLATE_SYSTEM_BASE = (
     "1. Output ONLY the declaration — no imports, no `variable`, no `open`, no prose, no markdown.\n"
     "2. Start with `theorem` or `lemma` followed by a NAME, end with `:= by`. "
     "NEVER write `theorem {{` or `theorem (` — the name comes first: `theorem my_name {{α ...`.\n"
+    "   NEVER start with `def`, `structure`, `class`, `instance`, or `noncomputable def`. "
+    "   If the LaTeX input is a definition (not a proposition), translate the PROPERTY it implies as a theorem.\n"
     "3. Square brackets `[...]` are ONLY for type class instances that Lean can synthesize automatically "
     "(e.g. `[MeasurableSpace α]`, `[TopologicalSpace α]`, `[Fintype α]`). "
     "NEVER put propositions or predicates in `[...]` — they MUST be explicit hypotheses `(h : P)`.\n"
@@ -297,10 +299,16 @@ class TranslationResult:
     last_error: str
     confidence: float = 0.0
     uncertainty_flags: list[str] = None
+    adversarial_flags: list[str] = None  # issues found by adversarial check
+    decomposition_stubs: list[dict] = None  # sorry-backed stubs for missing types
 
     def __post_init__(self) -> None:
         if self.uncertainty_flags is None:
             self.uncertainty_flags = []
+        if self.adversarial_flags is None:
+            self.adversarial_flags = []
+        if self.decomposition_stubs is None:
+            self.decomposition_stubs = []
 
 
 def _confidence_from_translation_state(
@@ -669,6 +677,73 @@ def _fix_invalid_binders(sig: str, error: str) -> str:
     return binder_re.sub(rewrite_binder, sig)
 
 
+_ADVERSARIAL_SYSTEM = (
+    "You are a formal verification critic. "
+    "Given an informal LaTeX theorem and its Lean 4 formalization, identify semantic mismatches. "
+    "Look for: dropped hypotheses, wrong quantifier order, weaker/stronger conclusion than stated, "
+    "vacuously true statements, or type mismatches that change meaning. "
+    "Also check if the Lean statement is trivially true (provable by `rfl`, `trivial`, or `decide` alone). "
+    "Reply with a compact JSON object:\n"
+    '{"issues": ["issue1", ...], "trivially_true": true/false, "verdict": "ok" | "suspicious" | "wrong"}\n'
+    "If no issues, reply: {\"issues\": [], \"trivially_true\": false, \"verdict\": \"ok\"}"
+)
+
+
+def adversarial_translation_check(
+    *,
+    latex_statement: str,
+    lean_signature: str,
+    client: object,
+    model: str,
+    api_log_hook: object = None,
+) -> list[str]:
+    """Use Leanstral to find semantic mismatches between LaTeX and Lean 4 formalization.
+
+    Returns a list of adversarial flags (empty = no issues found).
+    Uses only the Leanstral API — no external calls.
+    """
+    user_msg = (
+        f"LaTeX theorem:\n{latex_statement}\n\n"
+        f"Lean 4 formalization:\n{lean_signature}\n\n"
+        "Identify any semantic mismatches or trivially-true issues."
+    )
+    try:
+        _, raw = _chat_complete(
+            client=client,
+            model=model,
+            messages=[
+                {"role": "system", "content": _ADVERSARIAL_SYSTEM},
+                {"role": "user", "content": user_msg},
+            ],
+            temperature=0.0,
+            max_tokens=256,
+            purpose="adversarial_check",
+            api_log_hook=api_log_hook,
+        )
+    except Exception:
+        return []
+
+    # Extract JSON from response — may be wrapped in markdown.
+    json_match = re.search(r"\{.*\}", raw, re.DOTALL)
+    if not json_match:
+        return []
+    try:
+        parsed = json.loads(json_match.group(0))
+    except (ValueError, KeyError):
+        return []
+
+    flags: list[str] = []
+    issues = parsed.get("issues", [])
+    if isinstance(issues, list):
+        flags.extend(str(i) for i in issues if i)
+    if parsed.get("trivially_true"):
+        flags.append("trivially_true")
+    verdict = parsed.get("verdict", "ok")
+    if verdict in ("suspicious", "wrong"):
+        flags.append(f"verdict:{verdict}")
+    return flags
+
+
 def _build_repair_hint(error: str) -> str:
     """Return a targeted repair hint based on the Lean error category."""
     hint_parts = []
@@ -1017,6 +1092,14 @@ def _validate_signature(
     sig = re.sub(r":=\s*by\b.*$", "", signature, flags=re.DOTALL).strip()
     sig = re.sub(r":=\s*$", "", sig).strip()
 
+    # Gate: reject non-proposition declarations immediately — don't waste a Lean round-trip.
+    first_kw = sig.strip().split()[0] if sig.strip() else ""
+    if first_kw in ("def", "noncomputable", "structure", "class", "instance", "abbrev"):
+        return False, (
+            f"declaration starts with `{first_kw}` — only `theorem` or `lemma` are accepted. "
+            "The input LaTeX is a definition; translate it as a proposition about its properties."
+        )
+
     # Pre-validate fixes: deterministic rewrites that don't need a Lean round-trip to detect.
 
     # Fix 1: Missing theorem name — `theorem {` or `theorem (` → `theorem _anon {`
@@ -1164,6 +1247,7 @@ def translate_statement(
     temperature: float = 0.2,
     api_log_hook: object = None,
     retrieval_index_path: str = "data/mathlib_embeddings",
+    run_adversarial_check: bool = True,
 ) -> TranslationResult:
     """Translate a LaTeX statement to a validated Lean 4 signature.
 
@@ -1212,6 +1296,23 @@ def translate_statement(
                 last_error="",
                 signature=signature,
             )
+            adv_flags: list[str] = []
+            if run_adversarial_check and latex_statement.strip():
+                adv_flags = adversarial_translation_check(
+                    latex_statement=latex_statement,
+                    lean_signature=signature,
+                    client=client,
+                    model=model,
+                    api_log_hook=api_log_hook,
+                )
+                if adv_flags:
+                    # Penalise confidence when adversarial check finds issues.
+                    penalty = min(0.30, 0.10 * len(adv_flags))
+                    confidence = max(0.0, confidence - penalty)
+                    if "trivially_true" in adv_flags:
+                        flags.append("trivially_true_detected")
+                    if any(f.startswith("verdict:") for f in adv_flags):
+                        flags.append("adversarial_mismatch")
             return TranslationResult(
                 lean_signature=signature,
                 validated=True,
@@ -1219,6 +1320,7 @@ def translate_statement(
                 last_error="",
                 confidence=confidence,
                 uncertainty_flags=flags,
+                adversarial_flags=adv_flags,
             )
 
         if round_idx > max_repair_rounds or irrecoverable:
@@ -1245,6 +1347,16 @@ def translate_statement(
         last_error=last_error,
         signature=sorry_stub,
     )
+    # Generate decomposition stubs for missing types/identifiers.
+    stubs: list[dict] = []
+    if last_error and client is not None:
+        stubs = generate_decomposition_stubs(
+            lean_signature=sorry_stub,
+            lean_error=last_error,
+            client=client,
+            model=model,
+            api_log_hook=api_log_hook,
+        )
     return TranslationResult(
         lean_signature=sorry_stub,
         validated=False,
@@ -1252,7 +1364,79 @@ def translate_statement(
         last_error=last_error,
         confidence=confidence,
         uncertainty_flags=flags,
+        decomposition_stubs=stubs,
     )
+
+
+_STUB_SYSTEM = (
+    "You are a Lean 4 type stub generator. "
+    "Given a Lean 4 theorem signature that failed to elaborate because of unknown types or structures, "
+    "identify the missing definitions and generate minimal `sorry`-backed stubs. "
+    "Output a JSON list of stub objects:\n"
+    '[{"name": "TypeName", "kind": "structure|def|abbrev|class", '
+    '"lean_stub": "-- Stub for missing type\\nstructure TypeName where\\n  sorry_field : Unit := ()"}]\n'
+    "Keep stubs minimal. Use `sorry`-backed implementations. "
+    "If no stubs are needed, output an empty list []."
+)
+
+# Regex to find unknown identifier errors from Lean: "unknown identifier 'Foo'"
+_UNKNOWN_ID_RE = re.compile(r"unknown (?:identifier|constant|type)\s+'([^']+)'")
+
+
+def generate_decomposition_stubs(
+    *,
+    lean_signature: str,
+    lean_error: str,
+    client: object,
+    model: str,
+    api_log_hook: object = None,
+) -> list[dict]:
+    """When translation fails due to unknown types/identifiers, generate sorry-backed stubs.
+
+    Each stub is a minimal Lean 4 definition that satisfies the type-checker enough
+    for the theorem statement to elaborate. These become KG seed entries with
+    UNGROUNDED status — targets for later proof search.
+
+    Returns a list of {name, kind, lean_stub} dicts.
+    """
+    # Quick check: does the error mention unknown identifiers?
+    known_missing = _UNKNOWN_ID_RE.findall(lean_error)
+
+    user_msg = (
+        f"Lean 4 theorem signature:\n{lean_signature}\n\n"
+        f"Elaboration error:\n{lean_error}\n\n"
+    )
+    if known_missing:
+        user_msg += f"Unknown identifiers detected: {', '.join(known_missing)}\n\n"
+    user_msg += "Generate minimal sorry-backed stubs for all missing definitions."
+
+    try:
+        _, raw = _chat_complete(
+            client=client,
+            model=model,
+            messages=[
+                {"role": "system", "content": _STUB_SYSTEM},
+                {"role": "user", "content": user_msg},
+            ],
+            temperature=0.1,
+            max_tokens=600,
+            purpose="generate_decomposition_stubs",
+            api_log_hook=api_log_hook,
+        )
+    except Exception:
+        return []
+
+    # Extract JSON list from response.
+    json_match = re.search(r"\[.*\]", raw, re.DOTALL)
+    if not json_match:
+        return []
+    try:
+        stubs = json.loads(json_match.group(0))
+        if not isinstance(stubs, list):
+            return []
+        return [s for s in stubs if isinstance(s, dict) and "name" in s and "lean_stub" in s]
+    except (ValueError, KeyError):
+        return []
 
 
 def _build_parser() -> argparse.ArgumentParser:
