@@ -231,6 +231,9 @@ def _run_one(
         cmd.append("--translate-only")
     if args.model:
         cmd.extend(["--model", args.model])
+    # Note: we do not pass per-paper --write-kg here; kg_writer with a single
+    # paper would overwrite JSONL layers for other papers. Use --write-kg on
+    # arxiv_cycle to run one full ledger→KG merge when the batch finishes.
 
     start = time.time()
     proc = subprocess.run(cmd, cwd=project_root)
@@ -334,6 +337,16 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument("--mcts-cpu-target", type=float, default=0.8)
     p.add_argument("--temperature", type=float, default=0.2)
     p.add_argument("--dojo-timeout", type=int, default=600)
+    p.add_argument(
+        "--write-kg",
+        action="store_true",
+        help="After the full cycle, rebuild KG from all ledgers (kg_writer.build_kg, paper filter off)",
+    )
+    p.add_argument(
+        "--kg-root",
+        default="output/kg",
+        help="KG output root used with --write-kg (default: output/kg)",
+    )
     return p
 
 
@@ -403,6 +416,23 @@ def main() -> int:
     ok_count = sum(1 for r in results if r.ok)
     print(f"\n[done] completed {len(results)} papers, success={ok_count}/{len(results)}")
     print(f"[manifest] {manifest_path}")
+
+    if args.write_kg:
+        ledger_dir = project_root / "output" / "verification_ledgers"
+        kg_root = (project_root / args.kg_root).resolve()
+        try:
+            from kg_writer import build_kg
+
+            summary = build_kg(ledger_dir=ledger_dir, kg_root=kg_root, paper="")
+            print(
+                "[kg] rebuilt from all ledgers: "
+                f"papers={summary.papers} entries={summary.entries} "
+                f"trusted={summary.trusted} conditional={summary.conditional} "
+                f"diagnostics={summary.diagnostics} root={kg_root}"
+            )
+        except Exception as exc:
+            print(f"[kg] build failed: {exc}", file=sys.stderr)
+
     return 0 if ok_count == len(results) else 1
 
 

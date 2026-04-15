@@ -268,6 +268,85 @@ def _lean_expr_to_z3_str(lean_expr: str) -> str:
     return result.strip()
 
 
+def _build_z3_formula(z3_str: str, var_scope: "dict[str, Any]", z3: "Any") -> "Any":
+    """Parse ``z3_str`` into a Z3 formula without using eval().
+
+    Handles the restricted grammar produced by ``_lean_expr_to_z3_str``:
+      - Integer/variable atoms
+      - Arithmetic: +, -, *, // (int division), %
+      - Comparison: <, <=, >, >=, ==, !=
+      - Boolean connectives: and, or, not
+      - Parenthesised sub-expressions
+
+    Raises ``ValueError`` on unrecognised tokens.
+    """
+    import ast as _ast
+
+    # Use Python's own AST parser — it produces a safe tree (no eval).
+    # We then walk the tree and build Z3 expressions node by node.
+    try:
+        tree = _ast.parse(z3_str.strip(), mode="eval")
+    except SyntaxError as exc:
+        raise ValueError(f"Cannot parse z3 expression: {exc}") from exc
+
+    def _visit(node: "_ast.expr") -> "Any":
+        if isinstance(node, _ast.BoolOp):
+            ops = [_visit(v) for v in node.values]
+            if isinstance(node.op, _ast.And):
+                return z3.And(*ops)
+            if isinstance(node.op, _ast.Or):
+                return z3.Or(*ops)
+        if isinstance(node, _ast.UnaryOp) and isinstance(node.op, _ast.Not):
+            return z3.Not(_visit(node.operand))
+        if isinstance(node, _ast.Compare):
+            left = _visit(node.left)
+            result = None
+            prev = left
+            for op, comp in zip(node.ops, node.comparators):
+                right = _visit(comp)
+                if isinstance(op, _ast.Lt):
+                    clause = prev < right
+                elif isinstance(op, _ast.LtE):
+                    clause = prev <= right
+                elif isinstance(op, _ast.Gt):
+                    clause = prev > right
+                elif isinstance(op, _ast.GtE):
+                    clause = prev >= right
+                elif isinstance(op, _ast.Eq):
+                    clause = prev == right
+                elif isinstance(op, _ast.NotEq):
+                    clause = prev != right
+                else:
+                    raise ValueError(f"Unsupported comparison: {type(op).__name__}")
+                result = clause if result is None else z3.And(result, clause)
+                prev = right
+            return result
+        if isinstance(node, _ast.BinOp):
+            left, right = _visit(node.left), _visit(node.right)
+            if isinstance(node.op, _ast.Add):
+                return left + right
+            if isinstance(node.op, _ast.Sub):
+                return left - right
+            if isinstance(node.op, _ast.Mult):
+                return left * right
+            if isinstance(node.op, _ast.FloorDiv):
+                return left / right  # z3 Int division
+            if isinstance(node.op, _ast.Mod):
+                return left % right
+            raise ValueError(f"Unsupported binary op: {type(node.op).__name__}")
+        if isinstance(node, _ast.UnaryOp) and isinstance(node.op, _ast.USub):
+            return -_visit(node.operand)
+        if isinstance(node, _ast.Name):
+            if node.id in var_scope:
+                return var_scope[node.id]
+            raise ValueError(f"Unknown variable: {node.id!r}")
+        if isinstance(node, _ast.Constant) and isinstance(node.value, int):
+            return z3.IntVal(node.value)
+        raise ValueError(f"Unsupported AST node: {type(node).__name__}")
+
+    return _visit(tree.body)
+
+
 def check_entailment_z3(assumption_expr: str) -> EntailmentResult:
     """Attempt to verify a simple arithmetic assumption using Z3.
 
@@ -309,7 +388,7 @@ def check_entailment_z3(assumption_expr: str) -> EntailmentResult:
         for vname in var_names:
             scope[vname] = z3.Int(vname)
 
-        formula = eval(z3_str, {"__builtins__": {}}, {**scope, **{n: getattr(z3, n) for n in dir(z3)}})  # noqa: S307
+        formula = _build_z3_formula(z3_str, scope, z3)
         solver = z3.Solver()
         solver.add(z3.Not(formula))
         status = solver.check()

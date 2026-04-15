@@ -6,6 +6,12 @@ Usage:
     python3 arxiv_fetcher.py 2301.04567 --out /tmp/paper
 
 Outputs a directory containing all .tex files extracted from the arxiv tarball.
+
+**PDF-only submissions**: many arXiv records ship only as PDF (no TeX tarball).
+``fetch_source`` then raises ``RuntimeError``; the DESol LaTeX pipeline cannot
+ingest those until a separate PDF→structure path exists. Use
+``scripts/arxiv_oai_harvest.py --probe-tex`` to filter harvest queues to
+tarballs that contain at least one ``.tex`` file.
 """
 
 from __future__ import annotations
@@ -55,10 +61,12 @@ def fetch_source(paper_id: str, out_dir: Path) -> list[Path]:
                 f"(possibly a single-file PDF submission): {exc}"
             ) from exc
 
-    tex_paths: list[Path] = []
+    source_paths: list[Path] = []
+    allowed_exts = {".tex", ".sty", ".cls", ".def"}
     with tf:
         for member in tf.getmembers():
-            if not member.name.endswith(".tex"):
+            suffix = Path(member.name).suffix.lower()
+            if suffix not in allowed_exts:
                 continue
             member_path = out_dir / member.name
             member_path.parent.mkdir(parents=True, exist_ok=True)
@@ -66,9 +74,10 @@ def fetch_source(paper_id: str, out_dir: Path) -> list[Path]:
             if f is None:
                 continue
             member_path.write_bytes(f.read())
-            tex_paths.append(member_path)
+            source_paths.append(member_path)
             print(f"  extracted: {member.name}")
 
+    tex_paths = [p for p in source_paths if p.suffix.lower() == ".tex"]
     if not tex_paths:
         raise RuntimeError(
             f"No .tex files found in arxiv source for {paper_id!r}. "

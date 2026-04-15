@@ -44,10 +44,19 @@ _THEOREM_KINDS = frozenset({"theorem", "lemma", "proposition", "corollary", "fac
 _DEFINITION_KINDS = frozenset({"definition"})
 _ALL_ENVS = frozenset(_ENV_KIND.keys())
 
-_BEGIN_RE = re.compile(
-    r"\\begin\{(" + "|".join(re.escape(e) for e in sorted(_ALL_ENVS, key=len, reverse=True)) + r")\*?\}",
-    re.IGNORECASE,
-)
+_BEGIN_RE = None
+
+
+def _rebuild_begin_re() -> None:
+    global _BEGIN_RE, _ALL_ENVS
+    _ALL_ENVS = frozenset(_ENV_KIND.keys())
+    _BEGIN_RE = re.compile(
+        r"\\begin\{(" + "|".join(re.escape(e) for e in sorted(_ALL_ENVS, key=len, reverse=True)) + r")\*?\}",
+        re.IGNORECASE,
+    )
+
+
+_rebuild_begin_re()
 _END_RE_TEMPLATE = r"\\end\{%s\*?\}"
 _LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 _PROOF_BEGIN_RE = re.compile(r"\\begin\{proof\}", re.IGNORECASE)
@@ -92,6 +101,17 @@ def _extract_proof_after(text: str, env_end: int) -> str:
     return text[proof_body_start: proof_end.start()].strip()
 
 
+def register_environment_aliases(aliases: dict[str, str]) -> None:
+    changed = False
+    for env_name, canonical_kind in aliases.items():
+        env_key = env_name.lower().rstrip("*")
+        if env_key and _ENV_KIND.get(env_key) != canonical_kind:
+            _ENV_KIND[env_key] = canonical_kind
+            changed = True
+    if changed:
+        _rebuild_begin_re()
+
+
 def extract_theorems(tex_path: Path) -> list[TheoremEntry]:
     try:
         text = tex_path.read_text(encoding="utf-8", errors="replace")
@@ -102,6 +122,8 @@ def extract_theorems(tex_path: Path) -> list[TheoremEntry]:
     entries: list[TheoremEntry] = []
     counter = 0
 
+    if _BEGIN_RE is None:
+        _rebuild_begin_re()
     for m in _BEGIN_RE.finditer(text):
         env_name = m.group(1).lower().rstrip("*")
         body_start = m.end()

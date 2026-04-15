@@ -46,6 +46,7 @@ import os
 import re
 import sys
 import time
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
@@ -53,6 +54,12 @@ from pathlib import Path
 from typing import Any
 
 from dotenv import load_dotenv
+try:
+    from desol_config import get_config as _get_config
+    _CFG = _get_config()
+except Exception:
+    _CFG = None  # type: ignore[assignment]
+from distributed_proof_cache import DistributedProofCache
 
 load_dotenv()
 
@@ -264,6 +271,11 @@ def _attempt_proof(
     mcts_iterations: int = 12,
     mcts_repair_variants: int = 3,
     mcts_max_depth: int = 5,
+    mcts_exploration_c: float = 1.4,
+    partial_cache_dir: str = "",
+    self_compounding_top_k: int = 4,
+    self_compounding_max_entries: int = 400,
+    distributed_cache: DistributedProofCache | None = None,
 ) -> dict[str, Any]:
     """Run one proof attempt with a real Lean execution loop.
 
@@ -284,6 +296,23 @@ def _attempt_proof(
     from lean_repl_dojo import REPLDojo, ProofFinished, TacticState, LeanError
 
     t0 = time.time()
+
+    cache_key = ""
+    if distributed_cache is not None:
+        cache_key = distributed_cache.build_key(
+            theorem_statement=lean_statement,
+            mode=mode,
+            model=model,
+            retrieval_top_k=retrieval_top_k,
+        )
+        cached = distributed_cache.get(cache_key)
+        if isinstance(cached, dict):
+            restored = dict(cached)
+            restored["attempt"] = attempt_idx
+            restored["cache_hit"] = True
+            restored["elapsed_s"] = round(time.time() - t0, 2)
+            return restored
+
     tactic_history: list[str] = []
     last_lean_error = ""
     failure_stage = "init"
@@ -314,6 +343,8 @@ def _attempt_proof(
                 premise_context=premise_ctx,
                 retrieval_index_path=retrieval_index_path,
                 retrieval_top_k=retrieval_top_k,
+                self_compounding_top_k=self_compounding_top_k,
+                self_compounding_max_entries=self_compounding_max_entries,
             )
             return {
                 "attempt": attempt_idx,
@@ -336,25 +367,66 @@ def _attempt_proof(
                 "mode": mode,
             }
 
-    # mcts-draft and hierarchical are legacy aliases — forward to state-mcts equivalents.
+    # MCTS-draft and hierarchical paths.
     if mode in ("mcts-draft", "hierarchical"):
-        _fwd_mode = "hierarchical-state" if mode == "hierarchical" else "state-mcts"
-        return _attempt_proof(
-            lean_statement=lean_statement,
-            lean_header=lean_header,
-            attempt_idx=attempt_idx,
-            mode=_fwd_mode,
-            client=client,
-            model=model,
-            project_root=project_root,
-            mcts_iterations=mcts_iterations,
-            mcts_repair_variants=mcts_repair_variants,
-            mcts_max_depth=mcts_max_depth,
-            lean_timeout=lean_timeout,
-            retrieval_index_path=retrieval_index_path,
-            retrieval_top_k=retrieval_top_k,
-            worker_id=worker_id,
-        )
+        try:
+            from mcts_search import run_draft_mcts, run_hierarchical_mcts
+            bench_file = _write_bench_file(project_root, lean_statement, lean_header, worker_id)
+            theorem_name = _extract_theorem_name(lean_statement)
+            _partial_cache = ""
+            _warm_draft = ""
+            if partial_cache_dir:
+                import hashlib as _hl
+                _slug = _hl.md5(lean_statement.encode()).hexdigest()[:12]
+                _partial_cache = str(Path(partial_cache_dir) / f"{_slug}.partial.json")
+                if Path(_partial_cache).exists():
+                    try:
+                        import json as _j
+                        _warm_draft = _j.loads(Path(_partial_cache).read_text()).get("draft", "")
+                    except Exception:
+                        pass
+            common_kwargs = dict(
+                project_root=project_root,
+                file_path=bench_file.relative_to(project_root),
+                theorem_name=theorem_name,
+                client=client,
+                model=model,
+                iterations=mcts_iterations,
+                repair_variants=mcts_repair_variants,
+                max_depth=mcts_max_depth,
+                dojo_timeout=lean_timeout,
+                retrieval_index_path=retrieval_index_path,
+                retrieval_top_k=retrieval_top_k,
+                exploration_c=mcts_exploration_c,
+                warm_start_draft=_warm_draft,
+                partial_cache_path=_partial_cache,
+            )
+            if mode == "hierarchical":
+                ok, _records, summary = run_hierarchical_mcts(**common_kwargs)
+            else:
+                ok, _records, summary = run_draft_mcts(**common_kwargs)
+            proof = ""
+            if ok and _records:
+                proof = "\n".join(str(r.get("tactic", "")) for r in _records if r.get("tactic"))
+            return {
+                "attempt": attempt_idx,
+                "success": ok,
+                "proof": proof,
+                "error": "" if ok else summary,
+                "error_category": _categorize_error(summary) if not ok else "none",
+                "elapsed_s": round(time.time() - t0, 2),
+                "mode": mode,
+            }
+        except Exception as exc:
+            return {
+                "attempt": attempt_idx,
+                "success": False,
+                "proof": "",
+                "error": str(exc),
+                "error_category": _categorize_error(str(exc)),
+                "elapsed_s": round(time.time() - t0, 2),
+                "mode": mode,
+            }
 
     try:
         bench_file = _write_bench_file(project_root, lean_statement, lean_header, worker_id)
@@ -461,7 +533,6 @@ def _attempt_proof(
             "rounds": 0,
         }
 
-
 def run_benchmark(
     *,
     split: str,
@@ -480,6 +551,13 @@ def run_benchmark(
     mcts_iterations: int = 12,
     mcts_repair_variants: int = 3,
     mcts_max_depth: int = 5,
+    mcts_exploration_c: float = 1.4,
+    partial_cache_dir: str = "",
+    curriculum_sort: bool = False,
+    self_compounding_top_k: int = 4,
+    self_compounding_max_entries: int = 400,
+    distributed_cache_db: str = "",
+    worker_project_shards: str = "",
 ) -> BenchmarkResult:
     """Run the full miniF2F benchmark and return structured results."""
     try:
@@ -512,9 +590,17 @@ def run_benchmark(
             lean_header=header,
         ))
 
+    if curriculum_sort:
+        def _difficulty(r):
+            # Proxy: statement length + hypothesis count (longer = harder)
+            stmt = r.lean_statement
+            hyp_count = stmt.count("(") + stmt.count("[") + stmt.count("{")
+            return len(stmt) + hyp_count * 10
+        results.sort(key=_difficulty)
+        logger.info("Curriculum sort enabled — problems ordered by estimated difficulty")
+
     logger.info("Starting %d problems × %d attempts = %d total", len(results), k, len(results) * k)
 
-    import threading
     _thread_id_counter: dict[int, int] = {}
     _thread_id_lock = threading.Lock()
 
@@ -525,15 +611,32 @@ def run_benchmark(
                 _thread_id_counter[tid] = len(_thread_id_counter)
             return _thread_id_counter[tid]
 
+    shard_roots: list[Path] = []
+    if worker_project_shards.strip():
+        shard_roots = [Path(p.strip()).resolve() for p in worker_project_shards.split(",") if p.strip()]
+        shard_roots = [p for p in shard_roots if p.exists()]
+        if shard_roots:
+            logger.info("Using %d worker project shards", len(shard_roots))
+
+    dist_cache: DistributedProofCache | None = None
+    if distributed_cache_db.strip():
+        dist_cache = DistributedProofCache(distributed_cache_db)
+        logger.info("Distributed proof cache enabled: %s", distributed_cache_db)
+
     def _run_one(pr: ProblemResult, attempt_idx: int) -> tuple[ProblemResult, dict[str, Any]]:
+        worker_id = _get_worker_id()
+        chosen_root = root
+        if shard_roots:
+            chosen_root = shard_roots[worker_id % len(shard_roots)]
+
         attempt = _attempt_proof(
             lean_statement=pr.lean_statement,
             lean_header=pr.lean_header,
             client=client,
             model=model,
             attempt_idx=attempt_idx,
-            worker_id=_get_worker_id(),
-            project_root=root,
+            worker_id=worker_id,
+            project_root=chosen_root,
             retrieval_index_path=retrieval_index_path,
             retrieval_top_k=retrieval_top_k,
             max_ponder_rounds=max_ponder_rounds,
@@ -543,7 +646,22 @@ def run_benchmark(
             mcts_iterations=mcts_iterations,
             mcts_repair_variants=mcts_repair_variants,
             mcts_max_depth=mcts_max_depth,
+            mcts_exploration_c=mcts_exploration_c,
+            partial_cache_dir=partial_cache_dir,
+            self_compounding_top_k=self_compounding_top_k,
+            self_compounding_max_entries=self_compounding_max_entries,
+            distributed_cache=dist_cache,
         )
+        if dist_cache is not None and not attempt.get("cache_hit"):
+            key = dist_cache.build_key(
+                theorem_statement=pr.lean_statement,
+                mode=mode,
+                model=model,
+                retrieval_top_k=retrieval_top_k,
+            )
+            store = dict(attempt)
+            store.pop("attempt", None)
+            dist_cache.set(key, store)
         return pr, attempt
 
     with ThreadPoolExecutor(max_workers=workers) as pool:
@@ -651,8 +769,9 @@ def main() -> int:
         "--max-ponder-rounds", type=int, default=6,
         help="Max ponder rounds per tactic step"
     )
+    _default_lean_timeout = _CFG.proof_search.lean_timeout if _CFG else 90
     p.add_argument(
-        "--lean-timeout", type=int, default=90,
+        "--lean-timeout", type=int, default=_default_lean_timeout,
         help="Seconds allowed for each lake build call (default 90)"
     )
     p.add_argument(
@@ -681,6 +800,34 @@ def main() -> int:
         "--mcts-max-depth", type=int, default=5,
         help="Max MCTS depth in repair rounds (mcts-draft mode only, default 5)",
     )
+    p.add_argument(
+        "--mcts-exploration-c", type=float, default=1.4,
+        help="UCB1 exploration constant for MCTS (default 1.4, try 2.0 for stuck problems)",
+    )
+    p.add_argument(
+        "--partial-cache-dir", default="",
+        help="Directory to save/load best partial proof drafts across runs (warm-start)",
+    )
+    p.add_argument(
+        "--curriculum-sort", action="store_true",
+        help="Sort problems easiest-first by estimated difficulty (statement length)",
+    )
+    p.add_argument(
+        "--self-compounding-top-k", type=int, default=4,
+        help="Top-k proved internal lemmas injected per state expansion (state-mcts modes)",
+    )
+    p.add_argument(
+        "--self-compounding-max-entries", type=int, default=400,
+        help="Max proved entries loaded from KG layers for compounding retriever",
+    )
+    p.add_argument(
+        "--distributed-cache-db", default="",
+        help="SQLite path for cross-worker proof-attempt cache",
+    )
+    p.add_argument(
+        "--worker-project-shards", default="",
+        help="Comma-separated project roots (each with separate .lake) for workers",
+    )
     args = p.parse_args()
 
     bench = run_benchmark(
@@ -700,6 +847,13 @@ def main() -> int:
         mcts_iterations=args.mcts_iterations,
         mcts_repair_variants=args.mcts_repair_variants,
         mcts_max_depth=args.mcts_max_depth,
+        mcts_exploration_c=args.mcts_exploration_c,
+        partial_cache_dir=args.partial_cache_dir,
+        curriculum_sort=args.curriculum_sort,
+        self_compounding_top_k=args.self_compounding_top_k,
+        self_compounding_max_entries=args.self_compounding_max_entries,
+        distributed_cache_db=args.distributed_cache_db,
+        worker_project_shards=args.worker_project_shards,
     )
 
     print()

@@ -43,6 +43,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from arxiv_fetcher import fetch_source, find_main_tex
+from latex_preprocessor import collect_definitions, collect_root_tex_paths, register_env_aliases, write_expanded_roots
 from pipeline_status import (
     ProvenanceLink,
     aggregate_grounding_status,
@@ -50,7 +51,14 @@ from pipeline_status import (
     save_ledger,
 )
 from theorem_extractor import TheoremEntry, extract_from_files
+from lean_sanitize import escape_lean_comment
 from statement_translator import TranslationResult, translate_statement
+try:
+    from distributed_proof_cache import DistributedProofCache as _DistributedProofCache
+    _HAS_PROOF_CACHE = True
+except ImportError:
+    _DistributedProofCache = None  # type: ignore[assignment,misc]
+    _HAS_PROOF_CACHE = False
 
 _PROOF_IMPORTS = """\
 import Desol.SDE.Basic
@@ -231,11 +239,18 @@ def pipeline_results_to_json(results: list[PipelineResult]) -> list[dict]:
     return rows
 
 
+# Increment when translation logic changes enough to invalidate old entries.
+# On mismatch, the cache file is ignored and a fresh empty cache is written.
+_TRANSLATION_CACHE_VERSION = 2
+
+
 class _TranslationCache:
     """Persistent JSON cache: (paper_id, theorem_label) → validated Lean signature.
 
     Locks on every read/write so it is safe across parallel theorem threads.
     The cache only stores signatures that validated successfully.
+    File format: {"version": int, "entries": {key: signature}}.
+    Stale cache files (version mismatch) are silently evicted on load.
     """
 
     def __init__(self, path: Path) -> None:
@@ -244,7 +259,15 @@ class _TranslationCache:
         self._data: dict[str, str] = {}
         if path.exists():
             try:
-                self._data = json.loads(path.read_text(encoding="utf-8"))
+                raw = json.loads(path.read_text(encoding="utf-8"))
+                if isinstance(raw, dict):
+                    if raw.get("version") == _TRANSLATION_CACHE_VERSION:
+                        entries = raw.get("entries", {})
+                        if isinstance(entries, dict):
+                            self._data = entries
+                    else:
+                        # Version mismatch — start fresh, overwrite on next put.
+                        pass
             except Exception:
                 self._data = {}
 
@@ -263,8 +286,12 @@ class _TranslationCache:
             self._data[key] = signature
             try:
                 self._path.parent.mkdir(parents=True, exist_ok=True)
+                payload = {
+                    "version": _TRANSLATION_CACHE_VERSION,
+                    "entries": self._data,
+                }
                 self._path.write_text(
-                    json.dumps(self._data, indent=2, ensure_ascii=False),
+                    json.dumps(payload, indent=2, ensure_ascii=False),
                     encoding="utf-8",
                 )
             except Exception:
@@ -368,6 +395,8 @@ def run_pipeline(
     mcts_exploration_c: float = 1.4,
     mcts_parallel_workers: int = 0,
     mcts_cpu_target: float = 0.8,
+    self_compounding_top_k: int = 4,
+    self_compounding_max_entries: int = 400,
     imports: str = "",
     temperature: float = 0.2,
     dojo_timeout: int = 600,
@@ -390,15 +419,37 @@ def run_pipeline(
                 raise FileNotFoundError(f"Missing .tex file: {p}")
         main_tex = find_main_tex(tex_paths)
         print(f"      main file: {main_tex.name}  ({len(tex_paths)} total .tex files)")
+        source_paths = sorted({p.resolve() for p in tex_paths})
     else:
         print(f"\n[2.1] Fetching arxiv source for {paper_id} ...")
         tex_paths = fetch_source(paper_id, work_dir / "source")
         main_tex = find_main_tex(tex_paths)
         print(f"      main file: {main_tex.name}  ({len(tex_paths)} total .tex files)")
+        source_paths = sorted(
+            {
+                p.resolve()
+                for p in (work_dir / "source").rglob("*")
+                if p.is_file() and p.suffix.lower() in {".tex", ".sty", ".cls", ".def"}
+            }
+        )
+
+    # --- 2.1a Preprocess includes/macros before theorem extraction ---
+    print(f"\n[2.1a] Preprocessing LaTeX macros/includes ...")
+    macro_defs, env_aliases = collect_definitions(source_paths)
+    register_env_aliases(env_aliases)
+    root_tex_paths = collect_root_tex_paths(tex_paths, main_tex=main_tex)
+    expanded_dir = work_dir / "expanded_source"
+    expanded_tex_paths = write_expanded_roots(
+        root_tex_paths=root_tex_paths,
+        source_root=main_tex.parent,
+        output_root=expanded_dir,
+        macro_defs=macro_defs,
+    )
+    print(f"      expanded: {len(expanded_tex_paths)} logical root file(s)")
 
     # --- 2.1b Extract ---
     print(f"\n[2.1] Extracting theorem environments ...")
-    entries = extract_from_files(tex_paths)
+    entries = extract_from_files(expanded_tex_paths)
     if kinds:
         entries = [e for e in entries if e.kind in kinds]
     print(f"      found: {len(entries)} environments (kinds filter: {kinds or 'all'})")
@@ -418,6 +469,34 @@ def run_pipeline(
     rl = rate_limiter or _RateLimiter(rate=4.0)
     n = len(entries)
     _print_lock = threading.Lock()
+
+    # --- Checkpoint/resume: load previously completed theorem results ---
+    _checkpoint_path = work_dir / "pipeline_checkpoint.json"
+    _checkpoint: dict[str, dict] = {}
+    if _checkpoint_path.exists():
+        try:
+            _checkpoint = json.loads(_checkpoint_path.read_text(encoding="utf-8"))
+            if _checkpoint:
+                print(f"\n[resume] Loaded checkpoint: {len(_checkpoint)} theorem(s) already done")
+        except Exception:
+            _checkpoint = {}
+
+    def _save_checkpoint(lean_id: str, result_dict: dict) -> None:
+        """Persist a completed theorem result so re-runs can skip it."""
+        with _print_lock:
+            _checkpoint[lean_id] = result_dict
+            try:
+                _checkpoint_path.write_text(
+                    json.dumps(_checkpoint, ensure_ascii=True, indent=2), encoding="utf-8"
+                )
+            except Exception:
+                pass  # Checkpoint save failure must not break the pipeline
+
+    _proof_cache: "_DistributedProofCache | None" = (
+        _DistributedProofCache(project_root / "output" / "proof_cache.db")
+        if _HAS_PROOF_CACHE and not translate_only
+        else None
+    )
     static_premise_context = ""
     if premise_file:
         from ponder_loop import load_premise_context
@@ -440,6 +519,30 @@ def run_pipeline(
             print(f"\n[{i}/{n}] [{entry.kind}] {entry.name} → {lean_id}")
             if progress_hook:
                 progress_hook(f"[{i}/{n}] [{entry.kind}] {entry.name} → {lean_id}")
+
+        # --- Checkpoint resume: skip theorems already completed ---
+        if lean_id in _checkpoint:
+            saved = _checkpoint[lean_id]
+            with _print_lock:
+                print(f"         [resume] skipping {lean_id} — already in checkpoint")
+            tr_saved = TranslationResult(
+                lean_signature=saved.get("lean_signature", ""),
+                validated=bool(saved.get("validated", False)),
+                rounds_used=int(saved.get("rounds_used", 0)),
+                last_error=saved.get("last_error", ""),
+                confidence=float(saved.get("confidence", 0.0)),
+                uncertainty_flags=saved.get("uncertainty_flags", []),
+            )
+            return PipelineResult(
+                entry=entry,
+                translation=tr_saved,
+                proved=bool(saved.get("proved", False)),
+                proof_body=saved.get("proof_body", ""),
+                skipped=bool(saved.get("skipped", False)),
+                prove_summary=saved.get("prove_summary", "[resumed from checkpoint]"),
+                step_records=saved.get("step_records", []),
+                exception=saved.get("exception", ""),
+            )
 
         # --- 2.2 Translate (cache-first) ---
         cache = _get_cache(project_root)
@@ -514,6 +617,32 @@ def run_pipeline(
         proof_summary = ""
         records: list = []
         exc_str = ""
+
+        # Check distributed proof cache before launching proof search.
+        _cache_key: str | None = None
+        if _proof_cache is not None and tr.lean_signature:
+            _cache_key = _DistributedProofCache.build_key(
+                theorem_statement=tr.lean_signature,
+                mode=prove_mode,
+                model=model,
+                retrieval_top_k=retrieval_top_k,
+            )
+            cached = _proof_cache.get(_cache_key)
+            if cached is not None:
+                proved = bool(cached.get("proved", False))
+                proof_summary = cached.get("proof_summary", "cache-hit")
+                records = cached.get("records", [])
+                with _print_lock:
+                    print(f"         prove: CACHE-HIT {'SUCCESS' if proved else 'FAILED'}")
+                return PipelineResult(
+                    entry=entry,
+                    translation=tr,
+                    proved=proved,
+                    proof_body=cached.get("proof_body", ""),
+                    prove_summary=proof_summary,
+                    step_records=records,
+                )
+
         try:
             from prove_with_ponder import prove_with_full_draft_repair
 
@@ -560,6 +689,8 @@ def run_pipeline(
                     premise_context=static_premise_context,
                     retrieval_index_path=retrieval_index_path,
                     retrieval_top_k=retrieval_top_k,
+                    self_compounding_top_k=self_compounding_top_k,
+                    self_compounding_max_entries=self_compounding_max_entries,
                 )
                 recs = [{"tactic": t, "result": "state-advanced"} for t in tactics] if ok_mcts else []
                 return ok_mcts, recs, summ
@@ -582,6 +713,8 @@ def run_pipeline(
                         premise_context=static_premise_context,
                         retrieval_index_path=retrieval_index_path,
                         retrieval_top_k=retrieval_top_k,
+                        self_compounding_top_k=self_compounding_top_k,
+                        self_compounding_max_entries=self_compounding_max_entries,
                     )
                     records = [{"tactic": t, "result": "state-advanced"} for t in tactics] if proved else []
                 except Exception as smcts_exc:
@@ -633,6 +766,21 @@ def run_pipeline(
         with _print_lock:
             print(f"         prove: {'SUCCESS' if proved else 'FAILED'} — {proof_summary[:80]}")
 
+        # Store result in distributed proof cache for future workers.
+        if _proof_cache is not None and _cache_key is not None:
+            try:
+                _proof_cache.set(
+                    _cache_key,
+                    {
+                        "proved": proved,
+                        "proof_summary": proof_summary,
+                        "proof_body": proof_body,
+                        "records": _records_to_dicts(records),
+                    },
+                )
+            except Exception:
+                pass
+
         return PipelineResult(
             entry=entry,
             translation=tr,
@@ -643,16 +791,35 @@ def run_pipeline(
             exception=exc_str,
         )
 
+    def _process_and_checkpoint(i: int, entry: TheoremEntry) -> PipelineResult:
+        result = _process_entry(i, entry)
+        lean_id = _lean_name(entry.name)
+        _save_checkpoint(lean_id, {
+            "lean_signature": result.translation.lean_signature,
+            "validated": result.translation.validated,
+            "rounds_used": result.translation.rounds_used,
+            "last_error": result.translation.last_error,
+            "confidence": result.translation.confidence,
+            "uncertainty_flags": list(result.translation.uncertainty_flags),
+            "proved": result.proved,
+            "proof_body": result.proof_body,
+            "skipped": result.skipped,
+            "prove_summary": result.prove_summary,
+            "step_records": result.step_records,
+            "exception": result.exception,
+        })
+        return result
+
     workers = max(1, parallel_theorems)
     if workers == 1:
         results: list[PipelineResult] = [
-            _process_entry(i, entry) for i, entry in enumerate(entries, start=1)
+            _process_and_checkpoint(i, entry) for i, entry in enumerate(entries, start=1)
         ]
     else:
         results_map: dict[int, PipelineResult] = {}
         with ThreadPoolExecutor(max_workers=workers) as executor:
             futures = {
-                executor.submit(_process_entry, i, entry): i
+                executor.submit(_process_and_checkpoint, i, entry): i
                 for i, entry in enumerate(entries, start=1)
             }
             for future in as_completed(futures):
@@ -672,6 +839,10 @@ def run_pipeline(
     for r in results:
         lean_id = _lean_name(r.entry.name)
         sig_clean = re.sub(r"\s*:=\s*by\s*$", "", r.translation.lean_signature).strip()
+        # Use the post-penalty translation confidence (which incorporates
+        # roundtrip and adversarial flags) as the translation_fidelity_score
+        # so the promotion gate in pipeline_status.py is properly informed.
+        translation_fidelity = r.translation.confidence if r.translation.validated else None
         ledger = build_ledger_entry(
             theorem_name=lean_id,
             lean_file=str(out_lean),
@@ -694,6 +865,7 @@ def run_pipeline(
             translation_rounds_used=r.translation.rounds_used,
             translation_uncertainty_flags=r.translation.uncertainty_flags,
             translation_confidence=r.translation.confidence,
+            translation_fidelity_score=translation_fidelity,
             had_exception=bool(r.exception),
         )
         ledger_entries.append(ledger.to_dict())
@@ -748,9 +920,10 @@ def _write_lean_file(
     imports: str,
 ) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    safe_source_label = escape_lean_comment(source_label, max_len=200)
     parts: list[str] = [
         _LEAN_HEADER_TEMPLATE.format(
-            paper_id=source_label,
+            paper_id=safe_source_label,
             timestamp=time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()),
             imports=imports.strip(),
         )
@@ -759,7 +932,9 @@ def _write_lean_file(
     for r in results:
         entry = r.entry
         lean_id = _lean_name(entry.name)
-        latex_stmt_short = " ".join(entry.statement.split())[:120]
+        latex_stmt_short = escape_lean_comment(" ".join(entry.statement.split()), max_len=120)
+        safe_kind = escape_lean_comment(entry.kind, max_len=80)
+        safe_name = escape_lean_comment(entry.name, max_len=160)
 
         # Strip trailing `:= by` from signature so templates don't produce
         # double `:= by` when the model includes it in the signature.
@@ -767,24 +942,24 @@ def _write_lean_file(
 
         if not r.translation.validated:
             parts.append(_SORRY_STUB_TEMPLATE.format(
-                kind=entry.kind,
-                name=entry.name,
+                kind=safe_kind,
+                name=safe_name,
                 latex_stmt=latex_stmt_short,
-                error=r.translation.last_error[:80],
+                error=escape_lean_comment(r.translation.last_error, max_len=80),
                 signature=sig_clean[:200],
                 lean_name=lean_id,
             ))
         elif r.proved and r.proof_body.strip():
             parts.append(_PROVED_TEMPLATE.format(
-                kind=entry.kind,
-                name=entry.name,
+                kind=safe_kind,
+                name=safe_name,
                 signature=sig_clean,
                 proof_body=r.proof_body,
             ))
         else:
             parts.append(_UNPROVED_TEMPLATE.format(
-                kind=entry.kind,
-                name=entry.name,
+                kind=safe_kind,
+                name=safe_name,
                 signature=sig_clean,
             ))
 
@@ -852,6 +1027,18 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument("--mcts-exploration-c", type=float, default=1.4)
     p.add_argument("--mcts-parallel-workers", type=int, default=0)
     p.add_argument("--mcts-cpu-target", type=float, default=0.8)
+    p.add_argument(
+        "--self-compounding-top-k",
+        type=int,
+        default=4,
+        help="Top-k proved internal lemmas injected per state expansion (state-mcts modes)",
+    )
+    p.add_argument(
+        "--self-compounding-max-entries",
+        type=int,
+        default=400,
+        help="Max proved entries loaded from KG layers for compounding retriever",
+    )
     p.add_argument(
         "--parallel-theorems",
         type=int,
@@ -929,6 +1116,8 @@ def main() -> int:
             mcts_exploration_c=args.mcts_exploration_c,
             mcts_parallel_workers=args.mcts_parallel_workers,
             mcts_cpu_target=args.mcts_cpu_target,
+            self_compounding_top_k=args.self_compounding_top_k,
+            self_compounding_max_entries=args.self_compounding_max_entries,
             imports=args.imports,
             temperature=args.temperature,
             dojo_timeout=args.dojo_timeout,

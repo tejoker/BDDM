@@ -10,6 +10,8 @@ Run with:
 from __future__ import annotations
 
 import json
+import os
+import subprocess
 import sys
 import types
 from pathlib import Path
@@ -262,3 +264,245 @@ class TestKGSelfImproving:
 
         assert "prior_lemma" in captured_premise.get("ctx", ""), \
             "KG entry should appear in premise_context"
+
+
+class TestCLIHealthCheckReal:
+    """Real CLI health-check tests (no mocks)."""
+
+    def _run_health_check(self, script_rel: str) -> subprocess.CompletedProcess[str]:
+        cmd = [
+            sys.executable,
+            str(PROJECT_ROOT / script_rel),
+            "--project-root",
+            str(PROJECT_ROOT),
+            "--file",
+            "Desol/Basic.lean",
+            "--theorem",
+            "basic_demo_true",
+            "--backend-health-check",
+        ]
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(PROJECT_ROOT / "scripts") + os.pathsep + env.get("PYTHONPATH", "")
+        env.setdefault("DESOL_BACKEND_PHASE1", "1")
+        return subprocess.run(
+            cmd,
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=120,
+        )
+
+    def test_mcts_search_backend_health_check_exit_path_real(self):
+        proc = self._run_health_check("scripts/mcts_search.py")
+        output = (proc.stdout or "") + (proc.stderr or "")
+        assert proc.returncode in (0, 1)
+        assert "[startup]" in output
+        assert ("[ok]" in output) or ("[fail]" in output)
+        assert "Traceback" not in output
+
+    def test_prove_with_ponder_backend_health_check_exit_path_real(self):
+        proc = self._run_health_check("scripts/prove_with_ponder.py")
+        output = (proc.stdout or "") + (proc.stderr or "")
+        assert proc.returncode in (0, 1)
+        assert "[startup]" in output
+        assert ("[ok]" in output) or ("[fail]" in output)
+        assert "Traceback" not in output
+
+    def _make_temp_project_with_mismatch(self, tmp_path: Path) -> Path:
+        proj = tmp_path / "tmp_proj"
+        (proj / "Desol").mkdir(parents=True)
+        (proj / "Desol" / "Basic.lean").write_text(
+            "theorem basic_demo_true : True := by\n  trivial\n",
+            encoding="utf-8",
+        )
+        (proj / "lean-toolchain").write_text("leanprover/lean4:v4.15.0\n", encoding="utf-8")
+        return proj
+
+    def _make_fake_lake_bin(self, tmp_path: Path) -> Path:
+        bindir = tmp_path / "fake_bin"
+        bindir.mkdir(parents=True)
+        lake = bindir / "lake"
+        lake.write_text(
+            "#!/usr/bin/env sh\n"
+            "echo 'Lean (version 4.18.0, x86_64-unknown-linux-gnu, commit deadbeef)'\n"
+            "exit 0\n",
+            encoding="utf-8",
+        )
+        lake.chmod(0o755)
+        return bindir
+
+    def _run_health_check_with_mismatch(self, script_rel: str, tmp_path: Path) -> subprocess.CompletedProcess[str]:
+        proj = self._make_temp_project_with_mismatch(tmp_path)
+        fake_bin = self._make_fake_lake_bin(tmp_path)
+
+        cmd = [
+            sys.executable,
+            str(PROJECT_ROOT / script_rel),
+            "--project-root",
+            str(proj),
+            "--file",
+            "Desol/Basic.lean",
+            "--theorem",
+            "basic_demo_true",
+            "--backend-health-check",
+        ]
+        env = os.environ.copy()
+        env["PATH"] = str(fake_bin) + os.pathsep + env.get("PATH", "")
+        env["PYTHONPATH"] = str(PROJECT_ROOT / "scripts") + os.pathsep + env.get("PYTHONPATH", "")
+        env["DESOL_BACKEND_PHASE1"] = "1"
+        return subprocess.run(
+            cmd,
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=120,
+        )
+
+    def test_mcts_search_health_check_reports_toolchain_mismatch_hint_real(self, tmp_path):
+        proc = self._run_health_check_with_mismatch("scripts/mcts_search.py", tmp_path)
+        output = (proc.stdout or "") + (proc.stderr or "")
+        assert proc.returncode in (0, 1)
+        assert "[startup][hint] toolchain mismatch:" in output
+        assert "repo=4.15.0" in output
+        assert "runtime=4.18.0" in output
+        assert "Traceback" not in output
+
+    def test_prove_with_ponder_health_check_reports_toolchain_mismatch_hint_real(self, tmp_path):
+        proc = self._run_health_check_with_mismatch("scripts/prove_with_ponder.py", tmp_path)
+        output = (proc.stdout or "") + (proc.stderr or "")
+        assert proc.returncode in (0, 1)
+        assert "[startup][hint] toolchain mismatch:" in output
+        assert "repo=4.15.0" in output
+        assert "runtime=4.18.0" in output
+        assert "Traceback" not in output
+
+    def _run_prove_with_ponder_health_check_with_pythonpath(
+        self,
+        *,
+        extra_pythonpath: Path,
+        extra_env: dict[str, str] | None = None,
+    ) -> subprocess.CompletedProcess[str]:
+        cmd = [
+            sys.executable,
+            str(PROJECT_ROOT / "scripts/prove_with_ponder.py"),
+            "--project-root",
+            str(PROJECT_ROOT),
+            "--file",
+            "Desol/Basic.lean",
+            "--theorem",
+            "basic_demo_true",
+            "--backend-health-check",
+        ]
+        env = os.environ.copy()
+        env["PYTHONPATH"] = (
+            str(extra_pythonpath)
+            + os.pathsep
+            + str(PROJECT_ROOT / "scripts")
+            + os.pathsep
+            + env.get("PYTHONPATH", "")
+        )
+        env["DESOL_BACKEND_PHASE1"] = "1"
+        if extra_env:
+            env.update(extra_env)
+        return subprocess.run(
+            cmd,
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=120,
+        )
+
+    def _make_fake_leandojo_unavailable(self, tmp_path: Path) -> Path:
+        root = tmp_path / "fake_unavailable"
+        pkg = root / "lean_dojo"
+        pkg.mkdir(parents=True)
+        (pkg / "__init__.py").write_text(
+            "raise ModuleNotFoundError('forced unavailable lean_dojo')\n",
+            encoding="utf-8",
+        )
+        return root
+
+    def _make_fake_leandojo_available(self, tmp_path: Path) -> Path:
+        root = tmp_path / "fake_available"
+        pkg = root / "lean_dojo"
+        (pkg / "interaction").mkdir(parents=True)
+        (pkg / "data_extraction").mkdir(parents=True)
+
+        (pkg / "__init__.py").write_text(
+            "class LeanGitRepo:\n"
+            "    @classmethod\n"
+            "    def from_path(cls, path):\n"
+            "        return cls()\n"
+            "\n"
+            "class Theorem:\n"
+            "    def __init__(self, repo, file_path, theorem_name):\n"
+            "        self.repo = repo\n"
+            "\n"
+            "class _State:\n"
+            "    pp = '⊢ True'\n"
+            "    num_goals = 1\n"
+            "\n"
+            "class Dojo:\n"
+            "    def __init__(self, theorem, timeout=60):\n"
+            "        self.theorem = theorem\n"
+            "    def __enter__(self):\n"
+            "        return self, _State()\n"
+            "    def __exit__(self, *args):\n"
+            "        return False\n",
+            encoding="utf-8",
+        )
+
+        (pkg / "interaction" / "__init__.py").write_text("", encoding="utf-8")
+        (pkg / "interaction" / "dojo.py").write_text(
+            "class LeanError(Exception):\n"
+            "    def __init__(self, error=''):\n"
+            "        self.error = error\n"
+            "\n"
+            "class ProofFinished:\n"
+            "    def __init__(self, message=''):\n"
+            "        self.message = message\n"
+            "\n"
+            "class ProofGivenUp:\n"
+            "    pass\n"
+            "\n"
+            "class TacticState:\n"
+            "    def __init__(self, pp='⊢ True', num_goals=1):\n"
+            "        self.pp = pp\n"
+            "        self.num_goals = num_goals\n",
+            encoding="utf-8",
+        )
+
+        (pkg / "data_extraction" / "__init__.py").write_text("", encoding="utf-8")
+        (pkg / "data_extraction" / "trace.py").write_text("# fake trace module\n", encoding="utf-8")
+        (pkg / "data_extraction" / "ExtractData.lean").write_text(
+            "def getImports (header: Syntax) : IO String := do\n"
+            "  pure \"\"\n"
+            "let oleanPath1? := Path.toBuildDir \"lib/lean\" relativePath \"olean\"\n",
+            encoding="utf-8",
+        )
+        return root
+
+    def test_prove_with_ponder_reports_extractdata_unavailable_when_leandojo_forced_unavailable_real(self, tmp_path):
+        fake_root = self._make_fake_leandojo_unavailable(tmp_path)
+        proc = self._run_prove_with_ponder_health_check_with_pythonpath(
+            extra_pythonpath=fake_root,
+            extra_env={"DESOL_FORCE_REPL_DOJO": "0"},
+        )
+        output = (proc.stdout or "") + (proc.stderr or "")
+        assert proc.returncode in (0, 1)
+        assert "extractdata_patch_status=unavailable" in output
+        assert "Traceback" not in output
+
+    def test_prove_with_ponder_reports_extractdata_patched_when_leandojo_forced_available_real(self, tmp_path):
+        fake_root = self._make_fake_leandojo_available(tmp_path)
+        proc = self._run_prove_with_ponder_health_check_with_pythonpath(
+            extra_pythonpath=fake_root,
+            extra_env={"DESOL_FORCE_REPL_DOJO": "0", "DESOL_PROOF_BACKEND": "leandojo"},
+        )
+        output = (proc.stdout or "") + (proc.stderr or "")
+        assert proc.returncode in (0, 1)
+        assert "extractdata_patch_status=patched" in output
+        assert "Traceback" not in output

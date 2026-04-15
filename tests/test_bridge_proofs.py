@@ -179,7 +179,10 @@ class TestExecuteBridgeChain:
             pytest.skip("MISTRAL_API_KEY not set")
 
         from bridge_proofs import execute_bridge_chain
-        from mistralai.client import Mistral
+        try:
+            from mistralai import Mistral
+        except ImportError:
+            from mistralai.client import Mistral
         from mcts_search import run_state_mcts
 
         client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])

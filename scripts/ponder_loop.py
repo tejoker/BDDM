@@ -20,6 +20,11 @@ from typing import Any, Callable
 
 from dotenv import load_dotenv
 try:
+    from desol_config import get_config as _get_config
+    _CFG = _get_config()
+except Exception:
+    _CFG = None  # type: ignore[assignment]
+try:
     from mistralai import Mistral
 except ImportError:
     from mistralai.client import Mistral  # type: ignore[no-redef]
@@ -92,6 +97,70 @@ CONFIDENCE_RE = re.compile(
     r"confidence\s*[:=]\s*([01](?:\.\d+)?)",
     re.IGNORECASE,
 )
+
+_FORBIDDEN_TACTIC_TOKENS = {
+    "sorry",
+    "admit",
+    "theorem",
+    "lemma",
+    "def",
+    "#check",
+    "#eval",
+    "import ",
+    "```",
+}
+
+_TACTIC_START_TOKENS = {
+    "exact", "apply", "refine", "intro", "rintro", "cases", "induction",
+    "constructor", "left", "right", "simp", "simpa", "rw", "erw", "nth_rewrite",
+    "have", "let", "show", "change", "linarith", "nlinarith", "ring", "ring_nf",
+    "norm_num", "omega", "aesop", "trivial", "rfl", "assumption", "contradiction",
+    "tauto", "decide", "infer_instance", "funext", "ext",
+}
+
+_LEAN_TOKEN_RE = re.compile(
+    r"\s*(?:"
+    r"[:=]|:=|=>|->|←|↔|<=|>=|\|"
+    r"|[()\[\]{}.,;]|"
+    r"[+\-*/^]|"
+    r"\d+|"
+    r"[A-Za-z_][A-Za-z0-9_'.]*|"
+    r"[∀∃⊢≤≥≠∧∨¬→↦⟨⟩]|"
+    r"\S"
+    r")"
+)
+
+
+def _tokenize_tactic(text: str) -> list[str]:
+    return [m.group(0).strip() for m in _LEAN_TOKEN_RE.finditer(text) if m.group(0).strip()]
+
+
+def _token_stream_grammar_ok(tokens: list[str]) -> bool:
+    if not tokens:
+        return False
+
+    first = tokens[0]
+    if first not in _TACTIC_START_TOKENS:
+        # Allow qualified tactic names like `Mathlib.Tactic.ring`.
+        if "." not in first:
+            return False
+
+    forbidden = {"theorem", "lemma", "def", "import", "#check", "#eval", "sorry", "admit"}
+    if any(tok in forbidden for tok in tokens):
+        return False
+
+    # No tag markers in token stream.
+    if any(tok in {"<", ">", "</", "/>"} for tok in tokens):
+        return False
+
+    # Basic sequence sanity: no obvious duplicated separators.
+    for a, b in zip(tokens, tokens[1:]):
+        if a in {",", ";"} and b in {",", ";"}:
+            return False
+        if a == ":=" and b == ":=":
+            return False
+
+    return True
 
 ApiLogHook = Callable[[dict[str, Any]], None]
 _RETRIEVER_CACHE: dict[str, Any] = {}
@@ -309,6 +378,60 @@ def _extract_think(text: str) -> list[str]:
 
 def _extract_tactics(text: str) -> list[str]:
     return [m.strip() for m in TACTIC_RE.findall(text) if m.strip()]
+
+
+def _balanced_delimiters(text: str) -> bool:
+    pairs = {")": "(", "]": "[", "}": "{"}
+    opens = set(pairs.values())
+    stack: list[str] = []
+    for ch in text:
+        if ch in opens:
+            stack.append(ch)
+        elif ch in pairs:
+            if not stack or stack[-1] != pairs[ch]:
+                return False
+            stack.pop()
+    return not stack
+
+
+def sanitize_tactic_candidate(raw_tactic: str) -> str:
+    """Best-effort syntax-constrained decoding post-filter for Lean tactics.
+
+    This is not a token-level grammar mask at model sampling time, but a strict
+    post-decoding grammar guard that removes common malformed outputs before they
+    reach Lean execution.
+    """
+    t = (raw_tactic or "").strip()
+    if not t:
+        return ""
+
+    # Drop common numbered-list prefixes from model outputs.
+    t = re.sub(r"^\d+\.\s*", "", t).strip()
+    t = re.sub(r"^[-*]\s*", "", t).strip()
+    if not t:
+        return ""
+
+    lower = t.lower()
+    for token in _FORBIDDEN_TACTIC_TOKENS:
+        if token in lower:
+            return ""
+
+    # Avoid passing accidental XML/HTML wrappers through run_tac.
+    if "<" in t and ">" in t and re.search(r"<[^>]+>", t):
+        return ""
+
+    if not _balanced_delimiters(t):
+        return ""
+
+    # Guard extremely long malformed payloads.
+    if len(t) > 400:
+        return ""
+
+    tokens = _tokenize_tactic(t)
+    if not _token_stream_grammar_ok(tokens):
+        return ""
+
+    return t
 
 
 def _extract_drafts(text: str) -> list[str]:
@@ -546,13 +669,29 @@ def run_ponder_loop(
                 "Model returned multiple <tactic> blocks in one turn; expected exactly one."
             )
         if len(tactics) == 1:
+            tactic = sanitize_tactic_candidate(tactics[0])
+            if not tactic:
+                if turn == act_budget:
+                    break
+                messages.append({"role": "assistant", "content": text})
+                messages.append(
+                    {
+                        "role": "user",
+                        "content": (
+                            "Your tactic was rejected by syntax constraints. "
+                            "Return one valid Lean tactic in <tactic>...</tactic>, no prose."
+                        ),
+                    }
+                )
+                continue
+
             halt_reason = "tactic"
             if is_trivial:
                 halt_reason = "trivial-bypass"
             elif confidences and confidences[-1] > confidence_threshold:
                 halt_reason = "confidence"
             return PonderResult(
-                tactic=tactics[0],
+                tactic=tactic,
                 turns=turn,
                 act_budget=act_budget,
                 thoughts=thoughts,
@@ -657,7 +796,10 @@ def generate_tactic_options(
     seen: set[str] = set()
     tactics: list[str] = []
     for tac in _extract_tactics(text):
-        norm = " ".join(tac.split())
+        cleaned = sanitize_tactic_candidate(tac)
+        if not cleaned:
+            continue
+        norm = " ".join(cleaned.split())
         if not norm or norm in seen:
             continue
         seen.add(norm)
@@ -1016,8 +1158,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--temperature", type=float, default=0.2)
     parser.add_argument("--confidence-threshold", type=float, default=0.9)
+    _default_ponder_rounds = _CFG.proof_search.ponder_rounds if _CFG else 6
     parser.add_argument("--min-act-turns", type=int, default=2)
-    parser.add_argument("--max-act-turns", type=int, default=8)
+    parser.add_argument("--max-act-turns", type=int, default=_default_ponder_rounds)
     parser.add_argument("--trivial-state-chars", type=int, default=80)
     parser.add_argument(
         "--show-thoughts",

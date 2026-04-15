@@ -279,12 +279,20 @@ def prove_one(
 
         proof_text = ""
         if proved:
-            last_rec = records[-1] if records else None
-            if last_rec is not None:
-                proof_text = (
-                    last_rec.get("tactic", "") if isinstance(last_rec, dict)
-                    else getattr(last_rec, "tactic", "")
+            if proof_mode in ("state-mcts", "hierarchical-state", "mcts-draft", "hierarchical"):
+                # records is a list of per-tactic dicts; join all tactics as the proof body
+                proof_text = "\n".join(
+                    r.get("tactic", "") if isinstance(r, dict) else getattr(r, "tactic", "")
+                    for r in records
+                    if (r.get("tactic", "") if isinstance(r, dict) else getattr(r, "tactic", ""))
                 )
+            else:
+                last_rec = records[-1] if records else None
+                if last_rec is not None:
+                    proof_text = (
+                        last_rec.get("tactic", "") if isinstance(last_rec, dict)
+                        else getattr(last_rec, "tactic", "")
+                    )
             _patch_proof_into_file(thm.lean_file, thm.name, proof_text)
             if verbose:
                 print(f"    PROVED in {elapsed:.1f}s (steps={len(records)})", flush=True)

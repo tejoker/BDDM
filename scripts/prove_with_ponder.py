@@ -18,6 +18,24 @@ import subprocess
 from typing import Any
 
 from dotenv import load_dotenv
+try:
+    from desol_config import get_config as _get_config
+    _CFG = _get_config()
+except Exception:
+    _CFG = None  # type: ignore[assignment]
+from proof_backend import (
+    build_backend_health_report,
+    build_backend_startup_summary,
+    detect_extractdata_patch_status,
+    DefaultLeanDojoClient,
+    BackendHealthReport,
+    format_backend_startup_summary,
+    LeanDojoOpenRequest,
+    emit_backend_parity_event,
+    load_proof_backend_flags,
+    probe_leandojo_importability,
+    resolve_backend_choice,
+)
 
 # Ensure sibling script imports work when invoked from project root.
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -40,7 +58,8 @@ try:
     from lean_dojo.interaction.dojo import LeanError, ProofFinished, ProofGivenUp, TacticState
 
     _USE_LEAN_DOJO = True
-except ModuleNotFoundError:
+    _LEAN_DOJO_IMPORT_ERROR = ""
+except Exception as exc:
     try:
         from lean_repl_dojo import REPLDojo as Dojo
         from lean_repl_dojo import LeanError, ProofFinished, ProofGivenUp, TacticState
@@ -49,6 +68,7 @@ except ModuleNotFoundError:
         Theorem = Any  # type: ignore[assignment]
         _USE_LEAN_DOJO = False
         _DOJO_BACKEND_AVAILABLE = True
+        _LEAN_DOJO_IMPORT_ERROR = str(exc)
     except ModuleNotFoundError:
         Dojo = None  # type: ignore[assignment]
         LeanGitRepo = Any  # type: ignore[assignment]
@@ -59,6 +79,7 @@ except ModuleNotFoundError:
         TacticState = type("TacticState", (), {})  # type: ignore[assignment]
         _USE_LEAN_DOJO = False
         _DOJO_BACKEND_AVAILABLE = False
+        _LEAN_DOJO_IMPORT_ERROR = str(exc)
 else:
     _DOJO_BACKEND_AVAILABLE = True
 
@@ -96,6 +117,46 @@ _TACTIC_KEYWORDS = {
 }
 
 
+def classify_lean_error(error_text: str) -> str:
+    text = (error_text or "").lower()
+    if any(k in text for k in ("unknown constant", "unknown identifier", "does not exist")):
+        return "name-resolution"
+    if any(k in text for k in ("type mismatch", "application type mismatch")):
+        return "type-mismatch"
+    if any(k in text for k in ("rewrite failed", "did not match", "simp made no progress")):
+        return "rewrite-mismatch"
+    if any(k in text for k in ("unsolved goals", "goals remaining", "tactic failed")):
+        return "incomplete-progress"
+    if any(k in text for k in ("timeout", "maximum recursion depth", "max heartbeats")):
+        return "resource-timeout"
+    return "generic"
+
+
+def repair_hint_for_error_class(error_class: str) -> str:
+    if error_class == "name-resolution":
+        return (
+            "Repair strategy[name-resolution]: use only verified theorem names from retrieved premises; "
+            "avoid invented dotted names."
+        )
+    if error_class == "type-mismatch":
+        return (
+            "Repair strategy[type-mismatch]: introduce hypotheses (`intro`/`rintro`) and avoid over-specialized lemmas."
+        )
+    if error_class == "rewrite-mismatch":
+        return (
+            "Repair strategy[rewrite-mismatch]: avoid `rw` unless LHS appears literally; prefer `simp`, `simpa`, `nth_rewrite`."
+        )
+    if error_class == "incomplete-progress":
+        return (
+            "Repair strategy[incomplete-progress]: apply decomposition tactics first (`constructor`, `cases`, `have`, `linarith`)."
+        )
+    if error_class == "resource-timeout":
+        return (
+            "Repair strategy[resource-timeout]: choose shorter local tactics; avoid expensive global search tactics."
+        )
+    return "Repair strategy[generic]: choose a different tactic family than prior failures."
+
+
 def _ensure_lake_on_path() -> None:
     """Best-effort PATH fix for non-interactive shells missing elan bin dir."""
     if shutil.which("lake") is not None:
@@ -120,6 +181,22 @@ def _ensure_lake_on_path() -> None:
 
 
 _ensure_lake_on_path()
+
+
+def _is_tactic_state(value: Any) -> bool:
+    return hasattr(value, "pp") and hasattr(value, "num_goals")
+
+
+def _is_proof_finished(value: Any) -> bool:
+    return type(value).__name__ == "ProofFinished"
+
+
+def _is_lean_error(value: Any) -> bool:
+    return hasattr(value, "error") and isinstance(getattr(value, "error"), str)
+
+
+def _is_proof_given_up(value: Any) -> bool:
+    return type(value).__name__ == "ProofGivenUp"
 
 
 @dataclass
@@ -159,10 +236,10 @@ def _split_draft_into_tactics(draft: str) -> list[str]:
 def _execute_draft(
     *,
     dojo: Any,
-    initial_state: TacticState,
+    initial_state: Any,
     draft: str,
     round_idx: int,
-) -> tuple[bool, TacticState, list[StepRecord], str]:
+) -> tuple[bool, Any, list[StepRecord], str]:
     """Execute draft tactics in sequence and return structured error feedback."""
     state = initial_state
     records: list[StepRecord] = []
@@ -185,7 +262,7 @@ def _execute_draft(
     for idx, tactic in enumerate(tactics, start=1):
         outcome = dojo.run_tac(state, tactic)
 
-        if isinstance(outcome, TacticState):
+        if _is_tactic_state(outcome):
             records.append(
                 StepRecord(
                     step=round_idx,
@@ -199,7 +276,7 @@ def _execute_draft(
             state = outcome
             continue
 
-        if isinstance(outcome, ProofFinished):
+        if _is_proof_finished(outcome):
             records.append(
                 StepRecord(
                     step=round_idx,
@@ -212,8 +289,8 @@ def _execute_draft(
             )
             return True, state, records, "proof-finished"
 
-        if isinstance(outcome, LeanError):
-            err = outcome.error.strip()
+        if _is_lean_error(outcome):
+            err = str(getattr(outcome, "error", "")).strip()
             detail = f"line={idx}; message={err}"
             records.append(
                 StepRecord(
@@ -227,7 +304,7 @@ def _execute_draft(
             )
             return False, state, records, detail
 
-        if isinstance(outcome, ProofGivenUp):
+        if _is_proof_given_up(outcome):
             detail = f"line={idx}; message=proof-given-up"
             records.append(
                 StepRecord(
@@ -394,19 +471,67 @@ def _open_dojo(
     dojo_timeout: int,
 ) -> tuple[Any, Path | None]:
     """Create the right dojo context manager for the active backend."""
-    if not _DOJO_BACKEND_AVAILABLE:
+    backend_flags = load_proof_backend_flags()
+    backend_choice = resolve_backend_choice(
+        leandojo_available=_USE_LEAN_DOJO,
+        flags=backend_flags,
+    )
+    emit_backend_parity_event(
+        backend_flags,
+        "backend-open-start",
+        {
+            "backend": backend_choice,
+            "project_root": str(project_root),
+            "file_path": str(file_path),
+            "theorem": theorem_name,
+            "dojo_timeout": dojo_timeout,
+            "phase1_enabled": backend_flags.phase1_enabled,
+        },
+    )
+
+    if not _DOJO_BACKEND_AVAILABLE and backend_choice == "leandojo":
         raise RuntimeError(
             "No proof backend available: install lean_dojo or provide scripts/lean_repl_dojo.py"
         )
 
-    if _USE_LEAN_DOJO:
+    if backend_choice == "leandojo":
         try:
-            repo, tmp_root = _prepare_leandojo_repo(project_root)
-            theorem = Theorem(repo, file_path, theorem_name)
-            return Dojo(theorem, timeout=dojo_timeout), tmp_root
+            def _open_with_native_leandojo(request: LeanDojoOpenRequest) -> tuple[Any, Path | None]:
+                repo, tmp_root = _prepare_leandojo_repo(request.project_root)
+                theorem = Theorem(repo, request.file_path, request.theorem_name)
+                return Dojo(theorem, timeout=request.dojo_timeout), tmp_root
+
+            client = DefaultLeanDojoClient(
+                _open_with_native_leandojo
+            )
+            dojo_ctx, tmp_root = client.open_dojo(
+                LeanDojoOpenRequest(
+                    project_root=project_root,
+                    file_path=file_path,
+                    theorem_name=theorem_name,
+                    dojo_timeout=dojo_timeout,
+                )
+            )
+            emit_backend_parity_event(
+                backend_flags,
+                "backend-open-success",
+                {
+                    "backend": backend_choice,
+                    "tmp_snapshot": bool(tmp_root),
+                },
+            )
+            return dojo_ctx, tmp_root
         except Exception as e:
             import traceback
             logger.warning(f"LeanDojo initialization failed: {e}\n{traceback.format_exc()}")
+            emit_backend_parity_event(
+                backend_flags,
+                "backend-open-failure",
+                {
+                    "backend": backend_choice,
+                    "error": str(e),
+                },
+            )
             if "git" in str(e).lower() or "lake" in str(e).lower():
                 msg = (
                     f"Backend initialization failed during toolchain setup:\n"
@@ -419,14 +544,97 @@ def _open_dojo(
                 raise RuntimeError(msg) from e
             raise
 
-    # REPLDojo path (lean_repl_dojo.py available, LeanDojo not installed)
-    # Dojo is aliased to REPLDojo in the import block above.
-    return Dojo(  # type: ignore[call-arg]
+    # REPLDojo path
+    try:
+        from lean_repl_dojo import REPLDojo
+    except ModuleNotFoundError as exc:
+        emit_backend_parity_event(
+            backend_flags,
+            "backend-open-failure",
+            {
+                "backend": backend_choice,
+                "error": "REPLDojo unavailable",
+            },
+        )
+        raise RuntimeError(
+            "DESOL_PROOF_BACKEND resolved to repldojo but scripts/lean_repl_dojo.py is unavailable"
+        ) from exc
+
+    emit_backend_parity_event(
+        backend_flags,
+        "backend-open-success",
+        {
+            "backend": "repldojo",
+            "tmp_snapshot": False,
+        },
+    )
+    return REPLDojo(
         project_root=project_root,
         file_path=file_path,
         theorem_name=theorem_name,
         timeout=dojo_timeout,
     ), None
+
+
+def check_backend_health(
+    *,
+    project_root: Path,
+    file_path: Path,
+    theorem_name: str,
+    dojo_timeout: int,
+) -> BackendHealthReport:
+    """Run lightweight backend-open health check with structured diagnostics."""
+    backend_flags = load_proof_backend_flags()
+    try:
+        backend = resolve_backend_choice(leandojo_available=_USE_LEAN_DOJO, flags=backend_flags)
+    except Exception as exc:
+        return build_backend_health_report(backend="resolve", error_text=str(exc))
+
+    if backend == "leandojo":
+        patch_status = detect_extractdata_patch_status()
+        if patch_status in {"unpatched", "missing", "unknown"}:
+            return build_backend_health_report(
+                backend=backend,
+                error_text=(
+                    "LeanDojo ExtractData compatibility check failed "
+                    f"(status={patch_status})"
+                ),
+            )
+
+    dojo_ctx: Any | None = None
+    tmp_root: Path | None = None
+    try:
+        dojo_ctx, tmp_root = _open_dojo(
+            project_root=project_root,
+            file_path=file_path,
+            theorem_name=theorem_name,
+            dojo_timeout=max(30, min(dojo_timeout, 180)),
+        )
+        with dojo_ctx as (_dojo, state):
+            if not _is_tactic_state(state):
+                return build_backend_health_report(
+                    backend=backend,
+                    error_text=(
+                        "Backend returned unexpected initial state type: "
+                        f"{type(state).__name__}"
+                    ),
+                )
+        emit_backend_parity_event(
+            backend_flags,
+            "backend-health-success",
+            {"backend": backend},
+        )
+        return build_backend_health_report(backend=backend)
+    except Exception as exc:
+        emit_backend_parity_event(
+            backend_flags,
+            "backend-health-failure",
+            {"backend": backend, "error": str(exc)},
+        )
+        return build_backend_health_report(backend=backend, error_text=str(exc))
+    finally:
+        if tmp_root is not None:
+            shutil.rmtree(tmp_root, ignore_errors=True)
 
 
 def _estimate_theorem_difficulty(
@@ -569,7 +777,7 @@ def prove_with_ponder(
 
     try:
         with dojo_ctx as (dojo, state):
-            if not isinstance(state, TacticState):
+            if not _is_tactic_state(state):
                 return False, records, f"Unexpected initial state type: {type(state).__name__}"
 
             for step in range(1, max_steps + 1):
@@ -581,8 +789,11 @@ def prove_with_ponder(
                     if failed_attempts:
                         lines = ["Previous failed attempts on this exact state:"]
                         for i, (tac, err) in enumerate(failed_attempts, start=1):
+                            err_class = classify_lean_error(err)
                             lines.append(f"{i}. tactic: {tac}")
                             lines.append(f"   lean_error: {err}")
+                            lines.append(f"   error_class: {err_class}")
+                            lines.append(f"   {repair_hint_for_error_class(err_class)}")
                         lines.append("Propose a different tactic.")
                         state_context = state_context + "\n\n" + "\n".join(lines)
 
@@ -656,7 +867,7 @@ def prove_with_ponder(
 
                     outcome = dojo.run_tac(current_state, tactic)
 
-                    if isinstance(outcome, TacticState):
+                    if _is_tactic_state(outcome):
                         records.append(
                             StepRecord(
                                 step=step,
@@ -670,7 +881,7 @@ def prove_with_ponder(
                         state = outcome
                         break
 
-                    if isinstance(outcome, ProofFinished):
+                    if _is_proof_finished(outcome):
                         records.append(
                             StepRecord(
                                 step=step,
@@ -683,8 +894,8 @@ def prove_with_ponder(
                         )
                         return True, records, "Proof finished"
 
-                    if isinstance(outcome, LeanError):
-                        err = outcome.error.strip()
+                    if _is_lean_error(outcome):
+                        err = str(getattr(outcome, "error", "")).strip()
                         records.append(
                             StepRecord(
                                 step=step,
@@ -698,7 +909,7 @@ def prove_with_ponder(
                         failed_attempts.append((tactic, err))
                         continue
 
-                    if isinstance(outcome, ProofGivenUp):
+                    if _is_proof_given_up(outcome):
                         records.append(
                             StepRecord(
                                 step=step,
@@ -759,7 +970,7 @@ def prove_with_full_draft_repair(
 
     try:
         with dojo_ctx as (dojo, state):
-            if not isinstance(state, TacticState):
+            if not _is_tactic_state(state):
                 return False, records, f"Unexpected initial state type: {type(state).__name__}"
 
             current_draft = generate_full_proof_draft(
@@ -785,16 +996,22 @@ def prove_with_full_draft_repair(
                 if solved:
                     return True, records, f"Proof finished in round {round_idx}"
 
+                err_class = classify_lean_error(error_feedback)
+                hint = repair_hint_for_error_class(err_class)
+                enriched_feedback = (
+                    f"{error_feedback}\nerror_class: {err_class}\n{hint}"
+                )
+
                 if round_idx == repair_rounds:
                     return False, records, (
                         f"Failed after repair_rounds={repair_rounds}; "
-                        f"last_error={error_feedback}"
+                        f"last_error={error_feedback} error_class={err_class}"
                     )
 
                 current_draft = repair_full_proof_draft(
                     lean_state=state.pp,
                     current_draft=current_draft,
-                    error_feedback=error_feedback,
+                    error_feedback=enriched_feedback,
                     client=client,
                     model=model,
                     informal_proof_hint=informal_proof_hint,
@@ -835,10 +1052,11 @@ def _build_parser() -> argparse.ArgumentParser:
         default="tactic",
         help="Proof mode: tactic-by-tactic, full draft + repair loop, or draft-level MCTS repair",
     )
+    _default_repair_rounds = _CFG.proof_search.max_repair_rounds if _CFG else 5
     parser.add_argument(
         "--repair-rounds",
         type=int,
-        default=5,
+        default=_default_repair_rounds,
         help="Number of full-draft repair rounds (full-draft mode only)",
     )
     parser.add_argument(
@@ -914,6 +1132,11 @@ def _build_parser() -> argparse.ArgumentParser:
         default="hybrid",
         help="Draft-MCTS tuning profile (mcts-draft mode)",
     )
+    parser.add_argument(
+        "--backend-health-check",
+        action="store_true",
+        help="Run backend initialization health check and exit",
+    )
     return parser
 
 
@@ -921,6 +1144,40 @@ def main() -> int:
     load_dotenv()
     parser = _build_parser()
     args = parser.parse_args()
+
+    project_root = Path(args.project_root).resolve()
+    file_path = Path(args.file)
+    backend_flags = load_proof_backend_flags()
+    leandojo_available, leandojo_import_error = probe_leandojo_importability()
+    if _USE_LEAN_DOJO:
+        leandojo_available = True
+        leandojo_import_error = ""
+    elif _LEAN_DOJO_IMPORT_ERROR and not leandojo_import_error:
+        leandojo_import_error = _LEAN_DOJO_IMPORT_ERROR
+    startup = build_backend_startup_summary(
+        project_root=project_root,
+        flags=backend_flags,
+        leandojo_available=leandojo_available,
+        leandojo_import_error=leandojo_import_error,
+    )
+    if args.backend_health_check or backend_flags.phase1_enabled:
+        for line in format_backend_startup_summary(startup):
+            print(line)
+
+    if args.backend_health_check:
+        report = check_backend_health(
+            project_root=project_root,
+            file_path=file_path,
+            theorem_name=args.theorem,
+            dojo_timeout=args.dojo_timeout,
+        )
+        if report.ok:
+            print(f"[ok] {report.message}")
+            return 0
+        print(f"[fail] code={report.error_code} backend={report.backend} message={report.message}")
+        if report.recommendation:
+            print(f"[hint] {report.recommendation}")
+        return 1
 
     api_key = os.getenv("MISTRAL_API_KEY", "").strip()
     if not api_key:
@@ -932,8 +1189,6 @@ def main() -> int:
         print("[fail] no model configured")
         return 1
 
-    project_root = Path(args.project_root).resolve()
-    file_path = Path(args.file)
     informal_hint = args.informal_proof_hint.strip()
     if args.informal_proof_hint_file:
         informal_hint = Path(args.informal_proof_hint_file).read_text(encoding="utf-8").strip()
@@ -968,7 +1223,7 @@ def main() -> int:
 
         ok, tactics, summary = run_state_mcts(
             project_root=project_root,
-            theorem_statement=f"-- {args.theorem}",  # statement inferred from file
+            theorem_statement="",
             client=client,
             model=model,
             iterations=args.mcts_iterations,
@@ -978,6 +1233,8 @@ def main() -> int:
             premise_context=premise_context,
             retrieval_index_path=args.retrieval_index,
             retrieval_top_k=args.retrieval_top_k,
+            file_path=file_path,
+            theorem_name=args.theorem,
         )
         raw_records = [{"tactic": t, "result": "state-advanced", "step": i, "attempt": 0,
                         "model_turns": 1, "detail": ""} for i, t in enumerate(tactics)]

@@ -45,7 +45,7 @@ _STOPWORDS: frozenset[str] = frozenset({
 _MIN_TOKEN_LEN = 4
 
 # Default sentence-transformers model: small (80 MB), 384-dim, strong on technical text.
-_DEFAULT_ST_MODEL = "all-MiniLM-L6-v2"
+_DEFAULT_ST_MODEL = "BAAI/bge-small-en-v1.5"
 
 # Module-level cache so the model loads once per process.
 _ST_MODEL_CACHE: dict[str, Any] = {}

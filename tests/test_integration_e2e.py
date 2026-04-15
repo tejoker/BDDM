@@ -50,8 +50,8 @@ def test_repldojo_proves_trivial_theorem(tmp_path):
           sorry
     """), encoding="utf-8")
 
-    # Copy lakefile + toolchain
-    for fname in ["lakefile.toml", "lean-toolchain"]:
+    # Copy lakefile + toolchain + manifest so lake can resolve all dependencies
+    for fname in ["lakefile.toml", "lean-toolchain", "lake-manifest.json"]:
         src = PROJECT_ROOT / fname
         if src.exists():
             (tmp_path / fname).write_bytes(src.read_bytes())
@@ -81,7 +81,7 @@ def test_repldojo_reports_lean_error_on_bad_tactic(tmp_path):
         theorem nat_add_zero (n : Nat) : n + 0 = n := by
           sorry
     """), encoding="utf-8")
-    for fname in ["lakefile.toml", "lean-toolchain"]:
+    for fname in ["lakefile.toml", "lean-toolchain", "lake-manifest.json"]:
         src = PROJECT_ROOT / fname
         if src.exists():
             (tmp_path / fname).write_bytes(src.read_bytes())
@@ -111,7 +111,7 @@ def test_repldojo_tactic_state_on_partial_proof(tmp_path):
         theorem two_goals (n m : Nat) : n + 0 = n ∧ m + 0 = m := by
           sorry
     """), encoding="utf-8")
-    for fname in ["lakefile.toml", "lean-toolchain"]:
+    for fname in ["lakefile.toml", "lean-toolchain", "lake-manifest.json"]:
         src = PROJECT_ROOT / fname
         if src.exists():
             (tmp_path / fname).write_bytes(src.read_bytes())
@@ -181,7 +181,7 @@ def test_full_pipeline_proves_simple_theorem(tmp_path):
         theorem nat_add_zero (n : Nat) : n + 0 = n := by
           sorry
     """), encoding="utf-8")
-    for fname in ["lakefile.toml", "lean-toolchain"]:
+    for fname in ["lakefile.toml", "lean-toolchain", "lake-manifest.json"]:
         src = PROJECT_ROOT / fname
         if src.exists():
             (tmp_path / fname).write_bytes(src.read_bytes())

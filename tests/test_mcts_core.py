@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import math
+from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -223,3 +225,110 @@ def test_normalize_symmetric_blend():
     # tactics_factor = 1 - 5/10 = 0.5; base_value = 0.5 → result = 0.5
     v = normalize_value_with_tactics(0.5, 5)
     assert abs(v - 0.5) < 1e-9
+
+
+def test_run_mcts_initializes_root_on_valid_state(monkeypatch):
+    import mcts_search as ms
+
+    class FakeState:
+        def __init__(self):
+            self.pp = "⊢ True"
+            self.num_goals = 1
+
+    class FakeREPLDojo:
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+        def __enter__(self):
+            return self, FakeState()
+
+        def __exit__(self, *args):
+            return False
+
+    monkeypatch.setattr(ms, "_HAS_REPLDOJO", True)
+    monkeypatch.setattr(ms, "REPLDojo", FakeREPLDojo)
+    monkeypatch.setattr(ms, "TacticState", FakeState)
+    monkeypatch.setattr(ms, "expand_leaf", lambda **kwargs: [])
+    monkeypatch.setattr(ms, "evaluate_state_value", lambda **kwargs: (0.6, 3))
+
+    root, stats = ms.run_mcts(
+        project_root=Path("."),
+        file_path=Path("Desol/Basic.lean"),
+        theorem_name="basic_demo_true",
+        client=MagicMock(),
+        model="mock",
+        iterations=1,
+    )
+
+    assert isinstance(root, ms.MCTSNode)
+    assert root.state_text == "⊢ True"
+    assert stats.iterations == 1
+
+
+def test_extract_theorem_statement_from_file_multiline(tmp_path):
+    import mcts_search as ms
+
+    lean_file = tmp_path / "Tmp.lean"
+    lean_file.write_text(
+        "theorem demo_theorem\n"
+        "  (x y : Nat)\n"
+        "  (h : x = y) :\n"
+        "  y = x := by\n"
+        "  simpa [h]\n",
+        encoding="utf-8",
+    )
+
+    stmt = ms.extract_theorem_statement_from_file(
+        project_root=tmp_path,
+        file_path=Path("Tmp.lean"),
+        theorem_name="demo_theorem",
+    )
+    assert "theorem demo_theorem" in stmt
+    assert ":= by" not in stmt
+    assert "(h : x = y)" in stmt
+
+
+def test_grounded_goal_value_prefers_simple_goal():
+    import mcts_search as ms
+
+    simple = ["⊢ True"]
+    complex_goals = [
+        "h1 : ∀ x, P x",
+        "h2 : ∃ y, Q y",
+        "⊢ ∀ x, ∃ y, (f x = y) ∧ (g y = x)",
+    ]
+
+    v_simple = ms.grounded_goal_value(simple, depth=1, max_depth=10)
+    v_complex = ms.grounded_goal_value(complex_goals, depth=1, max_depth=10)
+    assert v_simple > v_complex
+    assert 0.0 <= v_simple <= 1.0
+    assert 0.0 <= v_complex <= 1.0
+
+
+def test_build_compounding_retriever_from_trusted_kg(tmp_path):
+    import json
+    import mcts_search as ms
+
+    kg_file = tmp_path / "output" / "kg" / "trusted" / "theorems.jsonl"
+    kg_file.parent.mkdir(parents=True, exist_ok=True)
+    kg_file.write_text(
+        json.dumps(
+            {
+                "name": "my_saved_lemma",
+                "statement": "theorem my_saved_lemma : True := by trivial",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    retriever, count = ms._build_compounding_retriever(project_root=tmp_path, max_entries=100)
+    assert retriever is not None
+    assert count == 1
+
+    ctx = ms._retrieve_compounding_context(
+        retriever=retriever,
+        lean_state="⊢ True",
+        top_k=1,
+    )
+    assert "my_saved_lemma" in ctx
