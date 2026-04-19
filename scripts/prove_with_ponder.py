@@ -4,13 +4,13 @@
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import multiprocessing as mp
 import os
 import re
 import shutil
 import sys
-import tempfile
 import traceback
 from dataclasses import dataclass
 from pathlib import Path
@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 try:
     from desol_config import get_config as _get_config
     _CFG = _get_config()
-except Exception:
+except (ImportError, OSError, ValueError):
     _CFG = None  # type: ignore[assignment]
 from proof_backend import (
     build_backend_health_report,
@@ -37,15 +37,6 @@ from proof_backend import (
     resolve_backend_choice,
 )
 
-# Ensure sibling script imports work when invoked from project root.
-SCRIPT_DIR = Path(__file__).resolve().parent
-if str(SCRIPT_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPT_DIR))
-
-try:
-    from git import Repo as GitRepo
-except ModuleNotFoundError:  # GitPython is optional
-    GitRepo = None  # type: ignore[assignment]
 try:
     from mistralai import Mistral
 except ImportError:
@@ -89,124 +80,23 @@ from ponder_loop import (
     repair_full_proof_draft,
     run_ponder_loop,
 )
+from prove_with_ponder_exec import (
+    StepRecord,
+    _execute_draft,
+    _is_lean_error,
+    _is_proof_finished,
+    _is_proof_given_up,
+    _is_tactic_state,
+    classify_lean_error,
+    extract_tactic_theorem_names,
+    repair_hint_for_error_class,
+    validate_lean_name,
+)
+from prove_with_ponder_repo import create_snapshot_repo, repo_has_commit
 
 logger = logging.getLogger(__name__)
 
 _SNAPSHOT_CACHE: dict[str, tuple[Path, Path]] = {}
-_NAME_VALIDATION_CACHE: dict[tuple[str, str], bool] = {}
-_TACTIC_NAME_RE = re.compile(r"\b([A-Za-z_][A-Za-z0-9_']*(?:\.[A-Za-z_][A-Za-z0-9_']*)+)\b")
-_TACTIC_KEYWORDS = {
-    "by",
-    "exact",
-    "apply",
-    "refine",
-    "intro",
-    "intros",
-    "rw",
-    "simp",
-    "simpa",
-    "at",
-    "with",
-    "fun",
-    "have",
-    "show",
-    "constructor",
-    "cases",
-    "induction",
-    "where",
-}
-
-
-def classify_lean_error(error_text: str) -> str:
-    text = (error_text or "").lower()
-    if any(k in text for k in ("unknown constant", "unknown identifier", "does not exist")):
-        return "name-resolution"
-    if any(k in text for k in ("type mismatch", "application type mismatch")):
-        return "type-mismatch"
-    if any(k in text for k in ("rewrite failed", "did not match", "simp made no progress")):
-        return "rewrite-mismatch"
-    if any(k in text for k in ("unsolved goals", "goals remaining", "tactic failed")):
-        return "incomplete-progress"
-    if any(k in text for k in ("timeout", "maximum recursion depth", "max heartbeats")):
-        return "resource-timeout"
-    return "generic"
-
-
-def repair_hint_for_error_class(error_class: str) -> str:
-    if error_class == "name-resolution":
-        return (
-            "Repair strategy[name-resolution]: use only verified theorem names from retrieved premises; "
-            "avoid invented dotted names."
-        )
-    if error_class == "type-mismatch":
-        return (
-            "Repair strategy[type-mismatch]: introduce hypotheses (`intro`/`rintro`) and avoid over-specialized lemmas."
-        )
-    if error_class == "rewrite-mismatch":
-        return (
-            "Repair strategy[rewrite-mismatch]: avoid `rw` unless LHS appears literally; prefer `simp`, `simpa`, `nth_rewrite`."
-        )
-    if error_class == "incomplete-progress":
-        return (
-            "Repair strategy[incomplete-progress]: apply decomposition tactics first (`constructor`, `cases`, `have`, `linarith`)."
-        )
-    if error_class == "resource-timeout":
-        return (
-            "Repair strategy[resource-timeout]: choose shorter local tactics; avoid expensive global search tactics."
-        )
-    return "Repair strategy[generic]: choose a different tactic family than prior failures."
-
-
-def _ensure_lake_on_path() -> None:
-    """Best-effort PATH fix for non-interactive shells missing elan bin dir."""
-    if shutil.which("lake") is not None:
-        return
-
-    candidates = [
-        str(Path.home() / ".elan" / "bin"),
-        str(Path.home() / ".local" / "bin"),
-        "/usr/local/bin",
-    ]
-    current = os.environ.get("PATH", "")
-    parts = current.split(":") if current else []
-
-    changed = False
-    for cand in candidates:
-        if cand and cand not in parts and Path(cand).exists():
-            parts.append(cand)
-            changed = True
-
-    if changed:
-        os.environ["PATH"] = ":".join(parts)
-
-
-_ensure_lake_on_path()
-
-
-def _is_tactic_state(value: Any) -> bool:
-    return hasattr(value, "pp") and hasattr(value, "num_goals")
-
-
-def _is_proof_finished(value: Any) -> bool:
-    return type(value).__name__ == "ProofFinished"
-
-
-def _is_lean_error(value: Any) -> bool:
-    return hasattr(value, "error") and isinstance(getattr(value, "error"), str)
-
-
-def _is_proof_given_up(value: Any) -> bool:
-    return type(value).__name__ == "ProofGivenUp"
-
-
-@dataclass
-class StepRecord:
-    step: int
-    attempt: int
-    tactic: str
-    model_turns: int
-    result: str
-    detail: str = ""
 
 
 @dataclass
@@ -218,232 +108,13 @@ class DifficultyEstimate:
     hypotheses: int
 
 
-def _split_draft_into_tactics(draft: str) -> list[str]:
-    lines = [ln.rstrip() for ln in draft.splitlines()]
-    tactics: list[str] = []
-    for line in lines:
-        stripped = line.strip()
-        if not stripped:
-            continue
-        if stripped.startswith("--"):
-            continue
-        if stripped in {"by", "begin", "end"}:
-            continue
-        tactics.append(stripped)
-    return tactics
-
-
-def _execute_draft(
-    *,
-    dojo: Any,
-    initial_state: Any,
-    draft: str,
-    round_idx: int,
-) -> tuple[bool, Any, list[StepRecord], str]:
-    """Execute draft tactics in sequence and return structured error feedback."""
-    state = initial_state
-    records: list[StepRecord] = []
-    tactics = _split_draft_into_tactics(draft)
-
-    if not tactics:
-        msg = "Draft contains no executable tactics"
-        records.append(
-            StepRecord(
-                step=round_idx,
-                attempt=1,
-                tactic="",
-                model_turns=1,
-                result="lean-error",
-                detail=msg,
-            )
-        )
-        return False, state, records, "line=1; message=empty draft"
-
-    for idx, tactic in enumerate(tactics, start=1):
-        outcome = dojo.run_tac(state, tactic)
-
-        if _is_tactic_state(outcome):
-            records.append(
-                StepRecord(
-                    step=round_idx,
-                    attempt=idx,
-                    tactic=tactic,
-                    model_turns=1,
-                    result="state-advanced",
-                    detail=f"goals={outcome.num_goals}",
-                )
-            )
-            state = outcome
-            continue
-
-        if _is_proof_finished(outcome):
-            records.append(
-                StepRecord(
-                    step=round_idx,
-                    attempt=idx,
-                    tactic=tactic,
-                    model_turns=1,
-                    result="proof-finished",
-                    detail=(outcome.message or ""),
-                )
-            )
-            return True, state, records, "proof-finished"
-
-        if _is_lean_error(outcome):
-            err = str(getattr(outcome, "error", "")).strip()
-            detail = f"line={idx}; message={err}"
-            records.append(
-                StepRecord(
-                    step=round_idx,
-                    attempt=idx,
-                    tactic=tactic,
-                    model_turns=1,
-                    result="lean-error",
-                    detail=detail,
-                )
-            )
-            return False, state, records, detail
-
-        if _is_proof_given_up(outcome):
-            detail = f"line={idx}; message=proof-given-up"
-            records.append(
-                StepRecord(
-                    step=round_idx,
-                    attempt=idx,
-                    tactic=tactic,
-                    model_turns=1,
-                    result="proof-given-up",
-                    detail=detail,
-                )
-            )
-            return False, state, records, detail
-
-        detail = f"line={idx}; message=unknown outcome {type(outcome).__name__}"
-        records.append(
-            StepRecord(
-                step=round_idx,
-                attempt=idx,
-                tactic=tactic,
-                model_turns=1,
-                result="unknown-outcome",
-                detail=detail,
-            )
-        )
-        return False, state, records, detail
-
-    return False, state, records, "line=end; message=draft exhausted without finishing proof"
-
-
-def extract_tactic_theorem_names(tactic: str) -> list[str]:
-    found: list[str] = []
-    seen: set[str] = set()
-    for name in _TACTIC_NAME_RE.findall(tactic):
-        head = name.split(".", 1)[0].lower()
-        if head in _TACTIC_KEYWORDS:
-            continue
-        if name in seen:
-            continue
-        seen.add(name)
-        found.append(name)
-    return found
-
-
-def validate_lean_name(name: str, project_root: Path) -> bool:
-    """Return True if `#check <name>` succeeds via lake env lean."""
-    key = (str(project_root.resolve()), name)
-    if key in _NAME_VALIDATION_CACHE:
-        return _NAME_VALIDATION_CACHE[key]
-
-    import uuid
-    tmp_path = project_root / "Desol" / f"_tmp_namecheck_{uuid.uuid4().hex[:8]}.lean"
-    lean_src = "import Desol.SDE.Basic\n\n#check @" + name + "\n"
-    try:
-        tmp_path.write_text(lean_src, encoding="utf-8")
-        lake_bin = shutil.which("lake") or os.path.expanduser("~/.elan/bin/lake")
-        proc = subprocess.run(
-            [lake_bin, "env", "lean", str(tmp_path)],
-            cwd=project_root,
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
-        combined = (proc.stderr or "") + (proc.stdout or "")
-        ok = proc.returncode == 0 and "error:" not in combined
-    except Exception:
-        ok = False
-    finally:
-        tmp_path.unlink(missing_ok=True)
-    _NAME_VALIDATION_CACHE[key] = ok
-    return ok
-
-
-def _create_snapshot_repo(project_root: Path) -> tuple[Path, Path]:
-    """Create a temporary committed snapshot when the source repo has no commits."""
-    tmp_root = Path(tempfile.mkdtemp(prefix="desol-dojo-snapshot-"))
-    snapshot_repo = tmp_root / "repo"
-
-    def _ignore(_src: str, names: list[str]) -> set[str]:
-        ignored = {".lake", "__pycache__", ".venv", ".git", ".mypy_cache", ".pytest_cache"}
-        return {n for n in names if n in ignored}
-
-    shutil.copytree(project_root, snapshot_repo, ignore=_ignore)
-
-    def _git(args: list[str]) -> None:
-        subprocess.run(
-            ["git", *args],
-            cwd=snapshot_repo,
-            check=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-
-    try:
-        if GitRepo is not None:
-            repo = GitRepo.init(snapshot_repo)
-            with repo.config_writer() as cw:
-                cw.set_value("user", "name", "desol-bot")
-                cw.set_value("user", "email", "desol-bot@example.local")
-            repo.git.add(A=True)
-            repo.index.commit("Temporary snapshot commit for LeanDojo")
-        else:
-            _git(["init"])
-            _git(["config", "user.name", "desol-bot"])
-            _git(["config", "user.email", "desol-bot@example.local"])
-            _git(["add", "-A"])
-            _git(["commit", "-m", "Temporary snapshot commit for LeanDojo"])
-    except Exception as exc:
-        raise RuntimeError(f"Failed to initialize temporary git snapshot: {exc}") from exc
-    return tmp_root, snapshot_repo
-
-
-def _repo_has_commit(project_root: Path) -> bool:
-    if GitRepo is not None:
-        try:
-            _ = GitRepo(project_root).head.commit.hexsha
-            return True
-        except Exception:
-            return False
-
-    try:
-        proc = subprocess.run(
-            ["git", "rev-parse", "--verify", "HEAD"],
-            cwd=project_root,
-            capture_output=True,
-            text=True,
-            timeout=10,
-        )
-        return proc.returncode == 0
-    except Exception:
-        return False
-
-
 def _prepare_leandojo_repo(project_root: Path) -> tuple[Any, Path | None]:
     """Return LeanGitRepo and optional temp dir to clean up."""
     if not _USE_LEAN_DOJO:
         return None, None
 
     try:
-        if _repo_has_commit(project_root):
+        if repo_has_commit(project_root):
             return LeanGitRepo.from_path(project_root), None
     except Exception:
         pass
@@ -456,7 +127,7 @@ def _prepare_leandojo_repo(project_root: Path) -> tuple[Any, Path | None]:
                 # Reuse cached snapshot to avoid repeated copytree+git init overhead.
                 return LeanGitRepo.from_path(cached_repo), None
 
-        tmp_root, snapshot_repo = _create_snapshot_repo(project_root)
+        snapshot_repo, tmp_root = create_snapshot_repo(project_root)
         _SNAPSHOT_CACHE[cache_key] = (tmp_root, snapshot_repo)
         return LeanGitRepo.from_path(snapshot_repo), tmp_root
     except Exception as exc:
@@ -1048,9 +719,9 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--dojo-timeout", type=int, default=600)
     parser.add_argument(
         "--mode",
-        choices=["tactic", "full-draft", "mcts-draft"],
+        choices=["tactic", "full-draft", "mcts-draft", "world-model-draft"],
         default="tactic",
-        help="Proof mode: tactic-by-tactic, full draft + repair loop, or draft-level MCTS repair",
+        help="Proof mode: tactic-by-tactic, full draft + repair loop, draft-level MCTS, or world-model guided MCTS",
     )
     _default_repair_rounds = _CFG.proof_search.max_repair_rounds if _CFG else 5
     parser.add_argument(
@@ -1131,6 +802,17 @@ def _build_parser() -> argparse.ArgumentParser:
         choices=["fixed", "throughput", "depth", "hybrid"],
         default="hybrid",
         help="Draft-MCTS tuning profile (mcts-draft mode)",
+    )
+    parser.add_argument(
+        "--world-model-ledger-root",
+        default="output/verification_ledgers",
+        help="Ledger root used for world-model bridge priors (world-model-draft mode)",
+    )
+    parser.add_argument(
+        "--world-model-budget",
+        type=int,
+        default=24,
+        help="World-model MCTS budget used to precompute bridge priors",
     )
     parser.add_argument(
         "--backend-health-check",
@@ -1218,7 +900,7 @@ def main() -> int:
             informal_proof_hint=informal_hint,
         )
     elif args.mode == "mcts-draft":
-        # mcts-draft is a legacy alias — use state-level MCTS instead
+        # mcts-draft uses state-level MCTS.
         from mcts_search import run_state_mcts
 
         ok, tactics, summary = run_state_mcts(
@@ -1238,6 +920,96 @@ def main() -> int:
         )
         raw_records = [{"tactic": t, "result": "state-advanced", "step": i, "attempt": 0,
                         "model_turns": 1, "detail": ""} for i, t in enumerate(tactics)]
+        records = [
+            StepRecord(
+                step=int(r.get("step", 0)),
+                attempt=int(r.get("attempt", 0)),
+                tactic=str(r.get("tactic", "")),
+                model_turns=int(r.get("model_turns", 0)),
+                result=str(r.get("result", "")),
+                detail=str(r.get("detail", "")),
+            )
+            for r in raw_records
+        ]
+    elif args.mode == "world-model-draft":
+        # Dedicated world-model proof loop: iterate world priors + MCTS episodes.
+        from mcts_search import run_state_mcts
+
+        wm_rounds = max(1, min(4, int(args.world_model_budget // max(1, args.mcts_iterations))))
+        wm_records: list[dict[str, Any]] = []
+        best = {"ok": False, "tactics": [], "summary": "world-model: no attempt"}
+
+        for wr in range(wm_rounds):
+            local_premise_context = premise_context
+            try:
+                from world_model_bridge import run_world_model_bridge_search
+
+                wm = run_world_model_bridge_search(
+                    target_theorem=args.theorem,
+                    ledger_root=Path(args.world_model_ledger_root),
+                    budget=max(1, int(args.world_model_budget)),
+                    max_depth=max(1, int(args.mcts_max_depth)),
+                    max_candidates_per_assumption=max(1, int(args.mcts_repair_variants)),
+                )
+                prior_theorems = [
+                    str(a.get("theorem_name", "")).strip()
+                    for a in wm.actions_taken
+                    if isinstance(a, dict) and str(a.get("kind", "")) == "bridge_candidate"
+                ]
+                prior_theorems = [p for p in prior_theorems if p and not p.startswith("model_prior:")]
+                if prior_theorems:
+                    prior_block = "\n".join(f"- {p}" for p in sorted(set(prior_theorems)))
+                    local_premise_context = (
+                        (local_premise_context + "\n\n") if local_premise_context else ""
+                    ) + "World-model bridge priors:\n" + prior_block
+                wm_records.append(
+                    {
+                        "round": wr,
+                        "grounded": int(wm.grounded_count),
+                        "assumptions_total": int(wm.assumptions_total),
+                        "reward": float(wm.reward),
+                    }
+                )
+            except Exception as exc:
+                wm_records.append({"round": wr, "error": str(exc)})
+
+            ok_i, tactics_i, summary_i = run_state_mcts(
+                project_root=project_root,
+                theorem_statement="",
+                client=client,
+                model=model,
+                iterations=max(2, int(args.mcts_iterations)),
+                n_tactics=max(1, int(args.mcts_repair_variants)),
+                max_depth=max(1, int(args.mcts_max_depth)),
+                temperature=args.temperature,
+                premise_context=local_premise_context,
+                retrieval_index_path=args.retrieval_index,
+                retrieval_top_k=args.retrieval_top_k,
+                file_path=file_path,
+                theorem_name=args.theorem,
+            )
+            if ok_i:
+                best = {"ok": True, "tactics": tactics_i, "summary": summary_i}
+                break
+            if len(tactics_i) > len(best.get("tactics", [])):
+                best = {"ok": False, "tactics": tactics_i, "summary": summary_i}
+
+        ok = bool(best["ok"])
+        tactics = list(best["tactics"])
+        summary = str(best["summary"]) + f" | wm_rounds={wm_rounds}"
+        raw_records = [{"tactic": t, "result": "state-advanced", "step": i, "attempt": 0,
+                        "model_turns": 1, "detail": "world-model"} for i, t in enumerate(tactics)]
+        for w in wm_records:
+            raw_records.append(
+                {
+                    "tactic": "",
+                    "result": "world-model-round",
+                    "step": int(w.get("round", 0)),
+                    "attempt": 0,
+                    "model_turns": 0,
+                    "detail": json.dumps(w, ensure_ascii=False),
+                }
+            )
         records = [
             StepRecord(
                 step=int(r.get("step", 0)),

@@ -39,8 +39,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-if str(SCRIPT_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPT_DIR))
 
 from arxiv_fetcher import fetch_source, find_main_tex
 from latex_preprocessor import collect_definitions, collect_root_tex_paths, register_env_aliases, write_expanded_roots
@@ -105,6 +103,14 @@ _UNPROVED_TEMPLATE = """\
 
 _CITE_CMD_RE = re.compile(r"\\cite[a-zA-Z*]*\{([^}]*)\}")
 _BIBITEM_RE = re.compile(r"\\bibitem(?:\[[^\]]*\])?\{([^}]*)\}")
+_NOTATION_RE = re.compile(
+    r"\\(?:newcommand|renewcommand|def|DeclareMathOperator)\b[^\n]*",
+    re.IGNORECASE,
+)
+_DEFINITION_ENV_RE = re.compile(
+    r"\\begin\{(?:definition|notation)\*?\}(.*?)\\end\{(?:definition|notation)\*?\}",
+    re.IGNORECASE | re.DOTALL,
+)
 
 
 def _extract_cited_refs_from_tex(tex_paths: list[Path]) -> list[str]:
@@ -113,7 +119,7 @@ def _extract_cited_refs_from_tex(tex_paths: list[Path]) -> list[str]:
     for p in tex_paths:
         try:
             text = p.read_text(encoding="utf-8", errors="replace")
-        except Exception:
+        except (OSError, UnicodeError):
             continue
 
         for m in _CITE_CMD_RE.finditer(text):
@@ -129,6 +135,58 @@ def _extract_cited_refs_from_tex(tex_paths: list[Path]) -> list[str]:
                 refs.add(key)
 
     return sorted(refs)
+
+
+def _build_context_pack(
+    *,
+    entry: TheoremEntry,
+    source_text: str,
+) -> str:
+    """Build theorem-local context pack from TeX text for higher-fidelity translation."""
+    stmt = (entry.statement or "").strip()
+    proof = (entry.proof or "").strip()
+    if not source_text.strip():
+        return proof[:1200]
+
+    idx = source_text.find(stmt[: min(120, len(stmt))]) if stmt else -1
+    if idx < 0 and stmt:
+        idx = source_text.find(" ".join(stmt.split())[:80])
+
+    # Nearby prose window around theorem occurrence.
+    if idx >= 0:
+        start = max(0, idx - 1800)
+        end = min(len(source_text), idx + max(1800, len(stmt) + 400))
+        local_window = source_text[start:end]
+    else:
+        local_window = source_text[:2200]
+
+    # Pull nearby definition-like blocks to ground notation.
+    nearby_defs: list[str] = []
+    for m in _DEFINITION_ENV_RE.finditer(source_text):
+        if idx >= 0 and abs(m.start() - idx) > 5000:
+            continue
+        chunk = " ".join(m.group(1).split())
+        if chunk:
+            nearby_defs.append(chunk[:320])
+        if len(nearby_defs) >= 4:
+            break
+
+    # Global notation declarations.
+    notations = [n.strip() for n in _NOTATION_RE.findall(source_text)]
+    notations = [n for n in notations if n][:8]
+
+    sections: list[str] = []
+    if nearby_defs:
+        sections.append("Relevant definitions/notation blocks:\n" + "\n".join(f"- {d}" for d in nearby_defs))
+    if notations:
+        sections.append("Declared notation/macros:\n" + "\n".join(f"- {n}" for n in notations))
+    local_clean = " ".join(local_window.split())
+    if local_clean:
+        sections.append(f"Nearby source context:\n{local_clean[:1400]}")
+    if proof:
+        sections.append(f"Local proof sketch:\n{proof[:1200]}")
+
+    return "\n\n".join(sections)[:5000]
 
 
 def _records_to_dicts(records: list) -> list[dict]:
@@ -383,6 +441,7 @@ def run_pipeline(
     max_theorems: int,
     translate_only: bool,
     repair_rounds: int,
+    translation_candidates: int = 1,
     retrieval_index_path: str,
     retrieval_top_k: int,
     premise_file: str = "",
@@ -400,6 +459,9 @@ def run_pipeline(
     imports: str = "",
     temperature: float = 0.2,
     dojo_timeout: int = 600,
+    use_schema_stage: bool = True,
+    deterministic_hard_mode: bool = True,
+    adversarial_hard_block: bool = False,
     parallel_theorems: int = 1,
     rate_limiter: "_RateLimiter | None" = None,
     local_tex_paths: list[Path] | None = None,
@@ -497,6 +559,23 @@ def run_pipeline(
         if _HAS_PROOF_CACHE and not translate_only
         else None
     )
+    _source_text_cache: dict[str, str] = {}
+
+    def _context_hint_for_entry(entry: TheoremEntry) -> str:
+        """Build theorem-local context, with per-source-file text caching."""
+        src = (entry.source_file or "").strip()
+        if not src:
+            return (entry.proof or "").strip()[:1200]
+        if src not in _source_text_cache:
+            try:
+                _source_text_cache[src] = Path(src).read_text(
+                    encoding="utf-8",
+                    errors="replace",
+                )
+            except OSError:
+                _source_text_cache[src] = ""
+        return _build_context_pack(entry=entry, source_text=_source_text_cache[src])
+
     static_premise_context = ""
     if premise_file:
         from ponder_loop import load_premise_context
@@ -560,16 +639,20 @@ def run_pipeline(
                 print(f"         translate: cached  rounds=0")
         else:
             rl.acquire()
+            context_hint = _context_hint_for_entry(entry)
             tr = translate_statement(
                 latex_statement=entry.statement,
-                latex_proof_hint=entry.proof,
+                latex_proof_hint=context_hint,
                 client=client,
                 model=model,
                 project_root=project_root,
                 imports=imports,
                 retrieval_index_path=retrieval_index_path,
                 max_repair_rounds=3,
+                translation_candidates=translation_candidates,
                 temperature=temperature,
+                use_schema_stage=use_schema_stage,
+                deterministic_hard_mode=deterministic_hard_mode,
             )
             if tr.validated:
                 cache.put(paper_id, entry.name, tr.lean_signature)
@@ -586,16 +669,23 @@ def run_pipeline(
             reason = (
                 f"adversarial_check_failed:{','.join(adv_flags)}"
             )
+            should_block = adversarial_hard_block or (not translate_only)
             with _print_lock:
-                print(f"         adversarial: BLOCKED — {reason}")
-            return PipelineResult(
-                entry=entry,
-                translation=tr,
-                proved=False,
-                proof_body="",
-                skipped=True,
-                prove_summary=reason,
-            )
+                if should_block:
+                    print(f"         adversarial: BLOCKED — {reason}")
+                elif translate_only:
+                    print(f"         adversarial: WARNING (translate-only) — {reason}")
+                else:
+                    print(f"         adversarial: BLOCKED — {reason}")
+            if should_block:
+                return PipelineResult(
+                    entry=entry,
+                    translation=tr,
+                    proved=False,
+                    proof_body="",
+                    skipped=True,
+                    prove_summary=reason,
+                )
         if adv_flags:
             with _print_lock:
                 print(f"         adversarial: WARNING — {adv_flags} (proceeding with penalty)")
@@ -987,6 +1077,12 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--repair-rounds", type=int, default=5)
     p.add_argument(
+        "--translation-candidates",
+        type=int,
+        default=1,
+        help="Number of translation candidates sampled per repair round (default: 1)",
+    )
+    p.add_argument(
         "--prove-mode",
         choices=["full-draft", "mcts-draft", "auto", "state-mcts", "hierarchical-state"],
         default="auto",
@@ -1014,6 +1110,21 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Override Lean import header (default: broad baseline + auto-expansion from premise index)",
     )
     p.add_argument("--temperature", type=float, default=0.2)
+    p.add_argument(
+        "--disable-schema-stage",
+        action="store_true",
+        help="Disable Stage-A schema extraction and synthesize Lean directly from raw LaTeX",
+    )
+    p.add_argument(
+        "--disable-deterministic-hard-mode",
+        action="store_true",
+        help="Disable deterministic literal mode for hard statements",
+    )
+    p.add_argument(
+        "--adversarial-hard-block",
+        action="store_true",
+        help="Block translations flagged adversarially wrong/trivially-true even in --translate-only mode",
+    )
     p.add_argument("--dojo-timeout", type=int, default=600)
     p.add_argument(
         "--mcts-profile",
@@ -1104,6 +1215,7 @@ def main() -> int:
             max_theorems=args.max_theorems,
             translate_only=args.translate_only,
             repair_rounds=args.repair_rounds,
+            translation_candidates=args.translation_candidates,
             retrieval_index_path=args.retrieval_index,
             retrieval_top_k=args.retrieval_top_k,
             premise_file=args.premise_file,
@@ -1121,6 +1233,9 @@ def main() -> int:
             imports=args.imports,
             temperature=args.temperature,
             dojo_timeout=args.dojo_timeout,
+            use_schema_stage=not args.disable_schema_stage,
+            deterministic_hard_mode=not args.disable_deterministic_hard_mode,
+            adversarial_hard_block=args.adversarial_hard_block,
             parallel_theorems=args.parallel_theorems,
             rate_limiter=_RateLimiter(rate=args.api_rate),
             write_kg=args.write_kg,

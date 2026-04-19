@@ -12,12 +12,16 @@ Protocol:
 
 from __future__ import annotations
 
+import hashlib
+import json
 import re
 import os
+import time
 import subprocess
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 
 # ── Mirror of lean_dojo types ─────────────────────────────────────────────────
@@ -47,6 +51,35 @@ class ProofGivenUp:
 @dataclass(frozen=True)
 class LeanError:
     error: str
+
+
+@dataclass(frozen=True)
+class StepTrace:
+    step_idx: int
+    tactic: str
+    result_kind: str
+    elapsed_ms: int
+    before_pp: str = field(default="", compare=False)
+    after_pp: str = field(default="", compare=False)
+    error: str = field(default="", compare=False)
+
+
+@dataclass(frozen=True)
+class BatchExpansionRequest:
+    project_root: str
+    file_path: str
+    theorem_name: str
+    tactics: list[str]
+    timeout: int = 300
+
+
+@dataclass(frozen=True)
+class SearchTreeCheckpoint:
+    tree_id: str
+    theorem_name: str
+    created_at_unix: int
+    frontier: list[dict[str, Any]]
+    explored: list[dict[str, Any]]
 
 
 # ── File helpers ──────────────────────────────────────────────────────────────
@@ -261,6 +294,7 @@ class REPLDojo:
         file_path: Path,
         theorem_name: str,
         timeout: int = 300,
+        cache_path: Path | None = None,
     ) -> None:
         self.project_root = project_root
         self.file_path = file_path
@@ -271,15 +305,71 @@ class REPLDojo:
         self._original: str = ""
         self._decl_line: int = 0
         self._tactics: list[str] = []
+        self._traces: list[StepTrace] = []
+        self._cache_path = cache_path or (project_root / "output" / "dojo_tactic_cache.json")
+        self._cache: dict[str, dict[str, Any]] = {}
+
+    def _cache_key(self, tactics: list[str]) -> str:
+        base = {
+            "target": self._target,
+            "theorem": self.theorem_name,
+            "source_hash": hashlib.sha256(self._original.encode("utf-8")).hexdigest(),
+            "tactics": tactics,
+        }
+        raw = json.dumps(base, sort_keys=True, ensure_ascii=False)
+        return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+    def _load_cache(self) -> None:
+        if self._cache:
+            return
+        try:
+            if self._cache_path.exists():
+                self._cache = json.loads(self._cache_path.read_text(encoding="utf-8"))
+                if not isinstance(self._cache, dict):
+                    self._cache = {}
+        except Exception:
+            self._cache = {}
+
+    def _save_cache(self) -> None:
+        try:
+            self._cache_path.parent.mkdir(parents=True, exist_ok=True)
+            self._cache_path.write_text(json.dumps(self._cache, ensure_ascii=False), encoding="utf-8")
+        except Exception:
+            pass
+
+    def _result_from_cache(self, key: str) -> subprocess.CompletedProcess[str] | None:
+        self._load_cache()
+        row = self._cache.get(key)
+        if not isinstance(row, dict):
+            return None
+        return subprocess.CompletedProcess(
+            args=["lake", "build", self._target],
+            returncode=int(row.get("returncode", 1)),
+            stdout=str(row.get("stdout", "")),
+            stderr=str(row.get("stderr", "")),
+        )
+
+    def _write_cache(self, key: str, result: subprocess.CompletedProcess[str]) -> None:
+        self._load_cache()
+        self._cache[key] = {
+            "returncode": int(result.returncode),
+            "stdout": result.stdout,
+            "stderr": result.stderr,
+        }
+        self._save_cache()
 
     def _build(self, tactics: list[str]) -> subprocess.CompletedProcess:
+        key = self._cache_key(tactics)
+        cached = self._result_from_cache(key)
+        if cached is not None:
+            return cached
         modified = _replace_theorem_body(self._original, self.theorem_name, tactics)
         self._full_path.write_text(modified)
         try:
             _env = os.environ.copy()
             _elan = str(Path.home() / ".elan" / "bin")
             _env["PATH"] = _elan + ":" + _env.get("PATH", "")
-            return subprocess.run(
+            result = subprocess.run(
                 ["lake", "build", self._target],
                 cwd=self.project_root,
                 capture_output=True,
@@ -287,12 +377,15 @@ class REPLDojo:
                 timeout=self.timeout,
                 env=_env,
             )
+            self._write_cache(key, result)
+            return result
         finally:
             self._full_path.write_text(self._original)
 
     def __enter__(self) -> tuple["REPLDojo", TacticState]:
         self._original = self._full_path.read_text()
         self._tactics = []
+        self._traces = []
         self._decl_line = _find_decl_line(self._original, self.theorem_name)
         pp = _synthetic_initial_state(self._original, self.theorem_name)
         return self, TacticState(pp=pp, id=0)
@@ -300,9 +393,11 @@ class REPLDojo:
     def run_tac(
         self, state: TacticState, tactic: str
     ) -> Union[TacticState, ProofFinished, LeanError, ProofGivenUp]:
+        t0 = time.monotonic()
         tactics = self._tactics[: state.id] + [tactic]
         result = self._build(tactics)
         output = result.stdout + result.stderr
+        elapsed_ms = int((time.monotonic() - t0) * 1000)
 
         if result.returncode == 0:
             # Proof finished if no sorry warning at the declaration line
@@ -310,18 +405,166 @@ class REPLDojo:
                 rf":{self._decl_line}:\d+:.*declaration uses.*sorry", output
             )
             if decl_sorry is None:
+                self._traces.append(
+                    StepTrace(
+                        step_idx=state.id,
+                        tactic=tactic,
+                        result_kind="proof_finished",
+                        elapsed_ms=elapsed_ms,
+                        before_pp=state.pp,
+                    )
+                )
                 return ProofFinished(tactic_state_id=state.id)
             # Tactic ran but theorem still uses sorry (e.g. tactic called sorry)
+            self._traces.append(
+                StepTrace(
+                    step_idx=state.id,
+                    tactic=tactic,
+                    result_kind="lean_error",
+                    elapsed_ms=elapsed_ms,
+                    before_pp=state.pp,
+                    error="Tactic completed but theorem still uses sorry",
+                )
+            )
             return LeanError(error="Tactic completed but theorem still uses sorry")
 
         goals = _extract_unsolved_goals(output)
         if goals is not None:
             self._tactics = tactics
+            self._traces.append(
+                StepTrace(
+                    step_idx=state.id,
+                    tactic=tactic,
+                    result_kind="state_advanced",
+                    elapsed_ms=elapsed_ms,
+                    before_pp=state.pp,
+                    after_pp=goals,
+                )
+            )
             return TacticState(pp=goals, id=state.id + 1)
 
         err = _extract_lean_error(output) or output[:500]
+        self._traces.append(
+            StepTrace(
+                step_idx=state.id,
+                tactic=tactic,
+                result_kind="lean_error",
+                elapsed_ms=elapsed_ms,
+                before_pp=state.pp,
+                error=err,
+            )
+        )
         return LeanError(error=err)
+
+    def get_step_traces(self) -> list[StepTrace]:
+        """Structured trace of executed tactics for replay/debug pipelines."""
+        return list(self._traces)
 
     def __exit__(self, *args: object) -> None:
         if self._original:
             self._full_path.write_text(self._original)
+
+
+def replay_step_traces(initial_state: str, traces: list[StepTrace]) -> dict[str, Any]:
+    """Deterministically replay stored step traces for debugging."""
+    state = initial_state
+    transcript: list[dict[str, Any]] = []
+    for tr in traces:
+        before = tr.before_pp or state
+        after = tr.after_pp or before
+        transcript.append(
+            {
+                "step_idx": tr.step_idx,
+                "tactic": tr.tactic,
+                "result_kind": tr.result_kind,
+                "before_pp": before,
+                "after_pp": after,
+                "error": tr.error,
+            }
+        )
+        state = after
+    return {"final_state_pp": state, "steps": transcript}
+
+
+def save_tree_checkpoint(path: Path, checkpoint: SearchTreeCheckpoint) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "tree_id": checkpoint.tree_id,
+        "theorem_name": checkpoint.theorem_name,
+        "created_at_unix": checkpoint.created_at_unix,
+        "frontier": checkpoint.frontier,
+        "explored": checkpoint.explored,
+    }
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def load_tree_checkpoint(path: Path) -> SearchTreeCheckpoint | None:
+    if not path.exists():
+        return None
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    if not isinstance(raw, dict):
+        return None
+    return SearchTreeCheckpoint(
+        tree_id=str(raw.get("tree_id", "")),
+        theorem_name=str(raw.get("theorem_name", "")),
+        created_at_unix=int(raw.get("created_at_unix", 0)),
+        frontier=list(raw.get("frontier", [])),
+        explored=list(raw.get("explored", [])),
+    )
+
+
+def _run_batch_request(req: BatchExpansionRequest) -> dict[str, Any]:
+    project_root = Path(req.project_root)
+    file_path = Path(req.file_path)
+    with REPLDojo(
+        project_root=project_root,
+        file_path=file_path,
+        theorem_name=req.theorem_name,
+        timeout=int(req.timeout),
+    ) as (dojo, state):
+        cur: Union[TacticState, ProofFinished, LeanError, ProofGivenUp] = state
+        for tac in req.tactics:
+            if not isinstance(cur, TacticState):
+                break
+            cur = dojo.run_tac(cur, tac)
+        kind = type(cur).__name__
+        payload: dict[str, Any] = {"result_kind": kind, "traces": [t.__dict__ for t in dojo.get_step_traces()]}
+        if isinstance(cur, TacticState):
+            payload["state_pp"] = cur.pp
+            payload["state_id"] = cur.id
+        elif isinstance(cur, LeanError):
+            payload["error"] = cur.error
+        return payload
+
+
+class REPLDojoWorkerPool:
+    """Process-isolated worker pool for batched tactic expansions."""
+
+    def __init__(self, max_workers: int = 2) -> None:
+        self.max_workers = max(1, int(max_workers))
+
+    def run_batch(self, requests: list[BatchExpansionRequest]) -> list[dict[str, Any]]:
+        if not requests:
+            return []
+        out: list[dict[str, Any]] = [dict() for _ in requests]
+        with ProcessPoolExecutor(max_workers=self.max_workers) as ex:
+            fut_map = {ex.submit(_run_batch_request, req): i for i, req in enumerate(requests)}
+            for fut in as_completed(fut_map):
+                idx = fut_map[fut]
+                try:
+                    out[idx] = fut.result(timeout=max(1, requests[idx].timeout + 5))
+                except Exception as exc:
+                    out[idx] = {"result_kind": "LeanError", "error": str(exc), "traces": []}
+        return out
+
+
+def expand_tactics_batch(
+    requests: list[BatchExpansionRequest],
+    *,
+    max_workers: int = 2,
+) -> list[dict[str, Any]]:
+    pool = REPLDojoWorkerPool(max_workers=max_workers)
+    return pool.run_batch(requests)

@@ -27,6 +27,8 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Compile all scripts
         run: python -m py_compile scripts/*.py
+      - name: Release readiness baseline checks
+        run: python scripts/release_readiness.py
       - name: Run unit tests (no API, no Lean required)
         run: python -m pytest tests/ -v --tb=short
 

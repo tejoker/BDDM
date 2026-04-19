@@ -4,11 +4,11 @@
 
 **Pinned result**: [minif2f_test_244_results.json](minif2f_test_244_results.json)
 
-Run date: 2026-04-02 | Model: `labs-leanstral-2603` | Lean: 4.29.0
+Run date: 2026-04-02 | Model: `labs-leanstral-2603` | Lean toolchain: `v4.30.0-rc1`
 
 ### Reproduce in one command
 
-Requirements: a server with Lean 4.29.0 + Mathlib cache built, Python 3.11,
+Requirements: a server with the repo's pinned Lean toolchain (`lean-toolchain`) + Mathlib cache built, Python 3.11,
 `MISTRAL_API_KEY` in `.env`.
 
 ```bash
@@ -63,3 +63,11 @@ miniF2F benchmark — split=test k=1 n=244
 - `lake build` is not perfectly deterministic across Lean patch versions
 - Mistral API responses have non-zero temperature variance at `temperature=0`
 - Expected range: ±2% (±5 problems) across reruns
+
+### Artifact sanity check
+
+Run the baseline readiness checker (includes pinned benchmark artifact schema checks):
+
+```bash
+python3 scripts/release_readiness.py
+```

@@ -22,13 +22,17 @@ parsed from ledger ``provenance.cited_refs``.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sqlite3
 import time
+from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+
+from canonicalization import build_manual_conflict_queue, canonical_record
 
 _NEW_ARXIV_ID = re.compile(r"(?:arxiv:)?(\d{4}\.\d{4,5})(?:v\d+)?\b", re.IGNORECASE)
 _OLD_ARXIV_ID = re.compile(r"\b([A-Za-z.-]+/\d{7})(?:v\d+)?\b")
@@ -70,6 +74,15 @@ class KGSummary:
     diagnostics: int = 0
     promotion_ready: int = 0
     citation_edges: int = 0
+    relation_edges: int = 0
+    taxonomy_edges: int = 0
+    edge_evidence_links: int = 0
+    entity_nodes: int = 0
+    math_nodes: int = 0
+    evidence_nodes: int = 0
+    canonical_groups: int = 0
+    canonical_duplicates: int = 0
+    canonical_near_duplicates: int = 0
     files_written: list[str] = field(default_factory=list)
 
 
@@ -104,6 +117,11 @@ def _jsonl_write(path: Path, rows: list[dict[str, Any]]) -> None:
     with path.open("w", encoding="utf-8") as fh:
         for row in rows:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
+def canonical_relation_id(*, src: str, dst: str, edge_type: str) -> str:
+    raw = f"{edge_type}|{src}|{dst}"
+    return "crl_" + hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
 
 
 def _sqlite_write(db_path: Path, nodes: list[dict[str, Any]], layer: str) -> None:
@@ -143,15 +161,51 @@ def _sqlite_write(db_path: Path, nodes: list[dict[str, Any]], layer: str) -> Non
             src_theorem TEXT NOT NULL,
             dst_theorem TEXT NOT NULL,
             edge_type TEXT NOT NULL,
+            canonical_relation_id TEXT NOT NULL DEFAULT '',
+            src_kind TEXT NOT NULL DEFAULT 'theorem',
+            dst_kind TEXT NOT NULL DEFAULT 'theorem',
+            confidence REAL NOT NULL DEFAULT 0.0,
+            evidence_ids_json TEXT NOT NULL DEFAULT '[]',
+            provenance_json TEXT NOT NULL DEFAULT '{}',
             PRIMARY KEY (src_theorem, dst_theorem, edge_type)
         )
         """
     )
     con.execute(
+        """
+        CREATE TABLE IF NOT EXISTS kg_entities (
+            entity_id TEXT PRIMARY KEY,
+            entity_type TEXT NOT NULL,
+            label TEXT NOT NULL,
+            payload_json TEXT NOT NULL
+        )
+        """
+    )
+    # Backward-compatible migration for existing dbs created before edge metadata.
+    cols = {
+        str(r[1])
+        for r in con.execute("PRAGMA table_info(kg_edges)").fetchall()
+    }
+    if "src_kind" not in cols:
+        con.execute("ALTER TABLE kg_edges ADD COLUMN src_kind TEXT NOT NULL DEFAULT 'theorem'")
+    if "canonical_relation_id" not in cols:
+        con.execute("ALTER TABLE kg_edges ADD COLUMN canonical_relation_id TEXT NOT NULL DEFAULT ''")
+    if "dst_kind" not in cols:
+        con.execute("ALTER TABLE kg_edges ADD COLUMN dst_kind TEXT NOT NULL DEFAULT 'theorem'")
+    if "confidence" not in cols:
+        con.execute("ALTER TABLE kg_edges ADD COLUMN confidence REAL NOT NULL DEFAULT 0.0")
+    if "evidence_ids_json" not in cols:
+        con.execute("ALTER TABLE kg_edges ADD COLUMN evidence_ids_json TEXT NOT NULL DEFAULT '[]'")
+    if "provenance_json" not in cols:
+        con.execute("ALTER TABLE kg_edges ADD COLUMN provenance_json TEXT NOT NULL DEFAULT '{}'")
+    con.execute(
         "CREATE INDEX IF NOT EXISTS idx_kg_nodes_layer ON kg_nodes(layer)"
     )
     con.execute(
         "CREATE INDEX IF NOT EXISTS idx_kg_nodes_status ON kg_nodes(status)"
+    )
+    con.execute(
+        "CREATE INDEX IF NOT EXISTS idx_kg_edges_crid ON kg_edges(canonical_relation_id)"
     )
     with con:
         for node in nodes:
@@ -199,10 +253,16 @@ def _sqlite_write(db_path: Path, nodes: list[dict[str, Any]], layer: str) -> Non
                 if dep:
                     con.execute(
                         """
-                        INSERT OR IGNORE INTO kg_edges(src_theorem, dst_theorem, edge_type)
-                        VALUES (?, ?, 'transitive_dep')
+                        INSERT OR IGNORE INTO kg_edges(
+                            src_theorem, dst_theorem, edge_type, canonical_relation_id
+                        )
+                        VALUES (?, ?, 'transitive_dep', ?)
                         """,
-                        (theorem_name, dep),
+                        (
+                            theorem_name,
+                            dep,
+                            canonical_relation_id(src=theorem_name, dst=dep, edge_type="transitive_dep"),
+                        ),
                     )
     con.close()
 
@@ -228,14 +288,80 @@ def _sqlite_merge_citation_edges(db_path: Path, nodes: list[dict[str, Any]]) -> 
                 tid = str(target).strip()
                 if not tid or tid == paper_id:
                     continue
+                evidence_ids = []
+                eid = str(node.get("evidence_id", "")).strip()
+                if eid:
+                    evidence_ids.append(eid)
                 cur = con.execute(
                     """
-                    INSERT OR IGNORE INTO kg_edges(src_theorem, dst_theorem, edge_type)
-                    VALUES (?, ?, 'cites_arxiv')
+                    INSERT OR REPLACE INTO kg_edges(
+                        src_theorem, dst_theorem, edge_type,
+                        canonical_relation_id, src_kind, dst_kind, confidence, evidence_ids_json, provenance_json
+                    )
+                    VALUES (?, ?, 'cites_arxiv', ?, 'theorem', 'paper', ?, ?, ?)
                     """,
-                    (src, tid,),
+                    (
+                        src,
+                        tid,
+                        canonical_relation_id(src=src, dst=tid, edge_type="cites_arxiv"),
+                        0.8,
+                        json.dumps(evidence_ids, ensure_ascii=False),
+                        json.dumps({"source": "provenance.cited_refs"}, ensure_ascii=False),
+                    ),
                 )
                 inserted += int(cur.rowcount or 0)
+    con.close()
+    return inserted
+
+
+def _sqlite_merge_relation_edges(
+    db_path: Path,
+    relation_edges: list[dict[str, Any]],
+) -> int:
+    """Replace heuristic relation rows in kg_edges."""
+    if not db_path.exists():
+        return 0
+    con = sqlite3.connect(str(db_path), timeout=30.0)
+    inserted = 0
+    relation_types = (
+        "equivalent_to",
+        "generalizes",
+        "specializes",
+        "implies",
+        "uses_definition",
+        "proved_by",
+        "bridge_by",
+    )
+    with con:
+        placeholders = ", ".join("?" for _ in relation_types)
+        con.execute(f"DELETE FROM kg_edges WHERE edge_type IN ({placeholders})", relation_types)
+        for edge in relation_edges:
+            src = str(edge.get("src_theorem", "")).strip()
+            dst = str(edge.get("dst_theorem", "")).strip()
+            edge_type = str(edge.get("edge_type", "")).strip()
+            if not src or not dst or not edge_type:
+                continue
+            cur = con.execute(
+                """
+                INSERT OR REPLACE INTO kg_edges(
+                    src_theorem, dst_theorem, edge_type,
+                    canonical_relation_id, src_kind, dst_kind, confidence, evidence_ids_json, provenance_json
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    src,
+                    dst,
+                    edge_type,
+                    str(edge.get("canonical_relation_id", canonical_relation_id(src=src, dst=dst, edge_type=edge_type))),
+                    str(edge.get("src_kind", "theorem")),
+                    str(edge.get("dst_kind", "theorem")),
+                    float(edge.get("confidence", 0.0)),
+                    json.dumps(edge.get("evidence_ids", []), ensure_ascii=False),
+                    json.dumps(edge.get("provenance", {}), ensure_ascii=False),
+                ),
+            )
+            inserted += int(cur.rowcount or 0)
     con.close()
     return inserted
 
@@ -288,6 +414,538 @@ def query_kg(
         except Exception:
             pass
     return results
+
+
+def _math_view_node(node: dict[str, Any]) -> dict[str, Any]:
+    """Public clean math view (no raw proof/evidence payload)."""
+    return {
+        "paper_id": node.get("paper_id", ""),
+        "theorem_name": node.get("theorem_name", ""),
+        "canonical_theorem_id": node.get("canonical_theorem_id", ""),
+        "claim_shape": node.get("claim_shape", "unknown"),
+        "status": node.get("status", "UNRESOLVED"),
+        "layer": node.get("layer", ""),
+        "trust_class": node.get("trust_class", "TRUST_PLACEHOLDER"),
+        "promotion_gate_passed": bool(node.get("promotion_gate_passed", False)),
+        "proof_mode": node.get("proof_mode", ""),
+        "time_s": node.get("time_s", 0.0),
+    }
+
+
+def query_math_kg(
+    db_path: Path,
+    *,
+    layer: str | None = None,
+    paper_id: str | None = None,
+    status: str | None = None,
+    limit: int = 500,
+) -> list[dict[str, Any]]:
+    """Query KG and return clean public math nodes only."""
+    nodes = query_kg(
+        db_path,
+        layer=layer,
+        paper_id=paper_id,
+        status=status,
+        limit=limit,
+    )
+    return [_math_view_node(n) for n in nodes]
+
+
+def query_kg_edges(
+    db_path: Path,
+    *,
+    edge_type: str | None = None,
+    limit: int = 500,
+) -> list[dict[str, Any]]:
+    """Query KG edges for clean graph traversal endpoints."""
+    if not db_path.exists():
+        return []
+    con = sqlite3.connect(str(db_path), timeout=10.0)
+    con.row_factory = sqlite3.Row
+    clauses: list[str] = []
+    params: list[Any] = []
+    if edge_type:
+        clauses.append("edge_type = ?")
+        params.append(edge_type)
+    where = ("WHERE " + " AND ".join(clauses)) if clauses else ""
+    cols = {
+        str(r[1])
+        for r in con.execute("PRAGMA table_info(kg_edges)").fetchall()
+    }
+    has_meta = "src_kind" in cols and "evidence_ids_json" in cols
+    if has_meta:
+        rows = con.execute(
+            (
+                "SELECT src_theorem, dst_theorem, edge_type, canonical_relation_id, src_kind, dst_kind, "
+                "confidence, evidence_ids_json, provenance_json "
+                f"FROM kg_edges {where} LIMIT ?"
+            ),
+            params + [limit],
+        ).fetchall()
+    else:
+        rows = con.execute(
+            f"SELECT src_theorem, dst_theorem, edge_type FROM kg_edges {where} LIMIT ?",
+            params + [limit],
+        ).fetchall()
+    con.close()
+    out: list[dict[str, Any]] = []
+    for r in rows:
+        evidence_ids: list[str] = []
+        provenance: dict[str, Any] = {}
+        if has_meta:
+            try:
+                evidence_ids = json.loads(str(r["evidence_ids_json"]))
+            except Exception:
+                evidence_ids = []
+            try:
+                provenance = json.loads(str(r["provenance_json"]))
+            except Exception:
+                provenance = {}
+        out.append(
+            {
+                "src_theorem": str(r["src_theorem"]),
+                "dst_theorem": str(r["dst_theorem"]),
+                "edge_type": str(r["edge_type"]),
+                "canonical_relation_id": (
+                    str(r["canonical_relation_id"])
+                    if has_meta and "canonical_relation_id" in r.keys() and str(r["canonical_relation_id"]).strip()
+                    else canonical_relation_id(
+                        src=str(r["src_theorem"]),
+                        dst=str(r["dst_theorem"]),
+                        edge_type=str(r["edge_type"]),
+                    )
+                ),
+                "src_kind": str(r["src_kind"]) if has_meta else "theorem",
+                "dst_kind": str(r["dst_kind"]) if has_meta else "theorem",
+                "confidence": float(r["confidence"]) if has_meta else 0.0,
+                "evidence_ids": evidence_ids,
+                "provenance": provenance,
+            }
+        )
+    return out
+
+
+_CANON_TOKEN_RE = re.compile(r"[A-Za-z0-9_']+")
+
+
+def _canon_tokens(stmt: str) -> set[str]:
+    toks = {t.lower() for t in _CANON_TOKEN_RE.findall(stmt or "") if len(t) >= 3}
+    stop = {"theorem", "lemma", "prop", "type", "forall", "exists", "true", "false"}
+    return {t for t in toks if t not in stop}
+
+
+def _node_ref(node: dict[str, Any]) -> str:
+    return f"{str(node.get('paper_id', '')).strip()}|{str(node.get('theorem_name', '')).strip()}"
+
+
+def _edge_record(
+    *,
+    src: str,
+    dst: str,
+    edge_type: str,
+    evidence_ids: list[str],
+    confidence: float,
+    src_kind: str = "theorem",
+    dst_kind: str = "theorem",
+    provenance: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    return {
+        "src_theorem": src,
+        "dst_theorem": dst,
+        "edge_type": edge_type,
+        "canonical_relation_id": canonical_relation_id(src=src, dst=dst, edge_type=edge_type),
+        "src_kind": src_kind,
+        "dst_kind": dst_kind,
+        "confidence": max(0.0, min(1.0, float(confidence))),
+        "evidence_ids": sorted({e for e in evidence_ids if e}),
+        "provenance": provenance or {},
+    }
+
+
+def _build_canonical_merge_report(nodes: list[dict[str, Any]]) -> dict[str, Any]:
+    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for node in nodes:
+        cid = str(node.get("canonical_theorem_id", "")).strip()
+        if cid:
+            groups[cid].append(node)
+
+    report_groups: list[dict[str, Any]] = []
+    duplicate_total = 0
+    for cid, members in groups.items():
+        if len(members) <= 1:
+            continue
+        duplicate_total += len(members) - 1
+        members_sorted = sorted(
+            members,
+            key=lambda m: (
+                str(m.get("paper_id", "")),
+                str(m.get("theorem_name", "")),
+            ),
+        )
+        representative = members_sorted[0]
+        report_groups.append(
+            {
+                "canonical_theorem_id": cid,
+                "representative": {
+                    "paper_id": representative.get("paper_id", ""),
+                    "theorem_name": representative.get("theorem_name", ""),
+                },
+                "members": [
+                    {
+                        "paper_id": m.get("paper_id", ""),
+                        "theorem_name": m.get("theorem_name", ""),
+                    }
+                    for m in members_sorted
+                ],
+            }
+        )
+
+    report_groups.sort(key=lambda g: (-len(g["members"]), g["canonical_theorem_id"]))
+    return {
+        "canonical_groups": len(report_groups),
+        "canonical_duplicates": duplicate_total,
+        "groups": report_groups,
+    }
+
+
+def _extract_relation_edges(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Heuristic relation scaffold over canonical statements.
+
+    Emits (src, dst, edge_type) tuples for:
+    - equivalent_to (same canonical theorem id)
+    - generalizes/specializes (token-subset heuristic in same claim shape)
+    - implies (high-overlap directional relation in same claim shape)
+    """
+    edge_map: dict[tuple[str, str, str], dict[str, Any]] = {}
+    keyed: list[tuple[str, str, str, set[str], str, list[str]]] = []
+    for n in nodes:
+        paper_id = str(n.get("paper_id", "")).strip()
+        theorem_name = str(n.get("theorem_name", "")).strip()
+        if not paper_id or not theorem_name:
+            continue
+        node_id = f"{paper_id}|{theorem_name}"
+        cid = str(n.get("canonical_theorem_id", "")).strip()
+        toks = _canon_tokens(str(n.get("canonical_statement", "")))
+        shape = str(n.get("claim_shape", "unknown"))
+        eids = [str(n.get("evidence_id", "")).strip()] if n.get("evidence_id") else []
+        keyed.append((node_id, cid, shape, toks, theorem_name, eids))
+
+    def _merge_edge(edge: dict[str, Any]) -> None:
+        k = (edge["src_theorem"], edge["dst_theorem"], edge["edge_type"])
+        if k not in edge_map:
+            edge_map[k] = edge
+            return
+        cur = edge_map[k]
+        cur["confidence"] = max(float(cur.get("confidence", 0.0)), float(edge.get("confidence", 0.0)))
+        cur["evidence_ids"] = sorted(
+            set(cur.get("evidence_ids", [])).union(edge.get("evidence_ids", []))
+        )
+
+    # 1) Equivalence by canonical id.
+    by_cid: dict[str, list[tuple[str, list[str]]]] = defaultdict(list)
+    for node_id, cid, _shape, _toks, _name, eids in keyed:
+        if cid:
+            by_cid[cid].append((node_id, eids))
+    for members in by_cid.values():
+        if len(members) < 2:
+            continue
+        for i in range(len(members)):
+            for j in range(i + 1, len(members)):
+                (a, ae), (b, be) = members[i], members[j]
+                _merge_edge(
+                    _edge_record(
+                        src=a,
+                        dst=b,
+                        edge_type="equivalent_to",
+                        evidence_ids=ae + be,
+                        confidence=0.99,
+                    )
+                )
+                _merge_edge(
+                    _edge_record(
+                        src=b,
+                        dst=a,
+                        edge_type="equivalent_to",
+                        evidence_ids=ae + be,
+                        confidence=0.99,
+                    )
+                )
+
+    # 2) Generalization/specialization and implication heuristics.
+    n = len(keyed)
+    for i in range(n):
+        src_id, _src_cid, src_shape, src_toks, _src_name, src_eids = keyed[i]
+        if not src_toks:
+            continue
+        for j in range(i + 1, n):
+            dst_id, _dst_cid, dst_shape, dst_toks, _dst_name, dst_eids = keyed[j]
+            if src_shape != dst_shape or not dst_toks:
+                continue
+            inter = len(src_toks & dst_toks)
+            if inter == 0:
+                continue
+            src_cover = inter / max(1, len(src_toks))
+            dst_cover = inter / max(1, len(dst_toks))
+
+            # Near-containment => one statement likely generalizes the other.
+            if src_cover >= 0.95 and len(src_toks) < len(dst_toks):
+                _merge_edge(
+                    _edge_record(
+                        src=src_id,
+                        dst=dst_id,
+                        edge_type="generalizes",
+                        evidence_ids=src_eids + dst_eids,
+                        confidence=0.86,
+                    )
+                )
+                _merge_edge(
+                    _edge_record(
+                        src=dst_id,
+                        dst=src_id,
+                        edge_type="specializes",
+                        evidence_ids=src_eids + dst_eids,
+                        confidence=0.86,
+                    )
+                )
+                _merge_edge(
+                    _edge_record(
+                        src=dst_id,
+                        dst=src_id,
+                        edge_type="implies",
+                        evidence_ids=src_eids + dst_eids,
+                        confidence=0.82,
+                    )
+                )
+            elif dst_cover >= 0.95 and len(dst_toks) < len(src_toks):
+                _merge_edge(
+                    _edge_record(
+                        src=dst_id,
+                        dst=src_id,
+                        edge_type="generalizes",
+                        evidence_ids=src_eids + dst_eids,
+                        confidence=0.86,
+                    )
+                )
+                _merge_edge(
+                    _edge_record(
+                        src=src_id,
+                        dst=dst_id,
+                        edge_type="specializes",
+                        evidence_ids=src_eids + dst_eids,
+                        confidence=0.86,
+                    )
+                )
+                _merge_edge(
+                    _edge_record(
+                        src=src_id,
+                        dst=dst_id,
+                        edge_type="implies",
+                        evidence_ids=src_eids + dst_eids,
+                        confidence=0.82,
+                    )
+                )
+            elif src_cover >= 0.90 and dst_cover >= 0.90:
+                # Strong overlap but not identical cid => soft implication both ways.
+                _merge_edge(
+                    _edge_record(
+                        src=src_id,
+                        dst=dst_id,
+                        edge_type="implies",
+                        evidence_ids=src_eids + dst_eids,
+                        confidence=0.74,
+                    )
+                )
+                _merge_edge(
+                    _edge_record(
+                        src=dst_id,
+                        dst=src_id,
+                        edge_type="implies",
+                        evidence_ids=src_eids + dst_eids,
+                        confidence=0.74,
+                    )
+                )
+
+    return [edge_map[k] for k in sorted(edge_map.keys())]
+
+
+_TYPE_TOKEN_RE = re.compile(r"\b[A-Z][A-Za-z0-9_']+\b")
+_DEF_TOKEN_RE = re.compile(r"\b(definition|define|defined as)\b", re.IGNORECASE)
+_CONCEPT_PHRASE_RE = re.compile(r"\b([a-z][a-z0-9_-]*(?:\s+[a-z][a-z0-9_-]*){0,3})\b")
+
+
+def _load_concept_map() -> dict[str, str]:
+    candidates = [
+        Path("output/tc_graph.json"),
+        Path("data/tc_graph.json"),
+    ]
+    for p in candidates:
+        if not p.exists():
+            continue
+        try:
+            raw = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if isinstance(raw, dict):
+            cmap = raw.get("concept_map", {})
+            if isinstance(cmap, dict):
+                out: dict[str, str] = {}
+                for k, v in cmap.items():
+                    ks = str(k).strip()
+                    vs = str(v).strip() if v is not None else ""
+                    if ks and vs:
+                        out[ks.lower()] = vs
+                if out:
+                    return out
+    return {}
+
+
+def _extract_entity_graph(nodes: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Extract entity taxonomy and typed edges from theorem evidence rows."""
+    entities: dict[str, dict[str, Any]] = {}
+    edges: list[dict[str, Any]] = []
+    theorem_keys = {_node_ref(n) for n in nodes if n.get("paper_id") and n.get("theorem_name")}
+    concept_map = _load_concept_map()
+
+    for node in nodes:
+        src = _node_ref(node)
+        if not src or src == "|":
+            continue
+        eids = [str(node.get("evidence_id", "")).strip()] if node.get("evidence_id") else []
+
+        # Entity extraction from assumptions and statement.
+        assumptions = node.get("assumptions", [])
+        if not isinstance(assumptions, list):
+            assumptions = []
+        stmt = str(node.get("canonical_statement", "")) + " " + str(node.get("lean_statement", ""))
+        lower_stmt = stmt.lower()
+        candidate_types = set(_TYPE_TOKEN_RE.findall(stmt))
+        for a in assumptions:
+            if isinstance(a, dict):
+                candidate_types.update(_TYPE_TOKEN_RE.findall(str(a.get("lean_expr", ""))))
+
+        for tok in sorted(candidate_types):
+            etype = "definition" if _DEF_TOKEN_RE.search(stmt) else "object_type"
+            eid = f"entity:{etype}:{tok}"
+            entities[eid] = {
+                "entity_id": eid,
+                "entity_type": etype,
+                "label": tok,
+                "payload": {"origin": "heuristic_token", "token": tok},
+            }
+            edges.append(
+                _edge_record(
+                    src=src,
+                    dst=eid,
+                    edge_type="uses_definition",
+                    src_kind="theorem",
+                    dst_kind="entity",
+                    evidence_ids=eids,
+                    confidence=0.55,
+                    provenance={"source": "assumptions_or_statement_tokens"},
+                )
+            )
+
+        # Concept extraction from concept_map aliases and noun phrases.
+        concept_hits: set[tuple[str, str]] = set()
+        for alias, target in concept_map.items():
+            if alias and alias in lower_stmt:
+                concept_hits.add((alias, target))
+        for ph in _CONCEPT_PHRASE_RE.findall(lower_stmt):
+            phr = " ".join(ph.split()).strip()
+            if len(phr) < 4:
+                continue
+            if phr in concept_map:
+                concept_hits.add((phr, concept_map[phr]))
+        for alias, target in sorted(concept_hits):
+            cid = f"entity:concept:{target}"
+            entities[cid] = {
+                "entity_id": cid,
+                "entity_type": "concept",
+                "label": target,
+                "payload": {"origin": "concept_map", "alias": alias},
+            }
+            edges.append(
+                _edge_record(
+                    src=src,
+                    dst=cid,
+                    edge_type="uses_definition",
+                    src_kind="theorem",
+                    dst_kind="entity",
+                    evidence_ids=eids,
+                    confidence=0.68,
+                    provenance={"source": "concept_map_match", "alias": alias},
+                )
+            )
+
+        # proved_by / bridge_by from assumption grounding_source where available.
+        for a in assumptions:
+            if not isinstance(a, dict):
+                continue
+            gsrc = str(a.get("grounding_source", "")).strip()
+            if not gsrc:
+                continue
+            if gsrc in theorem_keys:
+                edges.append(
+                    _edge_record(
+                        src=src,
+                        dst=gsrc,
+                        edge_type="proved_by",
+                        evidence_ids=eids,
+                        confidence=0.75,
+                        provenance={"source": "assumptions.grounding_source"},
+                    )
+                )
+            elif gsrc.lower().startswith("bridge:"):
+                dst = gsrc.split(":", 1)[1].strip()
+                if dst:
+                    edges.append(
+                        _edge_record(
+                            src=src,
+                            dst=dst,
+                            edge_type="bridge_by",
+                            evidence_ids=eids,
+                            confidence=0.65,
+                            provenance={"source": "assumptions.grounding_source"},
+                        )
+                    )
+
+        # Add theorem entity wrapper.
+        thm_entity = f"entity:theorem:{src}"
+        entities[thm_entity] = {
+            "entity_id": thm_entity,
+            "entity_type": "theorem",
+            "label": str(node.get("theorem_name", "")),
+            "payload": {
+                "paper_id": str(node.get("paper_id", "")),
+                "canonical_theorem_id": str(node.get("canonical_theorem_id", "")),
+            },
+        }
+
+    return sorted(entities.values(), key=lambda e: str(e.get("entity_id", ""))), edges
+
+
+def _sqlite_merge_entities(db_path: Path, entities: list[dict[str, Any]]) -> int:
+    if not db_path.exists():
+        return 0
+    con = sqlite3.connect(str(db_path), timeout=30.0)
+    inserted = 0
+    with con:
+        for e in entities:
+            cur = con.execute(
+                """
+                INSERT OR REPLACE INTO kg_entities(entity_id, entity_type, label, payload_json)
+                VALUES (?, ?, ?, ?)
+                """,
+                (
+                    str(e.get("entity_id", "")),
+                    str(e.get("entity_type", "")),
+                    str(e.get("label", "")),
+                    json.dumps(e.get("payload", {}), ensure_ascii=False),
+                ),
+            )
+            inserted += int(cur.rowcount or 0)
+    con.close()
+    return inserted
 
 
 def _paper_id_from_path(path: Path) -> str:
@@ -358,11 +1016,20 @@ def _propagate_ungroundedness(
 
 
 def _row_to_kg_node(row: dict[str, Any], paper_id: str, meta: dict[str, Any]) -> dict[str, Any]:
+    canon = canonical_record(
+        lean_statement=str(row.get("lean_statement", "")),
+        theorem_name=str(row.get("theorem_name", "")),
+        paper_id=paper_id,
+    )
     assumptions = row.get("assumptions", [])
     ungrounded_count = _count_ungrounded(assumptions if isinstance(assumptions, list) else [])
     return {
+        "evidence_id": f"ev:{paper_id}|{row.get('theorem_name', '')}",
         "paper_id": paper_id,
         "theorem_name": row.get("theorem_name", ""),
+        "canonical_theorem_id": canon["canonical_theorem_id"],
+        "canonical_statement": canon["canonical_statement"],
+        "claim_shape": canon["claim_shape"],
         "lean_file": row.get("lean_file", ""),
         "lean_statement": row.get("lean_statement", ""),
         "status": row.get("status", "UNRESOLVED"),
@@ -384,6 +1051,12 @@ def _row_to_kg_node(row: dict[str, Any], paper_id: str, meta: dict[str, Any]) ->
         "schema_version": meta.get("schema_version", "legacy"),
         "pipeline_commit": meta.get("pipeline_commit", "unknown"),
         "cited_arxiv_ids": _extract_cited_arxiv_ids(row),
+        # Evidence payload fields kept internal for debug/replay.
+        "provenance": row.get("provenance", {}),
+        "validation_gates": row.get("validation_gates", {}),
+        "gate_failures": row.get("gate_failures", []),
+        "error_message": row.get("error_message", ""),
+        "proof_text": row.get("proof_text", ""),
     }
 
 
@@ -463,12 +1136,35 @@ def build_kg(
     trusted_path = kg_root / "trusted" / "theorems.jsonl"
     conditional_path = kg_root / "conditional" / "theorems.jsonl"
     diagnostics_path = kg_root / "diagnostics" / "theorems.jsonl"
+    math_path = kg_root / "math" / "theorems.jsonl"
+    evidence_path = kg_root / "evidence" / "theorems.jsonl"
 
     _jsonl_write(trusted_path, trusted_nodes)
     _jsonl_write(conditional_path, conditional_nodes)
     _jsonl_write(diagnostics_path, diagnostic_nodes)
+    all_nodes = trusted_nodes + conditional_nodes + diagnostic_nodes
+    for n in all_nodes:
+        n["layer"] = _classification({"status": n.get("status", ""), "promotion_gate_passed": n.get("promotion_gate_passed", False), "adversarial_flags": n.get("adversarial_flags", [])})
+    math_nodes = [_math_view_node(n) for n in all_nodes]
+    _jsonl_write(math_path, math_nodes)
+    _jsonl_write(evidence_path, all_nodes)
+    summary.math_nodes = len(math_nodes)
+    summary.evidence_nodes = len(all_nodes)
+    merge_report = _build_canonical_merge_report(all_nodes)
+    summary.canonical_groups = int(merge_report.get("canonical_groups", 0))
+    summary.canonical_duplicates = int(merge_report.get("canonical_duplicates", 0))
+    conflict_queue = build_manual_conflict_queue(all_nodes)
+    summary.canonical_near_duplicates = int(conflict_queue.get("items_total", 0))
 
-    summary.files_written.extend([str(trusted_path), str(conditional_path), str(diagnostics_path)])
+    summary.files_written.extend(
+        [
+            str(trusted_path),
+            str(conditional_path),
+            str(diagnostics_path),
+            str(math_path),
+            str(evidence_path),
+        ]
+    )
 
     db_path = kg_root / "kg_index.db"
     _sqlite_write(db_path, trusted_nodes, "trusted")
@@ -476,13 +1172,33 @@ def build_kg(
     _sqlite_write(db_path, diagnostic_nodes, "diagnostics")
     summary.files_written.append(str(db_path))
 
-    all_nodes = trusted_nodes + conditional_nodes + diagnostic_nodes
     try:
         summary.citation_edges = _sqlite_merge_citation_edges(db_path, all_nodes)
     except Exception:
         summary.citation_edges = 0
     if summary.citation_edges:
         print(f"[info] wrote {summary.citation_edges} citation edge row(s) (cites_arxiv)")
+    relation_edges = _extract_relation_edges(all_nodes)
+    entities, taxonomy_edges = _extract_entity_graph(all_nodes)
+    combined_edges = relation_edges + taxonomy_edges
+    try:
+        summary.relation_edges = _sqlite_merge_relation_edges(db_path, combined_edges)
+    except Exception:
+        summary.relation_edges = 0
+    if summary.relation_edges:
+        print(f"[info] wrote {summary.relation_edges} relation edge row(s)")
+    summary.taxonomy_edges = len(taxonomy_edges)
+    summary.edge_evidence_links = sum(
+        len(e.get("evidence_ids", []))
+        for e in combined_edges
+    )
+    try:
+        summary.entity_nodes = _sqlite_merge_entities(db_path, entities)
+    except Exception:
+        summary.entity_nodes = 0
+    entity_path = kg_root / "math" / "entities.jsonl"
+    _jsonl_write(entity_path, entities)
+    summary.files_written.append(str(entity_path))
 
     manifest_dir = kg_root / "manifests"
     manifest_dir.mkdir(parents=True, exist_ok=True)
@@ -502,11 +1218,27 @@ def build_kg(
         "conditional": summary.conditional,
         "diagnostics": summary.diagnostics,
         "promotion_ready": summary.promotion_ready,
+        "math_nodes": summary.math_nodes,
+        "evidence_nodes": summary.evidence_nodes,
+        "canonical_groups": summary.canonical_groups,
+        "canonical_duplicates": summary.canonical_duplicates,
+        "canonical_near_duplicates": summary.canonical_near_duplicates,
+        "relation_edges": summary.relation_edges,
+        "taxonomy_edges": summary.taxonomy_edges,
+        "edge_evidence_links": summary.edge_evidence_links,
+        "entity_nodes": summary.entity_nodes,
+        "citation_edges": summary.citation_edges,
         "paper_manifests": sorted(per_paper_manifests.keys()),
     }
     all_manifest_path = manifest_dir / "promotion_manifest_all.json"
     all_manifest_path.write_text(json.dumps(all_manifest, indent=2, ensure_ascii=False), encoding="utf-8")
     summary.files_written.append(str(all_manifest_path))
+    merge_report_path = manifest_dir / "canonical_merge_report.json"
+    merge_report_path.write_text(json.dumps(merge_report, indent=2, ensure_ascii=False), encoding="utf-8")
+    summary.files_written.append(str(merge_report_path))
+    conflict_queue_path = manifest_dir / "canonical_conflict_queue.json"
+    conflict_queue_path.write_text(json.dumps(conflict_queue, indent=2, ensure_ascii=False), encoding="utf-8")
+    summary.files_written.append(str(conflict_queue_path))
 
     return summary
 
@@ -540,6 +1272,15 @@ def main() -> int:
         f"trusted={summary.trusted} conditional={summary.conditional} diagnostics={summary.diagnostics}"
     )
     print(f"[info] promotion_ready={summary.promotion_ready}")
+    print(
+        "[info] canonical="
+        f"groups={summary.canonical_groups} duplicates={summary.canonical_duplicates} near={summary.canonical_near_duplicates}"
+    )
+    print(
+        "[info] edges="
+        f"relations={summary.relation_edges} taxonomy={summary.taxonomy_edges} citations={summary.citation_edges} evidence_links={summary.edge_evidence_links}"
+    )
+    print(f"[info] entities={summary.entity_nodes}")
     for path in summary.files_written:
         print(f"[info] wrote {path}")
 

@@ -12,14 +12,19 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from lean_repl_dojo import (
+    BatchExpansionRequest,
     LeanError,
     ProofFinished,
     REPLDojo,
+    SearchTreeCheckpoint,
     TacticState,
     _extract_lean_error,
     _extract_unsolved_goals,
     _replace_theorem_body,
     _synthetic_initial_state,
+    load_tree_checkpoint,
+    replay_step_traces,
+    save_tree_checkpoint,
 )
 
 
@@ -266,3 +271,50 @@ def test_repldojo_sorry_result_is_lean_error(tmp_path):
         with dojo as (d, state):
             result = d.run_tac(state, "sorry")
     assert isinstance(result, LeanError)
+
+
+def test_repldojo_records_step_traces(tmp_path):
+    dojo = _make_dojo(tmp_path)
+    with patch("subprocess.run", return_value=_unsolved_result()):
+        with dojo as (d, state):
+            _ = d.run_tac(state, "intro")
+            traces = d.get_step_traces()
+    assert len(traces) == 1
+    assert traces[0].result_kind == "state_advanced"
+    assert traces[0].tactic == "intro"
+
+
+def test_replay_step_traces(tmp_path):
+    dojo = _make_dojo(tmp_path)
+    with patch("subprocess.run", return_value=_unsolved_result()):
+        with dojo as (d, state):
+            _ = d.run_tac(state, "intro")
+            traces = d.get_step_traces()
+            replay = replay_step_traces(state.pp, traces)
+    assert "final_state_pp" in replay
+    assert len(replay["steps"]) == 1
+
+
+def test_tree_checkpoint_roundtrip(tmp_path):
+    ck = SearchTreeCheckpoint(
+        tree_id="tree1",
+        theorem_name="my_thm",
+        created_at_unix=1,
+        frontier=[{"node": 1}],
+        explored=[{"node": 0}],
+    )
+    p = tmp_path / "ckpt.json"
+    save_tree_checkpoint(p, ck)
+    loaded = load_tree_checkpoint(p)
+    assert loaded is not None
+    assert loaded.tree_id == "tree1"
+
+
+def test_batch_request_dataclass():
+    req = BatchExpansionRequest(
+        project_root=".",
+        file_path="Desol/Test.lean",
+        theorem_name="my_thm",
+        tactics=["intro"],
+    )
+    assert req.timeout == 300

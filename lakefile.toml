@@ -5,12 +5,12 @@ defaultTargets = ["desol"]
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
-rev = "master"
+rev = "5923a7573b523783de41ba3f73e518fb8dd9ce01"
 
 [[require]]
 name = "repl"
 git = "https://github.com/leanprover-community/repl.git"
-rev = "master"
+rev = "c9cde4d461fcf1d56e121bbe7d0c96a7ad40e492"
 
 [[lean_lib]]
 name = "Desol"

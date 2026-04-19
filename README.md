@@ -10,7 +10,7 @@ Autonomous Lean 4 theorem prover with an arXiv ingestion pipeline and a growing 
 
 ## Infrastructure
 
-- **Lean 4** via Elan (`lean` + `lake`), v4.29.0-rc8
+- **Lean 4** via Elan (`lean` + `lake`), pinned by `lean-toolchain` (currently `v4.30.0-rc1`)
 - **Lean project** scaffold: `lakefile.toml`, `lean-toolchain`
 - **Python 3.11+** (tested on 3.11 and 3.12)
 - **Key packages**: `mistralai`, `sentence-transformers`, `python-dotenv`, `z3-solver` (optional), `fastapi uvicorn` (optional, for KG API), `numpy` (optional, for tactic policy training)
@@ -515,6 +515,9 @@ export MISTRAL_MODEL=labs-leanstral-2603
 export DESOL_ENABLE_STEP_ENTAILMENT=1    # Enable SMT step checking
 export DESOL_RETRIEVAL_INDEX=data/mathlib_embeddings
 export DESOL_KG_DB=output/kg/kg_index.db  # KG API database path
+export DESOL_API_KEY=change_me             # Optional: enables API auth (X-API-Key)
+export DESOL_RATE_LIMIT_PER_MIN=60         # Optional: per-client API rate limit
+export DESOL_VERIFY_MAX_INFLIGHT=2         # Optional: max concurrent /verify jobs
 export DESOL_BACKEND_PHASE1=1            # Enable backend selection logic
 export DESOL_PROOF_BACKEND=auto          # auto | leandojo | repldojo
 export DESOL_BACKEND_PARITY_LOG=1        # Log backend parity events
@@ -562,6 +565,15 @@ python scripts/benchmark_minif2f.py \
 
 Expected: `pass@1 = 28.7%` (±2%). Pinned result: [reproducibility/minif2f_test_244_results.json](reproducibility/minif2f_test_244_results.json).
 
+Baseline release-readiness checks:
+```bash
+python3 scripts/release_readiness.py
+```
+
+Operational and release docs:
+- [docs/PRODUCTION_READINESS.md](docs/PRODUCTION_READINESS.md)
+- [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md)
+
 ---
 
 ## Citation
@@ -586,4 +598,4 @@ Expected: `pass@1 = 28.7%` (±2%). Pinned result: [reproducibility/minif2f_test_
 
 ---
 
-**Last Updated**: April 12, 2026 | miniF2F: **28.7% pass@1** ponder-loop | **27.5% pass@1** MCTS-draft (244 problems)
+**Last Updated**: April 15, 2026 | miniF2F: **28.7% pass@1** ponder-loop | **27.5% pass@1** MCTS-draft (244 problems)

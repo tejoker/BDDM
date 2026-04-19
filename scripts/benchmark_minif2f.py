@@ -44,6 +44,7 @@ import json
 import logging
 import os
 import re
+import subprocess
 import sys
 import time
 import threading
@@ -127,6 +128,7 @@ class ProblemResult:
 
 @dataclass
 class BenchmarkResult:
+    schema_version: str
     split: str
     n_problems: int
     k: int
@@ -144,6 +146,14 @@ class BenchmarkResult:
     total_tokens_out: int = 0
     seconds_per_problem: float = 0.0
     api_calls_per_problem: float = 0.0
+    model: str = ""
+    retrieval_index: str = ""
+    retrieval_top_k: int = 0
+    lean_timeout_s: int = 0
+    mode: str = ""
+    git_commit: str = ""
+    lean_version: str = ""
+    python_version: str = ""
 
     def summary_lines(self) -> list[str]:
         lines = [
@@ -162,6 +172,34 @@ class BenchmarkResult:
             marker = " <-- we beat this!" if self.pass_at_1 > val else ""
             lines.append(f"  {val:.1%}  {name}{marker}")
         return lines
+
+
+def _run_cmd_first_line(cmd: list[str], cwd: Path | None = None, timeout: int = 8) -> str:
+    try:
+        proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout, check=False)
+    except Exception:
+        return "unknown"
+    out = ((proc.stdout or "") + "\n" + (proc.stderr or "")).strip()
+    if not out:
+        return "unknown"
+    return out.splitlines()[0].strip() or "unknown"
+
+
+def _validate_benchmark_artifact(bench: BenchmarkResult) -> None:
+    if not bench.model:
+        raise ValueError("benchmark artifact missing model")
+    if not bench.retrieval_index:
+        raise ValueError("benchmark artifact missing retrieval_index")
+    if bench.retrieval_top_k <= 0:
+        raise ValueError("benchmark artifact retrieval_top_k must be > 0")
+    if bench.lean_timeout_s <= 0:
+        raise ValueError("benchmark artifact lean_timeout_s must be > 0")
+    if not bench.git_commit:
+        raise ValueError("benchmark artifact missing git_commit")
+    if not bench.lean_version:
+        raise ValueError("benchmark artifact missing lean_version")
+    if not bench.python_version:
+        raise ValueError("benchmark artifact missing python_version")
 
 
 def _load_minif2f(split: str, n_problems: int | None = None) -> list[dict[str, Any]]:
@@ -291,8 +329,6 @@ def _attempt_proof(
     import threading
     from ponder_loop import run_ponder_loop
 
-    # Import REPLDojo from the local scripts directory.
-    sys.path.insert(0, str(project_root / "scripts"))
     from lean_repl_dojo import REPLDojo, ProofFinished, TacticState, LeanError
 
     t0 = time.time()
@@ -707,7 +743,11 @@ def run_benchmark(
     n = max(1, len(results))
 
     ts = datetime.now(tz=timezone.utc).strftime("%Y%m%dT%H%M%S")
+    git_commit = _run_cmd_first_line(["git", "rev-parse", "HEAD"], cwd=Path(project_root))
+    lean_version = _run_cmd_first_line(["lean", "--version"], cwd=Path(project_root))
+    python_version = sys.version.splitlines()[0].strip()
     bench = BenchmarkResult(
+        schema_version="1.0.0",
         split=split,
         n_problems=len(results),
         k=k,
@@ -733,7 +773,16 @@ def run_benchmark(
         total_tokens_out=total_tokens_out,
         seconds_per_problem=round(elapsed / n, 1),
         api_calls_per_problem=round(total_api_calls / n, 1),
+        model=model,
+        retrieval_index=retrieval_index,
+        retrieval_top_k=retrieval_top_k,
+        lean_timeout_s=lean_timeout,
+        mode=mode,
+        git_commit=git_commit,
+        lean_version=lean_version,
+        python_version=python_version,
     )
+    _validate_benchmark_artifact(bench)
 
     out_path = Path(out_dir)
     out_path.mkdir(parents=True, exist_ok=True)

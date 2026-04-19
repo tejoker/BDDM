@@ -1,0 +1,26 @@
+name: weekly-report
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Generate weekly report
+        run: |
+          python3 scripts/weekly_benchmark_report.py \
+            --ledger-root output/verification_ledgers \
+            --kg-db output/kg/kg_index.db \
+            --out-dir output/reports/weekly
+      - name: Upload report artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-report
+          path: output/reports/weekly

@@ -200,5 +200,15 @@
       ]
     }
   ],
-  "note": "Full per_problem results omitted for size. Run benchmark to reproduce."
+  "note": "Full per_problem results omitted for size. Run benchmark to reproduce.",
+  "model": "labs-leanstral-2603",
+  "retrieval_top_k": 12,
+  "lean_timeout_s": 120,
+  "retrieval_index": "data/mathlib_embeddings",
+  "solved": 70,
+  "schema_version": "1.0.0",
+  "mode": "ponder",
+  "git_commit": "118cc633fd97bceb56c3648c1b6622e4154bde6e",
+  "lean_version": "leanprover/lean4:v4.30.0-rc1",
+  "python_version": "3.12.3 (main, Mar  3 2026, 12:15:18) [GCC 13.3.0]"
 }
