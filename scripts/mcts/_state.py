@@ -20,7 +20,13 @@ if str(_SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR))
 
 # Cross-reference from classic MCTS module.
-from mcts._classic import _TACTIC_POLICY, LeanREPLServer, SearchStats  # noqa: E402
+from mcts._classic import (  # noqa: E402
+    _TACTIC_POLICY,
+    LeanREPLServer,
+    SearchStats,
+    best_path_from_root,
+    run_mcts,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -502,6 +508,43 @@ def run_state_mcts(
     """
     from lean_repl_server import LeanError as REPLLeanError
 
+    def _repl_backend_incompatible(err_text: str) -> bool:
+        s = (err_text or "").lower()
+        return (
+            "compiler.ignoreborrowannotation" in s
+            or "repl/lean/replay.lean" in s
+            or "some required targets logged failures" in s
+        )
+
+    def _fallback_to_draft(reason: str) -> tuple[bool, list[str], str]:
+        if file_path is None or not theorem_name.strip():
+            return False, [], f"{reason}; fallback unavailable (missing file/theorem metadata)"
+        local_theorem_name = theorem_name.split(".")[-1].strip() or theorem_name.strip()
+        safe_retrieval_path = retrieval_index_path if (retrieval_index_path and Path(retrieval_index_path).exists()) else ""
+        try:
+            root, stats = run_mcts(
+                project_root=project_root,
+                file_path=file_path,
+                theorem_name=local_theorem_name,
+                client=client,
+                model=model,
+                premise_context=premise_context,
+                retrieval_index_path=safe_retrieval_path,
+                retrieval_top_k=retrieval_top_k,
+                iterations=max(8, int(iterations)),
+                dojo_timeout=max(120, int(repl_timeout)),
+            )
+            path = best_path_from_root(root)
+            solved = stats.proofs_found > 0
+            return (
+                solved,
+                path,
+                f"state-mcts fallback to draft-mcts ({reason}); solved={solved} "
+                f"iterations={stats.iterations} proofs_found={stats.proofs_found}",
+            )
+        except Exception as exc:
+            return False, [], f"{reason}; draft fallback failed: {exc}"
+
     if LeanREPLServer is None:
         return False, [], "LeanREPLServer is unavailable"
 
@@ -551,121 +594,149 @@ def run_state_mcts(
             self_compounding_top_k,
         )
 
-    with LeanREPLServer(project_root=project_root, timeout=repl_timeout) as server:
-        ps = server.start_proof(theorem_statement)
-        if isinstance(ps, REPLLeanError):
-            return False, [], f"REPL failed to open proof: {ps.error}"
-
-        # Get initial goals without advancing the proof state.
-        # We use the sorry-stub proof state id directly; goals come from the sorry.
-        # "skip" is a no-op tactic that reveals goals — use it to get the initial state.
-        initial_goals_result = server.run_tac(ps, "skip")
-        if isinstance(initial_goals_result, REPLLeanError):
-            # skip not valid here; try getting goals via intro
-            initial_goals_result = server.run_tac(ps, "all_goals intro")
-        if isinstance(initial_goals_result, REPLLeanError):
-            # Last resort: use the proof state directly with placeholder goal string
-            initial_goals = ["<goal>"]
-            initial_ps_id = ps
-        else:
-            from lean_repl_server import TacticState as RSTS, ProofFinished as RSPF
-            if isinstance(initial_goals_result, RSPF):
-                # Trivially closed by skip — return success immediately
-                return True, ["skip"], "SOLVED trivially (skip closed proof)"
-            initial_goals = getattr(initial_goals_result, "goals", ["<goal>"])
-            initial_ps_id = getattr(initial_goals_result, "proof_state_id", ps)
-
-        root = StateMCTSNode(
-            proof_state_id=initial_ps_id,
-            goals=initial_goals,
-            tactic_from_parent=None,
-            depth=0,
-        )
-
-        stats = SearchStats(start_time=time.time())
-        solved_node: StateMCTSNode | None = None
-
-        for i in range(iterations):
-            stats.iterations += 1
-            path = _select_state_leaf(root, exploration_c)
-            leaf = path[-1]
-
-            if leaf.is_terminal:
-                value = 1.0 if leaf.terminal_reason == "proof-finished" else 0.0
-                _backpropagate_state(path, value)
-                if leaf.terminal_reason == "proof-finished" and solved_node is None:
-                    solved_node = leaf
-                    stats.proofs_found += 1
-                    logger.info("Proof found at iteration %d, depth %d", i + 1, leaf.depth)
-                    break
-                continue
-
-            new_children = _expand_state_node(
-                node=leaf,
-                server=server,
-                client=client,
-                model=model,
-                premise_context=premise_context,
-                retrieval_index_path=retrieval_index_path,
-                retrieval_top_k=retrieval_top_k,
-                max_depth=max_depth,
-                n_tactics=n_tactics,
-                temperature=temperature,
-                compounding_retriever=compounding_retriever,
-                compounding_top_k=self_compounding_top_k,
-            )
-            stats.expanded_nodes += 1
-
-            if not new_children:
-                leaf.is_terminal = True
-                leaf.terminal_reason = "no-valid-tactics"
-                _backpropagate_state(path, 0.0)
-                continue
-
-            # Check for immediate proof
-            for child, value in new_children:
-                if child.terminal_reason == "proof-finished":
-                    solved_node = child
-                    stats.proofs_found += 1
-                    logger.info("Proof found at iteration %d, depth %d", i + 1, child.depth)
-                    break
-            if solved_node:
-                _backpropagate_state(path + [solved_node], 1.0)
-                break
-
-            # Pick best child for rollout value, backpropagate
-            best_value = max(v for _, v in new_children)
-            _backpropagate_state(path, best_value)
-
-        stats.end_time = time.time()
-
-        if solved_node:
-            # Collect tactic sequence from root to solved_node
-            tactics: list[str] = []
-            node: StateMCTSNode | None = solved_node
-            while node is not None and node.tactic_from_parent is not None:
-                tactics.append(node.tactic_from_parent)
-                node = node.parent
-            tactics.reverse()
-            summary = (
-                f"SOLVED in {stats.elapsed_seconds:.1f}s | "
-                f"iterations={stats.iterations} expanded={stats.expanded_nodes} | "
-                f"proof_depth={len(tactics)}"
-            )
-            if kg_write_on_success:
+    try:
+        with LeanREPLServer(project_root=project_root, timeout=repl_timeout) as server:
+            anchor_candidates: list[str] = []
+            if file_path is not None:
+                anchor_candidates.append(str(file_path))
+            anchor_candidates.extend(["Desol/ReplAnchor.lean", "Desol/Basic.lean", "Desol/SDE/Basic.lean"])
+            bootstrap_err = None
+            for anchor in anchor_candidates:
                 try:
-                    _kg_record_proof(project_root, theorem_statement, tactics)
-                except Exception as _kg_exc:
-                    logger.warning("[kg] failed to record proof: %s", _kg_exc)
-            return True, tactics, summary
+                    env_or_err = server.ensure_mathlib_imported(anchor_file=anchor)
+                except Exception as exc:
+                    bootstrap_err = str(exc)
+                    continue
+                if isinstance(env_or_err, REPLLeanError):
+                    bootstrap_err = env_or_err.error
+                    continue
+                bootstrap_err = None
+                break
+            if bootstrap_err is not None:
+                if _repl_backend_incompatible(bootstrap_err):
+                    return _fallback_to_draft(f"REPL backend incompatible: {bootstrap_err}")
+                return False, [], f"REPL bootstrap failed: {bootstrap_err}"
 
-        # Not solved — return best partial path
-        best_path = _best_proof_path(root) or []
-        summary = (
-            f"FAILED | {stats.elapsed_seconds:.1f}s | "
-            f"iterations={stats.iterations} expanded={stats.expanded_nodes}"
-        )
-        return False, best_path, summary
+            ps = server.start_proof(theorem_statement)
+            if isinstance(ps, REPLLeanError):
+                if _repl_backend_incompatible(ps.error):
+                    return _fallback_to_draft(f"REPL backend incompatible: {ps.error}")
+                return False, [], f"REPL failed to open proof: {ps.error}"
+
+            # Get initial goals without advancing the proof state.
+            # We use the sorry-stub proof state id directly; goals come from the sorry.
+            # "skip" is a no-op tactic that reveals goals — use it to get the initial state.
+            initial_goals_result = server.run_tac(ps, "skip")
+            if isinstance(initial_goals_result, REPLLeanError):
+                # skip not valid here; try getting goals via intro
+                initial_goals_result = server.run_tac(ps, "all_goals intro")
+            if isinstance(initial_goals_result, REPLLeanError):
+                # Last resort: use the proof state directly with placeholder goal string
+                initial_goals = ["<goal>"]
+                initial_ps_id = ps
+            else:
+                from lean_repl_server import TacticState as RSTS, ProofFinished as RSPF
+                if isinstance(initial_goals_result, RSPF):
+                    # Trivially closed by skip — return success immediately
+                    return True, ["skip"], "SOLVED trivially (skip closed proof)"
+                initial_goals = getattr(initial_goals_result, "goals", ["<goal>"])
+                initial_ps_id = getattr(initial_goals_result, "proof_state_id", ps)
+
+            root = StateMCTSNode(
+                proof_state_id=initial_ps_id,
+                goals=initial_goals,
+                tactic_from_parent=None,
+                depth=0,
+            )
+
+            stats = SearchStats(start_time=time.time())
+            solved_node: StateMCTSNode | None = None
+
+            for i in range(iterations):
+                stats.iterations += 1
+                path = _select_state_leaf(root, exploration_c)
+                leaf = path[-1]
+
+                if leaf.is_terminal:
+                    value = 1.0 if leaf.terminal_reason == "proof-finished" else 0.0
+                    _backpropagate_state(path, value)
+                    if leaf.terminal_reason == "proof-finished" and solved_node is None:
+                        solved_node = leaf
+                        stats.proofs_found += 1
+                        logger.info("Proof found at iteration %d, depth %d", i + 1, leaf.depth)
+                        break
+                    continue
+
+                new_children = _expand_state_node(
+                    node=leaf,
+                    server=server,
+                    client=client,
+                    model=model,
+                    premise_context=premise_context,
+                    retrieval_index_path=retrieval_index_path,
+                    retrieval_top_k=retrieval_top_k,
+                    max_depth=max_depth,
+                    n_tactics=n_tactics,
+                    temperature=temperature,
+                    compounding_retriever=compounding_retriever,
+                    compounding_top_k=self_compounding_top_k,
+                )
+                stats.expanded_nodes += 1
+
+                if not new_children:
+                    leaf.is_terminal = True
+                    leaf.terminal_reason = "no-valid-tactics"
+                    _backpropagate_state(path, 0.0)
+                    continue
+
+                # Check for immediate proof
+                for child, value in new_children:
+                    if child.terminal_reason == "proof-finished":
+                        solved_node = child
+                        stats.proofs_found += 1
+                        logger.info("Proof found at iteration %d, depth %d", i + 1, child.depth)
+                        break
+                if solved_node:
+                    _backpropagate_state(path + [solved_node], 1.0)
+                    break
+
+                # Pick best child for rollout value, backpropagate
+                best_value = max(v for _, v in new_children)
+                _backpropagate_state(path, best_value)
+
+            stats.end_time = time.time()
+
+            if solved_node:
+                # Collect tactic sequence from root to solved_node
+                tactics: list[str] = []
+                node: StateMCTSNode | None = solved_node
+                while node is not None and node.tactic_from_parent is not None:
+                    tactics.append(node.tactic_from_parent)
+                    node = node.parent
+                tactics.reverse()
+                summary = (
+                    f"SOLVED in {stats.elapsed_seconds:.1f}s | "
+                    f"iterations={stats.iterations} expanded={stats.expanded_nodes} | "
+                    f"proof_depth={len(tactics)}"
+                )
+                if kg_write_on_success:
+                    try:
+                        _kg_record_proof(project_root, theorem_statement, tactics)
+                    except Exception as _kg_exc:
+                        logger.warning("[kg] failed to record proof: %s", _kg_exc)
+                return True, tactics, summary
+
+            # Not solved — return best partial path
+            best_path = _best_proof_path(root) or []
+            summary = (
+                f"FAILED | {stats.elapsed_seconds:.1f}s | "
+                f"iterations={stats.iterations} expanded={stats.expanded_nodes}"
+            )
+            return False, best_path, summary
+    except Exception as exc:
+        if _repl_backend_incompatible(str(exc)):
+            return _fallback_to_draft(f"REPL backend incompatible: {exc}")
+        raise
 
 
 def run_hierarchical_state_mcts(
@@ -802,5 +873,3 @@ def run_hierarchical_state_mcts(
         f"Final: {final_summary}"
     )
     return final_ok, final_tactics, summary
-
-

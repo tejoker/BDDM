@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Thin LaTeX preprocessing wrapper for arxiv theorem extraction.
+r"""Thin LaTeX preprocessing wrapper for arxiv theorem extraction.
 
 Goals:
 - expand \input / \subfile include trees
@@ -266,7 +266,8 @@ def expand_include_tree(
     source_root: Path,
     seen: set[Path] | None = None,
 ) -> str:
-    seen = seen or set()
+    if seen is None:
+        seen = set()
     current_path = current_path.resolve()
     if current_path in seen:
         return ""
@@ -288,6 +289,51 @@ def expand_include_tree(
         )
 
     return _INPUT_RE.sub(_replace, text)
+
+
+def _expand_latex_macros_textually(text: str, macro_defs: dict[str, MacroDefinition]) -> str:
+    out: list[str] = []
+    idx = 0
+    while idx < len(text):
+        if text[idx] != "\\":
+            out.append(text[idx])
+            idx += 1
+            continue
+
+        name_start = idx + 1
+        name_end = name_start
+        while name_end < len(text) and (text[name_end].isalpha() or text[name_end] == "@"):
+            name_end += 1
+        name = text[name_start:name_end]
+        spec = macro_defs.get(name)
+        if spec is None:
+            out.append(text[idx:name_end] if name else text[idx])
+            idx = name_end if name else idx + 1
+            continue
+
+        pos = name_end
+        args: list[str] = []
+        ok = True
+        for _ in range(spec.num_args):
+            while pos < len(text) and text[pos].isspace():
+                pos += 1
+            if pos >= len(text) or text[pos] != "{":
+                ok = False
+                break
+            try:
+                arg, pos = _read_braced(text, pos)
+            except ValueError:
+                ok = False
+                break
+            args.append(_expand_latex_macros_textually(arg, macro_defs))
+        if not ok:
+            out.append(text[idx:name_end])
+            idx = name_end
+            continue
+
+        out.append(_substitute_template(spec.replacement, args))
+        idx = pos
+    return "".join(out)
 
 
 def _render_macro(node: LatexMacroNode, macro_defs: dict[str, MacroDefinition], source_text: str) -> str:
@@ -353,7 +399,8 @@ def expand_latex_macros(text: str, macro_defs: dict[str, MacroDefinition]) -> st
         return text
     walker = LatexWalker(text)
     nodes, _pos, _len = walker.get_latex_nodes()
-    return _render_nodes(nodes, text, macro_defs)
+    rendered = _render_nodes(nodes, text, macro_defs)
+    return _expand_latex_macros_textually(rendered, macro_defs)
 
 
 def collect_root_tex_paths(tex_paths: list[Path], main_tex: Path | None = None) -> list[Path]:

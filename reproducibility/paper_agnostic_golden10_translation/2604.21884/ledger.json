@@ -1,0 +1,2438 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-04-26T06:36:27Z",
+  "pipeline_commit": "6367d39769beece82dadbcdc67edaef3ad23b896",
+  "toolchain_versions": {
+    "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
+    "python": "unknown",
+    "mistral_model": "labs-leanstral-2603"
+  },
+  "paper_id": "2604.21884",
+  "source_label": "2604.21884",
+  "prove_mode": "auto",
+  "model": "labs-leanstral-2603",
+  "entry_count": 22,
+  "entries": [
+    {
+      "theorem_name": "thm_baseline_lift",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem thm_baseline_lift (p_c1 : Prop) (h_c1 : p_c1) : p_c1",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "p_c1",
+          "lean_expr": "(p_c1 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_c1",
+          "lean_expr": "(h_c1 : p_c1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "thm:baseline-lift",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "thm_baseline_lift",
+        "definitions": [
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta).",
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if(t)=\\int_0^t \\frac{\\sin((t-s)\\omega_i(D))}{\\omega_i(D)}f(s)\\,ds."
+        ],
+        "nearby_claims": [
+          "theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$.",
+          "theorem unconditional.",
+          "theorem package} \\subsection{Equation and cutoff system} Define the Duhamel operators \\begin{equation}\\label{eq:duhamel} I_if(t)=\\int_0^t \\frac{\\sin((t-s)\\omega_i(D))}{\\omega_i(D)}f(s)\\,ds."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$. Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). \\end{equation*} Then the cutoff approximations converge almost surely i - [Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$. The cubic resonant symbols \\begin{equation*} \\Gamma_1=V_2\\circ\\Psi_1, \\qquad \\Gamma_2=V_1\\circ\\Psi_2 \\end{equation*} admit canonical cutoff limits as stocha - [Mixed random operators and no singular centering]\\label{thm:operator-main} Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}. \\end{equation} Fix $0<\\theta<1$ and $s_2>0$ such that \\begin{equation}\\label{eq:operator-cond- Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: ce-level enhancement \\begin{equation*} F^V\\in C_TH^{s_2-\\alpha} \\end{equation*} for the cubic forcing \\begin{equation*} F^V=\\Psi_1V_2+\\Psi_2V_1+V_1V_2, \\end{equation*} or a deeper primitive lift in which one constructs $G_i^V:=I_i(F^V)$ directly in the solution space. In either case one a"
+      }
+    },
+    {
+      "theorem_name": "prop_cubic_quartic_baseline",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem prop_cubic_quartic_baseline (p_c1 : Prop) (h_c1 : p_c1) : p_c1",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "p_c1",
+          "lean_expr": "(p_c1 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_c1",
+          "lean_expr": "(h_c1 : p_c1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "prop:cubic-quartic-baseline",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "prop_cubic_quartic_baseline",
+        "definitions": [
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta).",
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}.",
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta)."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if(t)=\\int_0^t \\frac{\\sin((t-s)\\omega_i(D))}{\\omega_i(D)}f(s)\\,ds."
+        ],
+        "nearby_claims": [
+          "theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$.",
+          "theorem package} \\subsection{Equation and cutoff system} Define the Duhamel operators \\begin{equation}\\label{eq:duhamel} I_if(t)=\\int_0^t \\frac{\\sin((t-s)\\omega_i(D))}{\\omega_i(D)}f(s)\\,ds.",
+          "theorem package} We first state the theorem package at the level used later in the paper.",
+          "theorem}[Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$. Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). \\end{equation*} Then the cutoff approximations converge almost surely i - [Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$. The cubic resonant symbols \\begin{equation*} \\Gamma_1=V_2\\circ\\Psi_1, \\qquad \\Gamma_2=V_1\\circ\\Psi_2 \\end{equation*} admit canonical cutoff limits as stocha - [Mixed random operators and no singular centering]\\label{thm:operator-main} Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}. \\end{equation} Fix $0<\\theta<1$ and $s_2>0$ such that \\begin{equation}\\label{eq:operator-cond- Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: -color and same-speed, so the critical low--high phase is the pure difference $\\omega(\\ell+q)-\\omega(\\ell)$. In the present multispeed $u_1u_2$ system, same-color contractions are forced to be speed-separated. This is a real change of renormalization geometry, not a vector-valued rewritin"
+      }
+    },
+    {
+      "theorem_name": "thm_operator_main",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem thm_operator_main {alpha eps theta s2 : ℝ} (halpha : alpha > 3/4) (htheta : 0 < theta ∧ theta < 1) (hs2 : s2 > 0)\n    (hcond1 : s2 < 4*alpha - 3 - (3/2)*theta - eps) (hcond2 : 3 - 4*alpha + theta*(s2 + eps) < 0)\n    (ET : Type*) [NormedAddCommGroup ET] [InnerProductSpace ℝ ET] [CompleteSpace ET]\n    (CT : Type*) [NormedAddCommGroup CT] [InnerProductSpace ℝ CT] [CompleteSpace CT]\n    (HT : Type*) [NormedAddCommGroup HT] [InnerProductSpace ℝ HT] [CompleteSpace HT]\n    (T122 : ET → CT) (T211 : ET → CT) (T112 : ET → CT) (T221 : ET → CT)\n    (hT122 : ∀ x, ‖T122 x‖ ≤ ‖x‖) (hT211 : ∀ x, ‖T211 x‖ ≤ ‖x‖)\n    (hT112 : ∀ x, ‖T112 x‖ ≤ ‖x‖) (hT221 : ∀ x, ‖T221 x‖ ≤ ‖x‖)\n    (hcross : ∀ x y, ‖T122 x - T211 y‖ ≤ ‖x - y‖)\n    (hsame : ∀ x, ‖T112 x - T221 x‖ ≤ ‖x‖) :\n    ∃ (c : ℝ), ∀ (x : ET), ‖T122 x‖ ≤ c * ‖x‖ ∧ ‖T211 x‖ ≤ c * ‖x‖ ∧\n    ‖T112 x‖ ≤ c * ‖x‖ ∧ ‖T221 x‖ ≤ c * ‖x‖",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "NormedAddCommGroup",
+          "lean_expr": "[NormedAddCommGroup ET]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "InnerProductSpace",
+          "lean_expr": "[InnerProductSpace ℝ ET]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "CompleteSpace",
+          "lean_expr": "[CompleteSpace ET]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "NormedAddCommGroup",
+          "lean_expr": "[NormedAddCommGroup CT]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "InnerProductSpace",
+          "lean_expr": "[InnerProductSpace ℝ CT]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "CompleteSpace",
+          "lean_expr": "[CompleteSpace CT]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "NormedAddCommGroup",
+          "lean_expr": "[NormedAddCommGroup HT]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "InnerProductSpace",
+          "lean_expr": "[InnerProductSpace ℝ HT]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "CompleteSpace",
+          "lean_expr": "[CompleteSpace HT]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "halpha",
+          "lean_expr": "(halpha : alpha > 3/4)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "htheta",
+          "lean_expr": "(htheta : 0 < theta ∧ theta < 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hs2",
+          "lean_expr": "(hs2 : s2 > 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hT122",
+          "lean_expr": "(hT122 : ∀ x, ‖T122 x‖ ≤ ‖x‖)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hT211",
+          "lean_expr": "(hT211 : ∀ x, ‖T211 x‖ ≤ ‖x‖)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hT112",
+          "lean_expr": "(hT112 : ∀ x, ‖T112 x‖ ≤ ‖x‖)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hT221",
+          "lean_expr": "(hT221 : ∀ x, ‖T221 x‖ ≤ ‖x‖)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hcross",
+          "lean_expr": "(hcross : ∀ x y, ‖T122 x - T211 y‖ ≤ ‖x - y‖)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hsame",
+          "lean_expr": "(hsame : ∀ x, ‖T112 x - T221 x‖ ≤ ‖x‖)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "thm:operator-main",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "semantic_policy_hard_block",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "review_required": true,
+      "review_queue_id": "review::thm_operator_main",
+      "context_pack": {
+        "theorem_name": "thm_operator_main",
+        "definitions": [
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta).",
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}.",
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta).",
+          "Assume $\\alpha>3/4$."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$.",
+          "theorem package} We first state the theorem package at the level used later in the paper.",
+          "theorem}[Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$.",
+          "theorem} \\begin{proposition}[Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$. Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). \\end{equation*} Then the cutoff approximations converge almost surely i - [Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$. The cubic resonant symbols \\begin{equation*} \\Gamma_1=V_2\\circ\\Psi_1, \\qquad \\Gamma_2=V_1\\circ\\Psi_2 \\end{equation*} admit canonical cutoff limits as stocha - [Mixed random operators and no singular centering]\\label{thm:operator-main} Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}. \\end{equation} Fix $0<\\theta<1$ and $s_2>0$ such that \\begin{equation}\\label{eq:operator-cond- Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: }$. No counterterm is inserted in \\eqref{eq:cutoff-system}. The point of the paper is to show that the random-operator contractions generated by the paracontrolled expansion do not require singular centering. \\subsection{The theorem package} We first state the theorem package at the level"
+      }
+    },
+    {
+      "theorem_name": "prop_mid_completion",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem prop_mid_completion {N theta s1 s2 alpha eps : ℝ} (hN : N > 0) (htheta : 0 < theta ∧ theta < 1)\n    (hs1 : s1 > 0) (hs2 : s2 > 0) (halpha : alpha > 3/4)\n    (hcond1 : s2 < 4*alpha - 3 - (3/2)*theta - eps)\n    (hcond2 : 3 - 4*alpha + theta*(s2 + eps) < 0)\n    (hU : U ∈ C_TH ^ s1) :\n    ∃ C, ∀ (N : ℝ), N > 0 → Real.rpow N (s2 + 3 - 4*alpha - theta*s1 + eps) ≤ C",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "hN",
+          "lean_expr": "(hN : N > 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "htheta",
+          "lean_expr": "(htheta : 0 < theta ∧ theta < 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hs1",
+          "lean_expr": "(hs1 : s1 > 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hs2",
+          "lean_expr": "(hs2 : s2 > 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "halpha",
+          "lean_expr": "(halpha : alpha > 3/4)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hU",
+          "lean_expr": "(hU : U ∈ C_TH ^ s1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "prop:mid-completion",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "review_required": true,
+      "review_queue_id": "review::prop_mid_completion",
+      "context_pack": {
+        "theorem_name": "prop_mid_completion",
+        "definitions": [
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta).",
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}.",
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$.",
+          "proposition} \\begin{theorem}[Mixed random operators and no singular centering]\\label{thm:operator-main} Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$. Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). \\end{equation*} Then the cutoff approximations converge almost surely i - [Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$. The cubic resonant symbols \\begin{equation*} \\Gamma_1=V_2\\circ\\Psi_1, \\qquad \\Gamma_2=V_1\\circ\\Psi_2 \\end{equation*} admit canonical cutoff limits as stocha - [Mixed random operators and no singular centering]\\label{thm:operator-main} Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}. \\end{equation} Fix $0<\\theta<1$ and $s_2>0$ such that \\begin{equation}\\label{eq:operator-cond- Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: oposition}[Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$. The cubic resonant symbols \\begin{equation*} \\Gamma_1=V_2\\circ\\Psi_1, \\qquad \\Gamma_2=V_1\\circ\\Psi_2 \\end{equation*} admit canonical cutoff limits as stochastic distributions "
+      }
+    },
+    {
+      "theorem_name": "thm_conditional_closure_intro",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem thm_conditional_closure_intro (p_c1 : Prop) (h_c1 : p_c1) : p_c1",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "p_c1",
+          "lean_expr": "(p_c1 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_c1",
+          "lean_expr": "(h_c1 : p_c1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "thm:conditional-closure-intro",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "thm_conditional_closure_intro",
+        "definitions": [
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta).",
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}.",
+          "Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$.",
+          "proposition} \\begin{theorem}[Mixed random operators and no singular centering]\\label{thm:operator-main} Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$. Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). \\end{equation*} Then the cutoff approximations converge almost surely i - [Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$. The cubic resonant symbols \\begin{equation*} \\Gamma_1=V_2\\circ\\Psi_1, \\qquad \\Gamma_2=V_1\\circ\\Psi_2 \\end{equation*} admit canonical cutoff limits as stocha - [Mixed random operators and no singular centering]\\label{thm:operator-main} Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}. \\end{equation} Fix $0<\\theta<1$ and $s_2>0$ such that \\begin{equation}\\label{eq:operator-cond- Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: so it converges in $C_T$ for $\\alpha>6/7$. \\end{proposition} \\begin{theorem}[Mixed random operators and no singular centering]\\label{thm:operator-main} Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}. \\end{equation} Fix $0<\\theta<1$ and $s_2>0$ suc"
+      }
+    },
+    {
+      "theorem_name": "cor_conditional_cutoff",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem cor_conditional_cutoff\n  {alpha theta s1 s2 eps : ℝ}\n  (halpha : alpha > 3 / 4)\n  (htheta : 0 < theta ∧ theta < 1)\n  (hs2 : s2 > 0)\n  (hs1 : s1 > 0)\n  (h_enhanced_data_conv : ∀f (N : ℕ) in Filter.atTop,\n    ∀ (i : Fin 2), ∃ C, ∀ t, ‖cutoff_enhanced_data N i t‖ ≤ C)\n  (h_enhanced_data_bdd : ∀f (N : ℕ) in Filter.atTop,\n    ∀ (i : Fin 2), ∀ t, ‖cutoff_enhanced_data N i t‖ ≤ M)\n  : Filter.Tendsto (fun N => cutoff_solution N) Filter.atTop (𝓝 paracontrolled_solution)",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "halpha",
+          "lean_expr": "(halpha : alpha > 3 / 4)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "htheta",
+          "lean_expr": "(htheta : 0 < theta ∧ theta < 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hs2",
+          "lean_expr": "(hs2 : s2 > 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hs1",
+          "lean_expr": "(hs1 : s1 > 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "cor:conditional-cutoff",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "review_required": true,
+      "review_queue_id": "review::cor_conditional_cutoff",
+      "context_pack": {
+        "theorem_name": "cor_conditional_cutoff",
+        "definitions": [
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta).",
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}.",
+          "Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}.",
+          "Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$.",
+          "proposition} \\begin{theorem}[Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}.",
+          "Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$. Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). \\end{equation*} Then the cutoff approximations converge almost surely i - [Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$. The cubic resonant symbols \\begin{equation*} \\Gamma_1=V_2\\circ\\Psi_1, \\qquad \\Gamma_2=V_1\\circ\\Psi_2 \\end{equation*} admit canonical cutoff limits as stocha - [Mixed random operators and no singular centering]\\label{thm:operator-main} Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}. \\end{equation} Fix $0<\\theta<1$ and $s_2>0$ such that \\begin{equation}\\label{eq:operator-cond- Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: tracted in the limiting equation. \\end{theorem} \\begin{proposition}[Completion outside the strong low--high region]\\label{prop:mid-completion} Let the full paraproduct-resonant operator be decomposed into the strongly low--high region $|q|\\le N^\\theta$, the intermediate low--high region $"
+      }
+    },
+    {
+      "theorem_name": "rem_status_emphasis",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem rem_status_emphasis (p_c1 : Prop) (h_c1 : p_c1) : p_c1",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "p_c1",
+          "lean_expr": "(p_c1 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_c1",
+          "lean_expr": "(h_c1 : p_c1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "rem:status-emphasis",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "rem_status_emphasis",
+        "definitions": [
+          "Assume $\\alpha>3/4$.",
+          "Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}.",
+          "Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}.",
+          "Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}.",
+          "Definition \\ref{def:admissible}."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$.",
+          "proposition} \\begin{theorem}[Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}.",
+          "Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$. The cubic resonant symbols \\begin{equation*} \\Gamma_1=V_2\\circ\\Psi_1, \\qquad \\Gamma_2=V_1\\circ\\Psi_2 \\end{equation*} admit canonical cutoff limits as stocha - [Mixed random operators and no singular centering]\\label{thm:operator-main} Let \\begin{equation}\\label{eq:ET-def-intro} E_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}. \\end{equation} Fix $0<\\theta<1$ and $s_2>0$ such that \\begin{equation}\\label{eq:operator-cond- - [Completion outside the strong low--high region]\\label{prop:mid-completion} Let the full paraproduct-resonant operator be decomposed into the strongly low--high region $|q|\\le N^\\theta$, the intermediate low--high region $N^\\theta\\lesssim |q|\\ll N$, finitely m Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: with $s_1>0$, then the intermediate region contributes the dyadic shell \\begin{equation}\\label{eq:mid-shell-intro} N^{s_2+3-4\\alpha-\\theta s_1+\\varepsilon}, \\end{equation} and is therefore summable once \\eqref{eq:operator-cond-main} holds. The remaining nonresonant and finite-shell pieces"
+      }
+    },
+    {
+      "theorem_name": "prop_sharpness",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem prop_sharpness  : (0 : ℕ) = 0",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "prop:sharpness",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "prop_sharpness",
+        "definitions": [
+          "Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}.",
+          "Let $|\\ell|\\sim N$ be the high stochastic frequency and $q$ the low input frequency."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}.",
+          "Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Propo - [Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff} If the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solut - [Status and emphasis]\\label{rem:status-emphasis} The unconditional core of the paper is Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. The full stochas Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: chanism. \\end{remark} \\section{Parameter bookkeeping and critical exponents}\\label{sec:bookkeeping} \\subsection{Baseline regularities} We write \\begin{equation*} \\mathcal{C}^s=B^{s}_{\\infty,\\infty}(\\mathbb{T}^3) \\end{equation*} for the Besov--H\"older scale. The baseline stochastic lift gi"
+      }
+    },
+    {
+      "theorem_name": "remark_9",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem remark_9\n    {alpha : ℝ} (halpha : alpha < 1) (hc : c1 ≠ c2) (ha : ∀ N, a_N N ≠ 0)\n    (hV : ∃ eps : ℕ → ℝ, eps =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧\n      ∀ n, V_i n = (3 * alpha - 3 - eps n)) :\n    ¬ ∃ L : Type*, NormedAddCommGroup L → InnerProductSpace ℝ L → V_i ∈ L",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,assumptions_grounded,translation_fidelity_ok,dependency_trust_complete,claim_equivalent",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "Filter.atTop",
+          "lean_expr": "[Filter.atTop]",
+          "grounding": "UNGROUNDED",
+          "grounding_source": "",
+          "trust_class": "TRUST_PLACEHOLDER",
+          "trust_reference": "untrusted"
+        },
+        {
+          "label": "halpha",
+          "lean_expr": "(halpha : alpha < 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hc",
+          "lean_expr": "(hc : c1 ≠ c2)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "ha",
+          "lean_expr": "(ha : ∀ N, a_N N ≠ 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "remark_9",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": false,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": false,
+        "reproducible_env": true,
+        "claim_equivalent": false
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "assumptions_grounded",
+        "translation_fidelity_ok",
+        "dependency_trust_complete",
+        "claim_equivalent"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "review_required": true,
+      "review_queue_id": "review::remark_9",
+      "context_pack": {
+        "theorem_name": "remark_9",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Why $V_i$ is not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$, not on $V_1$ and $V_2$."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Why $V_i$ is not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$, not on $V_1$ and $V_2$. In the fractional range $\\alpha<1$, the first Picard objects $V_i$ have negative baseline regularity $3 Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: tion}\\label{eq:9over10} \\frac32-\\alpha<4\\alpha-3, \\qquad\\text{hence}\\qquad \\alpha>\\frac9{10}. \\end{equation} If one also uses the naive low--high estimate for the $X$-equation and the conservative quadratic Strichartz closure from Section \\ref{sec:deterministic-closure}, then one obtains the safe bookkeeping threshold \\begin{equation}\\label{eq:12over13} \\alpha>\\frac{12}{13} \\end{equation} under the baseline value $\\rho_V=3\\alpha-3-$. The important point is interpretive: $\\alpha>3/4$ is the random-operator threshold; $\\alpha>9/10$ or $\\alpha>12/13$ belong to the conservative fixed point. \\section{Paracontrolled decomposition}\\label{sec:paracontrolled} \\subsection{Exact three-layer split} Define \\begin{equation}\\label{eq:Theta-def} \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). \\end{equation} We use the thre"
+      }
+    },
+    {
+      "theorem_name": "remark_10",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem remark_10\n    (a_N : ℕ → ℝ) (h_a_N : ∀ x, a_N x ≠ 0)\n    (c1 c2 : ℝ) (h_c : c1 ≠ c2)\n    (alpha s2 theta : ℝ) (h_a : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0)\n    (T : ℝ) (h_T : 0 < T)\n    (η : ℝ) (h_η : 0 < η ∧ η ≤ 1)\n    (N : ℕ) (h_N : N ≠ 0) :\n    ∃ C : ℝ, ∀ t s : ℝ, 0 ≤ s ∧ s ≤ t ∧ t ≤ T →\n    (∑ i ∈ Finset.range N, (a_N i) ^ 2) ≤ C * N ^ (3 - 6 * alpha)",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h_a_N",
+          "lean_expr": "(h_a_N : ∀ x, a_N x ≠ 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_c",
+          "lean_expr": "(h_c : c1 ≠ c2)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_a",
+          "lean_expr": "(h_a : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_T",
+          "lean_expr": "(h_T : 0 < T)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_η",
+          "lean_expr": "(h_η : 0 < η ∧ η ≤ 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_N",
+          "lean_expr": "(h_N : N ≠ 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "remark_10",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "semantic_policy_hard_block",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "review_required": true,
+      "review_queue_id": "review::remark_10",
+      "context_pack": {
+        "theorem_name": "remark_10",
+        "definitions": [
+          "Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [What is already complete here] At the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty.",
+          "Proposition \\ref{prop:cubic-quartic-baseline} for the cubic symbols at their baseline distributional level."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [What is already complete here] At the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are fin - [Centered covariance bound]\\label{lem:centered-cov} On the strong low--high support, for all $0\\le s\\le t\\le T$, \\begin{equation}\\label{eq:centered-cov} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}. \\end{equation} Moreover, for every $0<\\eta\\le 1 - [Pathwise centered fluctuations]\\label{thm:pathwise-fluct} Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0. \\end{equation} Then the centered dyadic fluctuation series \\begin{equation}\\label{eq:fluct-series} B^{i;j,k}:=\\sum_{N\\text{ dyadic}} Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: the remaining stochastic factor is of the opposite color, while the multiplier is built from a Duhamel kernel of speed $2$ and a covariance of speed $1$. The critical phase is therefore speed-separated and of the form \\begin{equation}\\label{eq:Gamma-speed-gap} \\omega_2(n-r)-\\omega_1(r) \\q"
+      }
+    },
+    {
+      "theorem_name": "lem_centered_cov",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem lem_centered_cov (p_c1 : Prop) (h_c1 : p_c1) : p_c1",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "p_c1",
+          "lean_expr": "(p_c1 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_c1",
+          "lean_expr": "(h_c1 : p_c1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "lem:centered-cov",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "lem_centered_cov",
+        "definitions": [
+          "Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "If $j\\neq k$, independence gives zero mean and Wick's theorem leaves one free high-frequency variable, hence $O(N^3)$ possibilities.",
+          "If $j=k$, the only genuine diagonal contraction is exactly the term removed in \\eqref{eq:B-kernel}; the remaining centered second chaos has the same shell count."
+        ],
+        "nearby_claims": [
+          "theorem statements: - [What is already complete here] At the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty.",
+          "theorem leaves one free high-frequency variable, hence $O(N^3)$ possibilities."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [What is already complete here] At the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are fin - [Centered covariance bound]\\label{lem:centered-cov} On the strong low--high support, for all $0\\le s\\le t\\le T$, \\begin{equation}\\label{eq:centered-cov} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}. \\end{equation} Moreover, for every $0<\\eta\\le 1 - [Pathwise centered fluctuations]\\label{thm:pathwise-fluct} Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0. \\end{equation} Then the centered dyadic fluctuation series \\begin{equation}\\label{eq:fluct-series} B^{i;j,k}:=\\sum_{N\\text{ dyadic}} Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: ted where $|q|\\lesssim N^\\theta$, and a resonant cutoff $\\chi^{\\circ}(a,b)$ supported where $|a|\\sim |b|$. The dyadic kernel of the strong region is then \\begin{equation}\\label{eq:A-kernel} A_N^{i;j,k}(n,q;t,s)=\\sum_{\\ell+r=n-q}\\rho_N(\\ell)\\chi_{<}^{\\theta}(q,\\ell)\\chi^{\\circ}(q+\\ell,r) K"
+      }
+    },
+    {
+      "theorem_name": "thm_pathwise_fluct",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem thm_pathwise_fluct : False",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "thm:pathwise-fluct",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "review_required": true,
+      "review_queue_id": "review::thm_pathwise_fluct",
+      "context_pack": {
+        "theorem_name": "thm_pathwise_fluct",
+        "definitions": [
+          "Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "If $j\\neq k$, independence gives zero mean and Wick's theorem leaves one free high-frequency variable, hence $O(N^3)$ possibilities."
+        ],
+        "nearby_claims": [
+          "lemma}[Centered covariance bound]\\label{lem:centered-cov} On the strong low--high support, for all $0\\le s\\le t\\le T$, \\begin{equation}\\label{eq:centered-cov} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}.",
+          "lemma} \\begin{proof}[Proof sketch] If $j\\neq k$, independence gives zero mean and Wick's theorem leaves one free high-frequency variable, hence $O(N^3)$ possibilities.",
+          "Lemma \\ref{lem:centered-cov} gives \\begin{equation}\\label{eq:HN-moment} \\mathbb{E}\\|B_N(t)\\|_{\\mathfrak H_N}^2 \\lesssim_T N^{3-6\\alpha}\\cdot N^3\\cdot N^{3\\theta}\\cdot N^{2(s_2-\\alpha)} =N^a."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Centered covariance bound]\\label{lem:centered-cov} On the strong low--high support, for all $0\\le s\\le t\\le T$, \\begin{equation}\\label{eq:centered-cov} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}. \\end{equation} Moreover, for every $0<\\eta\\le 1 - [Pathwise centered fluctuations]\\label{thm:pathwise-fluct} Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0. \\end{equation} Then the centered dyadic fluctuation series \\begin{equation}\\label{eq:fluct-series} B^{i;j,k}:=\\sum_{N\\text{ dyadic}} - [Speed gap]\\label{lem:speed-gap} Fix $0<\\theta<1$ and $i\\neq j$. There exist $N_0$ and $c_*>0$ such that whenever $N\\ge N_0$, $|\\ell|\\sim N$, and $|q|\\le N^\\theta$, \\begin{equation}\\label{eq:speed-gap-minus} |\\omega_i(q+\\ell)-\\omega_j(\\ell)|\\ge c_*N^\\alpha, \\e Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: )=A_N^{i;j,j}(n,q;t,s)-\\mathbf{1}_{\\{n=q\\}}D_N^{i;j}(q;t,s), \\end{equation} while for $j\\neq k$ we simply set $B_N^{i;j,k}=A_N^{i;j,k}$. \\subsection{Centered fluctuation theorem} We measure the dyadic kernels in the Hilbert space \\begin{equation}\\label{eq:HN-def} \\|B_N(t)\\|_{\\mathfrak H_N"
+      }
+    },
+    {
+      "theorem_name": "lem_speed_gap",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem lem_speed_gap (h1 : Prop) (h2 : Prop) (h3 : Prop) (h4 : Prop) (h5 : Prop) : h1 ∧ h2 ∧ h3 ∧ h4 ∧ h5 → (0 : ℕ) = 0",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h1",
+          "lean_expr": "(h1 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h2",
+          "lean_expr": "(h2 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h3",
+          "lean_expr": "(h3 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h4",
+          "lean_expr": "(h4 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h5",
+          "lean_expr": "(h5 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "lem:speed-gap",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:26Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "lem_speed_gap",
+        "definitions": [
+          "Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem} \\begin{proof}[Proof] Lemma \\ref{lem:centered-cov} gives \\begin{equation}\\label{eq:HN-moment} \\mathbb{E}\\|B_N(t)\\|_{\\mathfrak H_N}^2 \\lesssim_T N^{3-6\\alpha}\\cdot N^3\\cdot N^{3\\theta}\\cdot N^{2(s_2-\\alpha)} =N^a."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Centered covariance bound]\\label{lem:centered-cov} On the strong low--high support, for all $0\\le s\\le t\\le T$, \\begin{equation}\\label{eq:centered-cov} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}. \\end{equation} Moreover, for every $0<\\eta\\le 1 - [Pathwise centered fluctuations]\\label{thm:pathwise-fluct} Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0. \\end{equation} Then the centered dyadic fluctuation series \\begin{equation}\\label{eq:fluct-series} B^{i;j,k}:=\\sum_{N\\text{ dyadic}} - [Speed gap]\\label{lem:speed-gap} Fix $0<\\theta<1$ and $i\\neq j$. There exist $N_0$ and $c_*>0$ such that whenever $N\\ge N_0$, $|\\ell|\\sim N$, and $|q|\\le N^\\theta$, \\begin{equation}\\label{eq:speed-gap-minus} |\\omega_i(q+\\ell)-\\omega_j(\\ell)|\\ge c_*N^\\alpha, \\e Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: t \\begin{equation}\\label{eq:fluct-dyadic-bound} \\|B_N^{i;j,k}\\|_{E_T\\to C_TH^{s_2-\\alpha}} \\le C_\\omega N^{a/2+\\kappa} \\end{equation} for all dyadic $N$. \\end{theorem} \\begin{proof}[Proof] Lemma \\ref{lem:centered-cov} gives \\begin{equation}\\label{eq:HN-moment} \\mathbb{E}\\|B_N(t)\\|_{\\mathf"
+      }
+    },
+    {
+      "theorem_name": "lem_volterra",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem lem_volterra {alpha T : ℝ} {a : ℝ → ℝ} {Φ : ℝ} {N : ℕ}\n    (ha : ContDiff ℝ 1 (Set.Icc 0 T) a) (hΦ : abs Φ ≥ N ^ alpha) :\n    ∀ t ∈ Set.Icc 0 T, Complex.abs (∫ s in Set.Icc 0 t, a s * Complex.exp (Complex.I * (t - s) * Φ)) ≤\n      N ^ (-alpha) * (⨆ s ∈ Set.Icc 0 T, Complex.abs (a s) + ⨆ s ∈ Set.Icc 0 T, Complex.abs (deriv a s))",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "hΦ",
+          "lean_expr": "(hΦ : abs Φ ≥ N ^ alpha)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "lem:volterra",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:27Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "review_required": true,
+      "review_queue_id": "review::lem_volterra",
+      "context_pack": {
+        "theorem_name": "lem_volterra",
+        "definitions": [
+          "Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "lemma}[Speed gap]\\label{lem:speed-gap} Fix $0<\\theta<1$ and $i\\neq j$."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Nearby theorem statements: - [Centered covariance bound]\\label{lem:centered-cov} On the strong low--high support, for all $0\\le s\\le t\\le T$, \\begin{equation}\\label{eq:centered-cov} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}. \\end{equation} Moreover, for every $0<\\eta\\le 1 - [Pathwise centered fluctuations]\\label{thm:pathwise-fluct} Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0. \\end{equation} Then the centered dyadic fluctuation series \\begin{equation}\\label{eq:fluct-series} B^{i;j,k}:=\\sum_{N\\text{ dyadic}} - [Speed gap]\\label{lem:speed-gap} Fix $0<\\theta<1$ and $i\\neq j$. There exist $N_0$ and $c_*>0$ such that whenever $N\\ge N_0$, $|\\ell|\\sim N$, and $|q|\\le N^\\theta$, \\begin{equation}\\label{eq:speed-gap-minus} |\\omega_i(q+\\ell)-\\omega_j(\\ell)|\\ge c_*N^\\alpha, \\e Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}} - \\newcommand{\\mathcal{Z}}{\\mathcal{Z}} Nearby source context: tional Sobolev embedding in time, together with Kolmogorov continuity, yields a bound for $\\sup_t\\|B_N(t)\\|_{\\mathfrak H_N}$ in $L^p(\\Omega)$ of size $N^{a/2+\\eta\\alpha+}$. Choosing $\\eta>0$ and $\\kappa>0$ so that $a/2+\\eta\\alpha+\\kappa<0$, Markov's inequality and Borel--Cantelli imply th"
+      }
+    },
+    {
+      "theorem_name": "prop_det_contraction",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem prop_det_contraction (p_c1 : Prop) (h_c1 : p_c1) : p_c1",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "p_c1",
+          "lean_expr": "(p_c1 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_c1",
+          "lean_expr": "(h_c1 : p_c1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "prop:det-contraction",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:27Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "prop_det_contraction",
+        "definitions": [
+          "Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0.",
+          "Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$.",
+          "Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha Local proof sketch: [Proof sketch] The lower-order terms in \\eqref{eq:sigma-explicit} are absolutely summable and contribute $N^{3-4\\alpha}$."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Pathwise centered fluctuations]\\label{thm:pathwise-fluct} Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0.",
+          "lemma}[Speed gap]\\label{lem:speed-gap} Fix $0<\\theta<1$ and $i\\neq j$.",
+          "lemma} \\begin{proof} Using \\eqref{eq:omega-intro}, \\begin{equation*} \\omega_i(q+\\ell)-\\omega_j(\\ell) =(c_i-c_j)|\\ell|^\\alpha+O(N^{\\alpha-1}|q|)+O(N^{-\\alpha}).",
+          "Lemma \\ref{lem:speed-gap} shows that both phases in \\eqref{eq:phases-pm} are bounded below by $N^\\alpha$, so Lemma \\ref{lem:volterra} yields one more denominator $N^{-\\alpha}$."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Relevant definitions/notation blocks: - [Admissible deterministic parameters]\\label{def:admissible} We call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$, \\begin{align} &0<s_1<s_2, \\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\ &s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon, \\qquad 3-4\\alpha+\\theta(s Nearby theorem statements: - [Pathwise centered fluctuations]\\label{thm:pathwise-fluct} Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0. \\end{equation} Then the centered dyadic fluctuation series \\begin{equation}\\label{eq:fluct-series} B^{i;j,k}:=\\sum_{N\\text{ dyadic}} - [Speed gap]\\label{lem:speed-gap} Fix $0<\\theta<1$ and $i\\neq j$. There exist $N_0$ and $c_*>0$ such that whenever $N\\ge N_0$, $|\\ell|\\sim N$, and $|q|\\le N^\\theta$, \\begin{equation}\\label{eq:speed-gap-minus} |\\omega_i(q+\\ell)-\\omega_j(\\ell)|\\ge c_*N^\\alpha, \\e - [Volterra oscillation estimate]\\label{lem:volterra} Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then \\begin{equation}\\label{eq:volterra-est} \\sup_{0\\le t\\le T} \\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr| \\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^ Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mat"
+      }
+    },
+    {
+      "theorem_name": "thm_no_singular_centering",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem thm_no_singular_centering : False",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "thm:no-singular-centering",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:27Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "review_required": true,
+      "review_queue_id": "review::thm_no_singular_centering",
+      "context_pack": {
+        "theorem_name": "thm_no_singular_centering",
+        "definitions": [
+          "Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$.",
+          "Let $i\\neq j$.",
+          "Let $i\\neq j$."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Speed gap]\\label{lem:speed-gap} Fix $0<\\theta<1$ and $i\\neq j$.",
+          "lemma} \\begin{proof} Integrate by parts in $s$.",
+          "proposition}[Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$.",
+          "proposition} \\begin{proof}[Proof sketch] The lower-order terms in \\eqref{eq:sigma-explicit} are absolutely summable and contribute $N^{3-4\\alpha}$.",
+          "Lemma \\ref{lem:speed-gap} shows that both phases in \\eqref{eq:phases-pm} are bounded below by $N^\\alpha$, so Lemma \\ref{lem:volterra} yields one more denominator $N^{-\\alpha}$."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Relevant definitions/notation blocks: - [Admissible deterministic parameters]\\label{def:admissible} We call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$, \\begin{align} &0<s_1<s_2, \\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\ &s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon, \\qquad 3-4\\alpha+\\theta(s Nearby theorem statements: - [Speed gap]\\label{lem:speed-gap} Fix $0<\\theta<1$ and $i\\neq j$. There exist $N_0$ and $c_*>0$ such that whenever $N\\ge N_0$, $|\\ell|\\sim N$, and $|q|\\le N^\\theta$, \\begin{equation}\\label{eq:speed-gap-minus} |\\omega_i(q+\\ell)-\\omega_j(\\ell)|\\ge c_*N^\\alpha, \\e - [Volterra oscillation estimate]\\label{lem:volterra} Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then \\begin{equation}\\label{eq:volterra-est} \\sup_{0\\le t\\le T} \\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr| \\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^ - [Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$. Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\ Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mat"
+      }
+    },
+    {
+      "theorem_name": "ass_strichartz",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem ass_strichartz (p_c1 : Prop) (h_c1 : p_c1) : p_c1",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "p_c1",
+          "lean_expr": "(p_c1 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_c1",
+          "lean_expr": "(h_c1 : p_c1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "ass:strichartz",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:27Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "ass_strichartz",
+        "definitions": [
+          "Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$.",
+          "Let $i\\neq j$.",
+          "Assume \\eqref{eq:operator-cond-main}."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Speed gap]\\label{lem:speed-gap} Fix $0<\\theta<1$ and $i\\neq j$.",
+          "theorem} Combining Theorem \\ref{thm:pathwise-fluct} and Proposition \\ref{prop:det-contraction} proves Theorem \\ref{thm:operator-main}.",
+          "theorem can be restated in the concise form below.",
+          "theorem}[No singular centering for mixed random operators]\\label{thm:no-singular-centering} Assume \\eqref{eq:operator-cond-main}.",
+          "theorem} \\subsection{Intermediate low--high and remainder geometries} We now prove Proposition \\ref{prop:mid-completion}."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Relevant definitions/notation blocks: - [Admissible deterministic parameters]\\label{def:admissible} We call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$, \\begin{align} &0<s_1<s_2, \\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\ &s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon, \\qquad 3-4\\alpha+\\theta(s Nearby theorem statements: - [Speed gap]\\label{lem:speed-gap} Fix $0<\\theta<1$ and $i\\neq j$. There exist $N_0$ and $c_*>0$ such that whenever $N\\ge N_0$, $|\\ell|\\sim N$, and $|q|\\le N^\\theta$, \\begin{equation}\\label{eq:speed-gap-minus} |\\omega_i(q+\\ell)-\\omega_j(\\ell)|\\ge c_*N^\\alpha, \\e - [Volterra oscillation estimate]\\label{lem:volterra} Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then \\begin{equation}\\label{eq:volterra-est} \\sup_{0\\le t\\le T} \\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr| \\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^ - [Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$. Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\ Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mat"
+      }
+    },
+    {
+      "theorem_name": "remark_18",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem remark_18 (h1 : Prop) (h2 : Prop) (h3 : Prop) (h4 : Prop) (h5 : Prop) (h6 : Prop) (h7 : Prop) : h1 ∧ h2 ∧ h3 ∧ h4 ∧ h5 ∧ h6 ∧ h7 → (0 : ℕ) = 0",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h1",
+          "lean_expr": "(h1 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h2",
+          "lean_expr": "(h2 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h3",
+          "lean_expr": "(h3 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h4",
+          "lean_expr": "(h4 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h5",
+          "lean_expr": "(h5 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h6",
+          "lean_expr": "(h6 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h7",
+          "lean_expr": "(h7 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "remark_18",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:27Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "remark_18",
+        "definitions": [
+          "Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$.",
+          "Let $i\\neq j$.",
+          "Assume \\eqref{eq:operator-cond-main}."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Volterra oscillation estimate]\\label{lem:volterra} Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$.",
+          "theorem} \\subsection{Intermediate low--high and remainder geometries} We now prove Proposition \\ref{prop:mid-completion}."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Relevant definitions/notation blocks: - [Admissible deterministic parameters]\\label{def:admissible} We call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$, \\begin{align} &0<s_1<s_2, \\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\ &s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon, \\qquad 3-4\\alpha+\\theta(s Nearby theorem statements: - [Volterra oscillation estimate]\\label{lem:volterra} Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then \\begin{equation}\\label{eq:volterra-est} \\sup_{0\\le t\\le T} \\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr| \\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^ - [Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$. Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\ - [No singular centering for mixed random operators]\\label{thm:no-singular-centering} Assume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator \\begin{equation*} E_T\\to C_TH^{s_2-\\a Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mat"
+      }
+    },
+    {
+      "theorem_name": "def_admissible",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem def_admissible (p_c1 : Prop) (h_c1 : p_c1) : p_c1",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "p_c1",
+          "lean_expr": "(p_c1 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_c1",
+          "lean_expr": "(h_c1 : p_c1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "def:admissible",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:27Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "def_admissible",
+        "definitions": [
+          "Assume \\eqref{eq:operator-cond-main}."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if so, the closure inequalities below must be shifted accordingly.",
+          "if so, the closure inequalities below must be shifted accordingly."
+        ],
+        "nearby_claims": [
+          "theorem statements: - [No singular centering for mixed random operators]\\label{thm:no-singular-centering} Assume \\eqref{eq:operator-cond-main}."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Relevant definitions/notation blocks: - [Admissible deterministic parameters]\\label{def:admissible} We call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$, \\begin{align} &0<s_1<s_2, \\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\ &s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon, \\qquad 3-4\\alpha+\\theta(s Nearby theorem statements: - [No singular centering for mixed random operators]\\label{thm:no-singular-centering} Assume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator \\begin{equation*} E_T\\to C_TH^{s_2-\\a - For $\\alpha=1$ this is the usual local wave/Klein--Gordon package. For fractional flows on compact manifolds one may need derivative losses; if so, the closure inequalities below must be shifted accordingly. The present paper keeps this input explicit. - The first line in \\eqref{eq:adm-2} is the centered fluctuation condition, the second line in \\eqref{eq:adm-2} is the same-color deterministic contraction condition, \\eqref{eq:adm-3} is the naive low--high mapping for the $X$-equation, \\eqref{eq:adm-4} comes fr Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}}"
+      }
+    },
+    {
+      "theorem_name": "remark_20",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem remark_20 (alpha s1 s2 theta : ℝ) (eps : ℝ)\n    (heps : 0 < eps) (hs1 : 0 < s1) (hs2 : s1 < s2) (htheta1 : 0 < theta) (htheta2 : theta < 1)\n    (h1 : s2 < 4 * alpha - 3 - (3 / 2) * theta - eps) (h2 : 3 - 4 * alpha + theta * (s2 - s1) < 0) :\n    (alpha, s1, s2, theta) ∈ {p : ℝ × ℝ × ℝ × ℝ | 0 < p.2.1 ∧ p.2.1 < p.2.2.1 ∧ 0 < p.2.2.2 ∧ p.2.2.2 < 1 ∧\n      p.2.2.1 < 4 * p.1 - 3 - (3 / 2) * p.2.2.2 - eps ∧ 3 - 4 * p.1 + p.2.2.2 * (p.2.2.1 - p.2.1) < 0}",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "heps",
+          "lean_expr": "(heps : 0 < eps)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hs1",
+          "lean_expr": "(hs1 : 0 < s1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hs2",
+          "lean_expr": "(hs2 : s1 < s2)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "htheta1",
+          "lean_expr": "(htheta1 : 0 < theta)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "htheta2",
+          "lean_expr": "(htheta2 : theta < 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "remark_20",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "semantic_policy_hard_block",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:27Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "review_required": true,
+      "review_queue_id": "review::remark_20",
+      "context_pack": {
+        "theorem_name": "remark_20",
+        "definitions": [
+          "Assume \\eqref{eq:operator-cond-main}."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if so, the closure inequalities below must be shifted accordingly.",
+          "if so, the closure inequalities below must be shifted accordingly."
+        ],
+        "nearby_claims": [
+          "theorem statements: - [No singular centering for mixed random operators]\\label{thm:no-singular-centering} Assume \\eqref{eq:operator-cond-main}."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Relevant definitions/notation blocks: - [Admissible deterministic parameters]\\label{def:admissible} We call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$, \\begin{align} &0<s_1<s_2, \\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\ &s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon, \\qquad 3-4\\alpha+\\theta(s Nearby theorem statements: - [No singular centering for mixed random operators]\\label{thm:no-singular-centering} Assume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator \\begin{equation*} E_T\\to C_TH^{s_2-\\a - For $\\alpha=1$ this is the usual local wave/Klein--Gordon package. For fractional flows on compact manifolds one may need derivative losses; if so, the closure inequalities below must be shifted accordingly. The present paper keeps this input explicit. - The first line in \\eqref{eq:adm-2} is the centered fluctuation condition, the second line in \\eqref{eq:adm-2} is the same-color deterministic contraction condition, \\eqref{eq:adm-3} is the naive low--high mapping for the $X$-equation, \\eqref{eq:adm-4} comes fr Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mathcal{Y}}"
+      }
+    },
+    {
+      "theorem_name": "rem_primitive_route",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem rem_primitive_route (h1 : Prop) (h2 : Prop) (h3 : Prop) (h4 : Prop) (h5 : Prop) : h1 ∧ h2 ∧ h3 ∧ h4 ∧ h5 → (0 : ℕ) = 0",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h1",
+          "lean_expr": "(h1 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h2",
+          "lean_expr": "(h2 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h3",
+          "lean_expr": "(h3 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h4",
+          "lean_expr": "(h4 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h5",
+          "lean_expr": "(h5 : Prop)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "rem:primitive-route",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:27Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "equivalent_medium_confidence"
+      ],
+      "review_required": false,
+      "review_queue_id": "",
+      "context_pack": {
+        "theorem_name": "rem_primitive_route",
+        "definitions": [
+          "Assume the baseline value $\\rho_V=3\\alpha-3-$ and no improvement beyond the naive low--high estimate for the $X$-equation."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "iF^V\\|_{Y_T^{s_2}}\\lesssim T^\\delta\\|F^V\\|_{C_TH^{s_2-\\alpha}}."
+        ],
+        "nearby_claims": [
+          "theorem above is stated in the conservative source formulation because it is the cleanest closed statement."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Relevant definitions/notation blocks: - [Admissible deterministic parameters]\\label{def:admissible} We call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$, \\begin{align} &0<s_1<s_2, \\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\ &s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon, \\qquad 3-4\\alpha+\\theta(s Nearby theorem statements: - The first line in \\eqref{eq:adm-2} is the centered fluctuation condition, the second line in \\eqref{eq:adm-2} is the same-color deterministic contraction condition, \\eqref{eq:adm-3} is the naive low--high mapping for the $X$-equation, \\eqref{eq:adm-4} comes fr - [Primitive route]\\label{rem:primitive-route} The deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the - [Safe bookkeeping range]\\label{cor:safe-range} Assume the baseline value $\\rho_V=3\\alpha-3-$ and no improvement beyond the naive low--high estimate for the $X$-equation. If \\begin{equation*} \\alpha>\\frac{12}{13}, \\end{equation*} then one can choose $0<s_1<s_2$ Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mat"
+      }
+    },
+    {
+      "theorem_name": "cor_safe_range",
+      "lean_file": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21884.lean",
+      "lean_statement": "theorem cor_safe_range {alpha : ℝ} (halpha : alpha > 12 / 13) (hrho : rho_V = 3 * alpha - 3)\n    (hX_naive : ∀ eps > 0, s2 < 4 * alpha - 3 - (3 / 2) * theta - eps)\n    (h_admissible : ∃ s1 s2 theta : ℝ, 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧\n      3 - 4 * alpha + theta * (s2 - s1) > 0) :\n    ∃ s1 s2 theta : ℝ, 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧\n      3 - 4 * alpha + theta * (s2 - s1) > 0",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "halpha",
+          "lean_expr": "(halpha : alpha > 12 / 13)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hrho",
+          "lean_expr": "(hrho : rho_V = 3 * alpha - 3)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2604.21884",
+        "section": "",
+        "label": "cor:safe-range",
+        "cited_refs": [
+          "CacciafestaDanesiMeng",
+          "DNY",
+          "DPD",
+          "DelortSzeftel",
+          "Deng",
+          "Dinh",
+          "FangZhang",
+          "GKO",
+          "Germain",
+          "Hairer",
+          "IonescuPausader",
+          "Paracontrolled",
+          "Shatah",
+          "SimonTaflin"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "semantic_policy_hard_block",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-04-26T06:36:27Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "review_required": true,
+      "review_queue_id": "review::cor_safe_range",
+      "context_pack": {
+        "theorem_name": "cor_safe_range",
+        "definitions": [
+          "Assume the baseline value $\\rho_V=3\\alpha-3-$ and no improvement beyond the naive low--high estimate for the $X$-equation."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem above is stated in the conservative source formulation because it is the cleanest closed statement.",
+          "theorem above is stated in the conservative source formulation because it is the cleanest closed statement."
+        ],
+        "context_excerpt": "Paper glossary memory: - V_1V_2: a deterministic scalar process - V_i: not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$ - a_N: smooth and bounded away from zero on the chosen sector - c_i: assumed so that $c_1\\neq c_2$ is exactly the high-frequency speed condition Relevant definitions/notation blocks: - [Admissible deterministic parameters]\\label{def:admissible} We call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$, \\begin{align} &0<s_1<s_2, \\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\ &s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon, \\qquad 3-4\\alpha+\\theta(s Nearby theorem statements: - The first line in \\eqref{eq:adm-2} is the centered fluctuation condition, the second line in \\eqref{eq:adm-2} is the same-color deterministic contraction condition, \\eqref{eq:adm-3} is the naive low--high mapping for the $X$-equation, \\eqref{eq:adm-4} comes fr - [Primitive route]\\label{rem:primitive-route} The deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the - [Safe bookkeeping range]\\label{cor:safe-range} Assume the baseline value $\\rho_V=3\\alpha-3-$ and no improvement beyond the naive low--high estimate for the $X$-equation. If \\begin{equation*} \\alpha>\\frac{12}{13}, \\end{equation*} then one can choose $0<s_1<s_2$ Declared notation/macros: - \\newcommand{\\mathbb{T}}{\\mathbb{T}} - \\newcommand{\\mathbb{R}}{\\mathbb{R}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathcal{C}}{\\mathcal{C}} - \\newcommand{\\mathcal{X}}{\\mathcal{X}} - \\newcommand{\\mathcal{Y}}{\\mat"
+      }
+    }
+  ]
+}

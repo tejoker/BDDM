@@ -28,6 +28,7 @@ import json
 import multiprocessing as mp
 import os
 import re
+import signal
 import sys
 import threading
 import time
@@ -48,9 +49,26 @@ from pipeline_status import (
     build_ledger_entry,
     save_ledger,
 )
+from pipeline_status_models import FailureKind, FailureOrigin, ProofMethod, VerificationStatus
 from theorem_extractor import TheoremEntry, extract_from_files
 from lean_sanitize import escape_lean_comment
+from repair_feedback_dataset import (
+    DEFAULT_DATASET_PATH,
+    DEFAULT_SUMMARY_PATH,
+    default_run_dataset_path,
+    read_jsonl,
+    write_summary,
+)
+from paper_symbol_inventory import build_symbol_inventory, dedupe_symbols
+from paper_theory_builder import (
+    build_paper_theory,
+    paper_theory_import_header,
+    plan_paper_theory,
+    write_paper_theory,
+)
+from statement_validity import classify_statement
 from statement_translator import TranslationResult, translate_statement
+from translator._translate import _relax_fragile_hypotheses
 try:
     from distributed_proof_cache import DistributedProofCache as _DistributedProofCache
     _HAS_PROOF_CACHE = True
@@ -71,6 +89,10 @@ _LEAN_HEADER_TEMPLATE = """\
 
 {imports}
 
+-- Suppress binder-annotation check: some auto-translated typeclasses may not
+-- be recognized as class instances by Lean's binder checker, but are harmless.
+set_option checkBinderAnnotations false
+
 namespace ArxivPaper
 
 """
@@ -81,8 +103,8 @@ _SORRY_STUB_TEMPLATE = """\
 -- [{kind}] {name}
 -- Statement (LaTeX): {latex_stmt}
 -- Translation: FAILED — {error}
--- {signature}
-theorem {lean_name} : True := trivial
+-- Signature could not be produced. Review LaTeX and re-translate manually.
+theorem {lean_name} : False := by sorry
 
 """
 
@@ -111,6 +133,49 @@ _DEFINITION_ENV_RE = re.compile(
     r"\\begin\{(?:definition|notation)\*?\}(.*?)\\end\{(?:definition|notation)\*?\}",
     re.IGNORECASE | re.DOTALL,
 )
+_THEOREM_ENV_RE = re.compile(
+    r"\\begin\{(?:theorem|lemma|proposition|corollary|claim|fact|remark)\*?\}(.*?)\\end\{(?:theorem|lemma|proposition|corollary|claim|fact|remark)\*?\}",
+    re.IGNORECASE | re.DOTALL,
+)
+_ACTIONABILITY_DROP_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
+    ("tikz_or_graphics", re.compile(r"\\begin\{tikzpicture\}|\\includegraphics|\\pgf", re.IGNORECASE)),
+    ("tabular_artifact", re.compile(r"\\begin\{tabular\}|\\end\{tabular\}|\\hline", re.IGNORECASE)),
+    ("pure_citation", re.compile(r"^\s*(?:\[[^\]]+\]\s*)?(?:\\cite[a-zA-Z*]*\{[^}]*\}\s*)+$")),
+    ("latex_layout_noise", re.compile(r"\\abovedisplayskip|\\belowdisplayskip|node distance", re.IGNORECASE)),
+]
+
+
+def _extract_paper_glossary(source_paths: list[Path]) -> dict[str, str]:
+    """Build a compact notation glossary persisted per paper."""
+    pairs: dict[str, str] = {}
+    for p in source_paths:
+        try:
+            text = p.read_text(encoding="utf-8", errors="replace")
+        except (OSError, UnicodeError):
+            continue
+        for line in _NOTATION_RE.findall(text):
+            s = " ".join(line.split())
+            if not s:
+                continue
+            m = re.search(r"\\(?:newcommand|renewcommand|def|DeclareMathOperator)\s*\\?([A-Za-z]+)", s)
+            if not m:
+                continue
+            key = m.group(1).strip()
+            if key and key not in pairs:
+                pairs[key] = s[:180]
+        for m in re.finditer(r"\$([A-Za-z][A-Za-z0-9_{}\\^]*)\$\s*(?:denote|denotes|is|means)\s*([^.,;]{3,120})", text):
+            sym = m.group(1).strip()
+            meaning = " ".join(m.group(2).split())
+            if sym and meaning and sym not in pairs:
+                pairs[sym] = meaning[:160]
+    return dict(sorted(pairs.items())[:40])
+
+
+def _format_glossary_hint(glossary: dict[str, str]) -> str:
+    if not glossary:
+        return ""
+    lines = [f"- {k}: {v}" for k, v in list(glossary.items())[:25]]
+    return "\n".join(lines)
 
 
 def _extract_cited_refs_from_tex(tex_paths: list[Path]) -> list[str]:
@@ -141,6 +206,7 @@ def _build_context_pack(
     *,
     entry: TheoremEntry,
     source_text: str,
+    glossary: dict[str, str] | None = None,
 ) -> str:
     """Build theorem-local context pack from TeX text for higher-fidelity translation."""
     stmt = (entry.statement or "").strip()
@@ -175,9 +241,24 @@ def _build_context_pack(
     notations = [n.strip() for n in _NOTATION_RE.findall(source_text)]
     notations = [n for n in notations if n][:8]
 
+    # Pull nearby theorem/lemma statements for theorem-level context.
+    nearby_lemmas: list[str] = []
+    for m in _THEOREM_ENV_RE.finditer(source_text):
+        if idx >= 0 and abs(m.start() - idx) > 4500:
+            continue
+        chunk = " ".join(m.group(1).split())
+        if chunk:
+            nearby_lemmas.append(chunk[:260])
+        if len(nearby_lemmas) >= 3:
+            break
+
     sections: list[str] = []
+    if glossary:
+        sections.append("Paper glossary memory:\n" + "\n".join(f"- {k}: {v}" for k, v in list(glossary.items())[:18]))
     if nearby_defs:
         sections.append("Relevant definitions/notation blocks:\n" + "\n".join(f"- {d}" for d in nearby_defs))
+    if nearby_lemmas:
+        sections.append("Nearby theorem statements:\n" + "\n".join(f"- {d}" for d in nearby_lemmas))
     if notations:
         sections.append("Declared notation/macros:\n" + "\n".join(f"- {n}" for n in notations))
     local_clean = " ".join(local_window.split())
@@ -187,6 +268,63 @@ def _build_context_pack(
         sections.append(f"Local proof sketch:\n{proof[:1200]}")
 
     return "\n\n".join(sections)[:5000]
+
+
+def _goal_lane_score(lean_signature: str) -> float:
+    sig = (lean_signature or "").strip()
+    if not sig:
+        return 0.0
+    score = 0.0
+    lower = sig.lower()
+    if re.search(r"^\s*(theorem|lemma)\b", sig):
+        score += 0.20
+    if any(tok in sig for tok in ("→", "->", "↔", "=", "≤", "≥", "<", ">", "∃", "∀")):
+        score += 0.35
+    if re.search(r":\s*true\s*(?::=|$)", lower):
+        score -= 0.35
+    if "schema_fallback" in lower or "schema_translation" in lower:
+        score -= 0.20
+    if "sorry" in lower:
+        score -= 0.10
+    if re.search(r"\b(def|structure|class|instance)\b", lower):
+        score -= 0.20
+    return max(0.0, min(1.0, 0.5 + score))
+
+
+def _semantic_quality_score(tr: TranslationResult) -> tuple[float, list[str]]:
+    """Composite semantic gate score for deciding prove eligibility."""
+    score = float(getattr(tr, "confidence", 0.0) or 0.0)
+    reasons: list[str] = []
+
+    adv_flags = [str(x) for x in (getattr(tr, "adversarial_flags", []) or [])]
+    roundtrip_flags = [str(x) for x in (getattr(tr, "roundtrip_flags", []) or [])]
+    uncertainty = [str(x) for x in (getattr(tr, "uncertainty_flags", []) or [])]
+    last_error = str(getattr(tr, "last_error", "") or "").lower()
+    sig_lower = str(getattr(tr, "lean_signature", "") or "").lower()
+
+    if "trivially_true" in adv_flags:
+        score -= 0.50
+        reasons.append("adversarial_trivially_true")
+    if any(f.startswith("verdict:wrong") for f in adv_flags):
+        score -= 0.40
+        reasons.append("adversarial_verdict_wrong")
+    if roundtrip_flags:
+        score -= min(0.30, 0.08 * len(roundtrip_flags))
+        reasons.append("roundtrip_semantic_risk")
+    if any("semantic_policy" in f for f in uncertainty):
+        score -= 0.30
+        reasons.append("semantic_policy_flagged")
+    if any("schema_self_check" in f for f in uncertainty):
+        score -= 0.20
+        reasons.append("schema_self_check_risk")
+    if "semantic_policy_violation" in last_error or "trivialization_hard_violation" in last_error:
+        score -= 0.50
+        reasons.append("semantic_policy_violation")
+    if re.search(r":\s*true\s*(?::=|$)", sig_lower):
+        score -= 0.50
+        reasons.append("target_true")
+
+    return max(0.0, min(1.0, score)), reasons
 
 
 def _records_to_dicts(records: list) -> list[dict]:
@@ -217,6 +355,100 @@ def _records_to_dicts(records: list) -> list[dict]:
     return out
 
 
+def _statement_actionability_score(statement: str) -> tuple[float, list[str]]:
+    """Return heuristic actionability score for theorem statements.
+
+    High score means the statement likely contains executable mathematical content
+    (rather than figure/layout/citation fragments).
+    """
+    raw = statement or ""
+    text = " ".join(raw.split())
+    if not text:
+        return 0.0, ["empty_statement"]
+
+    reasons: list[str] = []
+    score = 0.0
+
+    low = text.lower()
+    if len(text) < 40:
+        score -= 0.25
+        reasons.append("too_short")
+    else:
+        score += 0.15
+
+    if any(p.search(text) for _, p in _ACTIONABILITY_DROP_PATTERNS):
+        score -= 0.55
+        reasons.append("layout_or_figure_artifact")
+
+    # Math signal from symbols and display math delimiters.
+    math_token_hits = len(re.findall(r"(=|<|>|≤|≥|∈|→|↔|∀|∃|\\leq|\\geq|\\in|\\subset|\\Rightarrow)", text))
+    if "$$" in raw or "\\[" in raw or "\\(" in raw:
+        score += 0.25
+    if math_token_hits >= 2:
+        score += 0.25
+    elif math_token_hits == 1:
+        score += 0.10
+    else:
+        score -= 0.20
+        reasons.append("weak_math_signal")
+
+    # Theorem-like connective cues.
+    if re.search(r"\b(if|then|suppose|assume|for all|there exists|exists|let)\b", low):
+        score += 0.15
+    else:
+        score -= 0.10
+        reasons.append("missing_theorem_connectives")
+
+    # Excessive control-sequence density usually means unresolved macro/layout noise.
+    ctrl = re.findall(r"\\[A-Za-z]+", text)
+    tok = re.findall(r"[A-Za-z0-9_]+", text)
+    if tok:
+        density = len(ctrl) / max(1, len(tok))
+        if density > 0.30:
+            score -= 0.20
+            reasons.append("high_macro_density")
+
+    # Clamp to [0, 1].
+    score = max(0.0, min(1.0, 0.5 + score))
+    return score, reasons
+
+
+def _dedupe_and_filter_entries(
+    entries: list[TheoremEntry],
+    *,
+    min_actionability_score: float,
+) -> tuple[list[TheoremEntry], list[tuple[TheoremEntry, float, list[str]]]]:
+    """Drop exact duplicates and low-actionability theorem environments."""
+    deduped: list[TheoremEntry] = []
+    dropped: list[tuple[TheoremEntry, float, list[str]]] = []
+    seen_keys: set[tuple[str, str]] = set()
+
+    for e in entries:
+        normalized_stmt = re.sub(r"\s+", " ", (e.statement or "")).strip().lower()
+        key = (e.kind.lower().strip(), normalized_stmt)
+        if key in seen_keys:
+            dropped.append((e, 0.0, ["duplicate_statement"]))
+            continue
+        seen_keys.add(key)
+
+        score, reasons = _statement_actionability_score(e.statement or "")
+        if score < min_actionability_score:
+            dropped.append((e, score, reasons or ["below_actionability_threshold"]))
+            continue
+        deduped.append(e)
+
+    return deduped, dropped
+
+
+@dataclass(frozen=True)
+class TranslationAcceptanceGate:
+    accepted: bool
+    reason: str = ""
+    status: VerificationStatus = VerificationStatus.UNRESOLVED
+    failure_kind: FailureKind = FailureKind.UNKNOWN
+    gate_failures: tuple[str, ...] = ()
+
+
 @dataclass
 class PipelineResult:
     entry: TheoremEntry
@@ -227,6 +459,36 @@ class PipelineResult:
     prove_summary: str = ""
     step_records: list[dict] = field(default_factory=list)
     exception: str = ""    # non-empty if prove raised
+    context_pack: dict[str, Any] = field(default_factory=dict)
+    translation_gate: TranslationAcceptanceGate = field(default_factory=lambda: TranslationAcceptanceGate(accepted=True))
+
+
+def _apply_translation_gate_to_ledger(ledger_entry, gate: TranslationAcceptanceGate) -> None:
+    """Reflect pre-proof translation gate decisions in the ledger entry."""
+    if gate.accepted or not gate.reason:
+        return
+    ledger_entry.status = gate.status
+    ledger_entry.proof_method = ProofMethod.TRANSLATION_LIMITED
+    ledger_entry.failure_kind = gate.failure_kind
+    ledger_entry.failure_origin = FailureOrigin.FORMALIZATION_ERROR
+    prefix = "translation_acceptance_gate"
+    ledger_entry.error_message = (
+        f"{prefix}:{gate.reason}"
+        if not str(ledger_entry.error_message or "").startswith(prefix)
+        else ledger_entry.error_message
+    )
+    failures = list(dict.fromkeys([*list(gate.gate_failures), *list(ledger_entry.gate_failures or [])]))
+    ledger_entry.gate_failures = failures
+    gates = dict(ledger_entry.validation_gates or {})
+    gates["translation_acceptance_gate"] = False
+    if "translation_fidelity_ok" in failures:
+        gates["translation_fidelity_ok"] = False
+    if "claim_equivalent" in failures:
+        gates["claim_equivalent"] = False
+    ledger_entry.validation_gates = gates
+    ledger_entry.promotion_gate_passed = False
+    ledger_entry.review_required = True
+    ledger_entry.review_queue_id = ledger_entry.review_queue_id or f"review::{ledger_entry.theorem_name}"
 
 
 def pipeline_results_to_json(results: list[PipelineResult]) -> list[dict]:
@@ -235,6 +497,11 @@ def pipeline_results_to_json(results: list[PipelineResult]) -> list[dict]:
     for r in results:
         lean_id = _lean_name(r.entry.name)
         sig_clean = re.sub(r"\s*:=\s*by\s*$", "", r.translation.lean_signature).strip()
+        statement_schema = getattr(r.translation, "statement_schema", {}) or {}
+        context_pack = dict(r.context_pack or {})
+        context_pack["original_latex_theorem"] = r.entry.statement
+        if isinstance(statement_schema, dict):
+            context_pack["translation_statement_schema"] = statement_schema
         ledger_entry = build_ledger_entry(
             theorem_name=lean_id,
             lean_file=r.entry.source_file,
@@ -247,9 +514,29 @@ def pipeline_results_to_json(results: list[PipelineResult]) -> list[dict]:
             translation_validated=r.translation.validated,
             translation_rounds_used=r.translation.rounds_used,
             translation_uncertainty_flags=r.translation.uncertainty_flags,
+            translation_adversarial_flags=getattr(r.translation, "adversarial_flags", []),
+            translation_roundtrip_flags=getattr(r.translation, "roundtrip_flags", []),
             translation_confidence=r.translation.confidence,
+            context_pack=context_pack,
+            original_latex_theorem=r.entry.statement,
+            normalized_natural_language_theorem=getattr(
+                r.translation,
+                "normalized_natural_language_theorem",
+                "",
+            ),
+            extracted_assumptions=(
+                [str(x) for x in (statement_schema.get("assumptions") or [])]
+                if isinstance(statement_schema, dict)
+                else None
+            ),
+            extracted_conclusion=(
+                str(statement_schema.get("claim", "") or "")
+                if isinstance(statement_schema, dict)
+                else ""
+            ),
             had_exception=bool(r.exception),
         )
+        _apply_translation_gate_to_ledger(ledger_entry, r.translation_gate)
         theorem_grounding = aggregate_grounding_status(ledger_entry.assumptions)
         rows.append(
             {
@@ -265,6 +552,7 @@ def pipeline_results_to_json(results: list[PipelineResult]) -> list[dict]:
                     "confidence": r.translation.confidence,
                     "uncertainty_flags": r.translation.uncertainty_flags,
                     "adversarial_flags": getattr(r.translation, "adversarial_flags", []),
+                    "structured_translation": dict(getattr(r.translation, "structured_translation", {}) or {}),
                 },
                 "proved": r.proved,
                 "skipped": r.skipped,
@@ -272,6 +560,13 @@ def pipeline_results_to_json(results: list[PipelineResult]) -> list[dict]:
                 "prove_summary": r.prove_summary,
                 "step_records": r.step_records,
                 "exception": r.exception,
+                "translation_acceptance_gate": {
+                    "accepted": r.translation_gate.accepted,
+                    "reason": r.translation_gate.reason,
+                    "status": r.translation_gate.status.value,
+                    "failure_kind": r.translation_gate.failure_kind.value,
+                    "gate_failures": list(r.translation_gate.gate_failures),
+                },
                 "verification_status": ledger_entry.status.value,
                 "grounding_status": theorem_grounding.value,
                 "status_reason": "derived from step obligations + assumption grounding snapshot",
@@ -292,14 +587,59 @@ def pipeline_results_to_json(results: list[PipelineResult]) -> list[dict]:
                     for a in ledger_entry.assumptions
                 ],
                 "first_failing_step": ledger_entry.first_failing_step,
+                "claim_equivalence_verdict": ledger_entry.claim_equivalence_verdict.value,
+                "claim_equivalence_notes": list(ledger_entry.claim_equivalence_notes),
+                "semantic_equivalence_artifact": ledger_entry.to_dict().get(
+                    "semantic_equivalence_artifact",
+                    {},
+                ),
+                "review_required": bool(ledger_entry.review_required),
+                "review_queue_id": ledger_entry.review_queue_id,
             }
         )
     return rows
 
 
+def _translation_repair_queue_rows(*, paper_id: str, results: list[PipelineResult]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for r in results:
+        gate = r.translation_gate
+        if gate.accepted or not gate.reason:
+            continue
+        rows.append(
+            {
+                "paper_id": paper_id,
+                "theorem_name": _lean_name(r.entry.name),
+                "source_name": r.entry.name,
+                "source_statement": r.entry.statement,
+                "lean_signature": r.translation.lean_signature,
+                "validated": bool(r.translation.validated),
+                "gate_reason": gate.reason,
+                "status": gate.status.value,
+                "failure_kind": gate.failure_kind.value,
+                "structured_translation": dict(getattr(r.translation, "structured_translation", {}) or {}),
+                "context_pack": r.context_pack,
+            }
+        )
+    return rows
+
+
+def _write_translation_repair_queue(*, work_dir: Path, paper_id: str, results: list[PipelineResult]) -> Path | None:
+    rows = _translation_repair_queue_rows(paper_id=paper_id, results=results)
+    if not rows:
+        return None
+    out = work_dir / "translation_repair_queue.jsonl"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(
+        "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+    return out
+
+
 # Increment when translation logic changes enough to invalidate old entries.
 # On mismatch, the cache file is ignored and a fresh empty cache is written.
-_TRANSLATION_CACHE_VERSION = 2
+_TRANSLATION_CACHE_VERSION = 4
 
 
 class _TranslationCache:
@@ -396,6 +736,29 @@ class _RateLimiter:
             self._tokens = max(0.0, self._tokens - 1.0)
 
 
+def _run_with_timeout(seconds: float, fn: Callable[[], Any]) -> Any:
+    """Run fn with a POSIX alarm timeout.
+
+    Raises TimeoutError when the timeout expires.
+    """
+    timeout_s = max(0.0, float(seconds))
+    if timeout_s <= 0.0:
+        return fn()
+    if not hasattr(signal, "SIGALRM"):
+        return fn()
+
+    def _handler(_signum: int, _frame: Any) -> None:
+        raise TimeoutError(f"timed out after {timeout_s:.1f}s")
+
+    old = signal.signal(signal.SIGALRM, _handler)
+    try:
+        signal.setitimer(signal.ITIMER_REAL, timeout_s)
+        return fn()
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0.0)
+        signal.signal(signal.SIGALRM, old)
+
+
 def _lean_name(raw: str) -> str:
     """Convert a LaTeX label or index into a valid Lean identifier."""
     # Replace non-alphanumeric (except _) with underscores, strip leading digits.
@@ -429,6 +792,372 @@ def _force_decl_name(signature_decl: str, expected_name: str) -> str:
     return signature_decl[:start] + expected_name + signature_decl[end:]
 
 
+def _comment_block(text: str) -> str:
+    """Render potentially multi-line text as Lean comments safely."""
+    lines = str(text or "").splitlines() or [""]
+    return "\n".join(f"-- {ln}" if ln else "--" for ln in lines)
+
+
+def _normalize_signature_for_output(signature: str, expected_name: str) -> str:
+    """Normalize raw translator signature for stable Lean file emission."""
+    sig = re.sub(r":=\s*by\b.*$", "", signature or "", flags=re.DOTALL).strip()
+    sig = re.sub(r":=\s*$", "", sig).strip()
+    if not sig:
+        return ""
+
+    # Keep only the first declaration block.
+    decl_start = re.search(r"^\s*(theorem|lemma|def)\b", sig, re.MULTILINE)
+    if decl_start and decl_start.start() > 0:
+        sig = sig[decl_start.start():].strip()
+    second_decl = re.search(r"^\s*(theorem|lemma|def)\b", sig[1:], re.MULTILINE)
+    if second_decl:
+        sig = sig[: 1 + second_decl.start()].strip()
+
+    sig = _force_decl_name(sig, expected_name)
+    sig = re.sub(r"^\s*def\b", "theorem", sig, count=1, flags=re.MULTILINE)
+    return sig.strip()
+
+
+# Patterns that identify a placeholder/trivial signature that conveys no math.
+# These must never be emitted as "usable" stubs — they are worse than sorry.
+_PLACEHOLDER_SIG_PATTERNS = [
+    re.compile(r"\(0\s*:\s*ℕ\)\s*=\s*0"),                           # (0 : ℕ) = 0
+    re.compile(r":\s*\(?0\s*:\s*ℕ\)?\s*=\s*0\s*$", re.MULTILINE),  # : 0 = 0 at end
+    re.compile(r"\(p_c\d+\s*:\s*Prop\)\s*\(h_c\d+\s*:\s*p_c\d+\)"),# schema placeholder
+    re.compile(r"\(p_[A-Za-z0-9_']+\s*:\s*Prop\)\s*\(h_[A-Za-z0-9_']+\s*:\s*p_[A-Za-z0-9_']+\)"),
+    re.compile(r":\s*Nonempty\s*\(?Unit\)?"),                         # Nonempty Unit
+    re.compile(r":\s*Unit\s*$", re.MULTILINE),                         # Unit target
+    re.compile(r"\(h\d+\s*:\s*Prop\).*→\s*\(?0\s*:\s*ℕ\)?\s*=\s*0",
+               re.DOTALL),                                            # h1 : Prop → 0=0
+    re.compile(r":\s*h\d+(?:\s*(?:∧|∨|↔|→)\s*h\d+)*\s*$", re.MULTILINE),
+    re.compile(r":\s*\(let\s+Claim\s*:\s*Prop\s*:=.*;\s*Claim\)\s*$", re.MULTILINE | re.DOTALL),
+    re.compile(r"^theorem\s+\w+\s*:\s*True\s*$", re.MULTILINE),     # : True
+    re.compile(r"\(h\s*:\s*True\)\s*:\s*True"),                      # (h : True) : True
+    re.compile(r"^theorem\s+schema_\w+\b", re.MULTILINE),            # schema_fallback / schema_template
+    re.compile(r":\s*[A-Za-z_][A-Za-z0-9_']*(?:RegeneratedStatement|PaperClaim)\s*$", re.MULTILINE),
+]
+
+
+def _is_placeholder_sig(sig: str) -> bool:
+    """Return True if a signature is a trivial placeholder with no mathematical content."""
+    if not sig:
+        return True
+    for pat in _PLACEHOLDER_SIG_PATTERNS:
+        if pat.search(sig):
+            return True
+    return False
+
+
+def _decl_target(sig: str) -> str:
+    """Best-effort theorem target extraction for acceptance-gate heuristics."""
+    s = re.sub(r":=\s*by\b.*$", "", sig or "", flags=re.DOTALL).strip()
+    if not s:
+        return ""
+    depth = 0
+    target_start = -1
+    for idx in range(len(s) - 1, -1, -1):
+        ch = s[idx]
+        if ch in ")]}":
+            depth += 1
+        elif ch in "([{":
+            depth = max(0, depth - 1)
+        elif ch == ":" and depth == 0:
+            target_start = idx + 1
+            break
+    return s[target_start:].strip() if target_start >= 0 else ""
+
+
+def _claim_shape_from_latex(text: str) -> str:
+    s = (text or "").lower()
+    if any(t in s for t in (" if and only if ", " iff ", "↔", "\\iff")):
+        return "iff"
+    if any(t in s for t in ("there exists", "\\exists", "∃")):
+        return "exists"
+    if any(t in s for t in ("≤", "≥", "\\le", "\\ge", "\\leq", "\\geq")):
+        return "ineq"
+    if any(t in s for t in (" for all ", "\\forall", "∀")):
+        return "forall"
+    if "=" in s:
+        return "eq"
+    return "prop"
+
+
+def _claim_shape_from_signature(sig: str) -> str:
+    target = _decl_target(sig)
+    t = target.lower()
+    if "↔" in target or "<->" in target:
+        return "iff"
+    if "∃" in target or "exists" in t:
+        return "exists"
+    if "∀" in target or "forall" in t:
+        return "forall"
+    if any(tok in target for tok in ("≤", "≥", "<", ">")):
+        return "ineq"
+    if "=" in target:
+        return "eq"
+    return "prop"
+
+
+def _claim_shape_mismatch_issue(latex_statement: str, signature: str) -> str:
+    lhs = _claim_shape_from_latex(latex_statement)
+    rhs = _claim_shape_from_signature(signature)
+    if lhs == "prop" or rhs == "prop" or lhs == rhs:
+        return ""
+    return f"claim_shape_mismatch:{lhs}->{rhs}"
+
+
+def _raw_latex_leak_reason(sig: str) -> str:
+    """Detect informal LaTeX/paper notation that leaked into generated Lean."""
+    s = " ".join((sig or "").split())
+    if not s:
+        return "empty_signature"
+    target = _decl_target(sig)
+    if re.fullmatch(r"I_i\s+(\S+)\s*=\s*I_i\s+\1", target or ""):
+        return "bare_paper_operator_application"
+    artifact_patterns: list[tuple[str, str]] = [
+        (r"\\(?:left|right|frac|sum|int|ell|xi|omega|theta|alpha|beta|gamma|begin|end)\b", "raw_latex_command"),
+        (r"\$[^$]*\$", "dollar_math_delimiter"),
+        (r"\b[BD]_N\^\{", "latex_superscript_artifact"),
+        (r"\^\{[^}]*\}", "latex_superscript_braces"),
+        (r"_\{[^}]*\}", "latex_subscript_braces"),
+        (r"\^\s*\([^)]*;", "semicolon_tuple_exponent_artifact"),
+        (r"\|[^|]+\|\s*(?:~|\\sim)\s*[A-Za-z0-9_']+", "latex_asymptotic_artifact"),
+        (r"∥[^∥]+∥_[A-Za-z0-9_]+", "norm_suffix_artifact"),
+        (r"\bd_dts\b", "latex_differential_artifact"),
+        (r"\bC_T\s+HSobolev\b", "bare_function_space_application"),
+        (r"\bC_TH\s*\^", "undefined_paper_function_space"),
+        (r"\bComplex\.abs\b", "non_mathlib_complex_abs_notation"),
+    ]
+    for pattern, reason in artifact_patterns:
+        if re.search(pattern, s):
+            return reason
+    return ""
+
+
+def _normalize_prop_for_gate(text: str) -> str:
+    return re.sub(r"\s+", " ", (text or "").strip())
+
+
+def _hypothesis_copies_target_issue(sig: str) -> str:
+    """Detect weakened statements of the form `(h : target) : target`."""
+    target = _normalize_prop_for_gate(_decl_target(sig))
+    if not target:
+        return ""
+    decl = re.sub(r":=\s*by\b.*$", "", sig or "", flags=re.DOTALL)
+    for match in re.finditer(
+        r"\(([hH][A-Za-z0-9_']*)\s*:\s*([^()]+?)\)",
+        decl,
+        flags=re.DOTALL,
+    ):
+        name = match.group(1)
+        typ = _normalize_prop_for_gate(match.group(2))
+        suspicious_name = re.search(r"(?:easy|claim|target|bound|conclusion|result)", name, re.IGNORECASE)
+        relation_target = any(tok in target for tok in ("=", "≤", "≥", "<", ">", "↔", "∧", "∨", "∃", "∀"))
+        if typ == target and (relation_target or suspicious_name):
+            return f"claim_copied_into_hypothesis:{name}"
+    return ""
+
+
+def _relaxed_prop_identity_issue(sig: str) -> str:
+    target = _normalize_prop_for_gate(_decl_target(sig))
+    if re.fullmatch(r"([A-Za-z_][A-Za-z0-9_']*)\s*(?:→|->)\s*\1", target):
+        return "relaxed_prop_identity"
+    return ""
+
+
+def _fake_placeholder_issue(sig: str) -> str:
+    s = " ".join((sig or "").split())
+    if re.search(r"\b(?:sorry_placeholder|schema_claim_hint|fake_theorem|placeholder_claim)\b", s, re.IGNORECASE):
+        return "fake_lean_placeholder"
+    return ""
+
+
+def _claim_atom_issue(sig: str) -> str:
+    target = _normalize_prop_for_gate(_decl_target(sig))
+    if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_']*(?:RegeneratedStatement|PaperClaim)", target or ""):
+        return "claim_atom_target"
+    if "PaperClaim" in (sig or ""):
+        return "paper_claim_atom"
+    return ""
+
+
+def _quantifier_mismatch_issue(latex_statement: str, sig: str) -> str:
+    source = (latex_statement or "").lower()
+    if not source:
+        return ""
+    sig_no_body = re.sub(r":=\s*by\b.*$", "", sig or "", flags=re.DOTALL)
+    target = _decl_target(sig)
+    binder_count = len(re.findall(r"\([^()]+?\s*:\s*[^()]+?\)", sig_no_body))
+    if any(tok in source for tok in ("for all", "\\forall", "∀")):
+        if "∀" not in target and "forall" not in target.lower() and binder_count == 0:
+            return "wrong_quantifier:missing_forall"
+    if any(tok in source for tok in ("there exists", "\\exists", "∃")):
+        if "∃" not in target and "exists" not in target.lower():
+            return "wrong_quantifier:missing_exists"
+    return ""
+
+
+def translation_acceptance_gate(
+    *,
+    entry: TheoremEntry,
+    translation: TranslationResult,
+) -> TranslationAcceptanceGate:
+    """Block proof search for translations that are not meaningful proof targets."""
+    sig = str(getattr(translation, "lean_signature", "") or "")
+    last_error = str(getattr(translation, "last_error", "") or "")
+    last_error_l = last_error.lower()
+    uncertainty = [str(x).lower() for x in (getattr(translation, "uncertainty_flags", []) or [])]
+    adversarial = [str(x).lower() for x in (getattr(translation, "adversarial_flags", []) or [])]
+    roundtrip = [str(x).lower() for x in (getattr(translation, "roundtrip_flags", []) or [])]
+
+    placeholder = _is_placeholder_sig(sig)
+    if placeholder:
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason="placeholder_or_schema_signature",
+            status=VerificationStatus.TRANSLATION_LIMITED,
+            failure_kind=FailureKind.TRANSLATION_FAILURE,
+            gate_failures=("translation_acceptance_gate", "translation_limited_statement"),
+        )
+
+    fake_placeholder = _fake_placeholder_issue(sig)
+    if fake_placeholder:
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason=fake_placeholder,
+            status=VerificationStatus.TRANSLATION_LIMITED,
+            failure_kind=FailureKind.TRANSLATION_FAILURE,
+            gate_failures=("translation_acceptance_gate", "translation_limited_statement"),
+        )
+
+    claim_atom = _claim_atom_issue(sig)
+    if claim_atom:
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason=claim_atom,
+            status=VerificationStatus.FLAWED,
+            failure_kind=FailureKind.FALSE_OR_AMBIGUOUS_STATEMENT,
+            gate_failures=("translation_acceptance_gate", "translation_fidelity_ok", "claim_equivalent"),
+        )
+
+    leak = _raw_latex_leak_reason(sig)
+    if leak:
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason=f"raw_latex_leak:{leak}",
+            status=VerificationStatus.FLAWED,
+            failure_kind=FailureKind.ELABORATION_FAILURE,
+            gate_failures=("translation_acceptance_gate", "translation_fidelity_ok", "claim_equivalent"),
+        )
+
+    if not bool(getattr(translation, "validated", False)):
+        missing_identifier = (
+            "unknown identifier" in last_error_l
+            or "unknown constant" in last_error_l
+            or "failed to synthesize" in last_error_l
+        )
+        if missing_identifier:
+            return TranslationAcceptanceGate(
+                accepted=False,
+                reason="unresolved_identifier_or_missing_paper_local_theory",
+                status=VerificationStatus.TRANSLATION_LIMITED,
+                failure_kind=FailureKind.MISSING_DEFINITION,
+                gate_failures=("translation_acceptance_gate", "identifiers_resolve_or_declared"),
+            )
+
+    relaxed_prop = _relaxed_prop_identity_issue(sig)
+    if relaxed_prop:
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason=relaxed_prop,
+            status=VerificationStatus.FLAWED,
+            failure_kind=FailureKind.FALSE_OR_AMBIGUOUS_STATEMENT,
+            gate_failures=("translation_acceptance_gate", "translation_fidelity_ok", "claim_equivalent"),
+        )
+
+    copied_hyp = _hypothesis_copies_target_issue(sig)
+    if copied_hyp:
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason=copied_hyp,
+            status=VerificationStatus.FLAWED,
+            failure_kind=FailureKind.FALSE_OR_AMBIGUOUS_STATEMENT,
+            gate_failures=("translation_acceptance_gate", "translation_fidelity_ok", "claim_equivalent"),
+        )
+
+    shape = _claim_shape_mismatch_issue(entry.statement or "", sig)
+    if shape or any("claim_shape_mismatch" in f for f in uncertainty):
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason=shape or "claim_shape_mismatch",
+            status=VerificationStatus.FLAWED,
+            failure_kind=FailureKind.FALSE_OR_AMBIGUOUS_STATEMENT,
+            gate_failures=("translation_acceptance_gate", "translation_fidelity_ok", "claim_equivalent"),
+        )
+
+    quantifier = _quantifier_mismatch_issue(entry.statement or "", sig)
+    if quantifier:
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason=quantifier,
+            status=VerificationStatus.FLAWED,
+            failure_kind=FailureKind.FALSE_OR_AMBIGUOUS_STATEMENT,
+            gate_failures=("translation_acceptance_gate", "translation_fidelity_ok", "claim_equivalent"),
+        )
+
+    statement_validity = classify_statement(
+        {
+            "theorem_name": getattr(entry, "name", "") or "",
+            "lean_statement": sig,
+            "status": "UNRESOLVED",
+            "gate_failures": [],
+            "axiom_debt": [],
+        }
+    )
+    if not statement_validity.valid_for_proof and statement_validity.primary_blocker in {
+        "translation_limited",
+        "bad_translation_artifact",
+        "ill_typed_statement",
+        "paper_theory_debt",
+    }:
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason="strict_statement_validity:" + ",".join(statement_validity.reasons or [statement_validity.primary_blocker]),
+            status=VerificationStatus.FLAWED,
+            failure_kind=FailureKind.FALSE_OR_AMBIGUOUS_STATEMENT,
+            gate_failures=("translation_acceptance_gate", "strict_statement_validity", "translation_fidelity_ok"),
+        )
+
+    if any("verdict:wrong" in f or "trivially_true" in f for f in adversarial):
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason="adversarial_or_trivialized_translation",
+            status=VerificationStatus.FLAWED,
+            failure_kind=FailureKind.FALSE_OR_AMBIGUOUS_STATEMENT,
+            gate_failures=("translation_acceptance_gate", "translation_fidelity_ok", "claim_equivalent"),
+        )
+
+    if any("roundtrip_semantic_mismatch" in f for f in roundtrip):
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason="roundtrip_semantic_mismatch",
+            status=VerificationStatus.FLAWED,
+            failure_kind=FailureKind.FALSE_OR_AMBIGUOUS_STATEMENT,
+            gate_failures=("translation_acceptance_gate", "translation_fidelity_ok", "claim_equivalent"),
+        )
+
+    if not bool(getattr(translation, "validated", False)):
+        return TranslationAcceptanceGate(
+            accepted=False,
+            reason="lean_elaboration_failed",
+            status=VerificationStatus.FLAWED,
+            failure_kind=FailureKind.ELABORATION_FAILURE,
+            gate_failures=("translation_acceptance_gate", "translation_fidelity_ok"),
+        )
+
+    return TranslationAcceptanceGate(accepted=True)
+
+
 def run_pipeline(
     *,
     paper_id: str,
@@ -457,12 +1186,24 @@ def run_pipeline(
     self_compounding_top_k: int = 4,
     self_compounding_max_entries: int = 400,
     imports: str = "",
+    domain: str = "",
+    paper_theory_module: str = "",
+    disable_paper_theory_refresh: bool = False,
+    paper_theory_build_gate: bool = False,
     temperature: float = 0.2,
     dojo_timeout: int = 600,
     use_schema_stage: bool = True,
     deterministic_hard_mode: bool = True,
     adversarial_hard_block: bool = False,
     parallel_theorems: int = 1,
+    min_actionability_score: float = 0.35,
+    goal_lane_only_for_proving: bool = True,
+    min_goal_lane_score: float = 0.55,
+    min_prove_confidence: float = 0.55,
+    min_semantic_quality_score: float = 0.60,
+    strict_assumption_slot_coverage: bool = True,
+    enable_schema_template_synthesis: bool = False,
+    enable_schema_self_check: bool = True,
     rate_limiter: "_RateLimiter | None" = None,
     local_tex_paths: list[Path] | None = None,
     source_label: str | None = None,
@@ -471,6 +1212,8 @@ def run_pipeline(
     kg_root: Path | None = None,
 ) -> list[PipelineResult]:
     label = source_label if source_label is not None else paper_id
+    repair_run_id = f"arxiv_to_lean_{re.sub(r'[^A-Za-z0-9_.-]+', '_', paper_id)}_{int(time.time())}_{os.getpid()}"
+    repair_run_dataset_path = default_run_dataset_path(project_root, run_id=repair_run_id)
 
     # --- 2.1 Fetch or local tree (same as arxiv: all .tex files + find_main_tex) ---
     if local_tex_paths is not None:
@@ -497,24 +1240,74 @@ def run_pipeline(
 
     # --- 2.1a Preprocess includes/macros before theorem extraction ---
     print(f"\n[2.1a] Preprocessing LaTeX macros/includes ...")
-    macro_defs, env_aliases = collect_definitions(source_paths)
-    register_env_aliases(env_aliases)
     root_tex_paths = collect_root_tex_paths(tex_paths, main_tex=main_tex)
-    expanded_dir = work_dir / "expanded_source"
-    expanded_tex_paths = write_expanded_roots(
-        root_tex_paths=root_tex_paths,
-        source_root=main_tex.parent,
-        output_root=expanded_dir,
-        macro_defs=macro_defs,
-    )
-    print(f"      expanded: {len(expanded_tex_paths)} logical root file(s)")
+    expanded_tex_paths: list[Path] = []
+    preprocess_mode = "expanded"
+    # Opt-in timeout: disabled by default so long papers can preprocess fully.
+    preprocess_timeout_s = float(os.environ.get("DESOL_PREPROCESS_TIMEOUT_S", "0") or 0.0)
+    try:
+        def _expand() -> list[Path]:
+            macro_defs, env_aliases = collect_definitions(source_paths)
+            register_env_aliases(env_aliases)
+            expanded_dir = work_dir / "expanded_source"
+            return write_expanded_roots(
+                root_tex_paths=root_tex_paths,
+                source_root=main_tex.parent,
+                output_root=expanded_dir,
+                macro_defs=macro_defs,
+            )
+
+        expanded_tex_paths = _run_with_timeout(preprocess_timeout_s, _expand)
+        print(f"      expanded: {len(expanded_tex_paths)} logical root file(s)")
+    except TimeoutError as exc:
+        preprocess_mode = "fallback_root_tex"
+        expanded_tex_paths = list(root_tex_paths)
+        print(
+            "      warning: preprocessor timeout; "
+            "falling back to unexpanded root tex files "
+            f"({len(expanded_tex_paths)} file(s)): {exc}"
+        )
+    except RecursionError as exc:
+        preprocess_mode = "fallback_root_tex"
+        expanded_tex_paths = list(root_tex_paths)
+        print(
+            "      warning: preprocessor recursion overflow; "
+            "falling back to unexpanded root tex files "
+            f"({len(expanded_tex_paths)} file(s)): {exc}"
+        )
+    except Exception as exc:
+        preprocess_mode = "fallback_root_tex"
+        expanded_tex_paths = list(root_tex_paths)
+        print(
+            "      warning: preprocessor failed; "
+            "falling back to unexpanded root tex files "
+            f"({len(expanded_tex_paths)} file(s)): {exc}"
+        )
 
     # --- 2.1b Extract ---
     print(f"\n[2.1] Extracting theorem environments ...")
     entries = extract_from_files(expanded_tex_paths)
+    if preprocess_mode != "expanded":
+        print(f"      extraction_mode: {preprocess_mode}")
     if kinds:
         entries = [e for e in entries if e.kind in kinds]
     print(f"      found: {len(entries)} environments (kinds filter: {kinds or 'all'})")
+    entries, dropped = _dedupe_and_filter_entries(
+        entries,
+        min_actionability_score=max(0.0, min(1.0, float(min_actionability_score))),
+    )
+    if dropped:
+        drop_reasons: dict[str, int] = {}
+        for _, _, reasons in dropped:
+            for r in reasons:
+                drop_reasons[r] = drop_reasons.get(r, 0) + 1
+        reason_summary = ", ".join(f"{k}={v}" for k, v in sorted(drop_reasons.items()))
+        print(
+            "      filtered: "
+            f"dropped {len(dropped)} low-actionability/duplicate entries "
+            f"(threshold={min_actionability_score:.2f}; {reason_summary})"
+        )
+    print(f"      actionable: {len(entries)} environments")
 
     if max_theorems > 0:
         entries = entries[:max_theorems]
@@ -523,6 +1316,81 @@ def run_pipeline(
     cited_refs = _extract_cited_refs_from_tex(tex_paths)
     if cited_refs:
         print(f"      extracted citation/bibliography refs: {len(cited_refs)}")
+    paper_glossary = _extract_paper_glossary(source_paths)
+    if paper_glossary:
+        print(f"      glossary terms: {len(paper_glossary)}")
+    glossary_path = work_dir / "paper_glossary.json"
+    try:
+        glossary_path.parent.mkdir(parents=True, exist_ok=True)
+        glossary_path.write_text(json.dumps(paper_glossary, ensure_ascii=False, indent=2), encoding="utf-8")
+    except Exception:
+        pass
+
+    paper_theory_module_name = ""
+    paper_theory_symbols = []
+    paper_theory_lock = threading.Lock()
+
+    def _paper_theory_seed_text(extra: str = "") -> str:
+        chunks: list[str] = []
+        for p in list(source_paths)[:80] + list(expanded_tex_paths)[:20]:
+            try:
+                chunks.append(Path(p).read_text(encoding="utf-8", errors="replace")[:20000])
+            except Exception:
+                continue
+        for e in entries:
+            chunks.append(str(e.name or ""))
+            chunks.append(str(e.kind or ""))
+            chunks.append(str(e.statement or ""))
+            chunks.append(str(e.proof or ""))
+        if out_lean.exists():
+            try:
+                chunks.append(out_lean.read_text(encoding="utf-8", errors="replace")[:40000])
+            except Exception:
+                pass
+        if extra:
+            chunks.append(extra)
+        return "\n".join(chunks)
+
+    def _refresh_paper_theory(*, extra_text: str = "", schemas: list[dict[str, Any]] | None = None) -> None:
+        nonlocal imports, paper_theory_module_name, paper_theory_symbols
+        if disable_paper_theory_refresh:
+            return
+        with paper_theory_lock:
+            if paper_theory_module:
+                module_name = paper_theory_module.rsplit(".", 1)[-1]
+                paper_theory_module_name = module_name
+                imports = paper_theory_import_header(imports or _PROOF_IMPORTS, module_name=module_name)
+                return
+            seed_text = _paper_theory_seed_text(extra_text)
+            new_symbols = build_symbol_inventory(
+                seed_text=seed_text,
+                glossary=paper_glossary,
+                schemas=schemas or [],
+                entries=entries,
+            )
+            merged_symbols = dedupe_symbols([*paper_theory_symbols, *new_symbols])
+            if paper_theory_module_name and {s.lean for s in merged_symbols} == {s.lean for s in paper_theory_symbols}:
+                imports = paper_theory_import_header(imports or _PROOF_IMPORTS, module_name=paper_theory_module_name)
+                return
+            paper_theory_symbols = merged_symbols
+            plan = plan_paper_theory(
+                paper_id=paper_id,
+                domain=domain or os.environ.get("DESOL_DOMAIN_HINT", ""),
+                inventory=paper_theory_symbols,
+            )
+            theory_path = write_paper_theory(project_root=project_root, plan=plan)
+            paper_theory_module_name = plan.module_name
+            imports = paper_theory_import_header(imports or _PROOF_IMPORTS, module_name=plan.module_name)
+            print(
+                "      paper theory: "
+                f"{theory_path} ({len(paper_theory_symbols)} symbol(s), domain={plan.domain})"
+            )
+            if paper_theory_build_gate:
+                gate = build_paper_theory(project_root=project_root, module_name=plan.module_name)
+                if not gate.get("ok"):
+                    raise RuntimeError(f"PaperTheory build failed: {gate.get('output_tail', '')}")
+
+    _refresh_paper_theory()
 
     if not entries:
         print("      no theorem environments found — nothing to do")
@@ -574,7 +1442,23 @@ def run_pipeline(
                 )
             except OSError:
                 _source_text_cache[src] = ""
-        return _build_context_pack(entry=entry, source_text=_source_text_cache[src])
+        return _build_context_pack(entry=entry, source_text=_source_text_cache[src], glossary=paper_glossary)
+
+    def _structured_context_pack(entry: TheoremEntry, context_hint: str) -> dict[str, Any]:
+        source = " ".join((context_hint or "").split())
+        defs = re.findall(r"(?:Definition|Assume|Let)\b[^.]{5,220}\.", source, flags=re.IGNORECASE)
+        notes = re.findall(r"(?:\\\\newcommand|\\\\DeclareMathOperator)[^\n]{1,160}", context_hint or "")
+        assumptions = re.findall(r"(?:if|suppose|assuming)\b[^.]{5,180}\.", source, flags=re.IGNORECASE)
+        nearby_claims = re.findall(r"(?:theorem|lemma|proposition)\b[^.]{5,220}\.", source, flags=re.IGNORECASE)
+        return {
+            "theorem_name": _lean_name(entry.name),
+            "original_latex_theorem": (entry.statement or "").strip(),
+            "definitions": [d.strip() for d in defs[:10] if d.strip()],
+            "notations": [n.strip() for n in notes[:10] if n.strip()],
+            "local_assumptions": [a.strip() for a in assumptions[:10] if a.strip()],
+            "nearby_claims": [c.strip() for c in nearby_claims[:8] if c.strip()],
+            "context_excerpt": source[:1800],
+        }
 
     static_premise_context = ""
     if premise_file:
@@ -594,6 +1478,8 @@ def run_pipeline(
 
     def _process_entry(i: int, entry: TheoremEntry) -> PipelineResult:
         lean_id = _lean_name(entry.name)
+        context_hint = _context_hint_for_entry(entry)
+        context_pack = _structured_context_pack(entry, context_hint)
         with _print_lock:
             print(f"\n[{i}/{n}] [{entry.kind}] {entry.name} → {lean_id}")
             if progress_hook:
@@ -611,7 +1497,26 @@ def run_pipeline(
                 last_error=saved.get("last_error", ""),
                 confidence=float(saved.get("confidence", 0.0)),
                 uncertainty_flags=saved.get("uncertainty_flags", []),
+                adversarial_flags=saved.get("adversarial_flags", []),
+                roundtrip_flags=saved.get("roundtrip_flags", []),
+                statement_schema=saved.get("statement_schema", {}),
+                normalized_natural_language_theorem=saved.get(
+                    "normalized_natural_language_theorem",
+                    "",
+                ),
+                structured_translation=saved.get("structured_translation", {}),
             )
+            gate_saved_raw = saved.get("translation_gate", {})
+            if isinstance(gate_saved_raw, dict):
+                gate_saved = TranslationAcceptanceGate(
+                    accepted=bool(gate_saved_raw.get("accepted", True)),
+                    reason=str(gate_saved_raw.get("reason", "")),
+                    status=VerificationStatus(str(gate_saved_raw.get("status", VerificationStatus.UNRESOLVED.value))),
+                    failure_kind=FailureKind(str(gate_saved_raw.get("failure_kind", FailureKind.UNKNOWN.value))),
+                    gate_failures=tuple(str(x) for x in (gate_saved_raw.get("gate_failures", []) or [])),
+                )
+            else:
+                gate_saved = translation_acceptance_gate(entry=entry, translation=tr_saved)
             return PipelineResult(
                 entry=entry,
                 translation=tr_saved,
@@ -621,6 +1526,10 @@ def run_pipeline(
                 prove_summary=saved.get("prove_summary", "[resumed from checkpoint]"),
                 step_records=saved.get("step_records", []),
                 exception=saved.get("exception", ""),
+                context_pack=saved.get("context_pack", context_pack)
+                if isinstance(saved.get("context_pack", context_pack), dict)
+                else context_pack,
+                translation_gate=gate_saved,
             )
 
         # --- 2.2 Translate (cache-first) ---
@@ -639,7 +1548,6 @@ def run_pipeline(
                 print(f"         translate: cached  rounds=0")
         else:
             rl.acquire()
-            context_hint = _context_hint_for_entry(entry)
             tr = translate_statement(
                 latex_statement=entry.statement,
                 latex_proof_hint=context_hint,
@@ -653,23 +1561,72 @@ def run_pipeline(
                 temperature=temperature,
                 use_schema_stage=use_schema_stage,
                 deterministic_hard_mode=deterministic_hard_mode,
+                run_adversarial_check=not translate_only,
+                run_roundtrip_check=not translate_only,
+                strict_assumption_slot_coverage=bool(strict_assumption_slot_coverage),
+                enable_schema_template_synthesis=bool(enable_schema_template_synthesis),
+                enable_schema_self_check=bool(enable_schema_self_check),
+                glossary_hint=_format_glossary_hint(paper_glossary),
+                paper_id=paper_id,
+                theorem_name=_lean_name(entry.name),
+                run_id=repair_run_id,
             )
-            if tr.validated:
-                cache.put(paper_id, entry.name, tr.lean_signature)
             status = "validated" if tr.validated else f"unvalidated (error: {tr.last_error[:60]})"
             with _print_lock:
                 print(f"         translate: {status}  rounds={tr.rounds_used}")
+
+        schema_payloads: list[dict[str, Any]] = []
+        statement_schema = getattr(tr, "statement_schema", {}) or {}
+        structured_translation = getattr(tr, "structured_translation", {}) or {}
+        if isinstance(statement_schema, dict):
+            schema_payloads.append(statement_schema)
+        if isinstance(structured_translation, dict):
+            schema_payloads.append(structured_translation)
+        try:
+            _refresh_paper_theory(
+                extra_text="\n".join(
+                    [
+                        str(getattr(tr, "lean_signature", "") or ""),
+                        str(getattr(tr, "last_error", "") or ""),
+                    ]
+                ),
+                schemas=schema_payloads,
+            )
+        except Exception as exc:
+            with _print_lock:
+                print(f"         paper theory refresh: WARNING — {str(exc)[:120]}")
 
         # Adversarial check enforcement: if the translation is flagged as wrong or
         # trivially true, treat it as unvalidated to avoid proving a bad statement.
         adv_flags = getattr(tr, "adversarial_flags", []) or []
         adv_verdict_wrong = any(f.startswith("verdict:wrong") for f in adv_flags)
         adv_trivially_true = "trivially_true" in adv_flags
+        _lean_sig_lower = str(getattr(tr, "lean_signature", "") or "").lower()
+        _last_err_lower = str(getattr(tr, "last_error", "") or "").lower()
+        # `: True` bodies are allowed for definition-style entries (defin_*, def_*) —
+        # they are structural stubs, not trivializations of real claims.
+        _true_body_match = re.search(r":\s*true\s*(?::=|$)", _lean_sig_lower)
+        _is_def_entry = bool(re.search(
+            r"(?:defin_|def_|notation_|abbrev_|_definition|_def\b|_notation\b|_abbrev\b)",
+            _lean_name(entry.name).lower(),
+        ))
+        # Only block on semantic_policy_violation when the translation is NOT validated.
+        # If the translator recovered (tr.validated=True), last_error may still contain
+        # an intermediate round's failure — do not penalize a successful recovery.
+        _translation_validated = bool(getattr(tr, "validated", False))
+        semantic_policy_violation = (
+            not _translation_validated
+            and (
+                "semantic_policy_violation" in _last_err_lower
+                or "trivialization_hard_violation" in _last_err_lower
+                or (_true_body_match is not None and not _is_def_entry)
+            )
+        )
         if adv_verdict_wrong or adv_trivially_true:
             reason = (
                 f"adversarial_check_failed:{','.join(adv_flags)}"
             )
-            should_block = adversarial_hard_block or (not translate_only)
+            should_block = True if adv_trivially_true else (adversarial_hard_block or (not translate_only))
             with _print_lock:
                 if should_block:
                     print(f"         adversarial: BLOCKED — {reason}")
@@ -685,10 +1642,123 @@ def run_pipeline(
                     proof_body="",
                     skipped=True,
                     prove_summary=reason,
+                    context_pack=context_pack,
+                    translation_gate=TranslationAcceptanceGate(
+                        accepted=False,
+                        reason=reason,
+                        status=VerificationStatus.FLAWED,
+                        failure_kind=FailureKind.FALSE_OR_AMBIGUOUS_STATEMENT,
+                        gate_failures=("translation_acceptance_gate", "translation_fidelity_ok", "claim_equivalent"),
+                    ),
                 )
+        if semantic_policy_violation:
+            reason = "semantic_policy_hard_block"
+            with _print_lock:
+                print(f"         semantic: BLOCKED — {reason}")
+            return PipelineResult(
+                entry=entry,
+                translation=tr,
+                proved=False,
+                proof_body="",
+                skipped=True,
+                prove_summary=reason,
+                context_pack=context_pack,
+                translation_gate=TranslationAcceptanceGate(
+                    accepted=False,
+                    reason=reason,
+                    status=VerificationStatus.FLAWED,
+                    failure_kind=FailureKind.FALSE_OR_AMBIGUOUS_STATEMENT,
+                    gate_failures=("translation_acceptance_gate", "translation_fidelity_ok", "claim_equivalent"),
+                ),
+            )
         if adv_flags:
             with _print_lock:
                 print(f"         adversarial: WARNING — {adv_flags} (proceeding with penalty)")
+
+        acceptance_gate = translation_acceptance_gate(entry=entry, translation=tr)
+        if (
+            not acceptance_gate.accepted
+            and not translate_only
+            and "typed_statement_ir" not in [str(x) for x in (getattr(tr, "uncertainty_flags", []) or [])]
+        ):
+            rl.acquire()
+            retry_tr = translate_statement(
+                latex_statement=entry.statement,
+                latex_proof_hint=context_hint,
+                client=client,
+                model=model,
+                project_root=project_root,
+                imports=imports,
+                retrieval_index_path=retrieval_index_path,
+                max_repair_rounds=3,
+                translation_candidates=translation_candidates,
+                temperature=0.0,
+                use_schema_stage=True,
+                deterministic_hard_mode=True,
+                run_adversarial_check=False,
+                run_roundtrip_check=False,
+                strict_assumption_slot_coverage=bool(strict_assumption_slot_coverage),
+                enable_schema_template_synthesis=bool(enable_schema_template_synthesis),
+                enable_schema_self_check=False,
+                glossary_hint=_format_glossary_hint(paper_glossary),
+                paper_id=paper_id,
+                theorem_name=_lean_name(entry.name),
+                run_id=f"{repair_run_id}_strict_retry",
+            )
+            retry_gate = translation_acceptance_gate(entry=entry, translation=retry_tr)
+            if retry_gate.accepted:
+                tr = retry_tr
+                acceptance_gate = retry_gate
+                with _print_lock:
+                    print("         strict statement retry: accepted typed structured translation")
+                retry_schema_payloads: list[dict[str, Any]] = []
+                retry_schema = getattr(tr, "statement_schema", {}) or {}
+                retry_structured = getattr(tr, "structured_translation", {}) or {}
+                if isinstance(retry_schema, dict):
+                    retry_schema_payloads.append(retry_schema)
+                if isinstance(retry_structured, dict):
+                    retry_schema_payloads.append(retry_structured)
+                try:
+                    _refresh_paper_theory(
+                        extra_text="\n".join(
+                            [
+                                str(getattr(tr, "lean_signature", "") or ""),
+                                str(getattr(tr, "last_error", "") or ""),
+                            ]
+                        ),
+                        schemas=retry_schema_payloads,
+                    )
+                except Exception as exc:
+                    with _print_lock:
+                        print(f"         paper theory retry refresh: WARNING — {str(exc)[:120]}")
+            else:
+                with _print_lock:
+                    print(f"         strict statement retry: still blocked — {retry_gate.reason}")
+        if not acceptance_gate.accepted:
+            with _print_lock:
+                print(f"         translation_acceptance_gate: BLOCKED — {acceptance_gate.reason}")
+            return PipelineResult(
+                entry=entry,
+                translation=tr,
+                proved=False,
+                proof_body="",
+                skipped=True,
+                prove_summary=f"translation_acceptance_gate:{acceptance_gate.reason}",
+                context_pack={
+                    **context_pack,
+                    "translation_acceptance_gate": {
+                        "accepted": False,
+                        "reason": acceptance_gate.reason,
+                        "status": acceptance_gate.status.value,
+                        "failure_kind": acceptance_gate.failure_kind.value,
+                        "gate_failures": list(acceptance_gate.gate_failures),
+                    },
+                },
+                translation_gate=acceptance_gate,
+            )
+
+        if not cached_sig and tr.validated:
+            cache.put(paper_id, entry.name, tr.lean_signature)
 
         if translate_only or not tr.validated:
             reason = "translate-only mode" if translate_only else "translation not validated"
@@ -699,6 +1769,48 @@ def run_pipeline(
                 proof_body="",
                 skipped=True,
                 prove_summary=reason,
+                context_pack=context_pack,
+            )
+
+        # Goal-lane and confidence cohort gating before proof search.
+        goal_score = _goal_lane_score(tr.lean_signature)
+        if goal_lane_only_for_proving and goal_score < float(min_goal_lane_score):
+            return PipelineResult(
+                entry=entry,
+                translation=tr,
+                proved=False,
+                proof_body="",
+                skipped=True,
+                prove_summary=f"skipped_non_goal_lane(goal_score={goal_score:.2f})",
+                context_pack=context_pack,
+            )
+        if tr.confidence < float(min_prove_confidence):
+            return PipelineResult(
+                entry=entry,
+                translation=tr,
+                proved=False,
+                proof_body="",
+                skipped=True,
+                prove_summary=(
+                    "skipped_low_translation_confidence"
+                    f"(confidence={tr.confidence:.2f}, threshold={float(min_prove_confidence):.2f})"
+                ),
+                context_pack=context_pack,
+            )
+        semantic_quality, semantic_reasons = _semantic_quality_score(tr)
+        if semantic_quality < float(min_semantic_quality_score):
+            return PipelineResult(
+                entry=entry,
+                translation=tr,
+                proved=False,
+                proof_body="",
+                skipped=True,
+                prove_summary=(
+                    "skipped_low_semantic_quality"
+                    f"(score={semantic_quality:.2f}, threshold={float(min_semantic_quality_score):.2f}; "
+                    f"reasons={','.join(semantic_reasons) or 'none'})"
+                ),
+                context_pack=context_pack,
             )
 
         # --- 2.3 Prove ---
@@ -731,6 +1843,7 @@ def run_pipeline(
                     proof_body=cached.get("proof_body", ""),
                     prove_summary=proof_summary,
                     step_records=records,
+                    context_pack=context_pack,
                 )
 
         try:
@@ -879,6 +1992,7 @@ def run_pipeline(
             prove_summary=proof_summary,
             step_records=_records_to_dicts(records),
             exception=exc_str,
+            context_pack=context_pack,
         )
 
     def _process_and_checkpoint(i: int, entry: TheoremEntry) -> PipelineResult:
@@ -891,12 +2005,27 @@ def run_pipeline(
             "last_error": result.translation.last_error,
             "confidence": result.translation.confidence,
             "uncertainty_flags": list(result.translation.uncertainty_flags),
+            "adversarial_flags": list(getattr(result.translation, "adversarial_flags", []) or []),
+            "roundtrip_flags": list(getattr(result.translation, "roundtrip_flags", []) or []),
+            "statement_schema": dict(getattr(result.translation, "statement_schema", {}) or {}),
+            "normalized_natural_language_theorem": str(
+                getattr(result.translation, "normalized_natural_language_theorem", "") or ""
+            ),
+            "structured_translation": dict(getattr(result.translation, "structured_translation", {}) or {}),
             "proved": result.proved,
             "proof_body": result.proof_body,
             "skipped": result.skipped,
             "prove_summary": result.prove_summary,
             "step_records": result.step_records,
             "exception": result.exception,
+            "context_pack": result.context_pack,
+            "translation_gate": {
+                "accepted": result.translation_gate.accepted,
+                "reason": result.translation_gate.reason,
+                "status": result.translation_gate.status.value,
+                "failure_kind": result.translation_gate.failure_kind.value,
+                "gate_failures": list(result.translation_gate.gate_failures),
+            },
         })
         return result
 
@@ -917,6 +2046,10 @@ def run_pipeline(
                 results_map[idx] = future.result()
         results = [results_map[i] for i in range(1, n + 1)]
 
+    repair_queue_path = _write_translation_repair_queue(work_dir=work_dir, paper_id=paper_id, results=results)
+    if repair_queue_path is not None:
+        print(f"       repair queue: {repair_queue_path}")
+
     # --- Write output .lean file ---
     _write_lean_file(
         out_lean,
@@ -929,14 +2062,29 @@ def run_pipeline(
     for r in results:
         lean_id = _lean_name(r.entry.name)
         sig_clean = re.sub(r"\s*:=\s*by\s*$", "", r.translation.lean_signature).strip()
-        # Use the post-penalty translation confidence (which incorporates
-        # roundtrip and adversarial flags) as the translation_fidelity_score
-        # so the promotion gate in pipeline_status.py is properly informed.
-        translation_fidelity = r.translation.confidence if r.translation.validated else None
+        # Normalize the ledger lean_statement to use the final theorem name (lean_id),
+        # not the translator's internal name (e.g. "schema_translation"). This keeps
+        # the ledger consistent with the emitted .lean file and allows prove_arxiv_batch
+        # to match and auto-close schema placeholder theorems by name.
+        sig_clean_ledger = _normalize_signature_for_output(sig_clean, lean_id)
+        if not sig_clean_ledger:
+            sig_clean_ledger = sig_clean
+        # Pass the translator's confidence as translation_fidelity_score whenever it is
+        # available — even for unvalidated translations.  The promotion gate applies its
+        # own penalty for translation_validated=False (a 0.10 fidelity deduction), so
+        # a partial translation with moderate confidence is scored correctly instead of
+        # being hard-floored to 0.30 just because Lean validation failed on a symbol.
+        _raw_confidence = r.translation.confidence if r.translation.confidence is not None else 0.0
+        translation_fidelity = _raw_confidence if _raw_confidence > 0.0 else None
+        statement_schema = getattr(r.translation, "statement_schema", {}) or {}
+        context_pack = dict(r.context_pack or {})
+        context_pack["original_latex_theorem"] = r.entry.statement
+        if isinstance(statement_schema, dict):
+            context_pack["translation_statement_schema"] = statement_schema
         ledger = build_ledger_entry(
             theorem_name=lean_id,
             lean_file=str(out_lean),
-            lean_statement=sig_clean,
+            lean_statement=sig_clean_ledger,
             proved=r.proved,
             step_records=r.step_records,
             proof_text=r.proof_body,
@@ -954,13 +2102,45 @@ def run_pipeline(
             translation_validated=r.translation.validated,
             translation_rounds_used=r.translation.rounds_used,
             translation_uncertainty_flags=r.translation.uncertainty_flags,
+            translation_adversarial_flags=getattr(r.translation, "adversarial_flags", []),
+            translation_roundtrip_flags=getattr(r.translation, "roundtrip_flags", []),
             translation_confidence=r.translation.confidence,
+            context_pack=context_pack,
+            original_latex_theorem=r.entry.statement,
+            normalized_natural_language_theorem=getattr(
+                r.translation,
+                "normalized_natural_language_theorem",
+                "",
+            ),
+            extracted_assumptions=(
+                [str(x) for x in (statement_schema.get("assumptions") or [])]
+                if isinstance(statement_schema, dict)
+                else None
+            ),
+            extracted_conclusion=(
+                str(statement_schema.get("claim", "") or "")
+                if isinstance(statement_schema, dict)
+                else ""
+            ),
             translation_fidelity_score=translation_fidelity,
             had_exception=bool(r.exception),
+            proof_method=(
+                ProofMethod.TRANSLATION_LIMITED
+                if (not r.translation_gate.accepted and r.translation_gate.reason)
+                else None
+            ),
+            failure_kind=(
+                r.translation_gate.failure_kind
+                if (not r.translation_gate.accepted and r.translation_gate.reason)
+                else None
+            ),
         )
+        _apply_translation_gate_to_ledger(ledger, r.translation_gate)
         ledger_entries.append(ledger.to_dict())
 
     ledger_root = project_root / "output" / "verification_ledgers"
+    repair_dataset_path = project_root / DEFAULT_DATASET_PATH
+    repair_dataset_summary_path = project_root / DEFAULT_SUMMARY_PATH
     ledger_path = save_ledger(
         paper_id=paper_id,
         entries=ledger_entries,
@@ -971,8 +2151,17 @@ def run_pipeline(
             "prove_mode": prove_mode,
             "model": model,
             "entry_count": len(ledger_entries),
+            "compiler_feedback_repair_run_id": repair_run_id,
+            "compiler_feedback_repair_run_dataset": str(repair_run_dataset_path),
+            "compiler_feedback_repair_dataset": str(repair_dataset_path),
+            "compiler_feedback_repair_dataset_summary": str(repair_dataset_summary_path),
         },
     )
+    if repair_run_dataset_path.exists():
+        try:
+            write_summary(read_jsonl(repair_run_dataset_path), repair_run_dataset_path.with_name("compiler_feedback_repair_dataset_summary.json"))
+        except Exception:
+            pass
 
     if write_kg:
         try:
@@ -999,6 +2188,8 @@ def run_pipeline(
     print(f"       proved:      {proved_count}/{len(results)}")
     print(f"       output:      {out_lean}")
     print(f"       ledger:      {ledger_path}")
+    if repair_run_dataset_path.exists():
+        print(f"       repair data: {repair_run_dataset_path}")
     return results
 
 
@@ -1011,34 +2202,78 @@ def _write_lean_file(
 ) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     safe_source_label = escape_lean_comment(source_label, max_len=200)
+    effective_imports = imports.strip() or _PROOF_IMPORTS.strip()
+    # Preserve the pre-proof PaperTheory header computed by run_pipeline. When
+    # this helper is used independently, add the conventional module import.
+    if "Desol.PaperTheory." not in effective_imports:
+        module_name = "Paper_" + re.sub(r"[^A-Za-z0-9_]", "_", safe_source_label.strip())
+        effective_imports = paper_theory_import_header(effective_imports, module_name=module_name)
     parts: list[str] = [
         _LEAN_HEADER_TEMPLATE.format(
             paper_id=safe_source_label,
             timestamp=time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()),
-            imports=imports.strip(),
+            imports=effective_imports,
         )
     ]
+    used_decl_names: dict[str, int] = {}
 
     for r in results:
         entry = r.entry
-        lean_id = _lean_name(entry.name)
+        base_lean_id = _lean_name(entry.name)
+        seen = used_decl_names.get(base_lean_id, 0)
+        lean_id = base_lean_id if seen == 0 else f"{base_lean_id}_{seen + 1}"
+        used_decl_names[base_lean_id] = seen + 1
         latex_stmt_short = escape_lean_comment(" ".join(entry.statement.split()), max_len=120)
         safe_kind = escape_lean_comment(entry.kind, max_len=80)
         safe_name = escape_lean_comment(entry.name, max_len=160)
 
-        # Strip trailing `:= by` from signature so templates don't produce
-        # double `:= by` when the model includes it in the signature.
-        sig_clean = re.sub(r"\s*:=\s*by\s*$", "", r.translation.lean_signature).strip()
+        sig_clean = _normalize_signature_for_output(r.translation.lean_signature, lean_id)
+        if sig_clean and not r.translation.validated:
+            sig_clean = _relax_fragile_hypotheses(sig_clean)
 
-        if not r.translation.validated:
-            parts.append(_SORRY_STUB_TEMPLATE.format(
-                kind=safe_kind,
-                name=safe_name,
-                latex_stmt=latex_stmt_short,
-                error=escape_lean_comment(r.translation.last_error, max_len=80),
-                signature=sig_clean[:200],
-                lean_name=lean_id,
-            ))
+        gate_blocked = bool((not r.translation_gate.accepted) and r.translation_gate.reason)
+        if gate_blocked:
+            # A validated-but-unfaithful statement is worse than an open failed stub:
+            # it invites proof search to prove the wrong theorem and pollutes reports.
+            parts.append(
+                f"-- [{safe_kind}] {safe_name}\n"
+                f"-- Statement (LaTeX): {latex_stmt_short}\n"
+                f"-- Translation: BLOCKED — {escape_lean_comment(r.translation_gate.reason, max_len=120)}\n"
+                f"-- Attempted signature rejected by translation_acceptance_gate.\n"
+                f"theorem {lean_id} : False := by sorry\n\n"
+            )
+        elif not r.translation.validated or not sig_clean:
+            _failed_sig = sig_clean or ""
+            _has_usable_sig = bool(
+                _failed_sig
+                and not _failed_sig.startswith("theorem schema_")
+                and not _is_placeholder_sig(_failed_sig)
+            )
+            if _has_usable_sig:
+                # Real signature, proof not found — open sorry stub for the prover.
+                sig_no_body = re.sub(r":=\s*by\b.*$", "", _failed_sig, flags=re.DOTALL).strip()
+                sig_no_body = re.sub(r":=\s*$", "", sig_no_body).strip()
+                parts.append(
+                    f"-- [{safe_kind}] {safe_name}\n"
+                    f"-- Statement (LaTeX): {latex_stmt_short}\n"
+                    f"-- Translation: PARTIAL — {escape_lean_comment(r.translation.last_error, max_len=80)}\n"
+                    f"{sig_no_body} := by\n"
+                    f"  sorry\n\n"
+                )
+            else:
+                # Placeholder or empty signature — emit as a named open sorry stub.
+                # NEVER emit `True := trivial` or `Nonempty(Unit)` — these silently
+                # masquerade as valid theorems in the KG and corrupt proof-closure counts.
+                # A named `False := by sorry` is always honest: it compiles, it's open,
+                # and it is visibly wrong so any reviewer spots it immediately.
+                parts.append(
+                    f"-- [{safe_kind}] {safe_name}\n"
+                    f"-- Statement (LaTeX): {latex_stmt_short}\n"
+                    f"-- Translation: FAILED — signature could not be produced. "
+                    f"Review LaTeX and re-translate manually.\n"
+                    f"-- Error: {escape_lean_comment(r.translation.last_error, max_len=120)}\n"
+                    f"theorem {lean_id} : False := by sorry\n\n"
+                )
         elif r.proved and r.proof_body.strip():
             parts.append(_PROVED_TEMPLATE.format(
                 kind=safe_kind,
@@ -1061,6 +2296,13 @@ def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description="arxiv paper → Lean 4 proof file")
     p.add_argument("paper_id", help="arxiv ID, e.g. 2301.04567")
     p.add_argument("--out", default="", help="Output .lean file path")
+    p.add_argument("--domain", default="", help="Domain hint for paper theory packs (e.g. probability)")
+    p.add_argument(
+        "--paper-theory-module",
+        default="",
+        help="Optional paper theory module name (e.g. Desol.PaperTheory.Paper_2604_21884). "
+             "If omitted, a paper-local module is generated under Desol/PaperTheory/ and imported.",
+    )
     p.add_argument("--work-dir", default="", help="Working directory for source extraction")
     p.add_argument("--project-root", default=".", help="Lean project root")
     p.add_argument("--model", default="", help="Mistral model (defaults to MISTRAL_MODEL env)")
@@ -1109,6 +2351,14 @@ def _build_parser() -> argparse.ArgumentParser:
         default="",
         help="Override Lean import header (default: broad baseline + auto-expansion from premise index)",
     )
+    p.add_argument("--disable-paper-theory-refresh", action="store_true", help="Do not regenerate PaperTheory before proof search")
+    p.add_argument("--paper-theory-build-gate", action="store_true", help="Run lake build on generated PaperTheory before proof search")
+    p.add_argument(
+        "--paper-theory-grounding-mode",
+        choices=["hybrid", "defs", "axioms"],
+        default="hybrid",
+        help="PaperTheory declaration policy (currently hybrid/defs share definition stubs; axioms reserved for future compatibility)",
+    )
     p.add_argument("--temperature", type=float, default=0.2)
     p.add_argument(
         "--disable-schema-stage",
@@ -1155,6 +2405,55 @@ def _build_parser() -> argparse.ArgumentParser:
         type=int,
         default=4,
         help="Number of theorems to translate/prove in parallel (default: 4)",
+    )
+    p.add_argument(
+        "--min-actionability-score",
+        type=float,
+        default=0.35,
+        help="Filter extracted theorem statements below this actionability score [0,1]",
+    )
+    p.add_argument(
+        "--disable-goal-lane-only-proving",
+        action="store_true",
+        help="Disable goal-lane theorem selector before proof search",
+    )
+    p.add_argument(
+        "--min-goal-lane-score",
+        type=float,
+        default=0.55,
+        help="Minimum goal-lane score required to launch proof search",
+    )
+    p.add_argument(
+        "--min-prove-confidence",
+        type=float,
+        default=0.55,
+        help="Minimum translation confidence required to attempt proving",
+    )
+    p.add_argument(
+        "--min-semantic-quality-score",
+        type=float,
+        default=0.60,
+        help="Minimum composite semantic quality score required before proving",
+    )
+    p.add_argument(
+        "--disable-strict-assumption-slot-coverage",
+        action="store_true",
+        help="Disable strict assumption-slot coverage hard-fail in translation",
+    )
+    p.add_argument(
+        "--enable-schema-template-synthesis",
+        action="store_true",
+        help="Enable legacy template-backed schema synthesis pre-pass",
+    )
+    p.add_argument(
+        "--disable-schema-template-synthesis",
+        action="store_true",
+        help="Disable template-backed schema synthesis pre-pass (kept for compatibility)",
+    )
+    p.add_argument(
+        "--disable-schema-self-check",
+        action="store_true",
+        help="Disable schema↔signature self-check pass",
     )
     p.add_argument(
         "--api-rate",
@@ -1231,12 +2530,26 @@ def main() -> int:
             self_compounding_top_k=args.self_compounding_top_k,
             self_compounding_max_entries=args.self_compounding_max_entries,
             imports=args.imports,
+            domain=args.domain,
+            paper_theory_module=args.paper_theory_module,
+            disable_paper_theory_refresh=args.disable_paper_theory_refresh,
+            paper_theory_build_gate=args.paper_theory_build_gate,
             temperature=args.temperature,
             dojo_timeout=args.dojo_timeout,
             use_schema_stage=not args.disable_schema_stage,
             deterministic_hard_mode=not args.disable_deterministic_hard_mode,
             adversarial_hard_block=args.adversarial_hard_block,
             parallel_theorems=args.parallel_theorems,
+            min_actionability_score=args.min_actionability_score,
+            goal_lane_only_for_proving=not args.disable_goal_lane_only_proving,
+            min_goal_lane_score=args.min_goal_lane_score,
+            min_prove_confidence=args.min_prove_confidence,
+            min_semantic_quality_score=args.min_semantic_quality_score,
+            strict_assumption_slot_coverage=not args.disable_strict_assumption_slot_coverage,
+            enable_schema_template_synthesis=(
+                args.enable_schema_template_synthesis and not args.disable_schema_template_synthesis
+            ),
+            enable_schema_self_check=not args.disable_schema_self_check,
             rate_limiter=_RateLimiter(rate=args.api_rate),
             write_kg=args.write_kg,
             kg_root=(Path(args.kg_root) if args.kg_root else None),

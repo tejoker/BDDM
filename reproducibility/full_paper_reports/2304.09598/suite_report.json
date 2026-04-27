@@ -1,0 +1,795 @@
+{
+  "paper_id": "2304.09598",
+  "ok": false,
+  "evidence_label": "partial_diagnostic_evidence",
+  "primary_metric": "verified_proven",
+  "claim_scope": "Not a full paper closure claim; use blocker taxonomy and verified_proven only.",
+  "out_lean": "/home/projectx/BDDM/output/2304.09598.lean",
+  "ledger_path": "/home/projectx/BDDM/output/verification_ledgers/2304.09598.json",
+  "results_file": "/home/projectx/BDDM/logs/full_paper_2304.09598_suite_results.json",
+  "unresolved_pack": "/home/projectx/BDDM/output/reports/full_paper/2304.09598_suite_report.unresolved.json",
+  "paper_local_theory_file": "",
+  "curated_paper_package": {
+    "available": true,
+    "path": "/home/projectx/BDDM/paper_2304.09598/proofs.lean",
+    "theorem_count": 25,
+    "axiom_count": 57,
+    "sorry_count": 0,
+    "theorem_names": [
+      "defin_1",
+      "multiplicity",
+      "Prop_Actions",
+      "Cor_BoundaryRTandMS",
+      "Precedes",
+      "Prop_IncreasingLength",
+      "Basic",
+      "EqualLN",
+      "Def_Simple",
+      "Prop_SimpleFacts",
+      "EqualAB",
+      "Thm_Simple",
+      "defin_14",
+      "Exa_QFM",
+      "Lem_PrecedesQuantum",
+      "Lem_AB",
+      "Lem_QuantEquiv",
+      "Lem_IrredQFM",
+      "Lem_Quant",
+      "Cor_Quant",
+      "Thm_Quant",
+      "Lem_A1",
+      "Lem_A1b",
+      "Thm_ManySimpleA_B",
+      "Cor_Arthur"
+    ],
+    "note": "Curated package is a separate hand-built Lean formalization. It may close every theorem relative to local/domain axioms, but it is not the same evidence as the automatic paper pipeline proving generated statements."
+  },
+  "auto_reliable_core": {
+    "available": true,
+    "path": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2304_09598.lean",
+    "theorem_count": 1,
+    "axiom_count": 0,
+    "sorry_count": 0,
+    "theorem_names": [
+      "auto_defin_14"
+    ],
+    "note": "Automatically generated reliable core. Statements are copied only when they avoid known bad-translation/paper-axiom patterns and close with deterministic Lean-checked tactics."
+  },
+  "final_metrics": {
+    "total_theorems": 25,
+    "total_provable": 18,
+    "translation_limited_count": 7,
+    "fully_proven": 0,
+    "fully_proven_status_count": 0,
+    "verified_proven": 0,
+    "real_fully_proven": 0,
+    "auto_closed_count": 0,
+    "axiom_backed_count": 0,
+    "axiom_debt_count": 0,
+    "axiom_debt": [],
+    "closure_by_method": {
+      "lean_verified": 0,
+      "auto_closed_or_reconciled": 0,
+      "axiom_backed": 0,
+      "translation_limited": 7,
+      "unresolved_or_flawed": 18
+    },
+    "full_closure": false,
+    "proving_rate": 0.0,
+    "status_counts": {
+      "TRANSLATION_LIMITED": 7,
+      "UNRESOLVED": 16,
+      "FLAWED": 2
+    },
+    "unresolved_count": 18,
+    "unresolved": [
+      {
+        "theorem_name": "multiplicity",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Precedes",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Prop_IncreasingLength",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "EqualLN",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Def_Simple",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent",
+          "translation_fidelity_ok"
+        ]
+      },
+      {
+        "theorem_name": "Prop_SimpleFacts",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "EqualAB",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Thm_Simple",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "defin_14",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Lem_PrecedesQuantum",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Lem_AB",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Lem_QuantEquiv",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Lem_IrredQFM",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Lem_Quant",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Cor_Quant",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Thm_Quant",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Thm_ManySimpleA_B",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "Cor_Arthur",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "status_alignment_ok",
+          "claim_equivalent"
+        ]
+      }
+    ],
+    "translation_limited": [
+      {
+        "theorem_name": "defin_1",
+        "status": "TRANSLATION_LIMITED"
+      },
+      {
+        "theorem_name": "Prop_Actions",
+        "status": "TRANSLATION_LIMITED"
+      },
+      {
+        "theorem_name": "Cor_BoundaryRTandMS",
+        "status": "TRANSLATION_LIMITED"
+      },
+      {
+        "theorem_name": "Basic",
+        "status": "TRANSLATION_LIMITED"
+      },
+      {
+        "theorem_name": "Exa_QFM",
+        "status": "TRANSLATION_LIMITED"
+      },
+      {
+        "theorem_name": "Lem_A1",
+        "status": "TRANSLATION_LIMITED"
+      },
+      {
+        "theorem_name": "Lem_A1b",
+        "status": "TRANSLATION_LIMITED"
+      }
+    ],
+    "axiom_backed": [],
+    "lean_verified_proven": [],
+    "auto_closed_proven": []
+  },
+  "final_normalization": {
+    "translation_limited_placeholders": 7,
+    "semantic_hard_flawed": 1,
+    "bad_statement_flawed": 1,
+    "ill_typed_artifact_flawed": 0
+  },
+  "blocker_clusters": {
+    "semantic_fidelity_hard_block": {
+      "count": 2,
+      "theorems": [
+        "Def_Simple",
+        "defin_14"
+      ]
+    },
+    "translation_fidelity_or_alignment": {
+      "count": 16,
+      "theorems": [
+        "multiplicity",
+        "Precedes",
+        "Prop_IncreasingLength",
+        "EqualLN",
+        "Prop_SimpleFacts",
+        "EqualAB",
+        "Thm_Simple",
+        "Lem_PrecedesQuantum",
+        "Lem_AB",
+        "Lem_QuantEquiv",
+        "Lem_IrredQFM",
+        "Lem_Quant",
+        "Cor_Quant",
+        "Thm_Quant",
+        "Thm_ManySimpleA_B",
+        "Cor_Arthur"
+      ]
+    },
+    "translation_limited_placeholder_or_schema": {
+      "count": 7,
+      "theorems": [
+        "defin_1",
+        "Prop_Actions",
+        "Cor_BoundaryRTandMS",
+        "Basic",
+        "Exa_QFM",
+        "Lem_A1",
+        "Lem_A1b"
+      ]
+    }
+  },
+  "pass_history": [
+    {
+      "pass_idx": 1,
+      "metrics": {
+        "total_theorems": 25,
+        "total_provable": 25,
+        "translation_limited_count": 0,
+        "fully_proven": 0,
+        "fully_proven_status_count": 0,
+        "verified_proven": 0,
+        "real_fully_proven": 0,
+        "auto_closed_count": 0,
+        "axiom_backed_count": 0,
+        "axiom_debt_count": 0,
+        "axiom_debt": [],
+        "closure_by_method": {
+          "lean_verified": 0,
+          "auto_closed_or_reconciled": 0,
+          "axiom_backed": 0,
+          "translation_limited": 0,
+          "unresolved_or_flawed": 25
+        },
+        "full_closure": false,
+        "proving_rate": 0.0,
+        "status_counts": {
+          "UNRESOLVED": 25
+        },
+        "unresolved_count": 25,
+        "unresolved": [
+          {
+            "theorem_name": "defin_1",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "multiplicity",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Prop_Actions",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Cor_BoundaryRTandMS",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Precedes",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "assumptions_grounded",
+              "translation_fidelity_ok",
+              "dependency_trust_complete",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Prop_IncreasingLength",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "assumptions_grounded",
+              "translation_fidelity_ok",
+              "dependency_trust_complete",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Basic",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "EqualLN",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Def_Simple",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Prop_SimpleFacts",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "EqualAB",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Thm_Simple",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "defin_14",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "assumptions_grounded",
+              "translation_fidelity_ok",
+              "dependency_trust_complete",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Exa_QFM",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Lem_PrecedesQuantum",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Lem_AB",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Lem_QuantEquiv",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Lem_IrredQFM",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Lem_Quant",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Cor_Quant",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Thm_Quant",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Lem_A1",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Lem_A1b",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Thm_ManySimpleA_B",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "Cor_Arthur",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "status_alignment_ok",
+              "claim_equivalent"
+            ]
+          }
+        ],
+        "translation_limited": [],
+        "axiom_backed": [],
+        "lean_verified_proven": [],
+        "auto_closed_proven": []
+      },
+      "returncode": 0
+    }
+  ],
+  "steps": [
+    {
+      "stage": "reset_paper_ledger",
+      "ledger_path": "/home/projectx/BDDM/output/verification_ledgers/2304.09598.json",
+      "removed": true,
+      "skipped": false
+    },
+    {
+      "stage": "mathlib_coverage_screen",
+      "skipped": false,
+      "coverage_score": 1.0,
+      "library_limited": false,
+      "library_limited_reasons": [],
+      "abstract_chars": 0
+    },
+    {
+      "stage": "library_first_bootstrap",
+      "cmd": [
+        "python3",
+        "scripts/library_first_bootstrap.py",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--domain",
+        "algebra_number_theory"
+      ],
+      "returncode": 0,
+      "elapsed_s": 1.607,
+      "stdout_tail": "{\n  \"domain\": \"algebra_number_theory\",\n  \"ok\": true,\n  \"imports\": [\n    \"Mathlib.Algebra.Field.Defs\",\n    \"Mathlib.RingTheory.Ideal.Basic\",\n    \"Mathlib.NumberTheory.Basic\"\n  ],\n  \"stub_file\": \"/home/projectx/BDDM/output/library_bootstrap/bootstrap_algebra_number_theory.lean\",\n  \"elapsed_s\": 1.577,\n  \"stdout_tail\": \"\",\n  \"stderr_tail\": \"\"\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "stage": "paper_theory_builder",
+      "ok": true,
+      "paper_theory_file": "/home/projectx/BDDM/Desol/PaperTheory/Paper_2304_09598.lean",
+      "module": "Desol.PaperTheory.Paper_2304_09598"
+    },
+    {
+      "stage": "bootstrap_arxiv_to_lean",
+      "cmd": [
+        "python3",
+        "scripts/arxiv_to_lean.py",
+        "2304.09598",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--out",
+        "/home/projectx/BDDM/output/2304.09598.lean",
+        "--repair-rounds",
+        "5",
+        "--translation-candidates",
+        "1",
+        "--prove-mode",
+        "full-draft",
+        "--mcts-iterations",
+        "24",
+        "--mcts-repair-variants",
+        "3",
+        "--mcts-max-depth",
+        "5",
+        "--domain",
+        "algebra_number_theory"
+      ],
+      "returncode": 0,
+      "elapsed_s": 7.89,
+      "stdout_tail": " in checkpoint\n\n[9/25] [theorem] Def:Simple → Def_Simple\n         [resume] skipping Def_Simple — already in checkpoint\n\n[11/25] [theorem] EqualAB → EqualAB\n         [resume] skipping EqualAB — already in checkpoint\n\n[14/25] [theorem] Exa:QFM → Exa_QFM\n         [resume] skipping Exa_QFM — already in checkpoint\n\n[12/25] [theorem] Thm:Simple → Thm_Simple\n         [resume] skipping Thm_Simple — already in checkpoint\n\n[15/25] [theorem] Lem:PrecedesQuantum → Lem_PrecedesQuantum\n         [resume] skipping Lem_PrecedesQuantum — already in checkpoint\n\n[13/25] [theorem] defin_14 → defin_14\n         [resume] skipping defin_14 — already in checkpoint\n\n[17/25] [theorem] Lem:QuantEquiv → Lem_QuantEquiv\n         [resume] skipping Lem_QuantEquiv — already in checkpoint\n\n[18/25] [theorem] Lem:IrredQFM → Lem_IrredQFM\n         [resume] skipping Lem_IrredQFM — already in checkpoint\n\n[19/25] [theorem] Lem:Quant → Lem_Quant\n         [resume] skipping Lem_Quant — already in checkpoint\n\n[20/25] [theorem] Cor:Quant → Cor_Quant\n         [resume] skipping Cor_Quant — already in checkpoint\n\n[16/25] [theorem] Lem:AB → Lem_AB\n         [resume] skipping Lem_AB — already in checkpoint\n\n[21/25] [theorem] Thm:Quant → Thm_Quant\n         [resume] skipping Thm_Quant — already in checkpoint\n\n[22/25] [theorem] Lem:A1 → Lem_A1\n         [resume] skipping Lem_A1 — already in checkpoint\n\n[25/25] [theorem] Cor:Arthur → Cor_Arthur\n         [resume] skipping Cor_Arthur — already in checkpoint\n\n[23/25] [theorem] Lem:A1b → Lem_A1b\n         [resume] skipping Lem_A1b — already in checkpoint\n\n[24/25] [theorem] Thm:ManySimpleA=B → Thm_ManySimpleA_B\n         [resume] skipping Thm_ManySimpleA_B — already in checkpoint\n[premise_retrieval] loading sentence-transformer 'BAAI/bge-small-en-v1.5' ...\n\n[done] 25 theorems processed\n       translated:  20/25\n       proved:      0/25\n       output:      /home/projectx/BDDM/output/2304.09598.lean\n       ledger:      /home/projectx/BDDM/output/verification_ledgers/2304.09598.json\n",
+      "stderr_tail": "Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n\nLoading weights:   0%|          | 0/199 [00:00<?, ?it/s]\nLoading weights: 100%|██████████| 199/199 [00:00<00:00, 12833.92it/s]\n\u001b[1mBertModel LOAD REPORT\u001b[0m from: BAAI/bge-small-en-v1.5\nKey                     | Status     |  | \n------------------------+------------+--+-\nembeddings.position_ids | UNEXPECTED |  | \n\nNotes:\n- UNEXPECTED:\tcan be ignored when loading from different task/architecture; not ok if you expect identical arch.\n"
+    },
+    {
+      "stage": "prove_pass_1",
+      "cmd": [
+        "python3",
+        "scripts/prove_arxiv_batch.py",
+        "--lean-file",
+        "/home/projectx/BDDM/output/2304.09598.lean",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--paper-id",
+        "2304.09598",
+        "--repair-rounds",
+        "1",
+        "--mode",
+        "full-draft",
+        "--mcts-iterations",
+        "24",
+        "--mcts-repair-variants",
+        "3",
+        "--mcts-max-depth",
+        "5",
+        "--bridge-loop",
+        "--bridge-rounds",
+        "1",
+        "--bridge-depth",
+        "1",
+        "--bridge-max-candidates",
+        "1",
+        "--mandatory-retry-rounds",
+        "0",
+        "--results-file",
+        "/home/projectx/BDDM/logs/full_paper_2304.09598_suite_results.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 4.455,
+      "stdout_tail": "  [sanitize] repaired malformed theorem separators in 2304.09598.lean\n  2304.09598.lean: 24 sorry theorems\n\nTotal: 24 theorems to prove\nNon-trivial filter drops: {'pure_nat0eq0': 1}\nEquivalence gate: kept=0 skipped=24 (require claim_equivalence_verdict='equivalent')\n[warn] No theorems left after proving cohort filters.\n",
+      "stderr_tail": ""
+    },
+    {
+      "stage": "auto_reliable_core",
+      "cmd": [
+        "python3",
+        "scripts/build_reliable_paper_core.py",
+        "2304.09598",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--lean-file",
+        "/home/projectx/BDDM/output/2304.09598.lean",
+        "--timeout-s",
+        "8",
+        "--max-theorems",
+        "40",
+        "--out-json",
+        "/home/projectx/BDDM/output/reports/full_paper/2304.09598_reliable_core.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 7.696,
+      "stdout_tail": "  {\n      \"source_theorem\": \"defin_14\",\n      \"theorem_name\": \"auto_defin_14\",\n      \"tactic\": \"rfl\"\n    }\n  ],\n  \"skipped_count\": 24,\n  \"skipped_sample\": [\n    {\n      \"theorem_name\": \"defin_1\",\n      \"reason\": \"trivial_true_target\"\n    },\n    {\n      \"theorem_name\": \"multiplicity\",\n      \"reason\": \"relaxed_prop_hypothesis\"\n    },\n    {\n      \"theorem_name\": \"Prop_Actions\",\n      \"reason\": \"schema_placeholder_identity\"\n    },\n    {\n      \"theorem_name\": \"Cor_BoundaryRTandMS\",\n      \"reason\": \"schema_placeholder_identity\"\n    },\n    {\n      \"theorem_name\": \"Precedes\",\n      \"reason\": \"no_direct_safe_tactic\"\n    },\n    {\n      \"theorem_name\": \"Prop_IncreasingLength\",\n      \"reason\": \"no_direct_safe_tactic\"\n    },\n    {\n      \"theorem_name\": \"Basic\",\n      \"reason\": \"trivial_nat0eq0_target\"\n    },\n    {\n      \"theorem_name\": \"EqualLN\",\n      \"reason\": \"relaxed_prop_hypothesis\"\n    },\n    {\n      \"theorem_name\": \"Def_Simple\",\n      \"reason\": \"no_direct_safe_tactic\"\n    },\n    {\n      \"theorem_name\": \"Prop_SimpleFacts\",\n      \"reason\": \"relaxed_prop_hypothesis\"\n    },\n    {\n      \"theorem_name\": \"EqualAB\",\n      \"reason\": \"relaxed_prop_hypothesis\"\n    },\n    {\n      \"theorem_name\": \"Thm_Simple\",\n      \"reason\": \"relaxed_prop_hypothesis\"\n    },\n    {\n      \"theorem_name\": \"Exa_QFM\",\n      \"reason\": \"schema_placeholder_identity\"\n    },\n    {\n      \"theorem_name\": \"Lem_PrecedesQuantum\",\n      \"reason\": \"relaxed_prop_hypothesis\"\n    },\n    {\n      \"theorem_name\": \"Lem_AB\",\n      \"reason\": \"relaxed_prop_hypothesis\"\n    },\n    {\n      \"theorem_name\": \"Lem_QuantEquiv\",\n      \"reason\": \"relaxed_prop_hypothesis\"\n    },\n    {\n      \"theorem_name\": \"Lem_IrredQFM\",\n      \"reason\": \"relaxed_prop_hypothesis\"\n    },\n    {\n      \"theorem_name\": \"Lem_Quant\",\n      \"reason\": \"no_direct_safe_tactic\"\n    },\n    {\n      \"theorem_name\": \"Cor_Quant\",\n      \"reason\": \"relaxed_prop_hypothesis\"\n    },\n    {\n      \"theorem_name\": \"Thm_Quant\",\n      \"reason\": \"relaxed_prop_hypothesis\"\n    }\n  ]\n}\n",
+      "stderr_tail": ""
+    }
+  ],
+  "reproducibility_bundle": {
+    "report": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/suite_report.json",
+    "ledger": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/verification_ledger.json",
+    "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/unresolved.json",
+    "manifest": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/manifest.json"
+  }
+}

@@ -1,15 +1,12 @@
-{"version": "1.2.0",
+{"version": "1.1.0",
  "packagesDir": ".lake/packages",
  "packages":
- [{"url": "https://github.com/leanprover-community/repl.git",
-   "type": "git",
-   "subDir": null,
+ [{"type": "path",
    "scope": "",
-   "rev": "c9cde4d461fcf1d56e121bbe7d0c96a7ad40e492",
    "name": "repl",
    "manifestFile": "lake-manifest.json",
-   "inputRev": "c9cde4d461fcf1d56e121bbe7d0c96a7ad40e492",
    "inherited": false,
+   "dir": "third_party/repl_compat",
    "configFile": "lakefile.toml"},
   {"url": "https://github.com/leanprover-community/mathlib4.git",
    "type": "git",
@@ -102,5 +99,4 @@
    "inherited": true,
    "configFile": "lakefile.toml"}],
  "name": "desol",
- "lakeDir": ".lake",
- "fixedToolchain": false}
+ "lakeDir": ".lake"}

@@ -271,10 +271,48 @@ def _extract_unsolved_goals(output: str) -> str | None:
 def _extract_lean_error(output: str) -> str | None:
     """Extract the first meaningful Lean error message (not 'unsolved goals')."""
     for line in output.splitlines():
-        m = re.match(r"error:\s+.+?:\d+:\d+:\s+(.+)$", line)
-        if m and "unsolved goals" not in line:
-            return m.group(1).strip()[:600]
+        m1 = re.match(r"error:\s+.+?:\d+:\d+:\s+(.+)$", line)
+        m2 = re.match(r".+?:\d+:\d+:\s+error:\s+(.+)$", line)
+        msg = None
+        if m1:
+            msg = m1.group(1).strip()
+        elif m2:
+            msg = m2.group(1).strip()
+        if msg and "unsolved goals" not in msg.lower():
+            return msg[:600]
     return None
+
+
+def _ensure_repl_compat_dependency(project_root: Path) -> None:
+    """Ensure path-based repl dependency exists for copied temp projects.
+
+    Some integration tests copy `lakefile.toml` into a temporary project root
+    without copying `third_party/repl_compat`. If the lakefile references this
+    local path dependency, `lake build` fails immediately. We materialize a
+    symlink (or fallback copy) from the canonical repository location.
+    """
+    try:
+        lakefile = project_root / "lakefile.toml"
+        if not lakefile.exists():
+            return
+        txt = lakefile.read_text(encoding="utf-8", errors="replace")
+        if "third_party/repl_compat" not in txt:
+            return
+        target = project_root / "third_party" / "repl_compat"
+        if target.exists():
+            return
+        canonical = Path(__file__).resolve().parent.parent / "third_party" / "repl_compat"
+        if not canonical.exists():
+            return
+        target.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            target.symlink_to(canonical, target_is_directory=True)
+        except Exception:
+            import shutil as _shutil
+            _shutil.copytree(canonical, target)
+    except Exception:
+        # Never block proof execution on dependency materialization best-effort.
+        return
 
 
 # ── Main class ────────────────────────────────────────────────────────────────
@@ -369,20 +407,35 @@ class REPLDojo:
             _env = os.environ.copy()
             _elan = str(Path.home() / ".elan" / "bin")
             _env["PATH"] = _elan + ":" + _env.get("PATH", "")
-            result = subprocess.run(
-                ["lake", "build", self._target],
+            # Bootstrap project dependencies first, then compile the concrete file.
+            # We use `lake update` (not `lake build`) so temp projects that don't
+            # include the package's executable targets still work.
+            bootstrap = subprocess.run(
+                ["lake", "update"],
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
                 timeout=self.timeout,
                 env=_env,
             )
+            if bootstrap.returncode != 0:
+                result = bootstrap
+            else:
+                result = subprocess.run(
+                    ["lake", "env", "lean", str(self.file_path)],
+                    cwd=self.project_root,
+                    capture_output=True,
+                    text=True,
+                    timeout=self.timeout,
+                    env=_env,
+                )
             self._write_cache(key, result)
             return result
         finally:
             self._full_path.write_text(self._original)
 
     def __enter__(self) -> tuple["REPLDojo", TacticState]:
+        _ensure_repl_compat_dependency(self.project_root)
         self._original = self._full_path.read_text()
         self._tactics = []
         self._traces = []
@@ -428,8 +481,37 @@ class REPLDojo:
             )
             return LeanError(error="Tactic completed but theorem still uses sorry")
 
+        # Prefer concrete Lean diagnostics over generic unsolved-goal parsing.
+        # Some malformed tactics can emit both; in that case this must be an error.
+        err = _extract_lean_error(output)
+        if err:
+            self._traces.append(
+                StepTrace(
+                    step_idx=state.id,
+                    tactic=tactic,
+                    result_kind="lean_error",
+                    elapsed_ms=elapsed_ms,
+                    before_pp=state.pp,
+                    error=err,
+                )
+            )
+            return LeanError(error=err)
+
         goals = _extract_unsolved_goals(output)
         if goals is not None:
+            if goals.strip() == state.pp.strip():
+                msg = "Tactic produced no progress (goal state unchanged)"
+                self._traces.append(
+                    StepTrace(
+                        step_idx=state.id,
+                        tactic=tactic,
+                        result_kind="lean_error",
+                        elapsed_ms=elapsed_ms,
+                        before_pp=state.pp,
+                        error=msg,
+                    )
+                )
+                return LeanError(error=msg)
             self._tactics = tactics
             self._traces.append(
                 StepTrace(
@@ -443,7 +525,7 @@ class REPLDojo:
             )
             return TacticState(pp=goals, id=state.id + 1)
 
-        err = _extract_lean_error(output) or output[:500]
+        err = output[:500]
         self._traces.append(
             StepTrace(
                 step_idx=state.id,

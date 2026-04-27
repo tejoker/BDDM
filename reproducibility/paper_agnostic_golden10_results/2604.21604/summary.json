@@ -1,0 +1,19 @@
+{
+  "paper_id": "2604.21604",
+  "domain": "graph_theory",
+  "role": "graph_or_discrete_structures",
+  "fetch_ok": false,
+  "tex_file_count": 0,
+  "root_tex_count": 0,
+  "expanded_root_count": 0,
+  "macro_count": 0,
+  "environment_alias_count": 0,
+  "theorem_count": 0,
+  "mistral_api_key_set": false,
+  "translation_status": "not_run_missing_mistral_api_key",
+  "proof_status": "not_run_missing_mistral_api_key",
+  "error": "arxiv source for '2604.21604' is not a tar archive (possibly a single-file PDF submission): file could not be opened successfully:\n- method gz: ReadError('not a gzip file')\n- method bz2: ReadError('not a bzip2 file')\n- method xz: ReadError('not an lzma file')\n- method tar: ReadError('invalid header')",
+  "paper_status": "EXTRACTION_FAILED",
+  "dominant_blocker": "missing_latex_source",
+  "elapsed_s": 0.731
+}

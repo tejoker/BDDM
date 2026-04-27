@@ -156,7 +156,6 @@ class PipelineOrchestrator:
                 (now, now),
             ).fetchone()
             if row is None:
-                con.close()
                 return None
             jid = int(row["id"])
             con.execute(
@@ -249,10 +248,69 @@ class PipelineOrchestrator:
         return self.lease_next(worker_id="legacy-pop", lease_seconds=120)
 
     def queue_dashboard(self) -> dict[str, Any]:
+        con = sqlite3.connect(str(self.queue_db_path), timeout=10.0)
+        now = int(time.time())
+        stalled = con.execute(
+            "SELECT COUNT(*) FROM queue_jobs WHERE status='leased' AND lease_until_unix < ?",
+            (now,),
+        ).fetchone()
+        con.close()
         return {
             "generated_at_unix": int(time.time()),
             "queue_db": str(self.queue_db_path),
             "stats": self._queue_stats(),
+            "stalled_leases": int(stalled[0]) if stalled else 0,
+        }
+
+    def reclaim_expired_leases(self) -> dict[str, Any]:
+        """Recover jobs whose worker lease expired without ack/fail."""
+        now = int(time.time())
+        con = sqlite3.connect(str(self.queue_db_path), timeout=30.0)
+        with con:
+            cur = con.execute(
+                """
+                UPDATE queue_jobs
+                SET status='failed',
+                    lease_owner='',
+                    lease_until_unix=0,
+                    next_attempt_at_unix=?,
+                    last_error=CASE
+                        WHEN last_error IS NULL OR last_error='' THEN 'lease_expired_reclaimed'
+                        ELSE last_error
+                    END,
+                    updated_at_unix=?
+                WHERE status='leased'
+                  AND lease_until_unix < ?
+                  AND attempts < max_attempts
+                """,
+                (now, now, now),
+            )
+            reclaimed_retry = int(cur.rowcount or 0)
+            cur2 = con.execute(
+                """
+                UPDATE queue_jobs
+                SET status='failed',
+                    lease_owner='',
+                    lease_until_unix=0,
+                    next_attempt_at_unix=0,
+                    last_error=CASE
+                        WHEN last_error IS NULL OR last_error='' THEN 'lease_expired_terminal'
+                        ELSE last_error
+                    END,
+                    updated_at_unix=?
+                WHERE status='leased'
+                  AND lease_until_unix < ?
+                  AND attempts >= max_attempts
+                """,
+                (now, now),
+            )
+            reclaimed_terminal = int(cur2.rowcount or 0)
+        con.close()
+        return {
+            "status": "ok",
+            "reclaimed_retry": reclaimed_retry,
+            "reclaimed_terminal": reclaimed_terminal,
+            "timestamp_unix": now,
         }
 
     # Legacy JSON queue kept for backward compatibility with older scripts.
@@ -422,6 +480,7 @@ def _build_parser() -> argparse.ArgumentParser:
     fail.add_argument("--base-backoff-s", type=int, default=60)
 
     sub.add_parser("queue-dashboard")
+    sub.add_parser("reclaim")
     return p
 
 
@@ -471,6 +530,9 @@ def main() -> int:
         return 0
     if args.cmd == "queue-dashboard":
         print(json.dumps(orch.queue_dashboard(), indent=2, ensure_ascii=False))
+        return 0
+    if args.cmd == "reclaim":
+        print(json.dumps(orch.reclaim_expired_leases(), indent=2, ensure_ascii=False))
         return 0
     return 1
 

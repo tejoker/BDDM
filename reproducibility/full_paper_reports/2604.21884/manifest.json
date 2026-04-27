@@ -1,0 +1,17 @@
+{
+  "paper_id": "2604.21884",
+  "schema_version": "1.0.0",
+  "bundle_dir": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21884",
+  "files": {
+    "report": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21884/suite_report.json",
+    "ledger": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21884/verification_ledger.json",
+    "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21884/unresolved.json",
+    "missing_lemmas": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21884/missing_lemmas.json",
+    "axiom_debt_burndown": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21884/axiom_debt_burndown.json",
+    "statement_validity": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21884/statement_validity.json",
+    "proof_repair_cohort": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21884/proof_repair_cohort.json",
+    "paper_theory_manifest": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21884/paper_theory_manifest.json",
+    "claim_equivalence_review_queue": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21884/claim_equivalence_review_queue.jsonl"
+  },
+  "regenerate_command": "python3 scripts/formalize_paper_full.py --paper-id 2604.21884 --project-root ."
+}

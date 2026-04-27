@@ -1,0 +1,21 @@
+{
+  "paper_id": "2604.21798",
+  "domain": "ml_statistics_theory",
+  "role": "ml_or_statistics_theory",
+  "fetch_ok": true,
+  "tex_file_count": 1,
+  "root_tex_count": 1,
+  "expanded_root_count": 1,
+  "macro_count": 1,
+  "environment_alias_count": 9,
+  "theorem_count": 0,
+  "mistral_api_key_set": false,
+  "translation_status": "not_run_missing_mistral_api_key",
+  "proof_status": "not_run_missing_mistral_api_key",
+  "error": "",
+  "main_tex": "output/paper_sources/golden10/2604.21798/main.tex",
+  "theorem_output_truncated": false,
+  "paper_status": "EXTRACTION_FAILED",
+  "dominant_blocker": "theorem_extraction",
+  "elapsed_s": 0.463
+}

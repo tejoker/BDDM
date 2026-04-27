@@ -1,0 +1,27 @@
+{
+  "paper_id": "2012.09271",
+  "theorem_count": 3,
+  "entries": [
+    {
+      "kind": "theorem",
+      "name": "theorem_1",
+      "statement": "[see \\Cref{thm:explicitfamily}]\nThere is an explicit family of $[[N,K,D_X,D_Z]]$ LDPC quantum codes encoding $K \\in \\Theta(N^\\frac{2}{3})$ logical qubits with $X$-distance $D_X \\in \\Omega(N^\\frac{1}{3})$ and $Z$-distance $D_Z \\in \\Theta(N)$.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2012.09271_expanded/balanced_product_codes.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "corollary_2",
+      "statement": "[see \\Cref{cor:explicitfamily}]\nThere is an explicit family of $[[N,K,D]]$ LDPC quantum codes encoding $K \\in \\Theta(N^\\frac{4}{5})$ logical qubits with distance $D \\in \\Omega(N^\\frac{3}{5})$.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2012.09271_expanded/balanced_product_codes.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "conjecture_3",
+      "statement": "The balanced product of two good classical LDPC codes over groups of order $\\Theta(N)$ gives rise to a family of \\emph{good} LDPC quantum codes.\n\nIn particular, the horizontal subsystem codes associated to the balanced products $C(X_{p,q},L)\\otimes_{\\operatorname{PGL}(2,q)}C(X_{p,q},L)^*$ form a family of \\emph{good} LDPC quantum codes.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2012.09271_expanded/balanced_product_codes.tex"
+    }
+  ]
+}

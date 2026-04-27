@@ -1,0 +1,195 @@
+[
+  {
+    "theorem_name": "multiplicity",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Precedes",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "assumptions_grounded",
+      "translation_fidelity_ok",
+      "dependency_trust_complete",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Prop_IncreasingLength",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "assumptions_grounded",
+      "translation_fidelity_ok",
+      "dependency_trust_complete",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "EqualLN",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Def_Simple",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent",
+      "translation_fidelity_ok"
+    ]
+  },
+  {
+    "theorem_name": "Prop_SimpleFacts",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "EqualAB",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Thm_Simple",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "defin_14",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "assumptions_grounded",
+      "translation_fidelity_ok",
+      "dependency_trust_complete",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Lem_PrecedesQuantum",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "translation_fidelity_ok",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Lem_AB",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Lem_QuantEquiv",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Lem_IrredQFM",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Lem_Quant",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "translation_fidelity_ok",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Cor_Quant",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Thm_Quant",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Thm_ManySimpleA_B",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Cor_Arthur",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "status_alignment_ok",
+      "claim_equivalent"
+    ]
+  }
+]

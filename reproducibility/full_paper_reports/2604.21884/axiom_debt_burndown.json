@@ -1,0 +1,797 @@
+{
+  "schema_version": "1.1.0",
+  "purpose": "Rank paper-local axioms by cheapest path to remove AXIOM_BACKED evidence.",
+  "axiom_backed_result_count": 0,
+  "paper_local_axiom_count": 25,
+  "result_buckets": {
+    "missing_definitions_only": 0,
+    "local_lemmas": 0,
+    "missing_mathlib": 0,
+    "deep_domain_theory": 0,
+    "translation_artifacts": 0,
+    "unclassified": 0
+  },
+  "summary_sentence": "0 axiom-backed results.",
+  "axiom_kind_counts": {
+    "definition": 23,
+    "lemma": 2
+  },
+  "difficulty_counts": {
+    "deep": 3,
+    "easy": 1,
+    "medium": 21
+  },
+  "dependency_bucket_counts": {
+    "deep_domain_theory": 3,
+    "local_lemmas": 2,
+    "missing_definitions_only": 20
+  },
+  "ranked_axioms": [
+    {
+      "burn_down_id": "dce0e6312eff1985",
+      "paper_local_axiom": "paper_definition_stub:HSobolev",
+      "needed_by": [
+        "thm_conditional_closure_intro",
+        "remark_18"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "thm_conditional_closure_intro",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "remark_18",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": true,
+      "mathlib_candidates": [
+        "SobolevSpace",
+        "MeasureTheory.MemLp"
+      ],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "easy",
+      "difficulty_rank": 10
+    },
+    {
+      "burn_down_id": "3a6892c6e9d90231",
+      "paper_local_axiom": "paper_definition_stub:B_N",
+      "needed_by": [
+        "lem_centered_cov"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "lem_centered_cov",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "17f9d329bac2fab6",
+      "paper_local_axiom": "paper_definition_stub:D_N",
+      "needed_by": [
+        "prop_det_contraction"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "prop_det_contraction",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "c3e7065cd23efa02",
+      "paper_local_axiom": "paper_definition_stub:MixedOperator",
+      "needed_by": [
+        "thm_no_singular_centering"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "thm_no_singular_centering",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "5e295cb99a07e286",
+      "paper_local_axiom": "paper_definition_stub:a",
+      "needed_by": [
+        "lem_volterra"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "lem_volterra",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "1c25d1aedd5dd8cf",
+      "paper_local_axiom": "paper_definition_stub:remark_10",
+      "needed_by": [
+        "remark_10"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "remark_10",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "remark_9"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "7f3d8c4c9a873c20",
+      "paper_local_axiom": "paper_definition_stub:remark_18",
+      "needed_by": [
+        "remark_18"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "remark_18",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "remark_9",
+        "remark_10"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "bb2ab095d07873ba",
+      "paper_local_axiom": "paper_definition_stub:remark_9",
+      "needed_by": [
+        "remark_9"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "remark_9",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "9d1a8c94d90397f6",
+      "paper_local_axiom": "paper_local_lemma:DyadicBlockBound",
+      "needed_by": [
+        "prop_sharpness"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "prop_sharpness",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "lemma",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "local_lemmas",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "63e5cc31d335ca92",
+      "paper_local_axiom": "paper_local_lemma:VolterraOscillation",
+      "needed_by": [
+        "rem_status_emphasis"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "rem_status_emphasis",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "lemma",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "local_lemmas",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "9f94ea8a89be9fee",
+      "paper_local_axiom": "paper_definition_stub:theta",
+      "needed_by": [
+        "prop_mid_completion",
+        "prop_det_contraction"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "prop_mid_completion",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "prop_det_contraction",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "thm_baseline_lift"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "92a48dce46da2807",
+      "paper_local_axiom": "paper_definition_stub:Γ1",
+      "needed_by": [
+        "prop_cubic_quartic_baseline",
+        "remark_10"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "prop_cubic_quartic_baseline",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "remark_10",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "96fed812b372e9f8",
+      "paper_local_axiom": "paper_definition_stub:Γ2",
+      "needed_by": [
+        "prop_cubic_quartic_baseline",
+        "remark_10"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "prop_cubic_quartic_baseline",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "remark_10",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "1d4852941510a3b3",
+      "paper_local_axiom": "paper_definition_stub:Ψ1",
+      "needed_by": [
+        "thm_baseline_lift",
+        "prop_cubic_quartic_baseline"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "thm_baseline_lift",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "prop_cubic_quartic_baseline",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "613b4d36b0bf4def",
+      "paper_local_axiom": "paper_definition_stub:Ψ2",
+      "needed_by": [
+        "thm_baseline_lift",
+        "prop_cubic_quartic_baseline"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "thm_baseline_lift",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "prop_cubic_quartic_baseline",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "60246891a4871dfc",
+      "paper_local_axiom": "paper_definition_stub:C",
+      "needed_by": [
+        "cor_conditional_cutoff",
+        "prop_det_contraction",
+        "ass_strichartz"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "cor_conditional_cutoff",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "prop_det_contraction",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "ass_strichartz",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        }
+      ],
+      "needed_by_count": 3,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "8a80c21316c78887",
+      "paper_local_axiom": "paper_definition_stub:I_i",
+      "needed_by": [
+        "rem_status_emphasis",
+        "remark_9",
+        "rem_primitive_route"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "rem_status_emphasis",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "remark_9",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "rem_primitive_route",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 3,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "80076a7c9df187d2",
+      "paper_local_axiom": "paper_definition_stub:ξ1",
+      "needed_by": [
+        "thm_baseline_lift",
+        "rem_status_emphasis",
+        "remark_9"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "thm_baseline_lift",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "rem_status_emphasis",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "remark_9",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 3,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "86f5d641daa5569a",
+      "paper_local_axiom": "paper_definition_stub:ξ2",
+      "needed_by": [
+        "thm_baseline_lift",
+        "rem_status_emphasis",
+        "remark_9"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "thm_baseline_lift",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "rem_status_emphasis",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "remark_9",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 3,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "13cd6928c5f854f7",
+      "paper_local_axiom": "paper_definition_stub:C_T",
+      "needed_by": [
+        "thm_baseline_lift",
+        "lem_centered_cov",
+        "thm_no_singular_centering",
+        "ass_strichartz"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "thm_baseline_lift",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "lem_centered_cov",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        },
+        {
+          "theorem_name": "thm_no_singular_centering",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "ass_strichartz",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        }
+      ],
+      "needed_by_count": 4,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "daa6128bdace1247",
+      "paper_local_axiom": "paper_definition_stub:s1",
+      "needed_by": [
+        "prop_mid_completion",
+        "thm_conditional_closure_intro",
+        "prop_det_contraction",
+        "ass_strichartz"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "prop_mid_completion",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "thm_conditional_closure_intro",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "prop_det_contraction",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "ass_strichartz",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        }
+      ],
+      "needed_by_count": 4,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "d2d4af1a8e2e6759",
+      "paper_local_axiom": "paper_definition_stub:s2",
+      "needed_by": [
+        "prop_mid_completion",
+        "thm_conditional_closure_intro",
+        "cor_conditional_cutoff",
+        "prop_det_contraction",
+        "ass_strichartz"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "prop_mid_completion",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "thm_conditional_closure_intro",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "cor_conditional_cutoff",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "prop_det_contraction",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "ass_strichartz",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        }
+      ],
+      "needed_by_count": 5,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "f649812431b8c012",
+      "paper_local_axiom": "paper_symbol:cutoff_enhanced_data",
+      "needed_by": [
+        "cor_conditional_cutoff"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "cor_conditional_cutoff",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "thm_baseline_lift",
+        "prop_cubic_quartic_baseline",
+        "thm_conditional_closure_intro"
+      ],
+      "dependency_bucket": "deep_domain_theory",
+      "estimated_difficulty": "deep",
+      "difficulty_rank": 90
+    },
+    {
+      "burn_down_id": "5fc0e6db5f274ef7",
+      "paper_local_axiom": "paper_symbol:paracontrolled_solution",
+      "needed_by": [
+        "cor_conditional_cutoff"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "cor_conditional_cutoff",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "thm_conditional_closure_intro"
+      ],
+      "dependency_bucket": "deep_domain_theory",
+      "estimated_difficulty": "deep",
+      "difficulty_rank": 90
+    },
+    {
+      "burn_down_id": "d1a8bf6b53b61970",
+      "paper_local_axiom": "paper_symbol:Θ",
+      "needed_by": [
+        "thm_baseline_lift",
+        "prop_cubic_quartic_baseline"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "thm_baseline_lift",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "prop_cubic_quartic_baseline",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "deep_domain_theory",
+      "estimated_difficulty": "deep",
+      "difficulty_rank": 90
+    }
+  ]
+}

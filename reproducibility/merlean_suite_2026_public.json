@@ -1,0 +1,29 @@
+{
+  "suite_name": "merlean_public_comparison_2026",
+  "source": "MerLean paper arXiv:2602.16554 and MerLean examples page",
+  "notes": [
+    "Paper A (Balanced Product Codes) is public on arXiv and can be benchmarked directly.",
+    "Paper B (Fault-Tolerant QC by gauging logical operators) is currently identified via journal DOI; arXiv ID is not specified in MerLean public artifacts.",
+    "Paper C (Quantum Topology) is explicitly unpublished in MerLean and therefore not reproducible from arXiv."
+  ],
+  "papers": [
+    {
+      "label": "PaperA_BalancedProductCodes",
+      "arxiv_id": "2012.09271",
+      "status": "benchmarkable"
+    },
+    {
+      "label": "PaperB_FaultTolerantQC_Gauging",
+      "doi": "10.1038/s41567-026-03220-8",
+      "status": "not_arxiv_id_publicly_pinned"
+    },
+    {
+      "label": "PaperC_QuantumTopology_Unpublished",
+      "status": "unpublished_unavailable"
+    }
+  ],
+  "references": {
+    "merlean_paper": "https://arxiv.org/abs/2602.16554",
+    "merlean_examples": "https://arthurmerlean.com/"
+  }
+}

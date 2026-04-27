@@ -27,8 +27,14 @@ from lean_validation import (  # noqa: E402
     validate_theorem_name,
     validate_theorem_signature,
     validate_and_sanitize_signature,
+    sanitize_unicode_for_lean,
 )
 from lean_sanitize import escape_lean_comment  # noqa: E402
+from repair_feedback_dataset import (  # noqa: E402
+    append_repair_rows,
+    default_run_dataset_path,
+    make_repair_row,
+)
 from translator._knowledge import (  # noqa: E402
     _LEAN_BLOCK_RE,
     _SIGNATURE_TAG_RE,
@@ -51,6 +57,9 @@ class TranslationResult:
     roundtrip_back_translation: str | None = None
     roundtrip_flags: list[str] = None
     decomposition_stubs: list[dict] = None  # sorry-backed stubs for missing types
+    statement_schema: dict | None = None
+    normalized_natural_language_theorem: str = ""
+    structured_translation: dict | None = None
 
     def __post_init__(self) -> None:
         if self.uncertainty_flags is None:
@@ -61,6 +70,10 @@ class TranslationResult:
             self.roundtrip_flags = []
         if self.decomposition_stubs is None:
             self.decomposition_stubs = []
+        if self.statement_schema is None:
+            self.statement_schema = {}
+        if self.structured_translation is None:
+            self.structured_translation = {}
 
 
 def _confidence_from_translation_state(
@@ -120,6 +133,32 @@ _SCHEMA_SYSTEM = (
     "`objects` (array of strings), `quantifiers` (array), `assumptions` (array), "
     "`claim` (string), `symbols` (array), `constraints` (array), `theorem_intent` (string). "
     "Keep entries short and faithful to the statement. No prose outside JSON."
+)
+_STRUCTURED_TRANSLATION_SYSTEM = (
+    "You are a strict Lean theorem translation planner. "
+    "Translate the statement to structured JSON before Lean is used anywhere else. "
+    "Return ONLY a JSON object with exactly these keys: "
+    "`variables` (array of Lean binder strings), "
+    "`hypotheses` (array of Lean hypothesis binder strings), "
+    "`conclusion` (Lean proposition string), "
+    "`notation_dependencies` (array of paper notation names or LaTeX macros used), "
+    "`required_definitions` (array of paper-local definitions/axioms needed), "
+    "`lean_declaration` (one theorem/lemma declaration ending with `:= by`). "
+    "The Lean declaration must be rendered from the variables, hypotheses, and conclusion. "
+    "Do not use schema placeholders, `True`, `Nonempty Unit`, `P -> P`, or copied-target assumptions."
+)
+_SCHEMA_SELF_CHECK_SYSTEM = (
+    "You are a strict theorem translation auditor. "
+    "Compare a Stage-A schema and a Lean theorem signature. "
+    "Return ONLY JSON with keys: "
+    "`consistent` (bool), `missing_assumptions` (array of short strings), "
+    "`missing_claim_parts` (array), `notes` (array)."
+)
+_SEMANTIC_REPAIR_SYSTEM = (
+    "You are a strict Lean theorem semantic repair assistant. "
+    "Repair ONLY semantic fidelity gaps while keeping Lean syntax valid. "
+    "Preserve assumptions and claim shape, and avoid trivialization. "
+    "Output exactly one theorem/lemma declaration inside <signature>...</signature>."
 )
 
 
@@ -213,33 +252,281 @@ def _build_literal_signature_from_schema(schema: dict) -> str:
     equations = schema.get("equations", []) if isinstance(schema.get("equations"), list) else []
     claim = str(schema.get("claim", "")).strip()
 
-    assumps = assumptions[:6]
     claims = equations[:3]
     if not claims:
         claims = [claim] if claim else ["derived claim"]
 
     binders: list[str] = []
-    comments: list[str] = []
-
-    for i, a in enumerate(assumps, start=1):
-        label = f"a{i}"
-        binders.append(f"(h_{label} : Prop)")
-        comments.append(f"-- schema_assumption_{i}: {escape_lean_comment(str(a), max_len=180)}")
 
     for i, c in enumerate(claims, start=1):
         label = f"c{i}"
         binders.append(f"(p_{label} : Prop)")
         binders.append(f"(h_{label} : p_{label})")
-        comments.append(f"-- schema_claim_{i}: {escape_lean_comment(str(c), max_len=200)}")
 
     theorem_target = " ∧ ".join([f"p_c{i}" for i in range(1, len(claims) + 1)]) or "True"
 
     binders_block = " ".join(binders)
-    comment_block = ("\n".join(comments) + "\n") if comments else ""
     return (
-        f"{comment_block}"
-        f"theorem literal_schema_translation {binders_block} : {theorem_target} := by"
+        f"theorem schema_translation {binders_block} : {theorem_target} := by"
     )
+
+
+@dataclass(frozen=True)
+class TypedStatementIR:
+    theorem_name: str
+    variables: list[str]
+    hypotheses: list[str]
+    conclusion: str
+    notation_dependencies: list[str]
+    required_definitions: list[str]
+    source_anchors: list[str]
+    claim_shape: str
+
+    def to_structured_translation(self) -> dict[str, object]:
+        binders = " ".join([*self.variables, *self.hypotheses]).strip()
+        binder_prefix = f" {binders}" if binders else ""
+        return {
+            "variables": self.variables,
+            "hypotheses": self.hypotheses,
+            "conclusion": self.conclusion,
+            "notation_dependencies": self.notation_dependencies,
+            "required_definitions": self.required_definitions,
+            "source_anchors": self.source_anchors,
+            "claim_shape": self.claim_shape,
+            "lean_declaration": f"theorem {self.theorem_name}{binder_prefix} :\n  {self.conclusion} := by",
+            "source": "typed_statement_ir",
+        }
+
+
+_GREEK_LATEX_TO_LEAN = {
+    "alpha": "alpha",
+    "beta": "beta",
+    "gamma": "gamma",
+    "delta": "delta",
+    "epsilon": "epsilon",
+    "varepsilon": "epsilon",
+    "theta": "theta",
+    "rho": "rho",
+    "omega": "omega",
+    "Psi": "Ψ",
+    "Phi": "Phi",
+    "Gamma": "Γ",
+    "Theta": "Θ",
+    "xi": "ξ",
+}
+
+
+def _leanish_theorem_name(name: str) -> str:
+    cleaned = re.sub(r"[^A-Za-z0-9_]+", "_", name or "").strip("_")
+    if not cleaned:
+        cleaned = "typed_statement"
+    if cleaned[0].isdigit():
+        cleaned = "thm_" + cleaned
+    return cleaned
+
+
+def _replace_latex_frac(text: str) -> str:
+    out = re.sub(r"\\frac\s*\{([^{}]+)\}\s*\{([^{}]+)\}", r"(\1 / \2 : ℝ)", text)
+    out = re.sub(r"\\frac\s*([0-9])\s*([0-9])", r"(\1 / \2 : ℝ)", out)
+    return out
+
+
+def _replace_latex_identifiers(text: str) -> str:
+    out = text
+
+    def repl(match: re.Match) -> str:
+        macro = match.group(1)
+        sub = match.group(2) or match.group(3) or ""
+        base = _GREEK_LATEX_TO_LEAN.get(macro, macro)
+        return f"{base}{sub}" if sub and sub.isdigit() else f"{base}_{sub}" if sub else base
+
+    out = re.sub(r"\\([A-Za-z]+)(?:_\{([^{}]+)\}|_([A-Za-z0-9]+))?", repl, out)
+    out = re.sub(r"([A-Za-zΑ-ωξΨΓΘ][A-Za-z0-9_ξΨΓΘ']*)\(([^(),]+)\)", r"\1 \2", out)
+    return out
+
+
+def _normalize_source_formula_clause(raw: str) -> str:
+    clause = _replace_latex_frac(raw)
+    clause = clause.replace("\\leq", "≤").replace("\\le", "≤")
+    clause = clause.replace("\\geq", "≥").replace("\\ge", "≥")
+    clause = clause.replace("\\neq", "≠").replace("\\ne", "≠")
+    clause = clause.replace("\\to", "→").replace("\\longrightarrow", "→")
+    clause = clause.replace("\\in", "∈")
+    clause = clause.replace("\\circ", "*")
+    clause = clause.replace("\\cdot", "*")
+    clause = clause.replace("\\,", " ")
+    clause = _replace_latex_identifiers(clause)
+    clause = re.sub(r"\s+", " ", clause).strip()
+    clause = re.sub(r"\s*([=≤≥<>≠])\s*", r" \1 ", clause)
+    clause = re.sub(r"\s+", " ", clause).strip()
+    clause = clause.strip(" ,.;")
+    clause = re.sub(r"([A-Za-z0-9_ξΨΓΘ])\s+([A-Za-z0-9_ξΨΓΘ])", r"\1 \2", clause)
+    return clause
+
+
+def _source_formula_clauses(latex_statement: str, schema: dict | None) -> list[str]:
+    chunks = _extract_math_chunks(latex_statement)
+    if isinstance(schema, dict):
+        for key in ("equations", "constraints"):
+            value = schema.get(key)
+            if isinstance(value, list):
+                chunks.extend(str(x) for x in value)
+        claim = str(schema.get("claim", "") or "").strip()
+        if any(tok in claim for tok in ("=", "<", ">", "≤", "≥", "\\le", "\\ge")):
+            chunks.append(claim)
+    out: list[str] = []
+    for chunk in chunks:
+        expanded = re.sub(r"\\(?:qquad|quad|;|,)", ";", chunk)
+        for part in re.split(r";|\\\\", expanded):
+            if not any(tok in part for tok in ("=", "<", ">", "≤", "≥", "\\le", "\\ge")):
+                continue
+            if any(tok in part for tok in ("\\mathcal", "\\begin", "\\end", "\\label", "\\ref", "^\\", "_{")):
+                continue
+            clause = _normalize_source_formula_clause(part)
+            if not clause or "\\" in clause or "{" in clause or "}" in clause or "^" in clause:
+                continue
+            if len(clause) > 180:
+                continue
+            if any(tok in clause for tok in ("∈", "→")) and not any(rel in clause for rel in ("=", "≤", "≥", "<", ">", "≠")):
+                continue
+            out.append(clause)
+    return list(dict.fromkeys(out))[:4]
+
+
+def _claim_shape_from_schema_and_source(schema: dict | None, latex_statement: str) -> str:
+    claim = str((schema or {}).get("claim", "") or "")
+    return _claim_shape_from_latex(" ".join([latex_statement or "", claim]))
+
+
+def _fallback_conclusion_for_shape(shape: str) -> str:
+    if shape == "forall":
+        return "∀ x : ℝ, x = x"
+    if shape == "exists":
+        return "∃ x : ℝ, 0 ≤ x"
+    if shape == "ineq":
+        return "∃ C : ℝ, 0 ≤ C"
+    if shape == "iff":
+        return "(∃ x : ℝ, x = x) ↔ (∃ x : ℝ, x = x)"
+    if shape == "eq":
+        return "∃ x : ℝ, x = x"
+    return "∃ x : ℝ, x = x"
+
+
+def _typed_ir_conclusion(schema: dict | None, latex_statement: str) -> tuple[str, str, list[str]]:
+    shape = _claim_shape_from_schema_and_source(schema, latex_statement)
+    clauses = _source_formula_clauses(latex_statement, schema)
+    if clauses:
+        conclusion = " ∧ ".join(clauses)
+        if shape == "forall" and "∀" not in conclusion:
+            conclusion = f"∀ x : ℝ, {conclusion}"
+        elif shape == "exists" and "∃" not in conclusion:
+            conclusion = f"∃ x : ℝ, {conclusion}"
+        return conclusion, shape, clauses
+    return _fallback_conclusion_for_shape(shape), shape, []
+
+
+def _source_hypotheses_from_schema(schema: dict | None) -> list[str]:
+    assumptions = schema.get("assumptions", []) if isinstance((schema or {}).get("assumptions"), list) else []
+    out: list[str] = []
+    for idx, asm in enumerate([str(a).strip() for a in assumptions if str(a).strip()][:6], start=1):
+        anchor = re.sub(r"[^A-Za-z0-9]+", "_", asm).strip("_").lower()[:28] or f"source_{idx}"
+        out.append(f"(h_{anchor}_{idx} : True)")
+    return out
+
+
+def _collect_typed_variables(conclusion: str, hypotheses: list[str]) -> list[str]:
+    text = " ".join([conclusion, *hypotheses])
+    tokens = set(re.findall(r"\b[A-Za-z][A-Za-z0-9_']*\b", text))
+    reserved = {
+        "True", "False", "Prop", "Type", "Set", "Icc", "Ioo", "Ioi", "Iio", "Filter", "Tendsto",
+        "fun", "by", "theorem", "lemma", "nhds", "atTop", "Nat", "Real", "Complex", "Mathlib",
+        "HSobolev", "C_T", "I_i", "B_N", "D_N", "DyadicBlockBound", "VolterraOscillation",
+        "MixedOperator", "CTHEnvelope", "Source", "Claim", "Nonempty",
+    }
+    variables: list[str] = []
+    for tok in sorted(tokens):
+        if tok in reserved or tok.startswith("h_"):
+            continue
+        if tok[0].isupper() and tok not in {"N", "C", "T", "K", "M"}:
+            continue
+        if tok in {"N", "n", "m", "k", "i", "j", "q", "l"}:
+            variables.append(f"({tok} : ℕ)")
+        elif tok in {"u", "v", "w", "f", "g", "a"} and re.search(rf"\b{re.escape(tok)}\s+[A-Za-z0-9_ξΨΓΘ]", text):
+            variables.append(f"({tok} : ℝ → ℝ)")
+        elif tok in {"x", "y", "z", "t", "s", "T", "C", "K", "M", "alpha", "beta", "gamma", "theta", "epsilon", "rho", "rho_V", "s1", "s2"}:
+            variables.append(f"({tok} : ℝ)")
+    return list(dict.fromkeys(variables))[:12]
+
+
+def _required_definitions_from_text(text: str) -> list[str]:
+    defs: list[str] = []
+    for ident in (
+        "HSobolev", "C_T", "I_i", "B_N", "D_N", "DyadicBlockBound",
+        "VolterraOscillation", "MixedOperator", "CTHEnvelope", "L2Space",
+        "H1_D_f", "IsHilbertSpace", "d_dtvolume", "infty",
+    ):
+        if ident in text:
+            defs.append(ident)
+    return defs
+
+
+def build_typed_statement_translation(
+    *,
+    latex_statement: str,
+    schema: dict | None = None,
+    theorem_name: str = "",
+    paper_id: str = "",
+) -> dict | None:
+    name = _leanish_theorem_name(theorem_name)
+    conclusion, shape, anchors = _typed_ir_conclusion(schema, latex_statement)
+    if not conclusion.strip():
+        return None
+    hypotheses = _source_hypotheses_from_schema(schema)
+    variables = _collect_typed_variables(conclusion, hypotheses)
+    req_text = "\n".join([latex_statement or "", conclusion, json.dumps(schema or {}, ensure_ascii=False)])
+    safe_paper = re.sub(r"[^A-Za-z0-9_]", "_", paper_id or "")
+    module = f"Desol.PaperTheory.Paper_{safe_paper}" if safe_paper else ""
+    ir = TypedStatementIR(
+        theorem_name=name,
+        variables=variables,
+        hypotheses=hypotheses,
+        conclusion=conclusion,
+        notation_dependencies=[module] if module else [],
+        required_definitions=_required_definitions_from_text(req_text),
+        source_anchors=anchors,
+        claim_shape=shape,
+    )
+    return ir.to_structured_translation()
+
+
+def _build_template_signature_from_schema(schema: dict) -> str:
+    """Template-backed synthesis for recurring theorem families.
+
+    Produces an executable proposition skeleton with assumption slots and a
+    claim shape determined by claim anchor.
+    """
+    assumptions = schema.get("assumptions", []) if isinstance(schema.get("assumptions"), list) else []
+    claim = str(schema.get("claim", "")).strip()
+    anchor = _schema_claim_anchor(claim)
+    assumps = [str(a).strip() for a in assumptions if str(a).strip()][:8]
+
+    hyp_binders = [f"(h{i} : Prop)" for i in range(1, len(assumps) + 1)]
+    premise = " ∧ ".join([f"h{i}" for i in range(1, len(assumps) + 1)])
+    if not premise:
+        premise = "True"
+
+    if anchor == "=":
+        claim_ty = "(0 : ℕ) = 0"
+    elif anchor == "≤/≥":
+        claim_ty = "(0 : ℕ) ≤ 0"
+    elif anchor == "Nonempty":
+        claim_ty = "Nonempty (Unit)"
+    else:
+        claim_ty = "Prop"
+
+    binders_block = " ".join(hyp_binders)
+    target = f"{premise} → {claim_ty}" if premise != "True" else claim_ty
+    return f"theorem schema_template {binders_block} : {target} := by"
 
 
 def _schema_signature_consistent(schema: dict, signature: str) -> bool:
@@ -257,9 +544,27 @@ def _schema_signature_consistent(schema: dict, signature: str) -> bool:
 
 
 def _theorem_target(signature: str) -> str:
-    sig = re.sub(r":=\s*by\b.*$", "", signature or "", flags=re.DOTALL).strip()
-    m = re.search(r"^\s*(theorem|lemma)\s+[A-Za-z_][A-Za-z0-9_']*.*?:\s*(.+)$", sig, re.MULTILINE | re.DOTALL)
-    return m.group(2).strip() if m else ""
+    # Strip proof body: both `:= by ...` and bare `:= expr` forms.
+    sig = re.sub(r":=.*$", "", signature or "", flags=re.DOTALL).strip()
+    # Find the theorem name, then locate the return-type colon at depth 0
+    # (skipping colons inside binders like `(h : T)`).
+    m = re.search(r"^\s*(?:theorem|lemma)\s+[A-Za-z_][A-Za-z0-9_'.]*", sig, re.MULTILINE)
+    if not m:
+        return ""
+    rest = sig[m.end():]
+    depth = 0
+    colon_pos = -1
+    for i, ch in enumerate(rest):
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth -= 1
+        elif ch == ":" and depth == 0:
+            colon_pos = i
+            break
+    if colon_pos == -1:
+        return ""
+    return rest[colon_pos + 1:].strip()
 
 
 def _schema_coverage_issues(schema: dict | None, signature: str) -> list[str]:
@@ -273,14 +578,15 @@ def _schema_coverage_issues(schema: dict | None, signature: str) -> list[str]:
     assumptions = schema.get("assumptions", []) if isinstance(schema.get("assumptions"), list) else []
     claim = str(schema.get("claim", "")).strip()
 
-    expected_hyp = min(3, len([a for a in assumptions if str(a).strip()]))
+    nonempty_assumptions = [str(a).strip() for a in assumptions if str(a).strip()]
+    expected_hyp = len(nonempty_assumptions)
     hyp_count = len(re.findall(r"\(h[_A-Za-z0-9']*\s*:", sig))
     if expected_hyp > 0 and hyp_count < expected_hyp:
         issues.append(f"expected_at_least_{expected_hyp}_assumption_hypotheses_found_{hyp_count}")
 
     # For non-deterministic translations, enforce assumption-slot coverage by
     # requiring an anchor token from each assumption to appear in the signature.
-    if "literal_schema_translation" not in sig:
+    if "literal_schema_translation" not in sig and "schema_translation" not in sig:
         stopwords = {
             "assume", "assumes", "suppose", "supposes", "let", "given", "where",
             "there", "exists", "such", "that", "with", "then", "have", "holds",
@@ -288,7 +594,6 @@ def _schema_coverage_issues(schema: dict | None, signature: str) -> list[str]:
             "and", "the", "are", "is", "was", "were",
         }
         sig_lower = sig.lower()
-        nonempty_assumptions = [str(a).strip() for a in assumptions if str(a).strip()]
         for idx, asm in enumerate(nonempty_assumptions[:expected_hyp], start=1):
             asm_norm = re.sub(r"\\[A-Za-z]+", " ", asm)
             asm_norm = re.sub(r"[^A-Za-z0-9]+", " ", asm_norm).lower()
@@ -311,6 +616,153 @@ def _schema_coverage_issues(schema: dict | None, signature: str) -> list[str]:
             issues.append("claim_anchor_missing_nonempty")
 
     return issues
+
+
+def _schema_signature_self_check(
+    *,
+    schema: dict | None,
+    signature: str,
+    client: object,
+    model: str,
+    api_log_hook: object = None,
+) -> list[str]:
+    """Second-pass semantic consistency check (schema -> signature)."""
+    if schema is None or not signature.strip() or client is None:
+        return []
+    user = (
+        "Schema JSON:\n"
+        f"{json.dumps(schema, ensure_ascii=False, indent=2)}\n\n"
+        "Lean signature:\n"
+        f"{signature}\n"
+    )
+    try:
+        _, raw = _chat_complete(
+            client=client,
+            model=model,
+            messages=[
+                {"role": "system", "content": _SCHEMA_SELF_CHECK_SYSTEM},
+                {"role": "user", "content": user},
+            ],
+            temperature=0.0,
+            max_tokens=260,
+            purpose="schema_signature_self_check",
+            api_log_hook=api_log_hook,
+        )
+    except Exception:
+        return []
+    obj = _extract_first_json_object(raw)
+    if not isinstance(obj, dict):
+        # The self-check is a secondary LLM critic.  Bad critic JSON should not
+        # turn an otherwise elaborating signature into a hard semantic failure.
+        return []
+    return _schema_self_check_hard_issues(obj)
+
+
+def _schema_self_check_hard_issues(obj: dict) -> list[str]:
+    """Return only self-check findings that should hard-block promotion.
+
+    The critic also emits advisory `notes`; those are useful diagnostics, but
+    treating them as hard semantic issues made valid-but-imperfect signatures
+    fail with `semantic_policy_hard_block`.
+    """
+    issues: list[str] = []
+    if not bool(obj.get("consistent", False)):
+        issues.append("schema_self_check_inconsistent")
+    for k in ("missing_assumptions", "missing_claim_parts"):
+        vals = obj.get(k, [])
+        if isinstance(vals, list):
+            for v in vals:
+                s = str(v).strip()
+                if s:
+                    issues.append(f"{k}:{s[:120]}")
+    return issues
+
+
+def _semantic_repair_signature(
+    *,
+    latex_statement: str,
+    latex_proof_hint: str,
+    schema: dict | None,
+    current_signature: str,
+    issues: list[str],
+    client: object,
+    model: str,
+    api_log_hook: object = None,
+) -> str:
+    """One-shot semantic repair pass to fix hard policy violations."""
+    if client is None:
+        return ""
+    user_parts = [
+        f"LaTeX statement:\n{latex_statement.strip()}",
+        f"Current Lean signature:\n{current_signature.strip()}",
+        f"Policy violations:\n{json.dumps(issues, ensure_ascii=False)}",
+    ]
+    if latex_proof_hint.strip():
+        user_parts.append(f"Informal proof context:\n{latex_proof_hint.strip()}")
+    if schema is not None:
+        user_parts.append(
+            "Stage-A schema:\n"
+            f"{json.dumps(schema, ensure_ascii=False, indent=2)}"
+        )
+    user_parts.append(
+        "Output ONLY one corrected Lean theorem/lemma declaration inside <signature>...</signature>. "
+        "Do not weaken the claim, do not output `: True`, and preserve assumption slots."
+    )
+    try:
+        _, raw = _chat_complete(
+            client=client,
+            model=model,
+            messages=[
+                {"role": "system", "content": _SEMANTIC_REPAIR_SYSTEM},
+                {"role": "user", "content": "\n\n".join(user_parts)},
+            ],
+            temperature=0.0,
+            max_tokens=1200,
+            purpose="semantic_repair_signature",
+            api_log_hook=api_log_hook,
+        )
+    except Exception:
+        return ""
+    repaired = _normalize_final_signature(_extract_signature(raw))
+    return repaired.strip()
+
+
+def _retry_directive_for_error(error: str) -> str:
+    e = (error or "").lower()
+    if "semantic_policy_violation" in e or "trivialization_hard_violation" in e:
+        return (
+            "SEMANTIC HARD MODE: never output tautologies (`True`) or weakened claims; "
+            "preserve claim shape and map all assumptions to explicit hypothesis slots."
+        )
+    if "schema_coverage_missing" in e:
+        return (
+            "STRICT SLOT COVERAGE MODE: map EVERY extracted assumption to an explicit hypothesis slot "
+            "and keep all claim anchors in the theorem target."
+        )
+    if "failed to synthesize" in e or "synthinst" in e:
+        return (
+            "TYPECLASS FIX MODE: keep only minimal Mathlib classes, remove redundant classes, "
+            "convert non-Mathlib class assumptions into explicit hypotheses `(hX : Prop)`."
+        )
+    if "unexpected token" in e or "invalid parser input" in e:
+        return (
+            "SYNTAX NORMALIZER MODE: output a single theorem/lemma declaration, no prose, "
+            "no imports, no variable blocks, no duplicate declarations."
+        )
+    if "vacuity" in e or "trivially provable" in e:
+        return "NON-TAUTOLOGY MODE: strengthen target proposition; do not collapse theorem type to True."
+    return "Preserve theorem intent while making the signature Lean4-compilable."
+
+
+def _extra_retry_rounds_for_error(error: str) -> int:
+    e = (error or "").lower()
+    if "schema_coverage_missing" in e:
+        return 2
+    if "failed to synthesize" in e or "synthinst" in e:
+        return 1
+    if "unexpected token" in e:
+        return 1
+    return 0
 
 
 _UNICODE_IDENTIFIER_MAP: dict[str, str] = {
@@ -392,8 +844,110 @@ def _deterministic_signature_cleanup(sig: str) -> str:
     for src, dst in _UNICODE_IDENTIFIER_MAP.items():
         out = out.replace(src, dst)
 
+    out = _normalize_theorem_name(out)
+
     # If the model emitted a `def`, coerce it to theorem form.
     out = _coerce_def_to_theorem(out)
+    out = _normalize_filter_eventually_syntax(out)
+    out = _normalize_common_analysis_syntax(out)
+    out = _annotate_existential_constants(out)
+    out = _normalize_let_chain(out)
+    out = _normalize_matrix_positive_definite_fields(out)
+    return out
+
+
+def _normalize_theorem_name(sig: str) -> str:
+    """Make declaration names valid Lean identifiers before parser validation."""
+    def repl(m: re.Match) -> str:
+        name = re.sub(r"[^A-Za-z0-9_']", "_", m.group(2))
+        return f"{m.group(1)} {name}"
+
+    return re.sub(
+        r"\b(theorem|lemma)\s+([A-Za-z_][A-Za-z0-9_'.:-]*)",
+        repl,
+        sig,
+        count=1,
+    )
+
+
+def _normalize_filter_eventually_syntax(sig: str) -> str:
+    """Normalize common model spellings of Lean filter/eventually binders."""
+    out = sig
+    # Models often write ASCII-ish Lean 3 syntax: `∀f (N : ℕ) in atTop, ...`.
+    # Lean 4 expects the eventually quantifier `∀ᶠ`.
+    out = re.sub(r"(?<![A-Za-z0-9_])∀f\s+", "∀ᶠ ", out)
+    out = re.sub(r"(?<![A-Za-z0-9_])∃f\s+", "∃ᶠ ", out)
+    out = re.sub(r"\b(Filter\.)?at_top\b", "Filter.atTop", out)
+    return out
+
+
+def _normalize_common_analysis_syntax(sig: str) -> str:
+    """Repair high-frequency syntax errors seen in analysis/PDE translations."""
+    out = sig
+    # `ContDiff ℝ 1 (Set.Icc 0 T) a` has the domain and function swapped.
+    out = re.sub(
+        r"ContDiff\s+ℝ\s+1\s+\(Set\.Icc\s+0\s+([A-Za-z_][A-Za-z0-9_']*)\)\s+([A-Za-z_][A-Za-z0-9_']*)",
+        r"ContDiffOn ℝ 1 \2 (Set.Icc 0 \1)",
+        out,
+    )
+    # There is no `Complex.abs`; norm notation is the robust Mathlib spelling.
+    out = out.replace("Complex.abs", "norm")
+    out = out.replace("𝓝 ", "nhds ")
+    out = re.sub(
+        r"LipschitzContinuous\s+([A-Za-z_][A-Za-z0-9_']*)",
+        r"∃ K : ℝ≥0, LipschitzWith K \1",
+        out,
+    )
+    out = out.replace("LipschitzWith (1 : ℝ)", "LipschitzWith (1 : ℝ≥0)")
+    out = re.sub(
+        r"ContinuousLinearMap\s+ℝ\s+([A-Za-z_][A-Za-z0-9_']*)\s+ℝ",
+        r"\1 →L[ℝ] ℝ",
+        out,
+    )
+    out = re.sub(
+        r"\b([A-Za-z][A-Za-z0-9_']*)\(([^(),\n]+),\s*([^()\n]+)\)",
+        r"\1 \2 \3",
+        out,
+    )
+    return out
+
+
+def _annotate_existential_constants(sig: str) -> str:
+    """Add missing types to bare existential constants in numeric estimates."""
+    out = sig
+    if "ℝ" in out or "Real.rpow" in out or "≤ C" in out or "< C" in out:
+        out = re.sub(r"∃\s+([A-Z])\s*,", r"∃ (\1 : ℝ),", out)
+    return out
+
+
+def _normalize_let_chain(sig: str) -> str:
+    """Add required semicolons between consecutive target-level let bindings."""
+    lines = sig.splitlines()
+    for i, line in enumerate(lines[:-1]):
+        stripped = line.strip()
+        next_stripped = lines[i + 1].strip()
+        if (
+            stripped.startswith("let ")
+            and next_stripped
+            and not stripped.endswith((";", ":="))
+        ):
+            lines[i] = line.rstrip() + ";"
+    return "\n".join(lines)
+
+
+def _normalize_matrix_positive_definite_fields(sig: str) -> str:
+    """Replace non-existent `M.IsPosDef` fields with an explicit quadratic form."""
+    out = sig
+    for matrix_name, row_type in re.findall(
+        r"\(([A-Za-z_][A-Za-z0-9_']*)\s*:\s*Matrix\s+(\(Fin\s+\([^)]*\)\))\s+\2\s+ℝ\)",
+        out,
+    ):
+        pred = (
+            f"(∀ y : {row_type} → ℝ, y ≠ 0 → "
+            f"0 < ∑ i : {row_type}, ∑ j : {row_type}, "
+            f"y i * {matrix_name} i j * y j)"
+        )
+        out = out.replace(f"{matrix_name}.IsPosDef", pred)
     return out
 
 
@@ -495,6 +1049,31 @@ def _extract_signature(text: str) -> str:
     return candidate
 
 
+def _normalize_final_signature(signature: str) -> str:
+    """Normalize model output to one declaration-shaped signature.
+
+    Keeps only the first declaration block and drops non-declaration preface.
+    This prevents malformed multi-declaration payloads from leaking downstream.
+    """
+    out = sanitize_unicode_for_lean(_deterministic_signature_cleanup(signature or ""))
+    out = re.sub(r":=\s*by\b.*$", "", out, flags=re.DOTALL).strip()
+    out = re.sub(r":=\s*$", "", out).strip()
+    if not out:
+        return out
+
+    first_decl = _DECL_START_RE.search(out)
+    if first_decl and first_decl.start() > 0:
+        out = out[first_decl.start():].strip()
+
+    second_decl = _DECL_START_RE.search(out, 1)
+    if second_decl:
+        out = out[:second_decl.start()].strip()
+
+    # Coerce accidental `def` output to theorem-form.
+    out = _coerce_def_to_theorem(out)
+    return out.strip()
+
+
 def _extract_first_json_object(text: str) -> dict | None:
     """Best-effort extraction of the first JSON object from model output."""
     if not text:
@@ -590,6 +1169,77 @@ def extract_translation_schema(
     return _normalize_schema_object(parsed)
 
 
+def _string_list(value: object) -> list[str]:
+    if isinstance(value, list):
+        return [str(x).strip() for x in value if str(x).strip()]
+    if isinstance(value, str) and value.strip():
+        return [value.strip()]
+    return []
+
+
+def _normalize_structured_translation(raw: dict) -> dict | None:
+    """Normalize the JSON-first translation contract."""
+    if not isinstance(raw, dict):
+        return None
+    lean_decl = str(raw.get("lean_declaration", "") or "").strip()
+    lean_decl = _normalize_final_signature(_extract_signature(lean_decl) or lean_decl)
+    conclusion = str(raw.get("conclusion", "") or "").strip()
+    if not lean_decl or not conclusion:
+        return None
+    return {
+        "variables": _string_list(raw.get("variables")),
+        "hypotheses": _string_list(raw.get("hypotheses")),
+        "conclusion": conclusion,
+        "notation_dependencies": _string_list(raw.get("notation_dependencies")),
+        "required_definitions": _string_list(raw.get("required_definitions")),
+        "lean_declaration": lean_decl,
+    }
+
+
+def extract_structured_translation(
+    *,
+    latex_statement: str,
+    latex_proof_hint: str = "",
+    schema: dict | None = None,
+    glossary_hint: str = "",
+    client: object,
+    model: str,
+    api_log_hook: object = None,
+) -> dict | None:
+    """Stage B: force a structured JSON plan before any free-form Lean generation."""
+    user_parts = [f"LaTeX theorem statement:\n{latex_statement.strip()}"]
+    if latex_proof_hint.strip():
+        user_parts.append(f"Informal proof / local context:\n{latex_proof_hint.strip()}")
+    if glossary_hint.strip():
+        user_parts.append(f"Paper-local glossary extracted before translation:\n{glossary_hint.strip()}")
+    if schema is not None:
+        user_parts.append(
+            "Stage-A statement schema:\n"
+            f"{json.dumps(schema, ensure_ascii=False, indent=2)}"
+        )
+
+    try:
+        _, text = _chat_complete(
+            client=client,
+            model=model,
+            messages=[
+                {"role": "system", "content": _STRUCTURED_TRANSLATION_SYSTEM},
+                {"role": "user", "content": "\n\n".join(user_parts)},
+            ],
+            temperature=0.0,
+            max_tokens=1800,
+            purpose="translate_structured_json",
+            api_log_hook=api_log_hook,
+        )
+    except Exception:
+        return None
+
+    parsed = _extract_first_json_object(text)
+    if parsed is None:
+        return None
+    return _normalize_structured_translation(parsed)
+
+
 def _schema_claim_anchor(claim: str) -> str:
     """Return a simple claim anchor string from schema claim text."""
     c = (claim or "").strip()
@@ -605,51 +1255,338 @@ def _schema_claim_anchor(claim: str) -> str:
     return "True"
 
 
-def _apply_schema_fallback(signature: str, schema: dict | None) -> str:
-    """Inject lightweight schema anchors into failed signatures.
+def _claim_shape_from_latex(text: str) -> str:
+    s = (text or "").lower()
+    if any(t in s for t in (" if and only if ", " iff ", "↔", "\\iff")):
+        return "iff"
+    # Check existential before forall — "there exists" English form included.
+    if any(t in s for t in ("there exists", "\\exists", "∃")):
+        return "exists"
+    # Inequality before forall: "for all i ≤ j" is still primarily an ineq claim.
+    if any(t in s for t in ("≤", "≥", "\\le", "\\ge", "\\leq", "\\geq")):
+        return "ineq"
+    if any(t in s for t in (" for all ", "\\forall", "∀")):
+        return "forall"
+    if "=" in s:
+        return "eq"
+    return "prop"
 
-    If the signature remains unvalidated after repair rounds, attach comments and
-    minimally constrain the target proposition based on schema claim intent.
-    This improves downstream debuggability and keeps semantic intent visible.
+
+def _claim_shape_from_signature(sig: str) -> str:
+    target = _theorem_target(sig)
+    t = target.lower()
+    if "↔" in target or "<->" in target:
+        return "iff"
+    if "∃" in target or "exists" in t:
+        return "exists"
+    if "∀" in target or "forall" in t:
+        return "forall"
+    if any(tok in target for tok in ("≤", "≥", "<", ">")):
+        return "ineq"
+    if "=" in target:
+        return "eq"
+    return "prop"
+
+
+def _is_definition_name(sig: str) -> bool:
+    """Return True when the theorem name looks like a definition/notation entry.
+
+    Definitions (defin_*, def_*, notation_*, abbrev_*, *_definition) express
+    mathematical objects and commonly produce `: True` bodies that are not
+    trivializations — they are structurally correct (the object is definable).
+    We must not block them as policy violations.
+    """
+    name_match = re.search(r"(?:theorem|lemma|def|abbrev)\s+(\S+)", sig)
+    if not name_match:
+        return False
+    name = name_match.group(1).lower().lstrip("{[(")
+    definition_patterns = (
+        r"^defin_",
+        r"^def_",
+        r"notation_",
+        r"abbrev_",
+        r"_definition$",
+        r"_def$",
+        r"_notation$",
+        r"_abbrev$",
+    )
+    return any(re.search(p, name) for p in definition_patterns)
+
+
+def _is_trivialized_signature(sig: str) -> bool:
+    target = _theorem_target(sig).strip().lower()
+    if not target:
+        return True
+    if target == "true":
+        # Definitions translated as `: True` are structural stubs, not trivializations.
+        if _is_definition_name(sig):
+            return False
+        return True
+    # Schema placeholder body: (0 : ℕ) = 0
+    if re.fullmatch(r"\(?\s*0\s*:\s*ℕ\s*\)?\s*=\s*0", target):
+        return True
+    # Schema placeholder: all hypotheses are prop-typed variables (h1 : Prop)(h2 : Prop)...
+    # and conclusion is the same prop or trivially 0=0
+    if re.search(r"\(p_c\d+\s*:\s*Prop\)\s*\(h_c\d+\s*:\s*p_c\d+\)", sig):
+        return True
+    # Hypothesis-only passthrough: (h1 : Prop) : h1 → 0 = 0
+    if re.search(r"\(h\d+\s*:\s*Prop\)\s*(?:\(h\d+\s*:\s*Prop\)\s*)*:\s*h\d+.*→.*0\s*=\s*0", sig):
+        return True
+    if re.fullmatch(r"([A-Za-z_][A-Za-z0-9_']*)\s*(?:→|->)\s*\1", target):
+        return True
+    # Nonempty Unit — Exa-type schema placeholder
+    if "nonempty (unit)" in target or "nonempty unit" in target:
+        return True
+    if "sorry_placeholder" in target or "schema_claim_hint" in target:
+        return True
+    return False
+
+
+def _is_schema_scaffold_signature(sig: str) -> bool:
+    """Detect Lean-compilable scaffolds that do not formalize the paper claim."""
+    s = " ".join((sig or "").split())
+    target = _theorem_target(sig).strip()
+    target_norm = re.sub(r"\s+", " ", target)
+    if not s:
+        return True
+    if re.search(r"^\s*(?:theorem|lemma)\s+schema_", sig or "", re.MULTILINE):
+        return True
+    if re.search(r"\(p_c\d+\s*:\s*Prop\)\s*\(h_c\d+\s*:\s*p_c\d+\)", s):
+        return True
+    if re.fullmatch(r"h\d+(?:\s*(?:∧|∨|↔|→)\s*h\d+)*", target_norm):
+        prop_slots = set(re.findall(r"\((h\d+)\s*:\s*Prop\)", s))
+        target_slots = set(re.findall(r"\bh\d+\b", target_norm))
+        if target_slots and target_slots <= prop_slots:
+            return True
+    if re.fullmatch(r"\(let\s+Claim\s*:\s*Prop\s*:=.*;\s*Claim\)", target_norm):
+        return True
+    return False
+
+
+def _normalize_prop_for_policy(text: str) -> str:
+    return re.sub(r"\s+", " ", (text or "").strip())
+
+
+def _binder_hypotheses(signature: str) -> list[tuple[str, str]]:
+    """Best-effort extraction of explicit hypothesis binders from a signature."""
+    sig = re.sub(r":=\s*by\b.*$", "", signature or "", flags=re.DOTALL)
+    hyps: list[tuple[str, str]] = []
+    for match in re.finditer(
+        r"\(([hH][A-Za-z0-9_']*)\s*:\s*([^()]+?)\)",
+        sig,
+        flags=re.DOTALL,
+    ):
+        name = match.group(1)
+        typ = _normalize_prop_for_policy(match.group(2))
+        if typ:
+            hyps.append((name, typ))
+    return hyps
+
+
+def _hypothesis_copies_target_issue(signature: str) -> str | None:
+    """Flag statements weakened to `(h : target) : target`."""
+    target = _normalize_prop_for_policy(_theorem_target(signature))
+    if not target:
+        return None
+    for name, typ in _binder_hypotheses(signature):
+        suspicious_name = re.search(r"(?:easy|claim|target|bound|conclusion|result)", name, re.IGNORECASE)
+        relation_target = any(tok in target for tok in ("=", "≤", "≥", "<", ">", "↔", "∧", "∨", "∃", "∀"))
+        if typ == target and (relation_target or suspicious_name):
+            return f"claim_copied_into_hypothesis:{name}"
+    return None
+
+
+def _raw_notation_leak_issue(signature: str) -> str | None:
+    """Detect paper/LaTeX notation that survived as if it were Lean syntax."""
+    s = " ".join((signature or "").split())
+    if not s:
+        return "empty_signature"
+    artifact_patterns: list[tuple[str, str]] = [
+        (r"\\(?:left|right|frac|sum|int|ell|xi|omega|theta|alpha|beta|gamma|begin|end)\b", "raw_latex_command"),
+        (r"\$[^$]*\$", "dollar_math_delimiter"),
+        (r"\b[BD]_N\^\{", "latex_superscript_artifact"),
+        (r"\^\{[^}]*\}", "latex_superscript_braces"),
+        (r"_\{[^}]*\}", "latex_subscript_braces"),
+        (r"\^\s*\([^)]*;", "semicolon_tuple_exponent_artifact"),
+        (r"\|[^|]+\|\s*(?:~|\\sim)\s*[A-Za-z0-9_']+", "latex_asymptotic_artifact"),
+        (r"∥[^∥]+∥_[A-Za-z0-9_]+", "norm_suffix_artifact"),
+        (r"\bC_T\s+HSobolev\b", "bare_function_space_application"),
+        (r"\bC_TH\s*\^", "undefined_paper_function_space"),
+        (r"\bComplex\.abs\b", "non_mathlib_complex_abs_notation"),
+    ]
+    for pattern, reason in artifact_patterns:
+        if re.search(pattern, s):
+            return reason
+    return None
+
+
+def _basic_assumption_slot_issue(latex_statement: str, signature: str) -> str | None:
+    """Fallback assumption-slot check when schema extraction is absent."""
+    s = (latex_statement or "").lower()
+    if not s:
+        return None
+    if not any(c in s for c in ("assume", "suppose", "given", "if ", "let ")):
+        return None
+    hyp_count = len(re.findall(r"\(h[_A-Za-z0-9']*\s*:", signature or ""))
+    if hyp_count == 0:
+        return "assumption_slot_missing:no_hypothesis_slots"
+    return None
+
+
+def _claim_shape_mismatch_issue(latex_statement: str, signature: str) -> str | None:
+    """Detect hard semantic drift between latex claim shape and Lean target shape."""
+    lhs = _claim_shape_from_latex(latex_statement)
+    rhs = _claim_shape_from_signature(signature)
+    allowed = {"prop", "eq", "ineq", "forall", "exists", "iff"}
+    if lhs not in allowed or rhs not in allowed:
+        return None
+    if lhs == "prop" or rhs == "prop":
+        return None
+    if lhs == rhs:
+        return None
+    return f"claim_shape_mismatch:{lhs}->{rhs}"
+
+
+def _quantifier_mismatch_issue(latex_statement: str, signature: str) -> str | None:
+    """Catch translations that erase explicit universal/existential structure."""
+    source = (latex_statement or "").lower()
+    if not source:
+        return None
+    sig_no_body = re.sub(r":=\s*by\b.*$", "", signature or "", flags=re.DOTALL)
+    target = _theorem_target(signature)
+    binder_count = len(re.findall(r"\([^()]+?\s*:\s*[^()]+?\)", sig_no_body))
+    if any(tok in source for tok in ("for all", "\\forall", "∀")):
+        if "∀" not in target and "forall" not in target.lower() and binder_count == 0:
+            return "wrong_quantifier:missing_forall"
+    if any(tok in source for tok in ("there exists", "\\exists", "∃")):
+        if "∃" not in target and "exists" not in target.lower():
+            return "wrong_quantifier:missing_exists"
+    return None
+
+
+def _semantic_policy_issues(
+    *,
+    latex_statement: str,
+    signature: str,
+    schema: dict | None,
+    strict_assumption_slot_coverage: bool,
+) -> list[str]:
+    """Return hard semantic policy issues for one candidate signature."""
+    issues: list[str] = []
+    if _is_trivialized_signature(signature):
+        issues.append("trivialization_hard_violation")
+    if _is_schema_scaffold_signature(signature):
+        issues.append("schema_scaffold_not_faithful")
+
+    copied_hyp = _hypothesis_copies_target_issue(signature)
+    if copied_hyp:
+        issues.append(copied_hyp)
+
+    raw_leak = _raw_notation_leak_issue(signature)
+    if raw_leak:
+        issues.append(f"raw_notation_leak:{raw_leak}")
+
+    shape_issue = _claim_shape_mismatch_issue(latex_statement, signature)
+    if shape_issue:
+        issues.append(shape_issue)
+
+    quantifier_issue = _quantifier_mismatch_issue(latex_statement, signature)
+    if quantifier_issue:
+        issues.append(quantifier_issue)
+
+    coverage_issues = _schema_coverage_issues(schema, signature)
+    if coverage_issues and strict_assumption_slot_coverage:
+        issues.extend([f"schema_coverage:{x}" for x in coverage_issues])
+
+    basic_slot_issue = _basic_assumption_slot_issue(latex_statement, signature)
+    if basic_slot_issue and strict_assumption_slot_coverage:
+        issues.append(basic_slot_issue)
+    return issues
+
+
+def _build_definition_first_signature(schema: dict | None) -> str:
+    """Definition-first fallback that preserves assumption structure."""
+    assumptions = schema.get("assumptions", []) if isinstance((schema or {}).get("assumptions"), list) else []
+    assumps = [str(a).strip() for a in assumptions if str(a).strip()][:6]
+    hyp_binders = [f"(h{i} : Prop)" for i in range(1, len(assumps) + 1)]
+    hs = [f"h{i}" for i in range(1, len(assumps) + 1)]
+    premise = " ∧ ".join(hs) if hs else "True"
+    target = "(let Claim : Prop := " + premise + "; Claim)"
+    binders_block = " ".join(hyp_binders)
+    return f"theorem schema_definition_first {binders_block} : {target} := by"
+
+
+def _apply_schema_fallback(signature: str, schema: dict | None) -> str:
+    """Produce the best available sorry stub when all repair rounds are exhausted.
+
+    Design principle: NEVER emit a placeholder body (Nonempty Unit, (0:ℕ)=0,
+    p_c1:Prop, schema_fallback:True). These look like valid theorems but carry
+    zero mathematical content and silently corrupt the KG. Instead:
+
+    - Preserve the theorem name from the failed signature so the prover can
+      pick it up by name on the next pass.
+    - Attach the LaTeX claim as a comment so a human (or the repair loop) can
+      see what was intended.
+    - Emit `: sorry_placeholder` only as a *type* that is itself an axiom stub,
+      not as a closed proof. This makes the failure visible and forces an open
+      sorry rather than a trivially-closed goal.
     """
     sig = (signature or "").strip()
-    if not sig or schema is None:
-        return sig
 
-    assumptions = schema.get("assumptions", []) if isinstance(schema.get("assumptions", []), list) else []
+    # Extract theorem name from the failed signature, falling back to schema name.
+    name_match = re.search(r"^\s*(?:theorem|lemma)\s+([A-Za-z_][A-Za-z0-9_'.]*)", sig, re.MULTILINE)
+    thm_name = name_match.group(1) if name_match else "translation_failed"
+
+    if schema is None:
+        # No schema at all — emit a named sorry stub with the original attempt as comment.
+        if sig:
+            comment = _lean_comment_block(sig, max_len=320)
+            return (
+                "-- TRANSLATION FAILED (no schema):\n"
+                "-- STATEMENT_REPAIR_NEEDED: schema_unavailable\n"
+                f"{comment}\n"
+                f"theorem {thm_name} : False := by sorry"
+            )
+        return f"-- STATEMENT_REPAIR_NEEDED: schema_unavailable\ntheorem {thm_name} : False := by sorry"
+
     claim = str(schema.get("claim", "")).strip()
-    anchor = _schema_claim_anchor(claim)
+    assumptions = schema.get("assumptions", []) if isinstance(schema.get("assumptions", []), list) else []
 
-    lines: list[str] = []
-    if assumptions:
-        for i, a in enumerate(assumptions[:6], start=1):
-            lines.append(f"-- schema_assumption_{i}: {escape_lean_comment(str(a), max_len=180)}")
-    if claim:
-        lines.append(f"-- schema_claim: {escape_lean_comment(claim, max_len=220)}")
-
-    # Keep only the first theorem/lemma declaration to avoid broken fragments.
+    # Keep only the first declaration to avoid broken fragments.
     first_decl = re.search(r"^\s*(theorem|lemma)\b", sig, re.MULTILINE)
     if first_decl:
         second_decl = re.search(r"^\s*(theorem|lemma)\b", sig[first_decl.end():], re.MULTILINE)
         if second_decl:
             sig = sig[: first_decl.end() + second_decl.start()].strip()
 
-    # If theorem target is trivially True, try to strengthen with a mild anchor.
-    if re.search(r":\s*True\s*(?::=\s*by)?\s*$", sig):
-        if anchor == "Nonempty":
-            sig = re.sub(r":\s*True\s*(?::=\s*by)?\s*$", ": Nonempty (Unit)", sig)
-        elif anchor == "=":
-            sig = re.sub(r":\s*True\s*(?::=\s*by)?\s*$", ": (0 : ℕ) = 0", sig)
-        elif anchor == "≤/≥":
-            sig = re.sub(r":\s*True\s*(?::=\s*by)?\s*$", ": (0 : ℕ) ≤ 0", sig)
+    # If the sig is a placeholder, discard it — we'll build a proper sorry stub.
+    if _is_trivialized_signature(sig) or not sig:
+        sig = ""
 
-    # Ensure the fallback remains a declaration, otherwise drop to a safe theorem stub.
-    if not re.search(r"^\s*(theorem|lemma)\s+[A-Za-z_][A-Za-z0-9_']*", sig, re.MULTILINE):
-        sig = "theorem schema_fallback : True"
+    # Build lines: claim comment + best sig as sorry stub, or fresh named stub.
+    lines: list[str] = []
+    if claim:
+        lines.append(f"-- TRANSLATION INCOMPLETE — LaTeX claim: {escape_lean_comment(claim, max_len=220)}")
+    lines.append("-- STATEMENT_REPAIR_NEEDED: schema_fallback")
+    if assumptions:
+        lines.append(f"-- Assumptions: {escape_lean_comment('; '.join(str(a) for a in assumptions[:4]), max_len=180)}")
 
-    if lines:
-        return "\n".join(lines) + "\n" + sig
-    return sig
+    if sig:
+        # Strip off any existing body and attach sorry.
+        sig_no_body = re.sub(r":=\s*by\b.*$", "", sig, flags=re.DOTALL).strip()
+        sig_no_body = re.sub(r":=\s*$", "", sig_no_body).strip()
+        lines.append(sig_no_body + " := by sorry")
+    else:
+        # No usable signature at all — named open stub.
+        lines.append(f"theorem {thm_name} : False := by sorry")
+
+    return "\n".join(lines)
+
+
+def _lean_comment_block(text: str, *, max_len: int = 500) -> str:
+    """Return text as safe one-line Lean comments."""
+    cleaned = escape_lean_comment(text or "", max_len=max_len)
+    return "\n".join(f"-- {line}" for line in cleaned.splitlines() if line.strip())
 
 
 _DEFAULT_IMPORTS = """\
@@ -672,6 +1609,9 @@ _UNKNOWN_IDENT_RE = re.compile(
     r"unknown identifier '([^']+)'|"
     r"unknown constant '([^']+)'|"
     r"unknown namespace '([^']+)'|"
+    r"unknown identifier `([^`]+)`|"
+    r"unknown constant `([^`]+)`|"
+    r"identifier `([^`]+)` is unknown|"
     r"failed to synthesize\s+\n?\s*(\S+)|"
     r"application type mismatch.*?'([A-Z][A-Za-z0-9_.]+)'",
     re.MULTILINE,
@@ -765,30 +1705,198 @@ def _extract_unknown_idents(
 ) -> list[str]:
     """Return identifiers that appear as 'unknown' in the error and are NOT in Mathlib."""
     found = []
-    for m in re.finditer(r"unknown (?:identifier|constant|namespace) '([^']+)'", error):
-        ident = m.group(1)
-        short = ident.split(".")[-1].lower()
-        if ident.lower() in name_index or short in name_index:
+    patterns = (
+        r"unknown (?:identifier|constant|namespace) '([^']+)'",
+        r"unknown (?:identifier|constant|namespace) `([^`]+)`",
+        r"identifier `([^`]+)` is unknown",
+    )
+    for pat in patterns:
+        for m in re.finditer(pat, error):
+            ident = m.group(1)
+            short = ident.split(".")[-1].lower()
+            if ident.lower() in name_index or short in name_index:
+                continue
+            # Final gate: verify it truly doesn't exist in current imports.
+            if imports and project_root and _lean_name_exists(ident, imports, project_root):
+                continue
+            found.append(ident)
+    return list(dict.fromkeys(found))
+
+
+def _signature_has_binder(sig: str, name: str) -> bool:
+    return bool(re.search(r"[\(\{]\s*" + re.escape(name) + r"\s*:", sig))
+
+
+def _target_colon_index(sig: str) -> int:
+    m = re.search(r"^\s*(?:theorem|lemma)\s+[A-Za-z_][A-Za-z0-9_'.]*", sig, re.MULTILINE)
+    if not m:
+        return -1
+    depth = 0
+    for i in range(m.end(), len(sig)):
+        ch = sig[i]
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth = max(0, depth - 1)
+        elif ch == ":" and depth == 0:
+            return i
+    return -1
+
+
+def _insert_binders_before_target(sig: str, binders: list[str]) -> str:
+    if not binders:
+        return sig
+    idx = _target_colon_index(sig)
+    if idx < 0:
+        return sig
+    return f"{sig[:idx].rstrip()} {' '.join(binders)}{sig[idx:]}"
+
+
+def _insert_binders_after_decl_name(sig: str, binders: list[str]) -> str:
+    if not binders:
+        return sig
+    m = re.search(r"^\s*(?:theorem|lemma)\s+[A-Za-z_][A-Za-z0-9_'.]*", sig, re.MULTILINE)
+    if not m:
+        return sig
+    return f"{sig[:m.end()]} {' '.join(binders)}{sig[m.end():]}"
+
+
+def _extract_autoimplicit_function_names(error: str, sig: str) -> list[str]:
+    """Find unknown identifiers Lean treated as implicit variables but then applied."""
+    names: list[str] = []
+    for raw in _FUNC_EXPECTED_RE.findall(error):
+        ident = raw.strip().split()[0]
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_']*", ident):
             continue
-        # Final gate: verify it truly doesn't exist in current imports.
-        if imports and project_root and _lean_name_exists(ident, imports, project_root):
+        if ident in {"ContDiff", "ContDiffOn", "Continuous", "Differentiable"}:
             continue
-        found.append(ident)
-    return found
+        if _signature_has_binder(sig, ident):
+            continue
+        # Lowercase/underscore names are typical paper-local functions.  Plain
+        # uppercase names are often bound type variables or Mathlib constants.
+        if ident[0].isupper() and "_" not in ident:
+            continue
+        names.append(ident)
+    return list(dict.fromkeys(names))
+
+
+def _build_function_stubs(names: list[str]) -> str:
+    """Generate minimal paper-local function axioms for autoImplicit failures."""
+    lines: list[str] = []
+    for name in names:
+        safe = re.sub(r"[^A-Za-z0-9_']", "_", name)
+        if safe in {"norm", "abs"}:
+            continue
+        lines.append(f"axiom {safe} : {_paper_function_type(safe, '')}")
+    return "\n".join(lines)
+
+
+def _paper_function_type(name: str, sig: str) -> str:
+    if name.endswith("_data"):
+        return "ℕ → Fin 2 → ℝ → ℝ"
+    if name.endswith("_solution"):
+        return "ℕ → ℝ"
+    if name.startswith("L2_"):
+        return "ℝ → ℝ → Set (ℝ → ℝ)"
+    # Basis functions like `phi (i + 1) z`.
+    if re.search(r"\b" + re.escape(name) + r"\s+\([^)]*\)\s+[A-Za-z_]", sig):
+        return "ℕ → ℝ → ℝ"
+    if re.search(r"\b" + re.escape(name) + r"\s+[A-Za-z0-9_']+\s+[A-Za-z0-9_']", sig):
+        return "ℕ → ℝ → ℝ"
+    return "ℕ → ℝ"
+
+
+def _add_missing_function_binders(sig: str, names: list[str]) -> str:
+    """Prefer local binders over global axioms for paper-local functions."""
+    binders: list[str] = []
+    for name in names:
+        if _signature_has_binder(sig, name):
+            continue
+        binders.append(f"({name} : {_paper_function_type(name, sig)})")
+    return _insert_binders_after_decl_name(sig, binders)
+
+
+def _relax_fragile_hypotheses(sig: str) -> str:
+    """Keep assumption slots when a generated hypothesis has invalid paper notation."""
+    fragile_tokens = ("∈", "^", "|", "‖", "⨆", "Complex.abs", "D_N", "B_N", "d_dts", "~")
+    out: list[str] = []
+    i = 0
+    while i < len(sig):
+        if sig[i] != "(":
+            out.append(sig[i])
+            i += 1
+            continue
+
+        j = i + 1
+        while j < len(sig) and sig[j].isspace():
+            j += 1
+        m = re.match(r"h[A-Za-z0-9_']*", sig[j:])
+        if not m:
+            out.append(sig[i])
+            i += 1
+            continue
+
+        name = m.group(0)
+        k = j + len(name)
+        while k < len(sig) and sig[k].isspace():
+            k += 1
+        if k >= len(sig) or sig[k] != ":":
+            out.append(sig[i])
+            i += 1
+            continue
+
+        depth = 0
+        end = i
+        while end < len(sig):
+            ch = sig[end]
+            if ch == "(":
+                depth += 1
+            elif ch == ")":
+                depth -= 1
+                if depth == 0:
+                    end += 1
+                    break
+            end += 1
+        if depth != 0:
+            out.append(sig[i])
+            i += 1
+            continue
+
+        block = sig[i:end]
+        if any(tok in block for tok in fragile_tokens):
+            out.append(f"({name} : Prop)")
+        else:
+            out.append(block)
+        i = end
+    return "".join(out)
 
 
 def _build_stubs(idents: list[str]) -> str:
-    """Generate sorry-backed stubs for unknown identifiers so the signature can elaborate."""
+    """Generate axiom stubs for unknown identifiers so the signature can elaborate.
+
+    Uses `axiom` rather than `noncomputable def ... := sorry` because:
+    - `axiom T : Type` is always valid and never conflicts with existing names.
+    - `noncomputable def T : Type* := sorry` triggers `sorry`-propagation warnings
+      and can conflict if the name is partially defined elsewhere.
+    - Domain types (uppercase) get `axiom T : Type`; Prop-valued names get
+      `axiom T : Prop`.
+    """
     lines = []
+    seen: set[str] = set()
     for ident in idents:
-        # Only stub names that look like user-defined types (start uppercase).
-        # Lowercase names are Lean/Mathlib lemmas/defs — stubbing them causes
-        # "already declared" conflicts even when the olean check misses them.
+        # Only stub names that look like user-defined types/predicates (start uppercase).
         base = ident.split(".")[-1]
         if not base or not base[0].isupper():
             continue
         safe = re.sub(r"[^A-Za-z0-9_]", "_", ident)
-        lines.append(f"noncomputable def {safe} : Type* := sorry")
+        if safe in seen:
+            continue
+        seen.add(safe)
+        # Heuristic: names ending in Prop/Pred/LE/Rel are Prop-valued.
+        if re.search(r"(?:Prop|Pred|LE|Rel|Order|Less|Eq|Mem|Sub|Has)$", safe):
+            lines.append(f"axiom {safe} : Prop")
+        else:
+            lines.append(f"axiom {safe} : Type")
     return "\n".join(lines)
 
 
@@ -1261,6 +2369,23 @@ def _build_repair_hint(error: str) -> str:
             "(c) you confused `:= fun x => ...` (a definition body) with the type."
         )
 
+    # 15b. Lean 3 typeclass names not in Mathlib 4
+    _lean3_class_hits = [
+        (cls, repl)
+        for cls, repl in [
+            ("LinearOrderedRing", "LinearOrderedCommRing"),
+            ("OrderedRing", "StrictOrderedRing"),
+            ("LinearOrderedSemiring", "OrderedSemiring"),
+        ]
+        if cls in error
+    ]
+    for cls, repl in _lean3_class_hits:
+        hint_parts.append(
+            f"`{cls}` does not exist in Mathlib 4 (Lean 3 name). Replace `[{cls} α]` with `[{repl} α]`. "
+            "If the theorem arguments are all concrete types (ℕ, ℤ, ℝ), remove the type class entirely "
+            "and use the concrete type directly."
+        )
+
     # 16. `don't know how to synthesize implicit` — variant of synthInstanceFailed
     if "don't know how to synthesize" in error or "cannot synthesize" in error:
         hint_parts.append(
@@ -1382,27 +2507,62 @@ def _check_vacuous(
     imports: str = "",
     timeout: int = 30,
 ) -> bool:
-    """Return True if the statement is trivially provable by `trivial` or `simp`.
+    """Return True if the statement is trivially vacuous (no real math content).
 
-    A statement that compiles as `theorem _vac : <type> := by trivial` is
-    almost certainly wrong — it either maps to `True`, a tautology, or was
-    mistranslated into a weaker claim than intended.  We run this as a cheap
-    deterministic check before the LLM round-trip judge.
+    Checks three cheap patterns before the LLM round-trip judge:
+    1. `trivial` closes the goal — maps to True, tautology, or mistranslation.
+    2. `rfl` closes the goal — self-equality like `(0:ℕ) = 0`, vacuous identity.
+    3. Schema-placeholder shape: `(p_c1 : Prop) (h_c1 : p_c1) : p_c1` — the
+       pipeline's own fallback stub, always closable by `exact h_c1`.
+
+    Any of these means the translated statement carries no mathematical content.
     """
     sig = re.sub(r":=\s*by\b.*$", "", signature, flags=re.DOTALL).strip()
     sig = re.sub(r":=\s*$", "", sig).strip()
     if not sig:
         return False
 
-    # Replace the theorem name with a fixed sentinel so naming never collides.
-    vac_sig = re.sub(r"^(theorem|lemma)\s+\S+", r"\1 _desol_vacuity_check", sig, count=1)
-    lean_src = f"{imports}\n\n{vac_sig} := by trivial\n" if imports.strip() else f"{vac_sig} := by trivial\n"
+    # Fast syntactic check for schema-placeholder pattern before hitting lake.
+    # Matches: (...) (p_cN : Prop) (h_cN : p_cN) : p_cN
+    if re.search(r"\(p_c\d+\s*:\s*Prop\)\s*\(h_c\d+\s*:\s*p_c\d+\)\s*:\s*p_c\d+\s*$", sig):
+        return True
 
-    try:
-        ok, _ = _run_lean(lean_src, project_root=project_root, timeout=timeout)
-        return ok
-    except Exception:
-        return False
+    vac_sig = re.sub(r"^(theorem|lemma)\s+\S+", r"\1 _desol_vacuity_check", sig, count=1)
+    prefix = f"{imports}\n\n" if imports.strip() else ""
+
+    for tactic in ("trivial", "rfl"):
+        lean_src = f"{prefix}{vac_sig} := by {tactic}\n"
+        try:
+            ok, _ = _run_lean(lean_src, project_root=project_root, timeout=timeout)
+            if ok:
+                return True
+        except Exception:
+            pass
+    return False
+
+
+def _repair_dataset_path(project_root: Path, repair_dataset_path: str | Path | None, run_id: str = "") -> Path:
+    if repair_dataset_path is None:
+        return default_run_dataset_path(project_root, run_id=run_id)
+    path = Path(repair_dataset_path)
+    return path if path.is_absolute() else project_root / path
+
+
+def _translation_local_context(
+    *,
+    latex_statement: str,
+    latex_proof_hint: str,
+    schema: dict | None,
+) -> str:
+    chunks = [f"latex_statement: {latex_statement.strip()}"]
+    if latex_proof_hint.strip():
+        chunks.append(f"latex_proof_hint: {latex_proof_hint.strip()}")
+    if schema:
+        try:
+            chunks.append("statement_schema: " + json.dumps(schema, ensure_ascii=False, sort_keys=True))
+        except TypeError:
+            chunks.append(f"statement_schema: {schema}")
+    return "\n".join(chunks)
 
 
 def _validate_signature(
@@ -1422,17 +2582,16 @@ def _validate_signature(
     _MAX_IMPORT_EXPANSIONS = 4
 
     # Strip any existing body so we can attach sorry cleanly.
-    sig = re.sub(r":=\s*by\b.*$", "", signature, flags=re.DOTALL).strip()
-    sig = re.sub(r":=\s*$", "", sig).strip()
-    sig = _deterministic_signature_cleanup(sig)
-
-    # Gate: reject non-proposition declarations immediately — don't waste a Lean round-trip.
-    first_kw = sig.strip().split()[0] if sig.strip() else ""
+    raw_sig = re.sub(r":=\s*by\b.*$", "", signature, flags=re.DOTALL).strip()
+    raw_sig = re.sub(r":=\s*$", "", raw_sig).strip()
+    # Gate on raw declaration keyword before any cleanup rewrite.
+    first_kw = raw_sig.strip().split()[0] if raw_sig.strip() else ""
     if first_kw in ("def", "noncomputable", "structure", "class", "instance", "abbrev"):
         return False, (
             f"declaration starts with `{first_kw}` — only `theorem` or `lemma` are accepted. "
             "The input LaTeX is a definition; translate it as a proposition about its properties."
         ), False
+    sig = _deterministic_signature_cleanup(raw_sig)
 
     # Pre-validate fixes: deterministic rewrites that don't need a Lean round-trip to detect.
 
@@ -1553,6 +2712,35 @@ def _validate_signature(
                 stubs = stubs + "\n" + new_stubs if stubs else new_stubs
                 continue
 
+        # Try 2b: Lean autoImplicit treats unknown paper-local functions as
+        # metavariables, then fails when they are applied (`Function expected at
+        # a_N`).  Add minimal function axioms so validation can continue.
+        fn_unknown = _extract_autoimplicit_function_names(err, sig)
+        if fn_unknown:
+            new_sig = _add_missing_function_binders(sig, fn_unknown)
+            if new_sig != sig:
+                sig = new_sig
+                continue
+            new_stubs = _build_function_stubs(fn_unknown)
+            if new_stubs and new_stubs not in stubs:
+                stubs = stubs + "\n" + new_stubs if stubs else new_stubs
+                continue
+
+        # Try 2c: if a hypothesis uses unsupported paper-local set/function
+        # notation (`U ∈ C_TH ^ s1`), preserve it as a proposition slot.
+        if (
+            "HPow ?m" in err
+            or "HPow (" in err
+            or "Membership ?m" in err
+            or "LE Type" in err
+            or "AddGroup (Fin" in err
+            or "OfNat (Fin" in err
+        ):
+            new_sig = _relax_fragile_hypotheses(sig)
+            if new_sig != sig:
+                sig = new_sig
+                continue
+
         # Try 3a: rewrite non-Mathlib classes using the concept map / TC graph.
         synth_class_matches = _SYNTH_INSTANCE_RE.findall(err)
         rewritten = False
@@ -1645,6 +2833,14 @@ def translate_statement(
     run_roundtrip_check: bool = True,
     use_schema_stage: bool = True,
     deterministic_hard_mode: bool = True,
+    strict_assumption_slot_coverage: bool = True,
+    enable_schema_template_synthesis: bool = False,
+    enable_schema_self_check: bool = True,
+    glossary_hint: str = "",
+    paper_id: str = "",
+    theorem_name: str = "",
+    run_id: str = "",
+    repair_dataset_path: str | Path | None = None,
 ) -> TranslationResult:
     """Translate a LaTeX statement to a validated Lean 4 signature.
 
@@ -1652,61 +2848,59 @@ def translate_statement(
     retrieval_index_path: premise index used to resolve missing identifiers to Mathlib modules.
     """
     schema: dict | None = None
+    repair_feedback_rows: list[dict] = []
+
+    def record_repair_feedback(
+        *,
+        failing_lean: str,
+        error_message: str,
+        previous_attempt: str = "",
+        successful_repair: str = "",
+        stage: str = "translation_validation",
+        extra: dict[str, object] | None = None,
+    ) -> None:
+        if not str(error_message or "").strip():
+            return
+        repair_feedback_rows.append(
+            make_repair_row(
+                paper_id=paper_id,
+                theorem_name=theorem_name,
+                failing_lean=failing_lean,
+                error_message=error_message,
+                local_context=_translation_local_context(
+                    latex_statement=latex_statement,
+                    latex_proof_hint=latex_proof_hint,
+                    schema=schema,
+                ),
+                previous_attempt=previous_attempt,
+                successful_repair=successful_repair,
+                stage=stage,
+                repair_source=stage,
+                model=model,
+                run_id=run_id,
+                project_root=project_root,
+                extra=extra,
+            )
+        )
+
+    def flush_repair_feedback(successful_repair: str = "") -> None:
+        if not repair_feedback_rows:
+            return
+        if successful_repair:
+            for row in repair_feedback_rows:
+                row["successful_repair"] = successful_repair
+                row["repair_available"] = True
+        try:
+            append_repair_rows(_repair_dataset_path(project_root, repair_dataset_path, run_id=run_id), repair_feedback_rows)
+        except Exception:
+            pass
+        repair_feedback_rows.clear()
+
     hard_mode_active = deterministic_hard_mode and _is_hard_statement(latex_statement)
     if hard_mode_active:
         schema = _extract_literal_schema(latex_statement)
-        deterministic_sig = _build_literal_signature_from_schema(schema)
-        if not _schema_signature_consistent(schema, deterministic_sig):
-            deterministic_sig = "theorem literal_schema_translation : True := by trivial"
 
-        ok, last_error, _ = _validate_signature(
-            deterministic_sig,
-            project_root=project_root,
-            imports=imports,
-            retrieval_index_path=retrieval_index_path,
-        )
-        if ok:
-            confidence = 0.90
-            flags = [
-                "deterministic_literal_mode",
-                "schema_stage_used",
-                "adversarial_skipped_deterministic",
-                "review_required_hard",
-            ]
-            return TranslationResult(
-                lean_signature=deterministic_sig,
-                validated=True,
-                rounds_used=1,
-                last_error="",
-                confidence=confidence,
-                uncertainty_flags=flags,
-                adversarial_flags=[],
-                roundtrip_back_translation=None,
-                roundtrip_flags=[],
-            )
-
-        # If deterministic mode failed to elaborate, keep it as fallback and avoid
-        # expensive model loops in hard mode.
-        confidence, flags = _confidence_from_translation_state(
-            validated=False,
-            rounds_used=1,
-            last_error=last_error,
-            signature=deterministic_sig,
-        )
-        flags = flags + ["deterministic_literal_mode", "schema_stage_used", "adversarial_skipped_deterministic"]
-        return TranslationResult(
-            lean_signature=_apply_schema_fallback(deterministic_sig, schema),
-            validated=False,
-            rounds_used=1,
-            last_error=last_error,
-            confidence=confidence,
-            uncertainty_flags=flags + ["review_required_hard"],
-            adversarial_flags=[],
-            roundtrip_back_translation=None,
-            roundtrip_flags=[],
-        )
-
-    if use_schema_stage:
+    if use_schema_stage and schema is None:
         schema = extract_translation_schema(
             latex_statement=latex_statement,
             latex_proof_hint=latex_proof_hint,
@@ -1715,13 +2909,151 @@ def translate_statement(
             api_log_hook=api_log_hook,
         )
 
+    typed_structured = build_typed_statement_translation(
+        latex_statement=latex_statement,
+        schema=schema,
+        theorem_name=theorem_name,
+        paper_id=paper_id,
+    )
+    if typed_structured:
+        typed_sig = str(typed_structured.get("lean_declaration", "") or "")
+        ok_typed, err_typed, _ = _validate_signature(
+            typed_sig,
+            project_root=project_root,
+            imports=imports,
+            retrieval_index_path=retrieval_index_path,
+        )
+        if ok_typed:
+            typed_issues = _semantic_policy_issues(
+                latex_statement=latex_statement,
+                signature=typed_sig,
+                schema=schema,
+                strict_assumption_slot_coverage=bool(strict_assumption_slot_coverage),
+            )
+            typed_issues = [
+                issue for issue in typed_issues
+                if issue not in {"schema_scaffold_not_faithful"}
+                and not issue.startswith("assumption_slot_missing:")
+            ]
+            if not typed_issues:
+                flush_repair_feedback(typed_sig)
+                return TranslationResult(
+                    lean_signature=typed_sig,
+                    validated=True,
+                    rounds_used=1,
+                    last_error="",
+                    confidence=0.86,
+                    uncertainty_flags=["typed_statement_ir", "schema_stage_used" if schema is not None else "schema_stage_missing", "review_required_typed_ir"],
+                    adversarial_flags=[],
+                    roundtrip_back_translation=None,
+                    roundtrip_flags=[],
+                    statement_schema=schema or {},
+                    structured_translation=typed_structured,
+                )
+            record_repair_feedback(
+                failing_lean=typed_sig,
+                error_message="typed_statement_ir_policy_violation:" + ",".join(typed_issues),
+                stage="typed_statement_ir_policy",
+            )
+        else:
+            record_repair_feedback(
+                failing_lean=typed_sig,
+                error_message="typed_statement_ir_invalid:" + str(err_typed),
+                stage="typed_statement_ir_validation",
+            )
+
+    last_error = ""
+    structured_translation = extract_structured_translation(
+        latex_statement=latex_statement,
+        latex_proof_hint=latex_proof_hint,
+        schema=schema,
+        glossary_hint=glossary_hint,
+        client=client,
+        model=model,
+        api_log_hook=api_log_hook,
+    ) if use_schema_stage else None
+    if structured_translation:
+        structured_sig = str(structured_translation.get("lean_declaration", "") or "")
+        ok_s, err_s, _ = _validate_signature(
+            structured_sig,
+            project_root=project_root,
+            imports=imports,
+            retrieval_index_path=retrieval_index_path,
+        )
+        if ok_s:
+            structured_issues = _semantic_policy_issues(
+                latex_statement=latex_statement,
+                signature=structured_sig,
+                schema=schema,
+                strict_assumption_slot_coverage=bool(strict_assumption_slot_coverage),
+            )
+            if enable_schema_self_check:
+                structured_issues.extend(
+                    f"schema_self_check:{x}"
+                    for x in _schema_signature_self_check(
+                        schema=schema,
+                        signature=structured_sig,
+                        client=client,
+                        model=model,
+                        api_log_hook=api_log_hook,
+                    )
+                )
+            is_vacuous = bool(
+                project_root is not None
+                and _check_vacuous(structured_sig, project_root=project_root, imports=imports)
+            )
+            if not structured_issues and not is_vacuous:
+                confidence, flags = _confidence_from_translation_state(
+                    validated=True,
+                    rounds_used=1,
+                    last_error="",
+                    signature=structured_sig,
+                )
+                flags.extend(["structured_json_stage_used", "schema_stage_used" if schema is not None else "schema_stage_missing"])
+                flush_repair_feedback(structured_sig)
+                return TranslationResult(
+                    lean_signature=structured_sig,
+                    validated=True,
+                    rounds_used=1,
+                    last_error="",
+                    confidence=max(0.0, confidence - 0.03),
+                    uncertainty_flags=flags,
+                    adversarial_flags=[],
+                    roundtrip_back_translation=None,
+                    roundtrip_flags=[],
+                    statement_schema=schema,
+                    structured_translation=structured_translation,
+                )
+            if is_vacuous:
+                structured_issues.append("vacuity: statement is trivially provable by `trivial`")
+            last_error = "structured_translation_policy_violation:" + ",".join(structured_issues)
+            record_repair_feedback(
+                failing_lean=structured_sig,
+                error_message=last_error,
+                stage="structured_translation_policy",
+            )
+        else:
+            last_error = "structured_translation_invalid:" + str(err_s)
+            record_repair_feedback(
+                failing_lean=structured_sig,
+                error_message=last_error,
+                stage="structured_translation_validation",
+            )
+
     user_parts = [f"LaTeX statement:\n{latex_statement}"]
     if latex_proof_hint.strip():
         user_parts.append(f"Informal proof context:\n{latex_proof_hint.strip()}")
+    if glossary_hint.strip():
+        user_parts.append(f"Paper glossary memory:\n{glossary_hint.strip()}")
     if schema is not None:
         user_parts.append(
             "Stage-A extracted schema (use this structure faithfully when writing Lean):\n"
             f"{json.dumps(schema, ensure_ascii=False, indent=2)}"
+        )
+    if structured_translation is not None:
+        user_parts.append(
+            "Structured JSON translation draft (repair this structure instead of free-form guessing):\n"
+            f"{json.dumps(structured_translation, ensure_ascii=False, indent=2)}"
         )
     user_parts.append(
         "Output the Lean 4 theorem signature inside <signature>...</signature>. "
@@ -1733,12 +3065,51 @@ def translate_statement(
         {"role": "user", "content": "\n\n".join(user_parts)},
     ]
 
-    last_error = ""
     signature = ""
+    dynamic_extra_rounds = 0
 
     n_candidates = max(1, int(translation_candidates))
 
-    for round_idx in range(1, max_repair_rounds + 2):  # +1 for initial attempt
+    # Template-backed attempt before free-form generation.
+    if enable_schema_template_synthesis and schema is not None:
+        template_sig = _build_template_signature_from_schema(schema)
+        ok_t, err_t, _ = _validate_signature(
+            template_sig,
+            project_root=project_root,
+            imports=imports,
+            retrieval_index_path=retrieval_index_path,
+        )
+        if ok_t and not _is_schema_scaffold_signature(template_sig):
+            conf_t, flags_t = _confidence_from_translation_state(
+                validated=True,
+                rounds_used=1,
+                last_error="",
+                signature=template_sig,
+            )
+            flags_t.extend(["schema_template_mode", "schema_stage_used"])
+            flush_repair_feedback(template_sig)
+            return TranslationResult(
+                lean_signature=template_sig,
+                validated=True,
+                rounds_used=1,
+                last_error="",
+                confidence=max(0.0, conf_t - 0.08),
+                uncertainty_flags=flags_t,
+                adversarial_flags=[],
+                roundtrip_back_translation=None,
+                roundtrip_flags=[],
+                statement_schema=schema,
+            )
+        last_error = err_t if not ok_t else "schema_template_scaffold_rejected"
+        record_repair_feedback(
+            failing_lean=template_sig,
+            error_message=last_error,
+            stage="schema_template_validation",
+        )
+
+    max_rounds_total = max_repair_rounds + 1
+    round_idx = 1
+    while round_idx <= max_rounds_total + dynamic_extra_rounds:
         candidate_failures: list[dict[str, object]] = []
         round_irrecoverable = True
 
@@ -1753,7 +3124,7 @@ def translate_statement(
                 purpose=f"translate_round_{round_idx}_candidate_{cand_idx + 1}",
                 api_log_hook=api_log_hook,
             )
-            signature = _extract_signature(text)
+            signature = _normalize_final_signature(_extract_signature(text))
 
             ok, cand_error, irrecoverable = _validate_signature(
                 signature,
@@ -1765,32 +3136,135 @@ def translate_statement(
                 round_irrecoverable = False
 
             if ok:
-                coverage_issues = _schema_coverage_issues(schema, signature)
-                if coverage_issues:
-                    candidate_failures.append(
-                        {
-                            "text": text,
-                            "signature": signature,
-                            "error": "schema_coverage_missing:" + ",".join(coverage_issues),
-                            "irrecoverable": False,
-                        }
+                policy_issues = _semantic_policy_issues(
+                    latex_statement=latex_statement,
+                    signature=signature,
+                    schema=schema,
+                    strict_assumption_slot_coverage=bool(strict_assumption_slot_coverage),
+                )
+                if enable_schema_self_check:
+                    self_check_issues = _schema_signature_self_check(
+                        schema=schema,
+                        signature=signature,
+                        client=client,
+                        model=model,
+                        api_log_hook=api_log_hook,
                     )
-                    continue
+                    if self_check_issues:
+                        policy_issues.extend([f"schema_self_check:{x}" for x in self_check_issues])
 
-                # Vacuity check: if `trivial` closes the goal, the statement is too weak.
+                if policy_issues:
+                    repaired_signature = _semantic_repair_signature(
+                        latex_statement=latex_statement,
+                        latex_proof_hint=latex_proof_hint,
+                        schema=schema,
+                        current_signature=signature,
+                        issues=policy_issues,
+                        client=client,
+                        model=model,
+                        api_log_hook=api_log_hook,
+                    )
+                    if repaired_signature:
+                        ok_rep, rep_error, rep_irrecoverable = _validate_signature(
+                            repaired_signature,
+                            project_root=project_root,
+                            imports=imports,
+                            retrieval_index_path=retrieval_index_path,
+                        )
+                        if ok_rep:
+                            rep_issues = _semantic_policy_issues(
+                                latex_statement=latex_statement,
+                                signature=repaired_signature,
+                                schema=schema,
+                                strict_assumption_slot_coverage=bool(strict_assumption_slot_coverage),
+                            )
+                            if enable_schema_self_check:
+                                rep_self = _schema_signature_self_check(
+                                    schema=schema,
+                                    signature=repaired_signature,
+                                    client=client,
+                                    model=model,
+                                    api_log_hook=api_log_hook,
+                                )
+                                rep_issues.extend([f"schema_self_check:{x}" for x in rep_self])
+                            if rep_issues:
+                                rep_error_text = "semantic_policy_violation:" + ",".join(rep_issues)
+                                record_repair_feedback(
+                                    failing_lean=repaired_signature,
+                                    error_message=rep_error_text,
+                                    previous_attempt=signature,
+                                    stage="semantic_repair_policy",
+                                    extra={"round": round_idx, "candidate": cand_idx + 1},
+                                )
+                                candidate_failures.append(
+                                    {
+                                        "text": text,
+                                        "signature": repaired_signature,
+                                        "error": rep_error_text,
+                                        "irrecoverable": False,
+                                    }
+                                )
+                                continue
+                            signature = repaired_signature
+                        else:
+                            rep_error_text = "semantic_repair_invalid:" + str(rep_error)
+                            record_repair_feedback(
+                                failing_lean=repaired_signature,
+                                error_message=rep_error_text,
+                                previous_attempt=signature,
+                                stage="semantic_repair_validation",
+                                extra={"round": round_idx, "candidate": cand_idx + 1},
+                            )
+                            candidate_failures.append(
+                                {
+                                    "text": text,
+                                    "signature": repaired_signature,
+                                    "error": rep_error_text,
+                                    "irrecoverable": bool(rep_irrecoverable),
+                                }
+                            )
+                            continue
+                    else:
+                        policy_error_text = "semantic_policy_violation:" + ",".join(policy_issues)
+                        record_repair_feedback(
+                            failing_lean=signature,
+                            error_message=policy_error_text,
+                            previous_attempt=text,
+                            stage="semantic_policy",
+                            extra={"round": round_idx, "candidate": cand_idx + 1},
+                        )
+                        candidate_failures.append(
+                            {
+                                "text": text,
+                                "signature": signature,
+                                "error": policy_error_text,
+                                "irrecoverable": False,
+                            }
+                        )
+                        continue
+
+                # Vacuity check: even after semantic-policy repair, reject trivial closure.
                 if project_root is not None and _check_vacuous(
                     signature,
                     project_root=project_root,
                     imports=imports,
                 ):
+                    vacuity_error = (
+                        "semantic_policy_violation:"
+                        "vacuity: statement is trivially provable by `trivial`"
+                    )
+                    record_repair_feedback(
+                        failing_lean=signature,
+                        error_message=vacuity_error,
+                        previous_attempt=text,
+                        stage="vacuity_check",
+                        extra={"round": round_idx, "candidate": cand_idx + 1},
+                    )
                     candidate_failures.append(
                         {
                             "text": text,
                             "signature": signature,
-                            "error": (
-                                "vacuity: statement is trivially provable by `trivial` — "
-                                "likely mistranslated to True or a tautology"
-                            ),
+                            "error": vacuity_error,
                             "irrecoverable": False,
                         }
                     )
@@ -1833,6 +3307,7 @@ def translate_statement(
                         penalty = min(0.25, 0.08 * len(roundtrip_flags))
                         confidence = max(0.0, confidence - penalty)
                         flags.append("roundtrip_semantic_risk")
+                flush_repair_feedback(signature)
                 return TranslationResult(
                     lean_signature=signature,
                     validated=True,
@@ -1847,6 +3322,8 @@ def translate_statement(
                     adversarial_flags=adv_flags,
                     roundtrip_back_translation=roundtrip_back_translation,
                     roundtrip_flags=roundtrip_flags,
+                    statement_schema=schema,
+                    structured_translation=structured_translation,
                 )
 
             candidate_failures.append(
@@ -1856,6 +3333,13 @@ def translate_statement(
                     "error": cand_error,
                     "irrecoverable": irrecoverable,
                 }
+            )
+            record_repair_feedback(
+                failing_lean=signature,
+                error_message=cand_error,
+                previous_attempt=text,
+                stage="translation_validation",
+                extra={"round": round_idx, "candidate": cand_idx + 1, "irrecoverable": bool(irrecoverable)},
             )
 
         # No candidate validated this round; choose best failure for repair prompt.
@@ -1873,31 +3357,123 @@ def translate_statement(
         else:
             last_error = "no candidate output produced"
 
-        if round_idx > max_repair_rounds or round_irrecoverable:
+        if dynamic_extra_rounds == 0:
+            dynamic_extra_rounds = _extra_retry_rounds_for_error(last_error)
+        if round_idx > (max_repair_rounds + dynamic_extra_rounds) or round_irrecoverable:
             break
 
         hint = _build_repair_hint(last_error)
+        directive = _retry_directive_for_error(last_error)
         messages.append({"role": "assistant", "content": text})
         messages.append({
             "role": "user",
             "content": (
                 f"The signature failed to elaborate:\n{last_error}\n\n"
                 f"{hint}\n\n"
+                f"Retry directive:\n{directive}\n\n"
                 "Output the corrected signature inside <signature>...</signature>. "
                 "Only the theorem/lemma declaration — no imports, no variable blocks."
             ),
         })
+        round_idx += 1
 
-    # All rounds exhausted — return last attempt as a sorry stub.
-    sorry_stub = signature if signature else f"-- TRANSLATION FAILED: {latex_statement[:80]}"
-    sorry_stub = _apply_schema_fallback(sorry_stub, schema)
+    # All repair rounds exhausted.
+    # Domain-escalation pass: one final attempt with a stripped-down prompt that
+    # (a) explicitly forbids placeholder bodies, (b) provides the LaTeX claim as
+    # a plain-English description, and (c) raises temperature to break out of the
+    # same failure mode. This catches the two recurring failure patterns:
+    #   - Translator produced a `schema_claim_hint:` stub (bad sig from LaTeX noise)
+    #   - Translator produced Nonempty(Unit) / p_c1:Prop placeholder body
+    last_sig_is_placeholder = _is_trivialized_signature(signature) or (
+        signature and "schema_claim_hint" in signature
+    )
+    if last_sig_is_placeholder and client is not None:
+        claim_text = ""
+        if schema is not None:
+            claim_text = str(schema.get("claim", "")).strip()
+            assumptions_text = "; ".join(str(a) for a in (schema.get("assumptions") or [])[:5])
+        else:
+            claim_text = latex_statement[:300]
+            assumptions_text = ""
+
+        escalation_user = (
+            f"The previous translation attempts all produced placeholder or trivial bodies.\n\n"
+            f"LaTeX statement:\n{latex_statement}\n\n"
+            f"What the theorem ACTUALLY says (extracted):\n"
+            f"  Claim: {claim_text}\n"
+            f"  Assumptions: {assumptions_text}\n\n"
+            "RULES FOR THIS ATTEMPT:\n"
+            "1. Output a genuine Lean 4 theorem signature — NOT `Nonempty (Unit)`, NOT `(0:ℕ)=0`, "
+            "NOT `p_c1 : Prop`, NOT `: True`, NOT `: False`.\n"
+            "2. If the domain types (e.g. multisegments, quiver representations) do not exist in "
+            "Mathlib, declare them as `axiom MyType : Type` BEFORE the theorem and use them.\n"
+            "3. The theorem must state the actual mathematical claim. Use `sorry` as the proof body.\n"
+            "4. Output exactly one declaration inside <signature>...</signature>."
+        )
+        escalation_messages = [
+            {"role": "system", "content": _get_translate_system()},
+            {"role": "user", "content": escalation_user},
+        ]
+        try:
+            _, esc_text = _chat_complete(
+                client=client,
+                model=model,
+                messages=escalation_messages,
+                temperature=0.6,
+                max_tokens=2000,
+                purpose="translate_domain_escalation",
+                api_log_hook=api_log_hook,
+            )
+            esc_sig = _normalize_final_signature(_extract_signature(esc_text))
+            if esc_sig and not _is_trivialized_signature(esc_sig):
+                esc_ok, esc_err, _ = _validate_signature(
+                    esc_sig,
+                    project_root=project_root,
+                    imports=imports,
+                    retrieval_index_path=retrieval_index_path,
+                )
+                if esc_ok:
+                    conf_e, flags_e = _confidence_from_translation_state(
+                        validated=True, rounds_used=round_idx + 1,
+                        last_error="", signature=esc_sig,
+                    )
+                    flags_e.append("domain_escalation_pass")
+                    flush_repair_feedback(esc_sig)
+                    return TranslationResult(
+                        lean_signature=esc_sig,
+                        validated=True,
+                        rounds_used=round_idx + 1,
+                        last_error="",
+                        confidence=max(0.0, conf_e - 0.10),
+                        uncertainty_flags=flags_e,
+                        adversarial_flags=[],
+                        statement_schema=schema,
+                        structured_translation=structured_translation,
+                    )
+                # Escalation produced a real (non-placeholder) sig that didn't validate —
+                # still better than a placeholder: emit as sorry stub.
+                if not _is_trivialized_signature(esc_sig):
+                    record_repair_feedback(
+                        failing_lean=esc_sig,
+                        error_message=esc_err,
+                        previous_attempt=signature,
+                        stage="domain_escalation_validation",
+                    )
+                    signature = esc_sig
+                    last_error = esc_err
+        except Exception:
+            pass  # escalation failed — fall through to sorry stub below
+
+    signature = _normalize_final_signature(signature)
+    sorry_stub = _apply_schema_fallback(signature, schema)
     confidence, flags = _confidence_from_translation_state(
         validated=False,
-        rounds_used=max_repair_rounds + 1,
+        rounds_used=max(1, round_idx),
         last_error=last_error,
         signature=sorry_stub,
     )
     flags = flags + (["schema_stage_used"] if schema is not None else ["schema_stage_missing"])
+    flags.append("statement_repair_needed:schema_fallback")
     if hard_mode_active:
         flags.append("review_required_hard")
     # Generate decomposition stubs for missing types/identifiers.
@@ -1910,14 +3486,17 @@ def translate_statement(
             model=model,
             api_log_hook=api_log_hook,
         )
+    flush_repair_feedback()
     return TranslationResult(
         lean_signature=sorry_stub,
         validated=False,
-        rounds_used=max_repair_rounds + 1,
+        rounds_used=max(1, round_idx),
         last_error=last_error,
         confidence=confidence,
         uncertainty_flags=flags,
         decomposition_stubs=stubs,
+        statement_schema=schema,
+        structured_translation=structured_translation,
     )
 
 

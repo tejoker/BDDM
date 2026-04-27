@@ -34,6 +34,17 @@ from typing import Any
 
 from canonicalization import build_manual_conflict_queue, canonical_record
 
+try:
+    from statement_retrieval import (
+        build_statement_index as _build_statement_index,
+        query_statement_index as _query_statement_index,
+        statement_text_from_row as _statement_text_from_row,
+    )
+except ModuleNotFoundError:
+    _build_statement_index = None
+    _query_statement_index = None
+    _statement_text_from_row = None
+
 _NEW_ARXIV_ID = re.compile(r"(?:arxiv:)?(\d{4}\.\d{4,5})(?:v\d+)?\b", re.IGNORECASE)
 _OLD_ARXIV_ID = re.compile(r"\b([A-Za-z.-]+/\d{7})(?:v\d+)?\b")
 
@@ -73,6 +84,12 @@ class KGSummary:
     conditional: int = 0
     diagnostics: int = 0
     promotion_ready: int = 0
+    # Dual-metric tracking: statements vs proofs are tracked separately so
+    # downstream reports can distinguish "we formalized it" from "we proved it".
+    statements_formalized: int = 0   # FULLY_PROVEN + AXIOM_BACKED + INTERMEDIARY_PROVEN
+    proofs_closed: int = 0           # FULLY_PROVEN only (closes from axioms without sorry)
+    axiom_backed: int = 0            # correct statement; proof delegates to domain axiom
+    domain_library_blocked: int = 0  # theorems blocked by missing Mathlib library
     citation_edges: int = 0
     relation_edges: int = 0
     taxonomy_edges: int = 0
@@ -80,9 +97,11 @@ class KGSummary:
     entity_nodes: int = 0
     math_nodes: int = 0
     evidence_nodes: int = 0
+    semantic_edges: int = 0
     canonical_groups: int = 0
     canonical_duplicates: int = 0
     canonical_near_duplicates: int = 0
+    statement_index: str = ""
     files_written: list[str] = field(default_factory=list)
 
 
@@ -182,6 +201,25 @@ def _sqlite_write(db_path: Path, nodes: list[dict[str, Any]], layer: str) -> Non
         """
     )
     # Backward-compatible migration for existing dbs created before edge metadata.
+    node_cols = {
+        str(r[1])
+        for r in con.execute("PRAGMA table_info(kg_nodes)").fetchall()
+    }
+    if "promotion_gate_passed" not in node_cols:
+        con.execute("ALTER TABLE kg_nodes ADD COLUMN promotion_gate_passed INTEGER NOT NULL DEFAULT 0")
+    if "transitive_ungrounded" not in node_cols:
+        con.execute("ALTER TABLE kg_nodes ADD COLUMN transitive_ungrounded INTEGER NOT NULL DEFAULT 0")
+    if "ungrounded_assumption_count" not in node_cols:
+        con.execute("ALTER TABLE kg_nodes ADD COLUMN ungrounded_assumption_count INTEGER NOT NULL DEFAULT 0")
+    if "proof_mode" not in node_cols:
+        con.execute("ALTER TABLE kg_nodes ADD COLUMN proof_mode TEXT NOT NULL DEFAULT ''")
+    if "rounds_used" not in node_cols:
+        con.execute("ALTER TABLE kg_nodes ADD COLUMN rounds_used INTEGER NOT NULL DEFAULT 0")
+    if "time_s" not in node_cols:
+        con.execute("ALTER TABLE kg_nodes ADD COLUMN time_s REAL NOT NULL DEFAULT 0.0")
+    if "timestamp" not in node_cols:
+        con.execute("ALTER TABLE kg_nodes ADD COLUMN timestamp TEXT NOT NULL DEFAULT ''")
+
     cols = {
         str(r[1])
         for r in con.execute("PRAGMA table_info(kg_edges)").fetchall()
@@ -328,6 +366,7 @@ def _sqlite_merge_relation_edges(
         "generalizes",
         "specializes",
         "implies",
+        "semantically_similar_to",
         "uses_definition",
         "proved_by",
         "bridge_by",
@@ -768,6 +807,90 @@ def _extract_relation_edges(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]
     return [edge_map[k] for k in sorted(edge_map.keys())]
 
 
+def _extract_semantic_similarity_edges(
+    nodes: list[dict[str, Any]],
+    *,
+    statement_index: Path,
+    threshold: float = 0.55,
+    top_k: int = 5,
+) -> list[dict[str, Any]]:
+    """Create theorem-neighbor edges from the extracted-statement retriever."""
+    if _query_statement_index is None or not statement_index.exists():
+        return []
+
+    theorem_keys = {_node_ref(n) for n in nodes if n.get("paper_id") and n.get("theorem_name")}
+    node_by_ref = {_node_ref(n): n for n in nodes if _node_ref(n) in theorem_keys}
+    edge_map: dict[tuple[str, str, str], dict[str, Any]] = {}
+
+    for node in nodes:
+        src = _node_ref(node)
+        if not src or src not in theorem_keys:
+            continue
+        query_text = str(
+            node.get("semantic_statement_text")
+            or node.get("canonical_statement")
+            or node.get("lean_statement")
+            or ""
+        ).strip()
+        if not query_text:
+            continue
+        try:
+            hits = _query_statement_index(
+                statement_index,
+                query_text,
+                top_k=max(1, top_k + 1),
+                exclude_statement_id=src,
+                overfetch=4,
+            )
+        except Exception:
+            continue
+        for hit in hits:
+            dst = str(hit.get("statement_id", "")).strip()
+            if not dst or dst == src or dst not in theorem_keys:
+                continue
+            score = float(hit.get("score", 0.0) or 0.0)
+            if score < threshold:
+                continue
+            dst_node = node_by_ref.get(dst, {})
+            evidence_ids = []
+            src_eid = str(node.get("evidence_id", "")).strip()
+            dst_eid = str(dst_node.get("evidence_id", "") or hit.get("evidence_id", "") or "").strip()
+            if src_eid:
+                evidence_ids.append(src_eid)
+            if dst_eid:
+                evidence_ids.append(dst_eid)
+            edge = _edge_record(
+                src=src,
+                dst=dst,
+                edge_type="semantically_similar_to",
+                evidence_ids=evidence_ids,
+                confidence=score,
+                provenance={
+                    "source": "statement_retrieval",
+                    "statement_index": str(statement_index),
+                    "score": score,
+                    "threshold": threshold,
+                    "encoder": _statement_index_encoder(statement_index),
+                },
+            )
+            key = (edge["src_theorem"], edge["dst_theorem"], edge["edge_type"])
+            if key not in edge_map or float(edge_map[key].get("confidence", 0.0)) < edge["confidence"]:
+                edge_map[key] = edge
+
+    return [edge_map[k] for k in sorted(edge_map.keys())]
+
+
+def _statement_index_encoder(statement_index: Path) -> str:
+    meta_path = statement_index / "meta.json"
+    if not meta_path.exists():
+        return ""
+    try:
+        raw = json.loads(meta_path.read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    return str(raw.get("encoder_name", "") or "")
+
+
 _TYPE_TOKEN_RE = re.compile(r"\b[A-Z][A-Za-z0-9_']+\b")
 _DEF_TOKEN_RE = re.compile(r"\b(definition|define|defined as)\b", re.IGNORECASE)
 _CONCEPT_PHRASE_RE = re.compile(r"\b([a-z][a-z0-9_-]*(?:\s+[a-z][a-z0-9_-]*){0,3})\b")
@@ -970,7 +1093,7 @@ def _classification(row: dict[str, Any]) -> str:
 
     if status == "FULLY_PROVEN" and promotion_ok and _adversarial_clean(row):
         return "trusted"
-    if status == "INTERMEDIARY_PROVEN":
+    if status in {"INTERMEDIARY_PROVEN", "AXIOM_BACKED"}:
         return "conditional"
     return "diagnostics"
 
@@ -984,6 +1107,15 @@ def _count_ungrounded(assumptions: list[Any]) -> int:
         if g in {"UNGROUNDED", "UNKNOWN", ""}:
             count += 1
     return count
+
+
+def _as_str_list(value: Any) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return [str(x).strip() for x in value if str(x).strip()]
+    text = str(value).strip()
+    return [text] if text else []
 
 
 def _propagate_ungroundedness(
@@ -1023,6 +1155,40 @@ def _row_to_kg_node(row: dict[str, Any], paper_id: str, meta: dict[str, Any]) ->
     )
     assumptions = row.get("assumptions", [])
     ungrounded_count = _count_ungrounded(assumptions if isinstance(assumptions, list) else [])
+    artifact = row.get("semantic_equivalence_artifact")
+    if not isinstance(artifact, dict):
+        artifact = {}
+    context = row.get("context_pack")
+    if not isinstance(context, dict):
+        context = {}
+    statement_text = ""
+    if _statement_text_from_row is not None:
+        try:
+            statement_text = _statement_text_from_row(row)
+        except Exception:
+            statement_text = ""
+    if not statement_text:
+        statement_text = str(row.get("lean_statement", ""))
+    original_latex = str(
+        artifact.get("original_latex_theorem")
+        or row.get("original_latex_theorem")
+        or context.get("original_latex_theorem")
+        or ""
+    )
+    normalized_nl = str(
+        artifact.get("normalized_natural_language_theorem")
+        or row.get("normalized_natural_language_theorem")
+        or ""
+    )
+    extracted_assumptions = _as_str_list(
+        artifact.get("extracted_assumptions")
+        or row.get("extracted_assumptions")
+    )
+    extracted_conclusion = str(
+        artifact.get("extracted_conclusion")
+        or row.get("extracted_conclusion")
+        or ""
+    )
     return {
         "evidence_id": f"ev:{paper_id}|{row.get('theorem_name', '')}",
         "paper_id": paper_id,
@@ -1051,6 +1217,14 @@ def _row_to_kg_node(row: dict[str, Any], paper_id: str, meta: dict[str, Any]) ->
         "schema_version": meta.get("schema_version", "legacy"),
         "pipeline_commit": meta.get("pipeline_commit", "unknown"),
         "cited_arxiv_ids": _extract_cited_arxiv_ids(row),
+        "semantic_statement": {
+            "original_latex_theorem": original_latex,
+            "normalized_natural_language_theorem": normalized_nl,
+            "extracted_assumptions": extracted_assumptions,
+            "extracted_conclusion": extracted_conclusion,
+            "retrieval_text_hash": hashlib.sha256(statement_text.encode("utf-8")).hexdigest()[:24],
+        },
+        "semantic_statement_text": statement_text,
         # Evidence payload fields kept internal for debug/replay.
         "provenance": row.get("provenance", {}),
         "validation_gates": row.get("validation_gates", {}),
@@ -1065,6 +1239,11 @@ def build_kg(
     ledger_dir: Path,
     kg_root: Path,
     paper: str = "",
+    statement_index: Path | None = None,
+    build_statement_index: bool = False,
+    semantic_edge_threshold: float = 0.55,
+    semantic_top_k: int = 5,
+    statement_encoder: str | None = None,
 ) -> KGSummary:
     summary = KGSummary()
 
@@ -1106,6 +1285,23 @@ def build_kg(
             manifest["counts"]["entries"] += 1
             layer = _classification(row)
             node = _row_to_kg_node(row, paper_id=paper_id, meta=meta)
+            status = str(row.get("status", "UNRESOLVED"))
+
+            # Dual-metric: statements_formalized vs proofs_closed
+            if status in {"FULLY_PROVEN", "AXIOM_BACKED", "INTERMEDIARY_PROVEN"}:
+                summary.statements_formalized += 1
+            if status == "FULLY_PROVEN":
+                summary.proofs_closed += 1
+            if status == "AXIOM_BACKED":
+                summary.axiom_backed += 1
+                payload = row.get("payload_json") or row.get("payload", {})
+                if isinstance(payload, str):
+                    try:
+                        payload = __import__("json").loads(payload)
+                    except Exception:
+                        payload = {}
+                if payload.get("domain_library_needed"):
+                    summary.domain_library_blocked += 1
 
             if layer == "trusted":
                 trusted_nodes.append(node)
@@ -1178,9 +1374,33 @@ def build_kg(
         summary.citation_edges = 0
     if summary.citation_edges:
         print(f"[info] wrote {summary.citation_edges} citation edge row(s) (cites_arxiv)")
+    semantic_edges: list[dict[str, Any]] = []
+    if statement_index is not None:
+        summary.statement_index = str(statement_index)
+        if build_statement_index or not statement_index.exists():
+            if _build_statement_index is not None:
+                try:
+                    meta = _build_statement_index(
+                        ledger_dir=ledger_dir,
+                        out_dir=statement_index,
+                        paper=paper,
+                        encoder_name=statement_encoder,
+                    )
+                    if int(meta.get("count", 0) or 0) > 0:
+                        summary.files_written.append(str(statement_index))
+                except Exception as exc:
+                    print(f"[warn] statement index build failed: {exc}")
+        if statement_index.exists():
+            semantic_edges = _extract_semantic_similarity_edges(
+                all_nodes,
+                statement_index=statement_index,
+                threshold=semantic_edge_threshold,
+                top_k=semantic_top_k,
+            )
+
     relation_edges = _extract_relation_edges(all_nodes)
     entities, taxonomy_edges = _extract_entity_graph(all_nodes)
-    combined_edges = relation_edges + taxonomy_edges
+    combined_edges = relation_edges + taxonomy_edges + semantic_edges
     try:
         summary.relation_edges = _sqlite_merge_relation_edges(db_path, combined_edges)
     except Exception:
@@ -1188,6 +1408,7 @@ def build_kg(
     if summary.relation_edges:
         print(f"[info] wrote {summary.relation_edges} relation edge row(s)")
     summary.taxonomy_edges = len(taxonomy_edges)
+    summary.semantic_edges = len(semantic_edges)
     summary.edge_evidence_links = sum(
         len(e.get("evidence_ids", []))
         for e in combined_edges
@@ -1225,9 +1446,11 @@ def build_kg(
         "canonical_near_duplicates": summary.canonical_near_duplicates,
         "relation_edges": summary.relation_edges,
         "taxonomy_edges": summary.taxonomy_edges,
+        "semantic_edges": summary.semantic_edges,
         "edge_evidence_links": summary.edge_evidence_links,
         "entity_nodes": summary.entity_nodes,
         "citation_edges": summary.citation_edges,
+        "statement_index": summary.statement_index,
         "paper_manifests": sorted(per_paper_manifests.keys()),
     }
     all_manifest_path = manifest_dir / "promotion_manifest_all.json"
@@ -1248,6 +1471,33 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument("--ledger-dir", default="output/verification_ledgers", help="Ledger directory")
     p.add_argument("--kg-root", default="output/kg", help="Output KG root")
     p.add_argument("--paper", default="", help="Optional paper id (e.g. 2304.09598)")
+    p.add_argument(
+        "--statement-index",
+        default="",
+        help="Optional extracted-statement retrieval index directory for semantic KG edges",
+    )
+    p.add_argument(
+        "--build-statement-index",
+        action="store_true",
+        help="Build or refresh --statement-index from the selected ledgers before creating semantic edges",
+    )
+    p.add_argument(
+        "--statement-encoder",
+        default=None,
+        help="Statement index encoder name, or 'hash' for deterministic offline embeddings",
+    )
+    p.add_argument(
+        "--semantic-edge-threshold",
+        type=float,
+        default=0.55,
+        help="Minimum retrieval score for semantically_similar_to KG edges",
+    )
+    p.add_argument(
+        "--semantic-top-k",
+        type=int,
+        default=5,
+        help="Semantic neighbors queried per theorem when --statement-index is set",
+    )
     return p
 
 
@@ -1260,7 +1510,17 @@ def main() -> int:
         print(f"[fail] ledger directory not found: {ledger_dir}")
         return 1
 
-    summary = build_kg(ledger_dir=ledger_dir, kg_root=kg_root, paper=args.paper)
+    statement_index = Path(args.statement_index) if args.statement_index else None
+    summary = build_kg(
+        ledger_dir=ledger_dir,
+        kg_root=kg_root,
+        paper=args.paper,
+        statement_index=statement_index,
+        build_statement_index=bool(args.build_statement_index),
+        semantic_edge_threshold=float(args.semantic_edge_threshold),
+        semantic_top_k=int(args.semantic_top_k),
+        statement_encoder=args.statement_encoder,
+    )
     if summary.papers == 0 and summary.entries == 0:
         print("[fail] no ledgers matched")
         return 1
@@ -1278,8 +1538,11 @@ def main() -> int:
     )
     print(
         "[info] edges="
-        f"relations={summary.relation_edges} taxonomy={summary.taxonomy_edges} citations={summary.citation_edges} evidence_links={summary.edge_evidence_links}"
+        f"relations={summary.relation_edges} taxonomy={summary.taxonomy_edges} "
+        f"semantic={summary.semantic_edges} citations={summary.citation_edges} evidence_links={summary.edge_evidence_links}"
     )
+    if summary.statement_index:
+        print(f"[info] statement_index={summary.statement_index}")
     print(f"[info] entities={summary.entity_nodes}")
     for path in summary.files_written:
         print(f"[info] wrote {path}")

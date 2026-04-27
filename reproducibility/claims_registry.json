@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "current_repo_toolchain": "leanprover/lean4:v4.29.0-rc7",
+  "claims": [
+    {
+      "id": "minif2f_ponder_20260402",
+      "status": "historical",
+      "summary": "miniF2F test split, ponder-loop mode, 70/244 solved (28.7% pass@1).",
+      "artifact_path": "reproducibility/minif2f_test_244_results.json",
+      "recorded_toolchain": "leanprover/lean4:v4.30.0-rc1",
+      "reason_not_current": "Artifact toolchain does not match the repository pin. Rerun under v4.29.0-rc7 before citing as a current result."
+    },
+    {
+      "id": "mcts_27_5_percent",
+      "status": "unsupported",
+      "summary": "Previously mentioned 27.5% MCTS result.",
+      "artifact_path": "",
+      "recorded_toolchain": "",
+      "reason_not_current": "No committed reproducibility artifact is present."
+    },
+    {
+      "id": "translation_85_3_percent",
+      "status": "unsupported",
+      "summary": "Previously mentioned 85.3% translation parse or syntactic accuracy claim.",
+      "artifact_path": "",
+      "recorded_toolchain": "",
+      "reason_not_current": "No committed measurement artifact is present."
+    },
+    {
+      "id": "golden10_ingestion_20260426",
+      "status": "current",
+      "summary": "Golden10 paper-agnostic ingestion pass: 10 attempted, 8 TeX fetch successes, 7 theorem inventories, 242 theorem-like statements extracted.",
+      "artifact_path": "reproducibility/paper_agnostic_golden10_results/summary.json",
+      "recorded_toolchain": "",
+      "reason_not_current": ""
+    }
+  ]
+}

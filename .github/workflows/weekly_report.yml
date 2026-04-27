@@ -19,6 +19,14 @@ jobs:
             --ledger-root output/verification_ledgers \
             --kg-db output/kg/kg_index.db \
             --out-dir output/reports/weekly
+      - name: Assert bridge progress gates
+        run: |
+          latest=$(ls -1 output/reports/weekly/weekly_report_*.json | sort | tail -n 1)
+          python3 scripts/ci_assert_bridge_progress.py \
+            --weekly-report "$latest" \
+            --min-hard-safe-yield 0.05 \
+            --min-slot-coverage-pass-rate 0.90 \
+            --max-candidate-empty-rate 0.50
       - name: Upload report artifacts
         uses: actions/upload-artifact@v4
         with:

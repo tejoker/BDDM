@@ -72,13 +72,13 @@ class TheoremEntry:
     source_file: str
 
 
-def _find_env_end(text: str, start: int, env_name: str) -> int:
-    """Return the index just past \\end{env_name} starting the search from *start*."""
+def _find_env_span(text: str, start: int, env_name: str) -> tuple[int, int]:
+    """Return the start/end span of \\end{env_name} after *start*."""
     end_re = re.compile(_END_RE_TEMPLATE % re.escape(env_name), re.IGNORECASE)
     m = end_re.search(text, start)
     if m is None:
-        return len(text)
-    return m.end()
+        return len(text), len(text)
+    return m.start(), m.end()
 
 
 def _extract_label(body: str) -> str:
@@ -127,8 +127,8 @@ def extract_theorems(tex_path: Path) -> list[TheoremEntry]:
     for m in _BEGIN_RE.finditer(text):
         env_name = m.group(1).lower().rstrip("*")
         body_start = m.end()
-        env_end = _find_env_end(text, body_start, m.group(1))
-        body = text[body_start: env_end - len(f"\\end{{{m.group(1)}}}") - 1].strip()
+        body_end, env_end = _find_env_span(text, body_start, m.group(1))
+        body = text[body_start:body_end].strip()
 
         label = _extract_label(body)
         counter += 1

@@ -1,0 +1,269 @@
+{
+  "main_theorem": {
+    "lean_signature": "theorem schema_definition_first (h1 : Prop) (h2 : Prop) (h3 : Prop) : (let Claim : Prop := h1 \u2227 h2 \u2227 h3; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "main_theorem",
+      "definitions": [],
+      "notations": [],
+      "local_assumptions": [
+        "Suppose that Assumptions 1-3 hold."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{main-theorem} Suppose that Assumptions 1-3 hold.",
+        "theorem for the generalized SOAP algorithm presented in Algorithm \\ref{gsoap}, which includes the original SOAP as a special case."
+      ],
+      "context_excerpt": "Paper glossary memory: - ALC: \\def\\ALC@item[#1]{% - Huge: \\def\\Huge{\\@setsize\\Huge{28pt}\\xxvpt\\@xxvpt} - LARGE: \\def\\LARGE{\\@setsize\\LARGE{20pt}\\xviipt\\@xviipt} - Large: \\def\\Large{\\@setsize\\Large{16pt}\\xivpt\\@xivpt} - abovespace: \\def\\abovespace{\\abovestrut{0.20in}} - abovestrut: \\def\\abovestrut#1{\\rule[0in]{0in}{#1}\\ignorespaces} - addcontentsline: \\def\\addcontentsline#1#2#3{} - addstringtofullauthorlist: \\newcommand\\addstringtofullauthorlist{\\g@addto@macro\\icmlfullauthorlist} - addtofullauthorlist: \\newcommand\\addtofullauthorlist[1]{% - addtomylist: \\newcommand\\addtomylist[2]{% - aroundspace: \\def\\aroundspace{\\abovestrut{0.20in}\\belowstrut{0.10in}} - belowspace: \\def\\belowspace{\\belowstrut{0.10in}} - belowstrut: \\def\\belowstrut#1{\\rule[-#1]{0in}{#1}\\ignorespaces} - bottomtitlebar: \\def\\bottomtitlebar{\\vskip .22in \\hrule height1pt \\vskip .3in} - comment: \\def\\comment#1{} - fillzeros: \\def\\fillzeros[#1]#2{\\cv@tmpc@=#2\\relax\\ifnum\\cv@tmpc@<0\\cv@tmpc@=-\\cv@tmpc@\\fi - fnum: \\def\\fnum@figure{Figure \\thefigure} - footnoterule: \\def\\footnoterule{\\kern-3pt \\hrule width 0.8in \\kern 2.6pt } Nearby theorem statements: - \\label{main-theorem} Suppose that Assumptions 1-3 hold. Let $\\hat\\sigma_F^2=\\max\\left\\{\\sigma_F^2,\\frac{L\\left(f(\\X_1)-f^*\\right)}{K\\gamma^2}\\right\\}$ with any $\\gamma\\in(0,1]$, $1-\\theta=\\sqrt{\\frac{L\\left(f(\\X_1)-f^*\\right)}{K\\hat\\sigma_F^2}}$, $0\\leq\\beta<1 Declared notation/macros: - \\newcommand{\\x}{\\mathbf{x}} - \\newcommand{\\y}{\\mathbf{y}} - \\newcommand{\\z}{\\mathbf{z}} - \\newcommand{\\g}{\\mathbf{g}} - \\newcommand{\\w}{\\mathbf{w}} - \\newcommand{\\s}{\\mathbf{s}} - \\newcommand{\\m}{\\mathbf{m}} - \\newcommand{\\e}{\\mathbf{e}} Nearby source context: respectively. Denote $\\F_k=\\sigma(\\zeta_1,\\zeta_2,\\cdots,\\zeta_k)$ to be the sigma field of the stochastic samples up to "
+    }
+  },
+  "equ1": {
+    "lean_signature": "theorem schema_definition_first (h1 : Prop) (h2 : Prop) (h3 : Prop) (h4 : Prop) (h5 : Prop) : (let Claim : Prop := h1 \u2227 h2 \u2227 h3 \u2227 h4 \u2227 h5; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "equ1",
+      "definitions": [],
+      "notations": [],
+      "local_assumptions": [
+        "Suppose that Assumptions 1-3 hold.",
+        "Suppose that Assumptions 1-3 hold."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{main-theorem} Suppose that Assumptions 1-3 hold.",
+        "theorem}\\label{main-theorem} Suppose that Assumptions 1-3 hold."
+      ],
+      "context_excerpt": "Paper glossary memory: - ALC: \\def\\ALC@item[#1]{% - Huge: \\def\\Huge{\\@setsize\\Huge{28pt}\\xxvpt\\@xxvpt} - LARGE: \\def\\LARGE{\\@setsize\\LARGE{20pt}\\xviipt\\@xviipt} - Large: \\def\\Large{\\@setsize\\Large{16pt}\\xivpt\\@xivpt} - abovespace: \\def\\abovespace{\\abovestrut{0.20in}} - abovestrut: \\def\\abovestrut#1{\\rule[0in]{0in}{#1}\\ignorespaces} - addcontentsline: \\def\\addcontentsline#1#2#3{} - addstringtofullauthorlist: \\newcommand\\addstringtofullauthorlist{\\g@addto@macro\\icmlfullauthorlist} - addtofullauthorlist: \\newcommand\\addtofullauthorlist[1]{% - addtomylist: \\newcommand\\addtomylist[2]{% - aroundspace: \\def\\aroundspace{\\abovestrut{0.20in}\\belowstrut{0.10in}} - belowspace: \\def\\belowspace{\\belowstrut{0.10in}} - belowstrut: \\def\\belowstrut#1{\\rule[-#1]{0in}{#1}\\ignorespaces} - bottomtitlebar: \\def\\bottomtitlebar{\\vskip .22in \\hrule height1pt \\vskip .3in} - comment: \\def\\comment#1{} - fillzeros: \\def\\fillzeros[#1]#2{\\cv@tmpc@=#2\\relax\\ifnum\\cv@tmpc@<0\\cv@tmpc@=-\\cv@tmpc@\\fi - fnum: \\def\\fnum@figure{Figure \\thefigure} - footnoterule: \\def\\footnoterule{\\kern-3pt \\hrule width 0.8in \\kern 2.6pt } Nearby theorem statements: - \\label{main-theorem} Suppose that Assumptions 1-3 hold. Let $\\hat\\sigma_F^2=\\max\\left\\{\\sigma_F^2,\\frac{L\\left(f(\\X_1)-f^*\\right)}{K\\gamma^2}\\right\\}$ with any $\\gamma\\in(0,1]$, $1-\\theta=\\sqrt{\\frac{L\\left(f(\\X_1)-f^*\\right)}{K\\hat\\sigma_F^2}}$, $0\\leq\\beta<1 Declared notation/macros: - \\newcommand{\\x}{\\mathbf{x}} - \\newcommand{\\y}{\\mathbf{y}} - \\newcommand{\\z}{\\mathbf{z}} - \\newcommand{\\g}{\\mathbf{g}} - \\newcommand{\\w}{\\mathbf{w}} - \\newcommand{\\s}{\\mathbf{s}} - \\newcommand{\\m}{\\mathbf{m}} - \\newcommand{\\e}{\\mathbf{e}} Nearby source context: he $\\ell_1$ norm is not unitarily invariant, the orthogonal projection matrices appearing on the left-hand side of (\\ref{"
+    }
+  },
+  "momentum_bound_lemma": {
+    "lean_signature": "theorem schema_definition_first (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 \u2227 h2; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "momentum_bound_lemma",
+      "definitions": [
+        "Let $0\\leq\\beta< 1$ and $\\V_0=0$."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "Suppose that Assumptions 1-3 hold.",
+        "if-equ} &\\E_k\\left[\\left\\|\\nabla f(\\X_k)-\\M_k\\right\\|_F^2\\big|\\F_{k-1}\\right]\\\\ \\leq&\\theta\\left\\|\\M_{k-1}-\\nabla - \\label{second-moment-lemma} Suppose that Assumptions 2-3 hold."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{momentum-bound-lemma} Suppose that Assumptions 1-3 hold.",
+        "lemma} Suppose that Assumptions 2-3 hold."
+      ],
+      "context_excerpt": "Paper glossary memory: - ALC: \\def\\ALC@item[#1]{% - Huge: \\def\\Huge{\\@setsize\\Huge{28pt}\\xxvpt\\@xxvpt} - LARGE: \\def\\LARGE{\\@setsize\\LARGE{20pt}\\xviipt\\@xviipt} - Large: \\def\\Large{\\@setsize\\Large{16pt}\\xivpt\\@xivpt} - abovespace: \\def\\abovespace{\\abovestrut{0.20in}} - abovestrut: \\def\\abovestrut#1{\\rule[0in]{0in}{#1}\\ignorespaces} - addcontentsline: \\def\\addcontentsline#1#2#3{} - addstringtofullauthorlist: \\newcommand\\addstringtofullauthorlist{\\g@addto@macro\\icmlfullauthorlist} - addtofullauthorlist: \\newcommand\\addtofullauthorlist[1]{% - addtomylist: \\newcommand\\addtomylist[2]{% - aroundspace: \\def\\aroundspace{\\abovestrut{0.20in}\\belowstrut{0.10in}} - belowspace: \\def\\belowspace{\\belowstrut{0.10in}} - belowstrut: \\def\\belowstrut#1{\\rule[-#1]{0in}{#1}\\ignorespaces} - bottomtitlebar: \\def\\bottomtitlebar{\\vskip .22in \\hrule height1pt \\vskip .3in} - comment: \\def\\comment#1{} - fillzeros: \\def\\fillzeros[#1]#2{\\cv@tmpc@=#2\\relax\\ifnum\\cv@tmpc@<0\\cv@tmpc@=-\\cv@tmpc@\\fi - fnum: \\def\\fnum@figure{Figure \\thefigure} - footnoterule: \\def\\footnoterule{\\kern-3pt \\hrule width 0.8in \\kern 2.6pt } Nearby theorem statements: - \\label{momentum-bound-lemma} Suppose that Assumptions 1-3 hold. Then for Algorithm \\ref{gsoap}, we have \\begin{eqnarray} \\begin{aligned}\\label{GM-dif-equ} &\\E_k\\left[\\left\\|\\nabla f(\\X_k)-\\M_k\\right\\|_F^2\\big|\\F_{k-1}\\right]\\\\ \\leq&\\theta\\left\\|\\M_{k-1}-\\nabla - \\label{second-moment-lemma} Suppose that Assumptions 2-3 hold. Let $0\\leq\\beta< 1$ and $\\V_0=0$. Then we have \\begin{eqnarray} \\begin{aligned}\\notag \\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n \\E_{\\F_{k-1}}\\left[\\sqrt{\\widetilde\\V_{k,i,j}+\\varepsilon}\\right]\\leq Kmn\\ Declared notation/macros: - \\newcommand{\\x}{\\mathbf{x}} - \\newcommand{\\y}{\\mathbf{y}} - \\newcommand{\\z}{\\mathbf{z}} - \\newcommand{\\g}{\\mathbf{g}} -"
+    }
+  },
+  "proof_4": {
+    "lean_signature": "theorem schema_definition_first  : (let Claim : Prop := True; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "proof_4",
+      "definitions": [
+        "Let $0\\leq\\beta< 1$ and $\\V_0=0$."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "Suppose that Assumptions 1-3 hold.",
+        "if-equ} &\\E_k\\left[\\left\\|\\nabla f(\\X_k)-\\M_k\\right\\|_F^2\\big|\\F_{k-1}\\right]\\\\ \\leq&\\theta\\left\\|\\M_{k-1}-\\nabla - \\label{second-moment-lemma} Suppose that Assumptions 2-3 hold.",
+        "Suppose that Assumptions 1-3 hold."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{momentum-bound-lemma} Suppose that Assumptions 1-3 hold.",
+        "lemma} Suppose that Assumptions 2-3 hold.",
+        "lemma is closely similar to \\citep[Lemma 4]{Li-2025-nips} and we list the proof here only for the sake of completeness.",
+        "lemma}\\label{momentum-bound-lemma} Suppose that Assumptions 1-3 hold."
+      ],
+      "context_excerpt": "Paper glossary memory: - ALC: \\def\\ALC@item[#1]{% - Huge: \\def\\Huge{\\@setsize\\Huge{28pt}\\xxvpt\\@xxvpt} - LARGE: \\def\\LARGE{\\@setsize\\LARGE{20pt}\\xviipt\\@xviipt} - Large: \\def\\Large{\\@setsize\\Large{16pt}\\xivpt\\@xivpt} - abovespace: \\def\\abovespace{\\abovestrut{0.20in}} - abovestrut: \\def\\abovestrut#1{\\rule[0in]{0in}{#1}\\ignorespaces} - addcontentsline: \\def\\addcontentsline#1#2#3{} - addstringtofullauthorlist: \\newcommand\\addstringtofullauthorlist{\\g@addto@macro\\icmlfullauthorlist} - addtofullauthorlist: \\newcommand\\addtofullauthorlist[1]{% - addtomylist: \\newcommand\\addtomylist[2]{% - aroundspace: \\def\\aroundspace{\\abovestrut{0.20in}\\belowstrut{0.10in}} - belowspace: \\def\\belowspace{\\belowstrut{0.10in}} - belowstrut: \\def\\belowstrut#1{\\rule[-#1]{0in}{#1}\\ignorespaces} - bottomtitlebar: \\def\\bottomtitlebar{\\vskip .22in \\hrule height1pt \\vskip .3in} - comment: \\def\\comment#1{} - fillzeros: \\def\\fillzeros[#1]#2{\\cv@tmpc@=#2\\relax\\ifnum\\cv@tmpc@<0\\cv@tmpc@=-\\cv@tmpc@\\fi - fnum: \\def\\fnum@figure{Figure \\thefigure} - footnoterule: \\def\\footnoterule{\\kern-3pt \\hrule width 0.8in \\kern 2.6pt } Nearby theorem statements: - \\label{momentum-bound-lemma} Suppose that Assumptions 1-3 hold. Then for Algorithm \\ref{gsoap}, we have \\begin{eqnarray} \\begin{aligned}\\label{GM-dif-equ} &\\E_k\\left[\\left\\|\\nabla f(\\X_k)-\\M_k\\right\\|_F^2\\big|\\F_{k-1}\\right]\\\\ \\leq&\\theta\\left\\|\\M_{k-1}-\\nabla - \\label{second-moment-lemma} Suppose that Assumptions 2-3 hold. Let $0\\leq\\beta< 1$ and $\\V_0=0$. Then we have \\begin{eqnarray} \\begin{aligned}\\notag \\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n \\E_{\\F_{k-1}}\\left[\\sqrt{\\widetilde\\V_{k,i,j}+\\varepsilon}\\right]\\leq Kmn\\ Declared notation/macros: - \\newcommand{\\x}{\\mathbf{x}} - \\newcommand{\\y}{\\mathbf{y}} - \\newcommand{\\z}{\\mathbf{z}} - \\newcommand{\\g}{\\mathbf{g}} -"
+    }
+  },
+  "second_moment_lemma": {
+    "lean_signature": "theorem schema_definition_first (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 \u2227 h2; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "second_moment_lemma",
+      "definitions": [
+        "Let $0\\leq\\beta< 1$ and $\\V_0=0$."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "Suppose that Assumptions 1-3 hold.",
+        "if-equ} &\\E_k\\left[\\left\\|\\nabla f(\\X_k)-\\M_k\\right\\|_F^2\\big|\\F_{k-1}\\right]\\\\ \\leq&\\theta\\left\\|\\M_{k-1}-\\nabla - \\label{second-moment-lemma} Suppose that Assumptions 2-3 hold."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{momentum-bound-lemma} Suppose that Assumptions 1-3 hold.",
+        "lemma} Suppose that Assumptions 2-3 hold."
+      ],
+      "context_excerpt": "Paper glossary memory: - ALC: \\def\\ALC@item[#1]{% - Huge: \\def\\Huge{\\@setsize\\Huge{28pt}\\xxvpt\\@xxvpt} - LARGE: \\def\\LARGE{\\@setsize\\LARGE{20pt}\\xviipt\\@xviipt} - Large: \\def\\Large{\\@setsize\\Large{16pt}\\xivpt\\@xivpt} - abovespace: \\def\\abovespace{\\abovestrut{0.20in}} - abovestrut: \\def\\abovestrut#1{\\rule[0in]{0in}{#1}\\ignorespaces} - addcontentsline: \\def\\addcontentsline#1#2#3{} - addstringtofullauthorlist: \\newcommand\\addstringtofullauthorlist{\\g@addto@macro\\icmlfullauthorlist} - addtofullauthorlist: \\newcommand\\addtofullauthorlist[1]{% - addtomylist: \\newcommand\\addtomylist[2]{% - aroundspace: \\def\\aroundspace{\\abovestrut{0.20in}\\belowstrut{0.10in}} - belowspace: \\def\\belowspace{\\belowstrut{0.10in}} - belowstrut: \\def\\belowstrut#1{\\rule[-#1]{0in}{#1}\\ignorespaces} - bottomtitlebar: \\def\\bottomtitlebar{\\vskip .22in \\hrule height1pt \\vskip .3in} - comment: \\def\\comment#1{} - fillzeros: \\def\\fillzeros[#1]#2{\\cv@tmpc@=#2\\relax\\ifnum\\cv@tmpc@<0\\cv@tmpc@=-\\cv@tmpc@\\fi - fnum: \\def\\fnum@figure{Figure \\thefigure} - footnoterule: \\def\\footnoterule{\\kern-3pt \\hrule width 0.8in \\kern 2.6pt } Nearby theorem statements: - \\label{momentum-bound-lemma} Suppose that Assumptions 1-3 hold. Then for Algorithm \\ref{gsoap}, we have \\begin{eqnarray} \\begin{aligned}\\label{GM-dif-equ} &\\E_k\\left[\\left\\|\\nabla f(\\X_k)-\\M_k\\right\\|_F^2\\big|\\F_{k-1}\\right]\\\\ \\leq&\\theta\\left\\|\\M_{k-1}-\\nabla - \\label{second-moment-lemma} Suppose that Assumptions 2-3 hold. Let $0\\leq\\beta< 1$ and $\\V_0=0$. Then we have \\begin{eqnarray} \\begin{aligned}\\notag \\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n \\E_{\\F_{k-1}}\\left[\\sqrt{\\widetilde\\V_{k,i,j}+\\varepsilon}\\right]\\leq Kmn\\ Declared notation/macros: - \\newcommand{\\x}{\\mathbf{x}} - \\newcommand{\\y}{\\mathbf{y}} - \\newcommand{\\z}{\\mathbf{z}} - \\newcommand{\\g}{\\mathbf{g}} -"
+    }
+  },
+  "proof_6": {
+    "lean_signature": "theorem schema_definition_first (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 \u2227 h2; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "proof_6",
+      "definitions": [
+        "Let $0\\leq\\beta< 1$ and $\\V_0=0$."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "Suppose that Assumptions 1-3 hold.",
+        "if-equ} &\\E_k\\left[\\left\\|\\nabla f(\\X_k)-\\M_k\\right\\|_F^2\\big|\\F_{k-1}\\right]\\\\ \\leq&\\theta\\left\\|\\M_{k-1}-\\nabla - \\label{second-moment-lemma} Suppose that Assumptions 2-3 hold.",
+        "Suppose that Assumptions 2-3 hold."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{momentum-bound-lemma} Suppose that Assumptions 1-3 hold.",
+        "lemma} Suppose that Assumptions 2-3 hold.",
+        "lemma is adapted from \\citep[Lemma 8]{lihuan-rmsprop-2024} and \\citep[Lemma 5]{Li-2025-nips}, with modifications introduced to accommodate the projection-based setting of the SOAP algorithm.",
+        "lemma}\\label{second-moment-lemma} Suppose that Assumptions 2-3 hold."
+      ],
+      "context_excerpt": "Paper glossary memory: - ALC: \\def\\ALC@item[#1]{% - Huge: \\def\\Huge{\\@setsize\\Huge{28pt}\\xxvpt\\@xxvpt} - LARGE: \\def\\LARGE{\\@setsize\\LARGE{20pt}\\xviipt\\@xviipt} - Large: \\def\\Large{\\@setsize\\Large{16pt}\\xivpt\\@xivpt} - abovespace: \\def\\abovespace{\\abovestrut{0.20in}} - abovestrut: \\def\\abovestrut#1{\\rule[0in]{0in}{#1}\\ignorespaces} - addcontentsline: \\def\\addcontentsline#1#2#3{} - addstringtofullauthorlist: \\newcommand\\addstringtofullauthorlist{\\g@addto@macro\\icmlfullauthorlist} - addtofullauthorlist: \\newcommand\\addtofullauthorlist[1]{% - addtomylist: \\newcommand\\addtomylist[2]{% - aroundspace: \\def\\aroundspace{\\abovestrut{0.20in}\\belowstrut{0.10in}} - belowspace: \\def\\belowspace{\\belowstrut{0.10in}} - belowstrut: \\def\\belowstrut#1{\\rule[-#1]{0in}{#1}\\ignorespaces} - bottomtitlebar: \\def\\bottomtitlebar{\\vskip .22in \\hrule height1pt \\vskip .3in} - comment: \\def\\comment#1{} - fillzeros: \\def\\fillzeros[#1]#2{\\cv@tmpc@=#2\\relax\\ifnum\\cv@tmpc@<0\\cv@tmpc@=-\\cv@tmpc@\\fi - fnum: \\def\\fnum@figure{Figure \\thefigure} - footnoterule: \\def\\footnoterule{\\kern-3pt \\hrule width 0.8in \\kern 2.6pt } Nearby theorem statements: - \\label{momentum-bound-lemma} Suppose that Assumptions 1-3 hold. Then for Algorithm \\ref{gsoap}, we have \\begin{eqnarray} \\begin{aligned}\\label{GM-dif-equ} &\\E_k\\left[\\left\\|\\nabla f(\\X_k)-\\M_k\\right\\|_F^2\\big|\\F_{k-1}\\right]\\\\ \\leq&\\theta\\left\\|\\M_{k-1}-\\nabla - \\label{second-moment-lemma} Suppose that Assumptions 2-3 hold. Let $0\\leq\\beta< 1$ and $\\V_0=0$. Then we have \\begin{eqnarray} \\begin{aligned}\\notag \\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n \\E_{\\F_{k-1}}\\left[\\sqrt{\\widetilde\\V_{k,i,j}+\\varepsilon}\\right]\\leq Kmn\\ Declared notation/macros: - \\newcommand{\\x}{\\mathbf{x}} - \\newcommand{\\y}{\\mathbf{y}} - \\newcommand{\\z}{\\mathbf{z}} - \\newcommand{\\g}{\\mathbf{g}} -"
+    }
+  },
+  "nuclear_l1_norms": {
+    "lean_signature": "theorem schema_template  : (0 : \u2115) = 0 := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.87,
+    "uncertainty_flags": [
+      "schema_template_mode",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "nuclear_l1_norms",
+      "definitions": [
+        "Let $\\e_i$ denote the $i$-th standard basis vector."
+      ],
+      "notations": [],
+      "local_assumptions": [],
+      "nearby_claims": [
+        "theorem statements: - \\label{nuclear-l1-norms} For any matrix $\\A$, we have $\\|\\A\\|_*\\leq \\|\\A\\|_1$."
+      ],
+      "context_excerpt": "Paper glossary memory: - ALC: \\def\\ALC@item[#1]{% - Huge: \\def\\Huge{\\@setsize\\Huge{28pt}\\xxvpt\\@xxvpt} - LARGE: \\def\\LARGE{\\@setsize\\LARGE{20pt}\\xviipt\\@xviipt} - Large: \\def\\Large{\\@setsize\\Large{16pt}\\xivpt\\@xivpt} - abovespace: \\def\\abovespace{\\abovestrut{0.20in}} - abovestrut: \\def\\abovestrut#1{\\rule[0in]{0in}{#1}\\ignorespaces} - addcontentsline: \\def\\addcontentsline#1#2#3{} - addstringtofullauthorlist: \\newcommand\\addstringtofullauthorlist{\\g@addto@macro\\icmlfullauthorlist} - addtofullauthorlist: \\newcommand\\addtofullauthorlist[1]{% - addtomylist: \\newcommand\\addtomylist[2]{% - aroundspace: \\def\\aroundspace{\\abovestrut{0.20in}\\belowstrut{0.10in}} - belowspace: \\def\\belowspace{\\belowstrut{0.10in}} - belowstrut: \\def\\belowstrut#1{\\rule[-#1]{0in}{#1}\\ignorespaces} - bottomtitlebar: \\def\\bottomtitlebar{\\vskip .22in \\hrule height1pt \\vskip .3in} - comment: \\def\\comment#1{} - fillzeros: \\def\\fillzeros[#1]#2{\\cv@tmpc@=#2\\relax\\ifnum\\cv@tmpc@<0\\cv@tmpc@=-\\cv@tmpc@\\fi - fnum: \\def\\fnum@figure{Figure \\thefigure} - footnoterule: \\def\\footnoterule{\\kern-3pt \\hrule width 0.8in \\kern 2.6pt } Nearby theorem statements: - \\label{nuclear-l1-norms} For any matrix $\\A$, we have $\\|\\A\\|_*\\leq \\|\\A\\|_1$. Declared notation/macros: - \\newcommand{\\x}{\\mathbf{x}} - \\newcommand{\\y}{\\mathbf{y}} - \\newcommand{\\z}{\\mathbf{z}} - \\newcommand{\\g}{\\mathbf{g}} - \\newcommand{\\w}{\\mathbf{w}} - \\newcommand{\\s}{\\mathbf{s}} - \\newcommand{\\m}{\\mathbf{m}} - \\newcommand{\\e}{\\mathbf{e}} Nearby source context: j}+\\varepsilon}}\\right]\\\\ \\leq&\\sqrt{\\sigma_{op}^2+\\varepsilon}+\\sum_{t=1}^k\\sqrt{\\beta^{k-t}}(1-\\beta)\\E_{\\F_{t-1}}\\left[\\frac{\\left|\\bP_{t-1,:,i}^T\\nabla f(\\X_t)\\bQ_{t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\V_{t,i,j}+\\varepsilon}}\\right], \\end{aligned} \\end{eqnarray} where we use $\\V_0=\\0$. Summing over $"
+    }
+  },
+  "proof_8": {
+    "lean_signature": "theorem schema_template  : (0 : \u2115) = 0 := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.87,
+    "uncertainty_flags": [
+      "schema_template_mode",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "proof_8",
+      "definitions": [],
+      "notations": [],
+      "local_assumptions": [],
+      "nearby_claims": [
+        "theorem statements: - \\label{nuclear-l1-norms} For any matrix $\\A$, we have $\\|\\A\\|_*\\leq \\|\\A\\|_1$."
+      ],
+      "context_excerpt": "Paper glossary memory: - ALC: \\def\\ALC@item[#1]{% - Huge: \\def\\Huge{\\@setsize\\Huge{28pt}\\xxvpt\\@xxvpt} - LARGE: \\def\\LARGE{\\@setsize\\LARGE{20pt}\\xviipt\\@xviipt} - Large: \\def\\Large{\\@setsize\\Large{16pt}\\xivpt\\@xivpt} - abovespace: \\def\\abovespace{\\abovestrut{0.20in}} - abovestrut: \\def\\abovestrut#1{\\rule[0in]{0in}{#1}\\ignorespaces} - addcontentsline: \\def\\addcontentsline#1#2#3{} - addstringtofullauthorlist: \\newcommand\\addstringtofullauthorlist{\\g@addto@macro\\icmlfullauthorlist} - addtofullauthorlist: \\newcommand\\addtofullauthorlist[1]{% - addtomylist: \\newcommand\\addtomylist[2]{% - aroundspace: \\def\\aroundspace{\\abovestrut{0.20in}\\belowstrut{0.10in}} - belowspace: \\def\\belowspace{\\belowstrut{0.10in}} - belowstrut: \\def\\belowstrut#1{\\rule[-#1]{0in}{#1}\\ignorespaces} - bottomtitlebar: \\def\\bottomtitlebar{\\vskip .22in \\hrule height1pt \\vskip .3in} - comment: \\def\\comment#1{} - fillzeros: \\def\\fillzeros[#1]#2{\\cv@tmpc@=#2\\relax\\ifnum\\cv@tmpc@<0\\cv@tmpc@=-\\cv@tmpc@\\fi - fnum: \\def\\fnum@figure{Figure \\thefigure} - footnoterule: \\def\\footnoterule{\\kern-3pt \\hrule width 0.8in \\kern 2.6pt } Nearby theorem statements: - \\label{nuclear-l1-norms} For any matrix $\\A$, we have $\\|\\A\\|_*\\leq \\|\\A\\|_1$. Declared notation/macros: - \\newcommand{\\x}{\\mathbf{x}} - \\newcommand{\\y}{\\mathbf{y}} - \\newcommand{\\z}{\\mathbf{z}} - \\newcommand{\\g}{\\mathbf{g}} - \\newcommand{\\w}{\\mathbf{w}} - \\newcommand{\\s}{\\mathbf{s}} - \\newcommand{\\m}{\\mathbf{m}} - \\newcommand{\\e}{\\mathbf{e}} Nearby source context: _{\\F_{t-1}}\\left[\\frac{\\left|\\bP_{t-1,:,i}^T\\nabla f(\\X_t)\\bQ_{t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\V_{t,i,j}+\\varepsilon}}\\right], \\end{aligned} \\end{eqnarray} where we use $\\V_0=\\0$. Summing over $i=1,2,\\cdots,m$, $j=1,2,\\cdots,n$, and $k=1,2,\\cdots,K$, we have \\begin{eqnarray} \\begin{aligned}\\notag &"
+    }
+  }
+}

@@ -84,13 +84,21 @@ def main() -> int:
     orch = PipelineOrchestrator(Path(args.orch_root))
     project_root = Path(args.project_root).resolve()
     done = 0
+    idle_loops = 0
     while True:
         if args.max_jobs > 0 and done >= args.max_jobs:
             break
+        if idle_loops % 12 == 0:
+            try:
+                orch.reclaim_expired_leases()
+            except Exception:
+                pass
         job = orch.lease_next(worker_id=args.worker_id, lease_seconds=max(60, int(args.lease_seconds)))
         if job is None:
+            idle_loops += 1
             time.sleep(max(1, int(args.poll_s)))
             continue
+        idle_loops = 0
         res = _run_one_job(
             orch=orch,
             job=job,
@@ -105,4 +113,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

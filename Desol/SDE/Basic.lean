@@ -12,6 +12,19 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Function.ConditionalExpectation.Basic
 import Mathlib.MeasureTheory.Function.StronglyMeasurable.Basic
 
+/-!
+# SDE and Gaussian Process Examples
+
+This module is a small first-party Lean surface for stochastic-process examples
+used by DESol proof-search experiments. It is not generated from an arXiv paper;
+it gives the pipeline concrete declarations over Mathlib probability APIs for
+backend health checks and tactic-search development.
+
+The main nontrivial statement is `wiener_martingale_natural`, which sketches the
+standard route from Gaussian independent increments and zero mean increments to
+the martingale property with respect to the natural filtration.
+-/
+
 open MeasureTheory ProbabilityTheory
 
 namespace DESol.SDE

@@ -1,0 +1,18 @@
+{
+  "suite_name": "paper_agnostic_seed",
+  "description": "Seed suite spanning distinct topics; extend to 20+ papers per domain for stable statistics.",
+  "papers": [
+    {
+      "paper_id": "2304.09598",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2012.09271",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.15007",
+      "domain": "remaining_cs_math"
+    }
+  ]
+}

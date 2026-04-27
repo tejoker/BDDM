@@ -1,0 +1,16 @@
+{
+  "paper_id": "2604.21604",
+  "domain": "graph_theory",
+  "role": "graph_or_discrete_structures",
+  "index": 6,
+  "returncode": 1,
+  "elapsed_s": 4.469,
+  "out_lean": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21604.lean",
+  "ledger": "",
+  "checkpoint": "",
+  "stdout_tail": "\n[2.1] Fetching arxiv source for 2604.21604 ...\n[fetch] https://arxiv.org/e-print/2604.21604\n",
+  "stderr_tail": "[fail] arxiv source for '2604.21604' is not a tar archive (possibly a single-file PDF submission): file could not be opened successfully:\n- method gz: ReadError('not a gzip file')\n- method bz2: ReadError('not a bzip2 file')\n- method xz: ReadError('not an lzma file')\n- method tar: ReadError('invalid header')\n",
+  "evidence_lean": "",
+  "evidence_ledger": "",
+  "evidence_checkpoint": ""
+}

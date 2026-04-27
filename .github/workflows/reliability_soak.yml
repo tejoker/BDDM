@@ -1,0 +1,29 @@
+name: reliability-soak
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"
+
+jobs:
+  soak:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run queue reliability soak
+        run: |
+          python3 scripts/reliability_soak.py \
+            --orch-root output/orchestrator_soak \
+            --jobs 200 \
+            --workers 4 \
+            --fail-rate 0.25 \
+            --rounds 300 \
+            --out output/reports/soak/reliability_soak.json
+      - name: Upload soak artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: reliability-soak
+          path: output/reports/soak

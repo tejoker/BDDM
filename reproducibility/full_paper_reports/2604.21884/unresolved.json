@@ -1,0 +1,922 @@
+[
+  {
+    "theorem_name": "thm_baseline_lift",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:C_T",
+        "symbol": "C_T",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Ψ1",
+        "symbol": "Ψ1",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Ψ2",
+        "symbol": "Ψ2",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:ξ1",
+        "symbol": "ξ1",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:ξ2",
+        "symbol": "ξ2",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_symbol:Θ",
+        "symbol": "Θ",
+        "grounding_kind": "domain_symbol_obligation",
+        "grounding_source": "paper_symbol_reference",
+        "grounding_trust": "unproved_domain_symbol",
+        "paper_agnostic_rule_id": "domain_symbol.requires_domain_pack_or_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      }
+    ]
+  },
+  {
+    "theorem_name": "prop_cubic_quartic_baseline",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Γ1",
+        "symbol": "Γ1",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Γ2",
+        "symbol": "Γ2",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Ψ1",
+        "symbol": "Ψ1",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Ψ2",
+        "symbol": "Ψ2",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_symbol:Θ",
+        "symbol": "Θ",
+        "grounding_kind": "domain_symbol_obligation",
+        "grounding_source": "paper_symbol_reference",
+        "grounding_trust": "unproved_domain_symbol",
+        "paper_agnostic_rule_id": "domain_symbol.requires_domain_pack_or_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      }
+    ]
+  },
+  {
+    "theorem_name": "thm_operator_main",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence"
+    ],
+    "result_label": "not_verified",
+    "claim_scope": "No verified closure claim is made for this result.",
+    "modulo_paper_local_axioms": false,
+    "debt_tier": "none",
+    "proof_value": "none",
+    "grounding_metadata": []
+  },
+  {
+    "theorem_name": "prop_mid_completion",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:s1",
+        "symbol": "s1",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:s2",
+        "symbol": "s2",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:theta",
+        "symbol": "theta",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "thm_conditional_closure_intro",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:HSobolev",
+        "symbol": "HSobolev",
+        "grounding_kind": "mathlib_close_definition_stub",
+        "grounding_source": "paper_symbol_inventory.mathlib_close_match",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.mathlib_close_match",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:s1",
+        "symbol": "s1",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:s2",
+        "symbol": "s2",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "cor_conditional_cutoff",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:C",
+        "symbol": "C",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:s2",
+        "symbol": "s2",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_symbol:cutoff_enhanced_data",
+        "symbol": "cutoff_enhanced_data",
+        "grounding_kind": "domain_symbol_obligation",
+        "grounding_source": "paper_symbol_reference",
+        "grounding_trust": "unproved_domain_symbol",
+        "paper_agnostic_rule_id": "domain_symbol.requires_domain_pack_or_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_symbol:paracontrolled_solution",
+        "symbol": "paracontrolled_solution",
+        "grounding_kind": "domain_symbol_obligation",
+        "grounding_source": "paper_symbol_reference",
+        "grounding_trust": "unproved_domain_symbol",
+        "paper_agnostic_rule_id": "domain_symbol.requires_domain_pack_or_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      }
+    ]
+  },
+  {
+    "theorem_name": "rem_status_emphasis",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:I_i",
+        "symbol": "I_i",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_local_lemma:VolterraOscillation",
+        "symbol": "VolterraOscillation",
+        "grounding_kind": "paper_local_lemma_obligation",
+        "grounding_source": "paper_statement_or_domain_pack",
+        "grounding_trust": "unproved_local_theory_obligation",
+        "paper_agnostic_rule_id": "local_lemma.requires_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:ξ1",
+        "symbol": "ξ1",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:ξ2",
+        "symbol": "ξ2",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "prop_sharpness",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "deep_domain_theory",
+    "proof_value": "deep_domain_gap",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_local_lemma:DyadicBlockBound",
+        "symbol": "DyadicBlockBound",
+        "grounding_kind": "paper_local_lemma_obligation",
+        "grounding_source": "paper_statement_or_domain_pack",
+        "grounding_trust": "unproved_local_theory_obligation",
+        "paper_agnostic_rule_id": "local_lemma.requires_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      }
+    ]
+  },
+  {
+    "theorem_name": "remark_9",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:I_i",
+        "symbol": "I_i",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:remark_9",
+        "symbol": "remark_9",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:ξ1",
+        "symbol": "ξ1",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:ξ2",
+        "symbol": "ξ2",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "remark_10",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:remark_10",
+        "symbol": "remark_10",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Γ1",
+        "symbol": "Γ1",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Γ2",
+        "symbol": "Γ2",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "lem_centered_cov",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:C_T",
+        "symbol": "C_T",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:B_N",
+        "symbol": "B_N",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "thm_pathwise_fluct",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified",
+    "claim_scope": "No verified closure claim is made for this result.",
+    "modulo_paper_local_axioms": false,
+    "debt_tier": "none",
+    "proof_value": "none",
+    "grounding_metadata": []
+  },
+  {
+    "theorem_name": "lem_speed_gap",
+    "status": "INTERMEDIARY_PROVEN",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence"
+    ],
+    "result_label": "not_verified",
+    "claim_scope": "No verified closure claim is made for this result.",
+    "modulo_paper_local_axioms": false,
+    "debt_tier": "none",
+    "proof_value": "none",
+    "grounding_metadata": []
+  },
+  {
+    "theorem_name": "lem_volterra",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:a",
+        "symbol": "a",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "prop_det_contraction",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:D_N",
+        "symbol": "D_N",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:C",
+        "symbol": "C",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:s1",
+        "symbol": "s1",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:s2",
+        "symbol": "s2",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:theta",
+        "symbol": "theta",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "thm_no_singular_centering",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:C_T",
+        "symbol": "C_T",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:MixedOperator",
+        "symbol": "MixedOperator",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "ass_strichartz",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:C_T",
+        "symbol": "C_T",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:C",
+        "symbol": "C",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:s1",
+        "symbol": "s1",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:s2",
+        "symbol": "s2",
+        "grounding_kind": "transparent_scalar_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "remark_18",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:HSobolev",
+        "symbol": "HSobolev",
+        "grounding_kind": "mathlib_close_definition_stub",
+        "grounding_source": "paper_symbol_inventory.mathlib_close_match",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.mathlib_close_match",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:remark_18",
+        "symbol": "remark_18",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "rem_primitive_route",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:I_i",
+        "symbol": "I_i",
+        "grounding_kind": "transparent_operator_or_distribution_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ]
+  },
+  {
+    "theorem_name": "cor_safe_range",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "independent_semantic_equivalence_evidence"
+    ],
+    "result_label": "not_verified",
+    "claim_scope": "No verified closure claim is made for this result.",
+    "modulo_paper_local_axioms": false,
+    "debt_tier": "none",
+    "proof_value": "none",
+    "grounding_metadata": []
+  }
+]

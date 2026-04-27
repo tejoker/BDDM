@@ -11,7 +11,9 @@ from typing import Any
 from unittest import mock
 
 import pytest
-from fastapi.testclient import TestClient
+
+fastapi_testclient = pytest.importorskip("fastapi.testclient")
+TestClient = fastapi_testclient.TestClient
 
 
 @pytest.fixture

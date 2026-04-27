@@ -23,6 +23,6 @@ def test_translation_fidelity_eval(tmp_path: Path) -> None:
     con.commit()
     con.close()
 
-    res = evaluate(gold_path=gold, kg_db=db)
+    res = evaluate(gold_path=gold, kg_dbs=[db])
     assert res["gold_count"] == 1
     assert res["avg_fidelity_f1"] > 0.6

@@ -1,0 +1,21 @@
+{
+  "paper_id": "2012.09271",
+  "domain": "cs_math_logic",
+  "role": "logic_or_cs_math",
+  "fetch_ok": true,
+  "tex_file_count": 8,
+  "root_tex_count": 1,
+  "expanded_root_count": 1,
+  "macro_count": 8,
+  "environment_alias_count": 3,
+  "theorem_count": 3,
+  "mistral_api_key_set": false,
+  "translation_status": "not_run_missing_mistral_api_key",
+  "proof_status": "not_run_missing_mistral_api_key",
+  "error": "",
+  "main_tex": "output/paper_sources/golden10/2012.09271/balanced_product_codes.tex",
+  "theorem_output_truncated": false,
+  "paper_status": "VALID_STATEMENT_UNPROVEN",
+  "dominant_blocker": "api_or_runtime_failure",
+  "elapsed_s": 0.28
+}

@@ -1,0 +1,60 @@
+[
+  {
+    "theorem_name": "main_theorem",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "equ1",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "momentum_bound_lemma",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "proof_4",
+    "status": "INTERMEDIARY_PROVEN",
+    "grounding_status": "",
+    "gate_failures": [
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "second_moment_lemma",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "proof_6",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  }
+]

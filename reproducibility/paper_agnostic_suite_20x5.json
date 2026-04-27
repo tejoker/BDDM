@@ -1,0 +1,440 @@
+{
+  "suite_name": "paper_agnostic_20x5",
+  "source": "arXiv API",
+  "per_domain_target": 20,
+  "domain_category_queries": {
+    "probability_statistics": [
+      "math.PR",
+      "stat.TH"
+    ],
+    "analysis_pde": [
+      "math.AP",
+      "math.CA"
+    ],
+    "optimization": [
+      "math.OC",
+      "cs.LG"
+    ],
+    "algebra_number_theory": [
+      "math.AG",
+      "math.NT",
+      "math.RA"
+    ],
+    "remaining_cs_math": [
+      "cs.LO",
+      "cs.DS",
+      "cs.CC",
+      "math.CO"
+    ]
+  },
+  "domain_counts": {
+    "probability_statistics": 20,
+    "analysis_pde": 20,
+    "optimization": 20,
+    "algebra_number_theory": 20,
+    "remaining_cs_math": 20
+  },
+  "notes": [],
+  "papers": [
+    {
+      "paper_id": "2604.21884",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21745",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21734",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21669",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21663",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21591",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21583",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21578",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21504",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21389",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21364",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21341",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21162",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21143",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21142",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21113",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21086",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21049",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.20984",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.20827",
+      "domain": "probability_statistics"
+    },
+    {
+      "paper_id": "2604.21821",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21756",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21727",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21583",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21506",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21339",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21319",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21314",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21299",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21217",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21213",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21200",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21185",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21174",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21145",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21143",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21047",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.20968",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.20840",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.20798",
+      "domain": "analysis_pde"
+    },
+    {
+      "paper_id": "2604.21799",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21693",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21674",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21641",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21616",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21578",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21577",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21526",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21451",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21443",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21371",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21368",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21329",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21270",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21259",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21248",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21179",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21177",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21132",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21065",
+      "domain": "optimization"
+    },
+    {
+      "paper_id": "2604.21925",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21900",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21880",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21709",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21661",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21653",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21521",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21398",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21367",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21358",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21303",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21242",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.20970",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.20729",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.20674",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.20662",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.20637",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.20440",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.20427",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.20426",
+      "domain": "algebra_number_theory"
+    },
+    {
+      "paper_id": "2604.21688",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.21603",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.21515",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.21172",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.21084",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.20807",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.20946",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.20754",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.20603",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.20345",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.20253",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.19947",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.19475",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.19459",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.19431",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.19382",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.19266",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.19251",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.19212",
+      "domain": "remaining_cs_math"
+    },
+    {
+      "paper_id": "2604.19036",
+      "domain": "remaining_cs_math"
+    }
+  ]
+}

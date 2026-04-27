@@ -40,9 +40,24 @@ wheels/
 *_ANALYSIS.md
 *_DIAGNOSIS.md
 
+# Internal planning / audit docs — not for public consumption
+/docs/internal/
+
+# Draft/scratch paper outputs (use paper_*/ for the clean public versions)
+/poc_2304.09598/
+
+# Graphify runtime output
+graphify-out/
+
 # Lean scratch files generated during proof search
 Desol/_tmp_*.lean
+Desol/_verify_*.lean
 Desol/Bench*.lean
+ExtractData.lean
+Desol/ReplAnchor.lean
+
+# Vendored/path dependencies: keep source, ignore local Lake build caches
+third_party/**/.lake/
 
 # Runtime artifacts
 hello_world_api_telemetry.json
@@ -57,4 +72,3 @@ quick_report_remote.json
 *.swo
 *~
 .DS_Store
-

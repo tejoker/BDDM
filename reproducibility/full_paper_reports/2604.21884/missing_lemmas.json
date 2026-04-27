@@ -1,0 +1,687 @@
+{
+  "schema_version": "1.1.0",
+  "purpose": "Queue for replacing paper-local axioms with unconditional Lean lemmas/definitions.",
+  "total_obligations": 6,
+  "counts_by_category": {
+    "easy_missing_definition": 0,
+    "local_paper_lemma": 4,
+    "missing_mathlib_theorem": 0,
+    "deep_domain_theory_gap": 2,
+    "bad_translation_artifact": 0
+  },
+  "definition_stub_grounding": {
+    "count": 20,
+    "total_references": 44,
+    "items": [
+      {
+        "symbol": "B_N",
+        "debt_item": "paper_definition_stub:B_N",
+        "needed_by": [
+          "lem_centered_cov"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:B_N",
+          "symbol": "B_N",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `B_N` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "D_N",
+        "debt_item": "paper_definition_stub:D_N",
+        "needed_by": [
+          "prop_det_contraction"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:D_N",
+          "symbol": "D_N",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `D_N` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "MixedOperator",
+        "debt_item": "paper_definition_stub:MixedOperator",
+        "needed_by": [
+          "thm_no_singular_centering"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:MixedOperator",
+          "symbol": "MixedOperator",
+          "grounding_kind": "transparent_operator_or_distribution_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `MixedOperator` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "a",
+        "debt_item": "paper_definition_stub:a",
+        "needed_by": [
+          "lem_volterra"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:a",
+          "symbol": "a",
+          "grounding_kind": "transparent_scalar_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `a` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "remark_10",
+        "debt_item": "paper_definition_stub:remark_10",
+        "needed_by": [
+          "remark_10"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:remark_10",
+          "symbol": "remark_10",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `remark_10` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "remark_18",
+        "debt_item": "paper_definition_stub:remark_18",
+        "needed_by": [
+          "remark_18"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:remark_18",
+          "symbol": "remark_18",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `remark_18` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "remark_9",
+        "debt_item": "paper_definition_stub:remark_9",
+        "needed_by": [
+          "remark_9"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:remark_9",
+          "symbol": "remark_9",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `remark_9` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "HSobolev",
+        "debt_item": "paper_definition_stub:HSobolev",
+        "needed_by": [
+          "thm_conditional_closure_intro",
+          "remark_18"
+        ],
+        "needed_by_count": 2,
+        "mathlib_close_match": true,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:HSobolev",
+          "symbol": "HSobolev",
+          "grounding_kind": "mathlib_close_definition_stub",
+          "grounding_source": "paper_symbol_inventory.mathlib_close_match",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.mathlib_close_match",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `HSobolev` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "theta",
+        "debt_item": "paper_definition_stub:theta",
+        "needed_by": [
+          "prop_mid_completion",
+          "prop_det_contraction"
+        ],
+        "needed_by_count": 2,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:theta",
+          "symbol": "theta",
+          "grounding_kind": "transparent_scalar_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `theta` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "Γ1",
+        "debt_item": "paper_definition_stub:Γ1",
+        "needed_by": [
+          "prop_cubic_quartic_baseline",
+          "remark_10"
+        ],
+        "needed_by_count": 2,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:Γ1",
+          "symbol": "Γ1",
+          "grounding_kind": "transparent_operator_or_distribution_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `Γ1` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "Γ2",
+        "debt_item": "paper_definition_stub:Γ2",
+        "needed_by": [
+          "prop_cubic_quartic_baseline",
+          "remark_10"
+        ],
+        "needed_by_count": 2,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:Γ2",
+          "symbol": "Γ2",
+          "grounding_kind": "transparent_operator_or_distribution_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `Γ2` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "Ψ1",
+        "debt_item": "paper_definition_stub:Ψ1",
+        "needed_by": [
+          "thm_baseline_lift",
+          "prop_cubic_quartic_baseline"
+        ],
+        "needed_by_count": 2,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:Ψ1",
+          "symbol": "Ψ1",
+          "grounding_kind": "transparent_operator_or_distribution_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `Ψ1` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "Ψ2",
+        "debt_item": "paper_definition_stub:Ψ2",
+        "needed_by": [
+          "thm_baseline_lift",
+          "prop_cubic_quartic_baseline"
+        ],
+        "needed_by_count": 2,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:Ψ2",
+          "symbol": "Ψ2",
+          "grounding_kind": "transparent_operator_or_distribution_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `Ψ2` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "C",
+        "debt_item": "paper_definition_stub:C",
+        "needed_by": [
+          "cor_conditional_cutoff",
+          "prop_det_contraction",
+          "ass_strichartz"
+        ],
+        "needed_by_count": 3,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:C",
+          "symbol": "C",
+          "grounding_kind": "transparent_scalar_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `C` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "I_i",
+        "debt_item": "paper_definition_stub:I_i",
+        "needed_by": [
+          "rem_status_emphasis",
+          "remark_9",
+          "rem_primitive_route"
+        ],
+        "needed_by_count": 3,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:I_i",
+          "symbol": "I_i",
+          "grounding_kind": "transparent_operator_or_distribution_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `I_i` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "ξ1",
+        "debt_item": "paper_definition_stub:ξ1",
+        "needed_by": [
+          "thm_baseline_lift",
+          "rem_status_emphasis",
+          "remark_9"
+        ],
+        "needed_by_count": 3,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:ξ1",
+          "symbol": "ξ1",
+          "grounding_kind": "transparent_operator_or_distribution_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `ξ1` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "ξ2",
+        "debt_item": "paper_definition_stub:ξ2",
+        "needed_by": [
+          "thm_baseline_lift",
+          "rem_status_emphasis",
+          "remark_9"
+        ],
+        "needed_by_count": 3,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:ξ2",
+          "symbol": "ξ2",
+          "grounding_kind": "transparent_operator_or_distribution_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `ξ2` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "C_T",
+        "debt_item": "paper_definition_stub:C_T",
+        "needed_by": [
+          "thm_baseline_lift",
+          "lem_centered_cov",
+          "thm_no_singular_centering",
+          "ass_strichartz"
+        ],
+        "needed_by_count": 4,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:C_T",
+          "symbol": "C_T",
+          "grounding_kind": "transparent_operator_or_distribution_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `C_T` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "s1",
+        "debt_item": "paper_definition_stub:s1",
+        "needed_by": [
+          "prop_mid_completion",
+          "thm_conditional_closure_intro",
+          "prop_det_contraction",
+          "ass_strichartz"
+        ],
+        "needed_by_count": 4,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:s1",
+          "symbol": "s1",
+          "grounding_kind": "transparent_scalar_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `s1` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "s2",
+        "debt_item": "paper_definition_stub:s2",
+        "needed_by": [
+          "prop_mid_completion",
+          "thm_conditional_closure_intro",
+          "cor_conditional_cutoff",
+          "prop_det_contraction",
+          "ass_strichartz"
+        ],
+        "needed_by_count": 5,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:s2",
+          "symbol": "s2",
+          "grounding_kind": "transparent_scalar_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `s2` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      }
+    ],
+    "claim_scope": "Definition stubs are reported separately from theorem/lemma obligations; they do not count as proved paper claims."
+  },
+  "attack_queue": [
+    {
+      "obligation_id": "b70602e5797087c3",
+      "theorem_name": "prop_cubic_quartic_baseline",
+      "status": "UNRESOLVED",
+      "proof_method": "translation_repaired_pending_proof",
+      "debt_item": "paper_symbol:Θ",
+      "debt_category": "local_paper_lemma",
+      "grounding_metadata": {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_symbol:Θ",
+        "symbol": "Θ",
+        "grounding_kind": "domain_symbol_obligation",
+        "grounding_source": "paper_symbol_reference",
+        "grounding_trust": "unproved_domain_symbol",
+        "paper_agnostic_rule_id": "domain_symbol.requires_domain_pack_or_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      },
+      "proof_countable": false,
+      "requires_verified_replacement": true,
+      "attack_priority": 30,
+      "missing_lemma_name": "missing_prop_cubic_quartic_baseline_missing_b70602e5",
+      "suggested_action": "Extract the paper lemma/data assumption as a named Lean lemma and prove it before the theorem.",
+      "axiom_debt_hash": "7f51b432b0322ce4",
+      "result_label": "not_verified_with_paper_local_axiom_debt"
+    },
+    {
+      "obligation_id": "d149b3e22d7c9ecf",
+      "theorem_name": "prop_sharpness",
+      "status": "UNRESOLVED",
+      "proof_method": "translation_repaired_pending_proof",
+      "debt_item": "paper_local_lemma:DyadicBlockBound",
+      "debt_category": "local_paper_lemma",
+      "grounding_metadata": {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_local_lemma:DyadicBlockBound",
+        "symbol": "DyadicBlockBound",
+        "grounding_kind": "paper_local_lemma_obligation",
+        "grounding_source": "paper_statement_or_domain_pack",
+        "grounding_trust": "unproved_local_theory_obligation",
+        "paper_agnostic_rule_id": "local_lemma.requires_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      },
+      "proof_countable": false,
+      "requires_verified_replacement": true,
+      "attack_priority": 30,
+      "missing_lemma_name": "missing_prop_sharpness_DyadicBlockBound_d149b3e2",
+      "suggested_action": "Extract the paper lemma/data assumption as a named Lean lemma and prove it before the theorem.",
+      "axiom_debt_hash": "9d1a8c94d90397f6",
+      "result_label": "not_verified_with_paper_local_axiom_debt"
+    },
+    {
+      "obligation_id": "1761391c9a653726",
+      "theorem_name": "rem_status_emphasis",
+      "status": "UNRESOLVED",
+      "proof_method": "translation_repaired_pending_proof",
+      "debt_item": "paper_local_lemma:VolterraOscillation",
+      "debt_category": "local_paper_lemma",
+      "grounding_metadata": {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_local_lemma:VolterraOscillation",
+        "symbol": "VolterraOscillation",
+        "grounding_kind": "paper_local_lemma_obligation",
+        "grounding_source": "paper_statement_or_domain_pack",
+        "grounding_trust": "unproved_local_theory_obligation",
+        "paper_agnostic_rule_id": "local_lemma.requires_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      },
+      "proof_countable": false,
+      "requires_verified_replacement": true,
+      "attack_priority": 30,
+      "missing_lemma_name": "missing_rem_status_emphasis_VolterraOscillation_1761391c",
+      "suggested_action": "Extract the paper lemma/data assumption as a named Lean lemma and prove it before the theorem.",
+      "axiom_debt_hash": "a51f08f14d225e5e",
+      "result_label": "not_verified_with_paper_local_axiom_debt"
+    },
+    {
+      "obligation_id": "3b0ca45338a033f2",
+      "theorem_name": "thm_baseline_lift",
+      "status": "UNRESOLVED",
+      "proof_method": "translation_repaired_pending_proof",
+      "debt_item": "paper_symbol:Θ",
+      "debt_category": "local_paper_lemma",
+      "grounding_metadata": {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_symbol:Θ",
+        "symbol": "Θ",
+        "grounding_kind": "domain_symbol_obligation",
+        "grounding_source": "paper_symbol_reference",
+        "grounding_trust": "unproved_domain_symbol",
+        "paper_agnostic_rule_id": "domain_symbol.requires_domain_pack_or_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      },
+      "proof_countable": false,
+      "requires_verified_replacement": true,
+      "attack_priority": 30,
+      "missing_lemma_name": "missing_thm_baseline_lift_missing_3b0ca453",
+      "suggested_action": "Extract the paper lemma/data assumption as a named Lean lemma and prove it before the theorem.",
+      "axiom_debt_hash": "b5f6f1e2706f5038",
+      "result_label": "not_verified_with_paper_local_axiom_debt"
+    },
+    {
+      "obligation_id": "dbdc147452268e6e",
+      "theorem_name": "cor_conditional_cutoff",
+      "status": "UNRESOLVED",
+      "proof_method": "translation_repaired_pending_proof",
+      "debt_item": "paper_symbol:cutoff_enhanced_data",
+      "debt_category": "deep_domain_theory_gap",
+      "grounding_metadata": {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_symbol:cutoff_enhanced_data",
+        "symbol": "cutoff_enhanced_data",
+        "grounding_kind": "domain_symbol_obligation",
+        "grounding_source": "paper_symbol_reference",
+        "grounding_trust": "unproved_domain_symbol",
+        "paper_agnostic_rule_id": "domain_symbol.requires_domain_pack_or_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      },
+      "proof_countable": false,
+      "requires_verified_replacement": true,
+      "attack_priority": 90,
+      "missing_lemma_name": "missing_cor_conditional_cutoff_cutoff_enhanced_data_dbdc1474",
+      "suggested_action": "Requires a domain-pack extension or imported formal library before this theorem can be unconditional.",
+      "axiom_debt_hash": "b6692e48a258b364",
+      "result_label": "not_verified_with_paper_local_axiom_debt"
+    },
+    {
+      "obligation_id": "8e4cd6ca358d3ae5",
+      "theorem_name": "cor_conditional_cutoff",
+      "status": "UNRESOLVED",
+      "proof_method": "translation_repaired_pending_proof",
+      "debt_item": "paper_symbol:paracontrolled_solution",
+      "debt_category": "deep_domain_theory_gap",
+      "grounding_metadata": {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_symbol:paracontrolled_solution",
+        "symbol": "paracontrolled_solution",
+        "grounding_kind": "domain_symbol_obligation",
+        "grounding_source": "paper_symbol_reference",
+        "grounding_trust": "unproved_domain_symbol",
+        "paper_agnostic_rule_id": "domain_symbol.requires_domain_pack_or_verified_replacement",
+        "proof_countable": false,
+        "hidden_assumption": true,
+        "requires_verified_replacement": true
+      },
+      "proof_countable": false,
+      "requires_verified_replacement": true,
+      "attack_priority": 90,
+      "missing_lemma_name": "missing_cor_conditional_cutoff_paracontrolled_solution_8e4cd6ca",
+      "suggested_action": "Requires a domain-pack extension or imported formal library before this theorem can be unconditional.",
+      "axiom_debt_hash": "b6692e48a258b364",
+      "result_label": "not_verified_with_paper_local_axiom_debt"
+    }
+  ]
+}

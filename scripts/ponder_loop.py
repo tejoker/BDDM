@@ -10,6 +10,7 @@ Protocol enforced by the system prompt:
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import sys
@@ -33,6 +34,11 @@ try:
     from premise_retrieval import PremiseRetriever
 except Exception:
     PremiseRetriever = None  # type: ignore[assignment]
+try:
+    from repair_feedback_dataset import format_repair_examples, retrieve_repair_examples
+except Exception:
+    format_repair_examples = None  # type: ignore[assignment]
+    retrieve_repair_examples = None  # type: ignore[assignment]
 
 SYSTEM_PROMPT = (
     "You are Leanstral. You must think deeply about the current Lean 4 proof state before acting. "
@@ -457,6 +463,215 @@ def _extract_best_effort_draft(text: str) -> str:
         return raw
 
     raise RuntimeError("Model returned an empty draft")
+
+
+_PROOF_PLAN_SYSTEM_PROMPT = (
+    "You are Leanstral in proof-planning mode. "
+    "Return only JSON object with keys: "
+    "`goal_shape` (string), `strategy` (string), `steps` (array of short tactic intents), "
+    "`risk_flags` (array of strings). "
+    "Do not output prose, markdown, or code fences."
+)
+
+
+_PLAN_TO_DRAFT_SYSTEM_PROMPT = (
+    "You are Leanstral in structured emission mode. "
+    "Given a Lean state and a plan JSON, emit exactly one <draft>...</draft> block. "
+    "Each line must be one executable Lean tactic. "
+    "Never emit `sorry` or `admit`."
+)
+
+
+def _extract_first_json_object(text: str) -> dict[str, Any] | None:
+    raw = (text or "").strip()
+    if not raw:
+        return None
+    start = raw.find("{")
+    if start < 0:
+        return None
+    depth = 0
+    for i in range(start, len(raw)):
+        ch = raw[i]
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                chunk = raw[start : i + 1]
+                try:
+                    obj = json.loads(chunk)
+                except Exception:
+                    return None
+                return obj if isinstance(obj, dict) else None
+    return None
+
+
+def _goal_shape_from_state(lean_state: str) -> str:
+    goal = ""
+    for ln in (lean_state or "").splitlines():
+        if "⊢" in ln:
+            goal = ln.split("⊢", 1)[1].strip()
+            break
+    if not goal:
+        return "unknown"
+    if "↔" in goal:
+        return "iff"
+    if "∃" in goal:
+        return "exists"
+    if "∀" in goal:
+        return "forall"
+    if any(tok in goal for tok in ("≤", "≥", "<", ">")):
+        return "inequality"
+    if "=" in goal:
+        return "equality"
+    if "→" in goal or "->" in goal:
+        return "implication"
+    if "∧" in goal:
+        return "conjunction"
+    return "prop"
+
+
+def _parse_premise_names(premise_context: str, max_names: int = 32) -> list[str]:
+    names: list[str] = []
+    for ln in (premise_context or "").splitlines():
+        s = ln.strip()
+        if not s.startswith("- "):
+            continue
+        body = s[2:]
+        name = body.split(":", 1)[0].strip()
+        if name and re.match(r"^[A-Za-z_][A-Za-z0-9_.']*$", name):
+            names.append(name)
+        if len(names) >= max_names:
+            break
+    return names
+
+
+def generate_structured_proof_plan(
+    *,
+    lean_state: str,
+    client: Mistral,
+    model: str,
+    informal_proof_hint: str = "",
+    premise_context: str = "",
+    api_log_hook: ApiLogHook | None = None,
+) -> dict[str, Any]:
+    goal_shape = _goal_shape_from_state(lean_state)
+    parts = [f"Lean state:\n{lean_state}", f"Goal shape: {goal_shape}"]
+    if informal_proof_hint.strip():
+        parts.append(f"Informal proof hint:\n{informal_proof_hint.strip()}")
+    if premise_context.strip():
+        parts.append(f"Retrieved premises:\n{premise_context.strip()}")
+    parts.append(
+        "Generate concise tactic-intent steps that are executable on this goal shape. "
+        "Avoid intro tactics unless binders/implications exist."
+    )
+    _, text = _chat_complete(
+        client=client,
+        model=model,
+        messages=[
+            {"role": "system", "content": _PROOF_PLAN_SYSTEM_PROMPT},
+            {"role": "user", "content": "\n\n".join(parts)},
+        ],
+        temperature=0.0,
+        max_tokens=420,
+        purpose="generate_structured_proof_plan",
+        api_log_hook=api_log_hook,
+    )
+    obj = _extract_first_json_object(text) or {}
+    steps = obj.get("steps", [])
+    if not isinstance(steps, list):
+        steps = []
+    clean_steps = [str(x).strip() for x in steps if str(x).strip()][:8]
+    return {
+        "goal_shape": str(obj.get("goal_shape", goal_shape) or goal_shape),
+        "strategy": str(obj.get("strategy", "")).strip(),
+        "steps": clean_steps,
+        "risk_flags": [str(x).strip() for x in (obj.get("risk_flags", []) if isinstance(obj.get("risk_flags", []), list) else []) if str(x).strip()],
+    }
+
+
+def generate_structured_draft_candidates(
+    *,
+    lean_state: str,
+    client: Mistral,
+    model: str,
+    informal_proof_hint: str = "",
+    premise_context: str = "",
+    retrieval_index_path: str = "",
+    retrieval_top_k: int = 12,
+    n_candidates: int = 4,
+    temperature: float = 0.2,
+    api_log_hook: ApiLogHook | None = None,
+) -> list[str]:
+    retrieved_context = ""
+    if retrieval_index_path:
+        retrieved_context = retrieve_premise_context(
+            lean_state=lean_state,
+            retrieval_index_path=retrieval_index_path,
+            top_k=retrieval_top_k,
+            use_tier_preference=True,
+        )
+    effective_premise_context = premise_context.strip()
+    if retrieved_context:
+        effective_premise_context = (
+            f"{effective_premise_context}\n- - -\n{retrieved_context}".strip()
+            if effective_premise_context
+            else retrieved_context
+        )
+
+    plan = generate_structured_proof_plan(
+        lean_state=lean_state,
+        client=client,
+        model=model,
+        informal_proof_hint=informal_proof_hint,
+        premise_context=effective_premise_context,
+        api_log_hook=api_log_hook,
+    )
+    allowed_lemmas = _parse_premise_names(effective_premise_context)
+
+    drafts: list[str] = []
+    for i in range(max(1, int(n_candidates))):
+        cand_temp = min(1.0, max(0.0, float(temperature) + 0.08 * i))
+        user_parts = [
+            f"Current Lean state:\n{lean_state}",
+            f"Plan JSON:\n{json.dumps(plan, ensure_ascii=False, indent=2)}",
+            f"Goal shape: {_goal_shape_from_state(lean_state)}",
+        ]
+        if informal_proof_hint.strip():
+            user_parts.append(f"Informal proof hint:\n{informal_proof_hint.strip()}")
+        if effective_premise_context:
+            user_parts.append(f"Retrieved premises:\n{effective_premise_context}")
+        if allowed_lemmas:
+            user_parts.append("Allowed lemma names:\n" + "\n".join(f"- {x}" for x in allowed_lemmas))
+        user_parts.append(
+            "Emit a short executable draft. "
+            "Do not use intro/intros/introN/rintro unless the goal has binders or implication."
+        )
+        _, raw = _chat_complete(
+            client=client,
+            model=model,
+            messages=[
+                {"role": "system", "content": _PLAN_TO_DRAFT_SYSTEM_PROMPT},
+                {"role": "user", "content": "\n\n".join(user_parts)},
+            ],
+            temperature=cand_temp,
+            max_tokens=900,
+            purpose=f"generate_structured_draft_candidate_{i+1}",
+            api_log_hook=api_log_hook,
+        )
+        draft = _extract_best_effort_draft(raw)
+        if draft.strip():
+            drafts.append(draft.strip())
+    # Keep unique candidates in order.
+    out: list[str] = []
+    seen: set[str] = set()
+    for d in drafts:
+        key = "\n".join(ln.strip() for ln in d.splitlines() if ln.strip())
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        out.append(d)
+    return out
 
 
 def _has_continue(text: str) -> bool:
@@ -1007,6 +1222,30 @@ def repair_full_proof_draft(
         "- Only use `linarith`/`omega` if the goal is a linear numeric (in)equality."
     )
 
+    goal_shape_advice = ""
+    low_error = (error_feedback or "").lower()
+    low_state = (lean_state or "").lower()
+    if (
+        "intro" in low_error
+        and ("no additional binders" in low_error or "not an implication" in low_error or "intro tactic failed" in low_error)
+    ):
+        if "⊢ ∃" in (lean_state or "") or "exists" in low_state:
+            goal_shape_advice = (
+                "Goal-shape repair: the previous `intro` failed on a non-binder existential goal. "
+                "Do not use `intro`; prefer `use ...` or `refine ⟨...⟩` if a witness is available."
+            )
+        elif any(tok in (lean_state or "") for tok in ("⊢", "≤", "≥", "=")):
+            goal_shape_advice = (
+                "Goal-shape repair: the previous `intro` failed because the target has no binder. "
+                "Do not use `intro`; first search local hypotheses for an exact match, then try `exact h`, `rfl`, "
+                "`linarith`, or a constructor/refine tactic matching the goal."
+            )
+        else:
+            goal_shape_advice = (
+                "Goal-shape repair: do not use `intro` unless the pretty-printed goal is an implication, forall, "
+                "or lambda binder."
+            )
+
     # Inject exact-match hits for the repair prompt too.
     exact_hits = _exact_match_premise_lookup(lean_state, retrieval_index_path)
     if exact_hits:
@@ -1022,11 +1261,39 @@ def repair_full_proof_draft(
                 f"{exact_hits}"
             )
 
+    repair_examples_context = ""
+    if retrieve_repair_examples is not None and format_repair_examples is not None:
+        dataset_path = Path(
+            os.getenv(
+                "DESOL_REPAIR_FEEDBACK_DATASET",
+                "output/flywheel/april_repair_dataset.jsonl",
+            )
+        )
+        if dataset_path.exists():
+            try:
+                repair_examples = retrieve_repair_examples(
+                    dataset_path=dataset_path,
+                    error_message=error_feedback,
+                    lean_state=lean_state,
+                    current_draft=current_draft,
+                    limit=int(os.getenv("DESOL_REPAIR_FEEDBACK_TOP_K", "3")),
+                )
+                repair_examples_context = format_repair_examples(repair_examples)
+            except Exception:
+                repair_examples_context = ""
+
     user_parts = [
         f"Current Lean 4 proof state:\n{lean_state}",
         f"Current failing draft:\n{current_draft}",
         f"Lean error feedback:\n{error_feedback}",
     ]
+    if goal_shape_advice:
+        user_parts.append(goal_shape_advice)
+    if repair_examples_context:
+        user_parts.append(
+            "Similar successful DESol repair examples:\n"
+            f"{repair_examples_context}"
+        )
     if informal_proof_hint.strip():
         user_parts.append(f"Original informal proof hint:\n{informal_proof_hint.strip()}")
     if effective_premise_context:

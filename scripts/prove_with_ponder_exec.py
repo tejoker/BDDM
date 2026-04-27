@@ -36,6 +36,12 @@ _NAME_VALIDATION_CACHE: dict[tuple[str, str], bool] = {}
 
 def classify_lean_error(error_text: str) -> str:
     text = (error_text or "").lower()
+    if "blocked_non_actionable_tactic" in text:
+        return "policy-blocked"
+    if ("tactic `assumption` failed" in text) or ("assumption" in text and "failed" in text):
+        return "assumption-mismatch"
+    if "tactic `rfl` failed" in text:
+        return "reflexivity-mismatch"
     if any(k in text for k in ("unknown constant", "unknown identifier", "does not exist")):
         return "name-resolution"
     if any(k in text for k in ("type mismatch", "application type mismatch")):
@@ -50,6 +56,16 @@ def classify_lean_error(error_text: str) -> str:
 
 
 def repair_hint_for_error_class(error_class: str) -> str:
+    if error_class == "assumption-mismatch":
+        return (
+            "Repair strategy[assumption-mismatch]: avoid bare `assumption` unless a local hypothesis "
+            "exactly matches the goal; prefer `intro`/`constructor`/`apply`/`exact` with explicit hypothesis names."
+        )
+    if error_class == "reflexivity-mismatch":
+        return (
+            "Repair strategy[reflexivity-mismatch]: avoid `rfl` unless goal is syntactically reflexive; "
+            "use `intro`/`constructor`/`exact` based on goal shape."
+        )
     if error_class == "name-resolution":
         return (
             "Repair strategy[name-resolution]: use only verified theorem names from retrieved premises; "
@@ -138,6 +154,142 @@ def _split_draft_into_tactics(draft: str) -> list[str]:
     return tactics
 
 
+def _goal_text_from_state_pp(state_pp: str) -> str:
+    for ln in (state_pp or "").splitlines():
+        if "⊢" in ln:
+            goal = ln.split("⊢", 1)[1].strip()
+            # Drop inline comments that may contain unrelated theorem text/signatures.
+            goal = goal.split("--", 1)[0].strip()
+            return goal
+    return ""
+
+
+def _goal_allows_intro(goal_text: str) -> bool:
+    g = (goal_text or "").strip()
+    if not g:
+        return False
+    starts_with_binder = g.startswith("∀") or g.startswith("∃")
+
+    # Accept intro on top-level implication only (avoid notation arrows like `→ₗ`).
+    has_implication = False
+    depth = 0
+    i = 0
+    while i < len(g):
+        ch = g[i]
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth = max(0, depth - 1)
+        elif depth == 0 and ch == "→":
+            prev_c = g[i - 1] if i > 0 else " "
+            next_c = g[i + 1] if (i + 1) < len(g) else " "
+            if prev_c.isspace() and next_c.isspace():
+                has_implication = True
+                break
+        elif depth == 0 and g.startswith("->", i):
+            prev_c = g[i - 1] if i > 0 else " "
+            next_c = g[i + 2] if (i + 2) < len(g) else " "
+            if prev_c.isspace() and next_c.isspace():
+                has_implication = True
+                break
+        i += 1
+    return starts_with_binder or has_implication or ("exists" in g.lower())
+
+
+def _is_hard_goal(goal_text: str) -> bool:
+    g = (goal_text or "").strip()
+    if not g:
+        return False
+    return any(tok in g for tok in ("∧", "→", "->", "∃", "∃!", "↔", "ExistsUnique"))
+
+
+def _strip_outer_parens(text: str) -> str:
+    s = (text or "").strip()
+    while s.startswith("(") and s.endswith(")"):
+        inner = s[1:-1].strip()
+        if not inner:
+            break
+        s = inner
+    return s
+
+
+def _split_top_level_eq(goal_text: str) -> tuple[str, str] | None:
+    g = (goal_text or "").strip()
+    if not g:
+        return None
+    depth = 0
+    for i, ch in enumerate(g):
+        if ch in "([{":
+            depth += 1
+            continue
+        if ch in ")]}":
+            depth = max(0, depth - 1)
+            continue
+        if ch != "=" or depth != 0:
+            continue
+        prev_c = g[i - 1] if i > 0 else ""
+        next_c = g[i + 1] if i + 1 < len(g) else ""
+        # Skip <=, >=, == style composites.
+        if prev_c in "<>=" or next_c == "=":
+            continue
+        lhs = g[:i].strip()
+        rhs = g[i + 1 :].strip()
+        if lhs and rhs:
+            return lhs, rhs
+    return None
+
+
+def _goal_allows_rfl(goal_text: str) -> bool:
+    split = _split_top_level_eq(goal_text)
+    if split is None:
+        return False
+    lhs, rhs = split
+    lhs_n = re.sub(r"\s+", "", _strip_outer_parens(lhs))
+    rhs_n = re.sub(r"\s+", "", _strip_outer_parens(rhs))
+    return bool(lhs_n and rhs_n and lhs_n == rhs_n)
+
+
+def _has_matching_hypothesis(*, state_pp: str, goal_text: str) -> bool:
+    goal_n = re.sub(r"\s+", "", _strip_outer_parens(goal_text))
+    if not goal_n:
+        return False
+    for ln in (state_pp or "").splitlines():
+        s = ln.strip()
+        if not s or "⊢" in s or ":" not in s:
+            continue
+        hyp_ty = s.split(":", 1)[1].split("--", 1)[0].strip()
+        hyp_n = re.sub(r"\s+", "", _strip_outer_parens(hyp_ty))
+        if hyp_n and hyp_n == goal_n:
+            return True
+    return False
+
+
+def _tactic_actionability_issue(*, state_pp: str, tactic: str) -> str | None:
+    t = (tactic or "").strip()
+    if not t:
+        return "empty_tactic"
+    # `introN` is not a Lean tactic and repeatedly appears as model noise.
+    if re.search(r"\bintroN\b", t):
+        return "unsupported_introN"
+    goal = _goal_text_from_state_pp(state_pp)
+    if re.search(r"\brfl\b", t):
+        if not _goal_allows_rfl(goal):
+            return "rfl_on_non_reflexive_goal"
+    # Prevent repeatedly wasting attempts on intro tactics when no binders exist.
+    if re.match(r"^(intro|intros|rintro)\b", t):
+        if not _goal_allows_intro(goal):
+            return "intro_on_non_binder_goal"
+    # Hard policy for full-closure lane: ban `assumption` tactics entirely.
+    # They frequently trap repair loops on semantically hard goals.
+    if re.search(r"\bassumption\b", t):
+        return "assumption_disabled_policy"
+    # Block auto-tactics that frequently degrade into assumption-family dead-ends
+    # and hide semantic mismatches.
+    if re.search(r"\b(aesop|solve_by_elim|tauto|trivial)\b", t):
+        return "hard_goal_auto_tactic_disabled"
+    return None
+
+
 def _execute_draft(
     *,
     dojo: Any,
@@ -165,6 +317,20 @@ def _execute_draft(
         return False, state, records, "line=1; message=empty draft"
 
     for idx, tactic in enumerate(tactics, start=1):
+        actionability_issue = _tactic_actionability_issue(state_pp=getattr(state, "pp", ""), tactic=tactic)
+        if actionability_issue:
+            detail = f"line={idx}; message=blocked_non_actionable_tactic:{actionability_issue}"
+            records.append(
+                StepRecord(
+                    step=round_idx,
+                    attempt=idx,
+                    tactic=tactic,
+                    model_turns=1,
+                    result="lean-error",
+                    detail=detail,
+                )
+            )
+            return False, state, records, detail
         outcome = dojo.run_tac(state, tactic)
 
         if _is_tactic_state(outcome):
@@ -283,4 +449,3 @@ def validate_lean_name(name: str, project_root: Path) -> bool:
 
 
 _ensure_lake_on_path()
-

@@ -1,0 +1,199 @@
+[
+  {
+    "theorem_name": "Thm_Glo2",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ]
+  },
+  {
+    "theorem_name": "alpha_0",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ]
+  },
+  {
+    "theorem_name": "Thm_Blowup_O",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "no_paper_axiom_debt"
+    ]
+  },
+  {
+    "theorem_name": "Thm_Blowup_O2",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent",
+      "no_paper_axiom_debt"
+    ]
+  },
+  {
+    "theorem_name": "Thm_Blowup_O3",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "no_paper_axiom_debt"
+    ]
+  },
+  {
+    "theorem_name": "infty",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ]
+  },
+  {
+    "theorem_name": "Beta",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ]
+  },
+  {
+    "theorem_name": "thm_9",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Hardy",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "no_paper_axiom_debt"
+    ]
+  },
+  {
+    "theorem_name": "Thm_Folst",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Thm_Blowup_O4",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "Thm_Blowup_O5",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ]
+  },
+  {
+    "theorem_name": "rem_15",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ]
+  },
+  {
+    "theorem_name": "mild_to_weak",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "thm_22",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ]
+  },
+  {
+    "theorem_name": "life",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "no_paper_axiom_debt"
+    ]
+  }
+]

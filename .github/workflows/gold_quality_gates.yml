@@ -12,6 +12,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Bootstrap deterministic gate fixtures
+        run: |
+          python3 scripts/ci_bootstrap_gates.py \
+            --fixture-jsonl reproducibility/ci_fixture_kg_nodes.jsonl \
+            --kg-db output/kg/kg_index.db
       - name: Translation fidelity gate
         run: |
           python3 scripts/eval_translation_fidelity.py \
@@ -25,6 +30,14 @@ jobs:
             --gold reproducibility/gold_linkage_set.jsonl \
             --kg-db output/kg/kg_index.db \
             --out output/reports/gates/linkage_eval.json
+      - name: Assert strict thresholds
+        run: |
+          python3 scripts/ci_assert_quality_gates.py \
+            --translation-report output/reports/gates/translation_fidelity.json \
+            --linkage-report output/reports/gates/linkage_eval.json \
+            --min-translation-f1 0.80 \
+            --min-linkage-f1 0.50 \
+            --kg-db output/kg/kg_index.db
       - name: Upload gate artifacts
         uses: actions/upload-artifact@v4
         with:

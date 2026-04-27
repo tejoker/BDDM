@@ -29,6 +29,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import select
 import subprocess
 import threading
 import time
@@ -65,6 +66,38 @@ class LeanError:
 
 
 TacticResult = Union[TacticState, ProofFinished, LeanError]
+
+_JSON_DECODER = json.JSONDecoder()
+
+
+def _extract_json_message(buffer: str) -> tuple[dict | None, str]:
+    """Extract the first full JSON object from a possibly noisy stream buffer.
+
+    Returns (obj, remainder). If no complete object is available yet, obj is None
+    and remainder contains the preserved suffix for continued accumulation.
+    """
+    start = buffer.find("{")
+    if start < 0:
+        return None, buffer[-4096:]
+
+    probe = start
+    while probe >= 0:
+        frag = buffer[probe:]
+        try:
+            obj, consumed = _JSON_DECODER.raw_decode(frag)
+            remainder = frag[consumed:]
+            return obj, remainder
+        except json.JSONDecodeError as exc:
+            # Looks incomplete: keep buffering from this JSON start.
+            if exc.pos >= max(0, len(frag) - 1):
+                return None, buffer[probe:]
+            # Malformed prefix, search for the next candidate object.
+            nxt = buffer.find("{", probe + 1)
+            if nxt < 0:
+                return None, buffer[probe:]
+            probe = nxt
+
+    return None, buffer[-4096:]
 
 
 # ── REPL server ───────────────────────────────────────────────────────────────
@@ -126,6 +159,14 @@ class LeanREPLServer:
             text=True,
             bufsize=1,
         )
+        try:
+            if self._proc.stdout is not None:
+                os.set_blocking(self._proc.stdout.fileno(), False)
+            if self._proc.stderr is not None:
+                os.set_blocking(self._proc.stderr.fileno(), False)
+        except Exception:
+            # Best-effort; fallback still works with select+readline.
+            pass
         # The repl prints nothing on startup — just wait briefly
         time.sleep(0.3)
         if self._proc.poll() is not None:
@@ -153,46 +194,83 @@ class LeanREPLServer:
 
     def _send(self, payload: dict) -> dict:
         """Send one JSON command and return the parsed response."""
-        if self._proc is None or self._proc.poll() is not None:
-            self.restart()
-
-        # REPL protocol: commands must be terminated with a blank line
         line = json.dumps(payload) + "\n\n"
-        deadline = time.monotonic() + self.timeout
-        try:
-            self._proc.stdin.write(line)
-            self._proc.stdin.flush()
-        except BrokenPipeError:
-            self.restart()
-            self._proc.stdin.write(line)
-            self._proc.stdin.flush()
-
-        # Accumulate lines and try json.loads after each one.
-        # The REPL emits a multi-line JSON object with no trailing blank line.
-        # Attempt parse on every new line — succeeds once the object is complete.
-        buf = ""
-        while time.monotonic() < deadline:
-            line = self._proc.stdout.readline()
-            if not line:
-                if self._proc.poll() is not None:
-                    break  # process exited
-                time.sleep(0.02)
-                continue
-            buf += line
-            # Only attempt parse when the line ends the top-level object
-            stripped = buf.strip()
-            if stripped.endswith("}"):
-                try:
-                    return json.loads(stripped)
-                except json.JSONDecodeError:
-                    pass  # incomplete — keep reading
-
-        if buf.strip():
+        last_err = ""
+        for attempt in range(2):
+            if self._proc is None or self._proc.poll() is not None:
+                self.restart()
+            assert self._proc is not None
+            deadline = time.monotonic() + self.timeout
             try:
-                return json.loads(buf.strip())
-            except json.JSONDecodeError:
-                pass
-        raise TimeoutError(f"REPL did not respond within {self.timeout}s")
+                self._proc.stdin.write(line)
+                self._proc.stdin.flush()
+            except BrokenPipeError:
+                last_err = "broken pipe while writing to repl stdin"
+                if attempt == 0:
+                    self.restart()
+                    continue
+                raise TimeoutError(f"REPL write failed: {last_err}")
+
+            out_buf = ""
+            err_buf = ""
+            while time.monotonic() < deadline:
+                if self._proc.poll() is not None:
+                    break
+                remaining = max(0.0, deadline - time.monotonic())
+                watch = []
+                if self._proc.stdout is not None:
+                    watch.append(self._proc.stdout)
+                if self._proc.stderr is not None:
+                    watch.append(self._proc.stderr)
+                if not watch:
+                    break
+                ready, _, _ = select.select(watch, [], [], min(0.25, remaining))
+                if not ready:
+                    continue
+                for stream in ready:
+                    if stream is self._proc.stdout and self._proc.stdout is not None:
+                        try:
+                            raw = os.read(self._proc.stdout.fileno(), 65536)
+                        except BlockingIOError:
+                            raw = b""
+                        if raw:
+                            out_buf += raw.decode("utf-8", errors="replace")
+                            obj, out_buf = _extract_json_message(out_buf)
+                            if obj is not None:
+                                return obj
+                    elif stream is self._proc.stderr and self._proc.stderr is not None:
+                        try:
+                            raw = os.read(self._proc.stderr.fileno(), 65536)
+                        except BlockingIOError:
+                            raw = b""
+                        if raw:
+                            err_buf += raw.decode("utf-8", errors="replace")
+
+            if out_buf.strip():
+                obj, _ = _extract_json_message(out_buf)
+                if obj is not None:
+                    return obj
+                last_err = f"invalid/non-json payload from REPL stdout: {out_buf.strip()[-220:]}"
+            else:
+                last_err = "empty response from REPL"
+            if err_buf.strip():
+                last_err = f"{last_err}; stderr: {err_buf.strip()[-220:]}"
+
+            if self._proc is not None and self._proc.poll() is not None and self._proc.stderr is not None:
+                try:
+                    stderr_tail = self._proc.stderr.read() or ""
+                    if isinstance(stderr_tail, bytes):
+                        stderr_tail = stderr_tail.decode("utf-8", errors="replace")
+                    stderr_tail = stderr_tail[-500:]
+                    if stderr_tail.strip():
+                        last_err = stderr_tail.strip()
+                except Exception:
+                    pass
+            if attempt == 0:
+                self.restart()
+                continue
+
+        raise TimeoutError(f"REPL did not respond within {self.timeout}s ({last_err})")
 
     # ── high-level API ────────────────────────────────────────────────────────
 
@@ -216,7 +294,7 @@ class LeanREPLServer:
             self._env_id = resp["env"]
         return resp
 
-    def ensure_mathlib_imported(self, anchor_file: str = "Desol/SDE/Basic.lean") -> Union[int, LeanError]:
+    def ensure_mathlib_imported(self, anchor_file: str = "Desol/ReplAnchor.lean") -> Union[int, LeanError]:
         """Load a project file to get an env with Mathlib already elaborated.
 
         Uses the REPL file mode with an existing .lean file — this hits the
@@ -249,9 +327,30 @@ class LeanREPLServer:
         stmt = re.sub(r":=\s*by\b.*$", "", stmt, flags=re.DOTALL).strip()
         stmt = re.sub(r":=\s*sorry\s*$", "", stmt, flags=re.DOTALL).strip()
         stmt = re.sub(r":=\s*$", "", stmt).strip()
+        # Avoid redeclaration collisions when the theorem already exists in loaded env.
+        tmp_name = f"__desol_tmp_{int(time.time() * 1000)}"
+        stmt = re.sub(
+            r"^\s*(theorem|lemma)\s+([^\s(:=]+)",
+            lambda m: f"{m.group(1)} {tmp_name}",
+            stmt,
+            count=1,
+            flags=re.MULTILINE,
+        )
         stmt_with_sorry = stmt + " := by\n  sorry"
 
-        resp = self.elaborate(stmt_with_sorry, env=self._env_id)
+        try:
+            resp = self.elaborate(stmt_with_sorry, env=self._env_id)
+        except TimeoutError as exc:
+            # One hard recovery attempt with fresh REPL process.
+            self.restart()
+            self._env_id = 0
+            env_or_err = self.ensure_mathlib_imported()
+            if isinstance(env_or_err, LeanError):
+                return env_or_err
+            try:
+                resp = self.elaborate(stmt_with_sorry, env=self._env_id)
+            except TimeoutError:
+                return LeanError(str(exc))
         msgs = resp.get("messages", [])
         # Check for errors unrelated to sorry
         real_errors = [
@@ -277,7 +376,10 @@ class LeanREPLServer:
         Response on error: {"message": "..."}  (no proofState key)
         """
         tactic = tactic.strip()
-        resp = self._send({"tactic": tactic, "proofState": proof_state_id})
+        try:
+            resp = self._send({"tactic": tactic, "proofState": proof_state_id})
+        except TimeoutError as exc:
+            return LeanError(str(exc))
 
         # Error: no proofState in response, or explicit message
         if "proofState" not in resp:

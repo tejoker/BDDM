@@ -1,0 +1,53 @@
+{
+  "theorems": [
+    {
+      "theorem_name": "th_lions",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "theorem_2",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "theorem_3",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "lem_tc",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "eq_zf",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "lemm_M",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "lemma_14",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    }
+  ]
+}

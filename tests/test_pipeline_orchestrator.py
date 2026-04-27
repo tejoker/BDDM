@@ -35,3 +35,22 @@ def test_orchestrator_retry_backoff_flow(tmp_path: Path) -> None:
     job_id = int(item["job_id"])
     res = orch.fail(job_id, error="transient_error", base_backoff_s=1)
     assert res["status"] in {"retry_scheduled", "failed_terminal"}
+
+
+def test_orchestrator_reclaim_expired_leases(tmp_path: Path) -> None:
+    orch = PipelineOrchestrator(tmp_path / "orch3")
+    _ = orch.enqueue("2604.15007", {"mode": "translate", "max_attempts": 3})
+    item = orch.lease_next(worker_id="w2", lease_seconds=1)
+    assert item is not None
+    # Force lease expiry.
+    import sqlite3
+    import time
+    con = sqlite3.connect(str((tmp_path / "orch3" / "queue.db")))
+    with con:
+        con.execute(
+            "UPDATE queue_jobs SET lease_until_unix=?, status='leased' WHERE id=?",
+            (int(time.time()) - 5, int(item["job_id"])),
+        )
+    con.close()
+    rec = orch.reclaim_expired_leases()
+    assert int(rec["reclaimed_retry"]) >= 1

@@ -1,0 +1,14 @@
+{
+  "paper_id": "2604.21314",
+  "fetch_ok": true,
+  "tex_files": [
+    "output/paper_sources/golden10/2604.21314/main.tex"
+  ],
+  "main_tex": "output/paper_sources/golden10/2604.21314/main.tex",
+  "root_tex_paths": [
+    "/home/projectx/BDDM/output/paper_sources/golden10/2604.21314/main.tex"
+  ],
+  "expanded_paths": [
+    "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+  ]
+}

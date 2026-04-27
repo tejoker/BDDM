@@ -47,6 +47,13 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Smoke test
         run: python scripts/smoke_test.py
+      - name: Public claims reproduction smoke
+        run: |
+          python3 scripts/reproduce_public_claims.py \
+            --suite reproducibility/paper_agnostic_golden10.json \
+            --smoke \
+            --max-papers 1 \
+            --out-root output/reproducibility/public_claims_smoke
 
   integration:
     name: Integration test (requires MISTRAL_API_KEY)

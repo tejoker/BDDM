@@ -1,0 +1,300 @@
+{
+  "total": 24,
+  "counts": {
+    "claim_review_pending": 1,
+    "ill_typed_statement": 1,
+    "paper_theory_debt": 7,
+    "proof_search_failure": 11,
+    "release_ready": 2,
+    "translation_limited": 2
+  },
+  "items": [
+    {
+      "theorem_name": "thm_baseline_lift",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "paper_symbol:Θ"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "-- Source claim excerpt: [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$. Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). \\end{equation*} Then the cutoff approximations converge almost surely in the path spaces \\begin{equation}\\label{eq:baseline-paths} \\Psi_i\\in C_T\\mathcal{C}^{\\alpha-3/2-}, \\qquad \\Theta\\in C_T\\mathcal{C}^{2\\alpha-3-}, \\qquad V_i\\in C_T\\mathcal{C}^{3\\alpha-3-}, \\qquad \\partial_tV_i\\in C_T\\mathcal{C}^{2\\alpha-3-}. \\end{equation} In particular, $\\Theta$ is a cross-Wick product without subtracting a scalar constant.\ntheorem thm_baseline_lift :\n  alpha > 3/4 := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "prop_cubic_quartic_baseline",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "paper_symbol:Θ"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "-- Source claim excerpt: [Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$. The cubic resonant symbols \\begin{equation*} \\Gamma_1=V_2\\circ\\Psi_1, \\qquad \\Gamma_2=V_1\\circ\\Psi_2 \\end{equation*} admit canonical cutoff limits as stochastic distributions with baseline regularity \\begin{equation}\\label{eq:gamma-baseline} \\Gamma_i\\in C_T\\mathcal{C}^{4\\alpha-9/2-}. \\end{equation} The nonzero-chaos part of $V_1V_2$ admits a canonical baseline lift in \\begin{equation}\\label{eq:vv-nonzero-baseline} (V_1V_2)^{\\neq 0}\\in C_T\\mathcal{C}^{6\\alpha-6-}. \\end{equation} Moreover, the zero-chaos part of $V_1V_2$ is a deterministic scalar process; under the speed-separated double Volterra estimate its dyadic shell is $N^{6-7\\alpha+}$, so it converges in $C_T$ for $\\alpha>6/7$.\ntheorem prop_cubic_quartic_baseline :\n  alpha > 3/4 ∧ alpha > 6/7 := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "thm_operator_main",
+      "valid_for_proof": false,
+      "primary_blocker": "translation_limited",
+      "reasons": [
+        "trivial_target"
+      ],
+      "next_action": "Re-translate from source; current statement is placeholder or non-substantive.",
+      "lean_statement": "theorem thm_operator_main : False",
+      "debt_tier": "none",
+      "proof_value": "none"
+    },
+    {
+      "theorem_name": "prop_mid_completion",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: [Completion outside the strong low--high region]\\label{prop:mid-completion} Let the full paraproduct-resonant operator be decomposed into the strongly low--high region $|q|\\le N^\\theta$, the intermediate low--high region $N^\\theta\\lesssim |q|\\ll N$, finitely many low shells, and the nonresonant paraproduct geometries. If the input has positive regularity $U\\in C_TH^{s_1}$ with $s_1>0$, then the intermediate region contributes the dyadic shell \\begin{equation}\\label{eq:mid-shell-intro} N^{s_2+3-4\\alpha-\\theta s_1+\\varepsilon}, \\end{equation} and is therefore summable once \\eqref{eq:operator-cond-main} holds. The remaining nonresonant and finite-shell pieces are bounded by standard paraproduct and finite-rank estimates.\ntheorem prop_mid_completion :\n  s_1 > 0 := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "thm_conditional_closure_intro",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: [Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm \\begin{equation}\\label{eq:source-hyp-intro} F^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha}, \\end{equation} and that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in \\begin{equation*} (X_T^{s_1})^2\\times (Y_T^{s_2})^2. \\end{equation*} The solution map is local...\ntheorem thm_conditional_closure_intro :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "cor_conditional_cutoff",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "paper_symbol:cutoff_enhanced_data",
+        "paper_symbol:paracontrolled_solution"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "-- Source claim excerpt: [Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff} If the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term.\ntheorem cor_conditional_cutoff :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "rem_status_emphasis",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "paper_local_lemma:VolterraOscillation"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "-- Source claim excerpt: [Status and emphasis]\\label{rem:status-emphasis} The unconditional core of the paper is Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. The full stochastic Cauchy problem is conditional only because one still has to choose a closure route for the cubic forcing $F^V$ and insert an appropriate fractional periodic Klein--Gordon Strichartz theorem. In particular, the random-operator part is already complete at the level relevant to the no singular centering mechanism.\ntheorem rem_status_emphasis :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "prop_sharpness",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "paper_local_lemma:DyadicBlockBound"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "-- Source claim excerpt: [Sharpness of the same-color shell]\\label{prop:sharpness} There exist a fixed low output frequency $q$, a conic sector of the resonant shell, and a smooth time profile $w(q,t)$ supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell $|\\ell|\\sim N$ satisfies \\begin{equation}\\label{eq:sharpness} \\|D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\\gtrsim N^{3-4\\alpha} \\end{equation} up to strictly lower-order terms. Consequently $\\alpha=3/4$ is logarithmically critical for the deterministic contraction channel.\ntheorem prop_sharpness :\n  alpha = 3/4 := by\n  sorry",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "local_paper_theory_obligation"
+    },
+    {
+      "theorem_name": "remark_9",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: [Why $V_i$ is not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$, not on $V_1$ and $V_2$. In the fractional range $\\alpha<1$, the first Picard objects $V_i$ have negative baseline regularity $3\\alpha-3-$ and should be treated as part of the enhanced stochastic data, not as $L^2$ inputs of the random-operator theorem.\ntheorem remark_9 :\n  alpha < 1 := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "remark_10",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: [What is already complete here] At the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are finite. The real difficulty appears only if one insists on inserting the whole forcing into the conservative source norm $C_TH^{s_2-\\alpha}$.\ntheorem remark_10 :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "lem_centered_cov",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem lem_centered_cov (N : ℕ) (i j k : ℕ) (n q : ℤ) (t s t' : ℝ) (alpha : ℝ) (η : ℝ) (h0 : 0 ≤ s) (h1 : s ≤ t) (h2 : t ≤ T) (h3 : 0 < η) (h4 : η ≤ 1/2) : Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (i, j, k) (n, q, t, s)| ^ 2) : ℝ)) (fun _ => C_T * N ^ (3 - 6 * alpha)) ∧ Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (i, j, k) (n, q, t, s) - B_N (i, j, k) (n, q, t', s)| ^ 2) : ℝ)) (fun _ => C_T * |t - t'| ^ (2 * η) * N ^ (3 - 6 * alpha + 2 * η * alpha))",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "thm_pathwise_fluct",
+      "valid_for_proof": false,
+      "primary_blocker": "ill_typed_statement",
+      "reasons": [
+        "latex_superscript_artifact"
+      ],
+      "next_action": "Fix generated notation/types or add a typed PaperTheory declaration, then revalidate.",
+      "lean_statement": "-- Source claim excerpt: [Pathwise centered fluctuations]\\label{thm:pathwise-fluct} Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0. \\end{equation} Then the centered dyadic fluctuation series \\begin{equation}\\label{eq:fluct-series} B^{i;j,k}:=\\sum_{N\\text{ dyadic}}B_N^{i;j,k} \\end{equation} converges almost surely in \\begin{equation}\\label{eq:fluct-op-space} \\mathcal L\\bigl(E_T,C_TH^{s_2-\\alpha}\\bigr). \\end{equation} More precisely, for every sufficiently small $\\kappa>0$ there is an almost surely finite random constant $C_\\omega$ such that \\begin{equation}\\label{eq:fluct-dyadic-bound} \\|B_N^{i;j,k}\\|_{E_T\\to C_TH^{s_2-\\alpha}} \\le C_\\omega N^{a/2+\\kappa} \\end{equation} for all dyadic $N$.\ntheorem thm_pathwise_fluct :\n  kappa > 0 := by\n  sorry",
+      "debt_tier": "none",
+      "proof_value": "none"
+    },
+    {
+      "theorem_name": "lem_speed_gap",
+      "valid_for_proof": false,
+      "primary_blocker": "claim_review_pending",
+      "reasons": [
+        "lean_proof_closed",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "next_action": "Apply human/hybrid claim-equivalence review only after other gates pass.",
+      "lean_statement": "theorem lem_speed_gap :\n  ∃ N0 : ℕ, ∃ cstar : ℝ, 0 < cstar ∧ (N0 : ℝ) ≤ (N0 : ℝ)",
+      "debt_tier": "none",
+      "proof_value": "none"
+    },
+    {
+      "theorem_name": "lem_volterra",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: [Volterra oscillation estimate]\\label{lem:volterra} Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then \\begin{equation}\\label{eq:volterra-est} \\sup_{0\\le t\\le T} \\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr| \\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^\\infty_T}+\\|\\partial_t a\\|_{L^\\infty_T}\\bigr). \\end{equation} The same bound holds with $\\sin((t-s)\\Phi)$ or $\\cos((t-s)\\Phi)$ in place of the exponential.\ntheorem lem_volterra :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "prop_det_contraction",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: [Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$. Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}} \\lesssim_T \\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr) \\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr). \\end{equation} Consequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second condition in \\eqref{eq:operator-cond-main} holds.\ntheorem prop_det_contraction :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "thm_no_singular_centering",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: [No singular centering for mixed random operators]\\label{thm:no-singular-centering} Assume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator \\begin{equation*} E_T\\to C_TH^{s_2-\\alpha}. \\end{equation*} Cross-color blocks are automatically centered by independence. Same-color blocks decompose as \\begin{equation*} T^{i;j,j}=\\mathcal D^{i;j}+\\mathcal B^{i;j,j}, \\end{equation*} where $\\mathcal D^{i;j}$ is a finite speed-separated deterministic Volterra multiplier and $\\mathcal B^{i;j,j}$ is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.\ntheorem thm_no_singular_centering :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "ass_strichartz",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem ass_strichartz (T : ℝ) (alpha : ℝ) (s1 : ℝ) (s2 : ℝ) (delta : ℝ) (i : Fin 2) (hT : 0 < T ∧ T ≤ 1) (halpha : 0 < alpha) (hs1 : 0 < s1) (hs2 : 0 < s2) (hdelta : 0 < delta) : ∀ (X Y : ℝ → ℝ), (∀ t, X t ∈ C_T H^{s1}) → (∀ t, d_dtt X t ∈ C_T H^{s1 - alpha}) → (∀ t, X t ∈ L_T^8 W^{s1 - alpha/4, 8/3}) → (∀ t, Y t ∈ C_T H^{s2}) → (∀ t, d_dtt Y t ∈ C_T H^{s2 - alpha}) → (∀ t, Y t ∈ L_T^4 W^{s2 - alpha/2, 4}) → T^delta * (∥X∥_{X_T^{s1}} * ∥Y∥_{Y_T^{s2}}) ≤ C",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "remark_18",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: For $\\alpha=1$ this is the usual local wave/Klein--Gordon package. For fractional flows on compact manifolds one may need derivative losses; if so, the closure inequalities below must be shifted accordingly. The present paper keeps this input explicit.\ntheorem remark_18 :\n  alpha = 1 := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "def_admissible",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "generated_row_has_axiom_or_domain_assumption_debt"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "theorem def_admissible :\n  ∃ alpha epsilon : ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 ≤ s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "superseded_generated_diagnostic"
+    },
+    {
+      "theorem_name": "remark_20",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "generated_row_has_axiom_or_domain_assumption_debt"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "theorem remark_20 (alpha s1 s2 theta : ℝ) (hs1 : 0 < s1) (hs2 : s1 < s2) (htheta : 0 < theta) (htheta1 : theta < 1) (hs2alpha : s2 < 4 * alpha - 3 - (3 / 2) * theta) : ∃ eps : ℝ, 0 < eps ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - eps",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "superseded_generated_diagnostic"
+    },
+    {
+      "theorem_name": "rem_primitive_route",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: [Primitive route]\\label{rem:primitive-route} The deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving $G_i^V$.\ntheorem rem_primitive_route :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "cor_safe_range",
+      "valid_for_proof": false,
+      "primary_blocker": "translation_limited",
+      "reasons": [
+        "trivial_target"
+      ],
+      "next_action": "Re-translate from source; current statement is placeholder or non-substantive.",
+      "lean_statement": "theorem cor_safe_range : False",
+      "debt_tier": "none",
+      "proof_value": "none"
+    },
+    {
+      "theorem_name": "def_admissible__audited_core",
+      "valid_for_proof": true,
+      "primary_blocker": "release_ready",
+      "reasons": [],
+      "next_action": "No blocker detected for release promotion.",
+      "lean_statement": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV)",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "audited_real_claim"
+    },
+    {
+      "theorem_name": "remark_20__audited_core",
+      "valid_for_proof": true,
+      "primary_blocker": "release_ready",
+      "reasons": [],
+      "next_action": "No blocker detected for release promotion.",
+      "lean_statement": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV ↔\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    (3 / 2 - alpha + eps < s2 ∧ s2 < s1 + 2 * alpha - 3 / 2 - eps) ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    (rhoV + s1 > 0 ∧ s2 - alpha < rhoV))",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "audited_real_claim"
+    }
+  ]
+}

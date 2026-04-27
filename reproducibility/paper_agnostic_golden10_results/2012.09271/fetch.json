@@ -1,0 +1,21 @@
+{
+  "paper_id": "2012.09271",
+  "fetch_ok": true,
+  "tex_files": [
+    "output/paper_sources/golden10/2012.09271/balanced_product_codes.tex",
+    "output/paper_sources/golden10/2012.09271/fig_balancedproduct.tex",
+    "output/paper_sources/golden10/2012.09271/sec_balancedproducts.tex",
+    "output/paper_sources/golden10/2012.09271/sec_complexes.tex",
+    "output/paper_sources/golden10/2012.09271/sec_expandercodes.tex",
+    "output/paper_sources/golden10/2012.09271/sec_explicit.tex",
+    "output/paper_sources/golden10/2012.09271/sec_hyperbolic.tex",
+    "output/paper_sources/golden10/2012.09271/sec_spectral.tex"
+  ],
+  "main_tex": "output/paper_sources/golden10/2012.09271/balanced_product_codes.tex",
+  "root_tex_paths": [
+    "/home/projectx/BDDM/output/paper_sources/golden10/2012.09271/balanced_product_codes.tex"
+  ],
+  "expanded_paths": [
+    "output/paper_sources/golden10/2012.09271_expanded/balanced_product_codes.tex"
+  ]
+}

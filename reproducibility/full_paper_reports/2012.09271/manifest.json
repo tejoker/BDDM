@@ -1,0 +1,11 @@
+{
+  "paper_id": "2012.09271",
+  "schema_version": "1.0.0",
+  "bundle_dir": "/home/projectx/BDDM/reproducibility/full_paper_reports/2012.09271",
+  "files": {
+    "report": "/home/projectx/BDDM/reproducibility/full_paper_reports/2012.09271/suite_report.json",
+    "ledger": "/home/projectx/BDDM/reproducibility/full_paper_reports/2012.09271/verification_ledger.json",
+    "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2012.09271/unresolved.json"
+  },
+  "regenerate_command": "python3 scripts/formalize_paper_full.py --paper-id 2012.09271 --project-root ."
+}

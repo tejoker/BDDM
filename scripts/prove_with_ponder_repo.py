@@ -8,6 +8,48 @@ import tempfile
 from pathlib import Path
 
 
+def _materialize_repl_compat(snapshot_repo: Path) -> None:
+    """Ensure path dependency `third_party/repl_compat` exists in snapshots."""
+    try:
+        lakefile = snapshot_repo / "lakefile.toml"
+        if not lakefile.exists():
+            return
+        txt = lakefile.read_text(encoding="utf-8", errors="replace")
+        if "third_party/repl_compat" not in txt:
+            return
+        target = snapshot_repo / "third_party" / "repl_compat"
+        if target.exists():
+            return
+        canonical = Path(__file__).resolve().parent.parent / "third_party" / "repl_compat"
+        if not canonical.exists():
+            return
+        target.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            target.symlink_to(canonical, target_is_directory=True)
+        except Exception:
+            shutil.copytree(canonical, target)
+    except Exception:
+        # Best effort only; caller handles downstream failures.
+        return
+
+
+def _materialize_missing_main(snapshot_repo: Path) -> None:
+    """Create a minimal Main.lean when lakefile expects it but it's absent."""
+    try:
+        lakefile = snapshot_repo / "lakefile.toml"
+        if not lakefile.exists():
+            return
+        txt = lakefile.read_text(encoding="utf-8", errors="replace")
+        if 'root = "Main"' not in txt:
+            return
+        main_file = snapshot_repo / "Main.lean"
+        if main_file.exists():
+            return
+        main_file.write_text("def main : IO Unit := pure ()\n", encoding="utf-8")
+    except Exception:
+        return
+
+
 def create_snapshot_repo(project_root: Path) -> tuple[Path, Path]:
     """Create a temporary committed snapshot when the source repo has no commits."""
     tmp_root = Path(tempfile.mkdtemp(prefix="desol-dojo-snapshot-"))
@@ -18,6 +60,8 @@ def create_snapshot_repo(project_root: Path) -> tuple[Path, Path]:
         return {n for n in names if n in ignored}
 
     shutil.copytree(project_root, snapshot_repo, ignore=_ignore)
+    _materialize_repl_compat(snapshot_repo)
+    _materialize_missing_main(snapshot_repo)
 
     def _git(args: list[str]) -> None:
         subprocess.run(
@@ -48,4 +92,3 @@ def repo_has_commit(project_root: Path) -> bool:
         return proc.returncode == 0
     except Exception:
         return False
-

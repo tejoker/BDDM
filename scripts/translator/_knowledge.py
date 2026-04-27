@@ -194,14 +194,19 @@ _RULE7_STATIC = (
     "Only use type class names that exist in Mathlib4. "
     "Valid classes: MetricSpace, TopologicalSpace, MeasurableSpace, NormedAddCommGroup, "
     "NormedSpace, InnerProductSpace, CompleteSpace, Fintype, Finite, DecidableEq, Ring, Field, "
+    "LinearOrder, LinearOrderedField, LinearOrderedCommRing, "
     "Module, Algebra, Group, CommGroup, TopologicalGroup, CompactSpace, T2Space. "
     "FORBIDDEN classes (do NOT use — they do not exist in Mathlib4): "
+    "LinearOrderedRing (→ use LinearOrderedCommRing), "
+    "OrderedRing (→ use StrictOrderedRing), "
     "GeodesicSpace, LengthSpace, CatSpace, CBA, AlexandrovSpace, GeodesicMetricSpace, "
     "ProfiniteGroup, StronglyComplete, ResiduallyFinite, IsNest, StronglyResiduallyFinite, "
     "IsSigmaAlgebra, SigmaAlgebra, ProbabilitySpace, HilbertSpace, BanachSpace, "
     "FrechetSpace, VectorSpace, LinearSpace, SobolevSpace, RiemannianManifold, "
     "AnalyticManifold, FreeIndep, GraphClass, Hypergraph, RandomVariable, IndependentRV. "
     "REPLACEMENTS for forbidden classes: "
+    "LinearOrderedRing → `[LinearOrderedCommRing α]`; "
+    "OrderedRing → `[StrictOrderedRing α]`; "
     "GeodesicSpace/LengthSpace/CBA/CatSpace → `[MetricSpace α]`; "
     "ProfiniteGroup → `[Group G] [TopologicalGroup G] [CompactSpace G] [T2Space G]`; "
     "HilbertSpace → `[NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]`; "
@@ -211,10 +216,14 @@ _RULE7_STATIC = (
     "TC HIERARCHY — do NOT list implied classes: "
     "`[NormedSpace 𝕜 E]` already implies NormedAddCommGroup, SeminormedAddCommGroup; "
     "`[MetricSpace α]` already implies TopologicalSpace, UniformSpace, PseudoMetricSpace; "
-    "`[InnerProductSpace 𝕜 E]` already implies NormedSpace. "
+    "`[InnerProductSpace 𝕜 E]` already implies NormedSpace; "
+    "`[LinearOrderedField α]` already implies LinearOrder, Field, CommRing. "
     "PREDICATES vs CLASSES: `LocallyLipschitz f`, `StronglyConvexOn ℝ s f`, `MeasurableSet s`, "
     "`IsClosed s`, `IsOpen s` are PROPOSITIONS — use `(h : LocallyLipschitz f)`, not `[LocallyLipschitz f]`. "
-    "σ-algebras: use `[MeasurableSpace Ω]` (not `IsSigmaAlgebra`)."
+    "σ-algebras: use `[MeasurableSpace Ω]` (not `IsSigmaAlgebra`). "
+    "DOMAIN TYPES: if the paper's mathematical domain (e.g. multisegments, quiver representations, "
+    "p-adic groups) has no Mathlib4 formalization, use `axiom MyType : Type` stubs rather than "
+    "trying to fit the domain into existing Mathlib classes. Prefer correct axioms over wrong classes."
 )
 
 
@@ -238,10 +247,17 @@ def _get_translate_system() -> str:
             "Only use type class names that exist in Mathlib4. "
             "Valid classes: MetricSpace, TopologicalSpace, MeasurableSpace, NormedAddCommGroup, "
             "NormedSpace, InnerProductSpace, CompleteSpace, Fintype, Finite, DecidableEq, Ring, Field, "
+            "LinearOrder, LinearOrderedField, LinearOrderedCommRing, "
             "Module, Algebra, Group, CommGroup, TopologicalGroup, CompactSpace, T2Space. "
+            "ALWAYS FORBIDDEN (Lean 3 names absent from Mathlib4): "
+            "LinearOrderedRing (→ LinearOrderedCommRing), OrderedRing (→ StrictOrderedRing). "
         )
-        if forbidden:
-            rule7 += f"FORBIDDEN (do NOT use — not in Mathlib4): {forbidden}. "
+        # Merge graph-derived forbidden with hard-coded Lean3 names.
+        hard_forbidden = {"LinearOrderedRing", "OrderedRing"}
+        all_forbidden = hard_forbidden | set(forbidden.split(", ") if forbidden else [])
+        effective_forbidden = ", ".join(sorted(all_forbidden - {""}))
+        if effective_forbidden:
+            rule7 += f"FORBIDDEN (do NOT use — not in Mathlib4): {effective_forbidden}. "
         if replacements:
             rule7 += f"REPLACEMENTS: {replacements}. "
         if predicates:

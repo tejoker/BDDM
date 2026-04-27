@@ -7,11 +7,11 @@ Usage:
 
 Outputs a directory containing all .tex files extracted from the arxiv tarball.
 
-**PDF-only submissions**: many arXiv records ship only as PDF (no TeX tarball).
-``fetch_source`` then raises ``RuntimeError``; the DESol LaTeX pipeline cannot
-ingest those until a separate PDF→structure path exists. Use
-``scripts/arxiv_oai_harvest.py --probe-tex`` to filter harvest queues to
-tarballs that contain at least one ``.tex`` file.
+**PDF-only submissions**: many arXiv records ship only as PDF.  ``fetch_source``
+then raises ``RuntimeError``; the DESol LaTeX pipeline cannot ingest those until
+a separate PDF→structure path exists.  Some arXiv e-print responses are a single
+plain ``.tex`` file rather than a tarball; those are accepted and written as
+``source.tex``.
 """
 
 from __future__ import annotations
@@ -39,6 +39,22 @@ def _fetch_bytes(url: str) -> bytes:
         return resp.read()
 
 
+def _looks_like_tex_source(raw: bytes) -> bool:
+    if not raw or raw.startswith(b"%PDF"):
+        return False
+    sample = raw[:8192].decode("utf-8", errors="ignore")
+    tex_markers = (
+        "\\documentclass",
+        "\\begin{document}",
+        "\\input{",
+        "\\include{",
+        "\\newcommand",
+        "\\section",
+        "\\begin{theorem}",
+    )
+    return any(marker in sample for marker in tex_markers)
+
+
 def fetch_source(paper_id: str, out_dir: Path) -> list[Path]:
     """Download arxiv source tarball for *paper_id* and extract .tex files to *out_dir*.
 
@@ -56,6 +72,11 @@ def fetch_source(paper_id: str, out_dir: Path) -> list[Path]:
         try:
             tf = tarfile.open(fileobj=io.BytesIO(raw), mode="r:*")
         except tarfile.TarError as exc:
+            if _looks_like_tex_source(raw):
+                tex_path = out_dir / "source.tex"
+                tex_path.write_bytes(raw)
+                print("  extracted: source.tex (single-file TeX source)")
+                return [tex_path]
             raise RuntimeError(
                 f"arxiv source for {paper_id!r} is not a tar archive "
                 f"(possibly a single-file PDF submission): {exc}"

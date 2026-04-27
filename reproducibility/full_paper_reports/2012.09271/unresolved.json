@@ -1,0 +1,28 @@
+[
+  {
+    "theorem_name": "theorem_1",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "assumptions_grounded",
+      "translation_fidelity_ok",
+      "dependency_trust_complete",
+      "claim_equivalent"
+    ]
+  },
+  {
+    "theorem_name": "corollary_2",
+    "status": "UNRESOLVED",
+    "grounding_status": "",
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "assumptions_grounded",
+      "translation_fidelity_ok",
+      "dependency_trust_complete",
+      "claim_equivalent"
+    ]
+  }
+]

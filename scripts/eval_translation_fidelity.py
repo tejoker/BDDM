@@ -56,19 +56,21 @@ def _load_gold(path: Path) -> list[dict[str, str]]:
     return out
 
 
-def _load_actual(db_path: Path, paper_id: str, theorem_name: str) -> str:
-    if not db_path.exists():
-        return ""
-    con = sqlite3.connect(str(db_path))
-    row = con.execute(
-        "SELECT payload_json FROM kg_nodes WHERE paper_id=? AND theorem_name=? LIMIT 1",
-        (paper_id, theorem_name),
-    ).fetchone()
-    con.close()
-    if row is None:
-        return ""
+def _norm_name(s: str) -> str:
+    return "".join(ch for ch in (s or "").lower() if ch.isalnum())
+
+
+def _discover_default_dbs() -> list[Path]:
+    roots = [Path("output/kg/kg_index.db")]
+    for p in sorted(Path("output").glob("**/kg_index.db")):
+        if p not in roots:
+            roots.append(p)
+    return roots
+
+
+def _extract_lean(payload_json: Any) -> str:
     try:
-        payload = json.loads(str(row[0]))
+        payload = json.loads(str(payload_json))
     except Exception:
         return ""
     if not isinstance(payload, dict):
@@ -76,12 +78,53 @@ def _load_actual(db_path: Path, paper_id: str, theorem_name: str) -> str:
     return str(payload.get("lean_statement", "")).strip()
 
 
-def evaluate(*, gold_path: Path, kg_db: Path) -> dict[str, Any]:
+def _load_actual_from_db(db_path: Path, paper_id: str, theorem_name: str) -> str:
+    if not db_path.exists():
+        return ""
+    con = sqlite3.connect(str(db_path))
+    try:
+        row = con.execute(
+            "SELECT payload_json FROM kg_nodes WHERE paper_id=? AND theorem_name=? LIMIT 1",
+            (paper_id, theorem_name),
+        ).fetchone()
+        if row is not None:
+            actual = _extract_lean(row[0])
+            if actual:
+                return actual
+
+        # Fallback: normalized theorem-name matching to survive naming variants.
+        target = _norm_name(theorem_name)
+        if not target:
+            return ""
+        rows = con.execute(
+            "SELECT theorem_name, payload_json FROM kg_nodes WHERE paper_id=?",
+            (paper_id,),
+        ).fetchall()
+        for thm, payload_json in rows:
+            if _norm_name(str(thm)) != target:
+                continue
+            actual = _extract_lean(payload_json)
+            if actual:
+                return actual
+    finally:
+        con.close()
+    return ""
+
+
+def _load_actual(db_paths: list[Path], paper_id: str, theorem_name: str) -> tuple[str, str]:
+    for db_path in db_paths:
+        actual = _load_actual_from_db(db_path, paper_id, theorem_name)
+        if actual:
+            return actual, str(db_path)
+    return "", ""
+
+
+def evaluate(*, gold_path: Path, kg_dbs: list[Path]) -> dict[str, Any]:
     gold = _load_gold(gold_path)
     rows: list[dict[str, Any]] = []
     total = 0.0
     for g in gold:
-        actual = _load_actual(kg_db, g["paper_id"], g["theorem_name"])
+        actual, source_db = _load_actual(kg_dbs, g["paper_id"], g["theorem_name"])
         score = _f1(_tokens(actual), _tokens(g["expected_lean"]))
         rows.append(
             {
@@ -89,6 +132,7 @@ def evaluate(*, gold_path: Path, kg_db: Path) -> dict[str, Any]:
                 "theorem_name": g["theorem_name"],
                 "score_f1": round(score, 4),
                 "found": bool(actual),
+                "source_db": source_db,
             }
         )
         total += score
@@ -96,6 +140,7 @@ def evaluate(*, gold_path: Path, kg_db: Path) -> dict[str, Any]:
     return {
         "gold_count": len(rows),
         "avg_fidelity_f1": round(avg, 4),
+        "db_paths": [str(p) for p in kg_dbs],
         "rows": rows,
     }
 
@@ -103,7 +148,7 @@ def evaluate(*, gold_path: Path, kg_db: Path) -> dict[str, Any]:
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description="Evaluate translation fidelity against gold set")
     p.add_argument("--gold", default="reproducibility/gold_translation_fidelity.jsonl")
-    p.add_argument("--kg-db", default="output/kg/kg_index.db")
+    p.add_argument("--kg-db", action="append", default=[])
     p.add_argument("--min-score", type=float, default=0.8)
     p.add_argument("--out", default="")
     return p
@@ -111,7 +156,8 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     args = _build_parser().parse_args()
-    payload = evaluate(gold_path=Path(args.gold), kg_db=Path(args.kg_db))
+    kg_dbs = [Path(p) for p in args.kg_db] if args.kg_db else _discover_default_dbs()
+    payload = evaluate(gold_path=Path(args.gold), kg_dbs=kg_dbs)
     txt = json.dumps(payload, indent=2, ensure_ascii=False)
     if args.out:
         out = Path(args.out)
@@ -125,4 +171,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

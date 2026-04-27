@@ -1,0 +1,196 @@
+{
+  "paper_id": "2604.21798",
+  "ok": false,
+  "evidence_label": "partial_diagnostic_evidence",
+  "primary_metric": "verified_proven",
+  "claim_scope": "Not a full paper closure claim; use blocker taxonomy and verified_proven only.",
+  "out_lean": "/home/projectx/BDDM/output/2604.21798.lean",
+  "ledger_path": "/home/projectx/BDDM/output/verification_ledgers/2604.21798.json",
+  "results_file": "/home/projectx/BDDM/logs/full_paper_2604.21798_suite_results.json",
+  "unresolved_pack": "/home/projectx/BDDM/output/reports/full_paper/2604.21798_suite_report.unresolved.json",
+  "paper_local_theory_file": "",
+  "curated_paper_package": {
+    "available": false
+  },
+  "final_metrics": {
+    "total_theorems": 0,
+    "total_provable": 0,
+    "translation_limited_count": 0,
+    "fully_proven": 0,
+    "fully_proven_status_count": 0,
+    "verified_proven": 0,
+    "real_fully_proven": 0,
+    "auto_closed_count": 0,
+    "axiom_backed_count": 0,
+    "axiom_debt_count": 0,
+    "axiom_debt": [],
+    "closure_by_method": {
+      "lean_verified": 0,
+      "auto_closed_or_reconciled": 0,
+      "axiom_backed": 0,
+      "translation_limited": 0,
+      "unresolved_or_flawed": 0
+    },
+    "full_closure": false,
+    "proving_rate": 0.0,
+    "status_counts": {},
+    "unresolved_count": 0,
+    "unresolved": [],
+    "translation_limited": [],
+    "axiom_backed": [],
+    "lean_verified_proven": [],
+    "auto_closed_proven": []
+  },
+  "final_normalization": {
+    "translation_limited_placeholders": 0,
+    "semantic_hard_flawed": 0,
+    "bad_statement_flawed": 0,
+    "ill_typed_artifact_flawed": 0
+  },
+  "blocker_clusters": {},
+  "pass_history": [
+    {
+      "pass_idx": 1,
+      "metrics": {
+        "total_theorems": 0,
+        "total_provable": 0,
+        "translation_limited_count": 0,
+        "fully_proven": 0,
+        "fully_proven_status_count": 0,
+        "verified_proven": 0,
+        "real_fully_proven": 0,
+        "auto_closed_count": 0,
+        "axiom_backed_count": 0,
+        "axiom_debt_count": 0,
+        "axiom_debt": [],
+        "closure_by_method": {
+          "lean_verified": 0,
+          "auto_closed_or_reconciled": 0,
+          "axiom_backed": 0,
+          "translation_limited": 0,
+          "unresolved_or_flawed": 0
+        },
+        "full_closure": false,
+        "proving_rate": 0.0,
+        "status_counts": {},
+        "unresolved_count": 0,
+        "unresolved": [],
+        "translation_limited": [],
+        "axiom_backed": [],
+        "lean_verified_proven": [],
+        "auto_closed_proven": []
+      },
+      "returncode": 1
+    }
+  ],
+  "steps": [
+    {
+      "stage": "reset_paper_ledger",
+      "ledger_path": "/home/projectx/BDDM/output/verification_ledgers/2604.21798.json",
+      "removed": false,
+      "skipped": false
+    },
+    {
+      "stage": "mathlib_coverage_screen",
+      "skipped": false,
+      "coverage_score": 1.0,
+      "library_limited": false,
+      "library_limited_reasons": [],
+      "abstract_chars": 0
+    },
+    {
+      "stage": "library_first_bootstrap",
+      "cmd": [
+        "python3",
+        "scripts/library_first_bootstrap.py",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--domain",
+        "probability_statistics"
+      ],
+      "returncode": 0,
+      "elapsed_s": 1.894,
+      "stdout_tail": "{\n  \"domain\": \"probability_statistics\",\n  \"ok\": true,\n  \"imports\": [\n    \"Mathlib.Probability.ConditionalProbability\",\n    \"Mathlib.Probability.Martingale.Basic\",\n    \"Mathlib.MeasureTheory.Function.LpSpace.Basic\"\n  ],\n  \"stub_file\": \"/home/projectx/BDDM/output/library_bootstrap/bootstrap_probability_statistics.lean\",\n  \"elapsed_s\": 1.865,\n  \"stdout_tail\": \"\",\n  \"stderr_tail\": \"\"\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "stage": "paper_theory_builder",
+      "ok": true,
+      "paper_theory_file": "/home/projectx/BDDM/Desol/PaperTheory/Paper_2604_21798.lean",
+      "module": "Desol.PaperTheory.Paper_2604_21798"
+    },
+    {
+      "stage": "bootstrap_arxiv_to_lean",
+      "cmd": [
+        "python3",
+        "scripts/arxiv_to_lean.py",
+        "2604.21798",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--out",
+        "/home/projectx/BDDM/output/2604.21798.lean",
+        "--repair-rounds",
+        "5",
+        "--translation-candidates",
+        "1",
+        "--prove-mode",
+        "full-draft",
+        "--mcts-iterations",
+        "24",
+        "--mcts-repair-variants",
+        "3",
+        "--mcts-max-depth",
+        "5",
+        "--domain",
+        "probability_statistics"
+      ],
+      "returncode": 0,
+      "elapsed_s": 4.442,
+      "stdout_tail": "\n[2.1] Fetching arxiv source for 2604.21798 ...\n[fetch] https://arxiv.org/e-print/2604.21798\n  extracted: main.tex\n      main file: main.tex  (1 total .tex files)\n\n[2.1a] Preprocessing LaTeX macros/includes ...\n      expanded: 1 logical root file(s)\n\n[2.1] Extracting theorem environments ...\n      found: 0 environments (kinds filter: {'corollary', 'theorem', 'lemma', 'proposition'})\n      actionable: 0 environments\n      extracted citation/bibliography refs: 21\n      glossary terms: 3\n      no theorem environments found — nothing to do\n",
+      "stderr_tail": ""
+    },
+    {
+      "stage": "prove_pass_1",
+      "cmd": [
+        "python3",
+        "scripts/prove_arxiv_batch.py",
+        "--lean-file",
+        "/home/projectx/BDDM/output/2604.21798.lean",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--paper-id",
+        "2604.21798",
+        "--repair-rounds",
+        "1",
+        "--mode",
+        "full-draft",
+        "--mcts-iterations",
+        "24",
+        "--mcts-repair-variants",
+        "3",
+        "--mcts-max-depth",
+        "5",
+        "--bridge-loop",
+        "--bridge-rounds",
+        "1",
+        "--bridge-depth",
+        "1",
+        "--bridge-max-candidates",
+        "1",
+        "--mandatory-retry-rounds",
+        "0",
+        "--results-file",
+        "/home/projectx/BDDM/logs/full_paper_2604.21798_suite_results.json"
+      ],
+      "returncode": 1,
+      "elapsed_s": 4.183,
+      "stdout_tail": "  [warn] sanitize skipped for 2604.21798.lean: [Errno 2] No such file or directory: '/home/projectx/BDDM/output/2604.21798.lean'\n",
+      "stderr_tail": "Traceback (most recent call last):\n  File \"/home/projectx/BDDM/scripts/prove_arxiv_batch.py\", line 2928, in <module>\n    sys.exit(main())\n             ^^^^^^\n  File \"/home/projectx/BDDM/scripts/prove_arxiv_batch.py\", line 2566, in main\n    thms_raw = _extract_sorry_theorems(lf)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/projectx/BDDM/scripts/prove_arxiv_batch.py\", line 89, in _extract_sorry_theorems\n    text = lean_file.read_text(encoding=\"utf-8\")\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1029, in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1015, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/home/projectx/BDDM/output/2604.21798.lean'\n"
+    }
+  ],
+  "reproducibility_bundle": {
+    "report": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/suite_report.json",
+    "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/unresolved.json",
+    "manifest": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/manifest.json"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "paper_id": "2604.21616",
+  "domain": "combinatorics",
+  "role": "combinatorics_or_discrete_math",
+  "index": 5,
+  "returncode": 0,
+  "elapsed_s": 55.588,
+  "out_lean": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21616.lean",
+  "ledger": "/home/projectx/BDDM/output/verification_ledgers/2604.21616.json",
+  "checkpoint": "/home/projectx/BDDM/output/paper_translation_work/golden10/2604.21616/pipeline_checkpoint.json",
+  "stdout_tail": "\n[2.1] Fetching arxiv source for 2604.21616 ...\n[fetch] https://arxiv.org/e-print/2604.21616\n  extracted: algorithmic.sty\n  extracted: algorithm.sty\n  extracted: icml2020.sty\n  extracted: SOAP.tex\n      main file: SOAP.tex  (1 total .tex files)\n\n[2.1a] Preprocessing LaTeX macros/includes ...\n      warning: preprocessor recursion overflow; falling back to unexpanded root tex files (1 file(s)): maximum recursion depth exceeded\n\n[2.1] Extracting theorem environments ...\n      extraction_mode: fallback_root_tex\n      found: 8 environments (kinds filter: {'theorem', 'lemma', 'corollary', 'proposition'})\n      actionable: 8 environments\n      extracted citation/bibliography refs: 25\n      glossary terms: 40\n\n[1/8] [theorem] main-theorem → main_theorem\n         translate: validated  rounds=1\n\n[2/8] [theorem] equ1 → equ1\n         translate: validated  rounds=1\n\n[3/8] [theorem] momentum-bound-lemma → momentum_bound_lemma\n         translate: validated  rounds=1\n\n[4/8] [theorem] proof_4 → proof_4\n         translate: validated  rounds=1\n\n[5/8] [theorem] second-moment-lemma → second_moment_lemma\n         translate: validated  rounds=1\n\n[6/8] [theorem] proof_6 → proof_6\n         translate: validated  rounds=1\n\n[7/8] [theorem] nuclear-l1-norms → nuclear_l1_norms\n         translate: validated  rounds=1\n\n[8/8] [theorem] proof_8 → proof_8\n         translate: validated  rounds=1\n\n[done] 8 theorems processed\n       translated:  8/8\n       proved:      0/8\n       output:      /home/projectx/BDDM/output/paper_translations/golden10/2604.21616.lean\n       ledger:      /home/projectx/BDDM/output/verification_ledgers/2604.21616.json\n",
+  "stderr_tail": "",
+  "evidence_lean": "reproducibility/paper_agnostic_golden10_translation/2604.21616/2604.21616.lean",
+  "evidence_ledger": "reproducibility/paper_agnostic_golden10_translation/2604.21616/ledger.json",
+  "evidence_checkpoint": "reproducibility/paper_agnostic_golden10_translation/2604.21616/pipeline_checkpoint.json"
+}

@@ -1,0 +1,14 @@
+{
+  "paper_id": "2604.21583",
+  "fetch_ok": true,
+  "tex_files": [
+    "output/paper_sources/golden10/2604.21583/yukawa_2d.tex"
+  ],
+  "main_tex": "output/paper_sources/golden10/2604.21583/yukawa_2d.tex",
+  "root_tex_paths": [
+    "/home/projectx/BDDM/output/paper_sources/golden10/2604.21583/yukawa_2d.tex"
+  ],
+  "expanded_paths": [
+    "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+  ]
+}

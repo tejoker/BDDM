@@ -1,16 +1,20 @@
-# DESol — Deep Exploration of Symbolic Systems for Lean
+# DESol — Automated Lean 4 Formalization of arXiv Mathematics
 
-Autonomous Lean 4 theorem prover with an arXiv ingestion pipeline and a growing Knowledge Graph (KG) of verified mathematics. Combines Leanstral (Mistral-based tactic agent), state-level MCTS, REPLDojo proof checking, LaTeX macro expansion, round-trip semantic verification, and a tactic policy trained on proof traces.
+DESol is an evidence-preserving pipeline for turning arXiv LaTeX papers into auditable Lean 4 formalization attempts. Given an arXiv paper ID, it extracts theorem-like statements, translates them into Lean signatures, searches for machine-checked proofs, and writes a verification ledger plus Knowledge Graph (KG) entries that explain what closed, what remained conditional, and why.
 
-**Current Status**: miniF2F benchmark — **28.7% pass@1** ponder-loop (244 problems) | **27.5% pass@1** MCTS-draft (244 problems, 67/244 solved)
+**To use it:** install Lean 4 via Elan and Python 3.11+, set `MISTRAL_API_KEY` in `.env`, then run `python scripts/arxiv_to_lean.py <arxiv-id> --out output/papers/`. A verification ledger and KG entry are written when configured. For a full-paper closure run (bootstrap → batch prove/bridge passes → JSON report), use `python scripts/formalize_paper_full.py --paper-id <arxiv-id> --project-root .` and optionally `--report-out output/reports/full_paper/<id>_suite_report.json`. Suite-scale runs default progress under `output/reports/full_paper/` via `run_paper_agnostic_suite.py`. One-command public-claims reproduction (full API runs or CI **smoke** re-index): `python scripts/reproduce_public_claims.py --smoke` or omit `--smoke` for full mode.
 
-**Long-term goal**: global verifier of arXiv — ingest math papers, extract and formalize theorems, prove them in Lean 4, and build a KG of verified results.
+To query the KG, start the REST API with `uvicorn scripts/kg_api:app --port 8000` and use `GET /kg/paper/{arxiv-id}`, `GET /kg/stats`, math-layer and evidence routes (see [Query the KG](#query-the-kg-via-rest-api)).
+
+**Main contribution:** a paper-agnostic arXiv-to-Lean workflow that records theorem inventory, translation attempts, Lean validation, proof search traces, axiom debt tiers, claim-equivalence review hooks, and blocker taxonomy for arbitrary LaTeX-source arXiv papers. miniF2F is kept as a calibration benchmark for the proof-search component, not as the headline claim. See [docs/REPRODUCIBILITY_CONTRACT.md](docs/REPRODUCIBILITY_CONTRACT.md), [docs/PAPER_AGNOSTIC_PIPELINE.md](docs/PAPER_AGNOSTIC_PIPELINE.md), and [docs/SCRIPT_MATURITY.md](docs/SCRIPT_MATURITY.md).
+
+**Script trust boundary:** `scripts/` mixes production entrypoints, support modules, and experiments. The **official pipeline** surface (enforced by `tests/test_script_registry.py`) is: `arxiv_to_lean.py`, `formalize_paper_full.py`, `reproduce_public_claims.py`, `run_paper_agnostic_suite.py`, `arxiv_cycle.py`, `arxiv_cycle_daemon.py`, `pipeline_worker.py`. List them anytime with `python scripts/script_registry.py --tier official_pipeline`.
 
 ---
 
 ## Infrastructure
 
-- **Lean 4** via Elan (`lean` + `lake`), pinned by `lean-toolchain` (currently `v4.30.0-rc1`)
+- **Lean 4** via Elan (`lean` + `lake`), pinned by `lean-toolchain` (currently `v4.29.0-rc7`)
 - **Lean project** scaffold: `lakefile.toml`, `lean-toolchain`
 - **Python 3.11+** (tested on 3.11 and 3.12)
 - **Key packages**: `mistralai`, `sentence-transformers`, `python-dotenv`, `z3-solver` (optional), `fastapi uvicorn` (optional, for KG API), `numpy` (optional, for tactic policy training)
@@ -45,8 +49,8 @@ python scripts/smoke_test.py
 
 ```bash
 python scripts/mcts_search.py \
-  --file Desol/SDE/Basic.lean \
-  --theorem gaussian_process_zero_mean \
+  --file Desol/Basic.lean \
+  --theorem basic_demo_true \
   --search-mode state \
   --state-mcts-n-tactics 4 \
   --state-mcts-max-depth 12
@@ -56,8 +60,8 @@ python scripts/mcts_search.py \
 
 ```bash
 python scripts/prove_with_ponder.py \
-  --file Desol/SDE/Basic.lean \
-  --theorem gaussian_process_zero_mean \
+  --file Desol/Basic.lean \
+  --theorem basic_demo_true \
   --mode full-draft \
   --repair-rounds 5
 ```
@@ -68,6 +72,19 @@ python scripts/prove_with_ponder.py \
 python scripts/arxiv_to_lean.py 2301.04567 \
   --out output/papers/ \
   --prove-mode state-mcts
+```
+
+For reproducible full-paper closure reports, use the official harness (orchestrates ingest, iterative `prove_arxiv_batch` / bridge rounds, ledger evaluation, optional claim-equivalence review queue, and JSON closure report):
+
+```bash
+python scripts/formalize_paper_full.py --paper-id 2301.04567 --project-root . \
+  --report-out output/reports/full_paper/2301.04567_suite_report.json
+```
+
+Re-index or regenerate committed public-claim artifacts (see `PUBLIC_ARTIFACTS` in `reproduce_public_claims.py`):
+
+```bash
+python scripts/reproduce_public_claims.py --smoke --project-root .
 ```
 
 ### ArXiv corpus scale-out
@@ -115,6 +132,28 @@ python scripts/kg_writer.py \
   --kg-root output/kg
 ```
 
+### Build theorem-level semantic retrieval
+
+```bash
+python scripts/statement_retrieval.py build \
+  --ledger-dir output/verification_ledgers \
+  --out output/statement_index
+
+python scripts/statement_retrieval.py query \
+  --index output/statement_index \
+  --query "compactness theorem for tight families of measures" \
+  --top-k 10
+
+python scripts/kg_writer.py \
+  --ledger-dir output/verification_ledgers \
+  --kg-root output/kg \
+  --statement-index output/statement_index \
+  --build-statement-index
+```
+
+The statement index is built from ledger `semantic_equivalence_artifact` fields
+and adds `semantically_similar_to` edges to the KG when passed to `kg_writer.py`.
+
 ### Query the KG via REST API
 
 ```bash
@@ -122,9 +161,16 @@ pip install fastapi uvicorn
 uvicorn scripts/kg_api:app --host 0.0.0.0 --port 8000
 
 curl "localhost:8000/kg/query?layer=trusted&limit=10"
+curl "localhost:8000/kg/stats"
+curl "localhost:8000/kg/semantic/search?q=gaussian%20integrability&top_k=5"
+curl "localhost:8000/kg/math/query?limit=10"
 curl "localhost:8000/kg/proof/2301.04567/Theorem_1"
+curl "localhost:8000/evidence/query?limit=10"
+curl "localhost:8000/ops/dashboard"
 curl -X POST "localhost:8000/verify?paper_id=2304.09598"
 ```
+
+Optional auth and paths (see `kg_api.py`): `DESOL_API_KEY` / `DESOL_EVIDENCE_API_KEY` / `DESOL_OPS_API_KEY` (send `X-API-Key`), `DESOL_KG_DB`, `DESOL_STATEMENT_INDEX`, `DESOL_REPORT_ROOT` (default `output/reports/weekly`), `DESOL_REVIEW_QUEUE_ROOT`, `DESOL_ORCHESTRATOR_ROOT`, `DESOL_VERIFY_USE_ORCHESTRATOR`.
 
 ---
 
@@ -144,7 +190,7 @@ arXiv paper ID
       |
       v
 [3] Statement translation (statement_translator.py)
-    LaTeX → Lean 4 signature (85.3% syntactic accuracy)
+    LaTeX → Lean 4 signature candidates
     vacuity check (lake env lean + trivial)
     round-trip verifier (back-translate → LLM equivalence judge)
     translation_fidelity_score gates promotion at 0.80
@@ -161,7 +207,7 @@ arXiv paper ID
     │  each node = Lean tactic state via leanprover-community/repl  │
     │  UCB1 selection · tactic policy reranking (sft/rl weights)   │
     │  distributed proof cache (SQLite WAL, cross-worker dedup)     │
-    └──────────────────────────────────────────────────────────────-┘
+    └────────────────────────────────────────────────────────────────┘
     ┌── full-draft + repair ─────────────────────────────────────────┐
     │  Leanstral → REPLDojo → classify_lean_error → repair hint     │
     │  error_class in {name-resolution, type-mismatch,              │
@@ -170,8 +216,10 @@ arXiv paper ID
     parallel workers: each gets isolated project copy (no .lake/ conflict)
       |
       v
-[6] Verification ledger (pipeline_status.py)
-    FULLY_PROVEN / INTERMEDIARY_PROVEN / FLAWED / UNRESOLVED
+[6] Verification ledger (pipeline_status.py, pipeline_status_models.py)
+    FULLY_PROVEN / AXIOM_BACKED / INTERMEDIARY_PROVEN / TRANSLATION_LIMITED /
+    FLAWED / UNRESOLVED
+    proof_method distinguishes lake-verified closure vs domain-axiom IOUs
     assumption grounding: Mathlib → internal KG → cited refs → UNGROUNDED
     translation_fidelity_score gated at 0.80 for promotion
       |
@@ -183,8 +231,8 @@ arXiv paper ID
       |
       v
 [8] KG API (kg_api.py) — FastAPI REST gateway
-    GET /kg/query · GET /kg/paper/{id} · GET /kg/proof/{id}/{name}
-    POST /verify — enqueue paper for background processing
+    GET /kg/query · /kg/stats · /kg/math/* · /evidence/* · /ops/*
+    GET /kg/paper/{id} · GET /kg/proof/{id}/{name} · POST /verify
 ```
 
 ---
@@ -224,7 +272,7 @@ python scripts/ponder_loop.py \
 **State-level MCTS** (`mcts_search.py`, default `--search-mode state`)
 - Each node is an individual Lean tactic state via `leanprover-community/repl`
 - UCB1 selection, Leanstral expansion, structural value estimation (goal count × depth)
-- Tactic candidates reranked by bag-of-words logistic policy (trained on `(state, tactic, outcome)` triples — weights loaded from `output/research/tactic_policy/`)
+- Tactic candidates can be reranked by a bag-of-words logistic policy when trained weights are present under `output/research/tactic_policy/`
 - Per-worker project isolation: each parallel worker copies the project tree (minus `.lake/`) into a temp dir — eliminates `lake build` cache conflicts
 
 **Draft-level MCTS** (`--search-mode draft`, legacy)
@@ -235,16 +283,16 @@ python scripts/ponder_loop.py \
 ```bash
 # State-MCTS (default)
 python scripts/mcts_search.py \
-  --file Desol/SDE/Basic.lean \
-  --theorem gaussian_process_zero_mean \
+  --file Desol/Basic.lean \
+  --theorem basic_demo_true \
   --search-mode state \
   --state-mcts-n-tactics 4 \
   --state-mcts-max-depth 12
 
 # Draft-MCTS (legacy)
 python scripts/mcts_search.py \
-  --file Desol/SDE/Basic.lean \
-  --theorem gaussian_process_zero_mean \
+  --file Desol/Basic.lean \
+  --theorem basic_demo_true \
   --search-mode draft \
   --iterations 50 --parallel --num-processes 4
 ```
@@ -254,10 +302,14 @@ python scripts/mcts_search.py \
 **Verification Ledger** (`pipeline_status.py`)
 
 Status taxonomy:
-- `FULLY_PROVEN`: proof steps verified + all assumptions grounded + fidelity ≥ 0.80
+- `FULLY_PROVEN`: proof closes from stated axioms, verified by Lean, all assumptions grounded, fidelity ≥ 0.80
+- `AXIOM_BACKED`: correct Lean statement, proof delegates to a domain axiom not yet in Mathlib (honest IOU, not sorry)
 - `INTERMEDIARY_PROVEN`: proof steps verified, at least one assumption ungrounded
+- `TRANSLATION_LIMITED`: key Mathlib/domain types missing; statement excluded from proof-rate denominator (library frontier, not a proof-search flake)
 - `FLAWED`: proof steps fail local verification or contradiction found
 - `UNRESOLVED`: pipeline could not complete deterministically
+
+Paper-level summaries may map these into the coarser contract in [docs/PAPER_AGNOSTIC_PIPELINE.md](docs/PAPER_AGNOSTIC_PIPELINE.md) (`VALID_STATEMENT_UNPROVEN`, `TRANSLATION_UNCERTAIN`, etc.).
 
 Assumption grounding policy (in order):
 1. Mathlib check via `lake env lean -E "#check ..."`
@@ -293,6 +345,12 @@ python scripts/arxiv_to_lean.py 2301.04567 \
 - Distributed proof cache (SQLite WAL) — cross-worker dedup, key = SHA256(theorem, mode, model, top-k)
 - `translation_fidelity_score` wired end-to-end from translator confidence → ledger → promotion gate
 
+**Full-paper harness** (`formalize_paper_full.py`)
+- Iterative `prove_arxiv_batch` passes with configurable bridge depth/rounds
+- Axiom-debt burndown tiers and statement-validity cohort summaries for closure reports
+- Optional `--write-claim-equivalence-review-queue` / `--claim-equivalence-adjudications` for auditable semantic review (does not relax `FULLY_PROVEN` gates)
+- Mathlib namespace prescreening to mark library-limited domains early (`TRANSLATION_LIMITED`)
+
 **KG Writer** (`kg_writer.py`)
 ```bash
 python scripts/kg_writer.py --ledger-dir output/verification_ledgers --kg-root output/kg
@@ -309,10 +367,15 @@ uvicorn scripts/kg_api:app --host 0.0.0.0 --port 8000
 | Endpoint | Description |
 |----------|-------------|
 | `GET /health` | Liveness check |
-| `GET /kg/query?layer=trusted&limit=100` | Filtered KG query |
+| `GET /kg/query` | Filtered KG query (`layer`, `paper_id`, `status`, `limit`) |
+| `GET /kg/stats` | Programme-wide summary metrics |
 | `GET /kg/paper/{paper_id}` | All nodes for a paper |
 | `GET /kg/proof/{paper_id}/{theorem_name}` | Single theorem payload |
-| `POST /verify?paper_id=2304.09598` | Trigger pipeline (non-blocking) |
+| `GET /kg/semantic/search` | Statement-index semantic search |
+| `GET /kg/math/query` · `GET /kg/math/paper/{paper_id}` · `GET /kg/math/edges` | Math-layer KG views |
+| `GET /evidence/query` · `GET /evidence/paper/{paper_id}` · `GET /evidence/edges` | Evidence graph (optional API key) |
+| `GET /ops/dashboard` · `GET /ops/queue` · `GET /ops/review-queue` | Operational dashboards (optional ops API key) |
+| `POST /verify` | Enqueue paper pipeline (non-blocking; bounded concurrency) |
 
 **Tactic Policy Training** (`tactic_training.py`)
 ```bash
@@ -369,62 +432,47 @@ python scripts/mathlib_contrib.py generate-skeleton \
 DESol/
 ├── Desol/                          # Lean 4 theorem library
 │   ├── Basic.lean
-│   └── SDE/Basic.lean              # Formally verified SDE theorems
+│   ├── Foundations.lean
+│   ├── SDE/Basic.lean              # Formally verified SDE theorems
+│   ├── PaperTheory/                # Per-paper theory modules (e.g. Paper_2304_09598.lean)
+│   ├── PaperTheory/Repair/         # Repair-scaffold Lean for pipeline iterations
+│   └── PaperProofs/                # Generated / curated paper proofs (incl. Auto/)
 ├── scripts/
-│   ├── — Proof search ——————————————————————————————————————————
-│   ├── mcts_search.py              # State-MCTS + draft-MCTS + parallel workers
-│   ├── prove_with_ponder.py        # Full-draft + repair + MCTS driver
-│   ├── ponder_loop.py              # Ponder loop: structured reasoning
-│   ├── lean_repl_server.py         # leanprover-community/repl persistent server
-│   ├── lean_repl_dojo.py           # REPLDojo: incremental lake build checker
-│   ├── proof_backend.py            # Backend selection (auto/leandojo/repldojo)
-│   ├── premise_retrieval.py        # 136k Mathlib4 lemmas, ST encoder
-│   ├── tactic_training.py          # SFT + RL tactic policy trainer
-│   ├── distributed_proof_cache.py  # SQLite WAL proof result cache
-│   │
-│   ├── — arXiv pipeline ————————————————————————————————————————
-│   ├── arxiv_to_lean.py            # End-to-end orchestrator
-│   ├── arxiv_fetcher.py            # arXiv source downloader
-│   ├── latex_preprocessor.py       # Macro expansion + include inlining
-│   ├── theorem_extractor.py        # LaTeX environment extractor
-│   ├── statement_translator.py     # LaTeX→Lean 4, vacuity+round-trip checks
-│   ├── prove_arxiv_batch.py        # Batch proof search over papers
-│   ├── arxiv_cycle.py              # Multi-paper pipeline runner
-│   │
-│   ├── — KG & Verification ——————————————————————————————————————
-│   ├── kg_writer.py                # KG layers + SQLite index + manifests
-│   ├── kg_api.py                   # FastAPI REST gateway
-│   ├── pipeline_status.py          # Status taxonomy + assumption grounding
-│   ├── step_entailment_checker.py  # Proof obligation parser + Z3 SMT check
-│   ├── bridge_proofs.py            # Multi-paper chaining + Z3 (safe AST builder)
-│   ├── mathlib_contrib.py          # Mathlib novelty check + PR skeleton
-│   ├── quality_gates_report.py     # Verification metric extraction
-│   ├── run_benchmark_audit_bundle.py
-│   │
-│   └── — Research ——————————————————————————————————————————————
-│       ├── research.py             # Conjecture generation + proving CLI
-│       ├── conjecture_generator.py
-│       └── build_tc_graph.py       # Mathlib TC graph + HyDRA synonyms
+│   ├── script_registry.py          # Authoritative script maturity registry
+│   ├── arxiv_to_lean.py            # Official single-paper pipeline
+│   ├── formalize_paper_full.py     # Official full-paper report harness
+│   ├── reproduce_public_claims.py  # Official one-shot public-claims reproduction
+│   ├── run_paper_agnostic_suite.py # Official suite runner
+│   ├── arxiv_cycle.py              # Official curated queue batch runner
+│   ├── arxiv_cycle_daemon.py       # Official queue daemon
+│   ├── pipeline_worker.py          # Official worker for queued jobs
+│   └── ...                         # Support, CI/reporting, benchmarks, experiments
 │
 ├── tests/                          # Unit + integration test suite
+├── paper_2304.09598/               # First ingested paper (clean public output)
+│   ├── proofs.lean                 # 25 theorems, 0 errors, 0 sorry
+│   └── README.md                   # What is proven, what isn't, and why
 ├── reproducibility/
 │   ├── README.md
 │   └── minif2f_test_244_results.json
+├── docs/
+│   └── translation_error_log_2304.09598.md
 ├── data/
 │   └── mathlib_embeddings/
 ├── output/
+│   ├── reports/full_paper/         # Suite progress + per-paper suite_report.json (typical)
 │   ├── kg/
 │   │   ├── trusted/theorems.jsonl
 │   │   ├── conditional/theorems.jsonl
 │   │   ├── diagnostics/theorems.jsonl
 │   │   ├── kg_index.db             # SQLite index with dedup + edge queries
 │   │   └── manifests/
+│   ├── orchestrator/               # Optional pipeline orchestrator state (API / verify)
 │   ├── proof_cache.db              # Distributed proof result cache
 │   └── research/
 │       └── tactic_policy/
-│           ├── sft_weights.npy     # Loaded by state-MCTS for tactic reranking
-│           └── rl_weights.npy
-├── OBJECTIVES.md
+│           ├── sft_weights.npy     # Optional; produced by tactic_training.py
+│           └── rl_weights.npy      # Optional; produced by tactic_training.py
 ├── lakefile.toml
 └── requirements.txt
 ```
@@ -445,45 +493,35 @@ DESol/
 | `tactic_training.py` | Export triples → SFT → RL policy; weights used by state-MCTS | ✅ |
 | `distributed_proof_cache.py` | SQLite WAL proof cache; integrated in arxiv_to_lean | ✅ |
 | `latex_preprocessor.py` | `\newcommand/\def/\edef/\let` expansion + include inlining | ✅ |
-| `statement_translator.py` | LaTeX→Lean 4 (85.3% parse rate), vacuity check, round-trip verifier | ✅ |
+| `statement_translator.py` | LaTeX→Lean 4 candidates, vacuity check, round-trip verifier | ✅ |
 | `arxiv_to_lean.py` | arXiv→Lean pipeline, macro expansion, fidelity-gated proofs | ✅ |
+| `reproduce_public_claims.py` | One command: full suite reproduction or `--smoke` evidence indexing | ✅ |
+| `pipeline_worker.py` | Worker for queued verification jobs | ✅ |
 | `kg_writer.py` | KG layers + SQLite index (dedup + transitive edges) + manifests | ✅ |
 | `kg_api.py` | FastAPI REST gateway (query/verify endpoints) | ✅ |
 | `pipeline_status.py` | Verification ledger, status taxonomy, assumption grounding | ✅ |
+| `paper_agnostic_report.py` | Paper-level status and blocker summaries from ledgers | ✅ |
 | `step_entailment_checker.py` | Proof obligation parser + SMT step checker | ✅ |
 | `bridge_proofs.py` | Multi-paper chaining + safe Z3 AST builder + Lean entailment | ✅ |
-| `benchmark_minif2f.py` | miniF2F benchmark: 28.7% pass@1 | ✅ |
+| `benchmark_minif2f.py` | miniF2F proof-search calibration benchmark | ✅ |
 
 ---
 
-## Benchmark Results
+## Evaluation Notes
 
-### miniF2F (Lean 4, test split, 244 problems)
+### miniF2F Calibration
 
-| System | Model | pass@1 |
-|--------|-------|--------|
-| **DeSol** (ponder-loop) | labs-leanstral-2603 + retrieval | **28.7%** |
-| **DeSol** (MCTS-draft) | labs-leanstral-2603 + retrieval | 27.5% |
-| ReProver | GPT-4 + best-first search | 27.3% |
-| LLM-Step | Llama-2 | 22.0% |
-| Aesop | rule-based, no LLM | 4.0% |
-| Raw LeanStral (no search) | labs-leanstral-2603 | 0.0% |
-| HyperTree Proof Search | Meta internal model | 33.0% |
+The proof-search component has a historical miniF2F test-split run recorded at [reproducibility/minif2f_test_244_results.json](reproducibility/minif2f_test_244_results.json): `70/244` solved (`28.7% pass@1`) with `labs-leanstral-2603`, top-12 retrieval, and `workers=1`.
 
-Run details: `labs-leanstral-2603`, 6 ponder rounds per problem, top-12 premise retrieval, `lean-timeout 120s`, `workers=1`, ~1.8h on single CPU server.
+This result is useful as a proof-search calibration point, but it is not the main DESol contribution. It was recorded under Lean `v4.30.0-rc1`; the repository is now pinned to `v4.29.0-rc7`, so reruns should be treated as new artifacts rather than assumed identical reproductions.
 
-Failure breakdown (174 unsolved): 87 tactic errors, 85 search exhausted (6-round budget).
+The previously mentioned `27.5%` draft/state-MCTS result is not promoted in this README until a matching committed artifact exists.
 
-### Ablation
+### Paper-Level Evaluation
 
-| Configuration | pass@1 |
-|---------------|--------|
-| Raw LeanStral, no feedback | 0.0% |
-| DeSol + Mistral Large, no retrieval | 14.0% |
-| DeSol + LeanStral, no retrieval | 22.0% |
-| DeSol + LeanStral + retrieval | **28.7%** |
+DESol's primary evaluation target is paper-level formalization behavior: theorem extraction, statement translation, Lean validation, proof search, axiom debt, and failure attribution across diverse arXiv papers. See [docs/PAPER_AGNOSTIC_PIPELINE.md](docs/PAPER_AGNOSTIC_PIPELINE.md) for the intended ledger contract.
 
-The 0% → 28.7% lift is entirely from the ponder loop + REPLDojo feedback.
+The committed golden10 ingestion evidence currently records 10 attempted arXiv papers, 8 TeX fetch successes, 7 theorem inventories, and 242 theorem-like statements extracted. Translation and proof search were not run in that recorded environment because `MISTRAL_API_KEY` was not set; see [reproducibility/paper_agnostic_golden10_results/summary.json](reproducibility/paper_agnostic_golden10_results/summary.json).
 
 ---
 
@@ -493,7 +531,8 @@ For each theorem, the pipeline outputs:
 
 | Field | Description |
 |-------|-------------|
-| `status` | `FULLY_PROVEN` / `INTERMEDIARY_PROVEN` / `FLAWED` / `UNRESOLVED` |
+| `status` | `FULLY_PROVEN` / `AXIOM_BACKED` / `INTERMEDIARY_PROVEN` / `TRANSLATION_LIMITED` / `FLAWED` / `UNRESOLVED` |
+| `proof_method` | How closure was recorded (`lean_verified`, `domain_axiom`, `translation_limited`, etc.) |
 | `translation_fidelity_score` | Translator confidence (gated at 0.80 for promotion) |
 | `step_obligations` | Per-tactic trace with result and detail |
 | `assumptions` | Each assumption with grounding status and source |
@@ -516,8 +555,14 @@ export DESOL_ENABLE_STEP_ENTAILMENT=1    # Enable SMT step checking
 export DESOL_RETRIEVAL_INDEX=data/mathlib_embeddings
 export DESOL_KG_DB=output/kg/kg_index.db  # KG API database path
 export DESOL_API_KEY=change_me             # Optional: enables API auth (X-API-Key)
+export DESOL_EVIDENCE_API_KEY=change_me    # Optional: evidence routes
+export DESOL_OPS_API_KEY=change_me         # Optional: ops dashboard routes
 export DESOL_RATE_LIMIT_PER_MIN=60         # Optional: per-client API rate limit
 export DESOL_VERIFY_MAX_INFLIGHT=2         # Optional: max concurrent /verify jobs
+export DESOL_REPORT_ROOT=output/reports/weekly
+export DESOL_REVIEW_QUEUE_ROOT=output/reports/review_queue
+export DESOL_ORCHESTRATOR_ROOT=output/orchestrator
+export DESOL_VERIFY_USE_ORCHESTRATOR=0     # Optional: route /verify via orchestrator
 export DESOL_BACKEND_PHASE1=1            # Enable backend selection logic
 export DESOL_PROOF_BACKEND=auto          # auto | leandojo | repldojo
 export DESOL_BACKEND_PARITY_LOG=1        # Log backend parity events
@@ -525,7 +570,7 @@ export DESOL_BACKEND_PARITY_LOG=1        # Log backend parity events
 
 ### Benchmark flags
 ```bash
---mode ponder              # Ponder-loop (28.7% pass@1)
+--mode ponder              # Ponder-loop calibration mode
 --mode mcts-draft          # Draft-MCTS
 --mcts-iterations 15
 --mcts-repair-variants 3
@@ -563,7 +608,7 @@ python scripts/benchmark_minif2f.py \
   --out-dir output/repro
 ```
 
-Expected: `pass@1 = 28.7%` (±2%). Pinned result: [reproducibility/minif2f_test_244_results.json](reproducibility/minif2f_test_244_results.json).
+Historical artifact: [reproducibility/minif2f_test_244_results.json](reproducibility/minif2f_test_244_results.json). Because that artifact records Lean `v4.30.0-rc1` while this repo is pinned to `v4.29.0-rc7`, a fresh run under the current toolchain should be committed as a new artifact before being cited.
 
 Baseline release-readiness checks:
 ```bash
@@ -571,8 +616,10 @@ python3 scripts/release_readiness.py
 ```
 
 Operational and release docs:
-- [docs/PRODUCTION_READINESS.md](docs/PRODUCTION_READINESS.md)
-- [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md)
+- [docs/REPRODUCIBILITY_CONTRACT.md](docs/REPRODUCIBILITY_CONTRACT.md)
+- [docs/PAPER_AGNOSTIC_PIPELINE.md](docs/PAPER_AGNOSTIC_PIPELINE.md)
+- [docs/SCRIPT_MATURITY.md](docs/SCRIPT_MATURITY.md)
+- [docs/internal/](docs/internal/) — release checklist, security notes, and implementation checklists (operator-facing)
 
 ---
 
@@ -598,4 +645,4 @@ Operational and release docs:
 
 ---
 
-**Last Updated**: April 15, 2026 | miniF2F: **28.7% pass@1** ponder-loop | **27.5% pass@1** MCTS-draft (244 problems)
+**Last Updated**: April 27, 2026 | Lean toolchain: `v4.29.0-rc7` | miniF2F kept as proof-search calibration artifact

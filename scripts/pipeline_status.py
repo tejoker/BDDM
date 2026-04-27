@@ -31,6 +31,7 @@ import os
 import re
 import subprocess
 import time
+import hashlib
 from pathlib import Path
 from typing import Any
 from pipeline_status_classification import (
@@ -43,10 +44,14 @@ from pipeline_status_classification import (
 )
 from pipeline_status_models import (
     Assumption,
+    ClaimEquivalenceVerdict,
     FailureOrigin,
+    FailureKind,
     GroundingStatus,
     ProvenanceLink,
+    ProofMethod,
     StatusDecision,
+    SemanticEquivalenceArtifact,
     StepObligation,
     StepVerdict,
     TheoremLedgerEntry,
@@ -99,7 +104,7 @@ def independent_lean_verify(
 
     Returns (success, detail).
     """
-    import tempfile, shutil as _shutil
+    import tempfile
     if not proof_text.strip() or not lean_statement.strip():
         return False, "empty proof or statement"
 
@@ -116,20 +121,22 @@ def independent_lean_verify(
     for line in proof_text.strip().splitlines():
         lean_src += "  " + line + "\n"
 
-    tmp_dir = Path(tempfile.mkdtemp(prefix="desol_verify_"))
+    tmp_dir = project_root / "Desol"
+    tmp_dir.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        prefix="_tmp_verify_",
+        suffix=".lean",
+        dir=tmp_dir,
+        delete=False,
+    ) as _tf:
+        verify_lean = Path(_tf.name)
+        _tf.write(lean_src.encode())
     try:
-        # Copy lakefile and toolchain so lake can find Mathlib
-        for fname in ["lakefile.toml", "lean-toolchain", "lake-manifest.json"]:
-            src = project_root / fname
-            if src.exists():
-                _shutil.copy2(src, tmp_dir / fname)
-
-        verify_lean = tmp_dir / "Verify.lean"
-        verify_lean.write_text(lean_src, encoding="utf-8")
+        pass  # file written above
 
         result = subprocess.run(
-            ["lake", "build", "Verify"],
-            cwd=tmp_dir,
+            ["lake", "env", "lean", str(verify_lean)],
+            cwd=project_root,
             capture_output=True,
             text=True,
             timeout=timeout,
@@ -143,7 +150,7 @@ def independent_lean_verify(
     except Exception as exc:
         return False, str(exc)
     finally:
-        _shutil.rmtree(tmp_dir, ignore_errors=True)
+        verify_lean.unlink(missing_ok=True)
 
 
 def evaluate_promotion_gates(
@@ -161,6 +168,10 @@ def evaluate_promotion_gates(
     lean_statement: str = "",
     proof_text: str = "",
     run_independent_verify: bool = False,
+    claim_equivalence_verdict: ClaimEquivalenceVerdict = ClaimEquivalenceVerdict.UNCLEAR,
+    independent_semantic_evidence: bool | None = None,
+    semantic_adversarial_checks_passed: bool | None = None,
+    axiom_debt: list[str] | None = None,
 ) -> tuple[VerificationStatus, dict[str, bool], list[str]]:
     """Evaluate strict promotion gates and optionally downgrade FULLY_PROVEN.
 
@@ -170,6 +181,19 @@ def evaluate_promotion_gates(
     """
     min_fidelity = float(os.environ.get("DESOL_MIN_TRANSLATION_FIDELITY", "0.80"))
     min_alignment = float(os.environ.get("DESOL_MIN_STATUS_ALIGNMENT", "0.80"))
+    require_equivalent = os.environ.get("DESOL_REQUIRE_EQUIVALENT_FOR_FULL", "1").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+    }
+    require_independent_semantic = os.environ.get(
+        "DESOL_REQUIRE_INDEPENDENT_SEMANTIC_EVIDENCE_FOR_FULL",
+        "1",
+    ).strip().lower() in {
+        "1",
+        "true",
+        "yes",
+    }
 
     # Independent verification: re-run lake build in a clean temp dir
     if run_independent_verify and proved and project_root and lean_statement and proof_text:
@@ -181,6 +205,7 @@ def evaluate_promotion_gates(
     else:
         lean_closed = proved
 
+    debt = [str(x).strip() for x in (axiom_debt or []) if str(x).strip()]
     gates = {
         "lean_proof_closed": lean_closed,
         "step_verdict_verified": step_verdict == StepVerdict.VERIFIED,
@@ -206,14 +231,593 @@ def evaluate_promotion_gates(
             if reproducible_env is not None
             else _auto_reproducible_env(project_root)
         ),
+        "claim_equivalent": (
+            claim_equivalence_verdict == ClaimEquivalenceVerdict.EQUIVALENT
+            if require_equivalent
+            else claim_equivalence_verdict
+            in {ClaimEquivalenceVerdict.EQUIVALENT, ClaimEquivalenceVerdict.UNCLEAR}
+        ),
+        "independent_semantic_equivalence_evidence": (
+            bool(independent_semantic_evidence)
+            if require_independent_semantic
+            else True
+        ),
+        "semantic_adversarial_checks_passed": (
+            bool(semantic_adversarial_checks_passed)
+            if semantic_adversarial_checks_passed is not None
+            else True
+        ),
+        "no_paper_axiom_debt": not debt,
     }
 
     failures = [k for k, ok in gates.items() if not ok]
     final_status = status
-    if status == VerificationStatus.FULLY_PROVEN and failures:
+    if status == VerificationStatus.FULLY_PROVEN and debt:
+        final_status = (
+            VerificationStatus.AXIOM_BACKED
+            if set(failures) <= {"no_paper_axiom_debt"}
+            else VerificationStatus.INTERMEDIARY_PROVEN
+        )
+    elif status == VerificationStatus.FULLY_PROVEN and failures:
         final_status = VerificationStatus.INTERMEDIARY_PROVEN
 
     return final_status, gates, failures
+
+
+def infer_claim_equivalence(
+    *,
+    translation_validated: bool | None,
+    translation_fidelity_score: float | None,
+    status_alignment_score: float | None,
+    uncertainty_flags: list[str] | None,
+    adversarial_flags: list[str] | None,
+    roundtrip_flags: list[str] | None,
+) -> tuple[ClaimEquivalenceVerdict, list[str]]:
+    flags = [str(x).strip() for x in (uncertainty_flags or []) if str(x).strip()]
+    adv = [str(x).strip() for x in (adversarial_flags or []) if str(x).strip()]
+    rt = [str(x).strip() for x in (roundtrip_flags or []) if str(x).strip()]
+    all_flags_l = [f.lower() for f in [*flags, *adv, *rt]]
+    notes: list[str] = []
+    allow_heuristic_equivalence = os.environ.get("DESOL_ALLOW_HEURISTIC_EQUIVALENCE", "0").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+    }
+    independent_positive_markers = (
+        "human_equivalent",
+        "claim_equivalent:human",
+        "semantic_equivalence:verified",
+        "roundtrip_equivalent",
+        "adversarial_passed",
+    )
+    has_independent_positive = any(
+        any(marker in f for marker in independent_positive_markers) for f in all_flags_l
+    )
+
+    # Hard-block only on *semantic* failures (adversarial verdict, policy violation,
+    # or weaker/stronger shape mismatch) — NOT on Lean symbol-resolution failures.
+    # A Lean validation error (e.g. unknown identifier, type mismatch) means the
+    # statement may need repair, but it does not make the claim semantically wrong.
+    _semantic_hard_fail_markers = (
+        "semantic_policy_violation",
+        "trivialization_hard_violation",
+        "adversarial_check_failed",
+        "verdict:wrong",
+        "verdict:suspicious",
+    )
+    _has_semantic_hard_fail = any(
+        any(mark in f for mark in _semantic_hard_fail_markers) for f in all_flags_l
+    )
+    if translation_validated is False and _has_semantic_hard_fail:
+        notes.append("translation_unvalidated_semantic_fail")
+        return ClaimEquivalenceVerdict.UNCLEAR, notes
+
+    # Record validation failure as a note (for traceability) but continue scoring.
+    if translation_validated is False:
+        notes.append("translation_unvalidated")
+
+    if any("weaker" in f for f in all_flags_l):
+        notes.append("detected_weaker_than_paper")
+        return ClaimEquivalenceVerdict.WEAKER, notes
+    if any(("stronger" in f) or ("dropped hypotheses" in f) or ("dropped hypothesis" in f) for f in all_flags_l):
+        notes.append("detected_stronger_than_paper")
+        return ClaimEquivalenceVerdict.STRONGER, notes
+
+    risky_markers = (
+        "roundtrip_semantic_mismatch",
+        "adversarial_mismatch",
+        "schema_self_check_failed",
+        "schema_coverage_missing",
+        "trivially_true",
+        "verdict:wrong",
+        "verdict:suspicious",
+    )
+    if any(any(mark in f for mark in risky_markers) for f in all_flags_l):
+        notes.append("semantic_mismatch_risk")
+        return ClaimEquivalenceVerdict.UNCLEAR, notes
+
+    fidelity = float(translation_fidelity_score or 0.0)
+    alignment = float(status_alignment_score or 0.0)
+
+    # Apply a small fidelity penalty when Lean validation failed (not semantic fail):
+    # the statement may have unresolved symbols so we discount confidence slightly.
+    if translation_validated is False:
+        fidelity = max(0.0, fidelity - 0.10)
+
+    if has_independent_positive and fidelity >= 0.80 and alignment >= 0.75:
+        notes.append("equivalent_independent_semantic_evidence")
+        return ClaimEquivalenceVerdict.EQUIVALENT, notes
+
+    # Heuristic scores are triage, not independent semantic evidence. Keep
+    # heuristic equivalence opt-in so release reports cannot certify claim
+    # equivalence from the same pipeline signals used to generate a proof.
+    if allow_heuristic_equivalence and fidelity >= 0.9 and alignment >= 0.85:
+        notes.append("equivalent_high_confidence_heuristic_opt_in")
+        return ClaimEquivalenceVerdict.EQUIVALENT, notes
+
+    if (
+        allow_heuristic_equivalence
+        and fidelity >= 0.65
+        and alignment >= 0.55
+        and not any(
+            any(mark in f for mark in ("semantic_mismatch", "adversarial", "roundtrip", "schema_coverage_missing"))
+            for f in all_flags_l
+        )
+    ):
+        notes.append("equivalent_medium_confidence")
+        return ClaimEquivalenceVerdict.EQUIVALENT, notes
+
+    notes.append("insufficient_semantic_evidence")
+    return ClaimEquivalenceVerdict.UNCLEAR, notes
+
+
+_INDEPENDENT_SEMANTIC_EVIDENCE_MARKERS = (
+    "human_equivalent",
+    "claim_equivalent:human",
+    "semantic_equivalence:verified",
+    "roundtrip_equivalent",
+    "adversarial_passed",
+    "equivalent_independent_semantic_evidence",
+)
+
+
+def _coerce_str_list(raw: object) -> list[str]:
+    if isinstance(raw, list):
+        return [str(x).strip() for x in raw if str(x).strip()]
+    if isinstance(raw, tuple):
+        return [str(x).strip() for x in raw if str(x).strip()]
+    if isinstance(raw, str) and raw.strip():
+        return [raw.strip()]
+    return []
+
+
+def _strip_latex_markup(text: str) -> str:
+    out = text or ""
+    out = re.sub(r"%.*", "", out)
+    out = re.sub(r"\\(?:begin|end)\{[^}]+\}", " ", out)
+    out = re.sub(r"\\(?:label|ref|cite|eqref)\{[^}]*\}", " ", out)
+    out = re.sub(r"\\[a-zA-Z]+\*?(?:\[[^\]]*\])?", " ", out)
+    out = out.replace("{", " ").replace("}", " ")
+    out = out.replace("$", " ")
+    out = re.sub(r"\s+", " ", out)
+    return out.strip()
+
+
+def _schema_from_context(
+    *,
+    context_pack: dict[str, Any] | None,
+    existing_artifact: dict[str, Any] | None,
+) -> dict[str, Any]:
+    for source in (existing_artifact or {}, context_pack or {}):
+        for key in (
+            "translation_statement_schema",
+            "statement_schema",
+            "normalized_statement_schema",
+            "schema",
+        ):
+            raw = source.get(key) if isinstance(source, dict) else None
+            if isinstance(raw, dict):
+                return raw
+    return {}
+
+
+def _normalized_theorem_text(
+    *,
+    original_latex_theorem: str,
+    explicit_normalized: str,
+    schema: dict[str, Any],
+) -> str:
+    if explicit_normalized.strip():
+        return explicit_normalized.strip()
+    if schema:
+        quantifiers = _coerce_str_list(schema.get("quantifiers"))
+        assumptions = _coerce_str_list(schema.get("assumptions"))
+        claim = str(schema.get("claim", "") or "").strip()
+        parts: list[str] = []
+        if quantifiers:
+            parts.append("Quantifiers: " + "; ".join(quantifiers))
+        if assumptions:
+            parts.append("Assumptions: " + "; ".join(assumptions))
+        if claim:
+            parts.append("Conclusion: " + claim)
+        if parts:
+            return " ".join(parts)
+    return _strip_latex_markup(original_latex_theorem)
+
+
+def _lean_conclusion(lean_statement: str) -> str:
+    stmt = re.sub(r":=\s*by\b.*$", "", lean_statement or "", flags=re.DOTALL).strip()
+    depth = 0
+    target_start = -1
+    for i, ch in enumerate(stmt):
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth = max(0, depth - 1)
+        elif ch == ":" and depth == 0:
+            target_start = i + 1
+    if target_start >= 0:
+        return stmt[target_start:].strip()
+    return stmt
+
+
+def _top_level_binder_count(lean_statement: str) -> int:
+    stmt = re.sub(r":=\s*by\b.*$", "", lean_statement or "", flags=re.DOTALL)
+    return len(re.findall(r"[\(\{\[][^\)\}\]]+:[^\)\}\]]+[\)\}\]]", stmt))
+
+
+def _hypothesis_copies_conclusion(lean_statement: str, conclusion: str) -> bool:
+    target = re.sub(r"\s+", " ", (conclusion or "")).strip()
+    if not target:
+        return False
+    for m in re.finditer(r"\((\w+)\s*:\s*([^()]*)\)", lean_statement or ""):
+        name, typ = m.group(1), re.sub(r"\s+", " ", m.group(2)).strip()
+        if name.startswith("h") and typ == target:
+            return True
+    return False
+
+
+def _semantic_evidence_strings(
+    *,
+    context_pack: dict[str, Any] | None,
+    existing_artifact: dict[str, Any] | None,
+    uncertainty_flags: list[str] | None,
+    adversarial_flags: list[str] | None,
+    roundtrip_flags: list[str] | None,
+    claim_equivalence_notes: list[str] | None,
+    reviewer_evaluator_evidence: list[str] | None,
+) -> list[str]:
+    values: list[str] = []
+    values.extend(_coerce_str_list(uncertainty_flags))
+    values.extend(_coerce_str_list(adversarial_flags))
+    values.extend(_coerce_str_list(roundtrip_flags))
+    values.extend(_coerce_str_list(claim_equivalence_notes))
+    values.extend(_coerce_str_list(reviewer_evaluator_evidence))
+
+    for source in (context_pack or {}, existing_artifact or {}):
+        if not isinstance(source, dict):
+            continue
+        for key in (
+            "semantic_equivalence_evidence",
+            "semantic_evidence",
+            "independent_semantic_equivalence_evidence",
+            "reviewer_evaluator_evidence",
+        ):
+            raw = source.get(key)
+            if isinstance(raw, dict):
+                values.extend(f"{k}:{v}" for k, v in raw.items())
+            else:
+                values.extend(_coerce_str_list(raw))
+        equiv = source.get("semantic_equivalence")
+        if isinstance(equiv, dict):
+            values.extend(f"semantic_equivalence:{k}:{v}" for k, v in equiv.items())
+
+    return [v for v in values if v]
+
+
+def _has_independent_semantic_evidence(
+    *,
+    context_pack: dict[str, Any] | None,
+    existing_artifact: dict[str, Any] | None,
+    evidence_values: list[str],
+    equivalence_verdict: ClaimEquivalenceVerdict,
+) -> bool:
+    lowered = [v.lower() for v in evidence_values]
+    if any(any(marker in value for marker in _INDEPENDENT_SEMANTIC_EVIDENCE_MARKERS) for value in lowered):
+        return True
+    for source in (context_pack or {}, existing_artifact or {}):
+        if not isinstance(source, dict):
+            continue
+        if bool(source.get("semantic_equivalence_verified")) and equivalence_verdict == ClaimEquivalenceVerdict.EQUIVALENT:
+            return True
+        if bool(source.get("independent_semantic_evidence")) and equivalence_verdict == ClaimEquivalenceVerdict.EQUIVALENT:
+            return True
+        equiv = source.get("semantic_equivalence")
+        if isinstance(equiv, dict):
+            verdict = str(equiv.get("verdict", "") or equiv.get("claim_equivalence_verdict", "")).lower()
+            if bool(equiv.get("independent")) and verdict == "equivalent":
+                return True
+    return False
+
+
+def _semantic_adversarial_checks(
+    *,
+    original_latex_theorem: str,
+    lean_statement: str,
+    lean_conclusion: str,
+    uncertainty_flags: list[str] | None,
+    adversarial_flags: list[str] | None,
+    roundtrip_flags: list[str] | None,
+    claim_equivalence_notes: list[str] | None,
+) -> dict[str, dict[str, Any]]:
+    flags = [
+        f.lower()
+        for f in _coerce_str_list(uncertainty_flags)
+        + _coerce_str_list(adversarial_flags)
+        + _coerce_str_list(roundtrip_flags)
+        + _coerce_str_list(claim_equivalence_notes)
+    ]
+    latex_l = (original_latex_theorem or "").lower()
+    lean_l = (lean_statement or "").lower()
+    conclusion_l = (lean_conclusion or "").lower()
+
+    def result(triggered: bool, evidence: list[str]) -> dict[str, Any]:
+        return {"passed": not triggered, "evidence": evidence if triggered else []}
+
+    weaker_evidence = [f for f in flags if "weaker" in f or "dropped conclusion" in f]
+    trivial_evidence = [
+        f
+        for f in flags
+        if any(mark in f for mark in ("trivially_true", "vacuity", "hypothesis_copies_target"))
+    ]
+    if _hypothesis_copies_conclusion(lean_statement, lean_conclusion):
+        trivial_evidence.append("lean_hypothesis_copies_conclusion")
+
+    prop_evidence = [
+        f
+        for f in flags
+        if any(mark in f for mark in ("schema_placeholder", "placeholder_or_schema", "prop_placeholder"))
+    ]
+    if re.search(r"\([A-Za-z_][A-Za-z0-9_']*\s*:\s*Prop\)", lean_statement or ""):
+        domain_words = (
+            "space",
+            "function",
+            "operator",
+            "measure",
+            "solution",
+            "distribution",
+            "sequence",
+            "process",
+            "kernel",
+            "group",
+            "field",
+            "manifold",
+        )
+        if any(word in latex_l for word in domain_words):
+            prop_evidence.append("lean_prop_binder_for_domain_object")
+
+    analytic_markers = (
+        "\\le",
+        "\\ge",
+        "\\leq",
+        "\\geq",
+        "≤",
+        "≥",
+        "estimate",
+        "bound",
+        "norm",
+        "\\|",
+        "integral",
+        "\\int",
+    )
+    tautology_evidence: list[str] = []
+    if any(mark in latex_l for mark in analytic_markers):
+        if conclusion_l in {"true", "0 = 0", "1 = 1"} or re.fullmatch(
+            r"([A-Za-z0-9_'.]+)\s*=\s*\1",
+            conclusion_l,
+        ):
+            tautology_evidence.append("analytic_claim_reduced_to_tautology")
+        if " : true" in lean_l:
+            tautology_evidence.append("lean_statement_concludes_true")
+
+    quantifier_evidence = [f for f in flags if "quantifier" in f and ("erase" in f or "drop" in f)]
+    latex_quantified = any(q in latex_l for q in ("\\forall", "\\exists", " for all ", "there exists", "∀", "∃"))
+    lean_quantified = any(q in (lean_statement or "") for q in ("∀", "∃")) or _top_level_binder_count(lean_statement) > 0
+    if latex_quantified and not lean_quantified:
+        quantifier_evidence.append("latex_quantifier_absent_from_lean_statement")
+
+    return {
+        "lean_theorem_weaker": result(bool(weaker_evidence), weaker_evidence),
+        "trivialized_by_hypothesis": result(bool(trivial_evidence), trivial_evidence),
+        "domain_object_replaced_by_prop": result(bool(prop_evidence), prop_evidence),
+        "analytic_estimate_tautology": result(bool(tautology_evidence), tautology_evidence),
+        "quantifiers_erased": result(bool(quantifier_evidence), quantifier_evidence),
+    }
+
+
+def build_semantic_equivalence_artifact(
+    *,
+    original_latex_theorem: str,
+    normalized_natural_language_theorem: str,
+    lean_statement: str,
+    extracted_assumptions: list[str] | None,
+    extracted_conclusion: str,
+    assumptions: list[Assumption],
+    equivalence_verdict: ClaimEquivalenceVerdict,
+    claim_equivalence_notes: list[str],
+    reviewer_evaluator_evidence: list[str] | None,
+    uncertainty_flags: list[str] | None,
+    adversarial_flags: list[str] | None,
+    roundtrip_flags: list[str] | None,
+    context_pack: dict[str, Any] | None,
+    existing_artifact: dict[str, Any] | None = None,
+) -> SemanticEquivalenceArtifact:
+    existing = existing_artifact if isinstance(existing_artifact, dict) else {}
+    context = context_pack if isinstance(context_pack, dict) else {}
+    schema = _schema_from_context(context_pack=context, existing_artifact=existing)
+    original = (
+        original_latex_theorem.strip()
+        or str(existing.get("original_latex_theorem", "") or "").strip()
+        or str(context.get("original_latex_theorem", "") or "").strip()
+    )
+    schema_assumptions = _coerce_str_list(schema.get("assumptions"))
+    assumption_texts = (
+        _coerce_str_list(extracted_assumptions)
+        or _coerce_str_list(existing.get("extracted_assumptions"))
+        or schema_assumptions
+        or [a.lean_expr for a in assumptions]
+    )
+    lean_target = _lean_conclusion(lean_statement)
+    conclusion = (
+        extracted_conclusion.strip()
+        or str(existing.get("extracted_conclusion", "") or "").strip()
+        or str(schema.get("claim", "") or "").strip()
+        or lean_target
+    )
+    normalized = _normalized_theorem_text(
+        original_latex_theorem=original,
+        explicit_normalized=(
+            normalized_natural_language_theorem.strip()
+            or str(existing.get("normalized_natural_language_theorem", "") or "")
+        ),
+        schema=schema,
+    )
+    evidence = _semantic_evidence_strings(
+        context_pack=context,
+        existing_artifact=existing,
+        uncertainty_flags=uncertainty_flags,
+        adversarial_flags=adversarial_flags,
+        roundtrip_flags=roundtrip_flags,
+        claim_equivalence_notes=claim_equivalence_notes,
+        reviewer_evaluator_evidence=reviewer_evaluator_evidence,
+    )
+    evidence.extend(f"claim_equivalence_note:{n}" for n in claim_equivalence_notes)
+    evidence = list(dict.fromkeys(evidence))
+    checks = _semantic_adversarial_checks(
+        original_latex_theorem=original,
+        lean_statement=lean_statement,
+        lean_conclusion=lean_target,
+        uncertainty_flags=uncertainty_flags,
+        adversarial_flags=adversarial_flags,
+        roundtrip_flags=roundtrip_flags,
+        claim_equivalence_notes=claim_equivalence_notes,
+    )
+    independent = _has_independent_semantic_evidence(
+        context_pack=context,
+        existing_artifact=existing,
+        evidence_values=evidence,
+        equivalence_verdict=equivalence_verdict,
+    )
+    if bool(existing.get("independent_semantic_evidence")):
+        independent = True
+
+    return SemanticEquivalenceArtifact(
+        original_latex_theorem=original,
+        normalized_natural_language_theorem=normalized,
+        lean_statement=lean_statement,
+        extracted_assumptions=assumption_texts,
+        extracted_conclusion=conclusion,
+        equivalence_verdict=equivalence_verdict,
+        reviewer_evaluator_evidence=evidence,
+        adversarial_checks=checks,
+        independent_semantic_evidence=independent,
+    )
+
+
+def _paper_theory_manifest_symbols(lean_file: str) -> dict[str, str]:
+    """Load generated PaperTheory symbol grounding classes when available."""
+    roots: list[Path] = []
+    imported_modules: set[str] = set()
+    if lean_file:
+        p = Path(lean_file)
+        roots.extend([p.parent, *p.parents])
+        if p.exists():
+            try:
+                text = p.read_text(encoding="utf-8", errors="replace")
+                imported_modules = {
+                    m.rsplit(".", 1)[-1]
+                    for m in re.findall(r"(?m)^\s*import\s+(Desol\.PaperTheory\.Paper_[A-Za-z0-9_]+)\b", text)
+                }
+            except Exception:
+                imported_modules = set()
+    roots.append(Path(".").resolve())
+    seen: set[Path] = set()
+    out: dict[str, str] = {}
+    for root in roots:
+        candidate_root = root / "Desol" / "PaperTheory"
+        if not candidate_root.exists() or candidate_root in seen:
+            continue
+        seen.add(candidate_root)
+        for manifest in candidate_root.glob("Paper_*.manifest.json"):
+            if imported_modules and manifest.name.removesuffix(".manifest.json") not in imported_modules:
+                continue
+            try:
+                raw = json.loads(manifest.read_text(encoding="utf-8"))
+            except Exception:
+                continue
+            symbols = raw.get("symbols", []) if isinstance(raw, dict) else []
+            if not isinstance(symbols, list):
+                continue
+            for sym in symbols:
+                if not isinstance(sym, dict):
+                    continue
+                lean = str(sym.get("lean", "") or "").strip()
+                grounding = str(sym.get("grounding", "") or "").strip()
+                if lean:
+                    out[lean] = grounding
+    return out
+
+
+def _debt_label_for_grounding(name: str, grounding: str) -> str:
+    if grounding in {"definition_stub", "mathlib_abbrev"}:
+        return f"paper_definition_stub:{name}"
+    if grounding in {"local_lemma_axiom"}:
+        return f"paper_local_lemma:{name}"
+    return f"paper_symbol:{name}"
+
+
+def _detect_axiom_debt(
+    *,
+    lean_file: str,
+    lean_statement: str,
+    proof_text: str,
+    context_pack: dict[str, Any] | None,
+) -> list[str]:
+    """Record theorem-local dependence on paper-local axioms/stubs.
+
+    A generated file may import a paper-theory module so isolated checks can
+    elaborate, but that import alone is not proof debt. Debt is attached only
+    when the theorem statement/proof/context actually references paper-local
+    symbols or explicit paper-theory names.
+    """
+    debt: list[str] = []
+    ctx = context_pack if isinstance(context_pack, dict) else {}
+    raw_ctx_debt = ctx.get("axiom_debt", [])
+    if isinstance(raw_ctx_debt, list):
+        debt.extend(str(x).strip() for x in raw_ctx_debt if str(x).strip())
+    elif isinstance(raw_ctx_debt, str) and raw_ctx_debt.strip():
+        debt.append(raw_ctx_debt.strip())
+
+    combined = "\n".join([lean_statement or "", proof_text or ""])
+    if re.search(r"\bPaper_[A-Za-z0-9_]+\.", combined) or "Desol.PaperTheory" in combined:
+        debt.append("paper_theory_reference")
+    manifest_symbols = _paper_theory_manifest_symbols(lean_file)
+    for name, grounding in manifest_symbols.items():
+        if re.search(rf"(?<![A-Za-z0-9_']){re.escape(name)}(?![A-Za-z0-9_'])", combined):
+            debt.append(_debt_label_for_grounding(name, grounding))
+
+    paper_symbol_pattern = re.compile(
+        r"(?<![A-Za-z0-9_'])("
+        r"HSobolev|C_T|L2Space|I_i|ξ[0-9]?|Ψ[0-9]?|Γ[0-9]?|Θ|"
+        r"cutoff_solution|paracontrolled_solution|cutoff_enhanced_data|"
+        r"rho_V|naive_low_high_estimate"
+        r")(?![A-Za-z0-9_'])"
+    )
+    for name in paper_symbol_pattern.findall(combined):
+        if name not in manifest_symbols:
+            debt.append(f"paper_symbol:{name}")
+
+    return list(dict.fromkeys(debt))
 
 
 # ---------------------------------------------------------------------------
@@ -232,6 +836,24 @@ _MATHLIB_KNOWN: frozenset[str] = frozenset({
 })
 
 _PROP_INDICATORS = ("∀", "∃", "≤", "≥", "<", ">", "=", "≠", "∈", "⊆", "→", "↔", "¬")
+
+
+def _looks_proposition_type(typ: str, name: str) -> bool:
+    t = (typ or "").strip()
+    if not t:
+        return False
+    # Explicit proposition markers.
+    if any(ind in t for ind in ("∀", "∃", "≤", "≥", "<", ">", "=", "≠", "∈", "⊆", "↔", "¬")):
+        return True
+    # Function arrows often denote ordinary function/object binders; only treat as
+    # assumptions when binder is hypothesis-like (h, h1, hFoo) or ends in Prop.
+    if "→" in t or "->" in t:
+        if name.startswith("h") or t.endswith("Prop"):
+            return True
+        return False
+    if t == "Prop":
+        return True
+    return name.startswith("h")
 
 
 def extract_assumptions_from_statement(lean_statement: str) -> list[Assumption]:
@@ -267,20 +889,15 @@ def extract_assumptions_from_statement(lean_statement: str) -> list[Assumption]:
 
     for m in re.finditer(r"\((\w+)\s*:\s*([^()]+)\)", lean_statement):
         name, typ = m.group(1), m.group(2).strip()
-        # Heuristic: hypothesis binders are usually proposition-like formulas,
-        # or conventionally named h/h1/hFoo even when formula is a named axiom.
-        is_hyp_name = name.startswith("h")
-        looks_named_axiom = bool(re.fullmatch(r"[A-Z][A-Za-z0-9_.'-]*", typ))
-        if any(ind in typ for ind in _PROP_INDICATORS) or is_hyp_name or looks_named_axiom:
-            _push(name, f"({name} : {typ})", GroundingStatus.UNGROUNDED)
-
-    # Capture qualified identifiers used in statements (e.g. MeasureTheory.X, ProbabilityTheory.Y).
-    for m in re.finditer(r"\b([A-Z][A-Za-z0-9_']*(?:\.[A-Za-z][A-Za-z0-9_']*)+)\b", lean_statement):
-        ident = m.group(1).strip()
-        # Skip obvious type-level atoms.
-        if ident in {"Type", "Prop", "Sort"}:
-            continue
-        _push(ident, ident, GroundingStatus.UNGROUNDED, "qualified_identifier")
+        if _looks_proposition_type(typ, name):
+            # Local theorem hypotheses should count as in-scope grounded premises,
+            # not unresolved external dependencies.
+            _push(
+                name,
+                f"({name} : {typ})",
+                GroundingStatus.GROUNDED_INTERNAL_KG,
+                "local_hypothesis",
+            )
 
     return assumptions
 
@@ -382,7 +999,21 @@ def ground_assumptions(
             GroundingStatus.GROUNDED_INTERNAL_KG,
             GroundingStatus.GROUNDED_EXTERNAL_PAPER,
         }:
-            grounded_out.append(a)
+            # Normalize trust metadata when caller pre-classified grounding.
+            if a.trust_class == TrustClass.TRUST_PLACEHOLDER:
+                trust_cls, trust_ref = _trust_for_grounding(a.grounding)
+                grounded_out.append(
+                    Assumption(
+                        label=a.label,
+                        lean_expr=a.lean_expr,
+                        grounding=a.grounding,
+                        grounding_source=a.grounding_source or trust_ref,
+                        trust_class=trust_cls,
+                        trust_reference=a.trust_reference or trust_ref,
+                    )
+                )
+            else:
+                grounded_out.append(a)
             continue
 
         expr_type = _extract_assumption_type_expr(a.lean_expr)
@@ -773,8 +1404,19 @@ def build_ledger_entry(
     translation_validated: bool | None = None,
     translation_rounds_used: int | None = None,
     translation_uncertainty_flags: list[str] | None = None,
+    translation_adversarial_flags: list[str] | None = None,
+    translation_roundtrip_flags: list[str] | None = None,
     translation_confidence: float | None = None,
+    context_pack: dict[str, Any] | None = None,
+    original_latex_theorem: str = "",
+    normalized_natural_language_theorem: str = "",
+    extracted_assumptions: list[str] | None = None,
+    extracted_conclusion: str = "",
+    reviewer_evaluator_evidence: list[str] | None = None,
+    semantic_equivalence_artifact: dict[str, Any] | None = None,
     had_exception: bool = False,
+    proof_method: ProofMethod | None = None,
+    failure_kind: FailureKind | None = None,
 ) -> TheoremLedgerEntry:
     """Build a TheoremLedgerEntry from raw pipeline step_records."""
     step_obligations, first_failing = reconstruct_step_obligations(
@@ -805,6 +1447,22 @@ def build_ledger_entry(
         error_message=error_message,
     )
 
+    # Failure kind: finer-grained taxonomy used for routing.
+    if failure_kind is None:
+        low_err = (error_message or "").lower()
+        if not proved and ("translation not validated" in low_err or "semantic_policy_hard_block" in low_err):
+            failure_kind = FailureKind.TRANSLATION_FAILURE
+        elif not proved and ("unknown identifier" in low_err or "failed to synthesize" in low_err):
+            failure_kind = FailureKind.MISSING_DEFINITION
+        elif not proved and ("expected command" in low_err or "unexpected token" in low_err or "function expected at" in low_err):
+            failure_kind = FailureKind.ELABORATION_FAILURE
+        elif not proved and ("extractdata" in low_err):
+            failure_kind = FailureKind.IMPORT_MISMATCH
+        elif not proved:
+            failure_kind = FailureKind.PROOF_SEARCH_FAILURE
+        else:
+            failure_kind = FailureKind.UNKNOWN
+
     status = infer_status(
         proved=proved,
         step_obligations=step_obligations,
@@ -826,8 +1484,53 @@ def build_ledger_entry(
         translation_confidence=translation_confidence,
         had_exception=had_exception,
     )
+    equiv_verdict, equiv_notes = infer_claim_equivalence(
+        translation_validated=translation_validated,
+        translation_fidelity_score=auto_fidelity,
+        status_alignment_score=auto_alignment,
+        uncertainty_flags=translation_uncertainty_flags,
+        adversarial_flags=translation_adversarial_flags,
+        roundtrip_flags=translation_roundtrip_flags,
+    )
+    semantic_artifact = build_semantic_equivalence_artifact(
+        original_latex_theorem=original_latex_theorem,
+        normalized_natural_language_theorem=normalized_natural_language_theorem,
+        lean_statement=lean_statement,
+        extracted_assumptions=extracted_assumptions,
+        extracted_conclusion=extracted_conclusion,
+        assumptions=assumptions,
+        equivalence_verdict=equiv_verdict,
+        claim_equivalence_notes=equiv_notes,
+        reviewer_evaluator_evidence=reviewer_evaluator_evidence,
+        uncertainty_flags=translation_uncertainty_flags,
+        adversarial_flags=translation_adversarial_flags,
+        roundtrip_flags=translation_roundtrip_flags,
+        context_pack=context_pack,
+        existing_artifact=semantic_equivalence_artifact,
+    )
+    semantic_checks_passed = all(
+        bool(check.get("passed", False))
+        for check in (semantic_artifact.adversarial_checks or {}).values()
+        if isinstance(check, dict)
+    )
 
-    run_indep = os.environ.get("DESOL_INDEPENDENT_VERIFY", "0") == "1"
+    axiom_debt = _detect_axiom_debt(
+        lean_file=lean_file,
+        lean_statement=lean_statement,
+        proof_text=proof_text,
+        context_pack=context_pack,
+    )
+    axiom_debt_hash = (
+        hashlib.sha256("\n".join(axiom_debt).encode("utf-8")).hexdigest()[:16]
+        if axiom_debt
+        else ""
+    )
+
+    run_indep = os.environ.get("DESOL_INDEPENDENT_VERIFY", "1").strip().lower() not in {
+        "0",
+        "false",
+        "no",
+    }
     status, validation_gates, gate_failures = evaluate_promotion_gates(
         status=status,
         proved=proved,
@@ -842,6 +1545,10 @@ def build_ledger_entry(
         lean_statement=lean_statement,
         proof_text=proof_text,
         run_independent_verify=run_indep,
+        claim_equivalence_verdict=equiv_verdict,
+        independent_semantic_evidence=semantic_artifact.independent_semantic_evidence,
+        semantic_adversarial_checks_passed=semantic_checks_passed,
+        axiom_debt=axiom_debt,
     )
 
     theorem_trust_class, theorem_trust_ref, promotion_gate = _derive_theorem_trust(
@@ -850,6 +1557,29 @@ def build_ledger_entry(
     )
     if gate_failures:
         theorem_trust_ref = theorem_trust_ref + ";gate_failures=" + ",".join(gate_failures)
+    review_required = bool(
+        equiv_verdict != ClaimEquivalenceVerdict.EQUIVALENT
+        or ("claim_equivalent" in set(gate_failures))
+        or ("independent_semantic_equivalence_evidence" in set(gate_failures))
+        or ("semantic_adversarial_checks_passed" in set(gate_failures))
+    )
+    review_queue_id = f"review::{theorem_name}" if review_required else ""
+
+    # Infer proof_method when not supplied by the caller.
+    # Only LEAN_VERIFIED when the Lean kernel actually confirmed the proof
+    # (step_records contain a "proof-finished" or "state-advanced" result).
+    if proof_method is None:
+        if proved:
+            _step_results = {
+                str(r.get("result", "") if isinstance(r, dict) else getattr(r, "result", ""))
+                for r in step_records
+            }
+            if _step_results & {"proof-finished", "state-advanced"}:
+                proof_method = ProofMethod.LEAN_VERIFIED
+            else:
+                proof_method = ProofMethod.UNKNOWN
+        else:
+            proof_method = ProofMethod.UNKNOWN
 
     return TheoremLedgerEntry(
         theorem_name=theorem_name,
@@ -858,6 +1588,7 @@ def build_ledger_entry(
         status=status,
         step_verdict=step_verdict,
         failure_origin=failure_origin,
+        failure_kind=failure_kind,
         trust_class=theorem_trust_class,
         trust_reference=theorem_trust_ref,
         promotion_gate_passed=promotion_gate,
@@ -868,9 +1599,25 @@ def build_ledger_entry(
         first_failing_step=first_failing,
         error_message=error_message[:500] if error_message else "",
         proof_mode=proof_mode,
+        proof_method=proof_method,
         rounds_used=rounds_used,
         time_s=round(time_s, 2),
         timestamp=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         validation_gates=validation_gates,
         gate_failures=gate_failures,
+        claim_equivalence_verdict=equiv_verdict,
+        claim_equivalence_notes=equiv_notes,
+        semantic_equivalence_artifact=semantic_artifact,
+        review_required=review_required,
+        review_queue_id=review_queue_id,
+        context_pack=dict(context_pack or {}),
+        axiom_debt=axiom_debt,
+        axiom_debt_hash=axiom_debt_hash,
+        closure_claim=(
+            "lean_verified_without_paper_local_axioms"
+            if status == VerificationStatus.FULLY_PROVEN and not axiom_debt
+            else "proved_modulo_paper_local_axioms"
+            if status == VerificationStatus.AXIOM_BACKED and axiom_debt
+            else "not_closed"
+        ),
     )

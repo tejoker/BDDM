@@ -1,0 +1,269 @@
+{
+  "paper_id": "2012.09271",
+  "ok": false,
+  "evidence_label": "partial_diagnostic_evidence",
+  "primary_metric": "verified_proven",
+  "claim_scope": "Not a full paper closure claim; use blocker taxonomy and verified_proven only.",
+  "out_lean": "/home/projectx/BDDM/output/2012.09271.lean",
+  "ledger_path": "/home/projectx/BDDM/output/verification_ledgers/2012.09271.json",
+  "results_file": "/home/projectx/BDDM/logs/full_paper_2012.09271_suite_results.json",
+  "unresolved_pack": "/home/projectx/BDDM/output/reports/full_paper/2012.09271_suite_report.unresolved.json",
+  "paper_local_theory_file": "",
+  "curated_paper_package": {
+    "available": false
+  },
+  "final_metrics": {
+    "total_theorems": 2,
+    "total_provable": 2,
+    "translation_limited_count": 0,
+    "fully_proven": 0,
+    "fully_proven_status_count": 0,
+    "verified_proven": 0,
+    "real_fully_proven": 0,
+    "auto_closed_count": 0,
+    "axiom_backed_count": 0,
+    "axiom_debt_count": 0,
+    "axiom_debt": [],
+    "closure_by_method": {
+      "lean_verified": 0,
+      "auto_closed_or_reconciled": 0,
+      "axiom_backed": 0,
+      "translation_limited": 0,
+      "unresolved_or_flawed": 2
+    },
+    "full_closure": false,
+    "proving_rate": 0.0,
+    "status_counts": {
+      "FLAWED": 1,
+      "UNRESOLVED": 1
+    },
+    "unresolved_count": 2,
+    "unresolved": [
+      {
+        "theorem_name": "theorem_1",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "corollary_2",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ]
+      }
+    ],
+    "translation_limited": [],
+    "axiom_backed": [],
+    "lean_verified_proven": [],
+    "auto_closed_proven": []
+  },
+  "final_normalization": {
+    "translation_limited_placeholders": 0,
+    "semantic_hard_flawed": 1,
+    "bad_statement_flawed": 0,
+    "ill_typed_artifact_flawed": 0
+  },
+  "blocker_clusters": {
+    "semantic_fidelity_hard_block": {
+      "count": 1,
+      "theorems": [
+        "theorem_1"
+      ]
+    },
+    "translation_fidelity_or_alignment": {
+      "count": 1,
+      "theorems": [
+        "corollary_2"
+      ]
+    }
+  },
+  "pass_history": [
+    {
+      "pass_idx": 1,
+      "metrics": {
+        "total_theorems": 2,
+        "total_provable": 2,
+        "translation_limited_count": 0,
+        "fully_proven": 0,
+        "fully_proven_status_count": 0,
+        "verified_proven": 0,
+        "real_fully_proven": 0,
+        "auto_closed_count": 0,
+        "axiom_backed_count": 0,
+        "axiom_debt_count": 0,
+        "axiom_debt": [],
+        "closure_by_method": {
+          "lean_verified": 0,
+          "auto_closed_or_reconciled": 0,
+          "axiom_backed": 0,
+          "translation_limited": 0,
+          "unresolved_or_flawed": 2
+        },
+        "full_closure": false,
+        "proving_rate": 0.0,
+        "status_counts": {
+          "UNRESOLVED": 2
+        },
+        "unresolved_count": 2,
+        "unresolved": [
+          {
+            "theorem_name": "theorem_1",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "assumptions_grounded",
+              "translation_fidelity_ok",
+              "dependency_trust_complete",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "corollary_2",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "assumptions_grounded",
+              "translation_fidelity_ok",
+              "dependency_trust_complete",
+              "claim_equivalent"
+            ]
+          }
+        ],
+        "translation_limited": [],
+        "axiom_backed": [],
+        "lean_verified_proven": [],
+        "auto_closed_proven": []
+      },
+      "returncode": 0
+    }
+  ],
+  "steps": [
+    {
+      "stage": "reset_paper_ledger",
+      "ledger_path": "/home/projectx/BDDM/output/verification_ledgers/2012.09271.json",
+      "removed": false,
+      "skipped": false
+    },
+    {
+      "stage": "mathlib_coverage_screen",
+      "skipped": false,
+      "coverage_score": 1.0,
+      "library_limited": false,
+      "library_limited_reasons": [],
+      "abstract_chars": 0
+    },
+    {
+      "stage": "library_first_bootstrap",
+      "cmd": [
+        "python3",
+        "scripts/library_first_bootstrap.py",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--domain",
+        "remaining_cs_math"
+      ],
+      "returncode": 0,
+      "elapsed_s": 1.478,
+      "stdout_tail": "{\n  \"domain\": \"remaining_cs_math\",\n  \"ok\": true,\n  \"imports\": [\n    \"Mathlib.Data.SetLike.Basic\",\n    \"Mathlib.Logic.Basic\",\n    \"Mathlib.Computability.Primrec.List\"\n  ],\n  \"stub_file\": \"/home/projectx/BDDM/output/library_bootstrap/bootstrap_remaining_cs_math.lean\",\n  \"elapsed_s\": 1.449,\n  \"stdout_tail\": \"\",\n  \"stderr_tail\": \"\"\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "stage": "paper_theory_builder",
+      "ok": true,
+      "paper_theory_file": "/home/projectx/BDDM/Desol/PaperTheory/Paper_2012_09271.lean",
+      "module": "Desol.PaperTheory.Paper_2012_09271"
+    },
+    {
+      "stage": "bootstrap_arxiv_to_lean",
+      "cmd": [
+        "python3",
+        "scripts/arxiv_to_lean.py",
+        "2012.09271",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--out",
+        "/home/projectx/BDDM/output/2012.09271.lean",
+        "--repair-rounds",
+        "5",
+        "--translation-candidates",
+        "1",
+        "--prove-mode",
+        "full-draft",
+        "--mcts-iterations",
+        "24",
+        "--mcts-repair-variants",
+        "3",
+        "--mcts-max-depth",
+        "5",
+        "--domain",
+        "remaining_cs_math"
+      ],
+      "returncode": 0,
+      "elapsed_s": 8.181,
+      "stdout_tail": "\n[2.1] Fetching arxiv source for 2012.09271 ...\n[fetch] https://arxiv.org/e-print/2012.09271\n  extracted: IEEEtran.cls\n  extracted: balanced_product_codes.tex\n  extracted: fig_balancedproduct.tex\n  extracted: sec_balancedproducts.tex\n  extracted: sec_complexes.tex\n  extracted: sec_expandercodes.tex\n  extracted: sec_explicit.tex\n  extracted: sec_hyperbolic.tex\n  extracted: sec_spectral.tex\n      main file: balanced_product_codes.tex  (8 total .tex files)\n\n[2.1a] Preprocessing LaTeX macros/includes ...\n      warning: preprocessor recursion overflow; falling back to unexpanded root tex files (1 file(s)): maximum recursion depth exceeded\n\n[2.1] Extracting theorem environments ...\n      extraction_mode: fallback_root_tex\n      found: 2 environments (kinds filter: {'theorem', 'corollary', 'lemma', 'proposition'})\n      actionable: 2 environments\n      extracted citation/bibliography refs: 42\n      glossary terms: 40\n\n[resume] Loaded checkpoint: 6 theorem(s) already done\n\n[1/2] [theorem] theorem_1 → theorem_1\n         [resume] skipping theorem_1 — already in checkpoint\n\n[2/2] [theorem] corollary_2 → corollary_2\n         [resume] skipping corollary_2 — already in checkpoint\n[premise_retrieval] loading sentence-transformer 'BAAI/bge-small-en-v1.5' ...\n\n[done] 2 theorems processed\n       translated:  0/2\n       proved:      0/2\n       output:      /home/projectx/BDDM/output/2012.09271.lean\n       ledger:      /home/projectx/BDDM/output/verification_ledgers/2012.09271.json\n",
+      "stderr_tail": "Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n\nLoading weights:   0%|          | 0/199 [00:00<?, ?it/s]\nLoading weights: 100%|██████████| 199/199 [00:00<00:00, 12293.85it/s]\n\u001b[1mBertModel LOAD REPORT\u001b[0m from: BAAI/bge-small-en-v1.5\nKey                     | Status     |  | \n------------------------+------------+--+-\nembeddings.position_ids | UNEXPECTED |  | \n\nNotes:\n- UNEXPECTED:\tcan be ignored when loading from different task/architecture; not ok if you expect identical arch.\n"
+    },
+    {
+      "stage": "prove_pass_1",
+      "cmd": [
+        "python3",
+        "scripts/prove_arxiv_batch.py",
+        "--lean-file",
+        "/home/projectx/BDDM/output/2012.09271.lean",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--paper-id",
+        "2012.09271",
+        "--repair-rounds",
+        "1",
+        "--mode",
+        "full-draft",
+        "--mcts-iterations",
+        "24",
+        "--mcts-repair-variants",
+        "3",
+        "--mcts-max-depth",
+        "5",
+        "--bridge-loop",
+        "--bridge-rounds",
+        "1",
+        "--bridge-depth",
+        "1",
+        "--bridge-max-candidates",
+        "1",
+        "--mandatory-retry-rounds",
+        "0",
+        "--results-file",
+        "/home/projectx/BDDM/logs/full_paper_2012.09271_suite_results.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 4.24,
+      "stdout_tail": "  [sanitize] repaired malformed theorem separators in 2012.09271.lean\n  2012.09271.lean: 2 sorry theorems\n\nTotal: 2 theorems to prove\nEquivalence gate: kept=0 skipped=2 (require claim_equivalence_verdict='equivalent')\n[warn] No theorems left after proving cohort filters.\n",
+      "stderr_tail": ""
+    }
+  ],
+  "reproducibility_bundle": {
+    "report": "/home/projectx/BDDM/reproducibility/full_paper_reports/2012.09271/suite_report.json",
+    "ledger": "/home/projectx/BDDM/reproducibility/full_paper_reports/2012.09271/verification_ledger.json",
+    "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2012.09271/unresolved.json",
+    "manifest": "/home/projectx/BDDM/reproducibility/full_paper_reports/2012.09271/manifest.json"
+  }
+}

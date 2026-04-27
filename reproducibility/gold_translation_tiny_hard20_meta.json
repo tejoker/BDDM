@@ -1,0 +1,372 @@
+{
+  "generated_at_unix": 1776895235,
+  "count": 20,
+  "ledger_root": "output/verification_ledgers",
+  "items": [
+    {
+      "paper_id": "2304.09598",
+      "theorem_name": "Def_Simple",
+      "expected_lean": "-- schema_claim: A multisegment is simple if it has the form: = { [b,, e], [b+1,, e+1], , [b+n-1,, e+n-1] }. theorem isSimple_multisegment {α : Type*} [Fintype α] (a : α) (b e n : ℕ) (h : a = {i : ℕ × ℕ | ∃ k : ℕ, k < n ∧ i = (b + k, e + k)}) : (0 : ℕ) = 0",
+      "score": 250,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ],
+        "assumptions_count": 4,
+        "error_message": "translation not validated"
+      }
+    },
+    {
+      "paper_id": "2304.09598",
+      "theorem_name": "Prop_IncreasingLength",
+      "expected_lean": "-- schema_claim: During each iteration of the Mglin-Waldspurger algorithm the preceding segments will be chosen in increasing length. theorem moeglin_waldspurger_increasing_length {α : Type*} [LinearOrder α] {Δ : α → α → α} {b e : α → α} {m : α} (h_precedes : ∀ Δ₁ Δ₂, Δ₁ < Δ₂ → b Δ₁ < b Δ₂ ∧ e Δ₁ < e Δ₂ ∧ b Δ₂ ≤ e Δ₁ + 1) (h_max : ∀ Δ, e Δ ≤ m) (h_shortest : ∀ Δ, e Δ = m → Δ ≤ Δ_m) : ∀ Δ₁ Δ₂, Δ₁ < Δ₂ → (e Δ₁ = m - 1 ∧ e Δ₂ = m - 1) → (e Δ₁ - b Δ₁ + 1) < (e Δ₂ - b Δ₂ + 1)",
+      "score": 250,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ],
+        "assumptions_count": 4,
+        "error_message": "translation not validated"
+      }
+    },
+    {
+      "paper_id": "2604.14852",
+      "theorem_name": "T_main_deter",
+      "expected_lean": "theorem kenmer_main_deterministic {n : ℕ} (hn : n = 3 ∨ n = 4 ∨ n = 5) (u₀ : ℝ → ℝ) (h_u₀ : True) (Q : ℝ → ℝ) (hQ : True) (hH : True) (I : Set ℝ) (u : ℝ → ℝ → ℝ) : (True → ∀ t, True) ∧ (True → ∀ t ∈ I, True)",
+      "score": 248,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 7,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2604.14852",
+      "theorem_name": "th_lwp_add",
+      "expected_lean": "theorem lwp_additive_solution_exists {n : ℕ} (hn : n = 3 ∨ n = 4 ∨ n = 5) (u₀ : ℝ → ℝ) (A : ℝ) (hA : A > 0) (h_u₀ : Norm.norm (u₀) ≤ A) (φ : ℕ → ℝ → ℝ) (hφ : Filter.Tendsto (fun k => Norm.norm (φ k)) Filter.atTop (nhds 0)) : ∃ τ : ℝ, τ > 0 ∧ ∃ u : ℝ → ℝ → ℝ, (∀ t ∈ Set.Ico 0 τ, ∃! u_t : ℝ → ℝ, u t = u_t) ∧ ContinuousOn (fun t => u t) (Set.Ico 0 τ) ∧ Filter.Tendsto (fun t => Norm.norm (u t)) (nhds τ) (nhds 0)",
+      "score": 248,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 8,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "lem_DensityRatioLB",
+      "expected_lean": "-- schema_claim: m_ e^(-r^2/ - 4^2 d) * (vol(Q)/(Q)) _Q(y)/_Q[](y) M_ e^(r^2/ + 4^2 d) * (vol(Q)/(Q)) theorem DensityRatioLB {α : Type*} [MeasurableSpace α] (Q : Set α) (ν γ_Q : α → ℝ) {m_ν M_ν r α' d : ℝ} {φ : α → ℝ} (hφ : Continuous φ) (y : α) (hy : y ∈ Q) (hν : 0 < ν Q) (hm : 0 < m_ν) (hM : 0 < M_ν) : m_ν * Real.exp (-(r ^ 2 / α') - 4 * Real.pi ^ 2 * d) * (MeasureTheory.volume Q / ν Q) ≤ ν y / γ_Q y ∧ ν y / γ_Q y ≤ M_ν * Real.exp (r ^ 2 / α' + 4 * Real.pi ^ 2 * d) * (MeasureTheory.volume Q / ν Q)",
+      "score": 248,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 9,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "lem_DensityRatioLB",
+      "expected_lean": "-- schema_claim: m_ e^(-r^2/ - 4^2 d) * (vol(Q)/(Q)) _Q(y)/_Q[](y) M_ e^(r^2/ + 4^2 d) * (vol(Q)/(Q)) theorem DensityRatioLB {α : Type*} [MeasurableSpace α] (Q : Set α) (ν γ_Q : α → ℝ) {m_ν M_ν r α' d : ℝ} {φ : α → ℝ} (hφ : Continuous φ) (y : α) (hy : y ∈ Q) (hν : 0 < ν Q) (hm : 0 < m_ν) (hM : 0 < M_ν) : m_ν * Real.exp (-(r ^ 2 / α') - 4 * Real.pi ^ 2 * d) * (MeasureTheory.volume Q / ν Q) ≤ ν y / γ_Q y ∧ ν y / γ_Q y ≤ M_ν * Real.exp (r ^ 2 / α' + 4 * Real.pi ^ 2 * d) * (MeasureTheory.volume Q / ν Q)",
+      "score": 248,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 9,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "lem_integ_lb",
+      "expected_lean": "-- schema_claim: V_{X~^[_ + ]}[(X)] (1/2)V_{X~}[(X)] - (4/)_{L^(T^d)}^2 [I_,^[_] - I_,^[_ + ]] theorem integ_lb (α : Type*) [MetricSpace α] (ε : ℝ) (hε : ε > 0) (μ ν : Measure α) (hμ : μ ≪ ν) (χ : α → ℝ) (hχ : Measurable χ) (hχ_bound : ∀ x, |χ x| ≤ ‖χ‖_L∞) (φ_ε : α → ℝ) (hφ_ε : Measurable φ_ε) (I_μ_ν_ε_φ_ε : ℝ) (I_μ_ν_ε_φ_ε_plus_χ : ℝ) (hI : I_μ_ν_ε_φ_ε - I_μ_ν_ε_φ_ε_plus_χ ≥ 0) (lam : ℝ) (hlam : lam ∈ Set.Icc 0 1) : Real.var (fun x => χ x) (Measure.π ν (fun y => φ_ε y + lam * χ y)) ≥ (1 / 2) * Real.var (fun x => χ x) μ - (4 * lam / ε) * ‖χ‖_L∞ ^ 2 * (I_μ_ν_ε_φ_ε - I_μ_ν_ε_φ_ε_plus_χ)",
+      "score": 248,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 15,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "lem_integ_lb",
+      "expected_lean": "-- schema_claim: V_{X~^[_ + ]}[(X)] (1/2)V_{X~}[(X)] - (4/)_{L^(T^d)}^2 [I_,^[_] - I_,^[_ + ]] theorem integ_lb (α : Type*) [MetricSpace α] (ε : ℝ) (hε : ε > 0) (μ ν : Measure α) (hμ : μ ≪ ν) (χ : α → ℝ) (hχ : Measurable χ) (hχ_bound : ∀ x, |χ x| ≤ ‖χ‖_L∞) (φ_ε : α → ℝ) (hφ_ε : Measurable φ_ε) (I_μ_ν_ε_φ_ε : ℝ) (I_μ_ν_ε_φ_ε_plus_χ : ℝ) (hI : I_μ_ν_ε_φ_ε - I_μ_ν_ε_φ_ε_plus_χ ≥ 0) (lam : ℝ) (hlam : lam ∈ Set.Icc 0 1) : Real.var (fun x => χ x) (Measure.π ν (fun y => φ_ε y + lam * χ y)) ≥ (1 / 2) * Real.var (fun x => χ x) μ - (4 * lam / ε) * ‖χ‖_L∞ ^ 2 * (I_μ_ν_ε_φ_ε - I_μ_ν_ε_φ_ε_plus_χ)",
+      "score": 248,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 15,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "prop_bd2doubling",
+      "expected_lean": "-- schema_assumption_1: P_ac(T^d) -- schema_assumption_2: 0 < m_ (x) M_ < -- schema_claim: is doubling with coefficient 2^d M_ / m_ theorem isDoubling_of_bounded_density {α : Type*} [MeasurableSpace α] [Fintype α] (ρ : α → ℝ) (m_ρ M_ρ : ℝ) (h_ρ_ac : Measurable ρ) (h_ρ_bounds : 0 < m_ρ ∧ ∀ x, m_ρ ≤ ρ x ∧ ρ x ≤ M_ρ) : ∃ C, C = 2 ^ Fintype.card α * M_ρ / m_ρ ∧ ∀ x y r, 0 < r → ρ x ≤ C * ρ y",
+      "score": 248,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 6,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "rem_20",
+      "expected_lean": "theorem kantorovich_potential_first_order_approximation {ε : ℝ} {u₀ : ℝ → ℝ} {ρ₀ ρε : ℝ → ℝ} (hε : 0 < ε) (hu₀ : ∀ x, 0 < u₀ x) (hρ₀ : ∀ x, 0 < ρ₀ x) (hρε : ∀ x, 0 < ρε x) : ∃ C : ℝ, ∀ x, |ε * Real.log (u₀ x * Real.sqrt (ρ₀ x)) - (ε * Real.log (u₀ x * Real.sqrt (ρ₀ x)) - ε * Real.log (u₀ x * Real.sqrt (ρε x)))| ≤ C * ε ^ 2",
+      "score": 248,
+      "meta": {
+        "status": "FLAWED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 6,
+        "error_message": "adversarial_check_failed:The Lean statement is trivially true because the absolute value expression simplifies to |0| = 0, which is always ≤ C * ε² for any C ≥ 0. The theorem does not capture the intended meaning of the Kantorovich potentia"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "rem_50",
+      "expected_lean": "-- schema_assumption_1: Assumption ~ -- schema_claim: KL(R^^m R^^m) = _{j=1}^m (1/_j) [eot__j(_{t_{j-1}}^, _{t_j}^) - eot__j(_{t_{j-1}}^, _{t_j}^)] theorem multiSB_stable_KL_decomp {α : Type*} [MeasurableSpace α] {m : ℕ} {ε : Fin m → ℝ} {ρμ ρν : Fin m → Fin m → ℝ} {Rμ Rν : α → α → ℝ} (hε : ∀ j, 0 < ε j) (hρμ : ∀ j, ρμ j (·) ≥ 0) (hρν : ∀ j, ρν j (·) ≥ 0) (hRμ : ∀ x y, Rμ x y ≥ 0) (hRν : ∀ x y, Rν x y ≥ 0) (hKL : ∀ j, ∃ φμ ψμ φν ψν, Rμ = (fun x y => exp ((φμ x + ψμ y - (1 / ε j) * (x - y)^2))) ∧ Rν = (fun x y => exp ((φν x + ψν y - (1 / ε j) * (x - y)^2)))) : ∀ (μ ν : Fin m → ℝ), (∀ j, μ j ≥ 0) → (∀ j, ν j ≥ 0) → ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsLittleO (fun j => ε j) (fun j => ε j) ∧ ∑ j : Fin m, (1 / ε j) * (Asymptotics.IsBigO (fun j => ε j)",
+      "score": 248,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 7,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "rem_6",
+      "expected_lean": "-- schema_claim: The analysis extends to any compact smooth Riemannian manifolds without boundary. theorem analysis_extends_to_compact_riemannian_manifolds {α : Type*} [MetricSpace α] [TopologicalSpace α] [ChartedSpace ℝ α] [SmoothManifold α] [RiemannianManifold α] [CompleteSpace α] [CompactSpace α] : (0 : ℕ) ≤ 0",
+      "score": 248,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 7,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "thm_stability",
+      "expected_lean": "-- schema_assumption_1: (x) and (x) are probability density functions on T^d -- schema_assumption_2: (x) [m_, M_] for all x T^d -- schema_assumption_3: (x) [m_, M_] for all x T^d -- schema_claim: For any functions , C(T^d), the inequalities V_() (4 + C_ e^(2R^2/ + 8^2 d) + 8 osc()^2 / (3)) [I_,^[_] - I_,^[_ + ]] and V_() (4 + C_ e^(2R^2/ + 8^2 d) + 8 osc()^2 / (3)) [I_,^[_] - I_,^[_ + ]] hold. theorem stability {α : Type*} [MetricSpace α] {μ ν : α → ℝ} {m_μ m_ν M_μ M_ν : ℝ} {φ_ε ψ_ε χ η : α → ℝ} {R C_ν C_μ : ℝ} {d : ℕ} (hε : 0 < ε) (hμ : ∀ x, μ x ∈ Set.Icc m_μ M_μ) (hν : ∀ x, ν x ∈ Set.Icc m_ν M_ν) (hCν : 0 < C_ν) (hCμ : 0 < C_μ) : (∫ x, (χ x - ∫ y, χ y * μ y) ^ 2 * μ x) ≤ (4 * ε + C_ν * Real.exp (2 * R ^ 2 / α + 8 * Real.pi ^ 2 * d) + 8 * (⨆ x, χ x - ⨅ x, χ x) ^ 2 / (3 * ε)) * ((∫ x, φ_ε x * μ x * ν x) - (∫ x, (φ_ε + χ) x * μ x * ν x)) ∧ (∫ x, (η x - ∫ y, η y * ν y) ^ 2 * ν x) ≤ (4 * ε + C_μ * Real.exp (2 * R ^ 2 / α + 8 * Real.pi ^ 2 * d) + 8 * (⨆ x, η x - ⨅ x, η x) ^ 2 / (3 * ε)) * ((∫ x, ψ_ε x * μ x * ν x) - (∫ x, (ψ_ε + η) x * μ x * ν x))",
+      "score": 248,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 12,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2304.09598",
+      "theorem_name": "Basic",
+      "expected_lean": "-- schema_claim: For any two multisegments , with isomorphic quiver representations, c_ = c_ and S_ = S_. If then L_ L_. If then n_ n_. n_ L_ and n_ L_. C_ c_. theorem multisegment_quiver_properties {Multisegment : Type*} (c S L n C : Multisegment → ℕ) (dual : Multisegment → Multisegment) (α β : Multisegment) (h_iso : α = β) (h_le : α ≤ β) : c α = c β ∧ S α = S β ∧ L α ≤ L β ∧ n α ≥ n β ∧ n (dual α) ≥ L α ∧ n α ≥ L (dual α) ∧ C α ≥ c α",
+      "score": 247,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ],
+        "assumptions_count": 3,
+        "error_message": "translation not validated"
+      }
+    },
+    {
+      "paper_id": "2304.09598",
+      "theorem_name": "EqualAB",
+      "expected_lean": "-- schema_assumption_1: is simple -- schema_assumption_2: -- schema_assumption_3: L_ = L_ -- schema_claim: = theorem simple_segments_eq_of_le_and_L_eq {α β : Multiset ℕ} (hα : IsSimple α) (hαβ : α ≤ β) (hL : L α = L β) : α = β",
+      "score": 247,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ],
+        "assumptions_count": 3,
+        "error_message": "translation not validated"
+      }
+    },
+    {
+      "paper_id": "2304.09598",
+      "theorem_name": "Thm_Simple",
+      "expected_lean": "-- schema_assumption_1: is a simple multisegment -- schema_assumption_2: -- schema_assumption_3: ~ ~ -- schema_claim: = theorem simple_multisegment_unique {α β : Multisegment} (hα : IsSimple α) (hαβ : Leq α β) (hαβ_tilde : DualLeq α β) : α = β",
+      "score": 247,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ],
+        "assumptions_count": 3,
+        "error_message": "translation not validated"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "defn_38",
+      "expected_lean": "-- schema_claim: A probability distribution in P(T^d) is doubling with coefficient c > 0 if (B_{T^d}(x, 2r)) c (B_{T^d}(x, r)) holds for any x in T^d and r > 0. theorem isDoubling_measure {α : Type*} [MeasurableSpace α] [Fintype α] (ρ : Measure α) (c : ℝ) (hc : 0 < c) : (∀ (x : α) (r : ℝ), 0 < r → ρ (Metric.ball x (2 * r)) ≤ c * ρ (Metric.ball x r))",
+      "score": 242,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 4,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "prop_2norm_local_convex",
+      "expected_lean": "theorem local_strong_convexity_squared_distance {α R : ℝ} (hα : 0 < α) (hR : 0 < R) : ∀ x ∈ Metric.ball (0 : EuclideanSpace ℝ (Fin d)) R, ∀ y ∈ Metric.ball (0 : EuclideanSpace ℝ (Fin d)) R, ∀ t ∈ Set.Icc 0 1, (1 - t) * (dist 0 x)^2 + t * (dist 0 y)^2 ≥ (dist 0 ((1 - t) • x + t • y))^2 + α * t * (1 - t) * (dist x y)^2",
+      "score": 242,
+      "meta": {
+        "status": "FLAWED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 4,
+        "error_message": "adversarial_check_failed:The Lean theorem requires explicit α and R as parameters with positivity hypotheses, while the LaTeX statement asserts existence of such constants.,The LaTeX statement specifies strong convexity on a ball B_{T^d}(0_"
+      }
+    },
+    {
+      "paper_id": "2604.15152",
+      "theorem_name": "corollary_3",
+      "expected_lean": "-- schema_claim: For the proportion of empty boxes q, the expectation and variance are given by the provided formulas with constraints on R(n) and R(n). theorem empty_boxes_expectation_variance (n : ℕ) (ξ : ℝ) (α β : ℝ) (R₁ R₂ : ℕ → ℝ) (hR₁ : ∀ n, -4 ≤ R₁ n ∧ R₁ n ≤ 0) (hR₂ : ∀ n, -β ^ 2 - 7 * β - 4 * α - 12 ≤ R₂ n ∧ R₂ n ≤ 8) : (Real.exp (-n * ξ) + (2 * n)⁻¹ * (n * ξ) ^ 2 * Real.exp (-n * ξ) + n⁻² * R₁ n, n⁻¹ * α * Real.exp (-n * ξ) * (1 - Real.exp (-n * ξ)) - n⁻¹ * (Real.exp (-n * ξ) * (n * ξ)) ^ 2 + n⁻² * R₂ n)",
+      "score": 239,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 3,
+        "error_message": "translate-only mode"
+      }
+    },
+    {
+      "paper_id": "2604.15191",
+      "theorem_name": "prop_semi_concave",
+      "expected_lean": "-- schema_claim: The map $y c_(x, y)$ is $1$-semiconcave theorem semiconcave_c_epsilon {α : Type*} [MetricSpace α] (x : α) (ε : ℝ) (hε : ε > 0) : SemiconcaveOn (Set.univ : Set α) (fun y => c_epsilon x y) 1",
+      "score": 239,
+      "meta": {
+        "status": "UNRESOLVED",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete"
+        ],
+        "assumptions_count": 3,
+        "error_message": "translate-only mode"
+      }
+    }
+  ]
+}

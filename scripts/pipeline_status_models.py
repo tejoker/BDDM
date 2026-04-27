@@ -10,8 +10,41 @@ from typing import Any
 class VerificationStatus(str, Enum):
     FULLY_PROVEN = "FULLY_PROVEN"
     INTERMEDIARY_PROVEN = "INTERMEDIARY_PROVEN"
+    AXIOM_BACKED = "AXIOM_BACKED"            # statement formalized; proof delegates to domain axiom not yet in Mathlib
     FLAWED = "FLAWED"
     UNRESOLVED = "UNRESOLVED"
+    TRANSLATION_LIMITED = "TRANSLATION_LIMITED"  # key math types absent from Mathlib; excluded from proving rate denominator
+
+
+# Which statuses count as "statement formalized" vs "proof closed".
+# Use these everywhere instead of hard-coding strings so the distinction
+# stays consistent across the pipeline.
+STATUSES_STATEMENT_FORMALIZED: frozenset[VerificationStatus] = frozenset({
+    VerificationStatus.FULLY_PROVEN,
+    VerificationStatus.AXIOM_BACKED,
+    VerificationStatus.INTERMEDIARY_PROVEN,
+})
+STATUSES_PROOF_CLOSED: frozenset[VerificationStatus] = frozenset({
+    VerificationStatus.FULLY_PROVEN,
+})
+
+
+class ProofMethod(str, Enum):
+    """How the proof closure was established.
+
+    Only LEAN_VERIFIED counts toward the proving rate in quality metrics.
+    AUTO_CLOSED and RECONCILE_PROMOTED are convenience promotions that are
+    tracked separately and excluded from the verified-proof denominator.
+    DOMAIN_AXIOM means the proof body calls a domain axiom that cannot be
+    closed without a Mathlib library extension (honest IOU, not sorry).
+    TRANSLATION_LIMITED is not a proof at all — it is an exclusion marker.
+    """
+    LEAN_VERIFIED = "lean_verified"          # lake build confirmed the proof
+    AUTO_CLOSED = "auto_closed"              # trivial tactic applied without lake re-check
+    RECONCILE_PROMOTED = "reconcile_promoted"  # promoted by file-pattern scan post-hoc
+    DOMAIN_AXIOM = "domain_axiom"            # proof body calls an unformalized domain axiom
+    TRANSLATION_LIMITED = "translation_limited"  # statement excluded from proving scope
+    UNKNOWN = "unknown"                      # legacy / pre-field entries
 
 
 class StepVerdict(str, Enum):
@@ -28,6 +61,19 @@ class FailureOrigin(str, Enum):
     UNKNOWN = "UNKNOWN"
 
 
+class FailureKind(str, Enum):
+    EXTRACTION_FAILURE = "extraction_failure"
+    TRANSLATION_FAILURE = "translation_failure"
+    ELABORATION_FAILURE = "elaboration_failure"
+    MISSING_DEFINITION = "missing_definition"
+    MISSING_MATHLIB_THEOREM = "missing_mathlib_theorem"
+    PROOF_SEARCH_FAILURE = "proof_search_failure"
+    FALSE_OR_AMBIGUOUS_STATEMENT = "false_or_ambiguous_statement"
+    DOMAIN_AXIOM_DEBT = "domain_axiom_debt"
+    IMPORT_MISMATCH = "import_mismatch"
+    UNKNOWN = "unknown"
+
+
 class GroundingStatus(str, Enum):
     GROUNDED_MATHLIB = "GROUNDED_MATHLIB"
     GROUNDED_INTERNAL_KG = "GROUNDED_INTERNAL_KG"
@@ -41,6 +87,29 @@ class TrustClass(str, Enum):
     TRUST_EXTERNAL_FORMAL_LIB = "TRUST_EXTERNAL_FORMAL_LIB"
     TRUST_INTERNAL_PROVED = "TRUST_INTERNAL_PROVED"
     TRUST_PLACEHOLDER = "TRUST_PLACEHOLDER"
+
+
+class ClaimEquivalenceVerdict(str, Enum):
+    EQUIVALENT = "equivalent"
+    STRONGER = "stronger"
+    WEAKER = "weaker"
+    UNCLEAR = "unclear"
+
+
+@dataclass
+class SemanticEquivalenceArtifact:
+    """Auditable link between the paper theorem and generated Lean statement."""
+
+    original_latex_theorem: str = ""
+    normalized_natural_language_theorem: str = ""
+    lean_statement: str = ""
+    extracted_assumptions: list[str] = field(default_factory=list)
+    extracted_conclusion: str = ""
+    equivalence_verdict: ClaimEquivalenceVerdict = ClaimEquivalenceVerdict.UNCLEAR
+    reviewer_evaluator_evidence: list[str] = field(default_factory=list)
+    adversarial_checks: dict[str, dict[str, Any]] = field(default_factory=dict)
+    independent_semantic_evidence: bool = False
+    schema_version: str = "1.0"
 
 
 @dataclass
@@ -93,6 +162,7 @@ class TheoremLedgerEntry:
     status: VerificationStatus
     step_verdict: StepVerdict = StepVerdict.INCOMPLETE
     failure_origin: FailureOrigin = FailureOrigin.UNKNOWN
+    failure_kind: FailureKind = FailureKind.UNKNOWN
     trust_class: TrustClass = TrustClass.TRUST_PLACEHOLDER
     trust_reference: str = ""
     promotion_gate_passed: bool = False
@@ -103,18 +173,38 @@ class TheoremLedgerEntry:
     first_failing_step: int = -1
     error_message: str = ""
     proof_mode: str = "full-draft"
+    proof_method: ProofMethod = ProofMethod.UNKNOWN
     rounds_used: int = 0
     time_s: float = 0.0
     timestamp: str = ""
     validation_gates: dict[str, bool] = field(default_factory=dict)
     gate_failures: list[str] = field(default_factory=list)
+    claim_equivalence_verdict: ClaimEquivalenceVerdict = ClaimEquivalenceVerdict.UNCLEAR
+    claim_equivalence_notes: list[str] = field(default_factory=list)
+    semantic_equivalence_artifact: SemanticEquivalenceArtifact = field(
+        default_factory=SemanticEquivalenceArtifact
+    )
+    review_required: bool = False
+    review_queue_id: str = ""
+    context_pack: dict[str, Any] = field(default_factory=dict)
+    axiom_debt: list[str] = field(default_factory=list)
+    axiom_debt_hash: str = ""
+    closure_claim: str = "unverified"
 
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)
         d["status"] = self.status.value
         d["step_verdict"] = self.step_verdict.value
         d["failure_origin"] = self.failure_origin.value
+        d["failure_kind"] = self.failure_kind.value
         d["trust_class"] = self.trust_class.value
+        d["proof_method"] = self.proof_method.value
+        d["claim_equivalence_verdict"] = self.claim_equivalence_verdict.value
+        artifact = d.get("semantic_equivalence_artifact")
+        if isinstance(artifact, dict):
+            verdict = artifact.get("equivalence_verdict")
+            if not isinstance(verdict, str) and hasattr(verdict, "value"):
+                artifact["equivalence_verdict"] = verdict.value
         for a in d["assumptions"]:
             if not isinstance(a["grounding"], str):
                 a["grounding"] = a["grounding"].value
@@ -165,4 +255,3 @@ def all_assumptions_grounded(assumptions: list[Assumption]) -> bool:
         }
         for a in assumptions
     )
-

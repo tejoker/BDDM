@@ -1,0 +1,14 @@
+{
+  "paper_id": "2604.21616",
+  "fetch_ok": true,
+  "tex_files": [
+    "output/paper_sources/golden10/2604.21616/SOAP.tex"
+  ],
+  "main_tex": "output/paper_sources/golden10/2604.21616/SOAP.tex",
+  "root_tex_paths": [
+    "/home/projectx/BDDM/output/paper_sources/golden10/2604.21616/SOAP.tex"
+  ],
+  "expanded_paths": [
+    "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex"
+  ]
+}

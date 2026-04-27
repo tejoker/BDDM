@@ -1,0 +1,618 @@
+{
+  "th_lions": {
+    "lean_signature": "theorem schema_definition_first (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 \u2227 h2; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "th_lions",
+      "definitions": [
+        "Let $V$ and $H$ be Hilbert spaces satisfying: \\begin{equation} V \\subset H \\subset V^* \\text{ (the dual of } V) \\end{equation} \\noindent with the injection from $V$ to $H$ is dense and continuous."
+      ],
+      "notations": [],
+      "local_assumptions": [],
+      "nearby_claims": [
+        "theorem]\\label{th:lions} Let $V$ and $H$ be Hilbert spaces satisfying: \\begin{equation} V \\subset H \\subset V^* \\text{ (the dual of } V) \\end{equation} \\noindent with the injection from $V$ to $H$ is dense and continuous."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - [Lion's theorem]\\label{th:lions} Let $V$ and $H$ be Hilbert spaces satisfying: \\begin{equation} V \\subset H \\subset V^* \\text{ (the dual of } V) \\end{equation} \\noindent with the injection from $V$ to $H$ is dense and continuous. \\noindent Assuming a bilinear - The space \\( H^1_{D,f}(0,z_F) \\) is a Hilbert space with respect to the norm \\[ \\|v\\|_{D,f}^1 = \\left( \\int_0^{z_F} f(z) v^2(z) \\, dz + \\int_0^{z_F} D(z) (v'(z))^2 \\, dz \\right)^{\\frac{1}{2}} \\] Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: } &&\\int_0^{z_F} f \\rho_t \\phi \\hspace{0.1cm} dz+ \\int_0^{z_F} (f \\rho \\mathcal{F})_z \\phi \\hspace{0.1cm} dz+ \\int_0^{z_F} \\rho \\mathcal{G} \\phi \\hspace{0.1cm} dz = \\int_0^{z_F} [D (\\rho_z - \\rho \\mathcal{M})]_z \\phi dz\\nonum"
+    }
+  },
+  "theorem_2": {
+    "lean_signature": "-- TRANSLATION INCOMPLETE \u2014 LaTeX claim: The space H^1_{D,f}(0,z_F) is a Hilbert space with respect to the given norm.\n-- Assumptions: f(z) > 0 for z [0, z_F]; D(z) is Lipschitz continuous; f(z) is positive inside (0, z_F); z_F is a set of measure zero\ntheorem hilbert_space_H1_Df (f D : \u211d \u2192 \u211d) (z_F : \u211d) (hf : \u2200 z \u2208 Set.Icc 0 z_F, 0 < f z)\n    (hD : LipschitzContinuous D) :\n    let H1_Df := { v : \u211d \u2192 \u211d | v \u2208 L2_f(0, z_F) \u2227 v_z_weak \u2208 L2_D(0, z_F) }\n    let norm_H1_Df (v : \u211d \u2192 \u211d) := Real.sqrt (\u222b z in Set.Icc 0 z_F, f z * v z ^ 2 + \u222b z in Set.Icc 0 z_F, D z * (deriv v z) ^ 2)\n    IsComplete H1_Df norm_H1_Df := by sorry",
+    "validated": false,
+    "rounds_used": 5,
+    "last_error": "/home/projectx/BDDM/Desol/_tmp_validate_a12e6f1c.lean:8:39: error: unexpected token '('; expected '=>' or '}'",
+    "confidence": 0.2,
+    "uncertainty_flags": [
+      "formalization_unvalidated",
+      "syntax_error",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "theorem_2",
+      "definitions": [
+        "Let $V$ and $H$ be Hilbert spaces satisfying: \\begin{equation} V \\subset H \\subset V^* \\text{ (the dual of } V) \\end{equation} \\noindent with the injection from $V$ to $H$ is dense and continuous.",
+        "let \\( \\{v_n\\} \\subset H^1_{D,f} \\) be a Cauchy sequence in the induced norm.",
+        "let $\\varphi \\in C_c^{\\infty}(0,z_F)$, i."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "assuming \\eqref{A20}, with $L^2(0,z_F) \\subset L^2_D(0,z_F)$."
+      ],
+      "nearby_claims": [
+        "theorem]\\label{th:lions} Let $V$ and $H$ be Hilbert spaces satisfying: \\begin{equation} V \\subset H \\subset V^* \\text{ (the dual of } V) \\end{equation} \\noindent with the injection from $V$ to $H$ is dense and continuous."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - [Lion's theorem]\\label{th:lions} Let $V$ and $H$ be Hilbert spaces satisfying: \\begin{equation} V \\subset H \\subset V^* \\text{ (the dual of } V) \\end{equation} \\noindent with the injection from $V$ to $H$ is dense and continuous. \\noindent Assuming a bilinear - The space \\( H^1_{D,f}(0,z_F) \\) is a Hilbert space with respect to the norm \\[ \\|v\\|_{D,f}^1 = \\left( \\int_0^{z_F} f(z) v^2(z) \\, dz + \\int_0^{z_F} D(z) (v'(z))^2 \\, dz \\right)^{\\frac{1}{2}} \\] - The set of test functions is a closed subspace of $H^1_{D,f}$, $$\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq H^1_{D,f}. $$ i.e. a Hilbert Space with respect to the $H^1_{D,f}$ norm. Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: equation}\\label{eq:uppBou"
+    }
+  },
+  "theorem_3": {
+    "lean_signature": "-- TRANSLATION INCOMPLETE \u2014 LaTeX claim: T is a closed subspace of H^1_{D,f}\n-- Assumptions: v_n is a Cauchy sequence in T; H^1_{D,f}(0,z_F) is complete; f(z) > 0 for z [0,z_F); D(z) > 0 for z [0,z_F)\ntheorem is_closed_test_functions_subspace {alpha : Type*} [MeasurableSpace alpha] [Fintype alpha]\n    (f D : alpha \u2192 \u211d) (z_F : alpha) (hf : \u2200 z, f z > 0) (hD : \u2200 z, D z > 0)\n    (H1_D_f : Type*) [NormedAddCommGroup H1_D_f] [InnerProductSpace \u211d H1_D_f]\n    (eval_zero : ContinuousLinearMap \u211d H1_D_f \u211d) (T : Set H1_D_f)\n    (hT : T = {v : H1_D_f | eval_zero v = 0})\n    (h_dense : DenseRange eval_zero)\n    (h_complete : CompleteSpace H1_D_f)\n    (h_closed : IsClosed (Set.range eval_zero)) :\n    IsClosed T := by sorry",
+    "validated": false,
+    "rounds_used": 4,
+    "last_error": "/home/projectx/BDDM/Desol/_tmp_validate_aee20f0e.lean:9:37: error: Application type mismatch: The argument\n  \u211d\nhas type\n  Type\nbut is expected to have type\n  ?m.13 \u2192+* ?m.14\nin the application\n  ContinuousLinearMap \u211d",
+    "confidence": 0.2,
+    "uncertainty_flags": [
+      "formalization_unvalidated",
+      "type_mismatch",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "theorem_3",
+      "definitions": [
+        "Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.",
+        "let \\( \\{v_n\\} \\subset H^1_{D,f} \\) be a Cauchy sequence in the induced norm.",
+        "let $\\varphi \\in C_c^{\\infty}(0,z_F)$, i.",
+        "Let \\( \\{v_n\\} \\subset \\mathcal{T} \\) be a Cauchy sequence.",
+        "Let $0<\\epsilon<z_F$."
+      ],
+      "notations": [],
+      "local_assumptions": [],
+      "nearby_claims": [
+        "theorem \\eqref{eq:traceNE} we get \\begin{eqnarray} \\max\\{|v_n(0)-v(0)|, |v_n(z_F) - v(z_F) |\\} \\;\\leq \\; \\dfrac{c_T}{\\gamma_1}\\|{v_n-v}\\|_{H^1_{D,f}(0,\\epsilon)}."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - The space \\( H^1_{D,f}(0,z_F) \\) is a Hilbert space with respect to the norm \\[ \\|v\\|_{D,f}^1 = \\left( \\int_0^{z_F} f(z) v^2(z) \\, dz + \\int_0^{z_F} D(z) (v'(z))^2 \\, dz \\right)^{\\frac{1}{2}} \\] - The set of test functions is a closed subspace of $H^1_{D,f}$, $$\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq H^1_{D,f}. $$ i.e. a Hilbert Space with respect to the $H^1_{D,f}$ norm. - \\label{rem} Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: let \\( \\{v_n\\} \\subset H"
+    }
+  },
+  "rem": {
+    "lean_signature": "theorem schema_template (h1 : Prop) (h2 : Prop) : h1 \u2227 h2 \u2192 (0 : \u2115) = 0 := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.87,
+    "uncertainty_flags": [
+      "schema_template_mode",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "rem",
+      "definitions": [
+        "Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.",
+        "Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$.",
+        "assume that $f(z_F)\\geq 0$ and $D(z_F)\\geq 0$ (assumptions \\eqref{A10}, \\eqref{A20}) and impose in addition to assumption \\eqref{A2pp0}, that $f(z)$ and $D(z)$ have { similar behavior at $z_F$,} as in assumption \\eqref{A2p2}."
+      ],
+      "notations": [],
+      "local_assumptions": [],
+      "nearby_claims": [
+        "theorem statements: - The set of test functions is a closed subspace of $H^1_{D,f}$, $$\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq H^1_{D,f}."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - The set of test functions is a closed subspace of $H^1_{D,f}$, $$\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq H^1_{D,f}. $$ i.e. a Hilbert Space with respect to the $H^1_{D,f}$ norm. - \\label{rem} Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F - [Weighted Poincare Inequality]\\label{th:WPICa} Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$. Then, \\begin{equation}\\label{eq:WPI} \\|u\\|_v = \\left(\\int_0^{z_F Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\"
+    }
+  },
+  "th_WPICa": {
+    "lean_signature": "theorem schema_definition_first (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 \u2227 h2; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "th_WPICa",
+      "definitions": [
+        "Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.",
+        "Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$.",
+        "assume that $f(z_F)\\geq 0$ and $D(z_F)\\geq 0$ (assumptions \\eqref{A10}, \\eqref{A20}) and impose in addition to assumption \\eqref{A2pp0}, that $f(z)$ and $D(z)$ have { similar behavior at $z_F$,} as in assumption \\eqref{A2p2}."
+      ],
+      "notations": [],
+      "local_assumptions": [],
+      "nearby_claims": [
+        "theorem statements: - The set of test functions is a closed subspace of $H^1_{D,f}$, $$\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq H^1_{D,f}.",
+        "Theorem \\ref{th:WPICa}) for absolutely continuous functions on every compact subinterval, which includes $\\mathcal{T}$ (Lemma \\ref{lem:tc}).",
+        "Theorem \\ref{th:4g}."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - The set of test functions is a closed subspace of $H^1_{D,f}$, $$\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq H^1_{D,f}. $$ i.e. a Hilbert Space with respect to the $H^1_{D,f}$ norm. - \\label{rem} Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F - [Weighted Poincare Inequality]\\label{th:WPICa} Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$. Then, \\begin{equation}\\label{eq:WPI} \\|u\\|_v = \\left(\\int_0^{z_F Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\"
+    }
+  },
+  "lem_tc": {
+    "lean_signature": "-- TRANSLATION INCOMPLETE \u2014 LaTeX claim: T is a subset of C_a(0,z_F)\n-- Assumptions: v(0) = 0\ntheorem subset_T_H1_D_f_C_a {alpha : Type*} [NormedAddCommGroup alpha] [NormedSpace \u211d alpha]\n    (v : alpha) (h1 : v \u2208 {w : alpha | \u2203 (hw : w \u2208 Set.univ), True})\n    (h2 : \u2203 (z_F : \u211d), True)\n    (h3 : \u2203 (C_a : Set alpha), True)\n    (h4 : \u2203 (H1_D_f : Set alpha), True)\n    (h5 : v \u2208 {w : alpha | \u2203 (hw : w \u2208 H1_D_f), True})\n    (h6 : v \u2208 {w : alpha | \u2203 (hw : w \u2208 Set.univ), True})\n    (h7 : \u2203 (f : \u211d \u2192 \u211d), \u2200 z, z \u2208 Set.Ioo 0 z_F \u2192 f z > 0)\n    (h8 : \u2203 (D : \u211d \u2192 \u211d), \u2200 z, z \u2208 Set.Ioo 0 z_F \u2192 D z > 0)\n    (h9 : v \u2208 {w : alpha | \u2203 (hw : w \u2208 Set.univ), True})\n    : v \u2208 {w : alpha | \u2203 (hw : w \u2208 C_a), True} := by sorry",
+    "validated": false,
+    "rounds_used": 5,
+    "last_error": "semantic_repair_invalid:/home/projectx/BDDM/Desol/_tmp_validate_fdda8525.lean:16:31: error: typeclass instance problem is stuck\n  Membership alpha ?m.3\n\nNote: Lean will not try to resolve this typeclass instance problem because the second type argument to `Membership` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.\n\nHint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.",
+    "confidence": 0.2,
+    "uncertainty_flags": [
+      "formalization_unvalidated",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "lem_tc",
+      "definitions": [
+        "Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.",
+        "Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$.",
+        "Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.",
+        "Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$.",
+        "Let $v \\in \\mathcal{T}$, then $v(0) = 0$ and $v\\in H^1_{D,f}(0,z_F)$."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "if and only if \\begin{eqnarray Local proof sketch: Let $v \\in \\mathcal{T}$, then $v(0) = 0$ and $v\\in H^1_{D,f}(0,z_F)$."
+      ],
+      "nearby_claims": [
+        "Theorem \\ref{th:WPICa}) for absolutely continuous functions on every compact subinterval, which includes $\\mathcal{T}$ (Lemma \\ref{lem:tc}).",
+        "Theorem \\ref{th:4g}.",
+        "theorem}[Weighted Poincare Inequality]\\label{th:WPICa} Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{rem} Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F - [Weighted Poincare Inequality]\\label{th:WPICa} Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$. Then, \\begin{equation}\\label{eq:WPI} \\|u\\|_v = \\left(\\int_0^{z_F - \\label{lem:tc} $\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq C_a(0,z_F) $ Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: (z_F)\\geq 0$ (assumptions \\eqref{A10}, \\eqref{A20}) and impose in a"
+    }
+  },
+  "cor_wpi": {
+    "lean_signature": "theorem schema_definition_first (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 \u2227 h2; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "cor_wpi",
+      "definitions": [
+        "Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.",
+        "Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$.",
+        "Let $v \\in \\mathcal{T}$, then $v(0) = 0$ and $v\\in H^1_{D,f}(0,z_F)$."
+      ],
+      "notations": [],
+      "local_assumptions": [],
+      "nearby_claims": [
+        "theorem} \\begin{proof} By \\cite[Theorem 1.",
+        "lemma}\\label{lem:tc} $\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq C_a(0,z_F) $ \\end{lemma} \\begin{proof} Let $v \\in \\mathcal{T}$, then $v(0) = 0$ and $v\\in H^1_{D,f}(0,z_F)$."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{rem} Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F - [Weighted Poincare Inequality]\\label{th:WPICa} Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$. Then, \\begin{equation}\\label{eq:WPI} \\|u\\|_v = \\left(\\int_0^{z_F - \\label{lem:tc} $\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq C_a(0,z_F) $ Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: here $W(0,z_F)$ is the set of weight functions that are measurable,"
+    }
+  },
+  "eq_zf": {
+    "lean_signature": "-- TRANSLATION INCOMPLETE \u2014 LaTeX claim: |v(z)| C_0 \\|v\\|_{D, f}, z [0, z_F]\n-- Assumptions: condition is satisfied; v T\ntheorem weighted_inequality_lemma {alpha : Type*} [NormedAddCommGroup alpha] {v : alpha} {f D : \u211d \u2192 \u211d}\n    {z_F : \u211d} {C0 : \u211d} (hf : \u2200 z \u2208 Set.Icc 0 z_F, 0 < f z)\n    (hD : LipschitzWith (1 : \u211d) D) (hcond : \u2200 z \u2208 Set.Ioo 0 z_F,\n    \u2203 C, \u2200f x in Filter.atTop, |(z_F - z) * \u222b x \u2208 Set.Icc 0 z, 1 / D x| \u2264 C * 1)\n    (hv : v \u2208 {v : alpha | \u2203 (h : v \u2208 Set.Icc 0 z_F), True}) :\n    \u2200 z \u2208 Set.Icc 0 z_F, Real.sqrt (f z) * \u2016v\u2016 \u2264 C0 * \u2016v\u2016 := by sorry",
+    "validated": false,
+    "rounds_used": 5,
+    "last_error": "/home/projectx/BDDM/Desol/_tmp_validate_bfa4b5ad.lean:9:13: error: unexpected token 'in'; expected ','",
+    "confidence": 0.2,
+    "uncertainty_flags": [
+      "formalization_unvalidated",
+      "syntax_error",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "eq_zf",
+      "definitions": [
+        "Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.",
+        "Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$.",
+        "Let $v \\in \\mathcal{T}$, then $v(0) = 0$ and $v\\in H^1_{D,f}(0,z_F)$.",
+        "Let $u \\in \\mathcal{T} \\subset C_a(0,z_F)$.",
+        "Assume now that $D(z_F) = 0$."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "if $D(z_F) \\not= 0$, we get $$ D(z)\\int_0^z \\frac{1}{D(t)}dt \\leq \\|D\\|_{{\\infty}} \\int_0^{z_F} \\frac{1}{D(t)}dt< \\infty.",
+        "if $D(z_F) \\neq 0$, and\\\\ $C_0 = \\displaystyle \\left\\|\\frac{\\sqrt f}{ \\sqrt D} \\right\\|_{\\infty}L\\; B^2$ if $D(z_F) = 0$."
+      ],
+      "nearby_claims": [
+        "lemma}\\label{lem:tc} $\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq C_a(0,z_F) $ \\end{lemma} \\begin{proof} Let $v \\in \\mathcal{T}$, then $v(0) = 0$ and $v\\in H^1_{D,f}(0,z_F)$."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{rem} Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F - [Weighted Poincare Inequality]\\label{th:WPICa} Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$. Then, \\begin{equation}\\label{eq:WPI} \\|u\\|_v = \\left(\\int_0^{z_F - \\label{lem:tc} $\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq C_a(0,z_F) $ Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: egin{proof} By \\cite[Theorem 1.14]{OK90} for $p=q=p'=2$, $a=0, b=z_"
+    }
+  },
+  "th_4g": {
+    "lean_signature": "theorem schema_definition_first (h1 : Prop) : (let Claim : Prop := h1; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "th_4g",
+      "definitions": [
+        "Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.",
+        "Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$.",
+        "Assume that the condition \\eqref{cond:WI} is satisfied.",
+        "Assume now that $D(z_F) = 0$."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "if $D(z_F) \\not= 0$, we get $$ D(z)\\int_0^z \\frac{1}{D(t)}dt \\leq \\|D\\|_{{\\infty}} \\int_0^{z_F} \\frac{1}{D(t)}dt< \\infty."
+      ],
+      "nearby_claims": [
+        "lemma}Assume that the condition \\eqref{cond:WI} is satisfied.",
+        "lemma} \\begin{proof} Since $v \\in T\\subset C_a(0, z_F)$, and we have $$ \\sqrt{f(z)} v(z) = \\sqrt{f(z)} \\int_0^z v_z(t) dt, \\quad \\forall z\\in [0, z_F]."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{rem} Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F - [Weighted Poincare Inequality]\\label{th:WPICa} Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$. Then, \\begin{equation}\\label{eq:WPI} \\|u\\|_v = \\left(\\int_0^{z_F - \\label{lem:tc} $\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq C_a(0,z_F) $ Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: eqnarray} &&\\left \\| #1 \\right \\|_{2}{u}^2 = \\int_0^{z_F} u^2(z)dz "
+    }
+  },
+  "lemm_M": {
+    "lean_signature": "-- TRANSLATION INCOMPLETE \u2014 LaTeX claim: M is a symmetric positive definite matrix\ntheorem triadiagonal_mass_matrix_symmetric_positive_definite (n : \u2115) (hn : 1 < n) (M : Matrix (Fin (n - 1)) (Fin (n - 1)) \u211d) :\n    M.IsSymm \u2227 M.IsPosDef := by sorry",
+    "validated": false,
+    "rounds_used": 4,
+    "last_error": "semantic_repair_invalid:/home/projectx/BDDM/Desol/_tmp_validate_4d117f0f.lean:7:17: error(lean.invalidField): Invalid field `IsPosDef`: The environment does not contain `Function.IsPosDef`, so it is not possible to project the field `IsPosDef` from an expression\n  M\nof type `Fin (n - 1) \u2192 Fin (n - 1) \u2192 \u211d`",
+    "confidence": 0.2,
+    "uncertainty_flags": [
+      "formalization_unvalidated",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "lemm_M",
+      "definitions": [],
+      "notations": [],
+      "local_assumptions": [
+        "Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite.",
+        "if $T_e\\Delta t \\,\\rho (M_f^{-1}C) < 1$, then $V$ is invertible by Neumann series condition."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{lemm:M} The triadiagonal mass matrix $M$ is a symmetric positive definite matrix."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{lemm:M} The triadiagonal mass matrix $M$ is a symmetric positive definite matrix. - \\label{lemm:Mf}Given that $f(z) \\geq 0$, then the tridiagonal weighted mass matrix $M_f$ is symmetric positive definite. Moreover, the approximated matrix $M_f$ is positive definite. - \\label{lemma:2.8} Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite. Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: atrix}}, $ with $\\zeta_i = f_i+f_{i+1}$. \\item $ M= { \\dfrac{h}{6}\\begin{pmatrix} 4& 1 & 0 & \\hdots & 0\\\\ 1& 4 & 1& & \\vdots\\\\ 0 & \\ddots & \\ddots & \\ddots & 0\\\\ \\vdots & & 1 &4 & 1\\\\ 0&\\cdots&0&1&2 \\end{pmatrix}}. $ \\end{ite"
+    }
+  },
+  "lemm_Mf": {
+    "lean_signature": "-- TRANSLATION INCOMPLETE \u2014 LaTeX claim: The tridiagonal weighted mass matrix $M_f$ is symmetric positive definite. Moreover, the approximated matrix $M_f$ is positive definite.\n-- Assumptions: $f(z) 0$\ntheorem tridiagonal_weighted_mass_matrix_symmetric_positive_definite\n  {n : \u2115} {f : \u211d \u2192 \u211d} (hf : \u2200 z, f z \u2265 0) :\n  let M_f : Matrix (Fin (n - 1)) (Fin (n - 1)) \u211d :=\n    fun i j => \u222b z in Set.Icc 0 1, f z * (fun i => phi (i + 1) z) i * (fun j => phi (j + 1) z) j\n  (\u2200 i j, M_f i j = M_f j i) \u2227 (\u2200 y : Fin (n - 1) \u2192 \u211d, y \u2260 0 \u2192 0 < \u2211 i, \u2211 j, y i * M_f i j * y j) := by sorry",
+    "validated": false,
+    "rounds_used": 5,
+    "last_error": "/home/projectx/BDDM/Desol/_tmp_validate_04bd781c.lean:9:51: error: Function expected at\n  phi\nbut this term has type\n  ?m.1\n\nNote: Expected a function because this term is being applied to the argument\n  (i + 1)\n\nHint: The identifier `phi` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.\n/home/projectx/BDDM/Desol/_tmp_validate_04bd781c.lean:9:80: error: Function expected at\n  phi\nbut this term has type\n  ?m.1\n\nNote: Expected a function because this term is being applied to the argument\n  (j + 1)\n\nHint: The identifier `phi` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.",
+    "confidence": 0.2,
+    "uncertainty_flags": [
+      "formalization_unvalidated",
+      "unknown_symbol",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "lemm_Mf",
+      "definitions": [],
+      "notations": [],
+      "local_assumptions": [
+        "Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite.",
+        "if $T_e\\Delta t \\,\\rho (M_f^{-1}C) < 1$, then $V$ is invertible by Neumann series condition.",
+        "if and only if $ v(z) = 0$ over $(0,z_F)$, which is not the case."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{lemm:M} The triadiagonal mass matrix $M$ is a symmetric positive definite matrix.",
+        "lemma}\\label{lemm:M} The triadiagonal mass matrix $M$ is a symmetric positive definite matrix.",
+        "lemma} \\begin{proof} $M$ is given by $\\displaystyle M_{ij} = {\\int_0^{1}} \\varphi_{i+1}(z)\\varphi_{j+1}(z)\\,dz = \\big\\langle \\varphi_{i+1}(z), \\,\\varphi_{j+1}(z) \\big\\rangle$."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{lemm:M} The triadiagonal mass matrix $M$ is a symmetric positive definite matrix. - \\label{lemm:Mf}Given that $f(z) \\geq 0$, then the tridiagonal weighted mass matrix $M_f$ is symmetric positive definite. Moreover, the approximated matrix $M_f$ is positive definite. - \\label{lemma:2.8} Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite. Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: ve that most of the matrices are positive definite, specifically the $M_f$ matrix. Then, to prove the existence of a unique solution of system \\eqref{eq:Mat}, we will prove the invertibility of the matrix \\begin{eqnarray*} V="
+    }
+  },
+  "lemma_2_8": {
+    "lean_signature": "-- TRANSLATION INCOMPLETE \u2014 LaTeX claim: K_f is positive definite and B is positive semi-definite\n-- Assumptions: f(z) 0; f(z) is strictly decreasing; f(z) is positive\ntheorem lemma_2_8 {n : \u2115} {f : \u211d \u2192 \u211d} {K_f : Matrix (Fin (n - 1)) (Fin (n - 1)) \u211d} {B : Matrix (Fin (n - 1)) (Fin (n - 1)) \u211d}\n    (hf_nonneg : \u2200 z, 0 \u2264 f z) (hf_decr : StrictAnti f) (hf_pos : \u2200 z, 0 < f z) :\n    (\u2200 y : Fin (n - 1) \u2192 \u211d, 0 < \u2211 i : Fin (n - 1), \u2211 j : Fin (n - 1), y i * y j * K_f i j) \u2227\n    (\u2200 y : Fin (n - 1) \u2192 \u211d, 0 \u2264 \u2211 i : Fin (n - 1), \u2211 j : Fin (n - 1), y i * y j * B i j) := by sorry",
+    "validated": false,
+    "rounds_used": 4,
+    "last_error": "semantic_policy_violation:claim_shape_mismatch:ineq->forall,schema_coverage:assumption_slot_2_anchor_missing:strictly,schema_coverage:assumption_slot_3_anchor_missing:positive,schema_self_check:schema_self_check_inconsistent,schema_self_check:missing_claim_parts:K_f is positive definite,schema_self_check:missing_claim_parts:B is positive semi-definite,schema_self_check:notes:Lean theorem does not explicitly state the positive semi-definiteness of B, only the positive definiteness of K_f,schema_self_check:notes:Lean theorem uses matrix notation and summation, while the schema uses more abstract notation",
+    "confidence": 0.2,
+    "uncertainty_flags": [
+      "formalization_unvalidated",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "semantic_policy_hard_block",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "lemma_2_8",
+      "definitions": [],
+      "notations": [],
+      "local_assumptions": [
+        "Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite.",
+        "if and only if $ v(z) = 0$ over $(0,z_F)$, which is not the case."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{lemm:M} The triadiagonal mass matrix $M$ is a symmetric positive definite matrix."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{lemm:M} The triadiagonal mass matrix $M$ is a symmetric positive definite matrix. - \\label{lemm:Mf}Given that $f(z) \\geq 0$, then the tridiagonal weighted mass matrix $M_f$ is symmetric positive definite. Moreover, the approximated matrix $M_f$ is positive definite. - \\label{lemma:2.8} Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite. Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: q 0$ we have that $\\displaystyle v(z) = \\sum_{i=1}^{n-1} y_i \\varphi_{i+1}(z) \\neq 0$ over some subset of $(0,z_F)$, then\\vspace{-2mm} \\begin{align*} y^T M_f y &= \\sum_{i=1}^{n-1}\\sum_{j=1}^{n-1} y_i y_j (M_f)_{ij} %\\\\[0.2cm]"
+    }
+  },
+  "lemm_SD": {
+    "lean_signature": "-- TRANSLATION INCOMPLETE \u2014 LaTeX claim: S(D) is symmetric and positive definite, and the approximated matrix S(D) is positive definite\n-- Assumptions: D(z) 0; D(z) > 0 over [0,1)\ntheorem lemm:SD (D : \u211d \u2192 \u211d) (hD_nonneg : \u2200 z, D z \u2265 0) (hD_pos : \u2200 z \u2208 Set.Ico 0 1, D z > 0) :\n  let S := fun (i j : Fin (n - 1)) => \u222b z in Set.Icc 0 1, D z * (deriv (fun x => x) z) * (deriv (fun x => x) z)\n  let S_approx := fun (i j : Fin (n - 1)) => \u222b z in Set.Icc 0 1, D z * (deriv (fun x => x) z) * (deriv (fun x => x) z)\n  (\u2200 i j, S i j = S j i) \u2227\n  (\u2200 y : Fin (n - 1) \u2192 \u211d, 0 < \u2211 i, \u2211 j, y i * y j * S i j) \u2227\n  (\u2200 y : Fin (n - 1) \u2192 \u211d, 0 < \u2211 i, \u2211 j, y i * y j * S_approx i j) := by sorry",
+    "validated": false,
+    "rounds_used": 5,
+    "last_error": "semantic_repair_invalid:/home/projectx/BDDM/Desol/_tmp_validate_94b8b3b9.lean:6:92: error: unexpected token ':'; expected ':=', 'where' or '|'\n/home/projectx/BDDM/Desol/_tmp_validate_94b8b3b9.lean:6:13: error: Function expected at\n  SD\nbut this term has type\n  ?m.1\n\nNote: Expected a function because this term is being applied to the argument\n  (D : \u211d \u2192 \u211d)\n\nHint: The identifier `SD` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.",
+    "confidence": 0.2,
+    "uncertainty_flags": [
+      "formalization_unvalidated",
+      "unknown_symbol",
+      "syntax_error",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "lemm_SD",
+      "definitions": [
+        "definition of the $\\mathbb{P}_1$ finite element basis functions."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite.",
+        "Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}.",
+        "Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite.",
+        "if and only if $ v'(z) = 0$ for all $z\\in (0,z_F)$."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{lemm:Mf}Given that $f(z) \\geq 0$, then the tridiagonal weighted mass matrix $M_f$ is symmetric positive definite.",
+        "lemma}\\label{lemma:2."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{lemm:Mf}Given that $f(z) \\geq 0$, then the tridiagonal weighted mass matrix $M_f$ is symmetric positive definite. Moreover, the approximated matrix $M_f$ is positive definite. - \\label{lemma:2.8} Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite. - \\label{lemm:SD} Given that $D(z) \\geq 0$, then the tridiagonal diffusion matrix $S(D)$ is symmetric. Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}. Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: ft({y_{i+1}^2+y_{i}^2} + {(y_{i+1}+y_{i})^2}\\right)\\right]\\,>\\,0\\nonu"
+    }
+  },
+  "lemma_14": {
+    "lean_signature": "-- TRANSLATION INCOMPLETE \u2014 LaTeX claim: A(D) is positive definite\n-- Assumptions: D(z) is a strictly decreasing positive function\ntheorem tridiagonal_matrix_positive_definite_of_strictly_decreasing_positive_D\n  {n : \u2115} (D : \u211d \u2192 \u211d) (A : Matrix (Fin n) (Fin n) \u211d)\n  (hD_pos : \u2200 z, D z > 0)\n  (hD_decr : \u2200 z1 z2, z1 < z2 \u2192 D z2 < D z1)\n  (hA : \u2200 i j, A i j = \u222b z in Set.Icc 0 1, D z * (deriv (fun x => x) z) * (deriv (fun x => x) z))\n  (hA_tridiag : \u2200 i j, i \u2260 j \u2227 |i - j| \u2260 1 \u2192 A i j = 0) :\n  \u2200 y : Fin n \u2192 \u211d, y \u2260 0 \u2192 0 < \u2211 i : Fin n, \u2211 j : Fin n, y i * y j * A i j := by sorry",
+    "validated": false,
+    "rounds_used": 5,
+    "last_error": "/home/projectx/BDDM/Desol/_tmp_validate_7c0f4ec3.lean:11:31: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  AddGroup (Fin n)\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.\n/home/projectx/BDDM/Desol/_tmp_validate_7c0f4ec3.lean:11:41: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  OfNat (Fin n) 1\nnumerals are polymorphic in Lean, but the numeral `1` cannot be used in a context where the expected type is\n  Fin n\ndue to the absence of the instance above\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.",
+    "confidence": 0.2,
+    "uncertainty_flags": [
+      "formalization_unvalidated",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "lemma_14",
+      "definitions": [
+        "definition of the $\\mathbb{P}_1$ finite element basis functions."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite.",
+        "Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}.",
+        "Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite.",
+        "Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}.",
+        "if and only if $ v'(z) = 0$ for all $z\\in (0,z_F)$."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{lemma:2.",
+        "lemma} \\begin{proof} $S(D)$ is given by $\\displaystyle S_{ij} = \\int_0^{1} D(z)\\varphi_{i+1}'(z)\\varphi_{j+1}'(z)\\,dz = \\left \\langle \\varphi'_{i+1}(z), \\varphi'_{j+1}(z) \\right \\rangle_D $.",
+        "Lemma \\ref{lemma:2."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{lemma:2.8} Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite. - \\label{lemm:SD} Given that $D(z) \\geq 0$, then the tridiagonal diffusion matrix $S(D)$ is symmetric. Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}. - Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite. Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive de"
+    }
+  },
+  "rem_fh": {
+    "lean_signature": "-- TRANSLATION INCOMPLETE \u2014 LaTeX claim: f_h > 0 and f_h f_min > 0\n-- Assumptions: h > 0; [0,1-h] [0,1); f(z) > 0 over [0,1); f(z_F) > 0\ntheorem rem_fh (f : \u211d \u2192 \u211d) (h : \u211d) (f_min : \u211d) (z_F : \u211d)\n    (h_pos : h > 0) (h_subset : Set.Icc 0 (1 - h) \u2286 Set.Icc 0 1)\n    (f_pos : \u2200 z \u2208 Set.Icc 0 1, f z > 0) (f_zF_pos : f z_F > 0) :\n    let f_h := \u2a05 z \u2208 Set.Icc 0 (1 - h), f z\n    f_h > 0 \u2227 f_h \u2265 f_min \u2227 f_min > 0 := by sorry",
+    "validated": false,
+    "rounds_used": 4,
+    "last_error": "semantic_policy_violation:schema_coverage:expected_at_least_4_assumption_hypotheses_found_3,schema_coverage:assumption_slot_3_anchor_missing:over,schema_coverage:claim_anchor_missing_inequality,schema_self_check:notes:The Lean theorem signature includes an explicit definition of `f_h` as the infimum of `f` over `[0,1-h]`, which is consi,schema_self_check:notes:The Lean theorem signature includes `f_min` as a parameter, while the schema treats `f_min` as a derived quantity. This ,schema_self_check:notes:The Lean theorem signature explicitly includes `f_zF_pos` (which corresponds to `f(z_F) > 0` in the schema), while the s",
+    "confidence": 0.2,
+    "uncertainty_flags": [
+      "formalization_unvalidated",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "semantic_policy_hard_block",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "rem_fh",
+      "definitions": [
+        "let $$ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z),$$ then \\begin{itemize} \\item $ \\underline{f}_{h} > 0$ since $[0,1-h]\\subset [0,1)$ and $f(z)>0$ over $[0,1)$ by \\eqref{A10}."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}.",
+        "Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite.",
+        "if $y$ is constant, then the first term is nonzero.",
+        "Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{lemm:SD} Given that $D(z) \\geq 0$, then the tridiagonal diffusion matrix $S(D)$ is symmetric.",
+        "lemma} Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite.",
+        "Lemma \\ref{lemma:2."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{lemm:SD} Given that $D(z) \\geq 0$, then the tridiagonal diffusion matrix $S(D)$ is symmetric. Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}. - Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite. - \\label{rem:fh} For a fixed small $h>0$ , let $$ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z),$$ then \\begin{itemize} \\item $ \\underline{f}_{h} > 0$ since $[0,1-h]\\subset [0,1)$ and $f(z)>0$ over $[0,1)$ by \\eqref{A10}. \\item $ \\underline{f}_{h} \\geq f_{ Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: f the terms $y_i-y_{i-1} \\neq 0$ for $y\\neq 0$. Note th"
+    }
+  },
+  "lemma_m": {
+    "lean_signature": "-- TRANSLATION INCOMPLETE \u2014 LaTeX claim: yM_f y - (T_e/z_F)t yK_f y > (f_h/24)y_h (f_h/24)y_M\n-- Assumptions: f(z)0; f(z) satisfies A10; t < (h/(6F)) * (z_F/T_e); f_h > 0\ntheorem lemma_m {n : \u2115} (f : \u211d \u2192 \u211d) (deltat h z_F T_e : \u211d) (y : Fin (n - 1) \u2192 \u211d)\n    (K_f M_f : Matrix (Fin (n - 1)) (Fin (n - 1)) \u211d) (f_h : \u211d)\n    (hf : f_h > 0) (hdeltat : deltat < (h / (6 * F)) * (z_F / T_e)) (hy : y \u2260 0)\n    (hA10 : \u2200 z \u2208 Set.Icc 0 1, f z \u2265 0) :\n    (\u2211 i : Fin (n - 1), \u2211 j : Fin (n - 1), y i * M_f i j * y j) -\n    (T_e / z_F) * deltat * (\u2211 i : Fin (n - 1), \u2211 j : Fin (n - 1), y i * K_f i j * y j) >\n    (f_h / 24) * (\u2211 i : Fin (n - 1), (y i)^2 * h) \u2227\n    (f_h / 24) * (\u2211 i : Fin (n - 1), (y i)^2 * h) \u2265\n    (f_h / 24) * (\u2211 i : Fin (n - 1), \u2211 j : Fin (n - 1), y i * M_f i j * y j) := by sorry",
+    "validated": false,
+    "rounds_used": 5,
+    "last_error": "semantic_policy_violation:schema_coverage:assumption_slot_2_anchor_missing:satisfies,schema_self_check:schema_self_check_inconsistent,schema_self_check:missing_assumptions:f(z) satisfies A10,schema_self_check:missing_claim_parts:\u2016y\u2016_h\u00b2,schema_self_check:missing_claim_parts:\u2016y\u2016_M\u00b2,schema_self_check:notes:The Lean theorem does not explicitly include the assumption 'f(z) satisfies A10', which is present in the Stage-A schema,schema_self_check:notes:The norms \u2016y\u2016_h and \u2016y\u2016_M are not directly represented in the Lean theorem; instead, their squared forms are expressed a,schema_self_check:notes:The quantifiers 'for y\u22600' and '\u2200y\u22600' are both present in the schema, but the Lean theorem only includes 'y \u2260 0'.,schema_self_check:notes:The constraint 'f\u0332_h > 0' is represented as 'hf : f_h > 0' in Lean, which is consistent.,schema_self_check:notes:The constraint '\u0394t < (h/(6F)) * (z_F/T_e)' is represented as 'hdeltat' in Lean, which is consistent.",
+    "confidence": 0.2,
+    "uncertainty_flags": [
+      "formalization_unvalidated",
+      "schema_stage_used"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "semantic_policy_hard_block",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "lemma_m",
+      "definitions": [
+        "let $$ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z),$$ then \\begin{itemize} \\item $ \\underline{f}_{h} > 0$ since $[0,1-h]\\subset [0,1)$ and $f(z)>0$ over $[0,1)$ by \\eqref{A10}.",
+        "Let $y\\neq 0$, and $c=\\dfrac{T_e}{z_F}\\Delta t \\dfrac{\\mathcal{F}}{4}$."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}.",
+        "Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite."
+      ],
+      "nearby_claims": [
+        "theorem statements: - \\label{lemm:SD} Given that $D(z) \\geq 0$, then the tridiagonal diffusion matrix $S(D)$ is symmetric.",
+        "Lemma \\ref{lemma:2."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{lemm:SD} Given that $D(z) \\geq 0$, then the tridiagonal diffusion matrix $S(D)$ is symmetric. Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}. - Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite. - \\label{rem:fh} For a fixed small $h>0$ , let $$ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z),$$ then \\begin{itemize} \\item $ \\underline{f}_{h} > 0$ since $[0,1-h]\\subset [0,1)$ and $f(z)>0$ over $[0,1)$ by \\eqref{A10}. \\item $ \\underline{f}_{h} \\geq f_{ Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: ,\\varphi_{j+1} \\right \\rangle_{2} = \\int_0^{1} D(z)\\, \\"
+    }
+  },
+  "lemma_g": {
+    "lean_signature": "theorem schema_definition_first (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 \u2227 h2; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "lemma_g",
+      "definitions": [
+        "let $$ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z),$$ then \\begin{itemize} \\item $ \\underline{f}_{h} > 0$ since $[0,1-h]\\subset [0,1)$ and $f(z)>0$ over $[0,1)$ by \\eqref{A10}.",
+        "Let $y\\neq 0$, and $c=\\dfrac{T_e}{z_F}\\Delta t \\dfrac{\\mathcal{F}}{4}$."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite."
+      ],
+      "nearby_claims": [
+        "theorem statements: - Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite.",
+        "lemma} \\begin{proof} Let $y\\neq 0$, and $c=\\dfrac{T_e}{z_F}\\Delta t \\dfrac{\\mathcal{F}}{4}$."
+      ],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite. - \\label{rem:fh} For a fixed small $h>0$ , let $$ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z),$$ then \\begin{itemize} \\item $ \\underline{f}_{h} > 0$ since $[0,1-h]\\subset [0,1)$ and $f(z)>0$ over $[0,1)$ by \\eqref{A10}. \\item $ \\underline{f}_{h} \\geq f_{ - \\label{lemma:m} Assume that $f(z)\\geq 0$ satisfies \\eqref{A10} and that $\\Delta t < \\dfrac{h}{6\\mathcal{F}}\\dfrac{z_F}{T_e}$, then $$y^tM_fy - \\dfrac{T_e}{z_F}\\Delta t y^tK_fy \\;>\\; \\dfrac{\\underline{f}_{h} }{24} \\left \\| y \\right \\|_{h}^2 \\;\\geq\\; \\dfrac{\\und Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\right \\rangle_{H^1}} - \\newcommand{\\Vinner}[1]{\\left \\langle #1 \\right \\rangle_{V}} Nearby source context: line{f}_{h} }{24} \\left \\| y \\right \\|_"
+    }
+  },
+  "theorem_18": {
+    "lean_signature": "theorem schema_definition_first (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 \u2227 h2; Claim) := by",
+    "validated": true,
+    "rounds_used": 1,
+    "last_error": "",
+    "confidence": 0.9,
+    "uncertainty_flags": [
+      "deterministic_literal_mode",
+      "schema_stage_used",
+      "adversarial_skipped_deterministic",
+      "review_required_hard"
+    ],
+    "proved": false,
+    "proof_body": "",
+    "skipped": true,
+    "prove_summary": "translate-only mode",
+    "step_records": [],
+    "exception": "",
+    "context_pack": {
+      "theorem_name": "theorem_18",
+      "definitions": [
+        "let $$ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z),$$ then \\begin{itemize} \\item $ \\underline{f}_{h} > 0$ since $[0,1-h]\\subset [0,1)$ and $f(z)>0$ over $[0,1)$ by \\eqref{A10}.",
+        "Assume that $D(z)\\geq 0$ \\eqref{A20} is a Lipschitz continuous function \\eqref{A2pp0}, then there exists an $h_0<1$ ($n_0>1$), and there exist a constant $K_G$, such that for $h<h_0$ ($n>n_0$) one has $$v^TGv\\ge -|K_G|.",
+        "Assume that $D(z)\\geq 0$ \\eqref{A20} is a Lipschitz continuous function \\eqref{A2pp0}, then there exists an $h_0<1$ ($n_0>1$), and there exist a constant $K_G$, such that for $h<h_0$ ($n>n_0$) one has $$v^TGv\\ge -|K_G|."
+      ],
+      "notations": [],
+      "local_assumptions": [
+        "If $z_F\\mathcal{G} - |K_G| \\geq 0$, then $y^tVy >0$ for all $y\\neq 0$."
+      ],
+      "nearby_claims": [],
+      "context_excerpt": "Paper glossary memory: - B: an $(n-1)\\times(n-1)$ zero matrix with $B(n-1 - C_0: some positive constant that only depends on $f - D: Lipschitz continuous \\eqref{A2pp0} - H: dense and continuous - K_f: positive definite and matrix $B$ is positive semi-definite - L^2_f: a Hilbert space assuming $ f(z)>0$ for $z\\in[0 - M: a symmetric positive definite matrix - M_f: symmetric positive definite - V: invertible by Neumann series condition - f: positive inside $(0 - h_2: replaced by $h$ in \\eqref{eq:appv1} and \\eqref{eq:appv3} - u: absolutely continuous over $[a - y: constant - z_F: a set of measure zero Nearby theorem statements: - \\label{rem:fh} For a fixed small $h>0$ , let $$ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z),$$ then \\begin{itemize} \\item $ \\underline{f}_{h} > 0$ since $[0,1-h]\\subset [0,1)$ and $f(z)>0$ over $[0,1)$ by \\eqref{A10}. \\item $ \\underline{f}_{h} \\geq f_{ - \\label{lemma:m} Assume that $f(z)\\geq 0$ satisfies \\eqref{A10} and that $\\Delta t < \\dfrac{h}{6\\mathcal{F}}\\dfrac{z_F}{T_e}$, then $$y^tM_fy - \\dfrac{T_e}{z_F}\\Delta t y^tK_fy \\;>\\; \\dfrac{\\underline{f}_{h} }{24} \\left \\| y \\right \\|_{h}^2 \\;\\geq\\; \\dfrac{\\und - \\label{lemma:g} Assume that $D(z)\\geq 0$ \\eqref{A20} is a Lipschitz continuous function \\eqref{A2pp0}, then there exists an $h_0<1$ ($n_0>1$), and there exist a constant $K_G$, such that for $h<h_0$ ($n>n_0$) one has $$v^TGv\\ge -|K_G|. \\left \\| v \\right \\|_M^2 Declared notation/macros: - \\newcommand{\\ds}[1]{$\\displaystyle{#1}$} - \\newcommand{\\abs}[1]{\\left | #1 \\right |} - \\newcommand{\\para}[1]{\\left ( #1 \\right )} - \\newcommand{\\bracket}[1]{\\left [ #1 \\right ]} - \\newcommand{\\inner}[1]{\\left \\langle #1 \\right \\rangle} - \\newcommand{\\hminner}[1]{\\left \\langle #1 \\right \\rangle_{H^m}} - \\newcommand{\\honeinner}[1]{\\left \\langle #1 \\ri"
+    }
+  }
+}

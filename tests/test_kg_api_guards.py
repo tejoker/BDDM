@@ -45,3 +45,20 @@ def test_rate_limit_recovers_after_window_prune() -> None:
     assert ok2 is True
     assert retry2 == 0
 
+
+def test_scope_auth_with_dedicated_keys() -> None:
+    kg_api = _reload_kg_api(
+        DESOL_API_KEY="base",
+        DESOL_EVIDENCE_API_KEY="evk",
+        DESOL_OPS_API_KEY="opk",
+    )
+    assert kg_api._authorized_for_scope("evk", "evidence") is True
+    assert kg_api._authorized_for_scope("base", "evidence") is False
+    assert kg_api._authorized_for_scope("opk", "ops") is True
+    assert kg_api._authorized_for_scope("base", "ops") is False
+
+
+def test_scope_auth_falls_back_to_base_key() -> None:
+    kg_api = _reload_kg_api(DESOL_API_KEY="base", DESOL_EVIDENCE_API_KEY="", DESOL_OPS_API_KEY="")
+    assert kg_api._authorized_for_scope("base", "evidence") is True
+    assert kg_api._authorized_for_scope("base", "ops") is True

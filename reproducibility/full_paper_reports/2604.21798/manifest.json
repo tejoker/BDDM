@@ -1,0 +1,10 @@
+{
+  "paper_id": "2604.21798",
+  "schema_version": "1.0.0",
+  "bundle_dir": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798",
+  "files": {
+    "report": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/suite_report.json",
+    "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/unresolved.json"
+  },
+  "regenerate_command": "python3 scripts/formalize_paper_full.py --paper-id 2604.21798 --project-root ."
+}

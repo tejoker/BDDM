@@ -1,0 +1,14 @@
+{
+  "paper_id": "2304.09598",
+  "fetch_ok": true,
+  "tex_files": [
+    "output/paper_sources/golden10/2304.09598/CombinatorialApproach-arXiv.tex"
+  ],
+  "main_tex": "output/paper_sources/golden10/2304.09598/CombinatorialApproach-arXiv.tex",
+  "root_tex_paths": [
+    "/home/projectx/BDDM/output/paper_sources/golden10/2304.09598/CombinatorialApproach-arXiv.tex"
+  ],
+  "expanded_paths": [
+    "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex"
+  ]
+}

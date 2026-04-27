@@ -17,6 +17,10 @@ def _ok(msg: str) -> None:
     print(f"[OK] {msg}")
 
 
+def _warn(msg: str) -> None:
+    print(f"[WARN] {msg}")
+
+
 def check_lakefile_pins(repo_root: Path) -> bool:
     lakefile = repo_root / "lakefile.toml"
     if not lakefile.exists():
@@ -72,12 +76,108 @@ def check_benchmark_artifact_schema(repo_root: Path) -> bool:
     return True
 
 
+def check_claim_registry(repo_root: Path) -> bool:
+    registry_path = repo_root / "reproducibility" / "claims_registry.json"
+    if not registry_path.exists():
+        _fail("missing reproducibility/claims_registry.json")
+        return False
+
+    try:
+        raw = json.loads(registry_path.read_text(encoding="utf-8"))
+    except Exception:
+        _fail("invalid JSON in reproducibility/claims_registry.json")
+        return False
+
+    toolchain_path = repo_root / "lean-toolchain"
+    current_toolchain = toolchain_path.read_text(encoding="utf-8").strip() if toolchain_path.exists() else ""
+    if raw.get("current_repo_toolchain") != current_toolchain:
+        _fail("claims registry current_repo_toolchain does not match lean-toolchain")
+        return False
+
+    claims = raw.get("claims", [])
+    if not isinstance(claims, list):
+        _fail("claims registry must contain a claims list")
+        return False
+
+    ok = True
+    for claim in claims:
+        if not isinstance(claim, dict):
+            _fail("claims registry contains a non-object claim")
+            ok = False
+            continue
+        claim_id = str(claim.get("id", "<missing>"))
+        status = str(claim.get("status", ""))
+        artifact_path = str(claim.get("artifact_path", "")).strip()
+        if status == "current":
+            if not artifact_path:
+                _fail(f"current claim {claim_id} has no artifact_path")
+                ok = False
+                continue
+            artifact = repo_root / artifact_path
+            if not artifact.exists():
+                _fail(f"current claim {claim_id} artifact missing: {artifact_path}")
+                ok = False
+                continue
+            recorded_toolchain = str(claim.get("recorded_toolchain", "")).strip()
+            if recorded_toolchain and recorded_toolchain != current_toolchain:
+                _fail(f"current claim {claim_id} toolchain mismatch")
+                ok = False
+        elif status in {"historical", "unsupported"}:
+            if not str(claim.get("reason_not_current", "")).strip():
+                _fail(f"{status} claim {claim_id} must explain why it is not current")
+                ok = False
+        else:
+            _fail(f"claim {claim_id} has invalid status: {status}")
+            ok = False
+
+    if ok:
+        _ok("claims registry matches current toolchain policy")
+    return ok
+
+
+def check_weekly_release_gate(repo_root: Path) -> bool:
+    weekly_dir = repo_root / "output" / "reports" / "weekly"
+    if not weekly_dir.exists():
+        _warn("weekly report directory missing; skipping generated runtime release gate")
+        return True
+    reports = sorted(weekly_dir.glob("weekly_report_*.json"))
+    if not reports:
+        _warn("no weekly_report_*.json found; skipping generated runtime release gate")
+        return True
+    latest = reports[-1]
+    try:
+        raw = json.loads(latest.read_text(encoding="utf-8"))
+    except Exception:
+        _fail(f"invalid JSON in {latest}")
+        return False
+    gate = raw.get("release_gate", {}) if isinstance(raw, dict) else {}
+    if not isinstance(gate, dict):
+        _fail("weekly report missing release_gate object")
+        return False
+    if not bool(gate.get("hard_slice_in_range_50_100", False)):
+        _fail("weekly release gate: hard_slice_in_range_50_100=false")
+        return False
+    if "semantic_safe_yield_pass" in gate and not bool(gate.get("semantic_safe_yield_pass", False)):
+        _fail("weekly release gate: semantic_safe_yield_pass=false")
+        return False
+    if "slot_coverage_pass" in gate and not bool(gate.get("slot_coverage_pass", False)):
+        _fail("weekly release gate: slot_coverage_pass=false")
+        return False
+    _ok(
+        "weekly release gate present "
+        f"(go_for_controlled_release={bool(gate.get('go_for_controlled_release', False))})"
+    )
+    return True
+
+
 def main() -> int:
     repo_root = Path(__file__).resolve().parent.parent
     checks = [
         check_lakefile_pins(repo_root),
         check_toolchain(repo_root),
         check_benchmark_artifact_schema(repo_root),
+        check_claim_registry(repo_root),
+        check_weekly_release_gate(repo_root),
     ]
     if all(checks):
         print("[PASS] release readiness baseline checks passed")

@@ -1,0 +1,16 @@
+{
+  "paper_id": "2604.21798",
+  "domain": "ml_statistics_theory",
+  "role": "ml_or_statistics_theory",
+  "index": 7,
+  "returncode": 0,
+  "elapsed_s": 4.516,
+  "out_lean": "/home/projectx/BDDM/output/paper_translations/golden10/2604.21798.lean",
+  "ledger": "",
+  "checkpoint": "",
+  "stdout_tail": "\n[2.1] Fetching arxiv source for 2604.21798 ...\n[fetch] https://arxiv.org/e-print/2604.21798\n  extracted: main.tex\n      main file: main.tex  (1 total .tex files)\n\n[2.1a] Preprocessing LaTeX macros/includes ...\n      expanded: 1 logical root file(s)\n\n[2.1] Extracting theorem environments ...\n      found: 0 environments (kinds filter: {'corollary', 'theorem', 'proposition', 'lemma'})\n      actionable: 0 environments\n      extracted citation/bibliography refs: 21\n      glossary terms: 3\n      no theorem environments found — nothing to do\n",
+  "stderr_tail": "",
+  "evidence_lean": "",
+  "evidence_ledger": "",
+  "evidence_checkpoint": ""
+}

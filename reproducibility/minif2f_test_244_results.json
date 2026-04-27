@@ -210,5 +210,8 @@
   "mode": "ponder",
   "git_commit": "118cc633fd97bceb56c3648c1b6622e4154bde6e",
   "lean_version": "leanprover/lean4:v4.30.0-rc1",
-  "python_version": "3.12.3 (main, Mar  3 2026, 12:15:18) [GCC 13.3.0]"
+  "python_version": "3.12.3 (main, Mar  3 2026, 12:15:18) [GCC 13.3.0]",
+  "artifact_status": "historical_toolchain_mismatch",
+  "current_repo_toolchain": "leanprover/lean4:v4.29.0-rc7",
+  "reproducibility_note": "This artifact is retained as historical evidence only. Rerun under the current repo toolchain before citing as a current result."
 }

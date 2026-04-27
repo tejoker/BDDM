@@ -1,0 +1,226 @@
+{
+  "total": 18,
+  "counts": {
+    "bad_translation_artifact": 2,
+    "paper_theory_debt": 9,
+    "proof_search_failure": 7
+  },
+  "items": [
+    {
+      "theorem_name": "th_lions",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: [Lion's theorem]\\label{th:lions} Let $V$ and $H$ be Hilbert spaces satisfying: \\begin{equation} V \\subset H \\subset V^* \\text{ (the dual of } V) \\end{equation} \\noindent with the injection from $V$ to $H$ is dense and continuous. \\noindent Assuming a bilinear form $a(\\cdot,\\cdot): V \\times V \\to \\mathbb{R}$ satisfies \\begin{equation} \\begin{cases} |a(v,w)| \\leq M \\|v\\|_V \\|w\\|_V \\\\ |a(v,v)| \\geq c \\|v\\|_V^2 - c_1 \\|v\\|_H^2 \\end{cases} \\label{eq25} \\end{equation} \\noindent then for $u_0 \\in H$ and $F(t) \\in L^2(0,T;V^*)$, the initial value problem \\begin{equation} \\begin{cases} \\left \\langle #1 \\right \\rangle{u_t,v}_H + a(u(t),v) = \\left \\langle #1 \\right \\rangle{ F(t), v }_{H} \\\\ u(0) = u_0 \\end{cases} \\end{equation} \\noindent admits a unique solution u, satisfying: \\begin{equation} u \\in L^2(0,T;V) \\cap C(0,T;H), \\quad \\frac{du}{dt} \\in L^2(0,T;H). \\end{equation}\ntheorem th_lions :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "theorem_2",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: The space \\( H^1_{D,f}(0,z_F) \\) is a Hilbert space with respect to the norm \\[ \\|v\\|_{D,f}^1 = \\left( \\int_0^{z_F} f(z) v^2(z) \\, dz + \\int_0^{z_F} D(z) (v'(z))^2 \\, dz \\right)^{\\frac{1}{2}} \\]\ntheorem theorem_2 :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "theorem_3",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: The set of test functions is a closed subspace of $H^1_{D,f}$, $$\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq H^1_{D,f}. $$ i.e. a Hilbert Space with respect to the $H^1_{D,f}$ norm.\ntheorem theorem_3 :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "rem",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "paper_symbol:d_dtvolume"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "-- Source claim excerpt: \\label{rem} Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F)$ such that $$u(z) = \\int_0^z g(x)dx$$ a.e. on $(0,z_F)$. The converse is also true.\ntheorem rem :\n  ∃ x : ℝ, 0 ≤ x := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "th_WPICa",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem th_WPICa (v w : ℝ → ℝ) (u : ℝ → ℝ) (z_F : ℝ) (hv : Measurable v) (hw : Measurable w) (hv_nonneg : ∀ z, 0 ≤ v z) (hw_nonneg : ∀ z, 0 ≤ w z) (hv_fin : ∀ z, v z < infty) (hw_fin : ∀ z, w z < infty) (hu_abs_cont : AbsolutelyContinuous u) (hu_zero : u 0 = 0) : ∃ (C : ℝ), (∀ z, 0 < z → z < z_F → (∫ x in Set.Icc 0 z_F, (u x)^2 * v x d_dtx)^(1/2) ≤ C * (∫ x in Set.Icc 0 z_F, (deriv u x)^2 * w x d_dtx)^(1/2)) ∧ (∃ (B : ℝ), B = ⨆ (z : ℝ) (hz : 0 < z ∧ z < z_F), (∫ x in Set.Icc z z_F, v x d_dtx)^(1/2) * (∫ x in Set.Icc 0 z, 1 / w x d_dtx)^(1/2) ∧ B < infty ∧ B ≤ C ∧ C ≤ 2 * B)",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "lem_tc",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: \\label{lem:tc} $\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq C_a(0,z_F) $\ntheorem lem_tc :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "cor_wpi",
+      "valid_for_proof": false,
+      "primary_blocker": "bad_translation_artifact",
+      "reasons": [
+        "semantic_policy_hard_block"
+      ],
+      "next_action": "Repair the Lean statement/schema before proof search.",
+      "lean_statement": "theorem cor_wpi (u : ℝ → ℝ) (z_F : ℝ) (D : ℝ → ℝ) (f : ℝ → ℝ)\n    (hD : ∀ z ∈ Set.Ioo 0 z_F, D z > 0) (hf : ∀ z ∈ Set.Ioo 0 z_F, f z > 0)\n    (hf_bdd : ∃ (M : ℝ), ∀ z ∈ Set.Icc 0 z_F, f z ≤ M) (B_0 : ℝ)\n    (hB_0 : B_0 = sSup (Set.range fun z : ℝ => ((z_F - z) * ∫ x in Set.Icc 0 z, 1 / D x) ^ (1 / 2)))\n    (hB_0_fin : B_0 < infty) (C_p : ℝ) (hC_p : C_p < 2 * B_0) :\n    (∀ z ∈ Set.Icc 0 z_F, DifferentiableAt ℝ u z) →\n    (∀ z ∈ Set.Icc 0 z_F, deriv u z = deriv u z) →\n    (∀ z ∈ Set.Icc 0 z_F, u z = ∫ x in Set.Icc 0 z, deriv u x) →\n    ∫ z in Set.Icc 0 z_F, u z ^ 2 ≤ C_p ^ 2 * ∫ z in Set.Icc 0 z_F, (deriv u z) ^ 2 * D z ∧\n    ∫ z in Set.Icc 0 z_F, f z * u z ^ 2 ≤ (Classical.choose hf_bdd) * ∫ z in Set.Icc 0 z_F, u z ^ 2 ∧\n    ∫ z in Set.Icc 0 z_F, f z * u z ^ 2 ≤ (Classical.choose hf_bdd) * C_p ^ 2 * ∫ z in Set.Icc 0 z_F, (deriv u z) ^ 2 * D z",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "eq_zf",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: Assume that the condition \\eqref{cond:WI} is satisfied. Then the following inequality \\begin{eqnarray} \\sqrt{f(z)} |v(z)| \\leq C_0 \\|v\\|_{D, f}, \\qquad z\\in [0, z_F],\\label{eq:zf} \\end{eqnarray} holds for all $ v \\in \\mathcal T$, where $C_0$ is some positive constant that only depends on $f, \\,D$ and $z_F$.\ntheorem eq_zf :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "th_4g",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem th_4g {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha]\n    (D : alpha → ℝ) (M : alpha → ℝ) (F : alpha → ℝ) (G : ℝ) (f : alpha → ℝ) (z_F : alpha)\n    (hD : ∃ K : ℝ≥0, LipschitzWith K D) (hM : ∀ x, 0 < M x) (hF : ∀ x, 0 < F x)\n    (hf : ∀ x, 0 < f x) (hz_F : z_F ≠ 0) (hWI : ∃ (C : ℝ), ∀ x, √(f x) * ‖x‖ ≤ C * ‖x‖_D)\n    (hA : ∀ v w, ∃ (C : ℝ), ‖v‖_D ≤ C * ‖v‖_2 ∧ ‖w‖_D ≤ C * ‖w‖_2)\n    (hB : ∀ v, ‖v‖_f ≤ ‖f‖_infty * ‖v‖_2) (hC : ∀ v, ‖v‖_2 ≤ C_p * ‖v_z‖_D)\n    (hD_pos : ∀ x, 0 < D x) (hM_pos : ∀ x, 0 < M x) (hF_pos : ∀ x, 0 < F x)\n    (hG_pos : 0 < G) (hz_F_pos : 0 < z_F) :\n    ∀ v w : alpha, |⟨D • v_z, w_z⟩ - ⟨(M • D + f • F) • v, w_z⟩ + G * ⟨v, w⟩ + F z_F * v z_F * w z_F| ≤\n      C * ‖v‖_D_f * ‖w‖_D_f ∧\n    ∀ v : alpha, ⟨v, v⟩ ≥ C_1 * ‖v‖_D_f ^ 2 - C_2 * ‖v‖_f ^ 2 ∧\n    ∀ v : alpha, (∫ t in Set.Icc 0 T, |⟨(rho_atm t)', v⟩_2 + ⟨A (rho_atm t), v⟩| ^ 2) ^ (1 / 2) ≤\n      C_3 * ‖v‖_D_f",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "lemm_M",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: \\label{lemm:M} The triadiagonal mass matrix $M$ is a symmetric positive definite matrix.\ntheorem lemm_M :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "lemm_Mf",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem lemm_Mf (f : ℝ → ℝ) (z : ℝ) (h_f_z_0_1 : True) :\n  f z ≥ 0",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "lemma_2_8",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem lemma_2_8 (f : ℝ → ℝ) (z : ℝ) (h_f_z_0_1 : True) (h_f_z_is_strictly_decreasing_2 : True) (h_f_z_is_positive_3 : True) :\n  f z ≥ 0",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "lemm_SD",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem lemm_SD (D : ℝ → ℝ) (hD_nonneg : ∀ z, D z ≥ 0) (hD_pos : ∀ z ∈ Set.Ico 0 1, D z > 0) :\n    Symmetric (Matrix.fromBlocks (D 0) (D 0) (D 0) (D 0)) ∧\n    (Matrix.fromBlocks (D 0) (D 0) (D 0) (D 0)).PosDef ∧\n    (Matrix.fromBlocks (D 0) (D 0) (D 0) (D 0)).PosDef",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "lemma_14",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite.\ntheorem lemma_14 :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "rem_fh",
+      "valid_for_proof": false,
+      "primary_blocker": "bad_translation_artifact",
+      "reasons": [
+        "semantic_policy_hard_block"
+      ],
+      "next_action": "Repair the Lean statement/schema before proof search.",
+      "lean_statement": "theorem rem_fh (h : ℝ) (f : ℝ → ℝ) (f_min : ℝ) (h_pos : h > 0) (subset_Icc : Set.Icc 0 (1 - h) ⊆ Set.Icc 0 1) (f_pos : ∀ z ∈ Set.Icc 0 (1 - h), f z > 0) (f_zF_pos : f z_F > 0) : let f_h := ⨅ (z : ℝ) (H : z ∈ Set.Icc 0 (1 - h)), f z; f_h > 0 ∧ f_h ≥ f_min ∧ f_min > 0",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "lemma_m",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem lemma_m {n : ℕ} (f : ℝ → ℝ) (deltat h z_F T_e F : ℝ) (y : Fin (n - 1) → ℝ) (K_f M_f : Matrix (Fin (n - 1)) (Fin (n - 1)) ℝ) (f_h : ℝ) (hf : ∀ z, f z ≥ 0) (hf_pos : ∀ z, f z > 0) (hdeltat : deltat < (h / (6 * F)) * (z_F / T_e)) (hf_h : f_h > 0) (hy : y ≠ 0) : yT * M_f * y - (T_e / z_F) * deltat * (yT * K_f * y) > (f_h / 24) * ‖y‖_h ^ 2 ∧ (f_h / 24) * ‖y‖_h ^ 2 ≥ (f_h / 24) * ‖y‖_M ^ 2",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "lemma_g",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem lemma_g {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha] {n : ℕ} (h : ℝ) (v : Fin (n - 1) → alpha) (D : ℝ → ℝ) (G : Matrix (Fin (n - 1)) (Fin (n - 1)) ℝ) (M : Matrix (Fin (n - 1)) (Fin (n - 1)) ℝ) (c_D : ℝ) (I_D : ℝ) (L_delta : ℝ) (K_G : ℝ) (z_F : Set ℝ) (h_pos : 0 < h) (n_large : n > 1) (D_nonneg : ∀ z, D z ≥ 0) (D_lipschitz : LipschitzWith L_delta D) (c_D_bounds : 0 < c_D ∧ c_D < 2) (I_D_def : I_D = z_F.integral fun z => 1 / D z) (I_D_finite : I_D < infty) (M_pos_def : ∀ i, M i i > 0) (G_symm : ∀ i j, G i j = G j i) : v.transpose ⬝ G ⬝ v ≥ -|K_G| * (v.transpose ⬝ M ⬝ v)",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    },
+    {
+      "theorem_name": "theorem_18",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem theorem_18 {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha] (h deltat z_F T_e h_0 : ℝ) (f_h K_G C M_f : ℝ) (D : alpha → ℝ) (f : alpha → ℝ) (hD : ∀ z, D z ≥ 0) (hD_lip : Lipschitz D) (hf : ∀ z, f z ≥ 0) (hh : h < h_0) (hdeltat_pos : 0 < deltat) (hdeltat_bound : deltat < (z_F / (6 * T_e)) * min (h / F) (f_h / (4 * |z_F * G - |K_G||))) (hf_h : f_h = sInf (f '' Set.Icc 0 (1 - h))) (hf_h_pos : f_h > 0) : IsUnit (M_f + T_e * deltat * C)",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding"
+    }
+  ]
+}

@@ -2,7 +2,12 @@
 from __future__ import annotations
 
 from ponder_loop import sanitize_tactic_candidate
-from prove_with_ponder import classify_lean_error, repair_hint_for_error_class
+from prove_with_ponder import (
+    _replace_theorem_body_in_source,
+    _should_trigger_secondary_verifier,
+    classify_lean_error,
+    repair_hint_for_error_class,
+)
 
 
 def test_sanitize_tactic_candidate_accepts_valid_tactic():
@@ -45,6 +50,21 @@ def test_classify_lean_error_type_mismatch():
     assert classify_lean_error(err) == "type-mismatch"
 
 
+def test_classify_lean_error_assumption_mismatch():
+    err = "Tactic `assumption` failed"
+    assert classify_lean_error(err) == "assumption-mismatch"
+
+
+def test_classify_lean_error_assumption_mismatch_without_backticks():
+    err = "line=1; message=assumption failed to find matching hypothesis"
+    assert classify_lean_error(err) == "assumption-mismatch"
+
+
+def test_classify_lean_error_policy_blocked_marker():
+    err = "line=1; message=blocked_non_actionable_tactic:assumption_disabled_policy"
+    assert classify_lean_error(err) == "policy-blocked"
+
+
 def test_repair_hint_for_error_class_nonempty():
     for klass in [
         "name-resolution",
@@ -52,6 +72,35 @@ def test_repair_hint_for_error_class_nonempty():
         "rewrite-mismatch",
         "incomplete-progress",
         "resource-timeout",
+        "assumption-mismatch",
         "generic",
     ]:
         assert repair_hint_for_error_class(klass)
+
+
+def test_replace_theorem_body_in_source_rewrites_target_proof_block():
+    src = (
+        "theorem A : True := by\n"
+        "  trivial\n\n"
+        "theorem B : True := by\n"
+        "  trivial\n"
+    )
+    patched, detail = _replace_theorem_body_in_source(
+        lean_src=src,
+        theorem_name="A",
+        draft="simp\ntrivial",
+    )
+    assert detail == "ok"
+    assert patched is not None
+    assert "theorem A : True := by\n  simp\n  trivial\n" in patched
+    assert "theorem B : True := by\n  trivial\n" in patched
+
+
+def test_secondary_verifier_trigger_on_generic_rfl_feedback():
+    err = "line=1; message=Tactic `rfl` failed: Expected the goal to be a binary relation"
+    assert _should_trigger_secondary_verifier(err, "reflexivity-mismatch")
+
+
+def test_secondary_verifier_not_triggered_for_policy_block() -> None:
+    err = "line=1; message=blocked_non_actionable_tactic:assumption_disabled_policy"
+    assert _should_trigger_secondary_verifier(err, "policy-blocked") is False

@@ -1,0 +1,21 @@
+{
+  "paper_id": "2604.21616",
+  "domain": "combinatorics",
+  "role": "combinatorics_or_discrete_math",
+  "fetch_ok": true,
+  "tex_file_count": 1,
+  "root_tex_count": 1,
+  "expanded_root_count": 1,
+  "macro_count": 39,
+  "environment_alias_count": 8,
+  "theorem_count": 8,
+  "mistral_api_key_set": false,
+  "translation_status": "not_run_missing_mistral_api_key",
+  "proof_status": "not_run_missing_mistral_api_key",
+  "error": "",
+  "main_tex": "output/paper_sources/golden10/2604.21616/SOAP.tex",
+  "theorem_output_truncated": false,
+  "paper_status": "VALID_STATEMENT_UNPROVEN",
+  "dominant_blocker": "api_or_runtime_failure",
+  "elapsed_s": 0.337
+}

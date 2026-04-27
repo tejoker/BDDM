@@ -1,0 +1,1746 @@
+{
+  "paper_id": "2604.21583",
+  "ok": false,
+  "evidence_label": "partial_diagnostic_evidence",
+  "primary_metric": "verified_proven",
+  "claim_scope": "Not a full paper closure claim; use blocker taxonomy and verified_proven only.",
+  "out_lean": "/home/projectx/BDDM/output/2604.21583.lean",
+  "ledger_path": "/home/projectx/BDDM/output/verification_ledgers/2604.21583.json",
+  "results_file": "/home/projectx/BDDM/logs/full_paper_2604.21583_suite_results.json",
+  "unresolved_pack": "/home/projectx/BDDM/output/reports/full_paper/2604.21583_suite_report.unresolved.json",
+  "paper_local_theory_file": "/home/projectx/BDDM/output/paper_local_theory/2604.21583.lean",
+  "curated_paper_package": {
+    "available": false
+  },
+  "final_metrics": {
+    "total_theorems": 67,
+    "total_provable": 64,
+    "translation_limited_count": 3,
+    "fully_proven": 0,
+    "fully_proven_status_count": 0,
+    "verified_proven": 0,
+    "real_fully_proven": 0,
+    "auto_closed_count": 0,
+    "axiom_backed_count": 0,
+    "axiom_debt_count": 1,
+    "axiom_debt": [
+      "paper_symbol:Γ"
+    ],
+    "closure_by_method": {
+      "lean_verified": 0,
+      "auto_closed_or_reconciled": 0,
+      "axiom_backed": 0,
+      "translation_limited": 3,
+      "unresolved_or_flawed": 64
+    },
+    "full_closure": false,
+    "proving_rate": 0.0,
+    "status_counts": {
+      "FLAWED": 30,
+      "UNRESOLVED": 32,
+      "INTERMEDIARY_PROVEN": 2,
+      "TRANSLATION_LIMITED": 3
+    },
+    "unresolved_count": 64,
+    "unresolved": [
+      {
+        "theorem_name": "remark_1",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "rem_frac_bessel_implemented",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "thm_main_result",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_relent_signedA",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_shell_perturbed_free",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_exch2d",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "rem_missing_lower_bound_lemma11",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_number_moments_log",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_one_body_HS_safe",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_first_kinetic_log2",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_holder",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "thm_correlation_intro",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_second_cutoff_decomp",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "rem_surviving_channels",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent",
+          "no_paper_axiom_debt"
+        ]
+      },
+      {
+        "theorem_name": "cor_HF0_vanishes",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_high_frequency_fluctuations",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_NQ_double_commutator_direct",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "rem_B9_disappears",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_aH_S",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_com1",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "remark_22",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "rem_HF0_main_input",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_shell_vanishing_local",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_shell_decomposition_local",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_shell_polarization_local",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_shell_HS_local",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_shell_h_comm_local",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_shell_W_comm_local",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_shell_mode_local",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "cor_shell_summability_local",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_free_tail_Q1",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_Q1_number_fluctuation",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_Q1_tail_quantitative",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_exact_mixed_decomp",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_cross_terms_controlled",
+        "status": "INTERMEDIARY_PROVEN",
+        "grounding_status": "",
+        "gate_failures": [
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_weighted_mixed",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_high_high_mixed_vanishes",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_Thh_two_body",
+        "status": "INTERMEDIARY_PROVEN",
+        "grounding_status": "",
+        "gate_failures": [
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_block_cs",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent",
+          "no_paper_axiom_debt"
+        ]
+      },
+      {
+        "theorem_name": "thm_quant_deF",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_nonzero_explicit_corrected",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent",
+          "no_paper_axiom_debt"
+        ]
+      },
+      {
+        "theorem_name": "lem_pointwise_comparison",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "cor_husimi_second_moment",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_free_energy_lower_modulo_HF",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "thm_lower_bound_classical_final",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_free_energy_upper_final",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_class",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "thm_free_energy_convergence_final",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_weighted_lower_symbol",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "thm_density_matrix_convergence_final",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent",
+          "no_paper_axiom_debt"
+        ]
+      },
+      {
+        "theorem_name": "thm_HS_convergence_main",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_HS_classical_cutoff_limit",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_HS_states_to_rdm_trace",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent",
+          "no_paper_axiom_debt"
+        ]
+      },
+      {
+        "theorem_name": "prop_HS_state_to_rdm_scaled",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_HS_deFinetti_remainder_vanish",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_HS_full_norm_moment_mu",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_HS_full_norm_moment_nuP",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_HS_L1_to_moment_operator",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_periodic_yukawa_positive",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "prop_def_Gibbs",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_sum",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_convolution_kernels",
+        "status": "FLAWED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "lem_shifted_Yukawa_sums",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      },
+      {
+        "theorem_name": "cor_husimi_fourth_moment",
+        "status": "UNRESOLVED",
+        "grounding_status": "",
+        "gate_failures": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "translation_fidelity_ok",
+          "claim_equivalent"
+        ]
+      }
+    ],
+    "translation_limited": [
+      {
+        "theorem_name": "prop_localized_interaction_vs_DP",
+        "status": "TRANSLATION_LIMITED"
+      },
+      {
+        "theorem_name": "lem_HS_tensor_product_rdm_expansion",
+        "status": "TRANSLATION_LIMITED"
+      },
+      {
+        "theorem_name": "prop_HS_low_frequency_to_fd_classical",
+        "status": "TRANSLATION_LIMITED"
+      }
+    ],
+    "axiom_backed": [],
+    "lean_verified_proven": [],
+    "auto_closed_proven": []
+  },
+  "final_normalization": {
+    "translation_limited_placeholders": 3,
+    "semantic_hard_flawed": 9,
+    "bad_statement_flawed": 0,
+    "ill_typed_artifact_flawed": 0
+  },
+  "blocker_clusters": {
+    "semantic_fidelity_hard_block": {
+      "count": 30,
+      "theorems": [
+        "remark_1",
+        "rem_frac_bessel_implemented",
+        "lem_relent_signedA",
+        "lem_shell_perturbed_free",
+        "rem_missing_lower_bound_lemma11",
+        "prop_one_body_HS_safe",
+        "lem_holder",
+        "cor_HF0_vanishes",
+        "lem_NQ_double_commutator_direct",
+        "rem_B9_disappears",
+        "lem_aH_S",
+        "lem_com1",
+        "remark_22",
+        "prop_shell_vanishing_local",
+        "lem_shell_decomposition_local",
+        "lem_shell_polarization_local",
+        "lem_shell_h_comm_local",
+        "lem_Q1_tail_quantitative",
+        "lem_exact_mixed_decomp",
+        "prop_high_high_mixed_vanishes",
+        "thm_quant_deF",
+        "lem_pointwise_comparison",
+        "prop_free_energy_lower_modulo_HF",
+        "lem_class",
+        "thm_free_energy_convergence_final",
+        "prop_HS_classical_cutoff_limit",
+        "prop_HS_deFinetti_remainder_vanish",
+        "prop_def_Gibbs",
+        "lem_sum",
+        "lem_convolution_kernels"
+      ]
+    },
+    "translation_fidelity_or_alignment": {
+      "count": 34,
+      "theorems": [
+        "thm_main_result",
+        "lem_exch2d",
+        "prop_number_moments_log",
+        "lem_first_kinetic_log2",
+        "thm_correlation_intro",
+        "prop_second_cutoff_decomp",
+        "rem_surviving_channels",
+        "prop_high_frequency_fluctuations",
+        "rem_HF0_main_input",
+        "lem_shell_HS_local",
+        "lem_shell_W_comm_local",
+        "prop_shell_mode_local",
+        "cor_shell_summability_local",
+        "lem_free_tail_Q1",
+        "lem_Q1_number_fluctuation",
+        "lem_cross_terms_controlled",
+        "prop_weighted_mixed",
+        "lem_Thh_two_body",
+        "lem_block_cs",
+        "lem_nonzero_explicit_corrected",
+        "cor_husimi_second_moment",
+        "thm_lower_bound_classical_final",
+        "prop_free_energy_upper_final",
+        "prop_weighted_lower_symbol",
+        "thm_density_matrix_convergence_final",
+        "thm_HS_convergence_main",
+        "lem_HS_states_to_rdm_trace",
+        "prop_HS_state_to_rdm_scaled",
+        "lem_HS_full_norm_moment_mu",
+        "lem_HS_full_norm_moment_nuP",
+        "lem_HS_L1_to_moment_operator",
+        "lem_periodic_yukawa_positive",
+        "lem_shifted_Yukawa_sums",
+        "cor_husimi_fourth_moment"
+      ]
+    },
+    "translation_limited_placeholder_or_schema": {
+      "count": 3,
+      "theorems": [
+        "prop_localized_interaction_vs_DP",
+        "lem_HS_tensor_product_rdm_expansion",
+        "prop_HS_low_frequency_to_fd_classical"
+      ]
+    }
+  },
+  "pass_history": [
+    {
+      "pass_idx": 1,
+      "metrics": {
+        "total_theorems": 69,
+        "total_provable": 69,
+        "translation_limited_count": 0,
+        "fully_proven": 0,
+        "fully_proven_status_count": 0,
+        "verified_proven": 0,
+        "real_fully_proven": 0,
+        "auto_closed_count": 0,
+        "axiom_backed_count": 0,
+        "axiom_debt_count": 1,
+        "axiom_debt": [
+          "paper_symbol:Γ"
+        ],
+        "closure_by_method": {
+          "lean_verified": 0,
+          "auto_closed_or_reconciled": 0,
+          "axiom_backed": 0,
+          "translation_limited": 0,
+          "unresolved_or_flawed": 69
+        },
+        "full_closure": false,
+        "proving_rate": 0.0,
+        "status_counts": {
+          "UNRESOLVED": 44,
+          "FLAWED": 23,
+          "INTERMEDIARY_PROVEN": 2
+        },
+        "unresolved_count": 69,
+        "unresolved": [
+          {
+            "theorem_name": "remark_1",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "rem_frac_bessel_implemented",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "thm_main_result",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_relent_signedA",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_shell_perturbed_free",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_exch2d",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "rem_missing_lower_bound_lemma11",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_number_moments_log",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_one_body_HS_safe",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_first_kinetic_log2",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_holder",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "thm_correlation_intro",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_second_cutoff_decomp",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "rem_surviving_channels",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "assumptions_grounded",
+              "translation_fidelity_ok",
+              "dependency_trust_complete",
+              "claim_equivalent",
+              "no_paper_axiom_debt"
+            ]
+          },
+          {
+            "theorem_name": "cor_HF0_vanishes",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_high_frequency_fluctuations",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_NQ_double_commutator_direct",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "rem_B9_disappears",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_aH_S",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_com1",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_com1",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "remark_22",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "rem_HF0_main_input",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_shell_vanishing_local",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_shell_decomposition_local",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_shell_polarization_local",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_shell_HS_local",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_shell_h_comm_local",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_shell_W_comm_local",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_shell_mode_local",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "cor_shell_summability_local",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_free_tail_Q1",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_Q1_number_fluctuation",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_Q1_tail_quantitative",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_exact_mixed_decomp",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_cross_terms_controlled",
+            "status": "INTERMEDIARY_PROVEN",
+            "grounding_status": "",
+            "gate_failures": [
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_weighted_mixed",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_high_high_mixed_vanishes",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_Thh_two_body",
+            "status": "INTERMEDIARY_PROVEN",
+            "grounding_status": "",
+            "gate_failures": [
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_block_cs",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "assumptions_grounded",
+              "translation_fidelity_ok",
+              "dependency_trust_complete",
+              "claim_equivalent",
+              "no_paper_axiom_debt"
+            ]
+          },
+          {
+            "theorem_name": "thm_quant_deF",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_nonzero_explicit_corrected",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "assumptions_grounded",
+              "translation_fidelity_ok",
+              "dependency_trust_complete",
+              "claim_equivalent",
+              "no_paper_axiom_debt"
+            ]
+          },
+          {
+            "theorem_name": "prop_localized_interaction_vs_DP",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_pointwise_comparison",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "cor_husimi_second_moment",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_free_energy_lower_modulo_HF",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "thm_lower_bound_classical_final",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_free_energy_upper_final",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_class",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "thm_free_energy_convergence_final",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_weighted_lower_symbol",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "thm_density_matrix_convergence_final",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent",
+              "no_paper_axiom_debt"
+            ]
+          },
+          {
+            "theorem_name": "thm_HS_convergence_main",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "assumptions_grounded",
+              "translation_fidelity_ok",
+              "dependency_trust_complete",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_HS_classical_cutoff_limit",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_HS_states_to_rdm_trace",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent",
+              "no_paper_axiom_debt"
+            ]
+          },
+          {
+            "theorem_name": "prop_HS_state_to_rdm_scaled",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_HS_tensor_product_rdm_expansion",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_HS_deFinetti_remainder_vanish",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_HS_full_norm_moment_mu",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_HS_full_norm_moment_nuP",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "assumptions_grounded",
+              "translation_fidelity_ok",
+              "dependency_trust_complete",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_HS_L1_to_moment_operator",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "assumptions_grounded",
+              "translation_fidelity_ok",
+              "dependency_trust_complete",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_HS_low_frequency_to_fd_classical",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_periodic_yukawa_positive",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "prop_def_Gibbs",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_sum",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_convolution_kernels",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_convolution_kernels",
+            "status": "FLAWED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "lem_shifted_Yukawa_sums",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          },
+          {
+            "theorem_name": "cor_husimi_fourth_moment",
+            "status": "UNRESOLVED",
+            "grounding_status": "",
+            "gate_failures": [
+              "lean_proof_closed",
+              "step_verdict_verified",
+              "translation_fidelity_ok",
+              "claim_equivalent"
+            ]
+          }
+        ],
+        "translation_limited": [],
+        "axiom_backed": [],
+        "lean_verified_proven": [],
+        "auto_closed_proven": []
+      },
+      "returncode": 0
+    }
+  ],
+  "steps": [
+    {
+      "stage": "reset_paper_ledger",
+      "ledger_path": "/home/projectx/BDDM/output/verification_ledgers/2604.21583.json",
+      "removed": false,
+      "skipped": false
+    },
+    {
+      "stage": "mathlib_coverage_screen",
+      "skipped": false,
+      "coverage_score": 1.0,
+      "library_limited": false,
+      "library_limited_reasons": [],
+      "abstract_chars": 0
+    },
+    {
+      "stage": "library_first_bootstrap",
+      "cmd": [
+        "python3",
+        "scripts/library_first_bootstrap.py",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--domain",
+        "remaining_cs_math"
+      ],
+      "returncode": 0,
+      "elapsed_s": 1.403,
+      "stdout_tail": "{\n  \"domain\": \"remaining_cs_math\",\n  \"ok\": true,\n  \"imports\": [\n    \"Mathlib.Data.SetLike.Basic\",\n    \"Mathlib.Logic.Basic\",\n    \"Mathlib.Computability.Primrec.List\"\n  ],\n  \"stub_file\": \"/home/projectx/BDDM/output/library_bootstrap/bootstrap_remaining_cs_math.lean\",\n  \"elapsed_s\": 1.374,\n  \"stdout_tail\": \"\",\n  \"stderr_tail\": \"\"\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "stage": "paper_theory_builder",
+      "ok": true,
+      "paper_theory_file": "/home/projectx/BDDM/Desol/PaperTheory/Paper_2604_21583.lean",
+      "module": "Desol.PaperTheory.Paper_2604_21583"
+    },
+    {
+      "stage": "bootstrap_arxiv_to_lean",
+      "cmd": [
+        "python3",
+        "scripts/arxiv_to_lean.py",
+        "2604.21583",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--out",
+        "/home/projectx/BDDM/output/2604.21583.lean",
+        "--repair-rounds",
+        "5",
+        "--translation-candidates",
+        "1",
+        "--prove-mode",
+        "full-draft",
+        "--mcts-iterations",
+        "24",
+        "--mcts-repair-variants",
+        "3",
+        "--mcts-max-depth",
+        "5",
+        "--domain",
+        "remaining_cs_math"
+      ],
+      "returncode": 0,
+      "elapsed_s": 17.784,
+      "stdout_tail": "n\n         [resume] skipping lem_HS_tensor_product_rdm_expansion — already in checkpoint\n\n[59/69] [theorem] lem:HS-full-norm-moment-mu → lem_HS_full_norm_moment_mu\n         [resume] skipping lem_HS_full_norm_moment_mu — already in checkpoint\n\n[60/69] [theorem] lem:HS-full-norm-moment-nuP → lem_HS_full_norm_moment_nuP\n         [resume] skipping lem_HS_full_norm_moment_nuP — already in checkpoint\n\n[62/69] [theorem] prop:HS-low-frequency-to-fd-classical → prop_HS_low_frequency_to_fd_classical\n         [resume] skipping prop_HS_low_frequency_to_fd_classical — already in checkpoint\n\n[61/69] [theorem] lem:HS-L1-to-moment-operator → lem_HS_L1_to_moment_operator\n         [resume] skipping lem_HS_L1_to_moment_operator — already in checkpoint\n\n[64/69] [theorem] prop:def-Gibbs → prop_def_Gibbs\n         [resume] skipping prop_def_Gibbs — already in checkpoint\n\n[63/69] [theorem] lem:periodic-yukawa-positive → lem_periodic_yukawa_positive\n         [resume] skipping lem_periodic_yukawa_positive — already in checkpoint\n\n[65/69] [theorem] lem:sum → lem_sum\n         [resume] skipping lem_sum — already in checkpoint\n\n[66/69] [theorem] lem:convolution-kernels → lem_convolution_kernels\n         [resume] skipping lem_convolution_kernels — already in checkpoint\n\n[67/69] [theorem] lem:convolution-kernels → lem_convolution_kernels\n         [resume] skipping lem_convolution_kernels — already in checkpoint\n\n[69/69] [theorem] cor:husimi-fourth-moment → cor_husimi_fourth_moment\n         [resume] skipping cor_husimi_fourth_moment — already in checkpoint\n\n[68/69] [theorem] lem:shifted-Yukawa-sums → lem_shifted_Yukawa_sums\n         [resume] skipping lem_shifted_Yukawa_sums — already in checkpoint\n[premise_retrieval] loading sentence-transformer 'BAAI/bge-small-en-v1.5' ...\n\n[done] 69 theorems processed\n       translated:  30/69\n       proved:      2/69\n       output:      /home/projectx/BDDM/output/2604.21583.lean\n       ledger:      /home/projectx/BDDM/output/verification_ledgers/2604.21583.json\n",
+      "stderr_tail": "Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n\nLoading weights:   0%|          | 0/199 [00:00<?, ?it/s]\nLoading weights: 100%|██████████| 199/199 [00:00<00:00, 9742.92it/s]\n\u001b[1mBertModel LOAD REPORT\u001b[0m from: BAAI/bge-small-en-v1.5\nKey                     | Status     |  | \n------------------------+------------+--+-\nembeddings.position_ids | UNEXPECTED |  | \n\nNotes:\n- UNEXPECTED:\tcan be ignored when loading from different task/architecture; not ok if you expect identical arch.\n"
+    },
+    {
+      "stage": "prove_pass_1",
+      "cmd": [
+        "python3",
+        "scripts/prove_arxiv_batch.py",
+        "--lean-file",
+        "/home/projectx/BDDM/output/2604.21583.lean",
+        "--project-root",
+        "/home/projectx/BDDM",
+        "--paper-id",
+        "2604.21583",
+        "--repair-rounds",
+        "1",
+        "--mode",
+        "full-draft",
+        "--mcts-iterations",
+        "24",
+        "--mcts-repair-variants",
+        "3",
+        "--mcts-max-depth",
+        "5",
+        "--bridge-loop",
+        "--bridge-rounds",
+        "1",
+        "--bridge-depth",
+        "1",
+        "--bridge-max-candidates",
+        "1",
+        "--mandatory-retry-rounds",
+        "0",
+        "--results-file",
+        "/home/projectx/BDDM/logs/full_paper_2604.21583_suite_results.json"
+      ],
+      "returncode": 0,
+      "elapsed_s": 4.449,
+      "stdout_tail": "  [sanitize] repaired malformed theorem separators in 2604.21583.lean\n  2604.21583.lean: 64 sorry theorems\n\nTotal: 64 theorems to prove\nNon-trivial filter drops: {'pure_nat0eq0': 3}\nEquivalence gate: kept=0 skipped=64 (require claim_equivalence_verdict='equivalent')\n[warn] No theorems left after proving cohort filters.\n",
+      "stderr_tail": ""
+    }
+  ],
+  "reproducibility_bundle": {
+    "report": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21583/suite_report.json",
+    "ledger": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21583/verification_ledger.json",
+    "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21583/unresolved.json",
+    "manifest": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21583/manifest.json"
+  }
+}

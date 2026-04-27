@@ -1,0 +1,81 @@
+{
+  "theorems": [
+    {
+      "theorem_name": "prop_mid_completion",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "thm_conditional_closure_intro",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "remark_9",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "remark_10",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "lem_volterra",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "prop_det_contraction",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "thm_no_singular_centering",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "remark_18",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "def_admissible",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "generated_row_has_axiom_or_domain_assumption_debt"
+      ]
+    },
+    {
+      "theorem_name": "remark_20",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "generated_row_has_axiom_or_domain_assumption_debt"
+      ]
+    },
+    {
+      "theorem_name": "rem_primitive_route",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    }
+  ]
+}

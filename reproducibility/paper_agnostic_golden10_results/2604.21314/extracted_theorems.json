@@ -1,0 +1,174 @@
+{
+  "paper_id": "2604.21314",
+  "theorem_count": 24,
+  "entries": [
+    {
+      "kind": "theorem",
+      "name": "Thm Glo2",
+      "statement": "\\label{Thm Glo2}\n\t%Let $\\gamma\\geq 0$ and $\\alpha\\in (-1,0).$ Assume that $u_0\\in L^\\infty(\\mathbbm{H}^N),$ $f\\in L^\\infty(\\mathbbm{H}^N)\\cap L^1(\\mathbbm{H}^N)$  with $u_0\\geq 0$ and $\\int_{\\mathbbm{H}^N}f>0.$ Then for any $p\\in \\big(1,\\frac{Q-2\\alpha}{Q-2-2\\alpha}\\big),$ all non-trivial weak solutions to \\eqref{eq 0.1} blow up in finite time.\n\t%",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "alpha>0",
+      "statement": "\\label{alpha>0}\n\t%\t\tLet $\\gamma\\geq 0$ and $\\alpha\\in (0,\\infty).$ Assume $f\\in L^\\infty(\\mathbbm{H}^N)\\cap L^1(\\mathbbm{H}^N)$ with $\\int_{\\mathbbm{H}^N} f>0$ and $u_0\\in  L^\\infty(\\mathbbm{H}^N).$ Then, for any exponent $p>1,$ problem \\eqref{eq 0.1} does not admit a global-in-time weak solution.\n\t%",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Thm Blowup O",
+      "statement": "\\label{Thm Blowup O} Let $\\mathbb{H}^N$ be the Heisenberg group with homogeneous dimension $Q:=2N+2,$ and \n\tlet $\\gamma\\in [0,1)$ and $\\alpha\\in (-1,0).$ We assume that  \n\t\\begin{align}\n\t\t \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}u_0(\\xi)d\\xi<\\infty,\\,0< \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty.\n\t\\end{align} \n\tThen, for any $1<p<\\frac{Q+2\\gamma-\\mu(\\lambda)-2\\alpha}{Q-2-\\mu(\\lambda)-2\\alpha}$,  problem \\eqref{eq 0.1} does not admit a global-in-time weak solution.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Thm Blowup O2",
+      "statement": "\\label{Thm Blowup O2} Let $\\mathbb{H}^N$ be the Heisenberg group with homogeneous dimension $Q:=2N+2,$ and\n\tlet $\\gamma\\in [0,1)$ and  $\\alpha\\in (0,\\infty).$ We assume that \t\\begin{align}\n\t\t\\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}u_0(\\xi)d\\xi<\\infty,\\,0< \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty.\n\t\\end{align}   \n\tThen, for any $p>1,$ problem \\eqref{eq 0.1} does not admit a global-in-time weak solution.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Thm Blowup O3",
+      "statement": "\\label{Thm Blowup O3} Let $\\mathbb{H}^N$ be the Heisenberg group with homogeneous dimension $Q:=2N+2,$ and\n\tlet $\\gamma\\in (0,1)$ and  $\\alpha\\in [0,\\infty).$ We assume that \t\\begin{align}\n\t\t\\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}u_0(\\xi)d\\xi<\\infty,\\,0< \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty.\n\t\\end{align}  \n\tThen, for any $p>1,$ problem \\eqref{eq 0.1} does not admit a global-in-time weak solution.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "infty",
+      "statement": "\\cite{Gre}\n\tThe heat semigroup associated with $-\\Delta_{H}$ satisfies the following estimate:\n\t\\begin{align}\\label{infty}\n\t\t\\|e^{t\\Delta_{H}}g\\|_{L^\\infty(\\mathbbm{H}^N)}\\leq \\|g\\|_{L^\\infty(\\mathbbm{H}^N)},\n\t\\end{align}\n\tfor any $g\\in L^\\infty(\\mathbbm{H}^N)$ and $t>0.$",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Beta",
+      "statement": "[Beta function]\n\tThe Beta function $B(z_1,z_2)$ is a function of two complex variables $z_1,\\,z_2,$ defined as\n\t\\begin{align}\\label{Beta}\n\t\tB(z_1,z_2)=\\int_0^1t^{z_1-1}(1-t)^{z_2-1}dt,\\,\\, \\mathcal{R}e(z_i)>0,\\,i=1,2.\n\t\\end{align}\n\tThis integral is also known as the Eulerian integral of the first kind.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "defn_8",
+      "statement": "[Riemann-Liouville fractional integral \\cite{Kilbas}] For a given integrable function $u(t),$ $t\\in (0,T),$ the left and right Riemann–Liouville fractional integrals of order $\\gamma\\in (0,1)$ are defined as \n\t\\begin{align}\n\t\tI_{0+}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_0^t(t-\\tau)^{\\gamma-1}u(\\tau)d\\tau,\n\t\\end{align}\n\tand\n\t\\begin{align}\n\t\tI_{T-}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_t^T(\\tau-t)^{\\gamma-1}u(\\tau)d\\tau,\n\t\\end{align}\n\trespectively. Moreover, $I_{T-}^\\gamma u, I_{0+}^\\gamma u\\longrightarrow u$ a.e. as $\\gamma\\longrightarrow 0,$ see \\cite{Kilbas}. In view of it, we use the convention that $I_{T-}^0 u(t), I_{0+}^0 u(t)=u(t), t\\in (0,T).$",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "thm_9",
+      "statement": "[Picone's identity]\n%\tLet $p>1$ and $\\Omega\\subseteq\\mathbbm{H}^N.$ If $u,v\\in HW^{1,p}(\\Omega)$ with $u\\geq 0,$ and $-\\Delta_{H}$ is a bounded Radon measure. Also, $v|_{\\partial\\Omega}=0,$ $v\\geq 0$ (v$\\not\\equiv 0$). Then, the following estimate holds:\n%\t\\begin{align}\n\t%\t\t\\int_{\\Omega}|\\nabla_{H}u|^2\\geq \\int_{\\Omega}\\frac{u^2}{v}(-\\Delta_{H}v).\n\t%\t\\end{align} \n%",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Hardy",
+      "statement": "[Lemma 2.2 \\cite{Dou}]\\label{Hardy} Let $f\\in C_c^\\infty(\\mathbbm{H}^N)\\setminus\\{0\\}.$ Then\n\t\\begin{align}\n\t\t\\int_{\\mathbbm{H}^N}\\frac{(f(\\xi))^2}{\\|\\xi\\|_H^{2}}\\psi(\\xi)d\\xi\\leq \\left(\\frac{2}{Q-2}\\right)^2\\int_{\\mathbbm{H}^N}|\\nabla_{H}f(\\xi)|^2d\\xi,\n\t\\end{align}\n\twhere $\\psi=|\\nabla_{H}\\|\\cdot\\|_{H}|^2.$ Moreover, the constant $\\left(\\frac{2}{Q-2}\\right)^2$ appearing in the inequality is sharp.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Thm Folst",
+      "statement": "[Folland-Stein-Sobolev inequality \\cite{FollSte}]\\label{Thm Folst}\n\tLet $1<p<\\infty.$ Then, there exists a constant $C=C(p,Q)$ such that \n\t\\begin{align}\n\t\t\\left(\\int_{\\mathbbm{H}^N}|\\phi|^{\\frac{pQ}{Q-p}}d\\xi\\right)^{\\frac{Q-p}{pQ}} \\leq C(p,Q)\\left(\\int_{\\mathbbm{H}^N}|\\nabla_H\\phi|^p\\right)^{\\frac{1}{p}}\n\t\\end{align}\t\n\tfor all $\\phi\\in C_c^\\infty(\\mathbbm{H}^N).$",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Weak",
+      "statement": "[Weak solution]\\label{Weak} Let $v(0)\\in L^1_{\\text{loc}}(\\mathbbm{H}^N, \\|\\xi\\|^{-2\\mu(\\lambda)}d\\xi),f\\in L^1_{\\text{loc}}(\\mathbbm{H}^N, \\|\\xi\\|^{-\\mu(\\lambda)}d\\xi).$ Then $v\\in L^p_{\\text{loc}}((0,T),L^p_{\\text{loc}}(\\mathbbm{H}^N,\\|\\xi\\|_H^{-{(p+1)\\mu(\\lambda)}}d\\xi))\\cap L^1_{\\text{loc}}((0,T),L^1_{\\text{loc}}(\\mathbbm{H}^N,\\|\\xi\\|_H^{-2\\mu(\\lambda)}d\\xi)) $ is called a local-in-time weak solution to \\eqref{eq equi} (and equivalently, to \\eqref{eq 0.1}) if \n\t\\begin{align}\n\t\t-\\int_0^T\\int_{\\mathbbm{H}^N}\tv(\\|\\xi\\|_{H}^{-{2\\mu(\\lambda)}}\\partial_t\\phi-L_{H}\\phi)d\\xi dt &=\\frac{1}{\\Gamma(\\gamma)}\\int_0^T\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{{-(p+1)\\mu(\\lambda)}}|v|^pI^\\gamma_{T^-}\\phi d\\xi dt\\\\\n\t\t&\\qquad +\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{{-2\\mu(\\lambda)}}v(0,\\xi)\\phi(0,\\xi)d\\xi\\\\\n\t\t&\\qquad+\\int_0^T\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{{-\\mu(\\lambda)}}t^\\alpha f\\phi d\\xi dt\n\t\\end{align}\n\tholds for any non-negative test function $\\phi \\in C_c^1([0,T), C_c^2(\\mathbbm{H}^N).$ Moreover, $v$ is called global-in-time weak solution if $T=\\infty.$",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Thm Blowup O4",
+      "statement": "\\label{Thm Blowup O4}\n\tLet $\\gamma=0,$  $\\alpha\\in (-1,\\infty),$ and let  $0\\leq u_0,f\\in L^\\infty(\\mathbbm{H}^N).$ Then, for any $p>\n\t\\frac{\\mu(\\lambda)+2}{\\mu(\\lambda)},$ problem \\eqref{eq 0.1} does not admit a local-in-time solution.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Thm Blowup O5",
+      "statement": "\\label{Thm Blowup O5}\n\tLet $\\gamma>0,$ $\\alpha\\in (-1,\\infty),$ and let  $0\\leq u_0,f\\in L^\\infty(\\mathbbm{H}^N).$ Assume that \\ref{H1} holds. Then, for any $p>\n\t\\frac{\\mu(\\lambda)+2}{\\mu(\\lambda)},$ problem \\eqref{eq 0.1} does not admit a local-in-time weak solution.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "rem_15",
+      "statement": "Condition \\ref{H1} is a mild temporal monotonicity assumption over short intervals. It ensures that the memory term remains comparable to its instantaneous value.\n\tIt generalizes the standard monotonicity condition $u_t\\ge 0$ over some interval (as used by Li et al. \\cite{Li}), corresponding to the case $\\theta=1$. Hence, \\ref{H1} can be viewed as a variant of this classical assumption.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Mild",
+      "statement": "[Mild solution]\\label{Mild}\n\tA function $u\\in C([0,T],L^\\infty(\\mathbbm{H}^N))$ is called a local-in-time mild solution to \\eqref{eq without} if\n\t\\begin{align}\\label{eq Mild}\n\t\tu(t)=e^{t\\Delta_{H}}u_0+\\int_0^te^{(t-\\tau)\\Delta_{H}}\\left(\\frac{1}{\\Gamma (\\gamma)}\\int_0^\\tau(\\tau-s)^{-\\gamma}|u(s)|^{p}ds+\\tau^\\alpha f\\right)d\\tau\n\t\\end{align}\n\tholds for any $t\\in (0,T].$",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Weak2",
+      "statement": "[Weak solution]\\label{Weak2}\n\tLet $u_0,f\\in L^1_{\\text{loc}}(\\mathbbm{H}^N).$ Then $u\\in L^p_{\\text{loc}}((0,T),L^p_{\\text{loc}}(\\mathbbm{H}^N))$ is called a local-in-time weak solution to \\eqref{eq without} if \n\t\\begin{align}\n\t\t-\\int_0^T\\int_{\\mathbbm{H}^N}u(\\partial_t\\phi+\\Delta_{H}\\phi)d\\xi dt =\\int_0^T\\int_{\\mathbbm{H}^N}|u|^pI_{T^-}^\\gamma\\phi d\\xi dt +\\int_{\\mathbbm{H}^N}u_0\\phi(0,\\cdot)d\\xi +\\int_0^T\\int_{\\mathbbm{H}^N} \\tau^\\alpha f\\phi d\\xi d\\tau,\n\t\\end{align}\n\tholds for any non-negative test function $\\phi\\in C_c^1([0,T),C_c^2(\\mathbbm{H}^N)).$ \n\tMoreover, $u$ is called a global-in-time weak solution if $T=+\\infty.$",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "mild to weak",
+      "statement": "\\label{mild to weak}\n\tLet $u_0\\in L^\\infty(\\mathbbm{H}^N).$ Let $u$ be a mild solution to \\eqref{eq without} in $\\mathbbm{H}^N\\times [0,T),$ for $T>0.$ Then $u$ is also a weak solution to \\eqref{eq without} in $\\mathbbm{H}^N\\times [0,T).$",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "Local",
+      "statement": "\\label{Local}\n\tLet $\\gamma>0,$ $\\alpha\\in(-1,\\infty)\\setminus\\{0\\},$ $p>1$ and $u_0,f\\in L^\\infty(\\mathbbm{H}^N),$ with $u_0\\geq 0.$ Then, the following holds:\n\t\\begin{enumerate}\n\t\t\\item [(i)] There exists a fixed $T>0,$ and a unique mild solution $u\\in C([0,T],L^\\infty(\\mathbbm{H}^N))$ to \\eqref{eq without}. \n\t\t\\item [(ii)] The solution can be uniquely extended to a maximum interval $[0,T_{\\text{max}}).$ Moreover, if $T_{\\text{max}}$ is finite, then $\\|u(t)\\|_{L^\\infty(\\mathbbm{H}^N)}\\longrightarrow\\infty$ as $t\\longrightarrow T_{\\text{max}}.$\n\t\t\\item [(iii)] Let $u_0,$ $f\\in L^\\infty(\\mathbbm{H}^N)\\cap L^q(\\mathbbm{H}^N)$ for $q\\in [1,\\infty].$ Then\n\t\t\\begin{align}\n\t\t\tu\\in C([0,T_{\\text{max}}),L^\\infty(\\mathbbm{H}^N))\\cap C([0,T_{\\text{max}}),L^q(\\mathbbm{H}^N)).\n\t\t\\end{align}\n\t\\end{enumerate}",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "rem_20",
+      "statement": "When $\\gamma=0,$ problem \\eqref{eq without} is well-studied by the second and third-named authors in \\cite{Oza Sur 2}. In fact, in this regime, we have the existence of a global-in-time solution to \\eqref{eq without}.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "rem_21",
+      "statement": "%\t\tIt is easy to observe using Theorem \\ref{Local} that the following equation has a local-in-time solution:\n\t%\t\t\\begin{align}\n\t\t%\t\t\t\t\\begin{cases}\n\t\t\t%\t\t\t\t\\partial_tu_\\varepsilon-\\Delta_{\\mathbbm{H}^N}u_\\varepsilon=\\lambda \\frac{\\psi u_\\varepsilon}{\\|\\cdot\\|^{2}_{\\mathbbm{H}^N}+\\varepsilon}+\\frac{1}{\\Gamma(\\gamma)}\\int_0^t(t-\\tau)^{\\gamma-1}|u_\\varepsilon(\\tau)|^{p}d\\tau+t^\\alpha f &\\text{in } \\,\\mathbbm{H}^N\\times (0,T),\\\\\n\t\t\t%\t\t\t\tu_\\varepsilon(0,\\cdot)=u_0(\\cdot) &\\text{in } \\,\\mathbbm{H}^N,\n\t\t\t%\t\t\t\\end{cases}\t\n\t\t%\t\t\\end{align}\n\t%\t\tfor $\\alpha\\in (-1,\\infty)$ and $\\gamma\\in [0,1).$ Moreover, since $\\mathcal{H}_\\varepsilon:=\\frac{1}{\\|\\cdot\\|^{2}_{\\mathbbm{H}^N}+\\varepsilon}$ is a bounded operator. Let us assume that $\\mathcal{H}_\\varepsilon\\leq c.$ Hence, we have that the infinitesimal generator of $\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon$ (denoted by $e^{t(\\Delta_{\\mathbbm{H}^N}+\\mathcal{H}_\\varepsilon)}$) satisfies the following pointwise estimate:\n\t%\t\t\\begin{align}\n\t\t%\t\te^t{(\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon)}&\\leq e^{-tc}e^{t\\Delta_{\\mathbbm{H}^N}}\\\\\n\t\t%\t\t&\\leq Ce^{t\\Delta_{\\mathbbm{H}^N}},\n\t\t%\t\t\\end{align}\n\t%\t\tfor some positive constant $C.$\n\t%",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "thm_22",
+      "statement": "%\tLet $1<p<\\frac{\\mu(\\lambda)+2}{\\mu(\\lambda)},$\t\n\t%",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "life",
+      "statement": "\\label{life}\n\tLet $\\gamma\\in [0,1),$ $\\alpha\\in (-1,0),$ and $p\\in \\bigg(1,\\frac{Q+2\\gamma-\\mu(\\lambda)-2\\alpha}{Q-2-\\mu(\\lambda)-2\\alpha}\\bigg).$ Assume that $u_0\\in L^\\infty(\\mathbbm{H}^N)$ with $u_0\\geq 0,$ $0<\\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty$ and \n\t\\begin{align}\\label{fxi}\n\t\tf(\\xi)\\geq \\varepsilon\\|\\xi\\|_{H}^{-2\\beta}, \\text{ for }\\|\\xi\\|_{H}\\geq 1, \\beta\\in \\left(\\frac{Q}{2}-\\frac{\\mu(\\lambda)}{2},\\frac{\\gamma+p}{p-1}+\\alpha\\right) \\text{ and }\\varepsilon>0. \n\t\\end{align} \n\tThen for any local-in-time solution $u_\\varepsilon$ to \\eqref{eq 0.1}, the following estimate on $T_\\varepsilon$ is valid: \n\t\\begin{align}\n\t\tT_\\varepsilon\\leq C\\varepsilon^{\\big({\\beta-\\frac{\\gamma+p}{p-1}-\\alpha}\\big)^{-1}}, \n\t\\end{align}\n\tfor some constant $C>0$ independent of $T_\\varepsilon.$",
+      "proof": "In proving this result, we make use of the test functions introduced in the proof of Theorem \\ref{Thm Blowup O}. Let $u_\\varepsilon$ be local-in-time solution to \\eqref{eq 0.1} with its maximal time $T_\\varepsilon$ and also define $v_\\varepsilon(\\xi,t)\\coloneqq\\|\\xi\\|_{H}^{{\\mu(\\lambda)}}u_\\varepsilon(\\xi,t).$\n\tNow, for a fixed \n\t\\begin{align}\n\t\tl=1+\\frac{p+\\gamma}{p-1},\n\t\\end{align}\n\twe define a function \\begin{align}\n\t\t\\phi(\\xi,t)=\\phi_1(\\xi)\\phi_2(t).\n\t\\end{align} \n\tHere\n\t\\begin{align}\n\t\t\\phi_1(\\xi)=\\varphi\\left(\\frac{\\|\\xi\\|_{H}}{T_{\\varepsilon}^{\\frac{1}{2}}}\\right), \\, \\phi_2(t)=\\left(1-\\frac{t}{T_\\varepsilon}\\right)^l,\n\t\\end{align}\n\tand $\\varphi$ is the same function appearing in \\eqref{Phip}.\n\tNow, proceeding along similar lines as in the proof of Theorem \\ref{Thm Blowup O}, and incorporating the following change of variables \n\t\\begin{align}\\label{ch var}\n\t\t\\xi'=\\Phi_{T_\\varepsilon^{-\\frac{1}{2}}}\\xi \\text{ and } t'=T_\\varepsilon^{-1}t,\n\t\\end{align}\n\tprovides\n\t\\begin{align}\\label{lepo}\n\t\t\\\\(1&-2\\varepsilon)\\int_0^{T_\\varepsilon}\\int_{B^{H}_{2\\sqrt T_\\varepsilon}}\\|\\xi\\|_{H}^{{-(p+1)\\mu(\\lambda)}}|v_\\varepsilon|^pI^\\gamma_{T_\\varepsilon^-}\\phi d\\xi dt+\\int_{B^{H}_{2\\sqrt T_\\varepsilon}}\\|\\xi\\|_{H}^{-2\\mu(\\lambda)}v_0\\phi(0,\\xi)d\\xi+\\int_0^{T_\\varepsilon}\\int_{B^{H}_{2\\sqrt T_\\varepsilon}} \\|\\xi\\|_{H}^{-\\mu(\\lambda)}t^\\alpha f\\phi d\\xi dt\\\\&\\leq C(\\varepsilon){T_\\varepsilon}^{\\frac{Q}{2}+1-\\frac{\\gamma+p}{p-1}-\\frac{\\mu(\\lambda)}{2}}\\int_{0}^1\\int_{B^{H}_{2}}\\|\\xi'\\|_{H}^{-{\\mu(\\lambda)}}\\big(\\phi_1\\big(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\big)\\big)^{\\frac{-1}{p-1}}(I^\\gamma_{T_\\varepsilon T^-}\\phi_2(T_\\varepsilon t'))^{-\\frac{1}{p-1}}\\phi_1(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi')^{\\frac{p}{p-1}}|\\partial_t\\phi_2(T_\\varepsilon t')|^{\\frac{p}{p-1}}d\\xi'dt'\\\\\n\t\t&\\quad+C_1C(\\varepsilon)T_\\varepsilon^{\\frac{Q}{2}+1-\\frac{\\gamma+p}{p-1}-\\frac{\\mu(\\lambda)}{2}}\\times \\\\\n\t\t&\\qquad \\int_0^1\\int_{B^{H}_{2}}\\|\\xi'\\|_{H}^{\\mu(\\lambda)\\left(\\frac{p+1}{p-1}\\right)}\\big(\\phi_1\\big(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\big)\\big)^{{-\\frac{1}{p-1}}}(I^\\gamma_{T_\\varepsilon T^-}\\phi_2(T_\\varepsilon t'))^{-\\frac{1}{p-1}}(\\phi_2(T_\\varepsilon t'))^{\\frac{p}{p-1}}(L_H\\phi_1(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'))^{\\frac{p}{p-1}}d\\xi'dt',\n\t\\end{align}\n\tfor some constant $C_1$ independent of $T_\\varepsilon,$ since $\\phi_1\\in C_c^\\infty(\\mathbbm{H}^N).$ Using the facts that $u_0\\geq 0$ and $\\epsilon$ is arbitrarily small together with the following relation\n\t\\begin{align}\\label{s3}\n\t\t\\int_0^{T_\\varepsilon}\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{-\\mu(\\lambda)}t^\\alpha f\\phi d\\xi dt&=T_\\varepsilon^{(\\alpha+1)}\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{-\\mu(\\lambda)}f(\\xi)\\phi_1(\\xi)d\\xi\\int_0^1t'^\\alpha \\phi_2(T_\\varepsilon t')dt'\\\\\n\t\t&\\geq   CT_\\varepsilon^{(\\alpha+1)}\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{-\\mu(\\lambda)}f(\\xi)\\phi_1(\\xi) d\\xi,\n\t\\end{align}\n\tin the expression \\eqref{lepo} yields\n\t\\begin{align}\n\t\tCT_\\varepsilon^{(\\alpha+1)}\\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)\\phi_1(\\xi)d\\xi\n\t\t&\\leq CT_\\varepsilon^{\\frac{Q}{2}+1-\\frac{\\gamma+p}{p-1}-\\frac{\\mu(\\lambda)}{2}},\n\t\\end{align}\n\tfor some positive constant $C$ independent of $T_\\varepsilon.$ This simplifies to\n\t\\begin{align}\\label{s10}\n\t\t\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{-\\mu(\\lambda)}f(\\xi)\\phi_1(\\xi)d\\xi\n\t\t\\leq CT_\\varepsilon^{\\frac{Q}{2}-\\frac{\\gamma+p}{p-1}-\\alpha-\\frac{\\mu(\\lambda)}{2}}.\n\t\\end{align}\n\tFurther, using the estimate \\eqref{fxi} together with \\eqref{ch var}, we obtain\n\t\\begin{align}\\label{mt0}\n\t\t\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{-\\mu(\\lambda)}f(\\xi)\\phi_1(\\xi)d\\xi&=T_\\varepsilon^{\\frac{Q}{2}}\\int_{\\mathbbm{H}^N}\\|\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi\\|_{H}^{-\\mu(\\lambda)}f\\bigg(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\bigg)\\phi_1\\bigg(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\bigg)d\\xi'\\\\\n\t\t&\\geq \\varepsilon T_\\varepsilon^{\\frac{Q}{2}-\\beta-\\frac{\\mu(\\lambda)}{2}}\\int_{\\mathbbm{H}^N\\setminus B^{H}_{\\frac{1}{\\sqrt{T}_\\varepsilon}}}\\|\\xi'\\|_{H}^{-\\mu(\\lambda)}\\|\\xi'\\|_{H}^{-2\\beta}\\phi_1\\bigg(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\bigg)d\\xi'\\\\\n\t\t&\\geq \\varepsilon T_\\varepsilon^{\\frac{Q}{2}-\\beta-\\frac{\\mu(\\lambda)}{2} }\\int_{\\mathbbm{H}^N\\setminus B^{H}_{\\frac{1}{\\sqrt{T}}}}\\|\\xi'\\|_{H}^{-2\\beta-\\mu(\\lambda)}\\phi_1\\bigg(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\bigg)d\\xi',\n\t\\end{align}\n\tfor all $T\\leq T_\\varepsilon.$ Here, $\\Phi$ denotes the dilation given by \\eqref{dil}.\n\tFinally, utilizing \\eqref{mt0} in \\eqref{s10} yields\n\t\\begin{align}\n\t\t\\varepsilon T_\\varepsilon^{\\frac{Q}{2}-\\beta-\\frac{\\mu(\\lambda)}{2}}\\int_{\\mathbbm{H}^N\\setminus B^{H}_{\\frac{1}{\\sqrt{T}}}}\\|\\xi'\\|_{H}^{-2\\beta-\\mu(\\lambda)}\\phi_1\\bigg(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\bigg)d\\xi'\\leq CT_\\varepsilon^{\\frac{Q}{2}-\\frac{\\gamma+p}{p-1}-\\alpha-\\frac{\\mu(\\lambda)}{2}}.\n\t\\end{align}\nFurthermore, in view of the fact that $2\\beta>Q-\\mu$ (see \\eqref{fxi}), we get\n\t\\begin{align}\n\t\t\\varepsilon&\\leq CT_\\varepsilon^{\\frac{Q}{2}-\\frac{\\gamma+p}{p-1}-\\alpha-\\frac{Q}{2}+\\beta}\\\\\n\t\t&=CT_\\varepsilon^{-\\frac{\\gamma+p}{p-1}-\\alpha+\\beta}.\n\t\\end{align}\n\tThis deduces\n\t\\begin{align}\n\t\tT_\\varepsilon\\leq C\\varepsilon^{\\big({\\beta-\\frac{\\gamma+p}{p-1}-\\alpha}\\big)^{-1}},\n\t\\end{align}\n\tfor some positive constant $C$ independent of $T_\\varepsilon.$ This completes the proof.",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "ch var",
+      "statement": "In proving this result, we make use of the test functions introduced in the proof of Theorem \\ref{Thm Blowup O}. Let $u_\\varepsilon$ be local-in-time solution to \\eqref{eq 0.1} with its maximal time $T_\\varepsilon$ and also define $v_\\varepsilon(\\xi,t)\\coloneqq\\|\\xi\\|_{H}^{{\\mu(\\lambda)}}u_\\varepsilon(\\xi,t).$\n\tNow, for a fixed \n\t\\begin{align}\n\t\tl=1+\\frac{p+\\gamma}{p-1},\n\t\\end{align}\n\twe define a function \\begin{align}\n\t\t\\phi(\\xi,t)=\\phi_1(\\xi)\\phi_2(t).\n\t\\end{align} \n\tHere\n\t\\begin{align}\n\t\t\\phi_1(\\xi)=\\varphi\\left(\\frac{\\|\\xi\\|_{H}}{T_{\\varepsilon}^{\\frac{1}{2}}}\\right), \\, \\phi_2(t)=\\left(1-\\frac{t}{T_\\varepsilon}\\right)^l,\n\t\\end{align}\n\tand $\\varphi$ is the same function appearing in \\eqref{Phip}.\n\tNow, proceeding along similar lines as in the proof of Theorem \\ref{Thm Blowup O}, and incorporating the following change of variables \n\t\\begin{align}\\label{ch var}\n\t\t\\xi'=\\Phi_{T_\\varepsilon^{-\\frac{1}{2}}}\\xi \\text{ and } t'=T_\\varepsilon^{-1}t,\n\t\\end{align}\n\tprovides\n\t\\begin{align}\\label{lepo}\n\t\t\\\\(1&-2\\varepsilon)\\int_0^{T_\\varepsilon}\\int_{B^{H}_{2\\sqrt T_\\varepsilon}}\\|\\xi\\|_{H}^{{-(p+1)\\mu(\\lambda)}}|v_\\varepsilon|^pI^\\gamma_{T_\\varepsilon^-}\\phi d\\xi dt+\\int_{B^{H}_{2\\sqrt T_\\varepsilon}}\\|\\xi\\|_{H}^{-2\\mu(\\lambda)}v_0\\phi(0,\\xi)d\\xi+\\int_0^{T_\\varepsilon}\\int_{B^{H}_{2\\sqrt T_\\varepsilon}} \\|\\xi\\|_{H}^{-\\mu(\\lambda)}t^\\alpha f\\phi d\\xi dt\\\\&\\leq C(\\varepsilon){T_\\varepsilon}^{\\frac{Q}{2}+1-\\frac{\\gamma+p}{p-1}-\\frac{\\mu(\\lambda)}{2}}\\int_{0}^1\\int_{B^{H}_{2}}\\|\\xi'\\|_{H}^{-{\\mu(\\lambda)}}\\big(\\phi_1\\big(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\big)\\big)^{\\frac{-1}{p-1}}(I^\\gamma_{T_\\varepsilon T^-}\\phi_2(T_\\varepsilon t'))^{-\\frac{1}{p-1}}\\phi_1(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi')^{\\frac{p}{p-1}}|\\partial_t\\phi_2(T_\\varepsilon t')|^{\\frac{p}{p-1}}d\\xi'dt'\\\\\n\t\t&\\quad+C_1C(\\varepsilon)T_\\varepsilon^{\\frac{Q}{2}+1-\\frac{\\gamma+p}{p-1}-\\frac{\\mu(\\lambda)}{2}}\\times \\\\\n\t\t&\\qquad \\int_0^1\\int_{B^{H}_{2}}\\|\\xi'\\|_{H}^{\\mu(\\lambda)\\left(\\frac{p+1}{p-1}\\right)}\\big(\\phi_1\\big(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\big)\\big)^{{-\\frac{1}{p-1}}}(I^\\gamma_{T_\\varepsilon T^-}\\phi_2(T_\\varepsilon t'))^{-\\frac{1}{p-1}}(\\phi_2(T_\\varepsilon t'))^{\\frac{p}{p-1}}(L_H\\phi_1(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'))^{\\frac{p}{p-1}}d\\xi'dt',\n\t\\end{align}\n\tfor some constant $C_1$ independent of $T_\\varepsilon,$ since $\\phi_1\\in C_c^\\infty(\\mathbbm{H}^N).$ Using the facts that $u_0\\geq 0$ and $\\epsilon$ is arbitrarily small together with the following relation\n\t\\begin{align}\\label{s3}\n\t\t\\int_0^{T_\\varepsilon}\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{-\\mu(\\lambda)}t^\\alpha f\\phi d\\xi dt&=T_\\varepsilon^{(\\alpha+1)}\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{-\\mu(\\lambda)}f(\\xi)\\phi_1(\\xi)d\\xi\\int_0^1t'^\\alpha \\phi_2(T_\\varepsilon t')dt'\\\\\n\t\t&\\geq   CT_\\varepsilon^{(\\alpha+1)}\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{-\\mu(\\lambda)}f(\\xi)\\phi_1(\\xi) d\\xi,\n\t\\end{align}\n\tin the expression \\eqref{lepo} yields\n\t\\begin{align}\n\t\tCT_\\varepsilon^{(\\alpha+1)}\\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)\\phi_1(\\xi)d\\xi\n\t\t&\\leq CT_\\varepsilon^{\\frac{Q}{2}+1-\\frac{\\gamma+p}{p-1}-\\frac{\\mu(\\lambda)}{2}},\n\t\\end{align}\n\tfor some positive constant $C$ independent of $T_\\varepsilon.$ This simplifies to\n\t\\begin{align}\\label{s10}\n\t\t\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{-\\mu(\\lambda)}f(\\xi)\\phi_1(\\xi)d\\xi\n\t\t\\leq CT_\\varepsilon^{\\frac{Q}{2}-\\frac{\\gamma+p}{p-1}-\\alpha-\\frac{\\mu(\\lambda)}{2}}.\n\t\\end{align}\n\tFurther, using the estimate \\eqref{fxi} together with \\eqref{ch var}, we obtain\n\t\\begin{align}\\label{mt0}\n\t\t\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{-\\mu(\\lambda)}f(\\xi)\\phi_1(\\xi)d\\xi&=T_\\varepsilon^{\\frac{Q}{2}}\\int_{\\mathbbm{H}^N}\\|\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi\\|_{H}^{-\\mu(\\lambda)}f\\bigg(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\bigg)\\phi_1\\bigg(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\bigg)d\\xi'\\\\\n\t\t&\\geq \\varepsilon T_\\varepsilon^{\\frac{Q}{2}-\\beta-\\frac{\\mu(\\lambda)}{2}}\\int_{\\mathbbm{H}^N\\setminus B^{H}_{\\frac{1}{\\sqrt{T}_\\varepsilon}}}\\|\\xi'\\|_{H}^{-\\mu(\\lambda)}\\|\\xi'\\|_{H}^{-2\\beta}\\phi_1\\bigg(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\bigg)d\\xi'\\\\\n\t\t&\\geq \\varepsilon T_\\varepsilon^{\\frac{Q}{2}-\\beta-\\frac{\\mu(\\lambda)}{2} }\\int_{\\mathbbm{H}^N\\setminus B^{H}_{\\frac{1}{\\sqrt{T}}}}\\|\\xi'\\|_{H}^{-2\\beta-\\mu(\\lambda)}\\phi_1\\bigg(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\bigg)d\\xi',\n\t\\end{align}\n\tfor all $T\\leq T_\\varepsilon.$ Here, $\\Phi$ denotes the dilation given by \\eqref{dil}.\n\tFinally, utilizing \\eqref{mt0} in \\eqref{s10} yields\n\t\\begin{align}\n\t\t\\varepsilon T_\\varepsilon^{\\frac{Q}{2}-\\beta-\\frac{\\mu(\\lambda)}{2}}\\int_{\\mathbbm{H}^N\\setminus B^{H}_{\\frac{1}{\\sqrt{T}}}}\\|\\xi'\\|_{H}^{-2\\beta-\\mu(\\lambda)}\\phi_1\\bigg(\\Phi_{T_\\varepsilon^{\\frac{1}{2}}}\\xi'\\bigg)d\\xi'\\leq CT_\\varepsilon^{\\frac{Q}{2}-\\frac{\\gamma+p}{p-1}-\\alpha-\\frac{\\mu(\\lambda)}{2}}.\n\t\\end{align}\nFurthermore, in view of the fact that $2\\beta>Q-\\mu$ (see \\eqref{fxi}), we get\n\t\\begin{align}\n\t\t\\varepsilon&\\leq CT_\\varepsilon^{\\frac{Q}{2}-\\frac{\\gamma+p}{p-1}-\\alpha-\\frac{Q}{2}+\\beta}\\\\\n\t\t&=CT_\\varepsilon^{-\\frac{\\gamma+p}{p-1}-\\alpha+\\beta}.\n\t\\end{align}\n\tThis deduces\n\t\\begin{align}\n\t\tT_\\varepsilon\\leq C\\varepsilon^{\\big({\\beta-\\frac{\\gamma+p}{p-1}-\\alpha}\\big)^{-1}},\n\t\\end{align}\n\tfor some positive constant $C$ independent of $T_\\varepsilon.$ This completes the proof.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+    }
+  ]
+}

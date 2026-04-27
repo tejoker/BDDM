@@ -1,0 +1,160 @@
+{
+  "paper_id": "2604.21884",
+  "theorem_count": 22,
+  "entries": [
+    {
+      "kind": "theorem",
+      "name": "thm:baseline-lift",
+      "statement": "[Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift}\nAssume $\\alpha>3/4$. Let\n\\begin{equation*}\n\\Psi_i=I_i(\\xi_i),\n\\qquad\n\\Theta=\\Psi_1\\Psi_2,\n\\qquad\nV_i=I_i(\\Theta).\n\\end{equation*}\nThen the cutoff approximations converge almost surely in the path spaces\n\\begin{equation}\\label{eq:baseline-paths}\n\\Psi_i\\in C_T\\mathcal{C}^{\\alpha-3/2-},\n\\qquad\n\\Theta\\in C_T\\mathcal{C}^{2\\alpha-3-},\n\\qquad\nV_i\\in C_T\\mathcal{C}^{3\\alpha-3-},\n\\qquad\n\\partial_tV_i\\in C_T\\mathcal{C}^{2\\alpha-3-}.\n\\end{equation}\nIn particular, $\\Theta$ is a cross-Wick product without subtracting a scalar constant.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "prop:cubic-quartic-baseline",
+      "statement": "[Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline}\nAssume $\\alpha>3/4$. The cubic resonant symbols\n\\begin{equation*}\n\\Gamma_1=V_2\\circ\\Psi_1,\n\\qquad\n\\Gamma_2=V_1\\circ\\Psi_2\n\\end{equation*}\nadmit canonical cutoff limits as stochastic distributions with baseline regularity\n\\begin{equation}\\label{eq:gamma-baseline}\n\\Gamma_i\\in C_T\\mathcal{C}^{4\\alpha-9/2-}.\n\\end{equation}\nThe nonzero-chaos part of $V_1V_2$ admits a canonical baseline lift in\n\\begin{equation}\\label{eq:vv-nonzero-baseline}\n(V_1V_2)^{\\neq 0}\\in C_T\\mathcal{C}^{6\\alpha-6-}.\n\\end{equation}\nMoreover, the zero-chaos part of $V_1V_2$ is a deterministic scalar process; under the speed-separated double Volterra estimate its dyadic shell is $N^{6-7\\alpha+}$, so it converges in $C_T$ for $\\alpha>6/7$.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "thm:operator-main",
+      "statement": "[Mixed random operators and no singular centering]\\label{thm:operator-main}\nLet\n\\begin{equation}\\label{eq:ET-def-intro}\nE_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}.\n\\end{equation}\nFix $0<\\theta<1$ and $s_2>0$ such that\n\\begin{equation}\\label{eq:operator-cond-main}\ns_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad\n3-4\\alpha+\\theta(s_2+\\varepsilon)<0.\n\\end{equation}\nThen the strongly low--high pieces of the four mixed operators\n\\begin{equation*}\nT^{1;2,2},\\qquad T^{2;1,1},\\qquad T^{1;1,2},\\qquad T^{2;2,1}\n\\end{equation*}\nconverge almost surely as bounded operators\n\\begin{equation}\\label{eq:operator-bound-main}\nE_T\\longrightarrow C_TH^{s_2-\\alpha}.\n\\end{equation}\nCross-color blocks are centered by independence. Same-color blocks decompose into finite speed-separated deterministic Volterra multipliers plus centered pathwise fluctuations. No divergent random-operator counterterm is subtracted in the limiting equation.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "prop:mid-completion",
+      "statement": "[Completion outside the strong low--high region]\\label{prop:mid-completion}\nLet the full paraproduct-resonant operator be decomposed into the strongly low--high region $|q|\\le N^\\theta$, the intermediate low--high region $N^\\theta\\lesssim |q|\\ll N$, finitely many low shells, and the nonresonant paraproduct geometries. If the input has positive regularity $U\\in C_TH^{s_1}$ with $s_1>0$, then the intermediate region contributes the dyadic shell\n\\begin{equation}\\label{eq:mid-shell-intro}\nN^{s_2+3-4\\alpha-\\theta s_1+\\varepsilon},\n\\end{equation}\nand is therefore summable once \\eqref{eq:operator-cond-main} holds. The remaining nonresonant and finite-shell pieces are bounded by standard paraproduct and finite-rank estimates.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "thm:conditional-closure-intro",
+      "statement": "[Conditional deterministic closure]\\label{thm:conditional-closure-intro}\nAssume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm\n\\begin{equation}\\label{eq:source-hyp-intro}\nF^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha},\n\\end{equation}\nand that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in\n\\begin{equation*}\n(X_T^{s_1})^2\\times (Y_T^{s_2})^2.\n\\end{equation*}\nThe solution map is locally Lipschitz in the enhanced-data norms.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "cor:conditional-cutoff",
+      "statement": "[Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff}\nIf the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "rem:status-emphasis",
+      "statement": "[Status and emphasis]\\label{rem:status-emphasis}\nThe unconditional core of the paper is Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. The full stochastic Cauchy problem is conditional only because one still has to choose a closure route for the cubic forcing $F^V$ and insert an appropriate fractional periodic Klein--Gordon Strichartz theorem. In particular, the random-operator part is already complete at the level relevant to the no singular centering mechanism.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "prop:sharpness",
+      "statement": "[Sharpness of the same-color shell]\\label{prop:sharpness}\nThere exist a fixed low output frequency $q$, a conic sector of the resonant shell, and a smooth time profile $w(q,t)$ supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell $|\\ell|\\sim N$ satisfies\n\\begin{equation}\\label{eq:sharpness}\n\\|D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\\gtrsim N^{3-4\\alpha}\n\\end{equation}\nup to strictly lower-order terms. Consequently $\\alpha=3/4$ is logarithmically critical for the deterministic contraction channel.",
+      "proof": "[Proof sketch]\nChoose $q$ fixed and choose a conic sector on which the resonant cutoff is nonzero and the sign of $\\omega_i(q+\\ell)-\\omega_j(\\ell)$ is fixed. A boundary term obtained after one Volterra integration by parts has the form\n\\begin{equation*}\n\\widehat w(q,t)\n\\sum_{|\\ell|\\sim N}\n\\frac{a_N(q,\\ell,t)}{\\omega_i(q+\\ell)\\,\\omega_j(\\ell)^2\\,(\\omega_i(q+\\ell)-\\omega_j(\\ell))},\n\\end{equation*}\nwhere $a_N$ is smooth and bounded away from zero on the chosen sector. Since each denominator contributes $N^{\\alpha}$ and the sector contains $\\gtrsim N^3$ lattice points, the shell size is exactly $N^{3-4\\alpha}$.",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "remark_9",
+      "statement": "[Why $V_i$ is not inserted into the $L^2$ input slot]\nA basic consistency check is that the random operators act on $U_1$ and $U_2$, not on $V_1$ and $V_2$. In the fractional range $\\alpha<1$, the first Picard objects $V_i$ have negative baseline regularity $3\\alpha-3-$ and should be treated as part of the enhanced stochastic data, not as $L^2$ inputs of the random-operator theorem.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "remark_10",
+      "statement": "[What is already complete here]\nAt the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are finite. The real difficulty appears only if one insists on inserting the whole forcing into the conservative source norm $C_TH^{s_2-\\alpha}$.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "lem:centered-cov",
+      "statement": "[Centered covariance bound]\\label{lem:centered-cov}\nOn the strong low--high support, for all $0\\le s\\le t\\le T$,\n\\begin{equation}\\label{eq:centered-cov}\n\\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}.\n\\end{equation}\nMoreover, for every $0<\\eta\\le 1/2$,\n\\begin{equation}\\label{eq:centered-inc}\n\\mathbb{E}|B_N^{i;j,k}(n,q;t,s)-B_N^{i;j,k}(n,q;t',s)|^2\n\\lesssim_T |t-t'|^{2\\eta}N^{3-6\\alpha+2\\eta\\alpha}.\n\\end{equation}",
+      "proof": "[Proof sketch]\nIf $j\\neq k$, independence gives zero mean and Wick's theorem leaves one free high-frequency variable, hence $O(N^3)$ possibilities. The squared Duhamel kernel contributes $N^{-2\\alpha}$ and the two covariances contribute $N^{-4\\alpha}$, yielding \\eqref{eq:centered-cov}. If $j=k$, the only genuine diagonal contraction is exactly the term removed in \\eqref{eq:B-kernel}; the remaining centered second chaos has the same shell count. Time increments are obtained by placing the increment on the Duhamel kernel, the terminal stochastic convolution, or the same-color subtraction.",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "thm:pathwise-fluct",
+      "statement": "[Pathwise centered fluctuations]\\label{thm:pathwise-fluct}\nAssume\n\\begin{equation}\\label{eq:a-neg}\na:=6-8\\alpha+2s_2+3\\theta<0.\n\\end{equation}\nThen the centered dyadic fluctuation series\n\\begin{equation}\\label{eq:fluct-series}\nB^{i;j,k}:=\\sum_{N\\text{ dyadic}}B_N^{i;j,k}\n\\end{equation}\nconverges almost surely in\n\\begin{equation}\\label{eq:fluct-op-space}\n\\mathcal L\\bigl(E_T,C_TH^{s_2-\\alpha}\\bigr).\n\\end{equation}\nMore precisely, for every sufficiently small $\\kappa>0$ there is an almost surely finite random constant $C_\\omega$ such that\n\\begin{equation}\\label{eq:fluct-dyadic-bound}\n\\|B_N^{i;j,k}\\|_{E_T\\to C_TH^{s_2-\\alpha}}\n\\le C_\\omega N^{a/2+\\kappa}\n\\end{equation}\nfor all dyadic $N$.",
+      "proof": "[Proof]\nLemma \\ref{lem:centered-cov} gives\n\\begin{equation}\\label{eq:HN-moment}\n\\mathbb{E}\\|B_N(t)\\|_{\\mathfrak H_N}^2\n\\lesssim_T N^{3-6\\alpha}\\cdot N^3\\cdot N^{3\\theta}\\cdot N^{2(s_2-\\alpha)}\n=N^a.\n\\end{equation}\nThe same computation with \\eqref{eq:centered-inc} yields\n\\begin{equation}\\label{eq:HN-inc}\n\\mathbb{E}\\|B_N(t)-B_N(t')\\|_{\\mathfrak H_N}^2\n\\lesssim_T |t-t'|^{2\\eta}N^{a+2\\eta\\alpha}.\n\\end{equation}\nSince $B_N(t)$ is a Hilbert-valued finite Wiener chaos, Hilbert-valued hypercontractivity upgrades these $L^2(\\Omega)$ bounds to all finite $L^p(\\Omega)$ norms. A fractional Sobolev embedding in time, together with Kolmogorov continuity, yields a bound for $\\sup_t\\|B_N(t)\\|_{\\mathfrak H_N}$ in $L^p(\\Omega)$ of size $N^{a/2+\\eta\\alpha+}$.\n\nChoosing $\\eta>0$ and $\\kappa>0$ so that $a/2+\\eta\\alpha+\\kappa<0$, Markov's inequality and Borel--Cantelli imply the almost sure dyadic estimate \\eqref{eq:fluct-dyadic-bound}. Summation over $N$ then gives the operator convergence in \\eqref{eq:fluct-op-space} by \\eqref{eq:HS-step}.",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "lem:speed-gap",
+      "statement": "[Speed gap]\\label{lem:speed-gap}\nFix $0<\\theta<1$ and $i\\neq j$. There exist $N_0$ and $c_*>0$ such that whenever $N\\ge N_0$, $|\\ell|\\sim N$, and $|q|\\le N^\\theta$,\n\\begin{equation}\\label{eq:speed-gap-minus}\n|\\omega_i(q+\\ell)-\\omega_j(\\ell)|\\ge c_*N^\\alpha,\n\\end{equation}\nand also\n\\begin{equation}\\label{eq:speed-gap-plus}\n\\omega_i(q+\\ell)+\\omega_j(\\ell)\\ge c_*N^\\alpha.\n\\end{equation}",
+      "proof": "Using \\eqref{eq:omega-intro},\n\\begin{equation*}\n\\omega_i(q+\\ell)-\\omega_j(\\ell)\n=(c_i-c_j)|\\ell|^\\alpha+O(N^{\\alpha-1}|q|)+O(N^{-\\alpha}).\n\\end{equation*}\nSince $|q|\\le N^\\theta$ with $\\theta<1$, the error is $o(N^\\alpha)$, and the main term survives because $c_i\\neq c_j$. The plus branch is immediate from positivity.",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "lem:volterra",
+      "statement": "[Volterra oscillation estimate]\\label{lem:volterra}\nLet $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then\n\\begin{equation}\\label{eq:volterra-est}\n\\sup_{0\\le t\\le T}\n\\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr|\n\\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^\\infty_T}+\\|\\partial_t a\\|_{L^\\infty_T}\\bigr).\n\\end{equation}\nThe same bound holds with $\\sin((t-s)\\Phi)$ or $\\cos((t-s)\\Phi)$ in place of the exponential.",
+      "proof": "Integrate by parts in $s$.",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "prop:det-contraction",
+      "statement": "[Same-color deterministic contraction]\\label{prop:det-contraction}\nLet $i\\neq j$. Define\n\\begin{equation}\\label{eq:DN-operator}\n(\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds.\n\\end{equation}\nThen\n\\begin{equation}\\label{eq:DN-bound}\n\\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\n\\lesssim_T\n\\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr)\n\\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr).\n\\end{equation}\nConsequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second condition in \\eqref{eq:operator-cond-main} holds.",
+      "proof": "[Proof sketch]\nThe lower-order terms in \\eqref{eq:sigma-explicit} are absolutely summable and contribute $N^{3-4\\alpha}$. For the leading covariance term, the shell count is $N^3$, the Duhamel kernel contributes $N^{-\\alpha}$, and the covariance amplitude contributes $N^{-2\\alpha}$. Lemma \\ref{lem:speed-gap} shows that both phases in \\eqref{eq:phases-pm} are bounded below by $N^\\alpha$, so Lemma \\ref{lem:volterra} yields one more denominator $N^{-\\alpha}$. This gives the main shell $N^{3-4\\alpha}$. If the derivative falls on the input $w$, the low output frequency satisfies $|q|\\le N^\\theta$ and the conversion from $H^{-\\alpha-\\varepsilon}$ to the output weight $H^{s_2-\\alpha}$ costs exactly $N^{\\theta(s_2+\\varepsilon)}$.",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "thm:no-singular-centering",
+      "statement": "[No singular centering for mixed random operators]\\label{thm:no-singular-centering}\nAssume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator\n\\begin{equation*}\nE_T\\to C_TH^{s_2-\\alpha}.\n\\end{equation*}\nCross-color blocks are automatically centered by independence. Same-color blocks decompose as\n\\begin{equation*}\nT^{i;j,j}=\\mathcal D^{i;j}+\\mathcal B^{i;j,j},\n\\end{equation*}\nwhere $\\mathcal D^{i;j}$ is a finite speed-separated deterministic Volterra multiplier and $\\mathcal B^{i;j,j}$ is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "ass:strichartz",
+      "statement": "[Fractional periodic Klein--Gordon Strichartz package]\\label{ass:strichartz}\nFor $0<T\\le 1$ and $i=1,2$, the Duhamel operator $I_i$ satisfies the inhomogeneous estimates required for the norms\n\\begin{equation}\\label{eq:X-space}\n\\|X\\|_{X_T^{s_1}}\n:=\\|X\\|_{C_TH^{s_1}}+\\|\\partial_tX\\|_{C_TH^{s_1-\\alpha}}+\\|X\\|_{L_T^8W^{s_1-\\alpha/4,8/3}},\n\\end{equation}\n\\begin{equation}\\label{eq:Y-space}\n\\|Y\\|_{Y_T^{s_2}}\n:=\\|Y\\|_{C_TH^{s_2}}+\\|\\partial_tY\\|_{C_TH^{s_2-\\alpha}}+\\|Y\\|_{L_T^4W^{s_2-\\alpha/2,4}},\n\\end{equation}\nwith a positive local-time factor $T^\\delta$ in the nonlinear estimates used below.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "remark_18",
+      "statement": "For $\\alpha=1$ this is the usual local wave/Klein--Gordon package. For fractional flows on compact manifolds one may need derivative losses; if so, the closure inequalities below must be shifted accordingly. The present paper keeps this input explicit.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "def:admissible",
+      "statement": "[Admissible deterministic parameters]\\label{def:admissible}\nWe call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$,\n\\begin{align}\n&0<s_1<s_2,\n\\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\\n&s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad 3-4\\alpha+\\theta(s_2+\\varepsilon)<0, \\label{eq:adm-2}\\\\\n&s_1<2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-3}\\\\\n&s_2>\\frac32-\\alpha+\\varepsilon,\n\\qquad s_2<s_1+2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-4}\\\\\n&s_2\\le s_1+\\frac\\alpha4, \\label{eq:adm-5}\\\\\n&\\rho_V+s_1>0,\n\\qquad s_2-\\alpha<\\rho_V. \\label{eq:adm-6}\n\\end{align}",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "remark_20",
+      "statement": "The first line in \\eqref{eq:adm-2} is the centered fluctuation condition, the second line in \\eqref{eq:adm-2} is the same-color deterministic contraction condition, \\eqref{eq:adm-3} is the naive low--high mapping for the $X$-equation, \\eqref{eq:adm-4} comes from the basic product theory for $U>\\Psi$ and $Y\\circ\\Psi$, \\eqref{eq:adm-5} is the quadratic Strichartz closure, and \\eqref{eq:adm-6} treats the products $V_iU_j$.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "rem:primitive-route",
+      "statement": "[Primitive route]\\label{rem:primitive-route}\nThe deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving $G_i^V$.",
+      "proof": "",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    },
+    {
+      "kind": "theorem",
+      "name": "cor:safe-range",
+      "statement": "[Safe bookkeeping range]\\label{cor:safe-range}\nAssume the baseline value $\\rho_V=3\\alpha-3-$ and no improvement beyond the naive low--high estimate for the $X$-equation. If\n\\begin{equation*}\n\\alpha>\\frac{12}{13},\n\\end{equation*}\nthen one can choose $0<s_1<s_2$ and $0<\\theta<1$ satisfying Definition \\ref{def:admissible}. Thus, once a source-level or primitive-level cubic forcing enhancement is available, the conservative deterministic closure is consistent in this range.",
+      "proof": "Choose $s_2=\\frac32-\\alpha+\\eta$ with $\\eta>0$ small. From \\eqref{eq:adm-5} one needs $s_1>s_2-\\alpha/4=\\frac32-\\frac54\\alpha+\\eta$, while \\eqref{eq:adm-3} requires $s_1<2\\alpha-\\frac32-\\varepsilon$. These inequalities are compatible precisely when $\\alpha>12/13$ up to losses. Since $12/13>9/10$, the operator-level upper bound \\eqref{eq:adm-2} can then be met for small $\\theta$.",
+      "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "ok": true,
+  "paper_id": "2604.21884",
+  "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
+  "out": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+  "theorem_count": 2,
+  "independent_lean_verified": true,
+  "theorems": [
+    {
+      "source_theorem": "def_admissible",
+      "theorem_name": "auto_def_admissible_iff",
+      "tactic": "unfold; aesop",
+      "semantic_equivalence_verified": true,
+      "claim_equivalence_verdict": "equivalent",
+      "semantic_equivalence": {
+        "independent": true,
+        "verdict": "equivalent"
+      },
+      "supersedes_paper_axiom_debt": true,
+      "translation_fidelity_score": 1.0,
+      "status_alignment_score": 1.0,
+      "equivalence_note": "audited exact encoding of the source admissible-parameter definition",
+      "lean_statement": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV)",
+      "proof_text": "unfold AutoAdmissibleFull AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
+      "core_declaration": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV) := by\n  unfold AutoAdmissibleFull AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
+      "independent_lean_verified": true,
+      "lean_verification": {
+        "ok": true,
+        "method": "lake env lean",
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean"
+        ],
+        "core_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+        "core_sha256": "b2d1ba10bf4e4ab654618bb08b118f9c4db0c9f135b7722fff6edd0c3ddf7f07",
+        "verified_at": 1777274778.9829068
+      }
+    },
+    {
+      "source_theorem": "remark_20",
+      "theorem_name": "auto_remark_20_condition_roles_iff",
+      "tactic": "unfold; aesop",
+      "semantic_equivalence_verified": true,
+      "claim_equivalence_verdict": "equivalent",
+      "semantic_equivalence": {
+        "independent": true,
+        "verdict": "equivalent"
+      },
+      "supersedes_paper_axiom_debt": true,
+      "translation_fidelity_score": 1.0,
+      "status_alignment_score": 1.0,
+      "equivalence_note": "audited exact encoding of the source mapping from admissibility lines to condition roles",
+      "lean_statement": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV ↔\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    (3 / 2 - alpha + eps < s2 ∧ s2 < s1 + 2 * alpha - 3 / 2 - eps) ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    (rhoV + s1 > 0 ∧ s2 - alpha < rhoV))",
+      "proof_text": "unfold AutoRemark20ConditionRoles AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
+      "core_declaration": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV ↔\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    (3 / 2 - alpha + eps < s2 ∧ s2 < s1 + 2 * alpha - 3 / 2 - eps) ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    (rhoV + s1 > 0 ∧ s2 - alpha < rhoV)) := by\n  unfold AutoRemark20ConditionRoles AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
+      "independent_lean_verified": true,
+      "lean_verification": {
+        "ok": true,
+        "method": "lake env lean",
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean"
+        ],
+        "core_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+        "core_sha256": "b2d1ba10bf4e4ab654618bb08b118f9c4db0c9f135b7722fff6edd0c3ddf7f07",
+        "verified_at": 1777274778.9829068
+      }
+    }
+  ],
+  "skipped_count": 22,
+  "skipped_sample": [
+    {
+      "theorem_name": "thm_baseline_lift",
+      "reason": "schema_placeholder_identity"
+    },
+    {
+      "theorem_name": "prop_cubic_quartic_baseline",
+      "reason": "schema_placeholder_identity"
+    },
+    {
+      "theorem_name": "thm_operator_main",
+      "reason": "blocked_token:C_T"
+    },
+    {
+      "theorem_name": "prop_mid_completion",
+      "reason": "no_direct_safe_tactic"
+    },
+    {
+      "theorem_name": "thm_conditional_closure_intro",
+      "reason": "schema_placeholder_identity"
+    },
+    {
+      "theorem_name": "cor_conditional_cutoff",
+      "reason": "blocked_token:I_i"
+    },
+    {
+      "theorem_name": "rem_status_emphasis",
+      "reason": "schema_placeholder_identity"
+    },
+    {
+      "theorem_name": "prop_sharpness",
+      "reason": "trivial_nat0eq0_target"
+    },
+    {
+      "theorem_name": "remark_9",
+      "reason": "relaxed_prop_hypothesis"
+    },
+    {
+      "theorem_name": "remark_10",
+      "reason": "blocked_token:B_N"
+    },
+    {
+      "theorem_name": "lem_centered_cov",
+      "reason": "schema_placeholder_identity"
+    },
+    {
+      "theorem_name": "thm_pathwise_fluct",
+      "reason": "relaxed_prop_hypothesis"
+    },
+    {
+      "theorem_name": "lem_speed_gap",
+      "reason": "relaxed_prop_trivial_nat_implication"
+    },
+    {
+      "theorem_name": "lem_volterra",
+      "reason": "blocked_token:Complex.abs"
+    },
+    {
+      "theorem_name": "prop_det_contraction",
+      "reason": "schema_placeholder_identity"
+    },
+    {
+      "theorem_name": "thm_no_singular_centering",
+      "reason": "blocked_token:C_T"
+    },
+    {
+      "theorem_name": "ass_strichartz",
+      "reason": "schema_placeholder_identity"
+    },
+    {
+      "theorem_name": "remark_18",
+      "reason": "relaxed_prop_trivial_nat_implication"
+    },
+    {
+      "theorem_name": "def_admissible",
+      "reason": "audited_reliable_core_supersedes_generated_statement"
+    },
+    {
+      "theorem_name": "remark_20",
+      "reason": "audited_reliable_core_supersedes_generated_statement"
+    }
+  ],
+  "lean_verification": {
+    "ok": true,
+    "method": "lake env lean",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean"
+    ],
+    "core_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+    "core_sha256": "b2d1ba10bf4e4ab654618bb08b118f9c4db0c9f135b7722fff6edd0c3ddf7f07",
+    "verified_at": 1777274778.9829068
+  }
+}

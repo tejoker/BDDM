@@ -1,0 +1,21 @@
+{
+  "paper_id": "2604.21884",
+  "domain": "probability",
+  "role": "probability_statistics",
+  "fetch_ok": true,
+  "tex_file_count": 1,
+  "root_tex_count": 1,
+  "expanded_root_count": 1,
+  "macro_count": 17,
+  "environment_alias_count": 8,
+  "theorem_count": 22,
+  "mistral_api_key_set": false,
+  "translation_status": "not_run_missing_mistral_api_key",
+  "proof_status": "not_run_missing_mistral_api_key",
+  "error": "",
+  "main_tex": "output/paper_sources/golden10/2604.21884/revised_multispeed_KG_arxiv__1_.tex",
+  "theorem_output_truncated": false,
+  "paper_status": "VALID_STATEMENT_UNPROVEN",
+  "dominant_blocker": "api_or_runtime_failure",
+  "elapsed_s": 0.303
+}
