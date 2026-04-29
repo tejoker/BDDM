@@ -50,7 +50,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:37Z",
+      "timestamp": "2026-04-27T09:47:39Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -64,6 +64,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_acceptance_gate": false,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
@@ -81,6 +83,12 @@
         "translation_unvalidated",
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_c5cb82bf055869a8fe045fbf",
+      "canonical_theorem_id": "cth_2ec9ad690a7ba4acc2bc5074",
+      "alignment_pair_id": "align_c2016a3fa7507acba6e6f527",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift}\nAssume $\\alpha>3/4$. Let\n\\begin{equation*}\n\\Psi_i=I_i(\\xi_i),\n\\qquad\n\\Theta=\\Psi_1\\Psi_2,\n\\qquad\nV_i=I_i(\\Theta).\n\\end{equation*}\nThen the cutoff approximations converge almost surely in the path spaces\n\\begin{equation}\\label{eq:baseline-paths}\n\\Psi_i\\in C_T\\mathcal{C}^{\\alpha-3/2-},\n\\qquad\n\\Theta\\in C_T\\mathcal{C}^{2\\alpha-3-},\n\\qquad\nV_i\\in C_T\\mathcal{C}^{3\\alpha-3-},\n\\qquad\n\\partial_tV_i\\in C_T\\mathcal{C}^{2\\alpha-3-}.\n\\end{equation}\nIn particular, $\\Theta$ is a cross-Wick product without subtracting a scalar constant.",
         "normalized_natural_language_theorem": "Assumptions: [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$.; Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). Conclusion: \\end{equation*} Then the cutoff approximations converge almost surely in the path spaces \\begin{equation}\\label{eq:baseline-paths} \\Psi_i\\in C_T\\mathcal{C}^{\\alpha-3/2-}, \\qquad \\Theta\\in C_T\\mathcal{C}^{2\\alpha-3-}, \\qquad V_i\\in C_T\\mathcal{C}^{3\\alpha-3-}, \\qquad \\partial_tV_i\\in C_T\\mathcal{C}^{2\\alpha-3-}. \\end{equation} In particular, $\\Theta$ is a cross-Wick product without subtracting a scalar constant.",
@@ -125,6 +133,30 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_c5cb82bf055869a8fe045fbf",
+          "alignment_pair_id": "align_c2016a3fa7507acba6e6f527",
+          "paper_text_coverage": 0.0513,
+          "lean_text_coverage": 0.2,
+          "missing_assumptions": [
+            "[Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$.",
+            "Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta)."
+          ],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -310,6 +342,52 @@
         "paper_definition_stub:ξ2",
         "paper_symbol:Θ"
       ],
+      "canonical_statement": "theorem _ (u1 : ℝ) (u2 : alpha > 3 / 4) (ξ1 ξ2 : ℝ) : let Ψ1 : = I1 ξ1; let Ψ2 : = I2 ξ2; let Θ : = Ψ1 * Ψ2; let V1 : = I1 Θ; let V2 : = I2 Θ; Ψ1 ∈ C_T 𝒞 ^ (u1 - 3 / 2 -) ∧ Ψ2 ∈ C_T 𝒞 ^ (u1 - 3 / 2 -) ∧ Θ ∈ C_T 𝒞 ^ (2 * u1 - 3 -) ∧ V1 ∈ C_T 𝒞 ^ (3 * u1 - 3 -) ∧ V2 ∈ C_T 𝒞 ^ (3 * u1 - 3 -) ∧ d_dtt V1 ∈ C_T 𝒞 ^ (2 * u1 - 3 -) ∧ d_dtt V2 ∈ C_T 𝒞 ^ (2 * u1 - 3 -)",
+      "statement_fingerprint": "2ec9ad690a7ba4acc2bc5074da8ea4cf01c6f36ee939a43f17072dfd39e8f44e",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "prop_cubic_quartic_baseline",
+            "statement_id": "2604.21884|prop_cubic_quartic_baseline|1",
+            "statement_fingerprint": "571c30a868e4a59eded4c54d905174db8a9b54d8eef757ae4bfe8808c5772144",
+            "score": 2.0285
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "prop_cubic_quartic_baseline",
+            "statement_id": "2604.21884_repair_candidates|prop_cubic_quartic_baseline|21",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.5448
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "thm_baseline_lift",
+            "statement_id": "2604.21884_repair_candidates|thm_baseline_lift|19",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.5314
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -468,7 +546,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 15,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:37Z",
+      "timestamp": "2026-04-27T09:47:39Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -482,6 +560,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": false,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
         "domain_assumption_backed": false,
@@ -497,9 +577,15 @@
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "unrelated",
+      "paper_statement_id": "pstmt_88606fe6d4d2a70784dff6d9",
+      "canonical_theorem_id": "cth_571c30a868e4a59eded4c54d",
+      "alignment_pair_id": "align_d3c53c9b4f861d938059de37",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.88,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline}\nAssume $\\alpha>3/4$. The cubic resonant symbols\n\\begin{equation*}\n\\Gamma_1=V_2\\circ\\Psi_1,\n\\qquad\n\\Gamma_2=V_1\\circ\\Psi_2\n\\end{equation*}\nadmit canonical cutoff limits as stochastic distributions with baseline regularity\n\\begin{equation}\\label{eq:gamma-baseline}\n\\Gamma_i\\in C_T\\mathcal{C}^{4\\alpha-9/2-}.\n\\end{equation}\nThe nonzero-chaos part of $V_1V_2$ admits a canonical baseline lift in\n\\begin{equation}\\label{eq:vv-nonzero-baseline}\n(V_1V_2)^{\\neq 0}\\in C_T\\mathcal{C}^{6\\alpha-6-}.\n\\end{equation}\nMoreover, the zero-chaos part of $V_1V_2$ is a deterministic scalar process; under the speed-separated double Volterra estimate its dyadic shell is $N^{6-7\\alpha+}$, so it converges in $C_T$ for $\\alpha>6/7$.",
-        "normalized_natural_language_theorem": "[Baseline cubic and quartic stochastic symbols] Assume >3/4 . The cubic resonant symbols _1=V_2 _1, _2=V_1 _2 admit canonical cutoff limits as stochastic distributions with baseline regularity _i C_T C ^ 4 -9/2- . The nonzero-chaos part of V_1V_2 admits a canonical baseline lift in (V_1V_2)^ 0 C_T C ^ 6 -6- . Moreover, the zero-chaos part of V_1V_2 is a deterministic scalar process; under the speed-separated double Volterra estimate its dyadic shell is N^ 6-7 + , so it converges in C_T for >6/7 .",
+        "normalized_natural_language_theorem": "[Baseline cubic and quartic stochastic symbols] Assume alpha>3/4 . The cubic resonant symbols Gamma_1=V_2circPsi_1, qquad Gamma_2=V_1circPsi_2 admit canonical cutoff limits as stochastic distributions with baseline regularity Gamma_iin C_Tmathcal C^ 4alpha-9/2- . The nonzero-chaos part of V_1V_2 admits a canonical baseline lift in (V_1V_2)^ neq 0 in C_Tmathcal C^ 6alpha-6- . Moreover, the zero-chaos part of V_1V_2 is a deterministic scalar process; under the speed-separated double Volterra estimate its dyadic shell is N^ 6-7alpha+ , so it converges in C_T for alpha>6/7 .",
         "lean_statement": "theorem prop_cubic_quartic_baseline :\n  Γ1 = Γ1 ∧ Γ2 = Γ2 ∧ Θ = Ψ1 * Ψ2",
         "extracted_assumptions": [],
         "extracted_conclusion": "Γ1 = Γ1 ∧ Γ2 = Γ2 ∧ Θ = Ψ1 * Ψ2",
@@ -532,6 +618,26 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "unrelated",
+        "alignment_decision": {
+          "alignment_class": "unrelated",
+          "confidence": 0.75,
+          "reasons": [
+            "low_cross_text_overlap"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_88606fe6d4d2a70784dff6d9",
+          "alignment_pair_id": "align_d3c53c9b4f861d938059de37",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -643,6 +749,52 @@
         "paper_definition_stub:Ψ2",
         "paper_symbol:Θ"
       ],
+      "canonical_statement": "theorem _ : Γ1 = Γ1 ∧ Γ2 = Γ2 ∧ Θ = Ψ1 * Ψ2",
+      "statement_fingerprint": "571c30a868e4a59eded4c54d905174db8a9b54d8eef757ae4bfe8808c5772144",
+      "claim_shape": "equality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "thm_baseline_lift",
+            "statement_id": "2604.21884|thm_baseline_lift|0",
+            "statement_fingerprint": "2ec9ad690a7ba4acc2bc5074da8ea4cf01c6f36ee939a43f17072dfd39e8f44e",
+            "score": 1.5285
+          },
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "lem_volterra",
+            "statement_id": "2604.21884|lem_volterra|13",
+            "statement_fingerprint": "0a5bbc9249946719df523e6ae60a93a3d2905d938afd19dfcf2cefbe0e2b17c5",
+            "score": 1.4062
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "prop_cubic_quartic_baseline",
+            "statement_id": "2604.21884_repair_candidates|prop_cubic_quartic_baseline|21",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.0571
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -703,7 +855,7 @@
       "proof_method": "translation_limited",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:37Z",
+      "timestamp": "2026-04-27T09:47:39Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -717,6 +869,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_acceptance_gate": false
       },
       "gate_failures": [
@@ -732,9 +886,15 @@
         "translation_unvalidated",
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_aca47c629d04c52cec214391",
+      "canonical_theorem_id": "cth_e25416f8743c6564e03b088a",
+      "alignment_pair_id": "align_6bde0922691b23e0be1cdd2f",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Mixed random operators and no singular centering]\\label{thm:operator-main}\nLet\n\\begin{equation}\\label{eq:ET-def-intro}\nE_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}.\n\\end{equation}\nFix $0<\\theta<1$ and $s_2>0$ such that\n\\begin{equation}\\label{eq:operator-cond-main}\ns_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad\n3-4\\alpha+\\theta(s_2+\\varepsilon)<0.\n\\end{equation}\nThen the strongly low--high pieces of the four mixed operators\n\\begin{equation*}\nT^{1;2,2},\\qquad T^{2;1,1},\\qquad T^{1;1,2},\\qquad T^{2;2,1}\n\\end{equation*}\nconverge almost surely as bounded operators\n\\begin{equation}\\label{eq:operator-bound-main}\nE_T\\longrightarrow C_TH^{s_2-\\alpha}.\n\\end{equation}\nCross-color blocks are centered by independence. Same-color blocks decompose into finite speed-separated deterministic Volterra multipliers plus centered pathwise fluctuations. No divergent random-operator counterterm is subtracted in the limiting equation.",
-        "normalized_natural_language_theorem": "[Mixed random operators and no singular centering] Let E_T:=C_TL^2 C_T^1H^ - - . Fix 0< <1 and s_2>0 such that s_2<4 -3- 32 - , 3-4 + (s_2+ )<0. Then the strongly low--high pieces of the four mixed operators T^ 1;2,2 , T^ 2;1,1 , T^ 1;1,2 , T^ 2;2,1 converge almost surely as bounded operators E_T C_TH^ s_2- . Cross-color blocks are centered by independence. Same-color blocks decompose into finite speed-separated deterministic Volterra multipliers plus centered pathwise fluctuations. No divergent random-operator counterterm is subtracted in the limiting equation.",
+        "normalized_natural_language_theorem": "[Mixed random operators and no singular centering] Let E_T:=C_TL^2cap C_T^1H^ -alpha-varepsilon . Fix 0<theta<1 and s_2>0 such that s_2<4alpha-3-frac32theta-varepsilon, qquad 3-4alpha+theta(s_2+varepsilon)<0. Then the strongly low--high pieces of the four mixed operators T^ 1;2,2 ,qquad T^ 2;1,1 ,qquad T^ 1;1,2 ,qquad T^ 2;2,1 converge almost surely as bounded operators E_Tlongrightarrow C_TH^ s_2-alpha . Cross-color blocks are centered by independence. Same-color blocks decompose into finite speed-separated deterministic Volterra multipliers plus centered pathwise fluctuations. No divergent random-operator counterterm is subtracted in the limiting equation.",
         "lean_statement": "theorem thm_operator_main : False",
         "extracted_assumptions": [],
         "extracted_conclusion": "False",
@@ -771,6 +931,27 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_aca47c629d04c52cec214391",
+          "alignment_pair_id": "align_6bde0922691b23e0be1cdd2f",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "trivial_target",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -816,7 +997,62 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "canonical_statement": "theorem _ : False",
+      "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed",
+      "claim_shape": "proposition",
+      "novelty_status": "duplicate_in_corpus",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "canonical_fingerprint",
+        "reason": "canonical statement fingerprint matched another corpus statement",
+        "matches": [
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Folst",
+            "statement_id": "2604.21314|Thm_Folst|10",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Blowup_O4",
+            "statement_id": "2604.21314|Thm_Blowup_O4|12",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Mild",
+            "statement_id": "2604.21314|Mild|15",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "rem_HF0_main_input",
+            "statement_id": "2604.21583|rem_HF0_main_input|21",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "prop_shell_mode_local",
+            "statement_id": "2604.21583|prop_shell_mode_local|28",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "prop_mid_completion",
@@ -930,7 +1166,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 10,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:37Z",
+      "timestamp": "2026-04-27T09:47:39Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -944,6 +1180,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
         "domain_assumption_backed": false,
@@ -959,9 +1197,15 @@
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "partial",
+      "paper_statement_id": "pstmt_5734fd4b71c18de75e5c12a4",
+      "canonical_theorem_id": "cth_44fa4551d80d11a84fb45db7",
+      "alignment_pair_id": "align_fea3ed9dda042f1ec197640f",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.88,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Completion outside the strong low--high region]\\label{prop:mid-completion}\nLet the full paraproduct-resonant operator be decomposed into the strongly low--high region $|q|\\le N^\\theta$, the intermediate low--high region $N^\\theta\\lesssim |q|\\ll N$, finitely many low shells, and the nonresonant paraproduct geometries. If the input has positive regularity $U\\in C_TH^{s_1}$ with $s_1>0$, then the intermediate region contributes the dyadic shell\n\\begin{equation}\\label{eq:mid-shell-intro}\nN^{s_2+3-4\\alpha-\\theta s_1+\\varepsilon},\n\\end{equation}\nand is therefore summable once \\eqref{eq:operator-cond-main} holds. The remaining nonresonant and finite-shell pieces are bounded by standard paraproduct and finite-rank estimates.",
-        "normalized_natural_language_theorem": "[Completion outside the strong low--high region] Let the full paraproduct-resonant operator be decomposed into the strongly low--high region |q| N^ , the intermediate low--high region N^ |q| N , finitely many low shells, and the nonresonant paraproduct geometries. If the input has positive regularity U C_TH^ s_1 with s_1>0 , then the intermediate region contributes the dyadic shell N^ s_2+3-4 - s_1+ , and is therefore summable once holds. The remaining nonresonant and finite-shell pieces are bounded by standard paraproduct and finite-rank estimates.",
+        "normalized_natural_language_theorem": "[Completion outside the strong low--high region] Let the full paraproduct-resonant operator be decomposed into the strongly low--high region |q|le N^theta , the intermediate low--high region N^thetalesssim |q|ll N , finitely many low shells, and the nonresonant paraproduct geometries. If the input has positive regularity Uin C_TH^ s_1 with s_1>0 , then the intermediate region contributes the dyadic shell N^ s_2+3-4alpha-theta s_1+varepsilon , and is therefore summable once holds. The remaining nonresonant and finite-shell pieces are bounded by standard paraproduct and finite-rank estimates.",
         "lean_statement": "theorem prop_mid_completion :\n  ∃ s1 s2 theta : ℝ, 0 < s1 ∧ 0 < s2 ∧ 0 < theta ∧ theta < 1",
         "extracted_assumptions": [],
         "extracted_conclusion": "ℝ, 0 < s1 ∧ 0 < s2 ∧ 0 < theta ∧ theta < 1",
@@ -994,6 +1238,26 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "partial",
+        "alignment_decision": {
+          "alignment_class": "partial",
+          "confidence": 0.5688,
+          "reasons": [
+            "insufficient_exact_alignment_evidence"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_5734fd4b71c18de75e5c12a4",
+          "alignment_pair_id": "align_fea3ed9dda042f1ec197640f",
+          "paper_text_coverage": 0.0217,
+          "lean_text_coverage": 0.1667,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -1073,6 +1337,52 @@
         "paper_definition_stub:s2",
         "paper_definition_stub:theta"
       ],
+      "canonical_statement": "theorem _ : ∃ s1 s2 theta : ℝ, 0 < s1 ∧ 0 < s2 ∧ 0 < theta ∧ theta < 1",
+      "statement_fingerprint": "44fa4551d80d11a84fb45db7b91edad232c760e95df821eb9bc529957163c2c6",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "RepairCandidates.prop_mid_completion",
+            "statement_id": "2604.21884_repair_candidates|RepairCandidates.prop_mid_completion|2",
+            "statement_fingerprint": "712eff393fb64d99ea8532ec91d27cee3899ae3fb031de165a618299e0fdcbb1",
+            "score": 1.4272
+          },
+          {
+            "paper_id": "ab_repair_proof_topk0",
+            "theorem_name": "prop_mid_completion",
+            "statement_id": "ab_repair_proof_topk0|prop_mid_completion|1",
+            "statement_fingerprint": "712eff393fb64d99ea8532ec91d27cee3899ae3fb031de165a618299e0fdcbb1",
+            "score": 1.4209
+          },
+          {
+            "paper_id": "ab_repair_proof_topk3",
+            "theorem_name": "prop_mid_completion",
+            "statement_id": "ab_repair_proof_topk3|prop_mid_completion|1",
+            "statement_fingerprint": "712eff393fb64d99ea8532ec91d27cee3899ae3fb031de165a618299e0fdcbb1",
+            "score": 1.4209
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -1154,7 +1464,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 4,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:40Z",
+      "timestamp": "2026-04-27T09:47:43Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": true,
@@ -1168,6 +1478,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
         "domain_assumption_backed": false,
@@ -1183,9 +1495,15 @@
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "partial",
+      "paper_statement_id": "pstmt_d266b01d754819e9efe1a412",
+      "canonical_theorem_id": "cth_78ceb40e845e7f0bfe052771",
+      "alignment_pair_id": "align_c33567e902307dcaa31f324f",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.95,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Conditional deterministic closure]\\label{thm:conditional-closure-intro}\nAssume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm\n\\begin{equation}\\label{eq:source-hyp-intro}\nF^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha},\n\\end{equation}\nand that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in\n\\begin{equation*}\n(X_T^{s_1})^2\\times (Y_T^{s_2})^2.\n\\end{equation*}\nThe solution map is locally Lipschitz in the enhanced-data norms.",
-        "normalized_natural_language_theorem": "[Conditional deterministic closure] Assume the fractional periodic Klein--Gordon Strichartz package of Assumption . Assume that the enhanced stochastic data satisfy Theorem , Proposition , Theorem , and Proposition . Assume in addition that the pure stochastic forcing is available in the source norm F^V:= _1V_2+ _2V_1+V_1V_2 C_TH^ s_2- , and that the parameters ( ,s_1,s_2, ) satisfy the closure conditions listed in Definition . Then the paracontrolled system for the remainder variables (X_1,X_2,Y_1,Y_2) is locally well posed in (X_T^ s_1 )^2 (Y_T^ s_2 )^2. The solution map is locally Lipschitz in the enhanced-data norms.",
+        "normalized_natural_language_theorem": "[Conditional deterministic closure] Assume the fractional periodic Klein--Gordon Strichartz package of Assumption . Assume that the enhanced stochastic data satisfy Theorem , Proposition , Theorem , and Proposition . Assume in addition that the pure stochastic forcing is available in the source norm F^V:=Psi_1V_2+Psi_2V_1+V_1V_2in C_TH^ s_2-alpha , and that the parameters (alpha,s_1,s_2,theta) satisfy the closure conditions listed in Definition . Then the paracontrolled system for the remainder variables (X_1,X_2,Y_1,Y_2) is locally well posed in (X_T^ s_1 )^2times (Y_T^ s_2 )^2. The solution map is locally Lipschitz in the enhanced-data norms.",
         "lean_statement": "theorem thm_conditional_closure_intro :\n  ∃ s1 s2 : ℝ, HSobolev s1 = HSobolev s1 ∧ HSobolev s2 = HSobolev s2",
         "extracted_assumptions": [],
         "extracted_conclusion": "ℝ, HSobolev s1 = HSobolev s1 ∧ HSobolev s2 = HSobolev s2",
@@ -1218,6 +1536,26 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "partial",
+        "alignment_decision": {
+          "alignment_class": "partial",
+          "confidence": 0.5786,
+          "reasons": [
+            "insufficient_exact_alignment_evidence"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_d266b01d754819e9efe1a412",
+          "alignment_pair_id": "align_c33567e902307dcaa31f324f",
+          "paper_text_coverage": 0.0189,
+          "lean_text_coverage": 0.1667,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -1296,6 +1634,52 @@
         "paper_definition_stub:s1",
         "paper_definition_stub:s2"
       ],
+      "canonical_statement": "theorem _ : ∃ s1 s2 : ℝ, HSobolev s1 = HSobolev s1 ∧ HSobolev s2 = HSobolev s2",
+      "statement_fingerprint": "78ceb40e845e7f0bfe0527713bc86f576be639905dc6e8b4f9ee1ea01c86b8b6",
+      "claim_shape": "equality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_18",
+            "statement_id": "2604.21821|theorem_18|17",
+            "statement_fingerprint": "b82b1ec65418411a9c94a771c970a8a3f6f7f69f02f555c74d88a996c9e2182d",
+            "score": 2.2279
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_3",
+            "statement_id": "2604.21821|theorem_3|2",
+            "statement_fingerprint": "fab90788b0547efb2cbe202389898ef50b0660e48a250d2c00533e8100f44fab",
+            "score": 2.165
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_2",
+            "statement_id": "2604.21821|theorem_2|1",
+            "statement_fingerprint": "3849473a6a1f2e43c2b1d3b90a54d78c9930e25144268a08ed9832c183c27047",
+            "score": 2.1517
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -1357,7 +1741,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:40Z",
+      "timestamp": "2026-04-27T09:47:43Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -1371,6 +1755,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_acceptance_gate": false,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
@@ -1388,6 +1774,12 @@
         "translation_unvalidated",
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_5423b85ecd92bf7b1df6465e",
+      "canonical_theorem_id": "cth_e5a63af7455dc8ea106334b9",
+      "alignment_pair_id": "align_1e0a1d6efe6b1d0088b88863",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff}\nIf the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term.",
         "normalized_natural_language_theorem": "Quantifiers: If; then Assumptions: cutoff enhanced data converge in the norms required by Theorem; cutoff enhanced data are uniformly bounded on a common time interval; α>3/4; pure stochastic forcing is available in the source norm Conclusion: cutoff solutions of the system converge to the paracontrolled solution",
@@ -1433,6 +1825,37 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_5423b85ecd92bf7b1df6465e",
+          "alignment_pair_id": "align_1e0a1d6efe6b1d0088b88863",
+          "paper_text_coverage": 0.04,
+          "lean_text_coverage": 0.05,
+          "missing_assumptions": [
+            "cutoff enhanced data converge in the norms required by Theorem",
+            "cutoff enhanced data are uniformly bounded on a common time interval",
+            "α>3/4",
+            "pure stochastic forcing is available in the source norm"
+          ],
+          "added_assumptions": [
+            "h1: ∀ N, ∃ (C : ℝ",
+            "h2: ∀ N, cutoff_enhanced_data N ∈ ContinuousOn (fun t => t",
+            "h3: alpha > 3/4",
+            "h4: Fv ∈ ContinuousOn (fun t => t"
+          ],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -1597,6 +2020,52 @@
         "paper_symbol:cutoff_enhanced_data",
         "paper_symbol:paracontrolled_solution"
       ],
+      "canonical_statement": "theorem _ (Set.Icc 0 T) (Set.Icc 0 T) (fun t => Fv t) (fun t => Fv t) (fun t => cutoff_enhanced_data N t) (fun t => cutoff_enhanced_data N t) (fun t => t) (fun t => t) (fun t => t) (fun t => t) (u1 : ℕ → ℝ → ℝ) (u2 : ℝ → ℝ) (u3 : alpha > 3/4) (u4 : ℕ → ℝ → ℝ) (u5 : ℝ) (u6 : ℝ → ℝ) {u7 u8 u9 u10 : ℝ} : ∀ N, u1 N → u2",
+      "statement_fingerprint": "e5a63af7455dc8ea106334b9025645176c6cd36e4882b77be1cb2f22438690b6",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_18",
+            "statement_id": "2604.21821|theorem_18|17",
+            "statement_fingerprint": "b82b1ec65418411a9c94a771c970a8a3f6f7f69f02f555c74d88a996c9e2182d",
+            "score": 1.6291
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_2",
+            "statement_id": "2604.21821|theorem_2|1",
+            "statement_fingerprint": "3849473a6a1f2e43c2b1d3b90a54d78c9930e25144268a08ed9832c183c27047",
+            "score": 1.6128
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_3",
+            "statement_id": "2604.21821|theorem_3|2",
+            "statement_fingerprint": "fab90788b0547efb2cbe202389898ef50b0660e48a250d2c00533e8100f44fab",
+            "score": 1.6093
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -1755,7 +2224,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 15,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:40Z",
+      "timestamp": "2026-04-27T09:47:43Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -1769,6 +2238,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
         "domain_assumption_backed": false,
@@ -1784,6 +2255,12 @@
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "partial",
+      "paper_statement_id": "pstmt_1323487b205f365c5d5e45ca",
+      "canonical_theorem_id": "cth_52e931af8ba4e86bea8775d1",
+      "alignment_pair_id": "align_e51b70ce259e4716079ab0eb",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.88,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Status and emphasis]\\label{rem:status-emphasis}\nThe unconditional core of the paper is Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. The full stochastic Cauchy problem is conditional only because one still has to choose a closure route for the cubic forcing $F^V$ and insert an appropriate fractional periodic Klein--Gordon Strichartz theorem. In particular, the random-operator part is already complete at the level relevant to the no singular centering mechanism.",
         "normalized_natural_language_theorem": "[Status and emphasis] The unconditional core of the paper is Theorem , Proposition , Theorem , and Proposition . The full stochastic Cauchy problem is conditional only because one still has to choose a closure route for the cubic forcing F^V and insert an appropriate fractional periodic Klein--Gordon Strichartz theorem. In particular, the random-operator part is already complete at the level relevant to the no singular centering mechanism.",
@@ -1819,6 +2296,26 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "partial",
+        "alignment_decision": {
+          "alignment_class": "partial",
+          "confidence": 0.5761,
+          "reasons": [
+            "insufficient_exact_alignment_evidence"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_1323487b205f365c5d5e45ca",
+          "alignment_pair_id": "align_e51b70ce259e4716079ab0eb",
+          "paper_text_coverage": 0.0244,
+          "lean_text_coverage": 0.2,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -1912,6 +2409,52 @@
         "paper_definition_stub:ξ1",
         "paper_definition_stub:ξ2"
       ],
+      "canonical_statement": "theorem _ : I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2 ∧ VolterraOscillation (fun _ : ℝ => 0) 0 0 = VolterraOscillation (fun _ : ℝ => 0) 0 0",
+      "statement_fingerprint": "52e931af8ba4e86bea8775d14491b58c7c88ac00a90408d5d31cff234ea661ce",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_18",
+            "statement_id": "2604.21821|theorem_18|17",
+            "statement_fingerprint": "b82b1ec65418411a9c94a771c970a8a3f6f7f69f02f555c74d88a996c9e2182d",
+            "score": 2.1194
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_3",
+            "statement_id": "2604.21821|theorem_3|2",
+            "statement_fingerprint": "fab90788b0547efb2cbe202389898ef50b0660e48a250d2c00533e8100f44fab",
+            "score": 2.0941
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_2",
+            "statement_id": "2604.21821|theorem_2|1",
+            "statement_fingerprint": "3849473a6a1f2e43c2b1d3b90a54d78c9930e25144268a08ed9832c183c27047",
+            "score": 2.094
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -1926,13 +2469,13 @@
     {
       "theorem_name": "prop_sharpness",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Sharpness of the same-color shell]\\label{prop:sharpness} There exist a fixed low output frequency $q$, a conic sector of the resonant shell, and a smooth time profile $w(q,t)$ supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell $|\\ell|\\sim N$ satisfies \\begin{equation}\\label{eq:sharpness} \\|D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\\gtrsim N^{3-4\\alpha} \\end{equation} up to strictly lower-order terms. Consequently $\\alpha=3/4$ is logarithmically critical for the deterministic contraction channel.\ntheorem prop_sharpness :\n  alpha = 3/4 := by\n  sorry",
-      "status": "UNRESOLVED",
+      "lean_statement": "theorem prop_sharpness :\n  ∃ N : ℕ, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
+      "status": "INTERMEDIARY_PROVEN",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
       "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "trust_reference": "auto_reliable_core_evidence_only;gate_failures=generated_row_has_axiom_or_domain_assumption_debt",
       "promotion_gate_passed": false,
       "step_obligations": [
         {
@@ -1965,16 +2508,16 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "  simp",
+      "proof_text": "auto_reliable_core:auto_prop_sharpness_critical_exponent_iff",
       "first_failing_step": -1,
-      "error_message": "translation_repaired_pending_proof:regenerate_explicit_structured_statement,source_grounded_statement_body",
+      "error_message": "auto_reliable_core_strict_gates_failed:generated_row_has_axiom_or_domain_assumption_debt",
       "proof_mode": "full-draft",
-      "proof_method": "translation_repaired_pending_proof",
+      "proof_method": "auto_reliable_core_evidence",
       "rounds_used": 1,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:44Z",
+      "timestamp": "2026-04-27T09:47:47Z",
       "validation_gates": {
-        "lean_proof_closed": false,
+        "lean_proof_closed": true,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -1982,36 +2525,44 @@
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
         "reproducible_env": true,
-        "claim_equivalent": false,
-        "independent_semantic_equivalence_evidence": false,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
-        "translation_repair_applied": true,
-        "lean_statement_elaborates_after_repair": true,
-        "domain_assumption_backed": false,
-        "direct_proof_without_repair": false,
-        "paper_claim_diagnostic": false,
-        "statement_repair_kind": "faithful_statement_regeneration",
-        "repair_outcome": "faithful_statement_regeneration"
+        "no_paper_axiom_debt": true,
+        "auto_reliable_core_verified": true,
+        "fresh_lean_verification_evidence": true,
+        "consistent_closure_claim": true,
+        "ledger_statement_verified_by_core": false
       },
       "gate_failures": [
-        "lean_proof_closed"
+        "generated_row_has_axiom_or_domain_assumption_debt"
       ],
-      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audited_auto_reliable_core_equivalence",
+        "equivalent_independent_semantic_evidence"
       ],
+      "statement_alignment_class": "unrelated",
+      "paper_statement_id": "pstmt_3366722b35737b935b881d00",
+      "canonical_theorem_id": "cth_64ba6ffd4aa51bf1aed03a5b",
+      "alignment_pair_id": "align_69eb5deabbdcd5e5a0c8e4c0",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.95,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Sharpness of the same-color shell]\\label{prop:sharpness}\nThere exist a fixed low output frequency $q$, a conic sector of the resonant shell, and a smooth time profile $w(q,t)$ supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell $|\\ell|\\sim N$ satisfies\n\\begin{equation}\\label{eq:sharpness}\n\\|D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\\gtrsim N^{3-4\\alpha}\n\\end{equation}\nup to strictly lower-order terms. Consequently $\\alpha=3/4$ is logarithmically critical for the deterministic contraction channel.",
-        "normalized_natural_language_theorem": "[Sharpness of the same-color shell] There exist a fixed low output frequency q , a conic sector of the resonant shell, and a smooth time profile w(q,t) supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell | | N satisfies \\|D_N^ i;j w\\|_ C_TH^ s_2- N^ 3-4 up to strictly lower-order terms. Consequently =3/4 is logarithmically critical for the deterministic contraction channel.",
+        "normalized_natural_language_theorem": "[Sharpness of the same-color shell] There exist a fixed low output frequency q , a conic sector of the resonant shell, and a smooth time profile w(q,t) supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell |ell|sim N satisfies \\|D_N^ i;j w\\|_ C_TH^ s_2-alpha gtrsim N^ 3-4alpha up to strictly lower-order terms. Consequently alpha=3/4 is logarithmically critical for the deterministic contraction channel.",
         "lean_statement": "theorem prop_sharpness :\n  ∃ N : ℕ, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
         "extracted_assumptions": [],
         "extracted_conclusion": "ℕ, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "cache_hit",
           "insufficient_semantic_evidence",
-          "claim_equivalence_note:insufficient_semantic_evidence"
+          "claim_equivalence_note:insufficient_semantic_evidence",
+          "equivalent_independent_semantic_evidence",
+          "audited_auto_reliable_core_equivalence",
+          "audited exact encoding of the algebraic critical exponent 3 - 4*alpha = 0 iff alpha = 3/4; narrower than the full sharpness proposition"
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -2035,11 +2586,31 @@
             "evidence": []
           }
         },
-        "independent_semantic_evidence": false,
+        "independent_semantic_evidence": true,
+        "alignment_class": "unrelated",
+        "alignment_decision": {
+          "alignment_class": "unrelated",
+          "confidence": 0.75,
+          "reasons": [
+            "low_cross_text_overlap"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_3366722b35737b935b881d00",
+          "alignment_pair_id": "align_69eb5deabbdcd5e5a0c8e4c0",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
-      "review_required": true,
-      "review_queue_id": "review::prop_sharpness",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {
         "theorem_name": "prop_sharpness",
         "original_latex_theorem": "[Sharpness of the same-color shell]\\label{prop:sharpness}\nThere exist a fixed low output frequency $q$, a conic sector of the resonant shell, and a smooth time profile $w(q,t)$ supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell $|\\ell|\\sim N$ satisfies\n\\begin{equation}\\label{eq:sharpness}\n\\|D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\\gtrsim N^{3-4\\alpha}\n\\end{equation}\nup to strictly lower-order terms. Consequently $\\alpha=3/4$ is logarithmically critical for the deterministic contraction channel.",
@@ -2061,8 +2632,8 @@
       ],
       "axiom_debt_hash": "9d1a8c94d90397f6",
       "closure_claim": "not_closed",
-      "debt_tier": "deep_domain_theory",
-      "proof_value": "deep_domain_gap",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "superseded_generated_diagnostic",
       "grounding_metadata": [
         {
           "schema_version": "1.0.0",
@@ -2077,21 +2648,64 @@
           "requires_verified_replacement": true
         }
       ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_local_lemma:DyadicBlockBound"
-      ],
+      "result_label": "superseded_generated_diagnostic",
+      "claim_scope": "Generated row is retained for traceability only; the audited-core replacement row carries any verified claim.",
+      "modulo_paper_local_axioms": false,
       "proved": false,
-      "translation_repair": {
-        "changes": [
-          "regenerate_explicit_structured_statement",
-          "source_grounded_statement_body"
+      "auto_reliable_core": {
+        "theorem_name": "auto_prop_sharpness_critical_exponent_iff",
+        "core_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+        "tactic": "unfold AutoDyadicSharpnessCriticalExponent; constructor <;> intro h <;> linarith",
+        "strict_gate_passed": false,
+        "strict_gate_failures": [
+          "generated_row_has_axiom_or_domain_assumption_debt"
         ],
-        "repair_abstraction_kind": "",
-        "statement_repair_kind": "faithful_statement_regeneration",
-        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21884.lean"
+        "lean_verification": {
+          "ok": true,
+          "verified_at": 1777283293.622658,
+          "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
+          "method": "lake env lean"
+        },
+        "semantic_equivalence_evidence": "independent",
+        "audited_equivalence_applied": true,
+        "ledger_statement_verified_by_core": false
+      },
+      "ledger_role": "generated_diagnostic",
+      "superseded_by_audited_core": true,
+      "superseded_by_row_id": "prop_sharpness__audited_core",
+      "replacement_reason": "audited_core_replacement_records_verified_statement_proof_pair",
+      "replacement_policy": "generated_row_remains_diagnostic_not_counted",
+      "canonical_statement": "theorem _ : ∃ N : ℕ, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
+      "statement_fingerprint": "64ba6ffd4aa51bf1aed03a5b01d570410dc9018178ecef7f252481a6cc8de6e5",
+      "claim_shape": "equality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "prop_sharpness__audited_core",
+            "statement_id": "2604.21884|prop_sharpness__audited_core|22",
+            "statement_fingerprint": "c16ff941d4514781ae7ca459bdbbc57d5e0847eb209df50f9d998f885b2c9035",
+            "score": 1.942
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
       }
     },
     {
@@ -2171,7 +2785,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 5,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:44Z",
+      "timestamp": "2026-04-27T09:47:47Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -2185,6 +2799,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
         "domain_assumption_backed": false,
@@ -2200,9 +2816,15 @@
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "partial",
+      "paper_statement_id": "pstmt_512b52515431794b1dc90aeb",
+      "canonical_theorem_id": "cth_d6c4d75a6ad950e0a7deeb1b",
+      "alignment_pair_id": "align_814ce907676dcbcf16b0d1d6",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.88,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Why $V_i$ is not inserted into the $L^2$ input slot]\nA basic consistency check is that the random operators act on $U_1$ and $U_2$, not on $V_1$ and $V_2$. In the fractional range $\\alpha<1$, the first Picard objects $V_i$ have negative baseline regularity $3\\alpha-3-$ and should be treated as part of the enhanced stochastic data, not as $L^2$ inputs of the random-operator theorem.",
-        "normalized_natural_language_theorem": "[Why V_i is not inserted into the L^2 input slot] A basic consistency check is that the random operators act on U_1 and U_2 , not on V_1 and V_2 . In the fractional range <1 , the first Picard objects V_i have negative baseline regularity 3 -3- and should be treated as part of the enhanced stochastic data, not as L^2 inputs of the random-operator theorem.",
+        "normalized_natural_language_theorem": "[Why V_i is not inserted into the L^2 input slot] A basic consistency check is that the random operators act on U_1 and U_2 , not on V_1 and V_2 . In the fractional range alpha<1 , the first Picard objects V_i have negative baseline regularity 3alpha-3- and should be treated as part of the enhanced stochastic data, not as L^2 inputs of the random-operator theorem.",
         "lean_statement": "theorem remark_9 :\n  I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2",
         "extracted_assumptions": [],
         "extracted_conclusion": "I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2",
@@ -2235,6 +2857,26 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "partial",
+        "alignment_decision": {
+          "alignment_class": "partial",
+          "confidence": 0.6038,
+          "reasons": [
+            "insufficient_exact_alignment_evidence"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_512b52515431794b1dc90aeb",
+          "alignment_pair_id": "align_814ce907676dcbcf16b0d1d6",
+          "paper_text_coverage": 0.0286,
+          "lean_text_coverage": 0.3333,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -2320,6 +2962,30 @@
         "paper_definition_stub:ξ1",
         "paper_definition_stub:ξ2"
       ],
+      "canonical_statement": "theorem _ : I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2",
+      "statement_fingerprint": "d6c4d75a6ad950e0a7deeb1b5e235abb1f50131ae1ab1590a814e881f6c39e5a",
+      "claim_shape": "equality",
+      "novelty_status": "new_candidate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -2464,7 +3130,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 13,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:44Z",
+      "timestamp": "2026-04-27T09:47:47Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -2478,6 +3144,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": false,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
         "domain_assumption_backed": false,
@@ -2493,9 +3161,15 @@
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "unrelated",
+      "paper_statement_id": "pstmt_17569eb326d2a7e2546c971b",
+      "canonical_theorem_id": "cth_684d44b267fe88f63ab2f78b",
+      "alignment_pair_id": "align_055a1f034228f15270617cdd",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.88,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[What is already complete here]\nAt the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are finite. The real difficulty appears only if one insists on inserting the whole forcing into the conservative source norm $C_TH^{s_2-\\alpha}$.",
-        "normalized_natural_language_theorem": "[What is already complete here] At the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are finite. The real difficulty appears only if one insists on inserting the whole forcing into the conservative source norm C_TH^ s_2- .",
+        "normalized_natural_language_theorem": "[What is already complete here] At the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are finite. The real difficulty appears only if one insists on inserting the whole forcing into the conservative source norm C_TH^ s_2-alpha .",
         "lean_statement": "theorem remark_10 :\n  Γ1 = Γ1 ∧ Γ2 = Γ2",
         "extracted_assumptions": [],
         "extracted_conclusion": "Γ1 = Γ1 ∧ Γ2 = Γ2",
@@ -2528,6 +3202,26 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "unrelated",
+        "alignment_decision": {
+          "alignment_class": "unrelated",
+          "confidence": 0.75,
+          "reasons": [
+            "low_cross_text_overlap"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_17569eb326d2a7e2546c971b",
+          "alignment_pair_id": "align_055a1f034228f15270617cdd",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -2602,6 +3296,30 @@
         "paper_definition_stub:Γ1",
         "paper_definition_stub:Γ2"
       ],
+      "canonical_statement": "theorem _ : Γ1 = Γ1 ∧ Γ2 = Γ2",
+      "statement_fingerprint": "684d44b267fe88f63ab2f78b1ab94329ab55cfe41e4cb712c048bc6954330e44",
+      "claim_shape": "equality",
+      "novelty_status": "new_candidate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -2695,7 +3413,7 @@
       "proof_method": "translation_limited",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:44Z",
+      "timestamp": "2026-04-27T09:47:47Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -2709,6 +3427,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_acceptance_gate": false
       },
       "gate_failures": [
@@ -2725,6 +3445,12 @@
         "translation_unvalidated",
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_d7e2ce4cd42d4f58c6d60401",
+      "canonical_theorem_id": "cth_5ab1245f36463d93ba9ed1e1",
+      "alignment_pair_id": "align_3cfd65e8d795b684438d1d0a",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Centered covariance bound]\\label{lem:centered-cov}\nOn the strong low--high support, for all $0\\le s\\le t\\le T$,\n\\begin{equation}\\label{eq:centered-cov}\n\\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}.\n\\end{equation}\nMoreover, for every $0<\\eta\\le 1/2$,\n\\begin{equation}\\label{eq:centered-inc}\n\\mathbb{E}|B_N^{i;j,k}(n,q;t,s)-B_N^{i;j,k}(n,q;t',s)|^2\n\\lesssim_T |t-t'|^{2\\eta}N^{3-6\\alpha+2\\eta\\alpha}.\n\\end{equation}",
         "normalized_natural_language_theorem": "Quantifiers: forall Assumptions: [Centered covariance bound]\\label{lem:centered-cov} On the strong low--high support, for all $0\\le s\\le t\\le T$, \\begin{equation}\\label{eq:centered-cov} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}.; \\end{equation} Moreover, for every $0<\\eta\\le 1/2$, \\begin{equation}\\label{eq:centered-inc} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)-B_N^{i;j,k}(n,q;t',s)|^2 \\lesssim_T |t-t'|^{2\\eta}N^{3-6\\alpha+2\\eta\\alpha}. Conclusion: \\end{equation}",
@@ -2769,6 +3495,35 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_d7e2ce4cd42d4f58c6d60401",
+          "alignment_pair_id": "align_3cfd65e8d795b684438d1d0a",
+          "paper_text_coverage": 0.1034,
+          "lean_text_coverage": 0.1875,
+          "missing_assumptions": [
+            "[Centered covariance bound]\\label{lem:centered-cov} On the strong low--high support, for all $0\\le s\\le t\\le T$, \\begin{equation}\\label{eq:centered-cov} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}."
+          ],
+          "added_assumptions": [
+            "h0: 0 ≤ s",
+            "h1: s ≤ t",
+            "h2: t ≤ T",
+            "h3: 0 < η",
+            "h4: η ≤ 1/2"
+          ],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -2897,7 +3652,46 @@
       "paper_local_axiom_debt": [
         "paper_definition_stub:C_T",
         "paper_definition_stub:B_N"
-      ]
+      ],
+      "canonical_statement": "theorem _ (u1 u2 u3 : ℕ) (u11 : 0 < η) (u12 : 0 <= s) (u13 : s <= t) (u14 : t <= T) (u15 : η <= 1/2) (u4 u5 : ℤ) (u7 u6 u10 : ℝ) (u8 : ℕ) (u9 : ℝ) (η : ℝ) : Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (u1, u2, u3) (u4, u5, u6, u7)| ^ 2) : ℝ)) (fun _ => C_T * u8 ^ (3 - 6 * u9)) ∧ Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (u1, u2, u3) (u4, u5, u6, u7) - B_N (u1, u2, u3) (u4, u5, u10, u7)| ^ 2) : ℝ)) (fun _ => C_T * |u6 - u10| ^ (2 * η) * u8 ^ (3 - 6 * u9 + 2 * η * u9))",
+      "statement_fingerprint": "5ab1245f36463d93ba9ed1e18e11c720195dad167f3099dcafb4945f556b0bc7",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "lem_centered_cov",
+            "statement_id": "2604.21884_repair_candidates|lem_centered_cov|27",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.5474
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "RepairCandidates.lem_centered_cov",
+            "statement_id": "2604.21884_repair_candidates|RepairCandidates.lem_centered_cov|26",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.5221
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "thm_pathwise_fluct",
@@ -2940,7 +3734,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:44Z",
+      "timestamp": "2026-04-27T09:47:48Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -2954,6 +3748,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_acceptance_gate": false,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
@@ -2971,9 +3767,15 @@
         "translation_unvalidated",
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_02b91f5761b5a4bb02a1df78",
+      "canonical_theorem_id": "cth_e25416f8743c6564e03b088a",
+      "alignment_pair_id": "align_1b01d9fa59ac3b9dcaf3d023",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Pathwise centered fluctuations]\\label{thm:pathwise-fluct}\nAssume\n\\begin{equation}\\label{eq:a-neg}\na:=6-8\\alpha+2s_2+3\\theta<0.\n\\end{equation}\nThen the centered dyadic fluctuation series\n\\begin{equation}\\label{eq:fluct-series}\nB^{i;j,k}:=\\sum_{N\\text{ dyadic}}B_N^{i;j,k}\n\\end{equation}\nconverges almost surely in\n\\begin{equation}\\label{eq:fluct-op-space}\n\\mathcal L\\bigl(E_T,C_TH^{s_2-\\alpha}\\bigr).\n\\end{equation}\nMore precisely, for every sufficiently small $\\kappa>0$ there is an almost surely finite random constant $C_\\omega$ such that\n\\begin{equation}\\label{eq:fluct-dyadic-bound}\n\\|B_N^{i;j,k}\\|_{E_T\\to C_TH^{s_2-\\alpha}}\n\\le C_\\omega N^{a/2+\\kappa}\n\\end{equation}\nfor all dyadic $N$.",
-        "normalized_natural_language_theorem": "[Pathwise centered fluctuations] Assume a:=6-8 +2s_2+3 <0. Then the centered dyadic fluctuation series B^ i;j,k := _ N dyadic B_N^ i;j,k converges almost surely in L (E_T,C_TH^ s_2- ). More precisely, for every sufficiently small >0 there is an almost surely finite random constant C_ such that \\|B_N^ i;j,k \\|_ E_T C_TH^ s_2- C_ N^ a/2+ for all dyadic N .",
+        "normalized_natural_language_theorem": "[Pathwise centered fluctuations] Assume a:=6-8alpha+2s_2+3theta<0. Then the centered dyadic fluctuation series B^ i;j,k :=sum_ Ntext dyadic B_N^ i;j,k converges almost surely in mathcal Lbigl(E_T,C_TH^ s_2-alpha bigr). More precisely, for every sufficiently small kappa>0 there is an almost surely finite random constant C_omega such that \\|B_N^ i;j,k \\|_ E_Tto C_TH^ s_2-alpha le C_omega N^ a/2+kappa for all dyadic N .",
         "lean_statement": "theorem thm_pathwise_fluct : False",
         "extracted_assumptions": [],
         "extracted_conclusion": "False",
@@ -3011,6 +3813,27 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_02b91f5761b5a4bb02a1df78",
+          "alignment_pair_id": "align_1b01d9fa59ac3b9dcaf3d023",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "trivial_target",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -3053,6 +3876,61 @@
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
       "modulo_paper_local_axioms": false,
+      "canonical_statement": "theorem _ : False",
+      "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed",
+      "claim_shape": "proposition",
+      "novelty_status": "duplicate_in_corpus",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "canonical_fingerprint",
+        "reason": "canonical statement fingerprint matched another corpus statement",
+        "matches": [
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Folst",
+            "statement_id": "2604.21314|Thm_Folst|10",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Blowup_O4",
+            "statement_id": "2604.21314|Thm_Blowup_O4|12",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Mild",
+            "statement_id": "2604.21314|Mild|15",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "rem_HF0_main_input",
+            "statement_id": "2604.21583|rem_HF0_main_input|21",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "prop_shell_mode_local",
+            "statement_id": "2604.21583|prop_shell_mode_local|28",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -3148,7 +4026,7 @@
       "proof_method": "lean_verified",
       "rounds_used": 6,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:48Z",
+      "timestamp": "2026-04-27T09:47:52Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": true,
@@ -3161,7 +4039,9 @@
         "claim_equivalent": false,
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": true
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": false
       },
       "gate_failures": [
         "lean_proof_closed",
@@ -3172,9 +4052,15 @@
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "unrelated",
+      "paper_statement_id": "pstmt_c51a501f43156298e121b0f5",
+      "canonical_theorem_id": "cth_05ea3e1887b1445ed669fbb5",
+      "alignment_pair_id": "align_e12b7f48f3d023d36b45de12",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.95,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Speed gap]\\label{lem:speed-gap}\nFix $0<\\theta<1$ and $i\\neq j$. There exist $N_0$ and $c_*>0$ such that whenever $N\\ge N_0$, $|\\ell|\\sim N$, and $|q|\\le N^\\theta$,\n\\begin{equation}\\label{eq:speed-gap-minus}\n|\\omega_i(q+\\ell)-\\omega_j(\\ell)|\\ge c_*N^\\alpha,\n\\end{equation}\nand also\n\\begin{equation}\\label{eq:speed-gap-plus}\n\\omega_i(q+\\ell)+\\omega_j(\\ell)\\ge c_*N^\\alpha.\n\\end{equation}",
-        "normalized_natural_language_theorem": "[Speed gap] Fix 0< <1 and i j . There exist N_0 and c_*>0 such that whenever N N_0 , | | N , and |q| N^ , | _i(q+ )- _j( )| c_*N^ , and also _i(q+ )+ _j( ) c_*N^ .",
+        "normalized_natural_language_theorem": "[Speed gap] Fix 0<theta<1 and ineq j . There exist N_0 and c_*>0 such that whenever Nge N_0 , |ell|sim N , and |q|le N^theta , |omega_i(q+ell)-omega_j(ell)|ge c_*N^alpha, and also omega_i(q+ell)+omega_j(ell)ge c_*N^alpha.",
         "lean_statement": "theorem lem_speed_gap :\n  ∃ N0 : ℕ, ∃ cstar : ℝ, 0 < cstar ∧ (N0 : ℝ) ≤ (N0 : ℝ)",
         "extracted_assumptions": [],
         "extracted_conclusion": "ℝ, 0 < cstar ∧ (N0 : ℝ) ≤ (N0 : ℝ)",
@@ -3207,6 +4093,26 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "unrelated",
+        "alignment_decision": {
+          "alignment_class": "unrelated",
+          "confidence": 0.75,
+          "reasons": [
+            "low_cross_text_overlap"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_c51a501f43156298e121b0f5",
+          "alignment_pair_id": "align_e12b7f48f3d023d36b45de12",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -3233,7 +4139,53 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "canonical_statement": "theorem _ : ∃ N0 : ℕ, ∃ cstar : ℝ, 0 < cstar ∧ (N0 : ℝ) <= (N0 : ℝ)",
+      "statement_fingerprint": "05ea3e1887b1445ed669fbb5ec739faafb27c097a0e7003ab2549f0fa14cbf47",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "lem_speed_gap",
+            "statement_id": "2604.21884_repair_candidates|lem_speed_gap|9",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.1491
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates_fast_batch",
+            "theorem_name": "lem_speed_gap",
+            "statement_id": "2604.21884_repair_candidates_fast_batch|lem_speed_gap|3",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.1491
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "RepairCandidates.lem_speed_gap",
+            "statement_id": "2604.21884_repair_candidates|RepairCandidates.lem_speed_gap|8",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.0861
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "lem_volterra",
@@ -3309,7 +4261,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:48Z",
+      "timestamp": "2026-04-27T09:47:52Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -3323,6 +4275,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_acceptance_gate": false,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
@@ -3340,6 +4294,12 @@
         "translation_unvalidated",
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_c02ab379bd98ea5b87c0df47",
+      "canonical_theorem_id": "cth_0a5bbc9249946719df523e6a",
+      "alignment_pair_id": "align_a6983beb921c89ca09825fa9",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Volterra oscillation estimate]\\label{lem:volterra}\nLet $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then\n\\begin{equation}\\label{eq:volterra-est}\n\\sup_{0\\le t\\le T}\n\\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr|\n\\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^\\infty_T}+\\|\\partial_t a\\|_{L^\\infty_T}\\bigr).\n\\end{equation}\nThe same bound holds with $\\sin((t-s)\\Phi)$ or $\\cos((t-s)\\Phi)$ in place of the exponential.",
         "normalized_natural_language_theorem": "Quantifiers: ∀; ∃ Assumptions: a ∈ C¹([0,T]); |Φ| ≳ N^α Conclusion: sup₀≤t≤T |∫₀ᵗ a(s)e^(i(t-s)Φ) ds| ≲ N^(-α)(||a||_(L^∞_T) + ||∂ₜa||_(L^∞_T))",
@@ -3382,6 +4342,35 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_c02ab379bd98ea5b87c0df47",
+          "alignment_pair_id": "align_a6983beb921c89ca09825fa9",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [
+            "a ∈ C¹([0,T])",
+            "|Φ| ≳ N^α"
+          ],
+          "added_assumptions": [
+            "h_a: ContDiff ℝ 1 a",
+            "h_Φ: |Φ| ≥ N ^ alpha",
+            "h_N: N > 0",
+            "h_T: T ≥ 0"
+          ],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -3461,6 +4450,30 @@
       "paper_local_axiom_debt": [
         "paper_definition_stub:a"
       ],
+      "canonical_statement": "theorem _ (h_Φ : |Φ| >= N ^ alpha) (u1 : ℝ) (u2 : ℝ → ℝ) (u3 : ℝ) (u4 : ℝ) (u5 : ContDiff ℝ 1 a) (u6 : N > 0) (u7 : T >= 0) (Φ : ℝ) : ∀ t ∈ Set.Icc 0 u1, norm (∫ s in Set.Icc 0 t, u2 s * Complex.exp (Complex.I * (t - s) * Φ)) <= u3 ^ (-u4) * (⨆ s ∈ Set.Icc 0 u1, |u2 s| + ⨆ s ∈ Set.Icc 0 u1, |deriv u2 s|)",
+      "statement_fingerprint": "0a5bbc9249946719df523e6ae60a93a3d2905d938afd19dfcf2cefbe0e2b17c5",
+      "claim_shape": "inequality",
+      "novelty_status": "new_candidate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -3475,13 +4488,13 @@
     {
       "theorem_name": "prop_det_contraction",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$. Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}} \\lesssim_T \\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr) \\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr). \\end{equation} Consequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second condition in \\eqref{eq:operator-cond-main} holds.\ntheorem prop_det_contraction :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
-      "status": "UNRESOLVED",
+      "lean_statement": "theorem prop_det_contraction (i j : ℕ) (w : ℝ → ℝ) (q t s : ℝ) (N : ℕ) (alpha theta eps s1 s2 T : ℝ) (h_i_ne_j : i ≠ j) (h_eps_pos : 0 < eps) (h_theta_pos : 0 < theta) (h_s1_pos : 0 < s1) (h_s1_lt_s2 : s1 < s2) (h_s2_bound : s2 < 4 * alpha - 3 - (3 / 2) * theta - eps) (h_N_bound : 3 - 4 * alpha + theta * (s2 + eps) > 0) : ∃ C > 0, ∀ N ≥ N0, ‖(fun q t => ∫ s in Set.Icc 0 t, D_N i j (q, t, s) * w q s)‖_{C [0 T], H^{s2 - alpha}} ≤ C * (N^(3 - 4 * alpha) + N^(3 - 4 * alpha + theta * (s2 + eps))) * (‖w‖_{C [0 T], L2} + ‖(fun q t => deriv (fun t => w q t) t)‖_{C [0 T], H^{-alpha - eps}})",
+      "status": "FLAWED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "elaboration_failure",
       "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,assumptions_grounded,translation_fidelity_ok,dependency_trust_complete,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "trust_reference": "auto_reliable_core_evidence_only;gate_failures=assumptions_grounded,dependency_trust_complete,generated_row_has_axiom_or_domain_assumption_debt",
       "promotion_gate_passed": false,
       "step_obligations": [],
       "assumptions": [
@@ -3489,7 +4502,7 @@
           "label": "0",
           "lean_expr": "[0 T]",
           "grounding": "UNGROUNDED",
-          "grounding_source": "bridge_candidate:lem_Thh_two_body",
+          "grounding_source": "bridge_candidate:def_admissible__audited_core",
           "trust_class": "TRUST_PLACEHOLDER",
           "trust_reference": "untrusted"
         },
@@ -3555,44 +4568,49 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "",
+      "proof_text": "auto_reliable_core:auto_prop_det_contraction_condition_rearrange",
       "first_failing_step": -1,
-      "error_message": "translation_repaired_pending_proof:regenerate_explicit_structured_statement,source_grounded_statement_body",
+      "error_message": "auto_reliable_core_strict_gates_failed:assumptions_grounded,dependency_trust_complete,generated_row_has_axiom_or_domain_assumption_debt",
       "proof_mode": "full-draft",
-      "proof_method": "translation_repaired_pending_proof",
+      "proof_method": "auto_reliable_core_evidence",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:50Z",
+      "timestamp": "2026-04-27T09:47:55Z",
       "validation_gates": {
-        "lean_proof_closed": false,
-        "step_verdict_verified": false,
+        "lean_proof_closed": true,
+        "step_verdict_verified": true,
         "assumptions_grounded": false,
         "provenance_linked": true,
-        "translation_fidelity_ok": false,
+        "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": false,
         "reproducible_env": true,
-        "claim_equivalent": false,
-        "independent_semantic_equivalence_evidence": false,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
-        "translation_acceptance_gate": false,
-        "translation_repair_applied": true,
-        "lean_statement_elaborates_after_repair": true,
-        "domain_assumption_backed": false,
-        "direct_proof_without_repair": false,
-        "paper_claim_diagnostic": false,
-        "statement_repair_kind": "faithful_statement_regeneration",
-        "repair_outcome": "faithful_statement_regeneration"
+        "no_paper_axiom_debt": true,
+        "auto_reliable_core_verified": true,
+        "fresh_lean_verification_evidence": true,
+        "consistent_closure_claim": true,
+        "ledger_statement_verified_by_core": false
       },
       "gate_failures": [
-        "lean_proof_closed"
+        "assumptions_grounded",
+        "dependency_trust_complete",
+        "generated_row_has_axiom_or_domain_assumption_debt"
       ],
-      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
-        "translation_unvalidated",
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audited_auto_reliable_core_equivalence",
+        "equivalent_independent_semantic_evidence"
       ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_1b99e826a07f7523abc5ef4e",
+      "canonical_theorem_id": "cth_2de6f61d2c30397e23c4d0bc",
+      "alignment_pair_id": "align_39ec6082d9988099023bd5ed",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Same-color deterministic contraction]\\label{prop:det-contraction}\nLet $i\\neq j$. Define\n\\begin{equation}\\label{eq:DN-operator}\n(\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds.\n\\end{equation}\nThen\n\\begin{equation}\\label{eq:DN-bound}\n\\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\n\\lesssim_T\n\\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr)\n\\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr).\n\\end{equation}\nConsequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second condition in \\eqref{eq:operator-cond-main} holds.",
         "normalized_natural_language_theorem": "Assumptions: [Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$. Conclusion: Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}} \\lesssim_T \\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr) \\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr). \\end{equation} Consequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second conditio",
@@ -3601,7 +4619,7 @@
           "[Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$."
         ],
         "extracted_conclusion": "Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}} \\lesssim_T \\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr) \\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr). \\end{equation} Consequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second conditio",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "formalization_unvalidated",
           "syntax_error",
@@ -3611,7 +4629,10 @@
           "translation_unvalidated",
           "insufficient_semantic_evidence",
           "claim_equivalence_note:translation_unvalidated",
-          "claim_equivalence_note:insufficient_semantic_evidence"
+          "claim_equivalence_note:insufficient_semantic_evidence",
+          "equivalent_independent_semantic_evidence",
+          "audited_auto_reliable_core_equivalence",
+          "audited exact encoding of the two scalar inequalities in eq:operator-cond-main as the usable upper-bound forms in the deterministic contraction argument"
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -3635,11 +4656,39 @@
             "evidence": []
           }
         },
-        "independent_semantic_evidence": false,
+        "independent_semantic_evidence": true,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_1b99e826a07f7523abc5ef4e",
+          "alignment_pair_id": "align_39ec6082d9988099023bd5ed",
+          "paper_text_coverage": 0.075,
+          "lean_text_coverage": 0.1304,
+          "missing_assumptions": [
+            "[Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$."
+          ],
+          "added_assumptions": [
+            "h_i_ne_j: i ≠ j",
+            "h_eps_pos: 0 < eps",
+            "h_s1_pos: 0 < s1",
+            "h_s1_lt_s2: s1 < s2"
+          ],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
-      "review_required": true,
-      "review_queue_id": "review::prop_det_contraction",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {
         "theorem_name": "prop_det_contraction",
         "original_latex_theorem": "[Same-color deterministic contraction]\\label{prop:det-contraction}\nLet $i\\neq j$. Define\n\\begin{equation}\\label{eq:DN-operator}\n(\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds.\n\\end{equation}\nThen\n\\begin{equation}\\label{eq:DN-bound}\n\\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\n\\lesssim_T\n\\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr)\n\\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr).\n\\end{equation}\nConsequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second condition in \\eqref{eq:operator-cond-main} holds.",
@@ -3728,8 +4777,8 @@
       ],
       "axiom_debt_hash": "422fcef088529331",
       "closure_claim": "not_closed",
-      "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "superseded_generated_diagnostic",
       "grounding_metadata": [
         {
           "schema_version": "1.0.0",
@@ -3792,25 +4841,73 @@
           "requires_verified_replacement": false
         }
       ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_definition_stub:D_N",
-        "paper_definition_stub:C",
-        "paper_definition_stub:s1",
-        "paper_definition_stub:s2",
-        "paper_definition_stub:theta"
-      ],
+      "result_label": "superseded_generated_diagnostic",
+      "claim_scope": "Generated row is retained for traceability only; the audited-core replacement row carries any verified claim.",
+      "modulo_paper_local_axioms": false,
       "proved": false,
-      "translation_repair": {
-        "changes": [
-          "regenerate_explicit_structured_statement",
-          "source_grounded_statement_body"
+      "auto_reliable_core": {
+        "theorem_name": "auto_prop_det_contraction_condition_rearrange",
+        "core_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+        "tactic": "intro h; constructor <;> linarith [h.1, h.2]",
+        "strict_gate_passed": false,
+        "strict_gate_failures": [
+          "assumptions_grounded",
+          "dependency_trust_complete",
+          "generated_row_has_axiom_or_domain_assumption_debt"
         ],
-        "repair_abstraction_kind": "",
-        "statement_repair_kind": "faithful_statement_regeneration",
-        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21884.lean"
+        "lean_verification": {
+          "ok": true,
+          "verified_at": 1777283293.622658,
+          "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
+          "method": "lake env lean"
+        },
+        "semantic_equivalence_evidence": "independent",
+        "audited_equivalence_applied": true,
+        "ledger_statement_verified_by_core": false
+      },
+      "ledger_role": "generated_diagnostic",
+      "superseded_by_audited_core": true,
+      "superseded_by_row_id": "prop_det_contraction__audited_core",
+      "replacement_reason": "audited_core_replacement_records_verified_statement_proof_pair",
+      "replacement_policy": "generated_row_remains_diagnostic_not_counted",
+      "canonical_statement": "theorem _ (3 / 2) (s2 + eps) (u1 : ℕ) (u13 : 0 < eps) (u14 : 0 < s1) (u15 : 0 < theta) (u16 : i ≠ j) (u17 : s1 < s2) (u2 u4 u3 : ℝ) (u5 u6 : ℕ) (u7 : ℝ → ℝ) (u8 u10 u12 u18 u9 u11 : ℝ) : ∃ C > 0, ∀ u1 >= N0, ‖(fun u2 u3 => ∫ u4 in Set.Icc 0 u3, D_N u5 u6 (u2, u3, u4) * u7 u2 u4)‖_{C [0 u8], H^{u9 - u10}} <= C * (u1^(3 - 4 * u10) + u1^(3 - 4 * u10 + u11 * (u9 + u12))) * (‖u7‖_{C [0 u8], L2} + ‖(fun u2 u3 => deriv (fun u3 => u7 u2 u3) u3)‖_{C [0 u8], H^{-u10 - u12}})",
+      "statement_fingerprint": "2de6f61d2c30397e23c4d0bcd90470d671e97fc2ce64470bc778cf109cc98335",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "prop_HS_deFinetti_remainder_vanish",
+            "statement_id": "2604.21583|prop_HS_deFinetti_remainder_vanish|56",
+            "statement_fingerprint": "c0987d7e80446e84d7e00d1ebc91026e946996c9bc426481df8a55c70e308b88",
+            "score": 1.5171
+          },
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "prop_det_contraction__audited_core",
+            "statement_id": "2604.21884|prop_det_contraction__audited_core|23",
+            "statement_fingerprint": "a17bbb85f8274e055230242a036ae45cc6aa7b2e85e0935a636319885497d3a8",
+            "score": 0.9896
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
       }
     },
     {
@@ -3960,7 +5057,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 15,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:50Z",
+      "timestamp": "2026-04-27T09:47:55Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -3974,6 +5071,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": false,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
         "domain_assumption_backed": false,
@@ -3989,9 +5088,15 @@
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "unrelated",
+      "paper_statement_id": "pstmt_373cc3290f1c5103dc12ba0a",
+      "canonical_theorem_id": "cth_0291e012198d7d5d64276a8c",
+      "alignment_pair_id": "align_def29a2b4dde4d2470d23a1d",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.88,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[No singular centering for mixed random operators]\\label{thm:no-singular-centering}\nAssume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator\n\\begin{equation*}\nE_T\\to C_TH^{s_2-\\alpha}.\n\\end{equation*}\nCross-color blocks are automatically centered by independence. Same-color blocks decompose as\n\\begin{equation*}\nT^{i;j,j}=\\mathcal D^{i;j}+\\mathcal B^{i;j,j},\n\\end{equation*}\nwhere $\\mathcal D^{i;j}$ is a finite speed-separated deterministic Volterra multiplier and $\\mathcal B^{i;j,j}$ is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.",
-        "normalized_natural_language_theorem": "[No singular centering for mixed random operators] Assume . Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator E_T C_TH^ s_2- . Cross-color blocks are automatically centered by independence. Same-color blocks decompose as T^ i;j,j = D^ i;j + B^ i;j,j , where D^ i;j is a finite speed-separated deterministic Volterra multiplier and B^ i;j,j is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.",
+        "normalized_natural_language_theorem": "[No singular centering for mixed random operators] Assume . Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator E_Tto C_TH^ s_2-alpha . Cross-color blocks are automatically centered by independence. Same-color blocks decompose as T^ i;j,j =mathcal D^ i;j +mathcal B^ i;j,j , where mathcal D^ i;j is a finite speed-separated deterministic Volterra multiplier and mathcal B^ i;j,j is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.",
         "lean_statement": "theorem thm_no_singular_centering :\n  ∀ w : ℝ → ℝ, MixedOperator 0 w = w ∧ C_T = C_T",
         "extracted_assumptions": [],
         "extracted_conclusion": "ℝ → ℝ, MixedOperator 0 w = w ∧ C_T = C_T",
@@ -4024,6 +5129,26 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "unrelated",
+        "alignment_decision": {
+          "alignment_class": "unrelated",
+          "confidence": 0.75,
+          "reasons": [
+            "low_cross_text_overlap"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_373cc3290f1c5103dc12ba0a",
+          "alignment_pair_id": "align_def29a2b4dde4d2470d23a1d",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -4089,6 +5214,52 @@
         "paper_definition_stub:C_T",
         "paper_definition_stub:MixedOperator"
       ],
+      "canonical_statement": "theorem _ : ∀ w : ℝ → ℝ, MixedOperator 0 w = w ∧ C_T = C_T",
+      "statement_fingerprint": "0291e012198d7d5d64276a8c4253f64ae19856c0dda411d118f347121f1d58ba",
+      "claim_shape": "equality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "lem_volterra",
+            "statement_id": "2604.21884|lem_volterra|13",
+            "statement_fingerprint": "0a5bbc9249946719df523e6ae60a93a3d2905d938afd19dfcf2cefbe0e2b17c5",
+            "score": 1.2091
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "lem_cross_terms_controlled",
+            "statement_id": "2604.21583|lem_cross_terms_controlled|34",
+            "statement_fingerprint": "2e2378230463964d76d517c92aa3154fca58707df43b4db14eb6d7177bede7a3",
+            "score": 1.1467
+          },
+          {
+            "paper_id": "2604.21663",
+            "theorem_name": "ex_lotka_volterra",
+            "statement_id": "2604.21663|ex_lotka_volterra|39",
+            "statement_fingerprint": "568b6dc5e0b19749a6659375b78e5d163a348413de19b3a969bb60877da35f8a",
+            "score": 1.1336
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -4182,7 +5353,7 @@
       "proof_method": "translation_limited",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:50Z",
+      "timestamp": "2026-04-27T09:47:55Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -4196,6 +5367,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_acceptance_gate": false
       },
       "gate_failures": [
@@ -4212,6 +5385,12 @@
         "translation_unvalidated",
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_771c14d649cb4eb6cc48b28a",
+      "canonical_theorem_id": "cth_a46391d847a5fc2b2a749741",
+      "alignment_pair_id": "align_99bb00cc7680de18024043e7",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Fractional periodic Klein--Gordon Strichartz package]\\label{ass:strichartz}\nFor $0<T\\le 1$ and $i=1,2$, the Duhamel operator $I_i$ satisfies the inhomogeneous estimates required for the norms\n\\begin{equation}\\label{eq:X-space}\n\\|X\\|_{X_T^{s_1}}\n:=\\|X\\|_{C_TH^{s_1}}+\\|\\partial_tX\\|_{C_TH^{s_1-\\alpha}}+\\|X\\|_{L_T^8W^{s_1-\\alpha/4,8/3}},\n\\end{equation}\n\\begin{equation}\\label{eq:Y-space}\n\\|Y\\|_{Y_T^{s_2}}\n:=\\|Y\\|_{C_TH^{s_2}}+\\|\\partial_tY\\|_{C_TH^{s_2-\\alpha}}+\\|Y\\|_{L_T^4W^{s_2-\\alpha/2,4}},\n\\end{equation}\nwith a positive local-time factor $T^\\delta$ in the nonlinear estimates used below.",
         "normalized_natural_language_theorem": "Assumptions: [Fractional periodic Klein--Gordon Strichartz package]\\label{ass:strichartz} For $0<T\\le 1$ and $i=1,2$, the Duhamel operator $I_i$ satisfies the inhomogeneous estimates required for the norms \\begin{equation}\\label{eq:X-space} \\|X\\|_{X_T^{s_1}} :=\\|X\\|_{C_TH^{s_1}}+\\|\\partial_tX\\|_{C_TH^{s_1-\\alpha}}+\\|X\\|_{L_T^8W^{s_1-\\alpha/4,8/3}}, \\end{equation} \\begin{equation}\\label{eq:Y-space} \\|Y\\|_{Y_T^{s_2}} :=\\|Y\\|_{C_TH^{s_2}}+\\|\\partial_tY\\|_{C_TH^{s_2-\\alpha}}+\\|Y\\|_{L_T^4W^{s_2-\\alpha/2,4}}, \\end{equation} with a positive local-time factor $T^\\delta$ in the nonlinear estimates used below. Conclusion: i=1,2",
@@ -4255,6 +5434,33 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_771c14d649cb4eb6cc48b28a",
+          "alignment_pair_id": "align_99bb00cc7680de18024043e7",
+          "paper_text_coverage": 0.122,
+          "lean_text_coverage": 0.2778,
+          "missing_assumptions": [
+            "[Fractional periodic Klein--Gordon Strichartz package]\\label{ass:strichartz} For $0<T\\le 1$ and $i=1,2$, the Duhamel operator $I_i$ satisfies the inhomogeneous estimates required for the norms \\begin{equation}\\label{eq:X-space} \\|X\\|_{X_T^{s_1}} :=\\|X\\|_{C_TH^{s_1}}+\\|\\partial_tX\\|_{C_TH^{s_1-\\alpha}}+\\|X\\|_{L_T^8W^{s_1-\\alpha/4,8/3}}, \\end{equation} \\begin{equation}\\label{eq:Y-space} \\|Y\\|_{Y_T^{s_2}} :=\\|Y\\|_{C_TH^{s_2}}+\\|\\partial_tY\\|_{C_TH^{s_2-\\alpha}}+\\|Y\\|_{L_T^4W^{s_2-\\alpha/2,4}}, \\end{equation} with a positive local-time factor $T^\\delta$ in the nonlinear estimates used below."
+          ],
+          "added_assumptions": [
+            "hT: 0 < T ∧ T ≤ 1",
+            "hs1: 0 < s1",
+            "hs2: 0 < s2"
+          ],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -4411,7 +5617,46 @@
         "paper_definition_stub:C",
         "paper_definition_stub:s1",
         "paper_definition_stub:s2"
-      ]
+      ],
+      "canonical_statement": "theorem _ (u1 : ℝ) (u10 : 0 < s2) (u11 : Fin 2) (u2 : ℝ) (u3 : ℝ) (u4 : ℝ) (u5 : ℝ) (u6 : 0 < T ∧ T <= 1) (u7 : 0 < alpha) (u8 : 0 < delta) (u9 : 0 < s1) : ∀ (X Y : ℝ → ℝ), (∀ t, X t ∈ C_T H^{u1}) → (∀ t, d_dtt X t ∈ C_T H^{u1 - u2}) → (∀ t, X t ∈ L_T^8 W^{u1 - u2/4, 8/3}) → (∀ t, Y t ∈ C_T H^{u3}) → (∀ t, d_dtt Y t ∈ C_T H^{u3 - u2}) → (∀ t, Y t ∈ L_T^4 W^{u3 - u2/2, 4}) → u4^u5 * (∥X∥_{X_T^{u1}} * ∥Y∥_{Y_T^{u3}}) <= C",
+      "statement_fingerprint": "a46391d847a5fc2b2a74974113a684f3587311217a3ec94de9bfb263812fbe21",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "ass_strichartz",
+            "statement_id": "2604.21884_repair_candidates|ass_strichartz|31",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.6064
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "RepairCandidates.ass_strichartz",
+            "statement_id": "2604.21884_repair_candidates|RepairCandidates.ass_strichartz|30",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.5913
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "remark_18",
@@ -4546,7 +5791,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 13,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:50Z",
+      "timestamp": "2026-04-27T09:47:55Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -4560,6 +5805,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
         "domain_assumption_backed": false,
@@ -4575,9 +5822,15 @@
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "partial",
+      "paper_statement_id": "pstmt_c1238754981a75a5235dde4c",
+      "canonical_theorem_id": "cth_7cc73c75bc3c59f962946eac",
+      "alignment_pair_id": "align_45eda40904beeb7f975b3499",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.88,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "For $\\alpha=1$ this is the usual local wave/Klein--Gordon package. For fractional flows on compact manifolds one may need derivative losses; if so, the closure inequalities below must be shifted accordingly. The present paper keeps this input explicit.",
-        "normalized_natural_language_theorem": "For =1 this is the usual local wave/Klein--Gordon package. For fractional flows on compact manifolds one may need derivative losses; if so, the closure inequalities below must be shifted accordingly. The present paper keeps this input explicit.",
+        "normalized_natural_language_theorem": "For alpha=1 this is the usual local wave/Klein--Gordon package. For fractional flows on compact manifolds one may need derivative losses; if so, the closure inequalities below must be shifted accordingly. The present paper keeps this input explicit.",
         "lean_statement": "theorem remark_18 :\n  ∀ alpha : ℝ, alpha = 1 → HSobolev alpha = HSobolev alpha",
         "extracted_assumptions": [],
         "extracted_conclusion": "ℝ, alpha = 1 → HSobolev alpha = HSobolev alpha",
@@ -4610,6 +5863,26 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "partial",
+        "alignment_decision": {
+          "alignment_class": "partial",
+          "confidence": 0.5786,
+          "reasons": [
+            "insufficient_exact_alignment_evidence"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_c1238754981a75a5235dde4c",
+          "alignment_pair_id": "align_45eda40904beeb7f975b3499",
+          "paper_text_coverage": 0.0345,
+          "lean_text_coverage": 0.2,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -4672,6 +5945,30 @@
         "paper_definition_stub:HSobolev",
         "paper_definition_stub:remark_18"
       ],
+      "canonical_statement": "theorem _ : ∀ alpha : ℝ, alpha = 1 → HSobolev alpha = HSobolev alpha",
+      "statement_fingerprint": "7cc73c75bc3c59f962946eace2974f3d1b09ea35f89ed37bbf3b6c2f07733c34",
+      "claim_shape": "equality",
+      "novelty_status": "new_candidate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -4879,7 +6176,7 @@
       "proof_method": "auto_reliable_core_evidence",
       "rounds_used": 22,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:50Z",
+      "timestamp": "2026-04-27T09:47:55Z",
       "validation_gates": {
         "lean_proof_closed": true,
         "step_verdict_verified": true,
@@ -4907,9 +6204,15 @@
         "audited_auto_reliable_core_equivalence",
         "equivalent_independent_semantic_evidence"
       ],
+      "statement_alignment_class": "partial",
+      "paper_statement_id": "pstmt_17ebf18dc1a33ec142ca6d24",
+      "canonical_theorem_id": "cth_291e1a5e8c8052d16b66daca",
+      "alignment_pair_id": "align_75bd6f2e407866e59d3ade65",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.88,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Admissible deterministic parameters]\\label{def:admissible}\nWe call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$,\n\\begin{align}\n&0<s_1<s_2,\n\\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\\n&s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad 3-4\\alpha+\\theta(s_2+\\varepsilon)<0, \\label{eq:adm-2}\\\\\n&s_1<2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-3}\\\\\n&s_2>\\frac32-\\alpha+\\varepsilon,\n\\qquad s_2<s_1+2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-4}\\\\\n&s_2\\le s_1+\\frac\\alpha4, \\label{eq:adm-5}\\\\\n&\\rho_V+s_1>0,\n\\qquad s_2-\\alpha<\\rho_V. \\label{eq:adm-6}\n\\end{align}",
-        "normalized_natural_language_theorem": "[Admissible deterministic parameters] We call ( ,s_1,s_2, ) admissible for the conservative source formulation if, for sufficiently small >0 , &0<s_1<s_2, 0< <1, \\\\ &s_2<4 -3- 32 - , 3-4 + (s_2+ )<0, \\\\ &s_1<2 - 32- , \\\\ &s_2> 32- + , s_2<s_1+2 - 32- , \\\\ &s_2 s_1+ 4, \\\\ & _V+s_1>0, s_2- < _V.",
+        "normalized_natural_language_theorem": "[Admissible deterministic parameters] We call (alpha,s_1,s_2,theta) admissible for the conservative source formulation if, for sufficiently small varepsilon>0 , &0<s_1<s_2, qquad 0<theta<1, \\\\ &s_2<4alpha-3-frac32theta-varepsilon, qquad 3-4alpha+theta(s_2+varepsilon)<0, \\\\ &s_1<2alpha-frac32-varepsilon, \\\\ &s_2>frac32-alpha+varepsilon, qquad s_2<s_1+2alpha-frac32-varepsilon, \\\\ &s_2le s_1+fracalpha4, \\\\ &rho_V+s_1>0, qquad s_2-alpha<rho_V.",
         "lean_statement": "theorem def_admissible :\n  ∃ alpha epsilon : ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 ≤ s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V",
         "extracted_assumptions": [],
         "extracted_conclusion": "ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 ≤ s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V",
@@ -4945,6 +6248,26 @@
           }
         },
         "independent_semantic_evidence": true,
+        "alignment_class": "partial",
+        "alignment_decision": {
+          "alignment_class": "partial",
+          "confidence": 0.6324,
+          "reasons": [
+            "insufficient_exact_alignment_evidence"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_17ebf18dc1a33ec142ca6d24",
+          "alignment_pair_id": "align_75bd6f2e407866e59d3ade65",
+          "paper_text_coverage": 0.1429,
+          "lean_text_coverage": 0.3333,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": false,
@@ -5040,8 +6363,8 @@
         ],
         "lean_verification": {
           "ok": true,
-          "verified_at": 1777280295.2780578,
-          "core_sha256": "b2d1ba10bf4e4ab654618bb08b118f9c4db0c9f135b7722fff6edd0c3ddf7f07",
+          "verified_at": 1777283293.622658,
+          "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
           "method": "lake env lean"
         },
         "semantic_equivalence_evidence": "independent",
@@ -5052,7 +6375,53 @@
       "superseded_by_audited_core": true,
       "superseded_by_row_id": "def_admissible__audited_core",
       "replacement_reason": "audited_core_replacement_records_verified_statement_proof_pair",
-      "replacement_policy": "generated_row_remains_diagnostic_not_counted"
+      "replacement_policy": "generated_row_remains_diagnostic_not_counted",
+      "canonical_statement": "theorem _ : ∃ alpha epsilon : ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 <= s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V",
+      "statement_fingerprint": "291e1a5e8c8052d16b66daca83c94f8e5bed14dcf1310fc881386818e64f2504",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "def_admissible__audited_core",
+            "statement_id": "2604.21884|def_admissible__audited_core|24",
+            "statement_fingerprint": "e83bf263d268c3c010763f75b0ec4ca82ddd7028b2af749d324a61bf72fc9f5d",
+            "score": 1.9215
+          },
+          {
+            "paper_id": "2604.21663",
+            "theorem_name": "defi_admissible_measure",
+            "statement_id": "2604.21663|defi_admissible_measure|9",
+            "statement_fingerprint": "de7b608b8898197f714932865834a12aca261a9a5c8965f9da07e6e80a90e6eb",
+            "score": 1.0756
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "def_admissible",
+            "statement_id": "2604.21884_repair_candidates|def_admissible|33",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.0355
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "remark_20",
@@ -5128,7 +6497,7 @@
       "proof_method": "auto_reliable_core_evidence",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:50Z",
+      "timestamp": "2026-04-27T09:47:55Z",
       "validation_gates": {
         "lean_proof_closed": true,
         "step_verdict_verified": true,
@@ -5152,11 +6521,16 @@
       ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
-        "translation_unvalidated",
         "insufficient_semantic_evidence",
         "audited_auto_reliable_core_equivalence",
         "equivalent_independent_semantic_evidence"
       ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_72713f3383d27087a7bbedf1",
+      "canonical_theorem_id": "cth_565b8ed843fbcd67c62c9217",
+      "alignment_pair_id": "align_fc7fb76142d847953065e31c",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "The first line in \\eqref{eq:adm-2} is the centered fluctuation condition, the second line in \\eqref{eq:adm-2} is the same-color deterministic contraction condition, \\eqref{eq:adm-3} is the naive low--high mapping for the $X$-equation, \\eqref{eq:adm-4} comes from the basic product theory for $U>\\Psi$ and $Y\\circ\\Psi$, \\eqref{eq:adm-5} is the quadratic Strichartz closure, and \\eqref{eq:adm-6} treats the products $V_iU_j$.",
         "normalized_natural_language_theorem": "Assumptions: 0 < s_1 < s_2; 0 < θ < 1; s_2 < 4α - 3 - (3/2)θ - ε Conclusion: The parameters (α, s_1, s_2, θ) are admissible for the conservative source formulation if the given conditions hold for sufficiently small ε > 0.",
@@ -5203,6 +6577,37 @@
           }
         },
         "independent_semantic_evidence": true,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_72713f3383d27087a7bbedf1",
+          "alignment_pair_id": "align_fc7fb76142d847953065e31c",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [
+            "0 < s_1 < s_2",
+            "0 < θ < 1",
+            "s_2 < 4α - 3 - (3/2)θ - ε"
+          ],
+          "added_assumptions": [
+            "hs1: 0 < s1",
+            "hs2: s1 < s2",
+            "htheta: 0 < theta",
+            "htheta1: theta < 1",
+            "hs2alpha: s2 < 4 * alpha - 3 - (3 / 2"
+          ],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": false,
@@ -5335,8 +6740,8 @@
         ],
         "lean_verification": {
           "ok": true,
-          "verified_at": 1777280295.2780578,
-          "core_sha256": "b2d1ba10bf4e4ab654618bb08b118f9c4db0c9f135b7722fff6edd0c3ddf7f07",
+          "verified_at": 1777283293.622658,
+          "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
           "method": "lake env lean"
         },
         "semantic_equivalence_evidence": "independent",
@@ -5347,7 +6752,31 @@
       "superseded_by_audited_core": true,
       "superseded_by_row_id": "remark_20__audited_core",
       "replacement_reason": "audited_core_replacement_records_verified_statement_proof_pair",
-      "replacement_policy": "generated_row_remains_diagnostic_not_counted"
+      "replacement_policy": "generated_row_remains_diagnostic_not_counted",
+      "canonical_statement": "theorem _ (3 / 2) (u2 u8 u1 u3 : ℝ) (u4 : 0 < s1) (u5 : 0 < theta) (u6 : s1 < s2) (u7 : theta < 1) : ∃ eps : ℝ, 0 < eps ∧ u1 < 4 * u2 - 3 - (3 / 2) * u3 - eps",
+      "statement_fingerprint": "565b8ed843fbcd67c62c92179e8f57cc48d89d856861eac4300a94e68b23c3a7",
+      "claim_shape": "inequality",
+      "novelty_status": "new_candidate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "rem_primitive_route",
@@ -5461,7 +6890,7 @@
       "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 10,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:50Z",
+      "timestamp": "2026-04-27T09:47:55Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -5475,6 +6904,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_repair_applied": true,
         "lean_statement_elaborates_after_repair": true,
         "domain_assumption_backed": false,
@@ -5490,6 +6921,12 @@
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "partial",
+      "paper_statement_id": "pstmt_983c392170751e8c04a7a7af",
+      "canonical_theorem_id": "cth_df0a8cc054569cf6f2f8828e",
+      "alignment_pair_id": "align_8508617cdd97b4f235742cf9",
+      "translation_fidelity_score": 0.99,
+      "status_alignment_score": 0.88,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Primitive route]\\label{rem:primitive-route}\nThe deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving $G_i^V$.",
         "normalized_natural_language_theorem": "[Primitive route] The deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives G_i^V=I_i(F^V) directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving G_i^V .",
@@ -5525,6 +6962,26 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "partial",
+        "alignment_decision": {
+          "alignment_class": "partial",
+          "confidence": 0.6404,
+          "reasons": [
+            "insufficient_exact_alignment_evidence"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_983c392170751e8c04a7a7af",
+          "alignment_pair_id": "align_8508617cdd97b4f235742cf9",
+          "paper_text_coverage": 0.0417,
+          "lean_text_coverage": 0.5,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -5572,6 +7029,52 @@
       "paper_local_axiom_debt": [
         "paper_definition_stub:I_i"
       ],
+      "canonical_statement": "theorem _ : ∃ F : ℝ → ℝ, I_i (F 0) = I_i (F 0)",
+      "statement_fingerprint": "df0a8cc054569cf6f2f8828e49713b5bb1a6da0613cd3ac5311a56e1b7dc05c5",
+      "claim_shape": "equality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "rem_primitive_route",
+            "statement_id": "2604.21884_repair_candidates|rem_primitive_route|15",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.3505
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates_fast_batch",
+            "theorem_name": "rem_primitive_route",
+            "statement_id": "2604.21884_repair_candidates_fast_batch|rem_primitive_route|9",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.3505
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "RepairCandidates.rem_primitive_route",
+            "statement_id": "2604.21884_repair_candidates|RepairCandidates.rem_primitive_route|14",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.1686
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      },
       "proved": false,
       "translation_repair": {
         "changes": [
@@ -5624,7 +7127,7 @@
       "proof_method": "translation_limited",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-04-27T08:57:50Z",
+      "timestamp": "2026-04-27T09:47:55Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -5638,6 +7141,8 @@
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
         "translation_acceptance_gate": false
       },
       "gate_failures": [
@@ -5653,9 +7158,15 @@
         "translation_unvalidated",
         "insufficient_semantic_evidence"
       ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_f423b1a1254653424f16c09a",
+      "canonical_theorem_id": "cth_e25416f8743c6564e03b088a",
+      "alignment_pair_id": "align_b97b3103b1df20583b4ae85d",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Safe bookkeeping range]\\label{cor:safe-range}\nAssume the baseline value $\\rho_V=3\\alpha-3-$ and no improvement beyond the naive low--high estimate for the $X$-equation. If\n\\begin{equation*}\n\\alpha>\\frac{12}{13},\n\\end{equation*}\nthen one can choose $0<s_1<s_2$ and $0<\\theta<1$ satisfying Definition \\ref{def:admissible}. Thus, once a source-level or primitive-level cubic forcing enhancement is available, the conservative deterministic closure is consistent in this range.",
-        "normalized_natural_language_theorem": "[Safe bookkeeping range] Assume the baseline value _V=3 -3- and no improvement beyond the naive low--high estimate for the X -equation. If > 12 13 , then one can choose 0<s_1<s_2 and 0< <1 satisfying Definition . Thus, once a source-level or primitive-level cubic forcing enhancement is available, the conservative deterministic closure is consistent in this range.",
+        "normalized_natural_language_theorem": "[Safe bookkeeping range] Assume the baseline value rho_V=3alpha-3- and no improvement beyond the naive low--high estimate for the X -equation. If alpha>frac 12 13 , then one can choose 0<s_1<s_2 and 0<theta<1 satisfying Definition . Thus, once a source-level or primitive-level cubic forcing enhancement is available, the conservative deterministic closure is consistent in this range.",
         "lean_statement": "theorem cor_safe_range : False",
         "extracted_assumptions": [],
         "extracted_conclusion": "False",
@@ -5692,6 +7203,27 @@
           }
         },
         "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_f423b1a1254653424f16c09a",
+          "alignment_pair_id": "align_b97b3103b1df20583b4ae85d",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "trivial_target",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0"
       },
       "review_required": true,
@@ -5719,7 +7251,469 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "canonical_statement": "theorem _ : False",
+      "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed",
+      "claim_shape": "proposition",
+      "novelty_status": "duplicate_in_corpus",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "canonical_fingerprint",
+        "reason": "canonical statement fingerprint matched another corpus statement",
+        "matches": [
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Folst",
+            "statement_id": "2604.21314|Thm_Folst|10",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Blowup_O4",
+            "statement_id": "2604.21314|Thm_Blowup_O4|12",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Mild",
+            "statement_id": "2604.21314|Mild|15",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "rem_HF0_main_input",
+            "statement_id": "2604.21583|rem_HF0_main_input|21",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "prop_shell_mode_local",
+            "statement_id": "2604.21583|prop_shell_mode_local|28",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "prop_sharpness__audited_core",
+      "ledger_role": "audited_core_replacement",
+      "replaces_generated_theorem": "prop_sharpness",
+      "source_theorem": "prop_sharpness",
+      "supersedes_generated_row": "prop_sharpness",
+      "status": "FULLY_PROVEN",
+      "proved": true,
+      "lean_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+      "lean_statement": "def AutoDyadicSharpnessCriticalExponent (alpha : ℝ) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :\n    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4",
+      "proof_text": "unfold AutoDyadicSharpnessCriticalExponent\n  constructor\n  · intro h\n    linarith\n  · intro h\n    linarith",
+      "proof_mode": "audited-core-replacement",
+      "equivalence_scope": "critical_exponent_algebraic_component_only",
+      "proof_method": "lean_verified",
+      "proof_countable": true,
+      "step_verdict": "VERIFIED",
+      "failure_origin": "NOT_FAILED",
+      "failure_kind": "unknown",
+      "trust_class": "TRUST_INTERNAL_PROVED",
+      "trust_reference": "audited_core_replacement:auto_prop_sharpness_critical_exponent_iff;source_theorem:prop_sharpness;core_sha256:15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428;semantic_equivalence:verified;lean_verification:fresh",
+      "promotion_gate_passed": true,
+      "validation_gates": {
+        "lean_proof_closed": true,
+        "step_verdict_verified": true,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "fresh_lean_verification_evidence": true,
+        "ledger_records_audited_statement_proof_pair": true,
+        "generated_row_not_mutated": true
+      },
+      "gate_failures": [],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "audited_auto_reliable_core_equivalence",
+        "equivalent_independent_semantic_evidence"
+      ],
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "[Sharpness of the same-color shell]\\label{prop:sharpness}\nThere exist a fixed low output frequency $q$, a conic sector of the resonant shell, and a smooth time profile $w(q,t)$ supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell $|\\ell|\\sim N$ satisfies\n\\begin{equation}\\label{eq:sharpness}\n\\|D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\\gtrsim N^{3-4\\alpha}\n\\end{equation}\nup to strictly lower-order terms. Consequently $\\alpha=3/4$ is logarithmically critical for the deterministic contraction channel.",
+        "normalized_natural_language_theorem": "[Sharpness of the same-color shell] There exist a fixed low output frequency q , a conic sector of the resonant shell, and a smooth time profile w(q,t) supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell |ell|sim N satisfies \\|D_N^ i;j w\\|_ C_TH^ s_2-alpha gtrsim N^ 3-4alpha up to strictly lower-order terms. Consequently alpha=3/4 is logarithmically critical for the deterministic contraction channel.",
+        "lean_statement": "def AutoDyadicSharpnessCriticalExponent (alpha : ℝ) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :\n    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4",
+        "extracted_assumptions": [],
+        "extracted_conclusion": "ℕ, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
+        "equivalence_verdict": "equivalent",
+        "reviewer_evaluator_evidence": [
+          "cache_hit",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:insufficient_semantic_evidence",
+          "equivalent_independent_semantic_evidence",
+          "audited_auto_reliable_core_equivalence",
+          "audited exact encoding of the algebraic critical exponent 3 - 4*alpha = 0 iff alpha = 3/4; narrower than the full sharpness proposition"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": true,
+        "alignment_class": "unrelated",
+        "alignment_decision": {
+          "alignment_class": "unrelated",
+          "confidence": 0.75,
+          "reasons": [
+            "low_cross_text_overlap"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_3366722b35737b935b881d00",
+          "alignment_pair_id": "align_69eb5deabbdcd5e5a0c8e4c0",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0",
+        "audited_core_source_theorem": "prop_sharpness",
+        "audited_core_theorem_name": "auto_prop_sharpness_critical_exponent_iff",
+        "equivalence_scope": "critical_exponent_algebraic_component_only"
+      },
+      "review_required": false,
+      "review_queue_id": "",
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "modulo_paper_local_axioms": false,
+      "auto_reliable_core": {
+        "theorem_name": "auto_prop_sharpness_critical_exponent_iff",
+        "core_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+        "strict_gate_passed": true,
+        "strict_gate_failures": [],
+        "lean_verification": {
+          "ok": true,
+          "verified_at": 1777283293.622658,
+          "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
+          "method": "lake env lean"
+        },
+        "semantic_equivalence_evidence": "independent",
+        "audited_equivalence_applied": true,
+        "ledger_statement_verified_by_core": true
+      },
+      "audited_core_replacement": {
+        "source_theorem": "prop_sharpness",
+        "core_theorem_name": "auto_prop_sharpness_critical_exponent_iff",
+        "core_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+        "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
+        "verification_method": "lake env lean",
+        "verified_at": 1777283293.622658,
+        "lean_statement": "def AutoDyadicSharpnessCriticalExponent (alpha : ℝ) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :\n    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4",
+        "proof_text": "unfold AutoDyadicSharpnessCriticalExponent\n  constructor\n  · intro h\n    linarith\n  · intro h\n    linarith",
+        "core_declaration": "def AutoDyadicSharpnessCriticalExponent (alpha : ℝ) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :\n    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4 := by\n  unfold AutoDyadicSharpnessCriticalExponent\n  constructor\n  · intro h\n    linarith\n  · intro h\n    linarith",
+        "semantic_equivalence_verified": true,
+        "semantic_equivalence": {
+          "independent": true,
+          "verdict": "equivalent"
+        },
+        "semantic_equivalence_evidence": "independent",
+        "equivalence_note": "audited exact encoding of the algebraic critical exponent 3 - 4*alpha = 0 iff alpha = 3/4; narrower than the full sharpness proposition",
+        "equivalence_scope": "critical_exponent_algebraic_component_only",
+        "claim_scope": "Lake-verified algebraic critical-exponent component of the sharpness claim; this does not prove the analytic dyadic lower-bound witness.",
+        "proof_countable": true,
+        "replacement_gate": {
+          "exact_recorded_statement_required": true,
+          "exact_recorded_proof_required": true,
+          "fresh_lean_verification_required": true,
+          "no_paper_axiom_debt_required": true,
+          "audited_provenance_required": true
+        }
+      },
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "error_message": "",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "audited_real_claim",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_audited_component_without_paper_local_axioms",
+      "claim_scope": "Lake-verified algebraic critical-exponent component of the sharpness claim; this does not prove the analytic dyadic lower-bound witness.",
+      "canonical_statement": "theorem _ (u1 : ℝ) : AutoDyadicSharpnessCriticalExponent u1 ↔ u1 = 3 / 4",
+      "statement_fingerprint": "c16ff941d4514781ae7ca459bdbbc57d5e0847eb209df50f9d998f885b2c9035",
+      "canonical_theorem_id": "cth_c16ff941d4514781ae7ca459",
+      "claim_shape": "equality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "prop_sharpness",
+            "statement_id": "2604.21884|prop_sharpness|7",
+            "statement_fingerprint": "64ba6ffd4aa51bf1aed03a5b01d570410dc9018178ecef7f252481a6cc8de6e5",
+            "score": 1.9375
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "prop_det_contraction__audited_core",
+      "ledger_role": "audited_core_replacement",
+      "replaces_generated_theorem": "prop_det_contraction",
+      "source_theorem": "prop_det_contraction",
+      "supersedes_generated_row": "prop_det_contraction",
+      "status": "FULLY_PROVEN",
+      "proved": true,
+      "lean_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+      "lean_statement": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : ℝ) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta →\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 ∧\n    theta * (s2 + eps) < 4 * alpha - 3",
+      "proof_text": "intro h\n  constructor\n  · linarith [h.1]\n  · linarith [h.2]",
+      "proof_mode": "audited-core-replacement",
+      "equivalence_scope": "operator_condition_algebraic_component_only",
+      "proof_method": "lean_verified",
+      "proof_countable": true,
+      "step_verdict": "VERIFIED",
+      "failure_origin": "NOT_FAILED",
+      "failure_kind": "unknown",
+      "trust_class": "TRUST_INTERNAL_PROVED",
+      "trust_reference": "audited_core_replacement:auto_prop_det_contraction_condition_rearrange;source_theorem:prop_det_contraction;core_sha256:15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428;semantic_equivalence:verified;lean_verification:fresh",
+      "promotion_gate_passed": true,
+      "validation_gates": {
+        "lean_proof_closed": true,
+        "step_verdict_verified": true,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "fresh_lean_verification_evidence": true,
+        "ledger_records_audited_statement_proof_pair": true,
+        "generated_row_not_mutated": true
+      },
+      "gate_failures": [],
+      "claim_equivalence_verdict": "equivalent",
+      "claim_equivalence_notes": [
+        "audited_auto_reliable_core_equivalence",
+        "equivalent_independent_semantic_evidence"
+      ],
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "[Same-color deterministic contraction]\\label{prop:det-contraction}\nLet $i\\neq j$. Define\n\\begin{equation}\\label{eq:DN-operator}\n(\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds.\n\\end{equation}\nThen\n\\begin{equation}\\label{eq:DN-bound}\n\\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\n\\lesssim_T\n\\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr)\n\\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr).\n\\end{equation}\nConsequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second condition in \\eqref{eq:operator-cond-main} holds.",
+        "normalized_natural_language_theorem": "Assumptions: [Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$. Conclusion: Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}} \\lesssim_T \\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr) \\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr). \\end{equation} Consequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second conditio",
+        "lean_statement": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : ℝ) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta →\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 ∧\n    theta * (s2 + eps) < 4 * alpha - 3",
+        "extracted_assumptions": [
+          "[Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$."
+        ],
+        "extracted_conclusion": "Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}} \\lesssim_T \\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr) \\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr). \\end{equation} Consequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second conditio",
+        "equivalence_verdict": "equivalent",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence",
+          "equivalent_independent_semantic_evidence",
+          "audited_auto_reliable_core_equivalence",
+          "audited exact encoding of the two scalar inequalities in eq:operator-cond-main as the usable upper-bound forms in the deterministic contraction argument"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": true,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_1b99e826a07f7523abc5ef4e",
+          "alignment_pair_id": "align_39ec6082d9988099023bd5ed",
+          "paper_text_coverage": 0.075,
+          "lean_text_coverage": 0.1304,
+          "missing_assumptions": [
+            "[Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$."
+          ],
+          "added_assumptions": [
+            "h_i_ne_j: i ≠ j",
+            "h_eps_pos: 0 < eps",
+            "h_s1_pos: 0 < s1",
+            "h_s1_lt_s2: s1 < s2"
+          ],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0",
+        "audited_core_source_theorem": "prop_det_contraction",
+        "audited_core_theorem_name": "auto_prop_det_contraction_condition_rearrange",
+        "equivalence_scope": "operator_condition_algebraic_component_only"
+      },
+      "review_required": false,
+      "review_queue_id": "",
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "modulo_paper_local_axioms": false,
+      "auto_reliable_core": {
+        "theorem_name": "auto_prop_det_contraction_condition_rearrange",
+        "core_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+        "strict_gate_passed": true,
+        "strict_gate_failures": [],
+        "lean_verification": {
+          "ok": true,
+          "verified_at": 1777283293.622658,
+          "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
+          "method": "lake env lean"
+        },
+        "semantic_equivalence_evidence": "independent",
+        "audited_equivalence_applied": true,
+        "ledger_statement_verified_by_core": true
+      },
+      "audited_core_replacement": {
+        "source_theorem": "prop_det_contraction",
+        "core_theorem_name": "auto_prop_det_contraction_condition_rearrange",
+        "core_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
+        "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
+        "verification_method": "lake env lean",
+        "verified_at": 1777283293.622658,
+        "lean_statement": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : ℝ) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta →\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 ∧\n    theta * (s2 + eps) < 4 * alpha - 3",
+        "proof_text": "intro h\n  constructor\n  · linarith [h.1]\n  · linarith [h.2]",
+        "core_declaration": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : ℝ) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta →\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 ∧\n    theta * (s2 + eps) < 4 * alpha - 3 := by\n  intro h\n  constructor\n  · linarith [h.1]\n  · linarith [h.2]",
+        "semantic_equivalence_verified": true,
+        "semantic_equivalence": {
+          "independent": true,
+          "verdict": "equivalent"
+        },
+        "semantic_equivalence_evidence": "independent",
+        "equivalence_note": "audited exact encoding of the two scalar inequalities in eq:operator-cond-main as the usable upper-bound forms in the deterministic contraction argument",
+        "equivalence_scope": "operator_condition_algebraic_component_only",
+        "claim_scope": "Lake-verified algebraic rearrangement of the strong low-high operator conditions; this does not prove the analytic deterministic contraction estimate.",
+        "proof_countable": true,
+        "replacement_gate": {
+          "exact_recorded_statement_required": true,
+          "exact_recorded_proof_required": true,
+          "fresh_lean_verification_required": true,
+          "no_paper_axiom_debt_required": true,
+          "audited_provenance_required": true
+        }
+      },
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "error_message": "",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "audited_real_claim",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_audited_component_without_paper_local_axioms",
+      "claim_scope": "Lake-verified algebraic rearrangement of the strong low-high operator conditions; this does not prove the analytic deterministic contraction estimate.",
+      "canonical_statement": "theorem _ (u2 u1 u3 u4 : ℝ) : AutoStrongLowHighOperatorCondition u1 u2 u3 u4 → u3 + (3 / 2) * u4 + u1 < 4 * u2 - 3 ∧ u4 * (u3 + u1) < 4 * u2 - 3",
+      "statement_fingerprint": "a17bbb85f8274e055230242a036ae45cc6aa7b2e85e0935a636319885497d3a8",
+      "canonical_theorem_id": "cth_a17bbb85f8274e055230242a",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "prop_HS_deFinetti_remainder_vanish",
+            "statement_id": "2604.21583|prop_HS_deFinetti_remainder_vanish|56",
+            "statement_fingerprint": "c0987d7e80446e84d7e00d1ebc91026e946996c9bc426481df8a55c70e308b88",
+            "score": 1.5112
+          },
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "prop_det_contraction",
+            "statement_id": "2604.21884|prop_det_contraction|14",
+            "statement_fingerprint": "2de6f61d2c30397e23c4d0bcd90470d671e97fc2ce64470bc778cf109cc98335",
+            "score": 0.9888
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "def_admissible__audited_core",
@@ -5733,13 +7727,14 @@
       "lean_statement": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV)",
       "proof_text": "unfold AutoAdmissibleFull AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
       "proof_mode": "audited-core-replacement",
+      "equivalence_scope": "full_source_claim",
       "proof_method": "lean_verified",
       "proof_countable": true,
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
       "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "audited_core_replacement:auto_def_admissible_iff;source_theorem:def_admissible;core_sha256:b2d1ba10bf4e4ab654618bb08b118f9c4db0c9f135b7722fff6edd0c3ddf7f07;semantic_equivalence:verified;lean_verification:fresh",
+      "trust_reference": "audited_core_replacement:auto_def_admissible_iff;source_theorem:def_admissible;core_sha256:15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428;semantic_equivalence:verified;lean_verification:fresh",
       "promotion_gate_passed": true,
       "validation_gates": {
         "lean_proof_closed": true,
@@ -5760,7 +7755,7 @@
       ],
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Admissible deterministic parameters]\\label{def:admissible}\nWe call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$,\n\\begin{align}\n&0<s_1<s_2,\n\\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\\n&s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad 3-4\\alpha+\\theta(s_2+\\varepsilon)<0, \\label{eq:adm-2}\\\\\n&s_1<2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-3}\\\\\n&s_2>\\frac32-\\alpha+\\varepsilon,\n\\qquad s_2<s_1+2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-4}\\\\\n&s_2\\le s_1+\\frac\\alpha4, \\label{eq:adm-5}\\\\\n&\\rho_V+s_1>0,\n\\qquad s_2-\\alpha<\\rho_V. \\label{eq:adm-6}\n\\end{align}",
-        "normalized_natural_language_theorem": "[Admissible deterministic parameters] We call ( ,s_1,s_2, ) admissible for the conservative source formulation if, for sufficiently small >0 , &0<s_1<s_2, 0< <1, \\\\ &s_2<4 -3- 32 - , 3-4 + (s_2+ )<0, \\\\ &s_1<2 - 32- , \\\\ &s_2> 32- + , s_2<s_1+2 - 32- , \\\\ &s_2 s_1+ 4, \\\\ & _V+s_1>0, s_2- < _V.",
+        "normalized_natural_language_theorem": "[Admissible deterministic parameters] We call (alpha,s_1,s_2,theta) admissible for the conservative source formulation if, for sufficiently small varepsilon>0 , &0<s_1<s_2, qquad 0<theta<1, \\\\ &s_2<4alpha-3-frac32theta-varepsilon, qquad 3-4alpha+theta(s_2+varepsilon)<0, \\\\ &s_1<2alpha-frac32-varepsilon, \\\\ &s_2>frac32-alpha+varepsilon, qquad s_2<s_1+2alpha-frac32-varepsilon, \\\\ &s_2le s_1+fracalpha4, \\\\ &rho_V+s_1>0, qquad s_2-alpha<rho_V.",
         "lean_statement": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV)",
         "extracted_assumptions": [],
         "extracted_conclusion": "ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 ≤ s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V",
@@ -5796,9 +7791,30 @@
           }
         },
         "independent_semantic_evidence": true,
+        "alignment_class": "partial",
+        "alignment_decision": {
+          "alignment_class": "partial",
+          "confidence": 0.6324,
+          "reasons": [
+            "insufficient_exact_alignment_evidence"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_17ebf18dc1a33ec142ca6d24",
+          "alignment_pair_id": "align_75bd6f2e407866e59d3ade65",
+          "paper_text_coverage": 0.1429,
+          "lean_text_coverage": 0.3333,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0",
         "audited_core_source_theorem": "def_admissible",
-        "audited_core_theorem_name": "auto_def_admissible_iff"
+        "audited_core_theorem_name": "auto_def_admissible_iff",
+        "equivalence_scope": "full_source_claim"
       },
       "review_required": false,
       "review_queue_id": "",
@@ -5813,8 +7829,8 @@
         "strict_gate_failures": [],
         "lean_verification": {
           "ok": true,
-          "verified_at": 1777280295.2780578,
-          "core_sha256": "b2d1ba10bf4e4ab654618bb08b118f9c4db0c9f135b7722fff6edd0c3ddf7f07",
+          "verified_at": 1777283293.622658,
+          "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
           "method": "lake env lean"
         },
         "semantic_equivalence_evidence": "independent",
@@ -5825,9 +7841,9 @@
         "source_theorem": "def_admissible",
         "core_theorem_name": "auto_def_admissible_iff",
         "core_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
-        "core_sha256": "b2d1ba10bf4e4ab654618bb08b118f9c4db0c9f135b7722fff6edd0c3ddf7f07",
+        "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
         "verification_method": "lake env lean",
-        "verified_at": 1777280295.2780578,
+        "verified_at": 1777283293.622658,
         "lean_statement": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV)",
         "proof_text": "unfold AutoAdmissibleFull AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
         "core_declaration": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV) := by\n  unfold AutoAdmissibleFull AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
@@ -5838,6 +7854,8 @@
         },
         "semantic_equivalence_evidence": "independent",
         "equivalence_note": "audited exact encoding of the source admissible-parameter definition",
+        "equivalence_scope": "full_source_claim",
+        "claim_scope": "Audited Lean replacement for the source statement.",
         "proof_countable": true,
         "replacement_gate": {
           "exact_recorded_statement_required": true,
@@ -5854,7 +7872,54 @@
       "proof_value": "audited_real_claim",
       "grounding_metadata": [],
       "result_label": "lean_verified_without_paper_local_axioms",
-      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded."
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "canonical_statement": "theorem _ (u2 u1 u6 u3 u4 u5 : ℝ) : AutoAdmissibleFull u1 u2 u3 u4 u5 u6 ↔ (0 < u3 ∧ u3 < u4 ∧ 0 < u5 ∧ u5 < 1 ∧ u4 < 4 * u2 - 3 - (3 / 2) * u5 - u1 ∧ 3 - 4 * u2 + u5 * (u4 + u1) < 0 ∧ u3 < 2 * u2 - 3 / 2 - u1 ∧ 3 / 2 - u2 + u1 < u4 ∧ u4 < u3 + 2 * u2 - 3 / 2 - u1 ∧ u4 <= u3 + u2 / 4 ∧ u6 + u3 > 0 ∧ u4 - u2 < u6)",
+      "statement_fingerprint": "e83bf263d268c3c010763f75b0ec4ca82ddd7028b2af749d324a61bf72fc9f5d",
+      "canonical_theorem_id": "cth_e83bf263d268c3c010763f75",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "def_admissible",
+            "statement_id": "2604.21884|def_admissible|18",
+            "statement_fingerprint": "291e1a5e8c8052d16b66daca83c94f8e5bed14dcf1310fc881386818e64f2504",
+            "score": 1.9197
+          },
+          {
+            "paper_id": "2604.21663",
+            "theorem_name": "defi_admissible_measure",
+            "statement_id": "2604.21663|defi_admissible_measure|9",
+            "statement_fingerprint": "de7b608b8898197f714932865834a12aca261a9a5c8965f9da07e6e80a90e6eb",
+            "score": 1.0251
+          },
+          {
+            "paper_id": "2604.21663",
+            "theorem_name": "ArxivPaper.prop_nonadmissible_comparison_of_classes",
+            "statement_id": "2604.21663|ArxivPaper.prop_nonadmissible_comparison_of_classes|55",
+            "statement_fingerprint": "bdc506d16e6be0d7734a12873815cbf6d3797d319ab8e1b282ed0c0d11e2eec3",
+            "score": 1.023
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "remark_20__audited_core",
@@ -5868,13 +7933,14 @@
       "lean_statement": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV ↔\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    (3 / 2 - alpha + eps < s2 ∧ s2 < s1 + 2 * alpha - 3 / 2 - eps) ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    (rhoV + s1 > 0 ∧ s2 - alpha < rhoV))",
       "proof_text": "unfold AutoRemark20ConditionRoles AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
       "proof_mode": "audited-core-replacement",
+      "equivalence_scope": "full_source_claim",
       "proof_method": "lean_verified",
       "proof_countable": true,
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
       "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "audited_core_replacement:auto_remark_20_condition_roles_iff;source_theorem:remark_20;core_sha256:b2d1ba10bf4e4ab654618bb08b118f9c4db0c9f135b7722fff6edd0c3ddf7f07;semantic_equivalence:verified;lean_verification:fresh",
+      "trust_reference": "audited_core_replacement:auto_remark_20_condition_roles_iff;source_theorem:remark_20;core_sha256:15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428;semantic_equivalence:verified;lean_verification:fresh",
       "promotion_gate_passed": true,
       "validation_gates": {
         "lean_proof_closed": true,
@@ -5939,9 +8005,41 @@
           }
         },
         "independent_semantic_evidence": true,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_72713f3383d27087a7bbedf1",
+          "alignment_pair_id": "align_fc7fb76142d847953065e31c",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [
+            "0 < s_1 < s_2",
+            "0 < θ < 1",
+            "s_2 < 4α - 3 - (3/2)θ - ε"
+          ],
+          "added_assumptions": [
+            "hs1: 0 < s1",
+            "hs2: s1 < s2",
+            "htheta: 0 < theta",
+            "htheta1: theta < 1",
+            "hs2alpha: s2 < 4 * alpha - 3 - (3 / 2"
+          ],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
         "schema_version": "1.0",
         "audited_core_source_theorem": "remark_20",
-        "audited_core_theorem_name": "auto_remark_20_condition_roles_iff"
+        "audited_core_theorem_name": "auto_remark_20_condition_roles_iff",
+        "equivalence_scope": "full_source_claim"
       },
       "review_required": false,
       "review_queue_id": "",
@@ -5956,8 +8054,8 @@
         "strict_gate_failures": [],
         "lean_verification": {
           "ok": true,
-          "verified_at": 1777280295.2780578,
-          "core_sha256": "b2d1ba10bf4e4ab654618bb08b118f9c4db0c9f135b7722fff6edd0c3ddf7f07",
+          "verified_at": 1777283293.622658,
+          "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
           "method": "lake env lean"
         },
         "semantic_equivalence_evidence": "independent",
@@ -5968,9 +8066,9 @@
         "source_theorem": "remark_20",
         "core_theorem_name": "auto_remark_20_condition_roles_iff",
         "core_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
-        "core_sha256": "b2d1ba10bf4e4ab654618bb08b118f9c4db0c9f135b7722fff6edd0c3ddf7f07",
+        "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
         "verification_method": "lake env lean",
-        "verified_at": 1777280295.2780578,
+        "verified_at": 1777283293.622658,
         "lean_statement": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV ↔\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    (3 / 2 - alpha + eps < s2 ∧ s2 < s1 + 2 * alpha - 3 / 2 - eps) ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    (rhoV + s1 > 0 ∧ s2 - alpha < rhoV))",
         "proof_text": "unfold AutoRemark20ConditionRoles AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
         "core_declaration": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV ↔\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    (3 / 2 - alpha + eps < s2 ∧ s2 < s1 + 2 * alpha - 3 / 2 - eps) ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    (rhoV + s1 > 0 ∧ s2 - alpha < rhoV)) := by\n  unfold AutoRemark20ConditionRoles AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
@@ -5981,6 +8079,8 @@
         },
         "semantic_equivalence_evidence": "independent",
         "equivalence_note": "audited exact encoding of the source mapping from admissibility lines to condition roles",
+        "equivalence_scope": "full_source_claim",
+        "claim_scope": "Audited Lean replacement for the source statement.",
         "proof_countable": true,
         "replacement_gate": {
           "exact_recorded_statement_required": true,
@@ -5997,7 +8097,47 @@
       "proof_value": "audited_real_claim",
       "grounding_metadata": [],
       "result_label": "lean_verified_without_paper_local_axioms",
-      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded."
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "canonical_statement": "theorem _ (u2 u1 u6 u3 u4 u5 : ℝ) : AutoRemark20ConditionRoles u1 u2 u3 u4 u5 u6 ↔ (u4 < 4 * u2 - 3 - (3 / 2) * u5 - u1 ∧ 3 - 4 * u2 + u5 * (u4 + u1) < 0 ∧ u3 < 2 * u2 - 3 / 2 - u1 ∧ (3 / 2 - u2 + u1 < u4 ∧ u4 < u3 + 2 * u2 - 3 / 2 - u1) ∧ u4 <= u3 + u2 / 4 ∧ (u6 + u3 > 0 ∧ u4 - u2 < u6))",
+      "statement_fingerprint": "eaf4ac6602c01a384d5576827455231361d69d7ec76d2667c8c1918bd71c11c6",
+      "canonical_theorem_id": "cth_eaf4ac6602c01a384d557682",
+      "claim_shape": "inequality",
+      "novelty_status": "semantic_near_duplicate",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "ass_strichartz",
+            "statement_id": "2604.21884|ass_strichartz|16",
+            "statement_fingerprint": "a46391d847a5fc2b2a74974113a684f3587311217a3ec94de9bfb263812fbe21",
+            "score": 0.969
+          },
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "def_admissible__audited_core",
+            "statement_id": "2604.21884|def_admissible__audited_core|24",
+            "statement_fingerprint": "e83bf263d268c3c010763f75b0ec4ca82ddd7028b2af749d324a61bf72fc9f5d",
+            "score": 0.8156
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     }
   ]
 }

@@ -84,7 +84,54 @@
         "hidden_assumption": true,
         "requires_verified_replacement": true
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) (u2 : alpha > 3 / 4) (ξ1 ξ2 : ℝ) : let Ψ1 : = I1 ξ1; let Ψ2 : = I2 ξ2; let Θ : = Ψ1 * Ψ2; let V1 : = I1 Θ; let V2 : = I2 Θ; Ψ1 ∈ C_T 𝒞 ^ (u1 - 3 / 2 -) ∧ Ψ2 ∈ C_T 𝒞 ^ (u1 - 3 / 2 -) ∧ Θ ∈ C_T 𝒞 ^ (2 * u1 - 3 -) ∧ V1 ∈ C_T 𝒞 ^ (3 * u1 - 3 -) ∧ V2 ∈ C_T 𝒞 ^ (3 * u1 - 3 -) ∧ d_dtt V1 ∈ C_T 𝒞 ^ (2 * u1 - 3 -) ∧ d_dtt V2 ∈ C_T 𝒞 ^ (2 * u1 - 3 -)",
+    "statement_fingerprint": "2ec9ad690a7ba4acc2bc5074da8ea4cf01c6f36ee939a43f17072dfd39e8f44e",
+    "canonical_theorem_id": "cth_2ec9ad690a7ba4acc2bc5074",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21884",
+          "theorem_name": "prop_cubic_quartic_baseline",
+          "statement_id": "2604.21884|prop_cubic_quartic_baseline|1",
+          "statement_fingerprint": "571c30a868e4a59eded4c54d905174db8a9b54d8eef757ae4bfe8808c5772144",
+          "score": 2.0285
+        },
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "prop_cubic_quartic_baseline",
+          "statement_id": "2604.21884_repair_candidates|prop_cubic_quartic_baseline|21",
+          "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+          "score": 1.5448
+        },
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "thm_baseline_lift",
+          "statement_id": "2604.21884_repair_candidates|thm_baseline_lift|19",
+          "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+          "score": 1.5314
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "prop_cubic_quartic_baseline",
@@ -159,7 +206,54 @@
         "hidden_assumption": true,
         "requires_verified_replacement": true
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ : Γ1 = Γ1 ∧ Γ2 = Γ2 ∧ Θ = Ψ1 * Ψ2",
+    "statement_fingerprint": "571c30a868e4a59eded4c54d905174db8a9b54d8eef757ae4bfe8808c5772144",
+    "canonical_theorem_id": "cth_571c30a868e4a59eded4c54d",
+    "claim_shape": "equality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21884",
+          "theorem_name": "thm_baseline_lift",
+          "statement_id": "2604.21884|thm_baseline_lift|0",
+          "statement_fingerprint": "2ec9ad690a7ba4acc2bc5074da8ea4cf01c6f36ee939a43f17072dfd39e8f44e",
+          "score": 1.5285
+        },
+        {
+          "paper_id": "2604.21884",
+          "theorem_name": "lem_volterra",
+          "statement_id": "2604.21884|lem_volterra|13",
+          "statement_fingerprint": "0a5bbc9249946719df523e6ae60a93a3d2905d938afd19dfcf2cefbe0e2b17c5",
+          "score": 1.4062
+        },
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "prop_cubic_quartic_baseline",
+          "statement_id": "2604.21884_repair_candidates|prop_cubic_quartic_baseline|21",
+          "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+          "score": 1.0571
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "thm_operator_main",
@@ -178,7 +272,63 @@
     "modulo_paper_local_axioms": false,
     "debt_tier": "none",
     "proof_value": "none",
-    "grounding_metadata": []
+    "grounding_metadata": [],
+    "canonical_statement": "theorem _ : False",
+    "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed",
+    "canonical_theorem_id": "cth_e25416f8743c6564e03b088a",
+    "claim_shape": "proposition",
+    "novelty_status": "duplicate_in_corpus",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "canonical_fingerprint",
+      "reason": "canonical statement fingerprint matched another corpus statement",
+      "matches": [
+        {
+          "paper_id": "2604.21314",
+          "theorem_name": "Thm_Folst",
+          "statement_id": "2604.21314|Thm_Folst|10",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21314",
+          "theorem_name": "Thm_Blowup_O4",
+          "statement_id": "2604.21314|Thm_Blowup_O4|12",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21314",
+          "theorem_name": "Mild",
+          "statement_id": "2604.21314|Mild|15",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "rem_HF0_main_input",
+          "statement_id": "2604.21583|rem_HF0_main_input|21",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "prop_shell_mode_local",
+          "statement_id": "2604.21583|prop_shell_mode_local|28",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "prop_mid_completion",
@@ -229,7 +379,54 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ : ∃ s1 s2 theta : ℝ, 0 < s1 ∧ 0 < s2 ∧ 0 < theta ∧ theta < 1",
+    "statement_fingerprint": "44fa4551d80d11a84fb45db7b91edad232c760e95df821eb9bc529957163c2c6",
+    "canonical_theorem_id": "cth_44fa4551d80d11a84fb45db7",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "RepairCandidates.prop_mid_completion",
+          "statement_id": "2604.21884_repair_candidates|RepairCandidates.prop_mid_completion|2",
+          "statement_fingerprint": "712eff393fb64d99ea8532ec91d27cee3899ae3fb031de165a618299e0fdcbb1",
+          "score": 1.4272
+        },
+        {
+          "paper_id": "ab_repair_proof_topk0",
+          "theorem_name": "prop_mid_completion",
+          "statement_id": "ab_repair_proof_topk0|prop_mid_completion|1",
+          "statement_fingerprint": "712eff393fb64d99ea8532ec91d27cee3899ae3fb031de165a618299e0fdcbb1",
+          "score": 1.4209
+        },
+        {
+          "paper_id": "ab_repair_proof_topk3",
+          "theorem_name": "prop_mid_completion",
+          "statement_id": "ab_repair_proof_topk3|prop_mid_completion|1",
+          "statement_fingerprint": "712eff393fb64d99ea8532ec91d27cee3899ae3fb031de165a618299e0fdcbb1",
+          "score": 1.4209
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "thm_conditional_closure_intro",
@@ -280,7 +477,54 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ : ∃ s1 s2 : ℝ, HSobolev s1 = HSobolev s1 ∧ HSobolev s2 = HSobolev s2",
+    "statement_fingerprint": "78ceb40e845e7f0bfe0527713bc86f576be639905dc6e8b4f9ee1ea01c86b8b6",
+    "canonical_theorem_id": "cth_78ceb40e845e7f0bfe052771",
+    "claim_shape": "equality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "theorem_18",
+          "statement_id": "2604.21821|theorem_18|17",
+          "statement_fingerprint": "b82b1ec65418411a9c94a771c970a8a3f6f7f69f02f555c74d88a996c9e2182d",
+          "score": 2.2279
+        },
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "theorem_3",
+          "statement_id": "2604.21821|theorem_3|2",
+          "statement_fingerprint": "fab90788b0547efb2cbe202389898ef50b0660e48a250d2c00533e8100f44fab",
+          "score": 2.165
+        },
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "theorem_2",
+          "statement_id": "2604.21821|theorem_2|1",
+          "statement_fingerprint": "3849473a6a1f2e43c2b1d3b90a54d78c9930e25144268a08ed9832c183c27047",
+          "score": 2.1517
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "cor_conditional_cutoff",
@@ -343,7 +587,54 @@
         "hidden_assumption": true,
         "requires_verified_replacement": true
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (Set.Icc 0 T) (Set.Icc 0 T) (fun t => Fv t) (fun t => Fv t) (fun t => cutoff_enhanced_data N t) (fun t => cutoff_enhanced_data N t) (fun t => t) (fun t => t) (fun t => t) (fun t => t) (u1 : ℕ → ℝ → ℝ) (u2 : ℝ → ℝ) (u3 : alpha > 3/4) (u4 : ℕ → ℝ → ℝ) (u5 : ℝ) (u6 : ℝ → ℝ) {u7 u8 u9 u10 : ℝ} : ∀ N, u1 N → u2",
+    "statement_fingerprint": "e5a63af7455dc8ea106334b9025645176c6cd36e4882b77be1cb2f22438690b6",
+    "canonical_theorem_id": "cth_e5a63af7455dc8ea106334b9",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "theorem_18",
+          "statement_id": "2604.21821|theorem_18|17",
+          "statement_fingerprint": "b82b1ec65418411a9c94a771c970a8a3f6f7f69f02f555c74d88a996c9e2182d",
+          "score": 1.6291
+        },
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "theorem_2",
+          "statement_id": "2604.21821|theorem_2|1",
+          "statement_fingerprint": "3849473a6a1f2e43c2b1d3b90a54d78c9930e25144268a08ed9832c183c27047",
+          "score": 1.6128
+        },
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "theorem_3",
+          "statement_id": "2604.21821|theorem_3|2",
+          "statement_fingerprint": "fab90788b0547efb2cbe202389898ef50b0660e48a250d2c00533e8100f44fab",
+          "score": 1.6093
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "rem_status_emphasis",
@@ -406,34 +697,54 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
-  },
-  {
-    "theorem_name": "prop_sharpness",
-    "status": "UNRESOLVED",
-    "grounding_status": "",
-    "gate_failures": [
-      "lean_proof_closed"
     ],
-    "result_label": "not_verified_with_paper_local_axiom_debt",
-    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-    "modulo_paper_local_axioms": true,
-    "debt_tier": "deep_domain_theory",
-    "proof_value": "deep_domain_gap",
-    "grounding_metadata": [
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_local_lemma:DyadicBlockBound",
-        "symbol": "DyadicBlockBound",
-        "grounding_kind": "paper_local_lemma_obligation",
-        "grounding_source": "paper_statement_or_domain_pack",
-        "grounding_trust": "unproved_local_theory_obligation",
-        "paper_agnostic_rule_id": "local_lemma.requires_verified_replacement",
-        "proof_countable": false,
-        "hidden_assumption": true,
-        "requires_verified_replacement": true
+    "canonical_statement": "theorem _ : I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2 ∧ VolterraOscillation (fun _ : ℝ => 0) 0 0 = VolterraOscillation (fun _ : ℝ => 0) 0 0",
+    "statement_fingerprint": "52e931af8ba4e86bea8775d14491b58c7c88ac00a90408d5d31cff234ea661ce",
+    "canonical_theorem_id": "cth_52e931af8ba4e86bea8775d1",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "theorem_18",
+          "statement_id": "2604.21821|theorem_18|17",
+          "statement_fingerprint": "b82b1ec65418411a9c94a771c970a8a3f6f7f69f02f555c74d88a996c9e2182d",
+          "score": 2.1194
+        },
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "theorem_3",
+          "statement_id": "2604.21821|theorem_3|2",
+          "statement_fingerprint": "fab90788b0547efb2cbe202389898ef50b0660e48a250d2c00533e8100f44fab",
+          "score": 2.0941
+        },
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "theorem_2",
+          "statement_id": "2604.21821|theorem_2|1",
+          "statement_fingerprint": "3849473a6a1f2e43c2b1d3b90a54d78c9930e25144268a08ed9832c183c27047",
+          "score": 2.094
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
       }
-    ]
+    }
   },
   {
     "theorem_name": "remark_9",
@@ -496,7 +807,32 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ : I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2",
+    "statement_fingerprint": "d6c4d75a6ad950e0a7deeb1b5e235abb1f50131ae1ab1590a814e881f6c39e5a",
+    "canonical_theorem_id": "cth_d6c4d75a6ad950e0a7deeb1b",
+    "claim_shape": "equality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "remark_10",
@@ -547,7 +883,32 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ : Γ1 = Γ1 ∧ Γ2 = Γ2",
+    "statement_fingerprint": "684d44b267fe88f63ab2f78b1ab94329ab55cfe41e4cb712c048bc6954330e44",
+    "canonical_theorem_id": "cth_684d44b267fe88f63ab2f78b",
+    "claim_shape": "equality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "lem_centered_cov",
@@ -592,7 +953,47 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 u2 u3 : ℕ) (u11 : 0 < η) (u12 : 0 <= s) (u13 : s <= t) (u14 : t <= T) (u15 : η <= 1/2) (u4 u5 : ℤ) (u7 u6 u10 : ℝ) (u8 : ℕ) (u9 : ℝ) (η : ℝ) : Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (u1, u2, u3) (u4, u5, u6, u7)| ^ 2) : ℝ)) (fun _ => C_T * u8 ^ (3 - 6 * u9)) ∧ Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (u1, u2, u3) (u4, u5, u6, u7) - B_N (u1, u2, u3) (u4, u5, u10, u7)| ^ 2) : ℝ)) (fun _ => C_T * |u6 - u10| ^ (2 * η) * u8 ^ (3 - 6 * u9 + 2 * η * u9))",
+    "statement_fingerprint": "5ab1245f36463d93ba9ed1e18e11c720195dad167f3099dcafb4945f556b0bc7",
+    "canonical_theorem_id": "cth_5ab1245f36463d93ba9ed1e1",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "lem_centered_cov",
+          "statement_id": "2604.21884_repair_candidates|lem_centered_cov|27",
+          "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+          "score": 1.5474
+        },
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "RepairCandidates.lem_centered_cov",
+          "statement_id": "2604.21884_repair_candidates|RepairCandidates.lem_centered_cov|26",
+          "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+          "score": 1.5221
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "thm_pathwise_fluct",
@@ -606,7 +1007,63 @@
     "modulo_paper_local_axioms": false,
     "debt_tier": "none",
     "proof_value": "none",
-    "grounding_metadata": []
+    "grounding_metadata": [],
+    "canonical_statement": "theorem _ : False",
+    "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed",
+    "canonical_theorem_id": "cth_e25416f8743c6564e03b088a",
+    "claim_shape": "proposition",
+    "novelty_status": "duplicate_in_corpus",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "canonical_fingerprint",
+      "reason": "canonical statement fingerprint matched another corpus statement",
+      "matches": [
+        {
+          "paper_id": "2604.21314",
+          "theorem_name": "Thm_Folst",
+          "statement_id": "2604.21314|Thm_Folst|10",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21314",
+          "theorem_name": "Thm_Blowup_O4",
+          "statement_id": "2604.21314|Thm_Blowup_O4|12",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21314",
+          "theorem_name": "Mild",
+          "statement_id": "2604.21314|Mild|15",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "rem_HF0_main_input",
+          "statement_id": "2604.21583|rem_HF0_main_input|21",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "prop_shell_mode_local",
+          "statement_id": "2604.21583|prop_shell_mode_local|28",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "lem_speed_gap",
@@ -622,7 +1079,54 @@
     "modulo_paper_local_axioms": false,
     "debt_tier": "none",
     "proof_value": "none",
-    "grounding_metadata": []
+    "grounding_metadata": [],
+    "canonical_statement": "theorem _ : ∃ N0 : ℕ, ∃ cstar : ℝ, 0 < cstar ∧ (N0 : ℝ) <= (N0 : ℝ)",
+    "statement_fingerprint": "05ea3e1887b1445ed669fbb5ec739faafb27c097a0e7003ab2549f0fa14cbf47",
+    "canonical_theorem_id": "cth_05ea3e1887b1445ed669fbb5",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "lem_speed_gap",
+          "statement_id": "2604.21884_repair_candidates|lem_speed_gap|9",
+          "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+          "score": 1.1491
+        },
+        {
+          "paper_id": "2604.21884_repair_candidates_fast_batch",
+          "theorem_name": "lem_speed_gap",
+          "statement_id": "2604.21884_repair_candidates_fast_batch|lem_speed_gap|3",
+          "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+          "score": 1.1491
+        },
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "RepairCandidates.lem_speed_gap",
+          "statement_id": "2604.21884_repair_candidates|RepairCandidates.lem_speed_gap|8",
+          "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+          "score": 1.0861
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "lem_volterra",
@@ -649,82 +1153,32 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
-  },
-  {
-    "theorem_name": "prop_det_contraction",
-    "status": "UNRESOLVED",
-    "grounding_status": "",
-    "gate_failures": [
-      "lean_proof_closed"
     ],
-    "result_label": "not_verified_with_paper_local_axiom_debt",
-    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-    "modulo_paper_local_axioms": true,
-    "debt_tier": "definition_stub_grounding",
-    "proof_value": "definition_grounding",
-    "grounding_metadata": [
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:D_N",
-        "symbol": "D_N",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
+    "canonical_statement": "theorem _ (h_Φ : |Φ| >= N ^ alpha) (u1 : ℝ) (u2 : ℝ → ℝ) (u3 : ℝ) (u4 : ℝ) (u5 : ContDiff ℝ 1 a) (u6 : N > 0) (u7 : T >= 0) (Φ : ℝ) : ∀ t ∈ Set.Icc 0 u1, norm (∫ s in Set.Icc 0 t, u2 s * Complex.exp (Complex.I * (t - s) * Φ)) <= u3 ^ (-u4) * (⨆ s ∈ Set.Icc 0 u1, |u2 s| + ⨆ s ∈ Set.Icc 0 u1, |deriv u2 s|)",
+    "statement_fingerprint": "0a5bbc9249946719df523e6ae60a93a3d2905d938afd19dfcf2cefbe0e2b17c5",
+    "canonical_theorem_id": "cth_0a5bbc9249946719df523e6a",
+    "claim_shape": "inequality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
       },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:C",
-        "symbol": "C",
-        "grounding_kind": "transparent_scalar_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:s1",
-        "symbol": "s1",
-        "grounding_kind": "transparent_scalar_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:s2",
-        "symbol": "s2",
-        "grounding_kind": "transparent_scalar_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:theta",
-        "symbol": "theta",
-        "grounding_kind": "transparent_scalar_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
       }
-    ]
+    }
   },
   {
     "theorem_name": "thm_no_singular_centering",
@@ -763,7 +1217,54 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ : ∀ w : ℝ → ℝ, MixedOperator 0 w = w ∧ C_T = C_T",
+    "statement_fingerprint": "0291e012198d7d5d64276a8c4253f64ae19856c0dda411d118f347121f1d58ba",
+    "canonical_theorem_id": "cth_0291e012198d7d5d64276a8c",
+    "claim_shape": "equality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21884",
+          "theorem_name": "lem_volterra",
+          "statement_id": "2604.21884|lem_volterra|13",
+          "statement_fingerprint": "0a5bbc9249946719df523e6ae60a93a3d2905d938afd19dfcf2cefbe0e2b17c5",
+          "score": 1.2091
+        },
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "lem_cross_terms_controlled",
+          "statement_id": "2604.21583|lem_cross_terms_controlled|34",
+          "statement_fingerprint": "2e2378230463964d76d517c92aa3154fca58707df43b4db14eb6d7177bede7a3",
+          "score": 1.1467
+        },
+        {
+          "paper_id": "2604.21663",
+          "theorem_name": "ex_lotka_volterra",
+          "statement_id": "2604.21663|ex_lotka_volterra|39",
+          "statement_fingerprint": "568b6dc5e0b19749a6659375b78e5d163a348413de19b3a969bb60877da35f8a",
+          "score": 1.1336
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "ass_strichartz",
@@ -832,7 +1333,47 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) (u10 : 0 < s2) (u11 : Fin 2) (u2 : ℝ) (u3 : ℝ) (u4 : ℝ) (u5 : ℝ) (u6 : 0 < T ∧ T <= 1) (u7 : 0 < alpha) (u8 : 0 < delta) (u9 : 0 < s1) : ∀ (X Y : ℝ → ℝ), (∀ t, X t ∈ C_T H^{u1}) → (∀ t, d_dtt X t ∈ C_T H^{u1 - u2}) → (∀ t, X t ∈ L_T^8 W^{u1 - u2/4, 8/3}) → (∀ t, Y t ∈ C_T H^{u3}) → (∀ t, d_dtt Y t ∈ C_T H^{u3 - u2}) → (∀ t, Y t ∈ L_T^4 W^{u3 - u2/2, 4}) → u4^u5 * (∥X∥_{X_T^{u1}} * ∥Y∥_{Y_T^{u3}}) <= C",
+    "statement_fingerprint": "a46391d847a5fc2b2a74974113a684f3587311217a3ec94de9bfb263812fbe21",
+    "canonical_theorem_id": "cth_a46391d847a5fc2b2a749741",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "ass_strichartz",
+          "statement_id": "2604.21884_repair_candidates|ass_strichartz|31",
+          "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+          "score": 1.6064
+        },
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "RepairCandidates.ass_strichartz",
+          "statement_id": "2604.21884_repair_candidates|RepairCandidates.ass_strichartz|30",
+          "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+          "score": 1.5913
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "remark_18",
@@ -871,7 +1412,32 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ : ∀ alpha : ℝ, alpha = 1 → HSobolev alpha = HSobolev alpha",
+    "statement_fingerprint": "7cc73c75bc3c59f962946eace2974f3d1b09ea35f89ed37bbf3b6c2f07733c34",
+    "canonical_theorem_id": "cth_7cc73c75bc3c59f962946eac",
+    "claim_shape": "equality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "rem_primitive_route",
@@ -898,7 +1464,54 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ : ∃ F : ℝ → ℝ, I_i (F 0) = I_i (F 0)",
+    "statement_fingerprint": "df0a8cc054569cf6f2f8828e49713b5bb1a6da0613cd3ac5311a56e1b7dc05c5",
+    "canonical_theorem_id": "cth_df0a8cc054569cf6f2f8828e",
+    "claim_shape": "equality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "rem_primitive_route",
+          "statement_id": "2604.21884_repair_candidates|rem_primitive_route|15",
+          "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+          "score": 1.3505
+        },
+        {
+          "paper_id": "2604.21884_repair_candidates_fast_batch",
+          "theorem_name": "rem_primitive_route",
+          "statement_id": "2604.21884_repair_candidates_fast_batch|rem_primitive_route|9",
+          "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+          "score": 1.3505
+        },
+        {
+          "paper_id": "2604.21884_repair_candidates",
+          "theorem_name": "RepairCandidates.rem_primitive_route",
+          "statement_id": "2604.21884_repair_candidates|RepairCandidates.rem_primitive_route|14",
+          "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+          "score": 1.1686
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "cor_safe_range",
@@ -917,6 +1530,62 @@
     "modulo_paper_local_axioms": false,
     "debt_tier": "none",
     "proof_value": "none",
-    "grounding_metadata": []
+    "grounding_metadata": [],
+    "canonical_statement": "theorem _ : False",
+    "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed",
+    "canonical_theorem_id": "cth_e25416f8743c6564e03b088a",
+    "claim_shape": "proposition",
+    "novelty_status": "duplicate_in_corpus",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "canonical_fingerprint",
+      "reason": "canonical statement fingerprint matched another corpus statement",
+      "matches": [
+        {
+          "paper_id": "2604.21314",
+          "theorem_name": "Thm_Folst",
+          "statement_id": "2604.21314|Thm_Folst|10",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21314",
+          "theorem_name": "Thm_Blowup_O4",
+          "statement_id": "2604.21314|Thm_Blowup_O4|12",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21314",
+          "theorem_name": "Mild",
+          "statement_id": "2604.21314|Mild|15",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "rem_HF0_main_input",
+          "statement_id": "2604.21583|rem_HF0_main_input|21",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        },
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "prop_shell_mode_local",
+          "statement_id": "2604.21583|prop_shell_mode_local|28",
+          "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   }
 ]

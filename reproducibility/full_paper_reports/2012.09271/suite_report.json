@@ -14,6 +14,7 @@
   },
   "final_metrics": {
     "total_theorems": 2,
+    "total_headline_theorems": 2,
     "total_provable": 2,
     "translation_limited_count": 0,
     "fully_proven": 0,
@@ -21,9 +22,194 @@
     "verified_proven": 0,
     "real_fully_proven": 0,
     "auto_closed_count": 0,
+    "audited_core_replacement_count": 0,
+    "superseded_diagnostic_count": 0,
     "axiom_backed_count": 0,
     "axiom_debt_count": 0,
     "axiom_debt": [],
+    "paper_local_axiom_disclosure": {
+      "required": false,
+      "result_label": "proved_modulo_paper_local_axioms",
+      "claim_scope": "Lean checked this result only after accepting the listed paper-local axioms/declarations; do not count it as an unconditional verified theorem.",
+      "theorem_count": 0,
+      "theorems": [],
+      "axiom_debt": []
+    },
+    "statement_validity": {
+      "total": 2,
+      "counts": {
+        "bad_translation_artifact": 1,
+        "claim_review_pending": 1
+      },
+      "items": [
+        {
+          "theorem_name": "theorem_1",
+          "valid_for_proof": false,
+          "primary_blocker": "bad_translation_artifact",
+          "reasons": [
+            "semantic_policy_hard_block"
+          ],
+          "next_action": "Repair the Lean statement/schema before proof search.",
+          "lean_statement": "theorem theorem_1 (N : ℕ) :\n    ∃ (K D_X D_Z : ℕ → ℕ),\n    (∃ (f g : ℕ → ℝ), f =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧ g =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧\n    ∀ n, K n = ((n : ℝ) ^ (2 / 3 : ℝ) + f n) * (n : ℝ) ^ (2 / 3 : ℝ) ∧\n    D_X n = ((n : ℝ) ^ (1 / 3 : ℝ) + g n) * (n : ℝ) ^ (1 / 3 : ℝ) ∧\n    D_Z n = ((n : ℝ) + f n) * (n : ℝ)) ∧\n    (∀ n, K n ∈ Set.Icc (n ^ (2 / 3 : ℕ) / 2) (2 * n ^ (2 / 3 : ℕ))) ∧\n    (∀ n, D_X n ≥ n ^ (1 / 3 : ℕ) / 2) ∧\n    (∀ n, D_Z n ∈ Set.Icc (n / 2) (2 * n))",
+          "debt_tier": "none",
+          "proof_value": "none",
+          "novelty_status": "new_candidate",
+          "statement_fingerprint": "d777f9cb7550245d48954c35869ffbe69eec9fb0122b4ea7525b57a851f21ec8",
+          "canonical_theorem_id": "cth_d777f9cb7550245d48954c35",
+          "novelty_evidence": {
+            "schema_version": "1.0.0",
+            "method": "no_overlap_detected",
+            "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+            "matches": [],
+            "mathlib": {
+              "matched": false,
+              "method": "mathlib_no_overlap_found",
+              "reason": "no Mathlib overlap detected by available checks",
+              "unavailable_checks": [
+                "mathlib_seed_missing",
+                "lean_exact_check_disabled",
+                "mathlib_semantic_index_disabled"
+              ]
+            },
+            "thresholds": {
+              "semantic_near_duplicate": 0.78,
+              "mathlib_semantic_overlap": 0.86
+            }
+          }
+        },
+        {
+          "theorem_name": "corollary_2",
+          "valid_for_proof": false,
+          "primary_blocker": "claim_review_pending",
+          "reasons": [
+            "lean_proof_closed",
+            "step_verdict_verified",
+            "assumptions_grounded",
+            "translation_fidelity_ok",
+            "dependency_trust_complete",
+            "claim_equivalent"
+          ],
+          "next_action": "Apply human/hybrid claim-equivalence review only after other gates pass.",
+          "lean_statement": "theorem corollary_2 :\n    ∃ (N K D : ℕ) (alpha : Type*) [MetricSpace alpha] [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha],\n    ∃ (family : ℕ → (ℕ × ℕ × ℕ)),\n      (∀ n, (family n).1 = N * n) ∧\n      (∀ n, (family n).2.1 = K * n) ∧\n      (∀ n, (family n).2.2 = D * n) ∧\n      (∀ n, ∃ eps : ℕ → ℝ, eps =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (K * n : ℝ) = (1 + eps n) * (N * n : ℝ) ^ (4 / 5 : ℝ)) ∧\n      (∀ n, ∃ delta : ℕ → ℝ, delta =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (D * n : ℝ) = (1 + delta n) * (N * n : ℝ) ^ (3 / 5 : ℝ))",
+          "debt_tier": "none",
+          "proof_value": "none",
+          "novelty_status": "new_candidate",
+          "statement_fingerprint": "d86d39e7a866e974d64ea4870023fb923023b560e1410ffff2500598345027ab",
+          "canonical_theorem_id": "cth_d86d39e7a866e974d64ea487",
+          "novelty_evidence": {
+            "schema_version": "1.0.0",
+            "method": "no_overlap_detected",
+            "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+            "matches": [],
+            "mathlib": {
+              "matched": false,
+              "method": "mathlib_no_overlap_found",
+              "reason": "no Mathlib overlap detected by available checks",
+              "unavailable_checks": [
+                "mathlib_seed_missing",
+                "lean_exact_check_disabled",
+                "mathlib_semantic_index_disabled"
+              ]
+            },
+            "thresholds": {
+              "semantic_near_duplicate": 0.78,
+              "mathlib_semantic_overlap": 0.86
+            }
+          }
+        }
+      ]
+    },
+    "novelty_summary": {
+      "schema_version": "1.0.0",
+      "counts": {
+        "new_candidate": 2,
+        "mathlib_overlap": 0,
+        "duplicate_in_corpus": 0,
+        "semantic_near_duplicate": 0,
+        "unknown": 0
+      },
+      "total": 2,
+      "examples": {
+        "new_candidate": [
+          {
+            "theorem_name": "theorem_1",
+            "statement_fingerprint": "d777f9cb7550245d48954c35869ffbe69eec9fb0122b4ea7525b57a851f21ec8",
+            "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks"
+          },
+          {
+            "theorem_name": "corollary_2",
+            "statement_fingerprint": "d86d39e7a866e974d64ea4870023fb923023b560e1410ffff2500598345027ab",
+            "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks"
+          }
+        ],
+        "mathlib_overlap": [],
+        "duplicate_in_corpus": [],
+        "semantic_near_duplicate": [],
+        "unknown": []
+      }
+    },
+    "missing_lemma_subledger": {
+      "schema_version": "1.1.0",
+      "purpose": "Queue for replacing paper-local axioms with unconditional Lean lemmas/definitions.",
+      "total_obligations": 0,
+      "counts_by_category": {
+        "easy_missing_definition": 0,
+        "local_paper_lemma": 0,
+        "missing_mathlib_theorem": 0,
+        "deep_domain_theory_gap": 0,
+        "bad_translation_artifact": 0
+      },
+      "definition_stub_grounding": {
+        "count": 0,
+        "total_references": 0,
+        "items": [],
+        "claim_scope": "Definition stubs are reported separately from theorem/lemma obligations; they do not count as proved paper claims."
+      },
+      "attack_queue": []
+    },
+    "axiom_debt_burndown": {
+      "schema_version": "1.1.0",
+      "purpose": "Rank paper-local axioms by cheapest path to remove AXIOM_BACKED evidence.",
+      "axiom_backed_result_count": 0,
+      "paper_local_axiom_count": 0,
+      "result_buckets": {
+        "missing_definitions_only": 0,
+        "local_lemmas": 0,
+        "missing_mathlib": 0,
+        "deep_domain_theory": 0,
+        "translation_artifacts": 0,
+        "unclassified": 0
+      },
+      "summary_sentence": "0 axiom-backed results.",
+      "axiom_kind_counts": {},
+      "difficulty_counts": {},
+      "dependency_bucket_counts": {},
+      "ranked_axioms": []
+    },
+    "paper_theory_debt_dashboard": {
+      "schema_version": "1.0.0",
+      "purpose": "Separate paper-theory debt by proof value and next burn-down action.",
+      "total_rows_with_debt_or_alignment": 0,
+      "actionable_debt_count": 0,
+      "counts_by_tier": {},
+      "counts_by_proof_value": {},
+      "deep_domain_obligations": {
+        "schema_version": "1.0.0",
+        "purpose": "Group deep-domain paper-theory debt into reusable local-theory obligations.",
+        "total_obligations": 0,
+        "total_dependent_rows": 0,
+        "obligations": []
+      },
+      "items": [],
+      "top_actionable_items": []
+    },
+    "deep_domain_obligations": {
+      "schema_version": "1.0.0",
+      "purpose": "Group deep-domain paper-theory debt into reusable local-theory obligations.",
+      "total_obligations": 0,
+      "total_dependent_rows": 0,
+      "obligations": []
+    },
     "closure_by_method": {
       "lean_verified": 0,
       "auto_closed_or_reconciled": 0,
@@ -50,7 +236,38 @@
           "translation_fidelity_ok",
           "dependency_trust_complete",
           "claim_equivalent"
-        ]
+        ],
+        "result_label": "not_verified",
+        "claim_scope": "No verified closure claim is made for this result.",
+        "modulo_paper_local_axioms": false,
+        "debt_tier": "none",
+        "proof_value": "none",
+        "grounding_metadata": [],
+        "canonical_statement": "theorem _ (u1 : ℕ) : ∃ (K D_X D_Z : ℕ → ℕ), (∃ (f g : ℕ → ℝ), f =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧ g =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧ ∀ n, K n = ((n : ℝ) ^ (2 / 3 : ℝ) + f n) * (n : ℝ) ^ (2 / 3 : ℝ) ∧ D_X n = ((n : ℝ) ^ (1 / 3 : ℝ) + g n) * (n : ℝ) ^ (1 / 3 : ℝ) ∧ D_Z n = ((n : ℝ) + f n) * (n : ℝ)) ∧ (∀ n, K n ∈ Set.Icc (n ^ (2 / 3 : ℕ) / 2) (2 * n ^ (2 / 3 : ℕ))) ∧ (∀ n, D_X n >= n ^ (1 / 3 : ℕ) / 2) ∧ (∀ n, D_Z n ∈ Set.Icc (n / 2) (2 * n))",
+        "statement_fingerprint": "d777f9cb7550245d48954c35869ffbe69eec9fb0122b4ea7525b57a851f21ec8",
+        "canonical_theorem_id": "cth_d777f9cb7550245d48954c35",
+        "claim_shape": "inequality",
+        "novelty_status": "new_candidate",
+        "novelty_evidence": {
+          "schema_version": "1.0.0",
+          "method": "no_overlap_detected",
+          "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+          "matches": [],
+          "mathlib": {
+            "matched": false,
+            "method": "mathlib_no_overlap_found",
+            "reason": "no Mathlib overlap detected by available checks",
+            "unavailable_checks": [
+              "mathlib_seed_missing",
+              "lean_exact_check_disabled",
+              "mathlib_semantic_index_disabled"
+            ]
+          },
+          "thresholds": {
+            "semantic_near_duplicate": 0.78,
+            "mathlib_semantic_overlap": 0.86
+          }
+        }
       },
       {
         "theorem_name": "corollary_2",
@@ -63,11 +280,44 @@
           "translation_fidelity_ok",
           "dependency_trust_complete",
           "claim_equivalent"
-        ]
+        ],
+        "result_label": "not_verified",
+        "claim_scope": "No verified closure claim is made for this result.",
+        "modulo_paper_local_axioms": false,
+        "debt_tier": "none",
+        "proof_value": "none",
+        "grounding_metadata": [],
+        "canonical_statement": "theorem _ : ∃ (N K D : ℕ) (alpha : Type*) [MetricSpace alpha] [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha], ∃ (family : ℕ → (ℕ × ℕ × ℕ)), (∀ n, (family n).1 = N * n) ∧ (∀ n, (family n).2.1 = K * n) ∧ (∀ n, (family n).2.2 = D * n) ∧ (∀ n, ∃ eps : ℕ → ℝ, eps =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (K * n : ℝ) = (1 + eps n) * (N * n : ℝ) ^ (4 / 5 : ℝ)) ∧ (∀ n, ∃ delta : ℕ → ℝ, delta =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (D * n : ℝ) = (1 + delta n) * (N * n : ℝ) ^ (3 / 5 : ℝ))",
+        "statement_fingerprint": "d86d39e7a866e974d64ea4870023fb923023b560e1410ffff2500598345027ab",
+        "canonical_theorem_id": "cth_d86d39e7a866e974d64ea487",
+        "claim_shape": "inequality",
+        "novelty_status": "new_candidate",
+        "novelty_evidence": {
+          "schema_version": "1.0.0",
+          "method": "no_overlap_detected",
+          "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+          "matches": [],
+          "mathlib": {
+            "matched": false,
+            "method": "mathlib_no_overlap_found",
+            "reason": "no Mathlib overlap detected by available checks",
+            "unavailable_checks": [
+              "mathlib_seed_missing",
+              "lean_exact_check_disabled",
+              "mathlib_semantic_index_disabled"
+            ]
+          },
+          "thresholds": {
+            "semantic_near_duplicate": 0.78,
+            "mathlib_semantic_overlap": 0.86
+          }
+        }
       }
     ],
     "translation_limited": [],
     "axiom_backed": [],
+    "audited_core_replacements": [],
+    "superseded_diagnostics": [],
     "lean_verified_proven": [],
     "auto_closed_proven": []
   },
@@ -265,5 +515,154 @@
     "ledger": "/home/projectx/BDDM/reproducibility/full_paper_reports/2012.09271/verification_ledger.json",
     "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2012.09271/unresolved.json",
     "manifest": "/home/projectx/BDDM/reproducibility/full_paper_reports/2012.09271/manifest.json"
-  }
+  },
+  "statement_validity": {
+    "total": 2,
+    "counts": {
+      "bad_translation_artifact": 1,
+      "claim_review_pending": 1
+    },
+    "items": [
+      {
+        "theorem_name": "theorem_1",
+        "valid_for_proof": false,
+        "primary_blocker": "bad_translation_artifact",
+        "reasons": [
+          "semantic_policy_hard_block"
+        ],
+        "next_action": "Repair the Lean statement/schema before proof search.",
+        "lean_statement": "theorem theorem_1 (N : ℕ) :\n    ∃ (K D_X D_Z : ℕ → ℕ),\n    (∃ (f g : ℕ → ℝ), f =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧ g =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧\n    ∀ n, K n = ((n : ℝ) ^ (2 / 3 : ℝ) + f n) * (n : ℝ) ^ (2 / 3 : ℝ) ∧\n    D_X n = ((n : ℝ) ^ (1 / 3 : ℝ) + g n) * (n : ℝ) ^ (1 / 3 : ℝ) ∧\n    D_Z n = ((n : ℝ) + f n) * (n : ℝ)) ∧\n    (∀ n, K n ∈ Set.Icc (n ^ (2 / 3 : ℕ) / 2) (2 * n ^ (2 / 3 : ℕ))) ∧\n    (∀ n, D_X n ≥ n ^ (1 / 3 : ℕ) / 2) ∧\n    (∀ n, D_Z n ∈ Set.Icc (n / 2) (2 * n))",
+        "debt_tier": "none",
+        "proof_value": "none",
+        "novelty_status": "new_candidate",
+        "statement_fingerprint": "d777f9cb7550245d48954c35869ffbe69eec9fb0122b4ea7525b57a851f21ec8",
+        "canonical_theorem_id": "cth_d777f9cb7550245d48954c35",
+        "novelty_evidence": {
+          "schema_version": "1.0.0",
+          "method": "no_overlap_detected",
+          "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+          "matches": [],
+          "mathlib": {
+            "matched": false,
+            "method": "mathlib_no_overlap_found",
+            "reason": "no Mathlib overlap detected by available checks",
+            "unavailable_checks": [
+              "mathlib_seed_missing",
+              "lean_exact_check_disabled",
+              "mathlib_semantic_index_disabled"
+            ]
+          },
+          "thresholds": {
+            "semantic_near_duplicate": 0.78,
+            "mathlib_semantic_overlap": 0.86
+          }
+        }
+      },
+      {
+        "theorem_name": "corollary_2",
+        "valid_for_proof": false,
+        "primary_blocker": "claim_review_pending",
+        "reasons": [
+          "lean_proof_closed",
+          "step_verdict_verified",
+          "assumptions_grounded",
+          "translation_fidelity_ok",
+          "dependency_trust_complete",
+          "claim_equivalent"
+        ],
+        "next_action": "Apply human/hybrid claim-equivalence review only after other gates pass.",
+        "lean_statement": "theorem corollary_2 :\n    ∃ (N K D : ℕ) (alpha : Type*) [MetricSpace alpha] [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha],\n    ∃ (family : ℕ → (ℕ × ℕ × ℕ)),\n      (∀ n, (family n).1 = N * n) ∧\n      (∀ n, (family n).2.1 = K * n) ∧\n      (∀ n, (family n).2.2 = D * n) ∧\n      (∀ n, ∃ eps : ℕ → ℝ, eps =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (K * n : ℝ) = (1 + eps n) * (N * n : ℝ) ^ (4 / 5 : ℝ)) ∧\n      (∀ n, ∃ delta : ℕ → ℝ, delta =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (D * n : ℝ) = (1 + delta n) * (N * n : ℝ) ^ (3 / 5 : ℝ))",
+        "debt_tier": "none",
+        "proof_value": "none",
+        "novelty_status": "new_candidate",
+        "statement_fingerprint": "d86d39e7a866e974d64ea4870023fb923023b560e1410ffff2500598345027ab",
+        "canonical_theorem_id": "cth_d86d39e7a866e974d64ea487",
+        "novelty_evidence": {
+          "schema_version": "1.0.0",
+          "method": "no_overlap_detected",
+          "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+          "matches": [],
+          "mathlib": {
+            "matched": false,
+            "method": "mathlib_no_overlap_found",
+            "reason": "no Mathlib overlap detected by available checks",
+            "unavailable_checks": [
+              "mathlib_seed_missing",
+              "lean_exact_check_disabled",
+              "mathlib_semantic_index_disabled"
+            ]
+          },
+          "thresholds": {
+            "semantic_near_duplicate": 0.78,
+            "mathlib_semantic_overlap": 0.86
+          }
+        }
+      }
+    ]
+  },
+  "novelty_summary": {
+    "schema_version": "1.0.0",
+    "counts": {
+      "new_candidate": 2,
+      "mathlib_overlap": 0,
+      "duplicate_in_corpus": 0,
+      "semantic_near_duplicate": 0,
+      "unknown": 0
+    },
+    "total": 2,
+    "examples": {
+      "new_candidate": [
+        {
+          "theorem_name": "theorem_1",
+          "statement_fingerprint": "d777f9cb7550245d48954c35869ffbe69eec9fb0122b4ea7525b57a851f21ec8",
+          "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks"
+        },
+        {
+          "theorem_name": "corollary_2",
+          "statement_fingerprint": "d86d39e7a866e974d64ea4870023fb923023b560e1410ffff2500598345027ab",
+          "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks"
+        }
+      ],
+      "mathlib_overlap": [],
+      "duplicate_in_corpus": [],
+      "semantic_near_duplicate": [],
+      "unknown": []
+    }
+  },
+  "primary_blocker_dashboard": {
+    "bad_translation_artifact": 1,
+    "claim_review_pending": 1
+  },
+  "proof_repair_cohort_count": 0,
+  "next_best_actions": [
+    {
+      "theorem_name": "theorem_1",
+      "primary_blocker": "bad_translation_artifact",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "novelty_status": "new_candidate",
+      "statement_fingerprint": "d777f9cb7550245d48954c35869ffbe69eec9fb0122b4ea7525b57a851f21ec8",
+      "next_action": "Repair the Lean statement/schema before proof search.",
+      "reasons": [
+        "semantic_policy_hard_block"
+      ]
+    },
+    {
+      "theorem_name": "corollary_2",
+      "primary_blocker": "claim_review_pending",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "novelty_status": "new_candidate",
+      "statement_fingerprint": "d86d39e7a866e974d64ea4870023fb923023b560e1410ffff2500598345027ab",
+      "next_action": "Apply human/hybrid claim-equivalence review only after other gates pass.",
+      "reasons": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "assumptions_grounded",
+        "translation_fidelity_ok",
+        "dependency_trust_complete",
+        "claim_equivalent"
+      ]
+    }
+  ]
 }

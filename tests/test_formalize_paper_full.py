@@ -25,7 +25,14 @@ from formalize_paper_full import (
 
 def test_closure_metrics_full_and_unresolved() -> None:
     entries = [
-        {"theorem_name": "t1", "status": "FULLY_PROVEN", "grounding_status": "GROUNDED_MATHLIB"},
+        {
+            "theorem_name": "t1",
+            "status": "FULLY_PROVEN",
+            "proof_method": "lean_verified",
+            "grounding_status": "GROUNDED_MATHLIB",
+            "novelty_status": "new_candidate",
+            "statement_fingerprint": "abc",
+        },
         {"theorem_name": "t2", "status": "INTERMEDIARY_PROVEN", "grounding_status": "UNGROUNDED", "gate_failures": ["assumptions_grounded"]},
     ]
     m = _closure_metrics(entries)
@@ -35,6 +42,8 @@ def test_closure_metrics_full_and_unresolved() -> None:
     assert m["unresolved_count"] == 1
     assert m["status_counts"]["FULLY_PROVEN"] == 1
     assert m["status_counts"]["INTERMEDIARY_PROVEN"] == 1
+    assert m["novelty_summary"]["counts"]["new_candidate"] == 1
+    assert m["lean_verified_proven"][0]["novelty_status"] == "new_candidate"
 
 
 def test_claim_equivalence_review_queue_summary_surfaces_impact_fields() -> None:
@@ -292,7 +301,7 @@ def test_normalize_final_ledger_entries_reclassifies_placeholders_and_semantic_b
         {"theorem_name": "P", "status": "UNRESOLVED", "lean_statement": "theorem P (p_c1 : Prop) (h_c1 : p_c1) : p_c1"},
         {"theorem_name": "S", "status": "UNRESOLVED", "lean_statement": "theorem S : Nat = Nat", "error_message": "semantic_policy_hard_block"},
         {"theorem_name": "W", "status": "UNRESOLVED", "lean_statement": "theorem W (C : ℝ) (h_easy : C ≤ C) : C ≤ C"},
-        {"theorem_name": "V", "status": "FULLY_PROVEN", "proof_method": "lean_verified", "lean_statement": "theorem V : True"},
+        {"theorem_name": "V", "status": "FULLY_PROVEN", "proof_method": "lean_verified", "lean_statement": "theorem V (n : Nat) : n = n"},
     ]
     rows, counts = _normalize_final_ledger_entries(entries)
     assert rows[0]["status"] == "TRANSLATION_LIMITED"
@@ -301,9 +310,44 @@ def test_normalize_final_ledger_entries_reclassifies_placeholders_and_semantic_b
     assert rows[2]["status"] == "FLAWED"
     assert rows[2]["error_message"] == "final_weakened_statement:claim_copied_into_hypothesis:h_easy"
     assert rows[3]["status"] == "FULLY_PROVEN"
+    assert rows[0]["proof_eligible"] is False
+    assert rows[0]["statement_fidelity_verdict"] == "repair_candidate"
+    assert "statement_validity:translation_limited" in rows[0]["statement_fidelity_blockers"]
+    assert rows[3]["proof_eligible"] is False
+    assert "claim_equivalence_not_equivalent:missing" in rows[3]["statement_fidelity_blockers"]
     assert counts["translation_limited_placeholders"] == 1
     assert counts["semantic_hard_flawed"] == 1
     assert counts["weakened_statement_flawed"] == 1
+
+
+def test_closure_metrics_reports_statement_fidelity_denominators() -> None:
+    entries = [
+        {
+            "theorem_name": "eligible",
+            "status": "FULLY_PROVEN",
+            "proof_method": "lean_verified",
+            "lean_statement": "theorem eligible (n : Nat) : n = n",
+            "statement_alignment_class": "exact",
+            "alignment_gold_eligible": True,
+            "claim_equivalence_verdict": "equivalent",
+            "proof_eligible": True,
+        },
+        {
+            "theorem_name": "blocked",
+            "status": "TRANSLATION_LIMITED",
+            "proof_method": "translation_limited",
+            "lean_statement": "theorem blocked (p_c1 : Prop) (h_c1 : p_c1) : p_c1",
+            "proof_eligible": False,
+        },
+    ]
+
+    metrics = _closure_metrics(entries)
+
+    assert metrics["statement_fidelity"]["total_extracted_statements"] == 2
+    assert metrics["proof_eligible_count"] == 1
+    assert metrics["statement_fidelity_blocked_before_proof"] == 1
+    assert metrics["proven_among_proof_eligible"] == 1
+    assert metrics["proof_eligible_closure_rate"] == 1.0
 
 
 def test_apply_validated_translation_repairs_updates_only_changed_elaborating_candidates() -> None:
@@ -577,6 +621,83 @@ def test_apply_auto_reliable_core_promotions_replaces_axiom_backed_repair_with_a
     assert metrics["superseded_diagnostic_count"] == 1
 
 
+def test_apply_auto_reliable_core_promotions_records_scoped_audited_component(tmp_path) -> None:
+    core = tmp_path / "Paper_x.lean"
+    core.write_text(
+        "def AutoDyadicSharpnessCriticalExponent (alpha : ℝ) : Prop :=\n"
+        "  3 - 4 * alpha = 0\n\n"
+        "theorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :\n"
+        "    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4 := by\n"
+        "  unfold AutoDyadicSharpnessCriticalExponent\n"
+        "  constructor\n"
+        "  · intro h\n"
+        "    linarith\n"
+        "  · intro h\n"
+        "    linarith\n",
+        encoding="utf-8",
+    )
+    core_hash = hashlib.sha256(core.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
+
+    rows, promoted = _apply_auto_reliable_core_promotions(
+        [
+            {
+                "theorem_name": "prop_sharpness",
+                "status": "UNRESOLVED",
+                "proof_method": "translation_repaired_pending_proof",
+                "lean_statement": "theorem prop_sharpness (alpha : ℝ) : alpha = 3 / 4",
+                "axiom_debt": ["paper_local_lemma:DyadicBlockBound"],
+                "axiom_debt_hash": "abc",
+                "gate_failures": ["lean_proof_closed", "no_paper_axiom_debt"],
+            }
+        ],
+        {
+            "ok": True,
+            "theorem_count": 1,
+            "out": str(core),
+            "theorems": [
+                {
+                    "source_theorem": "prop_sharpness",
+                    "theorem_name": "auto_prop_sharpness_critical_exponent_iff",
+                    "tactic": "unfold AutoDyadicSharpnessCriticalExponent; constructor <;> intro h <;> linarith",
+                    "lean_statement": (
+                        "theorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :\n"
+                        "    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4"
+                    ),
+                    "proof_text": "unfold AutoDyadicSharpnessCriticalExponent\nconstructor\n· intro h\n  linarith\n· intro h\n  linarith",
+                    "core_declaration": core.read_text(encoding="utf-8"),
+                    "semantic_equivalence_verified": True,
+                    "claim_equivalence_verdict": "equivalent",
+                    "semantic_equivalence": {"independent": True, "verdict": "equivalent"},
+                    "supersedes_paper_axiom_debt": True,
+                    "translation_fidelity_score": 1.0,
+                    "status_alignment_score": 1.0,
+                    "equivalence_scope": "critical_exponent_algebraic_component_only",
+                    "claim_scope": "Lake-verified algebraic critical-exponent component only.",
+                    "lean_verification": {
+                        "ok": True,
+                        "core_sha256": core_hash,
+                        "core_file": str(core),
+                        "verified_at": 1,
+                        "method": "lake env lean",
+                    },
+                }
+            ],
+        },
+    )
+
+    metrics = _closure_metrics(rows)
+    assert promoted["audited_core_replacement_count"] == 1
+    assert rows[0]["superseded_by_audited_core"] is True
+    assert rows[0]["status"] == "UNRESOLVED"
+    assert rows[1]["ledger_role"] == "audited_core_replacement"
+    assert rows[1]["source_theorem"] == "prop_sharpness"
+    assert rows[1]["result_label"] == "lean_verified_audited_component_without_paper_local_axioms"
+    assert rows[1]["closure_claim"] == "not_closed"
+    assert rows[1]["audited_core_replacement"]["equivalence_scope"] == "critical_exponent_algebraic_component_only"
+    assert metrics["verified_proven"] == 1
+    assert metrics["superseded_diagnostic_count"] == 1
+
+
 def test_apply_auto_reliable_core_promotions_records_replacement_without_overwriting_generated_row(tmp_path) -> None:
     core = tmp_path / "Paper_x.lean"
     core.write_text("theorem auto_t : True := by\n  trivial\n", encoding="utf-8")
@@ -822,7 +943,7 @@ def test_apply_auto_reliable_core_promotions_blocks_inconsistent_closure_claim(t
     )
 
     assert promoted["promoted_count"] == 0
-    assert rows[0]["status"] == "INTERMEDIARY_PROVEN"
+    assert rows[0]["status"] == "UNRESOLVED"
     assert "consistent_closure_claim" in rows[0]["gate_failures"]
     assert rows[0]["promotion_gate_passed"] is False
 
@@ -952,4 +1073,3 @@ def test_detect_curated_paper_package_finds_desol_paper_proofs(tmp_path) -> None
     assert info["theorem_count"] == 1
     assert info["axiom_count"] == 0
     assert info["sorry_count"] == 0
-

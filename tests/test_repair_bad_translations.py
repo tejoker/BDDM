@@ -7,8 +7,10 @@ from repair_bad_translations import (
     _extract_decl_blocks,
     _is_schema_placeholder_decl,
     _direct_tactic_for_decl,
+    _repair_quality_blockers,
     _validation_source,
     build_repair_pack,
+    build_source_backed_repair_payload,
     infer_symbol_table,
     repair_statement_with_symbols,
     write_retry_lean_file,
@@ -295,6 +297,137 @@ def test_build_repair_pack_regenerates_schema_placeholder_with_explicit_statemen
     assert cand["statement_repair_kind"] == "faithful_statement_regeneration"
     assert cand["paper_theory_debt"] == []
     assert "Ψ1 = I_i ξ1" in cand["repaired_decl"]
+    assert cand["repair_quality"]["ok"] is True
+
+
+def test_repair_quality_blocks_vacuous_regenerated_statement() -> None:
+    blockers = _repair_quality_blockers(
+        repaired_decl="theorem weak : ∃ x : ℝ, x = x := by\n  sorry",
+        source_statement="There exists a non-trivial construction whose length strictly increases.",
+        changes=["regenerate_explicit_structured_statement", "source_grounded_statement_body"],
+    )
+
+    assert "vacuous_exists_self_equality_after_repair" in blockers
+
+
+def test_build_repair_pack_rejects_weak_structured_regeneration(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.setattr(
+        "repair_bad_translations.build_typed_statement_translation",
+        lambda **_kwargs: {"conclusion": "∃ x : ℝ, x = x"},
+    )
+    project = tmp_path / "proj"
+    project.mkdir()
+    report = tmp_path / "report.json"
+    lean = tmp_path / "paper.lean"
+    report.write_text(
+        json.dumps(
+            {
+                "final_metrics": {
+                    "unresolved": [],
+                    "translation_limited": [{"theorem_name": "weak"}],
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    lean.write_text(
+        "theorem weak (p_c1 : Prop) (h_c1 : p_c1) : p_c1 := by\n  sorry\n",
+        encoding="utf-8",
+    )
+    extracted_dir = project / "reproducibility" / "paper_agnostic_golden10_results" / "2604.21884"
+    extracted_dir.mkdir(parents=True)
+    (extracted_dir / "extracted_theorems.json").write_text(
+        json.dumps(
+            {
+                "entries": [
+                    {
+                        "name": "weak",
+                        "statement": "There exists a non-trivial construction whose length strictly increases.",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    payload = build_repair_pack(
+        paper_id="2604.21884",
+        report_path=report,
+        lean_file=lean,
+        project_root=project,
+        out_dir=tmp_path / "repair_weak",
+        validate_candidates=False,
+    )
+
+    cand = payload["repair_candidates"][0]
+    assert cand["repair_quality"]["ok"] is False
+    assert "vacuous_exists_self_equality_after_repair" in cand["repair_quality"]["blockers"]
+    assert cand["lean_validation"]["ok"] is False
+    assert payload["candidate_counts"]["quality_blocked"] == 1
+    assert payload["retry_candidate_count"] == 0
+
+
+def test_source_backed_repair_payload_records_reviewable_context(tmp_path: Path) -> None:
+    project = tmp_path / "proj"
+    project.mkdir()
+    payload = build_source_backed_repair_payload(
+        paper_id="2604.21884",
+        project_root=project,
+        out_dir=tmp_path / "source_backed",
+        validate_candidates=False,
+        source_contexts=[
+                {
+                    "theorem_name": "alpha_le_beta",
+                    "theorem_id": "alpha_le_beta",
+                    "source_latex": r"Let $\alpha,\beta$ be real numbers with $\alpha \le \beta$.",
+                    "context_pack": {
+                        "translation_statement_schema": {
+                            "objects": ["alpha", "beta"],
+                            "assumptions": ["alpha and beta are real numbers"],
+                            "claim": "alpha ≤ beta",
+                            "constraints": [r"\alpha \le \beta"],
+                        }
+                    },
+                    "source_span_quality": "extractor_native",
+                    "source_match": {"match_status": "matched"},
+                "source_span": {"source_file": "paper.tex", "start_byte": 0, "end_byte": 20},
+                "lean_statement": "theorem alpha_le_beta : True := by\n  trivial",
+            }
+        ],
+    )
+
+    cand = payload["repair_candidates"][0]
+    assert cand["regeneration_protocol"] == "source_backed_v2"
+    assert cand["source_context_pack_id"].startswith("srcctx_")
+    assert cand["source_context_pack"]["source_span_quality"] == "extractor_native"
+    assert cand["source_coverage"]["score"] > 0
+    assert cand["repair_quality"]["ok"] is True
+    assert cand["lean_validation"]["error"] == "validation_skipped"
+
+
+def test_source_backed_repair_payload_blocks_ambiguous_source_context(tmp_path: Path) -> None:
+    project = tmp_path / "proj"
+    project.mkdir()
+    payload = build_source_backed_repair_payload(
+        paper_id="2604.21884",
+        project_root=project,
+        out_dir=tmp_path / "source_backed_bad",
+        validate_candidates=False,
+        source_contexts=[
+            {
+                "theorem_name": "ambiguous",
+                "source_latex": r"Let $\alpha \le \beta$.",
+                "source_span_quality": "ambiguous",
+                "source_match": {"match_status": "ambiguous"},
+                "lean_statement": "theorem ambiguous : True := by\n  trivial",
+            }
+        ],
+    )
+
+    cand = payload["repair_candidates"][0]
+    assert cand["repair_quality"]["ok"] is False
+    assert "source_span_not_review_grade" in cand["repair_quality"]["blockers"]
+    assert "source_match_not_unique" in cand["repair_quality"]["blockers"]
 
 
 def test_extract_decl_blocks_stops_before_next_comment_header() -> None:

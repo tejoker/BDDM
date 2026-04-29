@@ -18,6 +18,7 @@ from prove_arxiv_batch import (
     _sanitize_generated_lean_file,
     _schema_placeholder_hyp_identity,
     _slot_scripts_for_state,
+    _statement_fidelity_gate_issue,
     _statement_shape_route,
     _translation_gate_issue,
     _translation_limited_reason,
@@ -105,6 +106,23 @@ def test_translation_gate_issue_blocks_semantic_hard_flags() -> None:
     entry = {"translation_adversarial_flags": ["verdict:wrong"], "translation_uncertainty_flags": []}
     decl = "theorem RealClaim (n : ℕ) : n = n := by sorry"
     assert _translation_gate_issue(entry, decl).startswith("translation_hard_block:")
+
+
+def test_statement_fidelity_gate_issue_blocks_llm_only_review_before_proof() -> None:
+    entry = {
+        "theorem_name": "T",
+        "reviewed_statement_alignment_class": "exact",
+        "reviewed_equivalence_verdict": "equivalent",
+        "reviewed_alignment_confidence": 0.99,
+        "review_provenance": {"reviewer_type": "llm", "reviewed_by": "llm:test"},
+    }
+    decl = "theorem T (n : Nat) : n = n := by sorry"
+
+    issue, payload = _statement_fidelity_gate_issue(entry, decl, "T")
+
+    assert issue.startswith("blocked:")
+    assert payload["proof_eligible"] is False
+    assert "llm_review_not_release_eligible" in payload["statement_fidelity_blockers"]
 
 
 def test_repl_startup_failure_detector_matches_expected_signature() -> None:

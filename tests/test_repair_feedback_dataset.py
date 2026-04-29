@@ -6,6 +6,8 @@ from pathlib import Path
 import pytest
 
 from repair_feedback_dataset import (
+    SILVER_DATASET_FAMILY,
+    apply_silver_metadata,
     classify_error,
     compute_row_id,
     default_run_dataset_path,
@@ -75,6 +77,36 @@ def test_make_repair_row_preserves_old_fields_and_adds_enriched_fields(tmp_path:
     assert "latex_statement" in row["repair_prompt_context"]
     assert "previous_attempt" in row["repair_prompt_context"]
     assert row["repair_source"] == "unit_test_pair"
+
+
+def test_apply_silver_metadata_is_backward_compatible_and_never_gold(tmp_path: Path) -> None:
+    row = make_repair_row(
+        paper_id="2401.00001",
+        theorem_name="bad_translation",
+        failing_lean="theorem bad_translation : PaperClaim := by sorry",
+        error_message="translation_acceptance_gate:paper_claim_atom",
+        stage="translation_gate",
+        project_root=tmp_path,
+    )
+
+    silver = apply_silver_metadata(
+        row,
+        label="negative_bad_translation",
+        blocker_label="bad_translation_artifact",
+        statement_validity_blocker="bad_translation_artifact",
+        paper_split="train",
+        negative_reason="paper_claim_atom",
+        provenance_confidence="high",
+    )
+
+    assert silver["dataset_family"] == SILVER_DATASET_FAMILY
+    assert silver["source_dataset_family"] == "desol_compiler_feedback_repair"
+    assert silver["dataset_tier"] == "silver"
+    assert silver["label"] == "negative_bad_translation"
+    assert silver["label_polarity"] == "negative"
+    assert silver["gold_eligible"] is False
+    assert silver["silver_row_id"]
+    assert silver["row_id"] == row["row_id"]
 
 
 def test_retrieve_repair_examples_prefers_matching_failure_class(tmp_path: Path) -> None:

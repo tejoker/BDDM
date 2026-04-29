@@ -7,14 +7,54 @@
       "name": "theorem_1",
       "statement": "[see \\Cref{thm:explicitfamily}]\nThere is an explicit family of $[[N,K,D_X,D_Z]]$ LDPC quantum codes encoding $K \\in \\Theta(N^\\frac{2}{3})$ logical qubits with $X$-distance $D_X \\in \\Omega(N^\\frac{1}{3})$ and $Z$-distance $D_Z \\in \\Theta(N)$.",
       "proof": "",
-      "source_file": "output/paper_sources/golden10/2012.09271_expanded/balanced_product_codes.tex"
+      "source_file": "output/paper_sources/golden10/2012.09271_expanded/balanced_product_codes.tex",
+      "source_span": {
+        "source_file": "output/paper_sources/golden10/2012.09271_expanded/balanced_product_codes.tex",
+        "start_byte": 26798,
+        "end_byte": 27039,
+        "start_line": 582,
+        "start_col": 17,
+        "end_line": 583,
+        "end_col": 210,
+        "span_confidence": "exact_extractor"
+      },
+      "proof_span": null,
+      "env_name": "theorem",
+      "label": "",
+      "span_start": 26782,
+      "span_end": 27054,
+      "body_start": 26798,
+      "body_end": 27039,
+      "start_line": 582,
+      "end_line": 584,
+      "source_span_id": "srcspan_a1b8391e840fbb4c1a62"
     },
     {
-      "kind": "theorem",
+      "kind": "corollary",
       "name": "corollary_2",
       "statement": "[see \\Cref{cor:explicitfamily}]\nThere is an explicit family of $[[N,K,D]]$ LDPC quantum codes encoding $K \\in \\Theta(N^\\frac{4}{5})$ logical qubits with distance $D \\in \\Omega(N^\\frac{3}{5})$.",
       "proof": "",
-      "source_file": "output/paper_sources/golden10/2012.09271_expanded/balanced_product_codes.tex"
+      "source_file": "output/paper_sources/golden10/2012.09271_expanded/balanced_product_codes.tex",
+      "source_span": {
+        "source_file": "output/paper_sources/golden10/2012.09271_expanded/balanced_product_codes.tex",
+        "start_byte": 27212,
+        "end_byte": 27404,
+        "start_line": 586,
+        "start_col": 19,
+        "end_line": 587,
+        "end_col": 161,
+        "span_confidence": "exact_extractor"
+      },
+      "proof_span": null,
+      "env_name": "corollary",
+      "label": "",
+      "span_start": 27194,
+      "span_end": 27421,
+      "body_start": 27212,
+      "body_end": 27404,
+      "start_line": 586,
+      "end_line": 588,
+      "source_span_id": "srcspan_0316aaebbc4d43474cb7"
     },
     {
       "kind": "theorem",
@@ -23,5 +63,13 @@
       "proof": "",
       "source_file": "output/paper_sources/golden10/2012.09271_expanded/balanced_product_codes.tex"
     }
-  ]
+  ],
+  "span_repair": {
+    "schema_version": "extracted_theorem_span_repair.v1",
+    "method": "extractor_unique_name_or_statement_match",
+    "rows": 3,
+    "repaired_rows": 2,
+    "unmatched_rows": 1,
+    "ambiguous_rows": 0
+  }
 }

@@ -62,7 +62,7 @@ def test_build_reliable_core_adds_audited_2604_admissible_definition(monkeypatch
     )
 
     assert payload["ok"] is True
-    assert payload["theorem_count"] == 2
+    assert payload["theorem_count"] == 4
     assert payload["independent_lean_verified"] is True
     assert payload["lean_verification"]["ok"] is True
     by_source = {item["source_theorem"]: item for item in payload["theorems"]}
@@ -70,8 +70,45 @@ def test_build_reliable_core_adds_audited_2604_admissible_definition(monkeypatch
     assert by_source["def_admissible"]["supersedes_paper_axiom_debt"] is True
     assert by_source["remark_20"]["semantic_equivalence_verified"] is True
     assert by_source["remark_20"]["supersedes_paper_axiom_debt"] is True
+    assert by_source["prop_sharpness"]["semantic_equivalence_verified"] is True
+    assert by_source["prop_sharpness"]["equivalence_scope"] == "critical_exponent_algebraic_component_only"
+    assert by_source["prop_det_contraction"]["semantic_equivalence_verified"] is True
+    assert by_source["prop_det_contraction"]["equivalence_scope"] == "operator_condition_algebraic_component_only"
     out = tmp_path / "Desol" / "PaperProofs" / "Auto" / "Paper_2604_21884.lean"
     text = out.read_text(encoding="utf-8")
     assert "theorem auto_def_admissible_iff" in text
     assert "theorem auto_remark_20_condition_roles_iff" in text
+    assert "theorem auto_prop_sharpness_critical_exponent_iff" in text
+    assert "theorem auto_prop_det_contraction_condition_rearrange" in text
+    assert "analytic deterministic contraction estimate" in by_source["prop_det_contraction"]["claim_scope"]
+    assert "sorry" not in text
+
+
+def test_build_reliable_core_adds_audited_2604_21616_triangle_component(monkeypatch, tmp_path: Path) -> None:
+    lean = tmp_path / "paper.lean"
+    lean.write_text("import Mathlib\n\nnamespace ArxivPaper\n\nend ArxivPaper\n", encoding="utf-8")
+
+    def fake_run(command, **kwargs):
+        return subprocess.CompletedProcess(command, 0, "", "")
+
+    monkeypatch.setattr(reliable_core.subprocess, "run", fake_run)
+
+    payload = build_reliable_core(
+        project_root=tmp_path,
+        paper_id="2604.21616",
+        lean_file=lean,
+        timeout_s=8,
+        max_theorems=10,
+        verify_output=True,
+    )
+
+    assert payload["ok"] is True
+    assert payload["theorem_count"] == 1
+    by_source = {item["source_theorem"]: item for item in payload["theorems"]}
+    assert by_source["proof_8"]["semantic_equivalence_verified"] is True
+    assert by_source["proof_8"]["equivalence_scope"] == "rank_one_triangle_inequality_component_only"
+    out = tmp_path / "Desol" / "PaperProofs" / "Auto" / "Paper_2604_21616.lean"
+    text = out.read_text(encoding="utf-8")
+    assert "theorem auto_proof_8_rank_one_triangle" in text
+    assert "full matrix nuclear norm theorem" in by_source["proof_8"]["claim_scope"]
     assert "sorry" not in text

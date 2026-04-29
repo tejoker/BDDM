@@ -36,8 +36,21 @@ from claim_equivalence_review import (
     summarize_review_queue,
     write_jsonl,
 )
+from corpus_release_metadata import (
+    CORPUS_RELEASE_SCHEMA_VERSION,
+    artifact_entry,
+    build_release_audit,
+    utc_now,
+)
+from novelty_dedup import annotate_entries, novelty_summary
 from pipeline_status import evaluate_promotion_gates, infer_claim_equivalence
-from statement_validity import classify_statement, proof_repair_cohort, summarize_validity
+from statement_alignment import classify_row_alignment
+from statement_validity import (
+    annotate_statement_fidelity,
+    proof_repair_cohort,
+    summarize_statement_fidelity,
+    summarize_validity,
+)
 from pipeline_status_models import (
     Assumption,
     ClaimEquivalenceVerdict,
@@ -219,6 +232,24 @@ def _read_json_file(path: Path) -> Any:
         return {}
 
 
+def _annotate_novelty_for_paper(
+    *,
+    project_root: Path,
+    paper_id: str,
+    entries: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    return annotate_entries(
+        entries,
+        paper_id=paper_id,
+        project_root=project_root,
+        ledger_dir=project_root / "output" / "verification_ledgers",
+        mathlib_seed=project_root / "output" / "kg" / "trusted" / "mathlib_seed.jsonl",
+        mathlib_index=project_root / "data" / "mathlib_embeddings",
+        run_lean_mathlib_check=False,
+        encoder_name="hash",
+    )
+
+
 def _publish_reproducibility_bundle(
     *,
     project_root: Path,
@@ -258,15 +289,28 @@ def _publish_reproducibility_bundle(
         dst = bundle_dir / dst_name
         shutil.copyfile(src, dst)
         paths[label] = str(dst)
+    artifact_rows = [
+        artifact_entry(project_root, label, Path(path), paper_id=paper_id, required=True)
+        for label, path in paths.items()
+    ]
+    regenerate_command = (
+        "python3 scripts/formalize_paper_full.py "
+        f"--paper-id {paper_id} --project-root ."
+    )
     manifest = {
         "paper_id": paper_id,
-        "schema_version": "1.0.0",
+        "schema_version": CORPUS_RELEASE_SCHEMA_VERSION,
+        "corpus_release_schema_version": CORPUS_RELEASE_SCHEMA_VERSION,
         "bundle_dir": str(bundle_dir),
         "files": paths,
-        "regenerate_command": (
-            "python3 scripts/formalize_paper_full.py "
-            f"--paper-id {paper_id} --project-root ."
+        "artifacts": artifact_rows,
+        "release_audit": build_release_audit(
+            project_root=project_root,
+            generated_at=utc_now(),
+            command=regenerate_command.split(),
+            artifacts=artifact_rows,
         ),
+        "regenerate_command": regenerate_command,
     }
     manifest_path = bundle_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -426,6 +470,10 @@ def _normalize_final_ledger_entries(entries: list[dict[str, Any]]) -> tuple[list
         "domain_assumption_repair_flawed": 0,
     }
     normalized: list[dict[str, Any]] = []
+
+    def _finish(row: dict[str, Any]) -> dict[str, Any]:
+        return annotate_statement_fidelity(_with_result_label(row))
+
     for row in entries:
         if not isinstance(row, dict):
             continue
@@ -466,7 +514,7 @@ def _normalize_final_ledger_entries(entries: list[dict[str, Any]]) -> tuple[list
             )
             r["validation_gates"] = vg
             counts["domain_assumption_repair_flawed"] += 1
-            normalized.append(_with_result_label(r))
+            normalized.append(_finish(r))
             continue
         if status != "FULLY_PROVEN":
             reason = _translation_limited_reason(str(r.get("lean_statement", "") or ""))
@@ -525,7 +573,7 @@ def _normalize_final_ledger_entries(entries: list[dict[str, Any]]) -> tuple[list
                         counts["ill_typed_artifact_flawed"] += 1
                     else:
                         counts["weakened_statement_flawed"] += 1
-        normalized.append(_with_result_label(r))
+        normalized.append(_finish(r))
     return normalized, counts
 
 
@@ -562,6 +610,23 @@ def _result_label_for_row(row: dict[str, Any]) -> tuple[str, str, bool]:
             "not_verified_with_paper_local_axiom_debt",
             "No verified closure claim is made, and the statement still references paper-local axiom debt.",
             True,
+        )
+    core = row.get("audited_core_replacement") if isinstance(row.get("audited_core_replacement"), dict) else {}
+    equivalence_scope = str(core.get("equivalence_scope", "") or row.get("equivalence_scope", "") or "")
+    if (
+        status == "FULLY_PROVEN"
+        and str(row.get("ledger_role", "") or "") == "audited_core_replacement"
+        and equivalence_scope
+        and equivalence_scope not in {"full_source_claim", "full_paper_claim"}
+    ):
+        return (
+            "lean_verified_audited_component_without_paper_local_axioms",
+            str(
+                core.get("claim_scope", "")
+                or row.get("claim_scope", "")
+                or "Lake-verified audited component; not a full paper-claim closure claim."
+            ),
+            False,
         )
     if status == "FULLY_PROVEN":
         return (
@@ -606,6 +671,18 @@ def _with_result_label(row: dict[str, Any]) -> dict[str, Any]:
 
 def _label_final_ledger_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return [_with_result_label(row) for row in entries if isinstance(row, dict)]
+
+
+def _novelty_fields_for_row(row: dict[str, Any]) -> dict[str, Any]:
+    keys = (
+        "canonical_statement",
+        "statement_fingerprint",
+        "canonical_theorem_id",
+        "claim_shape",
+        "novelty_status",
+        "novelty_evidence",
+    )
+    return {key: row[key] for key in keys if key in row}
 
 
 def _safe_lemma_id(raw: str) -> str:
@@ -789,6 +866,7 @@ def _repair_candidate_summary(payload: dict[str, Any]) -> dict[str, Any]:
         for c in candidates
         if isinstance(c, dict)
         and (c.get("changes") or c.get("direct_proof_without_repair"))
+        and (c.get("repair_quality") or {}).get("ok", True) is True
         and (c.get("lean_validation") or {}).get("ok") is True
     ]
     return {
@@ -825,6 +903,8 @@ def _apply_validated_translation_repairs(
             if not cand.get("direct_proof_without_repair"):
                 continue
         if (cand.get("lean_validation") or {}).get("ok") is not True:
+            continue
+        if (cand.get("repair_quality") or {}).get("ok", True) is not True:
             continue
         repaired = str(cand.get("repaired_decl", "") or "").strip()
         if not repaired:
@@ -904,6 +984,8 @@ def _apply_validated_translation_repairs(
                 repair_outcome = "domain_assumption_inserted"
             elif statement_repair_kind == "faithful_statement_regeneration":
                 repair_outcome = "faithful_statement_regeneration"
+            elif statement_repair_kind == "source_backed_statement_regeneration":
+                repair_outcome = "source_backed_statement_regeneration"
             elif changes:
                 repair_outcome = "statement_repaired_and_elaborates"
             vg.update(
@@ -921,11 +1003,28 @@ def _apply_validated_translation_repairs(
             r["validation_gates"] = vg
             if repair_kind:
                 r["repair_abstraction_kind"] = repair_kind
+            for meta_key in (
+                "source_context_pack_id",
+                "source_context_pack",
+                "regeneration_protocol",
+                "source_coverage",
+                "assumption_coverage",
+                "conclusion_coverage",
+                "review_batch_eligibility_preview",
+            ):
+                if meta_key in cand:
+                    r[meta_key] = cand[meta_key]
             r["translation_repair"] = {
                 "changes": changes,
                 "repair_abstraction_kind": repair_kind,
                 "statement_repair_kind": statement_repair_kind,
                 "repair_theory": str(repair_payload.get("repair_theory", "") or repair_payload.get("paper_theory", "")),
+                "regeneration_protocol": str(cand.get("regeneration_protocol", "") or ""),
+                "source_context_pack_id": str(cand.get("source_context_pack_id", "") or ""),
+                "source_coverage": cand.get("source_coverage", {}),
+                "assumption_coverage": cand.get("assumption_coverage", {}),
+                "conclusion_coverage": cand.get("conclusion_coverage", {}),
+                "review_batch_eligibility_preview": cand.get("review_batch_eligibility_preview", {}),
             }
             updated.append(str(r.get("theorem_name", "") or base))
         out.append(_with_result_label(r))
@@ -1200,6 +1299,7 @@ def _audited_replacement_row(
             "independent_semantic_evidence": True,
             "audited_core_source_theorem": source_theorem,
             "audited_core_theorem_name": core_theorem,
+            "equivalence_scope": str(item.get("equivalence_scope", "full_source_claim") or "full_source_claim"),
             "schema_version": str(replacement_artifact.get("schema_version", "1.0") or "1.0"),
         }
     )
@@ -1228,6 +1328,11 @@ def _audited_replacement_row(
         "semantic_equivalence": item.get("semantic_equivalence") if isinstance(item.get("semantic_equivalence"), dict) else {},
         "semantic_equivalence_evidence": "independent" if semantic_evidence_ok else "",
         "equivalence_note": str(item.get("equivalence_note", "") or ""),
+        "equivalence_scope": str(item.get("equivalence_scope", "full_source_claim") or "full_source_claim"),
+        "claim_scope": str(
+            item.get("claim_scope", "")
+            or "Audited Lean replacement for the source statement."
+        ),
         "proof_countable": True,
         "replacement_gate": {
             "exact_recorded_statement_required": True,
@@ -1250,6 +1355,7 @@ def _audited_replacement_row(
             "lean_statement": lean_statement,
             "proof_text": proof_text,
             "proof_mode": "audited-core-replacement",
+            "equivalence_scope": str(item.get("equivalence_scope", "full_source_claim") or "full_source_claim"),
             "proof_method": ProofMethod.LEAN_VERIFIED.value,
             "proof_countable": True,
             "step_verdict": StepVerdict.VERIFIED.value,
@@ -1468,7 +1574,11 @@ def _apply_auto_reliable_core_promotions(
                 if full_allowed
                 else (
                     _enum_value(VerificationStatus, original_status, VerificationStatus.UNRESOLVED)
-                    if diagnostic_repair or original_status in {"AXIOM_BACKED", "FLAWED", "TRANSLATION_LIMITED"}
+                    if (
+                        diagnostic_repair
+                        or generated_axiom_backed_or_domain_repair
+                        or original_status in {"AXIOM_BACKED", "FLAWED", "TRANSLATION_LIMITED"}
+                    )
                     else VerificationStatus.INTERMEDIARY_PROVEN
                 )
             )
@@ -1701,6 +1811,57 @@ def _blocker_clusters(entries: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def _statement_alignment_summary(entries: list[dict[str, Any]]) -> dict[str, Any]:
+    counts: dict[str, int] = {}
+    low_confidence: list[dict[str, Any]] = []
+    review_targets: list[dict[str, Any]] = []
+    for row in entries:
+        if not isinstance(row, dict) or bool(row.get("superseded_by_audited_core")):
+            continue
+        artifact = row.get("semantic_equivalence_artifact")
+        if not isinstance(artifact, dict):
+            artifact = {}
+        decision = artifact.get("alignment_decision")
+        if not isinstance(decision, dict):
+            decision = {}
+        alignment = str(
+            row.get("statement_alignment_class")
+            or artifact.get("alignment_class")
+            or decision.get("alignment_class")
+            or ""
+        )
+        if not alignment:
+            inferred = classify_row_alignment(row)
+            alignment = inferred.alignment_class.value
+            if not decision:
+                decision = {
+                    "confidence": inferred.confidence,
+                    "paper_statement_id": inferred.paper_statement_id,
+                    "alignment_pair_id": inferred.alignment_pair_id,
+                    "reasons": inferred.reasons,
+                }
+        counts[alignment] = counts.get(alignment, 0) + 1
+        confidence = float(decision.get("confidence", 0.0) or 0.0)
+        item = {
+            "theorem_name": str(row.get("theorem_name", "")),
+            "alignment_class": alignment,
+            "alignment_confidence": round(confidence, 4),
+            "paper_statement_id": str(row.get("paper_statement_id") or decision.get("paper_statement_id", "")),
+            "alignment_pair_id": str(row.get("alignment_pair_id") or decision.get("alignment_pair_id", "")),
+            "reasons": decision.get("reasons", []) if isinstance(decision.get("reasons"), list) else [],
+        }
+        if alignment == "exact" and confidence < 0.75:
+            low_confidence.append(item)
+        if alignment in {"unrelated", "stronger", "weaker"} or (alignment == "partial" and confidence < 0.55):
+            review_targets.append(item)
+    return {
+        "schema_version": "1.0",
+        "counts": {key: counts[key] for key in sorted(counts)},
+        "low_confidence_exact": low_confidence[:20],
+        "review_targets": review_targets[:30],
+    }
+
+
 def _audited_replacement_verified(row: dict[str, Any]) -> bool:
     if str(row.get("ledger_role", "") or "") != "audited_core_replacement":
         return True
@@ -1800,6 +1961,7 @@ def _closure_metrics(entries: list[dict[str, Any]]) -> dict[str, Any]:
                     "debt_tier": debt_tier_for_row(row),
                     "proof_value": proof_value_for_row(row),
                     "grounding_metadata": grounding_metadata_for_row(row),
+                    **_novelty_fields_for_row(row),
                 }
             )
         elif st == "AXIOM_BACKED":
@@ -1815,6 +1977,7 @@ def _closure_metrics(entries: list[dict[str, Any]]) -> dict[str, Any]:
                     "debt_tier": debt_tier_for_row(row),
                     "proof_value": proof_value_for_row(row),
                     "grounding_metadata": grounding_metadata_for_row(row),
+                    **_novelty_fields_for_row(row),
                 }
             )
         elif st == "FULLY_PROVEN":
@@ -1829,6 +1992,7 @@ def _closure_metrics(entries: list[dict[str, Any]]) -> dict[str, Any]:
                         "debt_tier": debt_tier_for_row(row),
                         "proof_value": proof_value_for_row(row),
                         "grounding_metadata": grounding_metadata_for_row(row),
+                        **_novelty_fields_for_row(row),
                     }
                     lean_verified_proven.append(item)
                     if str(row.get("ledger_role", "") or "") == "audited_core_replacement":
@@ -1856,6 +2020,7 @@ def _closure_metrics(entries: list[dict[str, Any]]) -> dict[str, Any]:
                             "debt_tier": debt_tier_for_row(row),
                             "proof_value": proof_value_for_row(row),
                             "grounding_metadata": grounding_metadata_for_row(row),
+                            **_novelty_fields_for_row(row),
                         }
                     )
             elif pm in _AUTO_CLOSED_METHODS:
@@ -1869,6 +2034,7 @@ def _closure_metrics(entries: list[dict[str, Any]]) -> dict[str, Any]:
                         "debt_tier": debt_tier_for_row(row),
                         "proof_value": proof_value_for_row(row),
                         "grounding_metadata": grounding_metadata_for_row(row),
+                        **_novelty_fields_for_row(row),
                     }
                 )
             else:
@@ -1883,6 +2049,7 @@ def _closure_metrics(entries: list[dict[str, Any]]) -> dict[str, Any]:
                         "debt_tier": debt_tier_for_row(row),
                         "proof_value": proof_value_for_row(row),
                         "grounding_metadata": grounding_metadata_for_row(row),
+                        **_novelty_fields_for_row(row),
                     }
                 )
         else:
@@ -1898,6 +2065,7 @@ def _closure_metrics(entries: list[dict[str, Any]]) -> dict[str, Any]:
                     "debt_tier": debt_tier_for_row(row),
                     "proof_value": proof_value_for_row(row),
                     "grounding_metadata": grounding_metadata_for_row(row),
+                    **_novelty_fields_for_row(row),
                 }
             )
 
@@ -1918,6 +2086,14 @@ def _closure_metrics(entries: list[dict[str, Any]]) -> dict[str, Any]:
     paper_theory_debt_dashboard = summarize_paper_theory_debt_tiers(entries)
     deep_domain_obligations = build_deep_domain_obligations(headline_entries)
     statement_validity = summarize_validity(headline_entries)
+    statement_fidelity = summarize_statement_fidelity(headline_entries)
+    proof_eligible_entries = [row for row in headline_entries if bool(row.get("proof_eligible"))]
+    proven_among_proof_eligible = [
+        row for row in proof_eligible_entries
+        if str(row.get("status", "") or "") == "FULLY_PROVEN"
+        and str(row.get("proof_method", "") or "") == "lean_verified"
+    ]
+    novelty = novelty_summary(headline_entries)
     return {
         "total_theorems": total_all,
         "total_headline_theorems": total_headline,
@@ -1943,6 +2119,18 @@ def _closure_metrics(entries: list[dict[str, Any]]) -> dict[str, Any]:
             "axiom_debt": paper_local_axiom_debt,
         },
         "statement_validity": statement_validity,
+        "statement_fidelity": statement_fidelity,
+        "proof_eligible_count": len(proof_eligible_entries),
+        "statement_fidelity_blocked_before_proof": statement_fidelity.get("blocked_before_proof", 0),
+        "statement_fidelity_repair_candidate_count": statement_fidelity.get("repair_candidates", 0),
+        "statement_fidelity_review_needed_count": statement_fidelity.get("review_needed", 0),
+        "proven_among_proof_eligible": len(proven_among_proof_eligible),
+        "proof_eligible_closure_rate": (
+            round(len(proven_among_proof_eligible) / len(proof_eligible_entries), 4)
+            if proof_eligible_entries
+            else 0.0
+        ),
+        "novelty_summary": novelty,
         "missing_lemma_subledger": missing_lemma_subledger,
         "axiom_debt_burndown": axiom_debt_burndown,
         "paper_theory_debt_dashboard": paper_theory_debt_dashboard,
@@ -2633,6 +2821,16 @@ def main() -> int:
         final_normalization["audited_core_replacements"] = int(
             auto_reliable_core_promotion.get("audited_core_replacement_count", 0) or 0
         )
+    final_entries, novelty = _annotate_novelty_for_paper(
+        project_root=project_root,
+        paper_id=args.paper_id,
+        entries=final_entries,
+    )
+    _save_ledger_entries(ledger_path, final_entries)
+    final_metrics = _closure_metrics(final_entries)
+    blocker_clusters = _blocker_clusters(final_entries)
+    statement_alignment = _statement_alignment_summary(final_entries)
+    final_normalization["novelty_annotated"] = int(novelty.get("total", 0) or 0)
     curated_package = _detect_curated_paper_package(project_root, args.paper_id)
     auto_reliable_core = _detect_auto_reliable_core(project_root, args.paper_id)
     unresolved_out.parent.mkdir(parents=True, exist_ok=True)
@@ -2649,6 +2847,7 @@ def main() -> int:
         encoding="utf-8",
     )
     statement_validity_summary = summarize_validity(final_entries)
+    statement_fidelity_summary = summarize_statement_fidelity(final_entries)
     statement_validity_out.write_text(
         json.dumps(statement_validity_summary, indent=2, ensure_ascii=False),
         encoding="utf-8",
@@ -2696,6 +2895,16 @@ def main() -> int:
         "deep_domain_obligations": final_metrics.get("deep_domain_obligations", {}),
         "statement_validity_report_path": str(statement_validity_out),
         "statement_validity": statement_validity_summary,
+        "statement_fidelity_gate": statement_fidelity_summary,
+        "statement_fidelity_denominators": {
+            "total_extracted_statements": statement_fidelity_summary.get("total_extracted_statements", 0),
+            "blocked_before_proof": statement_fidelity_summary.get("blocked_before_proof", 0),
+            "repair_candidates": statement_fidelity_summary.get("repair_candidates", 0),
+            "review_needed": statement_fidelity_summary.get("review_needed", 0),
+            "proof_eligible": statement_fidelity_summary.get("proof_eligible", 0),
+            "proven_among_proof_eligible": final_metrics.get("proven_among_proof_eligible", 0),
+        },
+        "statement_alignment": statement_alignment,
         "primary_blocker_dashboard": statement_validity_summary.get("counts", {}),
         "next_best_actions": [
             {
@@ -2703,6 +2912,8 @@ def main() -> int:
                 "primary_blocker": item.get("primary_blocker", ""),
                 "debt_tier": item.get("debt_tier", ""),
                 "proof_value": item.get("proof_value", ""),
+                "novelty_status": item.get("novelty_status", "unknown"),
+                "statement_fingerprint": item.get("statement_fingerprint", ""),
                 "next_action": item.get("next_action", ""),
                 "reasons": item.get("reasons", []),
             }
@@ -2721,6 +2932,7 @@ def main() -> int:
         "auto_reliable_core": auto_reliable_core,
         "auto_reliable_core_promotion": auto_reliable_core_promotion,
         "claim_equivalence_review": claim_equivalence_review,
+        "novelty_summary": novelty,
         "paper_local_axiom_disclosure": final_metrics.get("paper_local_axiom_disclosure", {}),
         "final_metrics": final_metrics,
         "final_normalization": final_normalization,
@@ -2763,9 +2975,16 @@ def main() -> int:
                 final_normalization["translation_repaired_elaborating"] = int(
                     translation_repair_application.get("updated_count", 0) or 0
                 )
+                final_entries, novelty = _annotate_novelty_for_paper(
+                    project_root=project_root,
+                    paper_id=args.paper_id,
+                    entries=final_entries,
+                )
+                final_normalization["novelty_annotated"] = int(novelty.get("total", 0) or 0)
                 _save_ledger_entries(ledger_path, final_entries)
                 final_metrics = _closure_metrics(final_entries)
                 blocker_clusters = _blocker_clusters(final_entries)
+                statement_alignment = _statement_alignment_summary(final_entries)
                 unresolved_out.write_text(
                     json.dumps(final_metrics.get("unresolved", []), indent=2, ensure_ascii=False),
                     encoding="utf-8",
@@ -2779,6 +2998,7 @@ def main() -> int:
                     encoding="utf-8",
                 )
                 statement_validity_summary = summarize_validity(final_entries)
+                statement_fidelity_summary = summarize_statement_fidelity(final_entries)
                 statement_validity_out.write_text(
                     json.dumps(statement_validity_summary, indent=2, ensure_ascii=False),
                     encoding="utf-8",
@@ -2815,6 +3035,16 @@ def main() -> int:
                         "final_normalization": final_normalization,
                         "blocker_clusters": blocker_clusters,
                         "statement_validity": statement_validity_summary,
+                        "statement_fidelity_gate": statement_fidelity_summary,
+                        "statement_fidelity_denominators": {
+                            "total_extracted_statements": statement_fidelity_summary.get("total_extracted_statements", 0),
+                            "blocked_before_proof": statement_fidelity_summary.get("blocked_before_proof", 0),
+                            "repair_candidates": statement_fidelity_summary.get("repair_candidates", 0),
+                            "review_needed": statement_fidelity_summary.get("review_needed", 0),
+                            "proof_eligible": statement_fidelity_summary.get("proof_eligible", 0),
+                            "proven_among_proof_eligible": final_metrics.get("proven_among_proof_eligible", 0),
+                        },
+                        "statement_alignment": statement_alignment,
                         "primary_blocker_dashboard": statement_validity_summary.get("counts", {}),
                         "next_best_actions": [
                             {
@@ -2822,6 +3052,8 @@ def main() -> int:
                                 "primary_blocker": item.get("primary_blocker", ""),
                                 "debt_tier": item.get("debt_tier", ""),
                                 "proof_value": item.get("proof_value", ""),
+                            "novelty_status": item.get("novelty_status", "unknown"),
+                            "statement_fingerprint": item.get("statement_fingerprint", ""),
                                 "next_action": item.get("next_action", ""),
                                 "reasons": item.get("reasons", []),
                             }
@@ -2830,6 +3062,7 @@ def main() -> int:
                         ],
                         "proof_repair_cohort_count": len(final_proof_repair_cohort),
                         "claim_equivalence_review": claim_equivalence_review,
+                        "novelty_summary": novelty,
                     }
                 )
             translation_repair_pack = _repair_candidate_summary(repair_payload)

@@ -1,0 +1,1142 @@
+#!/usr/bin/env python3
+"""Queue-driven statement repair worker.
+
+The worker is dry-run by default. It groups statement-repair rows into
+route-specific actions and only mutates ledgers/evidence when --write is set.
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import json
+from collections import Counter, defaultdict
+from pathlib import Path
+from typing import Any
+
+from build_gold_proof_queue import (
+    DEFAULT_OUT_JSONL as DEFAULT_GOLD_PROOF_OUT,
+    DEFAULT_OUT_SUMMARY as DEFAULT_GOLD_PROOF_SUMMARY,
+    build_gold_proof_queue,
+)
+from build_statement_fidelity_queue import (
+    DEFAULT_OUT_JSONL as DEFAULT_FIDELITY_OUT,
+    DEFAULT_OUT_SUMMARY as DEFAULT_FIDELITY_SUMMARY,
+    build_statement_fidelity_queue,
+)
+from build_statement_repair_queue import build_statement_repair_queue
+from build_statement_review_batch import (
+    DEFAULT_OUT_JSONL as DEFAULT_REVIEW_BATCH_OUT,
+    DEFAULT_OUT_SUMMARY as DEFAULT_REVIEW_BATCH_SUMMARY,
+    DEFAULT_OUT_TEMPLATE as DEFAULT_REVIEW_TEMPLATE_OUT,
+    build_statement_review_batch,
+    review_batch_exclusion_reasons,
+)
+from export_corpus import (
+    DEFAULT_EVIDENCE_DIR,
+    DEFAULT_LEDGER_DIR,
+    DEFAULT_OUT_JSONL as DEFAULT_CORPUS_OUT,
+    DEFAULT_OUT_SUMMARY as DEFAULT_CORPUS_SUMMARY,
+    DEFAULT_REPORT_DIR,
+    build_corpus_rows,
+)
+from statement_validity import classify_statement
+
+
+DEFAULT_OUT_ACTIONS = Path("output/corpus/statement_repair_worker_actions.jsonl")
+DEFAULT_OUT_SUMMARY = Path("output/corpus/statement_repair_worker_summary.json")
+DEFAULT_REPAIR_QUEUE_OUT = Path("output/corpus/statement_repair_queue.jsonl")
+DEFAULT_REPAIR_QUEUE_SUMMARY = Path("output/corpus/statement_repair_queue_summary.json")
+BLOCKING_VALIDITY = {"translation_limited", "bad_translation_artifact"}
+WRITE_CAPABLE_ROUTES = {"statement_regeneration", "source_span_repair", "source_translation_recovery"}
+
+
+def _read_json(path: Path) -> Any:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def _write_json(path: Path, payload: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def _read_jsonl(path: Path) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    if not path.exists():
+        return rows
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not line.strip():
+            continue
+        try:
+            raw = json.loads(line)
+        except Exception:
+            continue
+        if isinstance(raw, dict):
+            rows.append(raw)
+    return rows
+
+
+def _write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, sort_keys=True, ensure_ascii=False) + "\n")
+
+
+def _path_from_artifacts(row: dict[str, Any], *keys: str) -> str:
+    artifacts = row.get("artifact_paths") if isinstance(row.get("artifact_paths"), dict) else {}
+    current: Any = artifacts
+    for key in keys:
+        if not isinstance(current, dict):
+            return ""
+        current = current.get(key)
+    if isinstance(current, str):
+        return current
+    return ""
+
+
+def _resolve_path(project_root: Path, raw: str) -> Path:
+    path = Path(raw)
+    return path if path.is_absolute() else project_root / path
+
+
+def _project_path(project_root: Path, path: Path) -> Path:
+    return path if path.is_absolute() else project_root / path
+
+
+def graduation_blockers(row: dict[str, Any]) -> list[str]:
+    blockers = [f"review_batch_exclusion:{reason}" for reason in review_batch_exclusion_reasons(row)]
+    validity = classify_statement(row)
+    if validity.primary_blocker in BLOCKING_VALIDITY:
+        blockers.append(f"statement_validity:{validity.primary_blocker}")
+    return list(dict.fromkeys(blockers))
+
+
+def is_graduated_to_review(row: dict[str, Any]) -> bool:
+    return not graduation_blockers(row)
+
+
+def _selected_rows(rows: list[dict[str, Any]], *, limit: int) -> list[dict[str, Any]]:
+    return sorted(
+        rows,
+        key=lambda row: (
+            -int(row.get("priority_score", 0) or 0),
+            str(row.get("arxiv_id", "")),
+            str(row.get("theorem_id", "")),
+        ),
+    )[:limit]
+
+
+def _row_id(row: dict[str, Any]) -> str:
+    return str(row.get("row_id", "") or "").strip()
+
+
+def _index_by_row_id(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    return {_row_id(row): row for row in rows if _row_id(row)}
+
+
+def _action_type(route: str) -> str:
+    return {
+        "statement_regeneration": "translation_repair_pack",
+        "source_span_repair": "extracted_theorem_span_repair",
+        "source_alignment_review": "source_match_adjudication_queue",
+        "source_translation_recovery": "source_retranslation_required",
+        "source_alignment_recovery": "source_alignment_recovery",
+    }.get(route, "manual_statement_repair")
+
+
+def _lean_theorem_name_from_statement(statement: str) -> str:
+    match = re.search(r"^\s*(?:theorem|lemma)\s+([A-Za-z_][A-Za-z0-9_'.]*)\b", statement or "", flags=re.MULTILINE)
+    return match.group(1).rsplit(".", 1)[-1] if match else ""
+
+
+def _source_match_for_row(row: dict[str, Any]) -> dict[str, Any]:
+    evidence = row.get("alignment_evidence") if isinstance(row.get("alignment_evidence"), dict) else {}
+    source_match = evidence.get("source_match") if isinstance(evidence.get("source_match"), dict) else {}
+    return source_match
+
+
+def _source_context_for_row(row: dict[str, Any]) -> dict[str, Any]:
+    lean_statement = str(row.get("lean_statement", "") or "")
+    theorem_name = (
+        str(row.get("theorem_name", "") or "").rsplit(".", 1)[-1]
+        or _lean_theorem_name_from_statement(lean_statement)
+        or str(row.get("theorem_id", "") or "").rsplit(".", 1)[-1]
+    )
+    return {
+        "row_id": str(row.get("row_id", "") or ""),
+        "paper_id": str(row.get("arxiv_id", "") or ""),
+        "theorem_id": str(row.get("theorem_id", "") or theorem_name),
+        "theorem_name": theorem_name,
+        "ledger_theorem_name": theorem_name,
+        "source_latex": str(row.get("source_latex", "") or ""),
+        "normalized_text": str(row.get("normalized_text", "") or ""),
+        "lean_statement": lean_statement,
+        "status": str(row.get("status", "") or ""),
+        "source_span": row.get("source_span", {}) if isinstance(row.get("source_span"), dict) else {},
+        "source_span_quality": str(row.get("source_span_quality", "") or ""),
+        "source_match": _source_match_for_row(row),
+        "context_pack": row.get("context_pack", {}) if isinstance(row.get("context_pack"), dict) else {},
+        "artifact_paths": row.get("artifact_paths", {}) if isinstance(row.get("artifact_paths"), dict) else {},
+    }
+
+
+def build_worker_actions(rows: list[dict[str, Any]], *, limit: int = 500) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    selected = _selected_rows(rows, limit=limit)
+    groups: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in selected:
+        key = (
+            str(row.get("arxiv_id", "")),
+            str(row.get("repair_route", "") or "manual_statement_repair"),
+            str(row.get("repair_kind", "") or "statement_repair_review"),
+        )
+        groups[key].append(row)
+
+    actions: list[dict[str, Any]] = []
+    for (paper_id, route, repair_kind), group_rows in sorted(groups.items()):
+        first = group_rows[0]
+        report = _path_from_artifacts(first, "report")
+        lean_file = _path_from_artifacts(first, "lean_file") or _path_from_artifacts(first, "out_lean")
+        ledger = _path_from_artifacts(first, "ledger") or _path_from_artifacts(first, "reproducibility_bundle", "ledger")
+        evidence = _path_from_artifacts(first, "extracted_theorems")
+        current_blockers = Counter(reason for row in group_rows for reason in graduation_blockers(row))
+        actions.append(
+            {
+                "schema_version": "statement_repair_worker_action.v1",
+                "paper_id": paper_id,
+                "repair_route": route,
+                "repair_kind": repair_kind,
+                "action_type": _action_type(route),
+                "write_capable": route in WRITE_CAPABLE_ROUTES,
+                "input_rows": len(group_rows),
+                "row_ids": [str(row.get("row_id", "")) for row in group_rows],
+                "theorem_ids": [str(row.get("theorem_id", "")) for row in group_rows],
+                "source_contexts": [_source_context_for_row(row) for row in group_rows],
+                "priority_score_max": max(int(row.get("priority_score", 0) or 0) for row in group_rows),
+                "artifacts": {
+                    "report": report,
+                    "lean_file": lean_file,
+                    "ledger": ledger,
+                    "extracted_theorems": evidence,
+                },
+                "current_graduation_blockers": dict(current_blockers.most_common()),
+                "status": "planned",
+            }
+        )
+
+    summary = _summarize_actions(actions, rows=selected, write=False)
+    return actions, summary
+
+
+def _summarize_actions(actions: list[dict[str, Any]], *, rows: list[dict[str, Any]], write: bool) -> dict[str, Any]:
+    action_counts = Counter(str(action.get("action_type", "")) for action in actions)
+    route_counts = Counter(str(action.get("repair_route", "")) for action in actions)
+    paper_counts = Counter(str(action.get("paper_id", "")) for action in actions)
+    status_counts = Counter(str(action.get("status", "")) for action in actions)
+    blocker_counts = Counter(reason for row in rows for reason in graduation_blockers(row))
+    graduated = sum(1 for row in rows if is_graduated_to_review(row))
+    written_rows = sum(int(action.get("mutated_rows", 0) or 0) for action in actions)
+    mutated_groups = sum(1 for action in actions if bool(action.get("mutated")))
+    return {
+        "schema_version": "statement_repair_worker_summary.v1",
+        "write": write,
+        "dry_run": not write,
+        "input_rows": len(rows),
+        "action_groups": len(actions),
+        "attempted_rows": sum(int(action.get("input_rows", 0) or 0) for action in actions),
+        "written_actions": sum(1 for action in actions if bool(action.get("wrote"))),
+        "written_rows": written_rows,
+        "mutated_groups": mutated_groups,
+        "graduated_rows_before_action": graduated,
+        "graduated_rows_before": graduated,
+        "still_blocked_rows_before_action": max(0, len(rows) - graduated),
+        "still_blocked_rows_before": max(0, len(rows) - graduated),
+        "action_type_counts": dict(action_counts.most_common()),
+        "repair_route_counts": dict(route_counts.most_common()),
+        "per_paper_action_counts": dict(paper_counts.most_common()),
+        "per_route": _aggregate_actions(actions, "repair_route"),
+        "per_paper": _aggregate_actions(actions, "paper_id"),
+        "action_status_counts": dict(status_counts.most_common()),
+        "graduation_blocker_counts": dict(blocker_counts.most_common()),
+        "still_blocked_reason_counts_before": dict(blocker_counts.most_common()),
+        "honest_scope": "Worker orchestration only; repaired/reviewable rows are not proof closure.",
+    }
+
+
+def _aggregate_actions(actions: list[dict[str, Any]], key: str) -> dict[str, dict[str, int]]:
+    grouped: dict[str, dict[str, int]] = defaultdict(
+        lambda: {
+            "action_groups": 0,
+            "attempted_rows": 0,
+            "written_rows": 0,
+            "mutated_groups": 0,
+        }
+    )
+    for action in actions:
+        name = str(action.get(key, "") or "unknown")
+        grouped[name]["action_groups"] += 1
+        grouped[name]["attempted_rows"] += int(action.get("input_rows", 0) or 0)
+        grouped[name]["written_rows"] += int(action.get("mutated_rows", 0) or 0)
+        grouped[name]["mutated_groups"] += int(bool(action.get("mutated")))
+    return dict(sorted(grouped.items()))
+
+
+def _non_mutating_action(action: dict[str, Any], status: str, **extra: Any) -> dict[str, Any]:
+    return {
+        **action,
+        "status": status,
+        "wrote": False,
+        "mutated": False,
+        "mutated_rows": 0,
+        **extra,
+    }
+
+
+def _base_name(value: Any) -> str:
+    return str(value or "").strip().rsplit(".", 1)[-1]
+
+
+def _action_target_names(action: dict[str, Any]) -> set[str]:
+    names: set[str] = set()
+    for value in action.get("theorem_ids", []) if isinstance(action.get("theorem_ids"), list) else []:
+        base = _base_name(value)
+        if base:
+            names.add(base)
+    return names
+
+
+def _candidate_counts(candidates: list[dict[str, Any]]) -> dict[str, int]:
+    def ok(candidate: dict[str, Any]) -> bool:
+        return (
+            (candidate.get("repair_quality") or {}).get("ok", True) is True
+            and (candidate.get("lean_validation") or {}).get("ok") is True
+        )
+
+    return {
+        "total": len(candidates),
+        "changed": sum(1 for c in candidates if c.get("changes")),
+        "changed_elaborating": sum(1 for c in candidates if c.get("changes") and ok(c)),
+        "paper_claim_abstractions": sum(
+            1 for c in candidates if "abstract_schema_placeholder_to_paper_claim" in (c.get("changes") or [])
+        ),
+        "diagnostic_repair_abstractions": sum(
+            1 for c in candidates if c.get("repair_abstraction_kind") == "paper_claim_diagnostic"
+        ),
+        "faithful_statement_regenerations": sum(
+            1 for c in candidates if c.get("statement_repair_kind") == "faithful_statement_regeneration"
+        ),
+        "failed_validation": sum(1 for c in candidates if (c.get("lean_validation") or {}).get("ok") is False),
+        "quality_blocked": sum(1 for c in candidates if (c.get("repair_quality") or {}).get("ok", True) is not True),
+        "needs_llm_repair": sum(1 for c in candidates if c.get("needs_llm_repair")),
+    }
+
+
+def _repair_candidate_blocker_counts(candidates: list[dict[str, Any]]) -> dict[str, int]:
+    counts: Counter[str] = Counter()
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            continue
+        quality = candidate.get("repair_quality")
+        if isinstance(quality, dict):
+            for blocker in quality.get("blockers") or []:
+                if str(blocker).strip():
+                    counts[f"repair_quality:{blocker}"] += 1
+        validation = candidate.get("lean_validation")
+        if isinstance(validation, dict) and validation.get("ok") is False:
+            error = str(validation.get("error", "") or "")
+            if error.startswith("repair_quality_blocked:"):
+                continue
+            reason = error.splitlines()[0][:160] if error else "lean_validation_failed"
+            counts[f"lean_validation:{reason}"] += 1
+        if candidate.get("needs_llm_repair"):
+            counts["needs_llm_repair"] += 1
+    return dict(counts.most_common())
+
+
+def _repair_payload_for_action(repair_payload: dict[str, Any], action: dict[str, Any]) -> dict[str, Any]:
+    targets = _action_target_names(action)
+    if not targets:
+        return repair_payload
+    candidates = repair_payload.get("repair_candidates", [])
+    if not isinstance(candidates, list):
+        return repair_payload
+    filtered = [
+        c
+        for c in candidates
+        if isinstance(c, dict) and _base_name(c.get("theorem_name")) in targets
+    ]
+    out = dict(repair_payload)
+    out["repair_candidates"] = filtered
+    out["candidate_counts"] = _candidate_counts(filtered)
+    out["worker_candidate_filter"] = {
+        "target_names": sorted(targets),
+        "input_candidate_count": len(candidates),
+        "filtered_candidate_count": len(filtered),
+    }
+    return out
+
+
+def apply_validated_repair_pack_to_ledger(
+    *,
+    ledger_path: Path,
+    repair_payload: dict[str, Any],
+    write: bool,
+) -> dict[str, Any]:
+    payload = _read_json(ledger_path)
+    if not isinstance(payload, dict):
+        return {"ok": False, "reason": "invalid_ledger_json", "ledger": str(ledger_path)}
+    entries = payload.get("entries", [])
+    if not isinstance(entries, list):
+        return {"ok": False, "reason": "ledger_entries_missing", "ledger": str(ledger_path)}
+    from formalize_paper_full import _apply_validated_translation_repairs
+
+    updated_entries, summary = _apply_validated_translation_repairs(entries, repair_payload)
+    if write:
+        out = dict(payload)
+        out["entries"] = updated_entries
+        _write_json(ledger_path, out)
+    return {"ok": True, "ledger": str(ledger_path), "wrote": write, **summary}
+
+
+def _context_by_theorem(action: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    contexts = action.get("source_contexts") if isinstance(action.get("source_contexts"), list) else []
+    out: dict[str, dict[str, Any]] = {}
+    for context in contexts:
+        if not isinstance(context, dict):
+            continue
+        for key in (
+            context.get("ledger_theorem_name"),
+            context.get("theorem_name"),
+            context.get("theorem_id"),
+        ):
+            base = _base_name(key)
+            if base:
+                out.setdefault(base, context)
+    return out
+
+
+def _preview_row_for_candidate(context: dict[str, Any], candidate: dict[str, Any]) -> dict[str, Any]:
+    row = {
+        "row_id": context.get("row_id", ""),
+        "arxiv_id": context.get("paper_id", ""),
+        "theorem_id": context.get("theorem_id", ""),
+        "canonical_theorem_id": "",
+        "status": "UNRESOLVED",
+        "lean_statement": candidate.get("repaired_decl", ""),
+        "source_latex": context.get("source_latex", ""),
+        "normalized_text": context.get("normalized_text", ""),
+        "source_span": context.get("source_span", {}),
+        "source_span_quality": context.get("source_span_quality", ""),
+        "alignment_evidence": {"source_match": context.get("source_match", {})},
+        "statement_alignment_class": "partial",
+        "alignment_confidence": 0.5,
+        "alignment_gold_eligible": False,
+        "claim_equivalence_verdict": "unclear",
+        "identity_status": "unknown",
+        "gate_failures": ["lean_proof_closed"],
+        "axiom_debt": [],
+        "translation_repair": {
+            "statement_repair_kind": candidate.get("statement_repair_kind", ""),
+            "regeneration_protocol": candidate.get("regeneration_protocol", ""),
+        },
+    }
+    return row
+
+
+def _attach_review_batch_previews(repair_payload: dict[str, Any], action: dict[str, Any]) -> dict[str, Any]:
+    contexts = _context_by_theorem(action)
+    candidates = repair_payload.get("repair_candidates", [])
+    if not isinstance(candidates, list):
+        return repair_payload
+    out_candidates: list[dict[str, Any]] = []
+    for raw in candidates:
+        candidate = dict(raw) if isinstance(raw, dict) else {}
+        context = contexts.get(_base_name(candidate.get("theorem_name")), {})
+        if not context:
+            out_candidates.append(candidate)
+            continue
+        preview_row = _preview_row_for_candidate(context, candidate)
+        blockers = graduation_blockers(preview_row)
+        preview = {
+            "eligible": not blockers,
+            "blockers": blockers,
+            "status": "reviewable" if not blockers else "blocked",
+        }
+        candidate["review_batch_eligibility_preview"] = preview
+        if blockers:
+            quality = candidate.get("repair_quality") if isinstance(candidate.get("repair_quality"), dict) else {}
+            quality_blockers = list(quality.get("blockers") or [])
+            quality_blockers.extend(f"review_batch_preview:{blocker}" for blocker in blockers)
+            candidate["repair_quality"] = {
+                **quality,
+                "ok": False,
+                "blockers": list(dict.fromkeys(quality_blockers)),
+            }
+            validation = candidate.get("lean_validation") if isinstance(candidate.get("lean_validation"), dict) else {}
+            if validation.get("ok") is True or validation.get("ok") is None:
+                candidate["lean_validation"] = {
+                    "ok": False,
+                    "error": "review_batch_preview_blocked:" + ",".join(blockers),
+                    "review_batch_eligibility_preview": preview,
+                    "lean_validation_without_review_preview": validation,
+                }
+        out_candidates.append(candidate)
+    out = dict(repair_payload)
+    out["repair_candidates"] = out_candidates
+    out["candidate_counts"] = _candidate_counts(out_candidates)
+    return out
+
+
+def _build_source_backed_payload_for_action(
+    action: dict[str, Any],
+    *,
+    project_root: Path,
+    repair_output_root: Path,
+    validate_candidates: bool,
+) -> dict[str, Any]:
+    from repair_bad_translations import build_source_backed_repair_payload
+
+    paper_id = str(action.get("paper_id", ""))
+    source_contexts = action.get("source_contexts") if isinstance(action.get("source_contexts"), list) else []
+    out_dir = repair_output_root / paper_id.replace(".", "_") / str(action.get("repair_kind", "source_backed_v2"))
+    payload = build_source_backed_repair_payload(
+        paper_id=paper_id,
+        project_root=project_root,
+        source_contexts=[ctx for ctx in source_contexts if isinstance(ctx, dict)],
+        out_dir=out_dir,
+        validate_candidates=validate_candidates,
+    )
+    payload = _repair_payload_for_action(payload, action)
+    return _attach_review_batch_previews(payload, action)
+
+
+def _apply_source_backed_payload(
+    action: dict[str, Any],
+    *,
+    project_root: Path,
+    write: bool,
+    repair_output_root: Path,
+    validate_candidates: bool,
+    no_change_status: str,
+    written_status: str,
+) -> dict[str, Any]:
+    artifacts = action.get("artifacts") if isinstance(action.get("artifacts"), dict) else {}
+    ledger = str(artifacts.get("ledger", "") or "")
+    if not ledger:
+        return _non_mutating_action(action, "skipped_missing_repair_artifacts")
+    source_contexts = action.get("source_contexts") if isinstance(action.get("source_contexts"), list) else []
+    if not source_contexts:
+        return _non_mutating_action(action, "skipped_missing_source_contexts")
+    if not write:
+        return _non_mutating_action(action, "dry_run_write_required")
+
+    repair_payload = _build_source_backed_payload_for_action(
+        action,
+        project_root=project_root,
+        repair_output_root=repair_output_root,
+        validate_candidates=validate_candidates,
+    )
+    dry_apply = apply_validated_repair_pack_to_ledger(
+        ledger_path=_resolve_path(project_root, ledger),
+        repair_payload=repair_payload,
+        write=False,
+    )
+    updated_count = int(dry_apply.get("updated_count", 0) or 0)
+    if updated_count <= 0:
+        candidates = repair_payload.get("repair_candidates", [])
+        if not isinstance(candidates, list):
+            candidates = []
+        return _non_mutating_action(
+            action,
+            no_change_status,
+            repair_summary=repair_payload.get("candidate_counts", {}),
+            repair_blocker_counts=_repair_candidate_blocker_counts(candidates),
+            ledger_application=dry_apply,
+            wrote_repair_pack=True,
+            regeneration_protocol="source_backed_v2",
+        )
+
+    ledger_result = apply_validated_repair_pack_to_ledger(
+        ledger_path=_resolve_path(project_root, ledger),
+        repair_payload=repair_payload,
+        write=True,
+    )
+    final_updated_count = int(ledger_result.get("updated_count", 0) or 0)
+    return {
+        **action,
+        "status": written_status,
+        "wrote": True,
+        "mutated": final_updated_count > 0,
+        "mutated_rows": final_updated_count,
+        "repair_summary": repair_payload.get("candidate_counts", {}),
+        "ledger_application": ledger_result,
+        "regeneration_protocol": "source_backed_v2",
+    }
+
+
+def _execute_statement_regeneration(
+    action: dict[str, Any],
+    *,
+    project_root: Path,
+    write: bool,
+    repair_output_root: Path,
+    validate_candidates: bool,
+) -> dict[str, Any]:
+    artifacts = action.get("artifacts") if isinstance(action.get("artifacts"), dict) else {}
+    report = str(artifacts.get("report", "") or "")
+    lean_file = str(artifacts.get("lean_file", "") or "")
+    ledger = str(artifacts.get("ledger", "") or "")
+    if not (report and lean_file and ledger):
+        return _non_mutating_action(action, "skipped_missing_repair_artifacts")
+    if not write:
+        return _non_mutating_action(action, "dry_run_write_required")
+    if action.get("source_contexts"):
+        return _apply_source_backed_payload(
+            action,
+            project_root=project_root,
+            write=write,
+            repair_output_root=repair_output_root,
+            validate_candidates=validate_candidates,
+            no_change_status="source_backed_regeneration_no_ledger_change",
+            written_status="written_source_backed_regeneration",
+        )
+    from repair_bad_translations import build_repair_pack
+
+    paper_id = str(action.get("paper_id", ""))
+    out_dir = repair_output_root / paper_id.replace(".", "_") / str(action.get("repair_kind", "statement_regeneration"))
+    repair_payload = build_repair_pack(
+        paper_id=paper_id,
+        report_path=_resolve_path(project_root, report),
+        lean_file=_resolve_path(project_root, lean_file),
+        project_root=project_root,
+        out_dir=out_dir,
+        validate_candidates=validate_candidates,
+    )
+    repair_payload = _repair_payload_for_action(repair_payload, action)
+    dry_apply = apply_validated_repair_pack_to_ledger(
+        ledger_path=_resolve_path(project_root, ledger),
+        repair_payload=repair_payload,
+        write=False,
+    )
+    updated_count = int(dry_apply.get("updated_count", 0) or 0)
+    if updated_count <= 0:
+        candidates = repair_payload.get("repair_candidates", [])
+        if not isinstance(candidates, list):
+            candidates = []
+        return _non_mutating_action(
+            action,
+            "generated_repair_pack_no_ledger_change",
+            repair_summary=repair_payload.get("candidate_counts", {}),
+            repair_blocker_counts=_repair_candidate_blocker_counts(candidates),
+            ledger_application=dry_apply,
+            wrote_repair_pack=True,
+        )
+
+    ledger_result = apply_validated_repair_pack_to_ledger(
+        ledger_path=_resolve_path(project_root, ledger),
+        repair_payload=repair_payload,
+        write=True,
+    )
+    final_updated_count = int(ledger_result.get("updated_count", 0) or 0)
+    return {
+        **action,
+        "status": "written_translation_repair_pack",
+        "wrote": True,
+        "mutated": final_updated_count > 0,
+        "mutated_rows": final_updated_count,
+        "repair_summary": repair_payload.get("candidate_counts", {}),
+        "ledger_application": ledger_result,
+    }
+
+
+def _execute_source_span_repair(action: dict[str, Any], *, project_root: Path, write: bool) -> dict[str, Any]:
+    artifacts = action.get("artifacts") if isinstance(action.get("artifacts"), dict) else {}
+    evidence = str(artifacts.get("extracted_theorems", "") or "")
+    if not evidence:
+        return _non_mutating_action(action, "skipped_missing_extracted_theorems")
+    if not write:
+        return _non_mutating_action(action, "dry_run_write_required")
+    from repair_extracted_theorem_spans import repair_file
+
+    path = _resolve_path(project_root, evidence)
+    dry_result = repair_file(path, project_root=project_root, write=False)
+    repaired_rows = int(dry_result.get("repaired_rows", 0) or 0)
+    if repaired_rows <= 0:
+        return _non_mutating_action(action, "checked_source_span_no_change", span_repair=dry_result)
+    result = repair_file(path, project_root=project_root, write=True)
+    final_repaired_rows = int(result.get("repaired_rows", 0) or 0)
+    return {
+        **action,
+        "status": "written_source_span_repair",
+        "wrote": True,
+        "mutated": final_repaired_rows > 0,
+        "mutated_rows": final_repaired_rows,
+        "span_repair": result,
+    }
+
+
+def _execute_source_translation_recovery(
+    action: dict[str, Any],
+    *,
+    project_root: Path,
+    write: bool,
+    repair_output_root: Path,
+    validate_candidates: bool,
+) -> dict[str, Any]:
+    if not write:
+        return _non_mutating_action(
+            action,
+            "dry_run_source_retranslation_required",
+            translation_recovery_policy={
+                "write_capable": True,
+                "allowed_auto_write": "only_after_validation_and_review_batch_preview",
+                "required_exit_gate": "validator_passing_and_review_batch_eligible",
+                "proof_promotion": False,
+            },
+        )
+    return _apply_source_backed_payload(
+        action,
+        project_root=project_root,
+        write=write,
+        repair_output_root=repair_output_root,
+        validate_candidates=validate_candidates,
+        no_change_status="source_retranslation_no_ledger_change",
+        written_status="written_source_retranslation_candidate",
+    )
+
+
+def execute_worker_actions(
+    actions: list[dict[str, Any]],
+    *,
+    project_root: Path,
+    write: bool,
+    max_write_groups: int,
+    repair_output_root: Path,
+    validate_candidates: bool,
+) -> list[dict[str, Any]]:
+    executed: list[dict[str, Any]] = []
+    write_groups = 0
+    for action in actions:
+        route = str(action.get("repair_route", ""))
+        if write and action.get("write_capable") and write_groups >= max_write_groups:
+            executed.append(_non_mutating_action(action, "skipped_write_limit"))
+            continue
+        if route == "statement_regeneration":
+            result = _execute_statement_regeneration(
+                action,
+                project_root=project_root,
+                write=write,
+                repair_output_root=repair_output_root,
+                validate_candidates=validate_candidates,
+            )
+        elif route == "source_span_repair":
+            result = _execute_source_span_repair(action, project_root=project_root, write=write)
+        elif route == "source_alignment_review":
+            result = _non_mutating_action(action, "queued_source_match_adjudication")
+        elif route == "source_translation_recovery":
+            result = _execute_source_translation_recovery(
+                action,
+                project_root=project_root,
+                write=write,
+                repair_output_root=repair_output_root,
+                validate_candidates=validate_candidates,
+            )
+        else:
+            result = _non_mutating_action(action, "queued_manual_repair")
+        if write and bool(result.get("mutated")):
+            write_groups += 1
+        executed.append(result)
+    return executed
+
+
+def _action_write_paths(action: dict[str, Any], project_root: Path) -> list[Path]:
+    artifacts = action.get("artifacts") if isinstance(action.get("artifacts"), dict) else {}
+    paths: list[Path] = []
+    for key in ("ledger", "extracted_theorems"):
+        raw = str(artifacts.get(key, "") or "")
+        if raw:
+            paths.append(_resolve_path(project_root, raw))
+    return paths
+
+
+def _snapshot_write_artifacts(actions: list[dict[str, Any]], project_root: Path) -> dict[Path, str | None]:
+    snapshots: dict[Path, str | None] = {}
+    for action in actions:
+        if not action.get("write_capable"):
+            continue
+        for path in _action_write_paths(action, project_root):
+            if path in snapshots:
+                continue
+            try:
+                snapshots[path] = path.read_text(encoding="utf-8")
+            except OSError:
+                snapshots[path] = None
+    return snapshots
+
+
+def _mutated_snapshots(
+    snapshots: dict[Path, str | None],
+    actions: list[dict[str, Any]],
+    project_root: Path,
+) -> dict[Path, str | None]:
+    paths: set[Path] = set()
+    for action in actions:
+        if action.get("mutated"):
+            paths.update(_action_write_paths(action, project_root))
+    return {path: snapshots[path] for path in paths if path in snapshots}
+
+
+def _restore_write_artifacts(snapshots: dict[Path, str | None]) -> list[str]:
+    restored: list[str] = []
+    for path, text in snapshots.items():
+        if text is None:
+            if path.exists():
+                path.unlink()
+                restored.append(str(path))
+            continue
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+        restored.append(str(path))
+    return restored
+
+
+def _mark_rolled_back(actions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for action in actions:
+        if action.get("mutated"):
+            out.append(
+                {
+                    **action,
+                    "status": "rolled_back_no_post_rebuild_graduation",
+                    "wrote": False,
+                    "mutated": False,
+                    "mutated_rows_before_rollback": int(action.get("mutated_rows", 0) or 0),
+                    "mutated_rows": 0,
+                }
+            )
+        else:
+            out.append(action)
+    return out
+
+
+def _still_blocked_reasons_after_rebuild(
+    *,
+    before_row: dict[str, Any],
+    after_row: dict[str, Any] | None,
+    repair_row: dict[str, Any] | None,
+) -> list[str]:
+    if after_row is None:
+        return ["post_rebuild_row_missing"]
+    reasons: list[str] = []
+    if repair_row is not None:
+        repair_reasons = repair_row.get("repair_reasons")
+        if isinstance(repair_reasons, list) and repair_reasons:
+            reasons.extend(f"repair_queue:{reason}" for reason in repair_reasons)
+        else:
+            reasons.append("repair_queue:still_present")
+    reasons.extend(f"review_batch_exclusion:{reason}" for reason in review_batch_exclusion_reasons(after_row))
+    validity = classify_statement(after_row)
+    if validity.primary_blocker in BLOCKING_VALIDITY:
+        reasons.append(f"statement_validity:{validity.primary_blocker}")
+    return list(dict.fromkeys(reasons))
+
+
+def post_rebuild_graduation_report(
+    *,
+    before_rows: list[dict[str, Any]],
+    corpus_rows_after: list[dict[str, Any]],
+    repair_queue_after: list[dict[str, Any]],
+    review_batch_after: list[dict[str, Any]],
+    gold_queue_after: list[dict[str, Any]],
+) -> dict[str, Any]:
+    after_by_id = _index_by_row_id(corpus_rows_after)
+    repair_by_id = _index_by_row_id(repair_queue_after)
+    graduated: list[str] = []
+    still_blocked: dict[str, list[str]] = {}
+    for before in before_rows:
+        rid = _row_id(before)
+        if not rid:
+            continue
+        reasons = _still_blocked_reasons_after_rebuild(
+            before_row=before,
+            after_row=after_by_id.get(rid),
+            repair_row=repair_by_id.get(rid),
+        )
+        if reasons:
+            still_blocked[rid] = reasons
+        else:
+            graduated.append(rid)
+
+    reason_counts = Counter(reason for reasons in still_blocked.values() for reason in reasons)
+    return {
+        "input_row_ids": [_row_id(row) for row in before_rows if _row_id(row)],
+        "graduated_row_ids": graduated,
+        "graduated_rows_after": len(graduated),
+        "still_blocked_rows_after": len(still_blocked),
+        "still_blocked_reason_counts_after": dict(reason_counts.most_common()),
+        "still_blocked_by_row_id": still_blocked,
+        "repair_queue_rows_after": len(repair_queue_after),
+        "review_batch_rows_after": len(review_batch_after),
+        "gold_proof_queue_rows_after": len(gold_queue_after),
+    }
+
+
+def rebuild_downstream_artifacts(
+    *,
+    project_root: Path,
+    ledger_paths: list[Path],
+    report_roots: list[Path],
+    evidence_roots: list[Path],
+    selected_rows_before: list[dict[str, Any]],
+    limit: int,
+) -> dict[str, Any]:
+    corpus_out = _project_path(project_root, DEFAULT_CORPUS_OUT)
+    corpus_summary_out = _project_path(project_root, DEFAULT_CORPUS_SUMMARY)
+    fidelity_out = _project_path(project_root, DEFAULT_FIDELITY_OUT)
+    fidelity_summary_out = _project_path(project_root, DEFAULT_FIDELITY_SUMMARY)
+    repair_out = _project_path(project_root, DEFAULT_REPAIR_QUEUE_OUT)
+    repair_summary_out = _project_path(project_root, DEFAULT_REPAIR_QUEUE_SUMMARY)
+    review_out = _project_path(project_root, DEFAULT_REVIEW_BATCH_OUT)
+    review_template_out = _project_path(project_root, DEFAULT_REVIEW_TEMPLATE_OUT)
+    review_summary_out = _project_path(project_root, DEFAULT_REVIEW_BATCH_SUMMARY)
+    gold_out = _project_path(project_root, DEFAULT_GOLD_PROOF_OUT)
+    gold_summary_out = _project_path(project_root, DEFAULT_GOLD_PROOF_SUMMARY)
+    resolved_ledger_paths = [_project_path(project_root, path) for path in (ledger_paths or [DEFAULT_LEDGER_DIR])]
+    resolved_report_roots = [_project_path(project_root, path) for path in (report_roots or [DEFAULT_REPORT_DIR])]
+    resolved_evidence_roots = [_project_path(project_root, path) for path in (evidence_roots or [DEFAULT_EVIDENCE_DIR])]
+
+    rows_after, corpus_summary = build_corpus_rows(
+        ledger_paths=resolved_ledger_paths,
+        project_root=project_root,
+        report_roots=resolved_report_roots,
+        evidence_roots=resolved_evidence_roots,
+    )
+    _write_jsonl(corpus_out, rows_after)
+    _write_json(corpus_summary_out, {**corpus_summary, "out_jsonl": str(corpus_out), "out_summary": str(corpus_summary_out)})
+
+    fidelity_queue, fidelity_summary = build_statement_fidelity_queue(rows_after, limit=limit)
+    _write_jsonl(fidelity_out, fidelity_queue)
+    _write_json(fidelity_summary_out, {**fidelity_summary, "source_corpus_rows": len(rows_after), "out_jsonl": str(fidelity_out)})
+
+    repair_queue, repair_summary = build_statement_repair_queue(rows_after, limit=limit)
+    _write_jsonl(repair_out, repair_queue)
+    _write_json(repair_summary_out, {**repair_summary, "source_corpus_rows": len(rows_after), "out_jsonl": str(repair_out)})
+
+    review_batch, review_templates, review_summary = build_statement_review_batch(rows_after, limit=limit)
+    _write_jsonl(review_out, review_batch)
+    _write_jsonl(review_template_out, review_templates)
+    _write_json(
+        review_summary_out,
+        {
+            **review_summary,
+            "source_corpus_rows": len(rows_after),
+            "out_jsonl": str(review_out),
+            "out_template": str(review_template_out),
+        },
+    )
+
+    gold_queue, gold_summary = build_gold_proof_queue(rows_after, limit=limit)
+    _write_jsonl(gold_out, gold_queue)
+    _write_json(gold_summary_out, {**gold_summary, "source_corpus_rows": len(rows_after), "out_jsonl": str(gold_out)})
+
+    graduation = post_rebuild_graduation_report(
+        before_rows=selected_rows_before,
+        corpus_rows_after=rows_after,
+        repair_queue_after=repair_queue,
+        review_batch_after=review_batch,
+        gold_queue_after=gold_queue,
+    )
+    return {
+        "status": "completed",
+        "corpus_rows_after": len(rows_after),
+        "corpus_summary": corpus_summary,
+        "statement_fidelity_queue_rows_after": len(fidelity_queue),
+        "statement_repair_queue_rows_after": len(repair_queue),
+        "statement_review_batch_rows_after": len(review_batch),
+        "gold_proof_queue_rows_after": len(gold_queue),
+        "artifacts": {
+            "corpus_jsonl": str(corpus_out),
+            "corpus_summary": str(corpus_summary_out),
+            "statement_fidelity_queue": str(fidelity_out),
+            "statement_repair_queue": str(repair_out),
+            "statement_review_batch": str(review_out),
+            "statement_review_template": str(review_template_out),
+            "gold_proof_queue": str(gold_out),
+        },
+        **graduation,
+    }
+
+
+def run_worker(
+    rows: list[dict[str, Any]],
+    *,
+    project_root: Path,
+    write: bool = False,
+    limit: int = 500,
+    max_write_groups: int = 1,
+    repair_output_root: Path | None = None,
+    validate_candidates: bool = True,
+    ledger_paths: list[Path] | None = None,
+    report_roots: list[Path] | None = None,
+    evidence_roots: list[Path] | None = None,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    actions, _ = build_worker_actions(rows, limit=limit)
+    selected_rows = _selected_rows(rows, limit=limit)
+    snapshots = _snapshot_write_artifacts(actions, project_root) if write else {}
+    executed = execute_worker_actions(
+        actions,
+        project_root=project_root,
+        write=write,
+        max_write_groups=max_write_groups,
+        repair_output_root=repair_output_root or project_root / "output" / "statement_repair_worker",
+        validate_candidates=validate_candidates,
+    )
+    summary = _summarize_actions(executed, rows=selected_rows, write=write)
+    summary["validate_candidates"] = validate_candidates
+    summary["experimental"] = not validate_candidates
+    if write:
+        try:
+            post_rebuild = rebuild_downstream_artifacts(
+                project_root=project_root,
+                ledger_paths=ledger_paths or [DEFAULT_LEDGER_DIR],
+                report_roots=report_roots or [DEFAULT_REPORT_DIR],
+                evidence_roots=evidence_roots or [DEFAULT_EVIDENCE_DIR],
+                selected_rows_before=selected_rows,
+                limit=limit,
+            )
+        except Exception as exc:
+            post_rebuild = {"status": "failed", "error": f"{type(exc).__name__}:{exc}"}
+        summary["post_rebuild"] = post_rebuild
+        summary["graduated_rows_after"] = int(post_rebuild.get("graduated_rows_after", 0) or 0)
+        summary["net_graduated_rows"] = summary["graduated_rows_after"] - int(summary.get("graduated_rows_before_action", 0) or 0)
+        summary["still_blocked_reason_counts_after"] = post_rebuild.get("still_blocked_reason_counts_after", {})
+        summary["review_batch_rows_after"] = int(post_rebuild.get("review_batch_rows_after", 0) or 0)
+        summary["gold_proof_queue_rows_after"] = int(post_rebuild.get("gold_proof_queue_rows_after", 0) or 0)
+        if summary.get("mutated_groups", 0) and summary["net_graduated_rows"] <= 0:
+            restored = _restore_write_artifacts(_mutated_snapshots(snapshots, executed, project_root))
+            executed = _mark_rolled_back(executed)
+            try:
+                rollback_rebuild = rebuild_downstream_artifacts(
+                    project_root=project_root,
+                    ledger_paths=ledger_paths or [DEFAULT_LEDGER_DIR],
+                    report_roots=report_roots or [DEFAULT_REPORT_DIR],
+                    evidence_roots=evidence_roots or [DEFAULT_EVIDENCE_DIR],
+                    selected_rows_before=selected_rows,
+                    limit=limit,
+                )
+            except Exception as exc:
+                rollback_rebuild = {"status": "failed", "error": f"{type(exc).__name__}:{exc}"}
+            summary = _summarize_actions(executed, rows=selected_rows, write=write)
+            summary["validate_candidates"] = validate_candidates
+            summary["experimental"] = not validate_candidates
+            summary["post_rebuild"] = rollback_rebuild
+            summary["rollback"] = {
+                "status": "completed",
+                "reason": "no_post_rebuild_graduation",
+                "restored_artifacts": restored,
+            }
+            summary["graduated_rows_after"] = int(rollback_rebuild.get("graduated_rows_after", 0) or 0)
+            summary["net_graduated_rows"] = summary["graduated_rows_after"] - int(summary.get("graduated_rows_before_action", 0) or 0)
+            summary["still_blocked_reason_counts_after"] = rollback_rebuild.get("still_blocked_reason_counts_after", {})
+            summary["review_batch_rows_after"] = int(rollback_rebuild.get("review_batch_rows_after", 0) or 0)
+            summary["gold_proof_queue_rows_after"] = int(rollback_rebuild.get("gold_proof_queue_rows_after", 0) or 0)
+    else:
+        summary["post_rebuild"] = {"status": "skipped_dry_run"}
+        summary["graduated_rows_after"] = summary["graduated_rows_before_action"]
+        summary["net_graduated_rows"] = 0
+        summary["still_blocked_reason_counts_after"] = {}
+        summary["review_batch_rows_after"] = 0
+        summary["gold_proof_queue_rows_after"] = 0
+    summary["non_promotable"] = (
+        (not write)
+        or (not validate_candidates)
+        or str(summary.get("post_rebuild", {}).get("status", "")) != "completed"
+        or bool(summary.get("rollback"))
+        or int(summary.get("net_graduated_rows", 0) or 0) <= 0
+    )
+    return executed, summary
+
+
+def _load_or_build_queue(args: argparse.Namespace) -> tuple[list[dict[str, Any]], int]:
+    if args.repair_queue_jsonl is not None:
+        rows = _read_jsonl(args.repair_queue_jsonl)
+        return _filter_queue_rows(rows, repair_route=args.repair_route, repair_kind=args.repair_kind), len(rows)
+    corpus_rows, corpus_summary = build_corpus_rows(
+        ledger_paths=[_project_path(args.project_root, path) for path in (args.ledger_path or [DEFAULT_LEDGER_DIR])],
+        project_root=args.project_root,
+        report_roots=[_project_path(args.project_root, path) for path in (args.report_root or [DEFAULT_REPORT_DIR])],
+        evidence_roots=[_project_path(args.project_root, path) for path in (args.evidence_root or [DEFAULT_EVIDENCE_DIR])],
+    )
+    queue, _summary = build_statement_repair_queue(corpus_rows, limit=args.limit)
+    return _filter_queue_rows(queue, repair_route=args.repair_route, repair_kind=args.repair_kind), int(corpus_summary.get("rows", len(corpus_rows)))
+
+
+def _filter_queue_rows(rows: list[dict[str, Any]], *, repair_route: str = "", repair_kind: str = "") -> list[dict[str, Any]]:
+    route = str(repair_route or "").strip()
+    kind = str(repair_kind or "").strip()
+    if not route and not kind:
+        return rows
+    out: list[dict[str, Any]] = []
+    for row in rows:
+        if route and str(row.get("repair_route", "") or "") != route:
+            continue
+        if kind and str(row.get("repair_kind", "") or "") != kind:
+            continue
+        out.append(row)
+    return out
+
+
+def export_worker_run(args: argparse.Namespace) -> dict[str, Any]:
+    rows, source_rows = _load_or_build_queue(args)
+    actions, summary = run_worker(
+        rows,
+        project_root=args.project_root,
+        write=bool(args.write),
+        limit=args.limit,
+        max_write_groups=args.max_write_groups,
+        repair_output_root=args.repair_output_root,
+        validate_candidates=not args.skip_validate,
+    )
+    result = {
+        **summary,
+        "source_rows": source_rows,
+        "out_actions": str(args.out_actions),
+        "out_summary": str(args.out_summary),
+    }
+    _write_jsonl(args.out_actions, actions)
+    _write_json(args.out_summary, result)
+    return result
+
+
+def _build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Run dry-run-first statement repair worker")
+    parser.add_argument("--project-root", type=Path, default=Path("."))
+    parser.add_argument("--repair-queue-jsonl", type=Path, default=None)
+    parser.add_argument("--ledger-path", action="append", type=Path, default=[])
+    parser.add_argument("--report-root", action="append", type=Path, default=[])
+    parser.add_argument("--evidence-root", action="append", type=Path, default=[])
+    parser.add_argument("--out-actions", type=Path, default=DEFAULT_OUT_ACTIONS)
+    parser.add_argument("--out-summary", type=Path, default=DEFAULT_OUT_SUMMARY)
+    parser.add_argument("--repair-output-root", type=Path, default=None)
+    parser.add_argument("--limit", type=int, default=500)
+    parser.add_argument("--max-write-groups", type=int, default=1)
+    parser.add_argument("--repair-route", default="", help="Optional route filter for bounded repair runs")
+    parser.add_argument("--repair-kind", default="", help="Optional kind filter for bounded repair runs")
+    parser.add_argument("--write", action="store_true")
+    parser.add_argument("--skip-validate", action="store_true")
+    return parser
+
+
+def main() -> int:
+    args = _build_parser().parse_args()
+    args.project_root = args.project_root.resolve()
+    result = export_worker_run(args)
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

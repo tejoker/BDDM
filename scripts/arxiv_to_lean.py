@@ -214,14 +214,19 @@ def _build_context_pack(
     if not source_text.strip():
         return proof[:1200]
 
-    idx = source_text.find(stmt[: min(120, len(stmt))]) if stmt else -1
+    span_start = int(getattr(entry, "span_start", -1) or -1)
+    span_end = int(getattr(entry, "span_end", -1) or -1)
+    idx = span_start if 0 <= span_start < len(source_text) else -1
+    if idx < 0:
+        idx = source_text.find(stmt[: min(120, len(stmt))]) if stmt else -1
     if idx < 0 and stmt:
         idx = source_text.find(" ".join(stmt.split())[:80])
 
     # Nearby prose window around theorem occurrence.
     if idx >= 0:
         start = max(0, idx - 1800)
-        end = min(len(source_text), idx + max(1800, len(stmt) + 400))
+        theorem_end = span_end if span_end > idx else idx + len(stmt)
+        end = min(len(source_text), theorem_end + 1800)
         local_window = source_text[start:end]
     else:
         local_window = source_text[:2200]
@@ -264,6 +269,10 @@ def _build_context_pack(
     local_clean = " ".join(local_window.split())
     if local_clean:
         sections.append(f"Nearby source context:\n{local_clean[:1400]}")
+    if 0 <= span_start < span_end <= len(source_text):
+        exact_source = " ".join(source_text[span_start:span_end].split())
+        if exact_source:
+            sections.append(f"Exact theorem source span:\n{exact_source[:1400]}")
     if proof:
         sections.append(f"Local proof sketch:\n{proof[:1200]}")
 
@@ -1450,9 +1459,46 @@ def run_pipeline(
         notes = re.findall(r"(?:\\\\newcommand|\\\\DeclareMathOperator)[^\n]{1,160}", context_hint or "")
         assumptions = re.findall(r"(?:if|suppose|assuming)\b[^.]{5,180}\.", source, flags=re.IGNORECASE)
         nearby_claims = re.findall(r"(?:theorem|lemma|proposition)\b[^.]{5,220}\.", source, flags=re.IGNORECASE)
+        src_path = (entry.source_file or "").strip()
+        full_source = _source_text_cache.get(src_path, "") if src_path else ""
+        span_start = int(getattr(entry, "span_start", -1) or -1)
+        span_end = int(getattr(entry, "span_end", -1) or -1)
+        body_start = int(getattr(entry, "body_start", -1) or -1)
+        body_end = int(getattr(entry, "body_end", -1) or -1)
+        exact_source_excerpt = ""
+        section = ""
+        if full_source and 0 <= span_start < span_end <= len(full_source):
+            exact_source_excerpt = full_source[span_start:span_end]
+            prefix = full_source[:span_start]
+            section_matches = re.findall(
+                r"\\(?:section|subsection|subsubsection)\*?\{([^{}]{1,180})\}",
+                prefix,
+            )
+            section = section_matches[-1].strip() if section_matches else ""
+        cited_refs = sorted(
+            {
+                c.strip()
+                for chunk in re.findall(r"\\(?:cite|ref|eqref)\{([^}]+)\}", exact_source_excerpt or context_hint or "")
+                for c in chunk.split(",")
+                if c.strip()
+            }
+        )
         return {
             "theorem_name": _lean_name(entry.name),
             "original_latex_theorem": (entry.statement or "").strip(),
+            "source_file": src_path,
+            "source_span_id": str(getattr(entry, "source_span_id", "") or ""),
+            "source_char_range": [span_start, span_end] if span_start >= 0 and span_end >= 0 else [],
+            "statement_char_range": [body_start, body_end] if body_start >= 0 and body_end >= 0 else [],
+            "source_line_range": [
+                int(getattr(entry, "start_line", -1) or -1),
+                int(getattr(entry, "end_line", -1) or -1),
+            ],
+            "env_name": str(getattr(entry, "env_name", "") or entry.kind or ""),
+            "latex_label": str(getattr(entry, "label", "") or (entry.name if ":" in entry.name else "")),
+            "section": section,
+            "cited_refs": cited_refs,
+            "exact_source_excerpt": " ".join(exact_source_excerpt.split())[:1800],
             "definitions": [d.strip() for d in defs[:10] if d.strip()],
             "notations": [n.strip() for n in notes[:10] if n.strip()],
             "local_assumptions": [a.strip() for a in assumptions[:10] if a.strip()],

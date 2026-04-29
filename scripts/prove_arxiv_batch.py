@@ -56,6 +56,8 @@ try:
 except Exception:
     attempt_equivalence_repair = None  # type: ignore[assignment]
 
+from statement_validity import statement_fidelity_gate
+
 
 # ---------------------------------------------------------------------------
 # Parse validated .lean files to extract sorry theorems
@@ -375,6 +377,26 @@ def _translation_gate_issue(source_entry: dict | None, decl: str) -> str:
         if any(marker in flag for marker in hard_markers):
             return f"translation_hard_block:{flag[:80]}"
     return ""
+
+
+def _statement_fidelity_gate_issue(source_entry: dict | None, decl: str, theorem_name: str = "") -> tuple[str, dict]:
+    """Return a hard proof-eligibility issue plus the canonical gate payload."""
+    row = dict(source_entry or {})
+    if decl and not row.get("lean_statement"):
+        row["lean_statement"] = decl
+    elif decl:
+        row["lean_statement"] = decl
+    if theorem_name and not row.get("theorem_name"):
+        row["theorem_name"] = theorem_name
+    gate = statement_fidelity_gate(row)
+    payload = gate.to_dict()
+    if gate.proof_eligible:
+        return "", payload
+    issue = (
+        f"{gate.statement_fidelity_verdict}:"
+        + ",".join(gate.statement_fidelity_blockers or ["statement_fidelity_not_proof_eligible"])
+    )
+    return issue[:500], payload
 
 
 def _semantic_artifact_kwargs(source_entry: dict | None) -> dict:
@@ -1081,6 +1103,82 @@ def prove_one(
                 break
         if not isinstance(source_entry_for_gate, dict):
             source_entry_for_gate = None
+
+    if isinstance(source_entry_for_gate, dict):
+        fidelity_issue, fidelity_payload = _statement_fidelity_gate_issue(
+            source_entry_for_gate,
+            thm.declaration or "",
+            thm.full_name,
+        )
+        if fidelity_issue:
+            if verbose:
+                print(f"    statement-fidelity blocked before proof search: {fidelity_issue}", flush=True)
+            try:
+                from pipeline_status_models import FailureKind as _FK, ProofMethod as _ProofMethod, VerificationStatus as _VS
+                ledger_entry = build_ledger_entry(
+                    theorem_name=thm.full_name,
+                    lean_file=str(thm.lean_file),
+                    lean_statement=thm.declaration,
+                    proved=False,
+                    step_records=[],
+                    proof_text="",
+                    error_message=f"statement_fidelity_gate:{fidelity_issue}",
+                    proof_mode="statement-fidelity-gate",
+                    proof_method=_ProofMethod.TRANSLATION_LIMITED,
+                    rounds_used=0,
+                    time_s=0.0,
+                    had_exception=False,
+                    failure_kind=_FK.TRANSLATION_FAILURE,
+                    translation_validated=(
+                        bool(source_entry_for_gate.get("translation_validated"))
+                        if source_entry_for_gate.get("translation_validated") is not None
+                        else None
+                    ),
+                    translation_fidelity_score=(
+                        float(source_entry_for_gate.get("translation_fidelity_score"))
+                        if source_entry_for_gate.get("translation_fidelity_score") is not None
+                        else None
+                    ),
+                    status_alignment_score=(
+                        float(source_entry_for_gate.get("status_alignment_score"))
+                        if source_entry_for_gate.get("status_alignment_score") is not None
+                        else None
+                    ),
+                    **_semantic_artifact_kwargs(source_entry_for_gate),
+                )
+                ledger_entry.status = (
+                    _VS.TRANSLATION_LIMITED
+                    if str(fidelity_payload.get("statement_fidelity_verdict", "")) == "repair_candidate"
+                    else _VS.FLAWED
+                )
+                ledger_entry.proof_eligible = False
+                ledger_entry.statement_fidelity_verdict = str(
+                    fidelity_payload.get("statement_fidelity_verdict", "blocked") or "blocked"
+                )
+                ledger_entry.statement_fidelity_blockers = [
+                    str(x) for x in (fidelity_payload.get("statement_fidelity_blockers") or [])
+                ]
+                ledger_entry.statement_fidelity_source = str(
+                    fidelity_payload.get("statement_fidelity_source", "none") or "none"
+                )
+                if paper_id:
+                    upsert_ledger_entry(paper_id, ledger_entry)
+                    _sync_base_alias_entry(ledger_entry)
+            except Exception as _gate_exc:
+                if verbose:
+                    print(f"    statement-fidelity ledger warning: {_gate_exc}", flush=True)
+            return ProofResult(
+                theorem_name=thm.full_name,
+                lean_file=str(thm.lean_file),
+                proved=False,
+                proof_text="",
+                rounds_used=0,
+                time_s=0.0,
+                error=f"statement_fidelity_gate:{fidelity_issue}",
+                status="TRANSLATION_LIMITED"
+                if str(fidelity_payload.get("statement_fidelity_verdict", "")) == "repair_candidate"
+                else "FLAWED",
+            )
 
     gate_issue = _translation_gate_issue(source_entry_for_gate, thm.declaration or "")
     if gate_issue:
@@ -2854,6 +2952,48 @@ def main() -> int:
                 filtered[name] = thm
             else:
                 skipped += 1
+                try:
+                    from pipeline_status import build_ledger_entry as _ble_sf, upsert_ledger_entry as _ule_sf
+                    from pipeline_status_models import FailureKind as _FK_sf, ProofMethod as _PM_sf, VerificationStatus as _VS_sf
+
+                    _issue, _payload = _statement_fidelity_gate_issue(
+                        entry if isinstance(entry, dict) else {},
+                        thm.declaration,
+                        thm.full_name,
+                    )
+                    _le_sf = _ble_sf(
+                        theorem_name=thm.full_name,
+                        lean_file=str(thm.lean_file),
+                        lean_statement=thm.declaration,
+                        proved=False,
+                        step_records=[],
+                        proof_text="",
+                        error_message=(
+                            "statement_fidelity_gate:"
+                            + (_issue or f"blocked:claim_equivalence_not_equivalent:{verdict or 'missing'}")
+                        ),
+                        proof_mode="statement-fidelity-gate",
+                        proof_method=_PM_sf.TRANSLATION_LIMITED,
+                        rounds_used=0,
+                        time_s=0.0,
+                        had_exception=False,
+                        failure_kind=_FK_sf.TRANSLATION_FAILURE,
+                        **_semantic_artifact_kwargs(entry if isinstance(entry, dict) else None),
+                    )
+                    _le_sf.status = (
+                        _VS_sf.TRANSLATION_LIMITED
+                        if str(_payload.get("statement_fidelity_verdict", "")) == "repair_candidate"
+                        else _VS_sf.FLAWED
+                    )
+                    _le_sf.proof_eligible = False
+                    _le_sf.statement_fidelity_verdict = str(_payload.get("statement_fidelity_verdict", "blocked") or "blocked")
+                    _le_sf.statement_fidelity_blockers = [
+                        str(x) for x in (_payload.get("statement_fidelity_blockers") or [])
+                    ] or [f"claim_equivalence_not_equivalent:{verdict or 'missing'}"]
+                    _le_sf.statement_fidelity_source = str(_payload.get("statement_fidelity_source", "none") or "none")
+                    _ule_sf(paper_id, _le_sf)
+                except Exception:
+                    pass
         theorem_by_name = filtered
         print(
             f"Equivalence gate: kept={len(theorem_by_name)} skipped={skipped} "

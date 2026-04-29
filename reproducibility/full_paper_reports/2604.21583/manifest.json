@@ -1,11 +1,95 @@
 {
   "paper_id": "2604.21583",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "bundle_dir": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21583",
   "files": {
     "report": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21583/suite_report.json",
     "ledger": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21583/verification_ledger.json",
     "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21583/unresolved.json"
   },
-  "regenerate_command": "python3 scripts/formalize_paper_full.py --paper-id 2604.21583 --project-root ."
+  "regenerate_command": "python3 scripts/formalize_paper_full.py --paper-id 2604.21583 --project-root .",
+  "corpus_release_schema_version": "1.1.0",
+  "artifacts": [
+    {
+      "role": "report",
+      "path": "reproducibility/full_paper_reports/2604.21583/suite_report.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2604.21583",
+      "size_bytes": 54156,
+      "sha256": "33ef07db4467491262b00687c97c264856cbedcd15826ce9b31738b0ba9283a5"
+    },
+    {
+      "role": "ledger",
+      "path": "reproducibility/full_paper_reports/2604.21583/verification_ledger.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2604.21583",
+      "size_bytes": 507428,
+      "sha256": "dff83fef21d3e999f67b83106bc72e24e50feae7f10bbbadb4eb7599396f2bc6"
+    },
+    {
+      "role": "unresolved",
+      "path": "reproducibility/full_paper_reports/2604.21583/unresolved.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2604.21583",
+      "size_bytes": 15960,
+      "sha256": "428337986ab3917a4e15da37053e03651e38bc71bfa1d7d81b3b1d5b158889be"
+    }
+  ],
+  "release_audit": {
+    "schema_version": "1.1.0",
+    "generated_at": "2026-04-27T09:46:35Z",
+    "command": [
+      "python3",
+      "scripts/formalize_paper_full.py",
+      "--paper-id",
+      "2604.21583",
+      "--project-root",
+      "."
+    ],
+    "repository": {
+      "git_commit": "cf8822bcabfded106a2a42264184223bd9ddf272",
+      "dirty_tree": true
+    },
+    "toolchain": {
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "lean_version": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
+      "python_version": "3.12.3",
+      "lake_dependencies": [
+        {
+          "name": "mathlib",
+          "git": "https://github.com/leanprover-community/mathlib4.git",
+          "rev": "5923a7573b523783de41ba3f73e518fb8dd9ce01"
+        },
+        {
+          "name": "repl",
+          "path": "third_party/repl_compat"
+        }
+      ],
+      "mathlib": {
+        "name": "mathlib",
+        "git": "https://github.com/leanprover-community/mathlib4.git",
+        "rev": "5923a7573b523783de41ba3f73e518fb8dd9ce01"
+      }
+    },
+    "environment": {
+      "platform": "linux",
+      "mistral_model": "unknown"
+    },
+    "provenance_policy": {
+      "source_traceability": "Rows must retain arXiv paper id and artifact paths; theorem span fields are required when extraction provides them.",
+      "license_note": "arXiv source text remains attributed to the source paper; DESol-generated Lean and audit metadata are derived artifacts.",
+      "trust_tiers": "Gold, silver, diagnostic, and blocker labels must not be collapsed into one training tier."
+    },
+    "artifact_summary": {
+      "artifact_count": 3,
+      "existing_artifact_count": 3,
+      "required_artifact_count": 3,
+      "missing_required_count": 0,
+      "checksum_count": 3,
+      "checksum_coverage": 1.0
+    }
+  }
 }

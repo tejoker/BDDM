@@ -10,6 +10,8 @@ from pathlib import Path
 from typing import Any
 
 from axiom_debt_burndown import build_axiom_debt_burndown
+from novelty_dedup import NOVELTY_STATUSES, novelty_summary
+from statement_alignment import classify_row_alignment
 
 
 PAPER_STATUSES = (
@@ -91,6 +93,40 @@ def _paper_status(row: dict[str, Any]) -> str:
     return "TRANSLATION_UNCERTAIN"
 
 
+def _is_verified_proven(row: dict[str, Any]) -> bool:
+    return (
+        str(row.get("status", "")).strip().upper() == "FULLY_PROVEN"
+        and str(row.get("proof_method", "")).strip() == "lean_verified"
+    )
+
+
+def _is_gold_proof_row(row: dict[str, Any]) -> bool:
+    if not _is_verified_proven(row):
+        return False
+    joined = "\n".join(str(row.get(key, "") or "") for key in ("lean_statement", "proof_text", "trust_reference"))
+    if "PaperClaim" in joined or "paper_claim" in joined.lower():
+        return False
+    if _axiom_debt(row):
+        return False
+    if not str(row.get("proof_text", "") or "").strip():
+        return False
+    return not bool(row.get("gate_failures") or [])
+
+
+def _verified_proven_scope(row: dict[str, Any]) -> str:
+    if not _is_verified_proven(row):
+        return "not_verified_proven"
+    scope = str(row.get("equivalence_scope", "") or "").strip()
+    role = str(row.get("ledger_role", "") or "").strip()
+    if scope == "full_source_claim":
+        return "full_source_claim"
+    if role == "audited_core_replacement":
+        return "audited_component"
+    if scope:
+        return f"scoped:{scope}"
+    return "direct_or_unknown_scope"
+
+
 def _blocker(row: dict[str, Any]) -> str:
     explicit = str(row.get("blocker", "") or row.get("failure_stage", "")).strip()
     if explicit in BLOCKERS:
@@ -155,6 +191,49 @@ def _paper_local_axiom_disclosure(entries: list[dict[str, Any]]) -> dict[str, An
     }
 
 
+def _statement_validity_summary(pid: str, *, search_root: Path) -> dict[str, Any]:
+    path = search_root / "reproducibility" / "full_paper_reports" / pid / "statement_validity.json"
+    raw = _read_json(path)
+    if not isinstance(raw, dict):
+        return {"available": False, "path": str(path), "total": 0, "counts": {}}
+    counts = raw.get("counts", {})
+    if not isinstance(counts, dict):
+        counts = {}
+    return {
+        "available": True,
+        "path": str(path),
+        "total": int(raw.get("total", 0) or 0),
+        "counts": {str(k): int(v) for k, v in counts.items() if str(k).strip()},
+    }
+
+
+def _statement_alignment_counts(entries: list[dict[str, Any]], *, paper_id: str = "") -> Counter:
+    counts: Counter = Counter()
+    for row in entries:
+        artifact = row.get("semantic_equivalence_artifact")
+        if not isinstance(artifact, dict):
+            artifact = {}
+        decision = artifact.get("alignment_decision")
+        if not isinstance(decision, dict):
+            decision = {}
+        alignment = str(
+            row.get("statement_alignment_class")
+            or artifact.get("alignment_class")
+            or decision.get("alignment_class")
+            or ""
+        )
+        if not alignment:
+            alignment = classify_row_alignment(row, paper_id=paper_id).alignment_class.value
+        counts[alignment] += 1
+    return counts
+
+
+def _dominant_statement_blocker(counts: dict[str, int]) -> str:
+    if not counts:
+        return ""
+    return max(sorted(counts), key=lambda key: int(counts.get(key, 0)))
+
+
 def build_report(*, ledger_dir: Path, suite_json: Path | None, toolchain_file: Path) -> dict[str, Any]:
     suite_papers: set[str] = set()
     if suite_json is not None:
@@ -168,6 +247,11 @@ def build_report(*, ledger_dir: Path, suite_json: Path | None, toolchain_file: P
     paper_rows: list[dict[str, Any]] = []
     aggregate_status = Counter()
     aggregate_blockers = Counter()
+    aggregate_statement_validity = Counter()
+    aggregate_statement_alignment = Counter()
+    aggregate_novelty = Counter()
+    aggregate_verified_scope = Counter()
+    aggregate_verified_role = Counter()
     aggregate_axiom_backed_theorems: list[str] = []
     aggregate_axiom_debt: list[str] = []
     aggregate_entries: list[dict[str, Any]] = []
@@ -179,8 +263,20 @@ def build_report(*, ledger_dir: Path, suite_json: Path | None, toolchain_file: P
             continue
 
         statuses = Counter(_paper_status(row) for row in entries)
+        verified_proven = sum(1 for row in entries if _is_verified_proven(row))
+        gold_proof = sum(1 for row in entries if _is_gold_proof_row(row))
+        verified_scope = Counter(_verified_proven_scope(row) for row in entries if _is_verified_proven(row))
+        verified_role = Counter(str(row.get("ledger_role", "") or "direct_or_unknown") for row in entries if _is_verified_proven(row))
         blockers = Counter(_blocker(row) for row in entries)
+        alignment_counts = _statement_alignment_counts(entries, paper_id=pid)
         completeness = [_schema_completeness(row) for row in entries]
+        statement_validity = _statement_validity_summary(pid, search_root=ledger_dir.resolve().parents[1] if len(ledger_dir.resolve().parents) > 1 else Path.cwd())
+        paper_novelty = novelty_summary(entries)
+        aggregate_statement_validity.update(statement_validity.get("counts", {}))
+        aggregate_statement_alignment.update(alignment_counts)
+        aggregate_novelty.update(paper_novelty.get("counts", {}))
+        aggregate_verified_scope.update(verified_scope)
+        aggregate_verified_role.update(verified_role)
         aggregate_status.update(statuses)
         aggregate_blockers.update(blockers)
         aggregate_entries.extend(entries)
@@ -194,18 +290,36 @@ def build_report(*, ledger_dir: Path, suite_json: Path | None, toolchain_file: P
                 "schema_version": str(meta.get("schema_version", "legacy")),
                 "evidence_label": (
                     "full_verified_closure"
-                    if entries and statuses.get("FULLY_PROVEN", 0) == len(entries) and not disclosure["required"]
+                    if entries and verified_proven == len(entries) and not disclosure["required"]
                     else "partial_diagnostic_evidence"
                 ),
-                "primary_metric": "statuses.FULLY_PROVEN",
+                "primary_metric": "verified_proven",
                 "claim_scope": (
-                    "All ledger entries for this paper are FULLY_PROVEN without paper-local axiom disclosure."
-                    if entries and statuses.get("FULLY_PROVEN", 0) == len(entries) and not disclosure["required"]
-                    else "Partial diagnostic evidence: use statuses, blockers, and paper_local_axiom_disclosure; do not read this as full paper closure."
+                    "All ledger entries for this paper are verified_proven without paper-local axiom disclosure."
+                    if entries and verified_proven == len(entries) and not disclosure["required"]
+                    else "Partial diagnostic evidence: use verified_proven, statuses, blockers, and paper_local_axiom_disclosure; do not read raw FULLY_PROVEN status as full paper closure."
                 ),
                 "theorems": len(entries),
+                "verified_proven": verified_proven,
+                "verified_proven_scope_counts": dict(verified_scope),
+                "verified_proven_role_counts": dict(verified_role),
+                "verified_proven_full_source_claim": int(verified_scope.get("full_source_claim", 0)),
+                "verified_proven_audited_component": int(verified_scope.get("audited_component", 0)),
+                "gold_proof": gold_proof,
+                "dataset_tier_counts": {
+                    "gold_proof": gold_proof,
+                    "diagnostic_or_blocker": max(0, len(entries) - gold_proof),
+                },
                 "statuses": {key: int(statuses.get(key, 0)) for key in PAPER_STATUSES},
                 "blockers": {key: int(blockers.get(key, 0)) for key in ("none", *BLOCKERS)},
+                "statement_validity": {
+                    **statement_validity,
+                    "dominant_blocker": _dominant_statement_blocker(statement_validity.get("counts", {})),
+                },
+                "statement_alignment": {
+                    "counts": {key: int(alignment_counts.get(key, 0)) for key in sorted(alignment_counts)},
+                },
+                "novelty_summary": paper_novelty,
                 "paper_local_axiom_disclosure": disclosure,
                 "axiom_debt_burndown": build_axiom_debt_burndown(entries),
                 "mean_schema_completeness": round(sum(completeness) / len(completeness), 4) if completeness else 0.0,
@@ -227,9 +341,11 @@ def build_report(*, ledger_dir: Path, suite_json: Path | None, toolchain_file: P
     }
     full_verified = bool(
         paper_rows
-        and aggregate_status.get("FULLY_PROVEN", 0) == sum(int(row["theorems"]) for row in paper_rows)
+        and sum(int(row.get("verified_proven", 0)) for row in paper_rows) == sum(int(row["theorems"]) for row in paper_rows)
         and not aggregate_disclosure["required"]
     )
+    verified_proven = sum(int(row.get("verified_proven", 0)) for row in paper_rows)
+    gold_proof = sum(int(row.get("gold_proof", 0)) for row in paper_rows)
 
     return {
         "schema_version": "1.0.0",
@@ -237,16 +353,45 @@ def build_report(*, ledger_dir: Path, suite_json: Path | None, toolchain_file: P
         "ledger_dir": str(ledger_dir),
         "suite_json": str(suite_json) if suite_json else "",
         "evidence_label": "full_verified_closure" if full_verified else "partial_diagnostic_evidence",
-        "primary_metric": "aggregate_statuses.FULLY_PROVEN",
+        "primary_metric": "verified_proven",
         "claim_scope": (
-            "Every evaluated ledger entry is FULLY_PROVEN without paper-local axiom disclosure."
+            "Every evaluated ledger entry is verified_proven without paper-local axiom disclosure."
             if full_verified
-            else "Partial diagnostic evidence: use aggregate_statuses, aggregate_blockers, and paper_local_axiom_disclosure; do not read this as full suite closure."
+            else "Partial diagnostic evidence: use verified_proven, aggregate_statuses, aggregate_blockers, and paper_local_axiom_disclosure; do not read this as full suite closure and do not read raw FULLY_PROVEN status as closure."
         ),
         "papers_evaluated": len(paper_rows),
         "theorems_evaluated": sum(int(row["theorems"]) for row in paper_rows),
+        "verified_proven": verified_proven,
+        "verified_proven_scope_counts": dict(aggregate_verified_scope),
+        "verified_proven_role_counts": dict(aggregate_verified_role),
+        "verified_proven_full_source_claim": int(aggregate_verified_scope.get("full_source_claim", 0)),
+        "verified_proven_audited_component": int(aggregate_verified_scope.get("audited_component", 0)),
+        "gold_proof": gold_proof,
+        "dataset_tier_counts": {
+            "gold_proof": gold_proof,
+            "diagnostic_or_blocker": max(0, sum(int(row["theorems"]) for row in paper_rows) - gold_proof),
+        },
         "aggregate_statuses": {key: int(aggregate_status.get(key, 0)) for key in PAPER_STATUSES},
         "aggregate_blockers": {key: int(aggregate_blockers.get(key, 0)) for key in ("none", *BLOCKERS)},
+        "aggregate_statement_validity": {
+            "counts": {key: int(aggregate_statement_validity.get(key, 0)) for key in sorted(aggregate_statement_validity)},
+            "dominant_blocker": _dominant_statement_blocker({key: int(aggregate_statement_validity.get(key, 0)) for key in aggregate_statement_validity}),
+            "translation_statement_total": int(
+                aggregate_statement_validity.get("translation_limited", 0)
+                + aggregate_statement_validity.get("bad_translation_artifact", 0)
+                + aggregate_statement_validity.get("ill_typed_statement", 0)
+            ),
+        },
+        "aggregate_statement_alignment": {
+            "counts": {
+                key: int(aggregate_statement_alignment.get(key, 0))
+                for key in sorted(aggregate_statement_alignment)
+            },
+        },
+        "aggregate_novelty": {
+            "counts": {status: int(aggregate_novelty.get(status, 0)) for status in NOVELTY_STATUSES},
+            "total": sum(int(aggregate_novelty.get(status, 0)) for status in NOVELTY_STATUSES),
+        },
         "paper_local_axiom_disclosure": aggregate_disclosure,
         "axiom_debt_burndown": build_axiom_debt_burndown(aggregate_entries),
         "papers": paper_rows,

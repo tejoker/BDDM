@@ -1,0 +1,397 @@
+{
+  "total": 9,
+  "counts": {
+    "claim_review_pending": 1,
+    "paper_theory_debt": 4,
+    "proof_search_failure": 3,
+    "release_ready": 1
+  },
+  "items": [
+    {
+      "theorem_name": "main_theorem",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem main_theorem (K : ℕ) (L : ℝ) (sigma_F : ℝ) (sigma_op : ℝ) (f : ℝ → ℝ) (f_star : ℝ) (X_1 : ℝ) (gamma : ℝ) (beta : ℝ) (eps : ℝ) (η : ℝ) (m : ℕ) (n : ℕ) (hK : K > 0) (hL : L > 0) (hsigma_F : sigma_F ≥ 0) (hsigma_op : sigma_op ≥ 0) (hf : ∀ x y, |f x - f y| ≤ L * |x - y|) (hf_star : f X_1 - f_star ≥ 0) (hgamma : 0 < gamma ∧ gamma ≤ 1) (hbeta : 0 ≤ beta ∧ beta < 1) (heps : eps = sigma_op ^ 2) (hη : η = Real.sqrt ((eps * (f X_1 - f_star)) / (4 * L * K * sigma_F ^ 2))) : let sigma_F_hat := max sigma_F ^ 2 (L * (f X_1 - f_star) / (K * gamma ^ 2)); let theta := 1 - Real.sqrt ((L * (f X_1 - f_star)) / (K * sigma_F_hat)); (1 / K) * ∑ k ∈ Finset.range K, Real.sqrt (sigma_F_hat * L * (f X_1 - f_star) / (K * sigma_op ^ 2)) + 4 * Real.sqrt (m * n) * (sigma_F_hat * L * (f X_1 - f_star) / K) ^ (1 / 4) ≤ 10 * Real.sqrt (sigma_F_hat * L * (f X_1 - f_star) / (K * sigma_op ^ 2)) + 4 * Real.sqrt (m * n) * (sigma_F_hat * L * (f X_1 - f_star) / K) ^ (1 / 4)",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "51164090fed6f7ad139ddd80976f92f5c9684066e86b86933de328c38213f5b0",
+      "canonical_theorem_id": "cth_51164090fed6f7ad139ddd80",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21616",
+            "theorem_name": "equ1",
+            "statement_id": "2604.21616|equ1|1",
+            "statement_fingerprint": "08a25bfe1f09a9fb515570a0de272a2e785d2983664562608eadacc0aabb50c0",
+            "score": 0.8481
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "equ1",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem equ1 (L eps η theta beta K m n sigma_F_sq sigma_op_sq : ℝ) (f : Matrix (Fin m) (Fin n) ℝ) (X : ℕ → Matrix (Fin m) (Fin n) ℝ) (M : ℕ → Matrix (Fin m) (Fin n) ℝ) (V : ℕ → Matrix (Fin m) (Fin n) ℝ) (P Q : ℕ → Matrix (Fin m) (Fin n) ℝ) (G : ℕ → Matrix (Fin m) (Fin n) ℝ) (hL : L > 0) (heps : eps > 0) (hη : η > 0) (htheta : 0 < theta ∧ theta < 1) (hbeta : 0 ≤ beta ∧ beta < 1) (hK : K > 0) (hm : m > 0) (hn : n > 0) (hsigma_F : sigma_F_sq ≥ 0) (hsigma_op : sigma_op_sq ≥ 0) (hLip : ∀ x y, ‖gradf(x) - gradf(y)‖_F ≤ L * ‖x - y‖_F) (hAss2 : ∀ k, ‖gradf(X k) - G k‖_F^2 ≤ sigma_F_sq) (hAss3 : ∀ k, ‖gradf(X k) - G k‖_op^2 ≤ sigma_op_sq) (hη_bound : η ≤ √eps / (2 * L)) (hη_sq_bound : η^2 ≤ eps * (1 - theta)^2 / (2 * L^2)) (heps_def : eps = sigma_op_sq) : ∃ (C : ℝ), (1 / K) * ∑ k in Finset.range K, E[‖(P k)^T * gradf(X k) * (Q k)‖_1] ≤ C * Real.sqrt (sigma_F_sq * L * (f(X 0) - f^*) / (K * eps)) + C * Real.sqrt (m * n) * Real.rpow (sigma_F_sq * L * (f(X 0) - f^*) / (K * eps)) (1/4)",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "08a25bfe1f09a9fb515570a0de272a2e785d2983664562608eadacc0aabb50c0",
+      "canonical_theorem_id": "cth_08a25bfe1f09a9fb515570a0",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "thm_density_matrix_convergence_final",
+            "statement_id": "2604.21583|thm_density_matrix_convergence_final|50",
+            "statement_fingerprint": "b077aff4dc6b73241abeb6733bfda554807f3b6be20614f09d97d2b3527830bb",
+            "score": 3.0121
+          },
+          {
+            "paper_id": "2604.21663",
+            "theorem_name": "assumption_U",
+            "statement_id": "2604.21663|assumption_U|1",
+            "statement_fingerprint": "3d4dfdaee27b79493704f0438f1ad0ef9bfd73c7fe3b058b73ff4a6634cb996d",
+            "score": 3.0004
+          },
+          {
+            "paper_id": "2604.21616",
+            "theorem_name": "momentum_bound_lemma",
+            "statement_id": "2604.21616|momentum_bound_lemma|2",
+            "statement_fingerprint": "bafddca93c7a0a94091b7dc11f71fdf3451c3b72fe63dd0ad8dd3a969586edc5",
+            "score": 2.7586
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "momentum_bound_lemma",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: \\label{momentum-bound-lemma} Suppose that Assumptions 1-3 hold. Then for Algorithm \\ref{gsoap}, we have \\begin{eqnarray} \\begin{aligned}\\label{GM-dif-equ} &\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\ \\leq&\\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{(1-\\theta)\\sqrt{\\varepsilon}}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2. \\end{aligned} \\end{eqnarray}\ntheorem momentum_bound_lemma :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "bafddca93c7a0a94091b7dc11f71fdf3451c3b72fe63dd0ad8dd3a969586edc5",
+      "canonical_theorem_id": "cth_bafddca93c7a0a94091b7dc1",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "thm_density_matrix_convergence_final",
+            "statement_id": "2604.21583|thm_density_matrix_convergence_final|50",
+            "statement_fingerprint": "b077aff4dc6b73241abeb6733bfda554807f3b6be20614f09d97d2b3527830bb",
+            "score": 1.0121
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "proof_4",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "paper_symbol:Γ"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "-- Source claim excerpt: Denoting $\\Gamma_k=\\mathbf{G}_k-\\nabla f(\\mathbf{X}_k)$, we have $\\mathbb{E}_k\\left[\\Gamma_k\\big|\\mathcal{F}_{k-1}\\right]=0$ and $\\mathbb{E}_k\\left[\\left\\|\\Gamma_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\leq\\sigma_F^2$. From the update of $\\mathbf{M}_k$, we have \\begin{eqnarray} \\begin{aligned}\\notag \\mathbf{M}_k-\\nabla f(\\mathbf{X}_k)=& \\theta \\mathbf{M}_{k-1} + (1-\\theta)\\mathbf{G}_k - \\nabla f(\\mathbf{X}_k)\\\\ =& \\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) + (1-\\theta)\\left(\\nabla f(\\mathbf{X}_k)+\\Gamma_k\\right) - \\nabla f(\\mathbf{X}_k) + \\theta\\nabla f(\\mathbf{X}_{k-1})\\\\ =& \\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) + (1-\\theta)\\Gamma_k - \\theta\\left(\\nabla f(\\mathbf{X}_k)-\\nabla f(\\mathbf{X}_{k-1})\\right) \\end{aligned} \\end{eqnarray} and \\begin{eqnarray} \\begin{aligned}\\notag &\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\r...\ntheorem proof_4 :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "33fb13e960733064616b84b50ca978e016e296807f3386c03fd3daa6be0b5247",
+      "canonical_theorem_id": "cth_33fb13e960733064616b84b5",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "thm_density_matrix_convergence_final",
+            "statement_id": "2604.21583|thm_density_matrix_convergence_final|50",
+            "statement_fingerprint": "b077aff4dc6b73241abeb6733bfda554807f3b6be20614f09d97d2b3527830bb",
+            "score": 2.0039
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "second_moment_lemma",
+      "valid_for_proof": false,
+      "primary_blocker": "claim_review_pending",
+      "reasons": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "next_action": "Apply human/hybrid claim-equivalence review only after other gates pass.",
+      "lean_statement": "theorem second_moment_lemma (K m n : ℕ) (beta eps sigma_op : ℝ) (V : ℕ → ℕ → ℕ → ℝ) (X : ℕ → ℝ) (P Q : ℕ → ℕ → ℝ) (f : ℝ → ℝ) (hbeta : 0 ≤ beta ∧ beta < 1) (hV0 : V 0 = 0) (hsigma : sigma_op ≥ 0) (heps : eps > 0) : ∑ k in Finset.range K, ∑ i in Finset.range m, ∑ j in Finset.range n, Real.sqrt (V k i j + eps) ≤ K * m * n * Real.sqrt (sigma_op ^ 2 + eps) + 2 * ∑ t in Finset.range K, ‖(P (t - 1) ^ T * (f (X t)) * Q (t - 1)) / (Real.sqrt (V t + eps)) ^ (1 / 4)‖_F ^ 2",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "novelty_status": "new_candidate",
+      "statement_fingerprint": "6a8a68d3d4c51c8e4dbda418bb543431be4439d952b7c46562aedd09ae38ea79",
+      "canonical_theorem_id": "cth_6a8a68d3d4c51c8e4dbda418",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "proof_6",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
+      "reasons": [
+        "no_paper_axiom_debt_gate"
+      ],
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem proof_6 {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha]\n    (beta : ℝ) (eps : ℝ) (K m n : ℕ) (V : ℕ → Matrix (Fin m) (Fin n) ℝ)\n    (P : ℕ → Matrix (Fin m) (Fin m) ℝ) (Q : ℕ → Matrix (Fin n) (Fin n) ℝ)\n    (f : alpha → ℝ) (X : ℕ → alpha) (sigma_op : ℝ) (hbeta : 0 ≤ beta ∧ beta < 1) (heps : 0 < eps)\n    (hV : ∀ k, V k = beta • V (k - 1) + (1 - beta) • (P (k - 1)T • (grad f (X k)) • Q (k - 1)T • Q (k - 1) • (grad f (X k))T • P (k - 1)))\n    (hV0 : V 0 = 0) :\n    ∑ k in Finset.range K, ∑ i in Finset.range m, ∑ j in Finset.range n,\n      Real.sqrt ((V k i j) + eps) ≤\n    K * m * n * Real.sqrt (sigma_op ^ 2 + eps) +\n    (1 + Real.sqrt beta) * ∑ t in Finset.range K,\n      ∑ i in Finset.range m, ∑ j in Finset.range n,\n        ((V t i j) + eps)⁻1 * |(P (t - 1)T • (grad f (X t)) • Q (t - 1)T i j)| ^ 2",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "38ddbd66575ae3496bb80522d0b3984c3cb3b69201b63487f1d9b80a63fdded4",
+      "canonical_theorem_id": "cth_38ddbd66575ae3496bb80522",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "thm_density_matrix_convergence_final",
+            "statement_id": "2604.21583|thm_density_matrix_convergence_final|50",
+            "statement_fingerprint": "b077aff4dc6b73241abeb6733bfda554807f3b6be20614f09d97d2b3527830bb",
+            "score": 1.5322
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "nuclear_l1_norms",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "-- Source claim excerpt: \\label{nuclear-l1-norms} For any matrix $\\mathbf{A}$, we have $\\|\\mathbf{A}\\|_*\\leq \\|\\mathbf{A}\\|_1$.\ntheorem nuclear_l1_norms :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding",
+      "novelty_status": "duplicate_in_corpus",
+      "statement_fingerprint": "33bab6ec70e55e70f8ac17a3c7ab815371931692ff41b54de1489ebf6b3c7ea8",
+      "canonical_theorem_id": "cth_33bab6ec70e55e70f8ac17a3",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "canonical_fingerprint",
+        "reason": "canonical statement fingerprint matched another corpus statement",
+        "matches": [
+          {
+            "paper_id": "2604.21616",
+            "theorem_name": "proof_8",
+            "statement_id": "2604.21616|proof_8|7",
+            "statement_fingerprint": "33bab6ec70e55e70f8ac17a3c7ab815371931692ff41b54de1489ebf6b3c7ea8"
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "proof_8",
+      "valid_for_proof": true,
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "generated_row_has_axiom_or_domain_assumption_debt"
+      ],
+      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
+      "lean_statement": "theorem proof_8 (A : Matrix (Fin m) (Fin n) ℝ) : ‖A‖_* ≤ ‖A‖_1",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "superseded_generated_diagnostic",
+      "novelty_status": "duplicate_in_corpus",
+      "statement_fingerprint": "33bab6ec70e55e70f8ac17a3c7ab815371931692ff41b54de1489ebf6b3c7ea8",
+      "canonical_theorem_id": "cth_33bab6ec70e55e70f8ac17a3",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "canonical_fingerprint",
+        "reason": "canonical statement fingerprint matched another corpus statement",
+        "matches": [
+          {
+            "paper_id": "2604.21616",
+            "theorem_name": "nuclear_l1_norms",
+            "statement_id": "2604.21616|nuclear_l1_norms|6",
+            "statement_fingerprint": "33bab6ec70e55e70f8ac17a3c7ab815371931692ff41b54de1489ebf6b3c7ea8"
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "proof_8__audited_core",
+      "valid_for_proof": true,
+      "primary_blocker": "release_ready",
+      "reasons": [],
+      "next_action": "No blocker detected for release promotion.",
+      "lean_statement": "theorem auto_proof_8_rank_one_triangle\n    {m n : Type*} [Fintype m] [Fintype n]\n    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]\n    (A : m → n → ℝ) (B : m → n → E) :\n    ‖∑ i, ∑ j, A i j • B i j‖ ≤ ∑ i, ∑ j, |A i j| * ‖B i j‖",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "audited_real_claim",
+      "novelty_status": "new_candidate",
+      "statement_fingerprint": "1e1443489ca4ea4a211770880735f2465794ae592347e776d439fd7d0ac778e3",
+      "canonical_theorem_id": "cth_1e1443489ca4ea4a21177088",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    }
+  ]
+}

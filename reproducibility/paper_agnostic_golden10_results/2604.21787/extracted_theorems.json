@@ -1,5 +1,13 @@
 {
   "paper_id": "2604.21787",
   "theorem_count": 0,
-  "entries": []
+  "entries": [],
+  "span_repair": {
+    "schema_version": "extracted_theorem_span_repair.v1",
+    "method": "extractor_unique_name_or_statement_match",
+    "rows": 0,
+    "repaired_rows": 0,
+    "unmatched_rows": 0,
+    "ambiguous_rows": 0
+  }
 }

@@ -1,0 +1,25 @@
+{
+  "theorems": [
+    {
+      "theorem_name": "momentum_bound_lemma",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "nuclear_l1_norms",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "lean_proof_closed"
+      ]
+    },
+    {
+      "theorem_name": "proof_8",
+      "primary_blocker": "proof_search_failure",
+      "reasons": [
+        "generated_row_has_axiom_or_domain_assumption_debt"
+      ]
+    }
+  ]
+}

@@ -1189,11 +1189,24 @@ def _row_to_kg_node(row: dict[str, Any], paper_id: str, meta: dict[str, Any]) ->
         or row.get("extracted_conclusion")
         or ""
     )
+    alignment_decision = artifact.get("alignment_decision")
+    if not isinstance(alignment_decision, dict):
+        alignment_decision = {}
+    statement_alignment_class = str(
+        row.get("statement_alignment_class")
+        or artifact.get("alignment_class")
+        or alignment_decision.get("alignment_class")
+        or ""
+    )
     return {
         "evidence_id": f"ev:{paper_id}|{row.get('theorem_name', '')}",
         "paper_id": paper_id,
         "theorem_name": row.get("theorem_name", ""),
         "canonical_theorem_id": canon["canonical_theorem_id"],
+        "paper_statement_id": row.get("paper_statement_id") or alignment_decision.get("paper_statement_id", ""),
+        "alignment_pair_id": row.get("alignment_pair_id") or alignment_decision.get("alignment_pair_id", ""),
+        "statement_alignment_class": statement_alignment_class,
+        "alignment_confidence": float(alignment_decision.get("confidence", 0.0) or 0.0),
         "canonical_statement": canon["canonical_statement"],
         "claim_shape": canon["claim_shape"],
         "lean_file": row.get("lean_file", ""),
@@ -1222,6 +1235,8 @@ def _row_to_kg_node(row: dict[str, Any], paper_id: str, meta: dict[str, Any]) ->
             "normalized_natural_language_theorem": normalized_nl,
             "extracted_assumptions": extracted_assumptions,
             "extracted_conclusion": extracted_conclusion,
+            "alignment_class": statement_alignment_class,
+            "alignment_decision": alignment_decision,
             "retrieval_text_hash": hashlib.sha256(statement_text.encode("utf-8")).hexdigest()[:24],
         },
         "semantic_statement_text": statement_text,

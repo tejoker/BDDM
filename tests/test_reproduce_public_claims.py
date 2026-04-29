@@ -73,8 +73,20 @@ def test_build_public_claim_artifacts_indexes_hashes(monkeypatch, tmp_path: Path
 
     manifest = json.loads(paths["manifest"].read_text(encoding="utf-8"))
     assert manifest["all_required_artifacts_present"] is True
+    assert manifest["corpus_release_schema_version"] == "1.1.0"
+    assert manifest["release_audit"]["toolchain"]["lean_toolchain"] == "leanprover/lean4:v4.29.0-rc7"
+    assert manifest["release_audit"]["artifact_summary"]["missing_required_count"] == 0
+    assert manifest["required_public_artifacts"]
+    assert manifest["optional_public_artifacts"] == ["claim_equivalence_review_queue", "claim_equivalence_adjudications"]
+    assert manifest["artifact_count"] == len(manifest["artifacts"])
+    assert "silver_repair_dataset" in manifest["required_public_artifacts"]
+    assert "dataset_tier_summary" in manifest
+    assert manifest["dataset_tier_summary"]["silver_rows"] >= 0
     assert any(row["role"] == "fetched_paper_metadata" and row["sha256"] for row in manifest["artifacts"])
     assert manifest["missing_artifacts"][0]["role"] == "proof_attempts"
+    assert all(row["sha256"] for row in manifest["artifacts"] if row["exists"])
+    assert paths["silver_repair_dataset"].exists()
+    assert paths["silver_repair_dataset_summary"].exists()
 
     lean_validation = json.loads(paths["lean_validation"].read_text(encoding="utf-8"))
     assert lean_validation["rows"][0]["entries"][0]["validation_gates"]["lean_elaboration"] is True

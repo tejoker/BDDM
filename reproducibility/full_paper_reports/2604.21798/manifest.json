@@ -1,10 +1,138 @@
 {
   "paper_id": "2604.21798",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "bundle_dir": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798",
   "files": {
     "report": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/suite_report.json",
-    "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/unresolved.json"
+    "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/unresolved.json",
+    "missing_lemmas": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/missing_lemmas.json",
+    "axiom_debt_burndown": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/axiom_debt_burndown.json",
+    "statement_validity": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/statement_validity.json",
+    "proof_repair_cohort": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/proof_repair_cohort.json",
+    "paper_theory_manifest": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21798/paper_theory_manifest.json"
   },
-  "regenerate_command": "python3 scripts/formalize_paper_full.py --paper-id 2604.21798 --project-root ."
+  "regenerate_command": "python3 scripts/formalize_paper_full.py --paper-id 2604.21798 --project-root .",
+  "corpus_release_schema_version": "1.1.0",
+  "artifacts": [
+    {
+      "role": "report",
+      "path": "reproducibility/full_paper_reports/2604.21798/suite_report.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2604.21798",
+      "size_bytes": 26682,
+      "sha256": "707d7479d054177e88ba75d1c5a15f2c24e266191ffedcaa80a022c4c00613bf"
+    },
+    {
+      "role": "unresolved",
+      "path": "reproducibility/full_paper_reports/2604.21798/unresolved.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2604.21798",
+      "size_bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "role": "missing_lemmas",
+      "path": "reproducibility/full_paper_reports/2604.21798/missing_lemmas.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2604.21798",
+      "size_bytes": 606,
+      "sha256": "bc18dd59f1af7b2fc68aa96828e2ad7f0dbff7325da4b30a4fac0ef73f5a2cb9",
+      "schema_version": "1.1.0"
+    },
+    {
+      "role": "axiom_debt_burndown",
+      "path": "reproducibility/full_paper_reports/2604.21798/axiom_debt_burndown.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2604.21798",
+      "size_bytes": 541,
+      "sha256": "f1b2feb2f2ebb622994cabd1d34d323da3169140c61bf4d7954d2d39c561701a",
+      "schema_version": "1.1.0"
+    },
+    {
+      "role": "statement_validity",
+      "path": "reproducibility/full_paper_reports/2604.21798/statement_validity.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2604.21798",
+      "size_bytes": 47,
+      "sha256": "f3b985e71fd87227ae11bf2bbbd1098a04097834ea7a62bd097da576b510217f"
+    },
+    {
+      "role": "proof_repair_cohort",
+      "path": "reproducibility/full_paper_reports/2604.21798/proof_repair_cohort.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2604.21798",
+      "size_bytes": 20,
+      "sha256": "1ac6ddb08281ca725c4fc62ad4e9b83d05343789292971a677ba5c19be08e85c"
+    },
+    {
+      "role": "paper_theory_manifest",
+      "path": "reproducibility/full_paper_reports/2604.21798/paper_theory_manifest.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2604.21798",
+      "size_bytes": 3737,
+      "sha256": "9b48af6be1baa3e7c6614e11a6ee102adddf4235d27bdc142faf85859b579076",
+      "schema_version": "1.1.0"
+    }
+  ],
+  "release_audit": {
+    "schema_version": "1.1.0",
+    "generated_at": "2026-04-27T09:46:35Z",
+    "command": [
+      "python3",
+      "scripts/formalize_paper_full.py",
+      "--paper-id",
+      "2604.21798",
+      "--project-root",
+      "."
+    ],
+    "repository": {
+      "git_commit": "cf8822bcabfded106a2a42264184223bd9ddf272",
+      "dirty_tree": true
+    },
+    "toolchain": {
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "lean_version": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
+      "python_version": "3.12.3",
+      "lake_dependencies": [
+        {
+          "name": "mathlib",
+          "git": "https://github.com/leanprover-community/mathlib4.git",
+          "rev": "5923a7573b523783de41ba3f73e518fb8dd9ce01"
+        },
+        {
+          "name": "repl",
+          "path": "third_party/repl_compat"
+        }
+      ],
+      "mathlib": {
+        "name": "mathlib",
+        "git": "https://github.com/leanprover-community/mathlib4.git",
+        "rev": "5923a7573b523783de41ba3f73e518fb8dd9ce01"
+      }
+    },
+    "environment": {
+      "platform": "linux",
+      "mistral_model": "unknown"
+    },
+    "provenance_policy": {
+      "source_traceability": "Rows must retain arXiv paper id and artifact paths; theorem span fields are required when extraction provides them.",
+      "license_note": "arXiv source text remains attributed to the source paper; DESol-generated Lean and audit metadata are derived artifacts.",
+      "trust_tiers": "Gold, silver, diagnostic, and blocker labels must not be collapsed into one training tier."
+    },
+    "artifact_summary": {
+      "artifact_count": 7,
+      "existing_artifact_count": 7,
+      "required_artifact_count": 7,
+      "missing_required_count": 0,
+      "checksum_count": 7,
+      "checksum_coverage": 1.0
+    }
+  }
 }

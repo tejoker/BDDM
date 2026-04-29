@@ -81,4 +81,29 @@ theorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :
     AutoProductsViUjCondition
   aesop
 
+def AutoDyadicSharpnessCriticalExponent (alpha : ℝ) : Prop :=
+    3 - 4 * alpha = 0
+
+theorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :
+    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4 := by
+  unfold AutoDyadicSharpnessCriticalExponent
+  constructor
+  · intro h
+    linarith
+  · intro h
+    linarith
+
+def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : ℝ) : Prop :=
+    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧
+    3 - 4 * alpha + theta * (s2 + eps) < 0
+
+theorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : ℝ) :
+    AutoStrongLowHighOperatorCondition eps alpha s2 theta →
+    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 ∧
+    theta * (s2 + eps) < 4 * alpha - 3 := by
+  intro h
+  constructor
+  · linarith [h.1]
+  · linarith [h.2]
+
 end AutoPaper_2604_21884

@@ -7,7 +7,27 @@
       "name": "main-theorem",
       "statement": "\\label{main-theorem}\nSuppose that Assumptions 1-3 hold. Let $\\hat\\sigma_F^2=\\max\\left\\{\\sigma_F^2,\\frac{L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\gamma^2}\\right\\}$ with any $\\gamma\\in(0,1]$, $1-\\theta=\\sqrt{\\frac{L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\hat\\sigma_F^2}}$, $0\\leq\\beta<1$, $\\varepsilon=\\sigma_{op}^2$, and $\\eta=\\sqrt{\\frac{\\varepsilon\\left(f(\\mathbf{X}_1)-f^*\\right)}{4LK\\hat\\sigma_F^2}}$. Then for Algorithm \\ref{gsoap}, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{rate1}\n\\frac{1}{K}\\sum_{k=1}^K\\mathbb{E}\\left[\\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right\\|_1\\right]\\leq 10\\sqrt{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\sigma_{op}^2}}+4\\sqrt{mn}\\sqrt[4]{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K}},\n\\end{aligned}\n\\end{eqnarray} \nand\n\\begin{eqnarray}\n\\begin{aligned}\\label{rate2}\n\\frac{1}{K}\\sum_{k=1}^K\\mathbb{E}\\left[\\left\\|\\nabla f(\\mathbf{X}_k)\\right\\|_*\\right]\\leq 10\\sqrt{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\sigma_{op}^2}}+4\\sqrt{mn}\\sqrt[4]{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K}}.\n\\end{aligned}\n\\end{eqnarray}",
       "proof": "",
-      "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex"
+      "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex",
+      "source_span": {
+        "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex",
+        "start_byte": 16021,
+        "end_byte": 17144,
+        "start_line": 233,
+        "start_col": 16,
+        "end_line": 245,
+        "end_col": 15,
+        "span_confidence": "exact_extractor"
+      },
+      "proof_span": null,
+      "env_name": "theorem",
+      "label": "main-theorem",
+      "span_start": 16004,
+      "span_end": 17157,
+      "body_start": 16019,
+      "body_end": 17142,
+      "start_line": 233,
+      "end_line": 246,
+      "source_span_id": "srcspan_29e61e02ab26f0b51fa4"
     },
     {
       "kind": "theorem",
@@ -17,11 +37,39 @@
       "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex"
     },
     {
-      "kind": "theorem",
+      "kind": "lemma",
       "name": "momentum-bound-lemma",
       "statement": "\\label{momentum-bound-lemma}\nSuppose that Assumptions 1-3 hold. Then for Algorithm \\ref{gsoap}, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{GM-dif-equ}\n&\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n\\leq&\\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{(1-\\theta)\\sqrt{\\varepsilon}}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2.\n\\end{aligned}\n\\end{eqnarray}",
       "proof": "Denoting $\\Gamma_k=\\mathbf{G}_k-\\nabla f(\\mathbf{X}_k)$, we have $\\mathbb{E}_k\\left[\\Gamma_k\\big|\\mathcal{F}_{k-1}\\right]=0$ and $\\mathbb{E}_k\\left[\\left\\|\\Gamma_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\leq\\sigma_F^2$. From the update of $\\mathbf{M}_k$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\mathbf{M}_k-\\nabla f(\\mathbf{X}_k)=& \\theta \\mathbf{M}_{k-1} + (1-\\theta)\\mathbf{G}_k - \\nabla f(\\mathbf{X}_k)\\\\\n=& \\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) + (1-\\theta)\\left(\\nabla f(\\mathbf{X}_k)+\\Gamma_k\\right) - \\nabla f(\\mathbf{X}_k) + \\theta\\nabla f(\\mathbf{X}_{k-1})\\\\\n=& \\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) + (1-\\theta)\\Gamma_k - \\theta\\left(\\nabla f(\\mathbf{X}_k)-\\nabla f(\\mathbf{X}_{k-1})\\right)\n\\end{aligned}\n\\end{eqnarray}\nand\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n=&\\left\\|\\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) - \\theta\\left(\\nabla f(\\mathbf{X}_k)-\\nabla f(\\mathbf{X}_{k-1})\\right)\\right\\|_F^2 + (1-\\theta)^2\\mathbb{E}_k\\left[\\left\\|\\Gamma_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n\\leq& \\theta^2\\hspace*{-0.05cm}\\left(\\hspace*{-0.05cm}1\\hspace*{-0.05cm}+\\hspace*{-0.05cm}\\frac{1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta}{\\theta}\\right)\\hspace*{-0.05cm}\\left\\|\\mathbf{M}_{k-1}\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 \\hspace*{-0.05cm}+\\hspace*{-0.05cm} \\theta^2\\hspace*{-0.05cm}\\left(\\hspace*{-0.05cm}1\\hspace*{-0.05cm}+\\hspace*{-0.05cm}\\frac{\\theta}{1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta}\\right)\\hspace*{-0.05cm}\\left\\|\\nabla f(\\mathbf{X}_k)\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 \\hspace*{-0.05cm}+\\hspace*{-0.05cm} (1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta)^2\\mathbb{E}_k\\hspace*{-0.05cm}\\left[\\left\\|\\Gamma_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n\\leq& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{1}{1-\\theta}\\left\\|\\nabla f(\\mathbf{X}_k)-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n\\leq& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2}{1-\\theta}\\left\\|\\mathbf{X}_k-\\mathbf{X}_{k-1}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n=& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{1-\\theta}\\left\\|\\mathbf{P}_{k-2}\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt{\\mathbf{V}_{k-1}+\\varepsilon}}\\mathbf{Q}_{k-2}^T\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n=& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{1-\\theta}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n\\leq& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{(1-\\theta)\\sqrt{\\varepsilon}}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2.\n\\end{aligned}\n\\end{eqnarray}",
-      "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex"
+      "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex",
+      "source_span": {
+        "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex",
+        "start_byte": 34324,
+        "end_byte": 34877,
+        "start_line": 385,
+        "start_col": 14,
+        "end_line": 392,
+        "end_col": 15,
+        "span_confidence": "exact_extractor"
+      },
+      "proof_span": {
+        "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex",
+        "start_byte": 34904,
+        "end_byte": 38012,
+        "start_line": 395,
+        "start_col": 1,
+        "end_line": 415,
+        "end_col": 15
+      },
+      "env_name": "lemma",
+      "label": "momentum-bound-lemma",
+      "span_start": 34309,
+      "span_end": 34887,
+      "body_start": 34322,
+      "body_end": 34875,
+      "start_line": 385,
+      "end_line": 393,
+      "source_span_id": "srcspan_344cfd3447860d7368b1"
     },
     {
       "kind": "theorem",
@@ -31,11 +79,39 @@
       "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex"
     },
     {
-      "kind": "theorem",
+      "kind": "lemma",
       "name": "second-moment-lemma",
       "statement": "\\label{second-moment-lemma}\nSuppose that Assumptions 2-3 hold. Let $0\\leq\\beta< 1$ and $\\mathbf{V}_0=0$. Then we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n \\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\sqrt{\\widetilde\\mathbf{V}_{k,i,j}+\\varepsilon}\\right]\\leq Kmn\\sqrt{\\sigma_{op}^2+\\varepsilon}+2\\sum_{t=1}^K\\mathbb{E}_{\\mathcal{F}_{t-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{t-1}^T\\nabla f(\\mathbf{X}_t)\\mathbf{Q}_{t-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_t+\\varepsilon}}\\right\\|_F^2\\right].\n\\end{aligned}\n\\end{eqnarray}",
       "proof": "From the definition of $\\widetilde\\mathbf{V}_k$ in (\\ref{wide-v-def}), we have\n\\begin{eqnarray}\n\\hspace*{-2cm}\\begin{aligned}\\notag\n&\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\sqrt{\\widetilde\\mathbf{V}_{k,i,j}+\\varepsilon}\\right]\\\\\n=&\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\sqrt{\\beta\\mathbf{V}_{k-1,i,j}+(1-\\beta)\\left(\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\sigma_{op}^2\\right)+\\varepsilon}\\right]\n\\end{aligned}\n\\end{eqnarray}\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n=&\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\frac{\\beta\\mathbf{V}_{k-1,i,j}+(1-\\beta)\\sigma_{op}^2+\\varepsilon}{\\sqrt{\\beta\\mathbf{V}_{k-1,i,j}+(1-\\beta)\\left(\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\sigma_{op}^2\\right)+\\varepsilon}}\\right]\\\\\n& + \\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\frac{(1-\\beta)\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2}{\\sqrt{\\beta\\mathbf{V}_{k-1,i,j}+(1-\\beta)\\left(\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\sigma_{op}^2\\right)+\\varepsilon}}\\right]\\\\\n\\leq&\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\sqrt{\\beta\\mathbf{V}_{k-1,i,j}+(1-\\beta)\\sigma_{op}^2+\\varepsilon}\\right]+(1-\\beta)\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\frac{\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{k,i,j}+\\varepsilon}}\\right].\n\\end{aligned}\n\\end{eqnarray}\nConsider the first part in the general case. From the recursion of $\\mathbf{V}_{k-t,i,j}$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&\\mathbb{E}_{\\mathcal{F}_{k-t}}\\left[\\sqrt{\\beta^t\\mathbf{V}_{k-t,i,j}+(1-\\beta^t)\\sigma_{op}^2+\\varepsilon}\\right]\\\\\n=&\\mathbb{E}_{\\mathcal{F}_{k-t}}\\left[\\sqrt{\\beta^{t+1}\\mathbf{V}_{k-t-1,i,j}+\\beta^t(1-\\beta)\\left|\\mathbf{P}_{k-t-1,:,i}^T\\mathbf{G}_{k-t}\\mathbf{Q}_{k-t-1,:,j}\\right|^2+(1-\\beta^t)\\sigma_{op}^2+\\varepsilon}\\right]\\\\\n=&\\mathbb{E}_{\\mathcal{F}_{k-t-1}}\\left[\\mathbb{E}_{k-t}\\left[\\sqrt{\\beta^{t+1}\\mathbf{V}_{k-t-1,i,j}+\\beta^t(1-\\beta)\\left|\\mathbf{P}_{k-t-1,:,i}^T\\mathbf{G}_{k-t}\\mathbf{Q}_{k-t-1,:,j}\\right|^2+(1-\\beta^t)\\sigma_{op}^2+\\varepsilon}\\Big|\\mathcal{F}_{k-t-1}\\right]\\right]\\\\\n\\overset{a}\\leq&\\mathbb{E}_{\\mathcal{F}_{k-t-1}}\\left[\\sqrt{\\beta^{t+1}\\mathbf{V}_{k-t-1,i,j}+\\beta^t(1-\\beta)\\mathbb{E}_{k-t}\\left[\\left|\\mathbf{P}_{k-t-1,:,i}^T\\mathbf{G}_{k-t}\\mathbf{Q}_{k-t-1,:,j}\\right|^2\\Big|\\mathcal{F}_{k-t-1}\\right]+(1-\\beta^t)\\sigma_{op}^2+\\varepsilon}\\right]\\\\\n\\overset{b}\\leq&\\mathbb{E}_{\\mathcal{F}_{k-t-1}}\\left[\\sqrt{\\beta^{t+1}\\mathbf{V}_{k-t-1,i,j}+\\beta^t(1-\\beta)\\left(\\left|\\mathbf{P}_{k-t-1,:,i}^T\\nabla f(\\mathbf{X}_{k-t})\\mathbf{Q}_{k-t-1,:,j}\\right|^2+\\sigma_{op}^2\\right)+(1-\\beta^t)\\sigma_{op}^2+\\varepsilon}\\right]\\\\\n=&\\mathbb{E}_{\\mathcal{F}_{k-t-1}}\\left[\\sqrt{\\beta^{t+1}\\mathbf{V}_{k-t-1,i,j}+\\beta^t(1-\\beta)\\left|\\mathbf{P}_{k-t-1,:,i}^T\\nabla f(\\mathbf{X}_{k-t})\\mathbf{Q}_{k-t-1,:,j}\\right|^2+(1-\\beta^{t+1})\\sigma_{op}^2+\\varepsilon}\\right]\\\\\n=&\\mathbb{E}_{\\mathcal{F}_{k-t-1}}\\left[\\frac{\\beta^{t+1}\\mathbf{V}_{k-t-1,i,j}+(1-\\beta^{t+1})\\sigma_{op}^2+\\varepsilon}{\\sqrt{\\beta^{t+1}\\mathbf{V}_{k-t-1,i,j}+\\beta^t(1-\\beta)\\left|\\mathbf{P}_{k-t-1,:,i}^T\\nabla f(\\mathbf{X}_{k-t})\\mathbf{Q}_{k-t-1,:,j}\\right|^2+(1-\\beta^{t+1})\\sigma_{op}^2+\\varepsilon}}\\right]\\\\\n& + \\mathbb{E}_{\\mathcal{F}_{k-t-1}}\\left[\\frac{\\beta^t(1-\\beta)\\left|\\mathbf{P}_{k-t-1,:,i}^T\\nabla f(\\mathbf{X}_{k-t})\\mathbf{Q}_{k-t-1,:,j}\\right|^2}{\\sqrt{\\beta^{t+1}\\mathbf{V}_{k-t-1,i,j}+\\beta^t(1-\\beta)\\left|\\mathbf{P}_{k-t-1,:,i}^T\\nabla f(\\mathbf{X}_{k-t})\\mathbf{Q}_{k-t-1,:,j}\\right|^2+(1-\\beta^{t+1})\\sigma_{op}^2+\\varepsilon}}\\right]\\\\\n\\leq&\\mathbb{E}_{\\mathcal{F}_{k-t-1}}\\left[\\sqrt{\\beta^{t+1}\\mathbf{V}_{k-t-1,i,j}+(1-\\beta^{t+1})\\sigma_{op}^2+\\varepsilon}\\right]\\\\\n& + \\mathbb{E}_{\\mathcal{F}_{k-t-1}}\\left[\\frac{\\beta^t(1-\\beta)\\left|\\mathbf{P}_{k-t-1,:,i}^T\\nabla f(\\mathbf{X}_{k-t})\\mathbf{Q}_{k-t-1,:,j}\\right|^2}{\\sqrt{\\beta^{t+1}\\mathbf{V}_{k-t-1,i,j}+\\beta^t(1-\\beta)\\left|\\mathbf{P}_{k-t-1,:,i}^T\\nabla f(\\mathbf{X}_{k-t})\\mathbf{Q}_{k-t-1,:,j}\\right|^2+(\\beta^t-\\beta^{t+1})\\sigma_{op}^2+\\beta^t\\varepsilon}}\\right]\\\\\n=&\\mathbb{E}_{\\mathcal{F}_{k-t-1}}\\hspace*{-0.1cm}\\left[\\sqrt{\\beta^{t+1}\\mathbf{V}_{k-t-1,i,j}+(1-\\beta^{t+1})\\sigma_{op}^2+\\varepsilon}\\right]+\\sqrt{\\beta^t}(1-\\beta)\\mathbb{E}_{\\mathcal{F}_{k-t-1}}\\hspace*{-0.1cm}\\left[\\frac{\\left|\\mathbf{P}_{k-t-1,:,i}^T\\nabla f(\\mathbf{X}_{k-t})\\mathbf{Q}_{k-t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{k-t,i,j}+\\varepsilon}}\\right]\\hspace*{-0.1cm},\n\\end{aligned}\n\\end{eqnarray}\nwhere we use the concavity of $\\sqrt{x}$ in $\\overset{a}\\leq$ and a similar induction to (\\ref{equ2}) in $\\overset{b}\\leq$. Applying the above inequality recursively for $t=1,2,\\cdots,k-1$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\sqrt{\\beta\\mathbf{V}_{k-1,i,j}+(1-\\beta)\\sigma_{op}^2+\\varepsilon}\\right]\\\\\n\\leq&\\sqrt{\\beta^k\\mathbf{V}_{0,i,j}+(1-\\beta^k)\\sigma_{op}^2+\\varepsilon}+\\sum_{t=1}^{k-1}\\sqrt{\\beta^t}(1-\\beta)\\mathbb{E}_{\\mathcal{F}_{k-t-1}}\\left[\\frac{\\left|\\mathbf{P}_{k-t-1,:,i}^T\\nabla f(\\mathbf{X}_{k-t})\\mathbf{Q}_{k-t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{k-t,i,j}+\\varepsilon}}\\right]\\\\\n=&\\sqrt{\\beta^k\\mathbf{V}_{0,i,j}+(1-\\beta^k)\\sigma_{op}^2+\\varepsilon}+\\sum_{t=1}^{k-1}\\sqrt{\\beta^{k-t}}(1-\\beta)\\mathbb{E}_{\\mathcal{F}_{t-1}}\\left[\\frac{\\left|\\mathbf{P}_{t-1,:,i}^T\\nabla f(\\mathbf{X}_t)\\mathbf{Q}_{t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{t,i,j}+\\varepsilon}}\\right]\n\\end{aligned}\n\\end{eqnarray}\nand\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\sqrt{\\widetilde\\mathbf{V}_{k,i,j}+\\varepsilon}\\right]\\leq& \\sqrt{\\beta^k\\mathbf{V}_{0,i,j}+(1-\\beta^k)\\sigma_{op}^2+\\varepsilon}+\\sum_{t=1}^k\\sqrt{\\beta^{k-t}}(1-\\beta)\\mathbb{E}_{\\mathcal{F}_{t-1}}\\left[\\frac{\\left|\\mathbf{P}_{t-1,:,i}^T\\nabla f(\\mathbf{X}_t)\\mathbf{Q}_{t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{t,i,j}+\\varepsilon}}\\right]\\\\\n\\leq&\\sqrt{\\sigma_{op}^2+\\varepsilon}+\\sum_{t=1}^k\\sqrt{\\beta^{k-t}}(1-\\beta)\\mathbb{E}_{\\mathcal{F}_{t-1}}\\left[\\frac{\\left|\\mathbf{P}_{t-1,:,i}^T\\nabla f(\\mathbf{X}_t)\\mathbf{Q}_{t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{t,i,j}+\\varepsilon}}\\right],\n\\end{aligned}\n\\end{eqnarray}\nwhere we use $\\mathbf{V}_0=\\0$. Summing over $i=1,2,\\cdots,m$, $j=1,2,\\cdots,n$, and $k=1,2,\\cdots,K$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&\\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n \\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\sqrt{\\widetilde\\mathbf{V}_{k,i,j}+\\varepsilon}\\right]\\\\\n\\leq& Kmn\\sqrt{\\sigma_{op}^2+\\varepsilon}+\\sum_{k=1}^K\\sum_{t=1}^k\\sqrt{\\beta^{k-t}}(1-\\beta)\\sum_{i=1}^m\\sum_{j=1}^n\\mathbb{E}_{\\mathcal{F}_{t-1}}\\left[\\frac{\\left|\\mathbf{P}_{t-1,:,i}^T\\nabla f(\\mathbf{X}_t)\\mathbf{Q}_{t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{t,i,j}+\\varepsilon}}\\right]\\\\\n=& Kmn\\sqrt{\\sigma_{op}^2+\\varepsilon}+\\sum_{t=1}^K\\sum_{k=t}^K\\sqrt{\\beta^{k-t}}(1-\\beta)\\sum_{i=1}^m\\sum_{j=1}^n\\mathbb{E}_{\\mathcal{F}_{t-1}}\\left[\\frac{\\left|\\mathbf{P}_{t-1,:,i}^T\\nabla f(\\mathbf{X}_t)\\mathbf{Q}_{t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{t,i,j}+\\varepsilon}}\\right]\\\\\n\\leq& Kmn\\sqrt{\\sigma_{op}^2+\\varepsilon}+\\frac{1-\\beta}{1-\\sqrt{\\beta}}\\sum_{t=1}^K\\sum_{i=1}^m\\sum_{j=1}^n\\mathbb{E}_{\\mathcal{F}_{t-1}}\\left[\\frac{\\left|\\mathbf{P}_{t-1,:,i}^T\\nabla f(\\mathbf{X}_t)\\mathbf{Q}_{t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{t,i,j}+\\varepsilon}}\\right]\\\\\n=& Kmn\\sqrt{\\sigma_{op}^2+\\varepsilon}+(1+\\sqrt{\\beta})\\sum_{t=1}^K\\sum_{i=1}^m\\sum_{j=1}^n\\mathbb{E}_{\\mathcal{F}_{t-1}}\\left[\\frac{\\left|\\mathbf{P}_{t-1,:,i}^T\\nabla f(\\mathbf{X}_t)\\mathbf{Q}_{t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{t,i,j}+\\varepsilon}}\\right]\\\\\n=& Kmn\\sqrt{\\sigma_{op}^2+\\varepsilon}+(1+\\sqrt{\\beta})\\sum_{t=1}^K\\mathbb{E}_{\\mathcal{F}_{t-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{t-1}^T\\nabla f(\\mathbf{X}_t)\\mathbf{Q}_{t-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_t+\\varepsilon}}\\right\\|_F^2\\right].\n\\end{aligned}\n\\end{eqnarray}",
-      "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex"
+      "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex",
+      "source_span": {
+        "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex",
+        "start_byte": 38245,
+        "end_byte": 38784,
+        "start_line": 419,
+        "start_col": 14,
+        "end_line": 425,
+        "end_col": 15,
+        "span_confidence": "exact_extractor"
+      },
+      "proof_span": {
+        "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex",
+        "start_byte": 38811,
+        "end_byte": 46756,
+        "start_line": 428,
+        "start_col": 1,
+        "end_line": 483,
+        "end_col": 15
+      },
+      "env_name": "lemma",
+      "label": "second-moment-lemma",
+      "span_start": 38230,
+      "span_end": 38794,
+      "body_start": 38243,
+      "body_end": 38782,
+      "start_line": 419,
+      "end_line": 426,
+      "source_span_id": "srcspan_745cf656f6bdf1d6fb44"
     },
     {
       "kind": "theorem",
@@ -45,11 +121,39 @@
       "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex"
     },
     {
-      "kind": "theorem",
+      "kind": "lemma",
       "name": "nuclear-l1-norms",
       "statement": "\\label{nuclear-l1-norms}\nFor any matrix $\\mathbf{A}$, we have $\\|\\mathbf{A}\\|_*\\leq \\|\\mathbf{A}\\|_1$.",
       "proof": "Let $\\mathbf{e}_i$ denote the $i$-th standard basis vector.\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\|\\mathbf{A}\\|_*=\\left\\|\\sum_{i,j}\\mathbf{A}_{ij}\\mathbf{e}_i\\mathbf{e}_j^T\\right\\|_*\\leq \\sum_{i,j}|\\mathbf{A}_{ij}|\\left\\|\\mathbf{e}_i\\mathbf{e}_j^T\\right\\|_*=\\sum_{i,j}|\\mathbf{A}_{ij}|=\\|\\mathbf{A}\\|_1.\n\\end{aligned}\n\\end{eqnarray}",
-      "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex"
+      "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex",
+      "source_span": {
+        "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex",
+        "start_byte": 46856,
+        "end_byte": 46958,
+        "start_line": 487,
+        "start_col": 14,
+        "end_line": 488,
+        "end_col": 78,
+        "span_confidence": "exact_extractor"
+      },
+      "proof_span": {
+        "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex",
+        "start_byte": 46985,
+        "end_byte": 47319,
+        "start_line": 491,
+        "start_col": 1,
+        "end_line": 496,
+        "end_col": 15
+      },
+      "env_name": "lemma",
+      "label": "nuclear-l1-norms",
+      "span_start": 46841,
+      "span_end": 46968,
+      "body_start": 46854,
+      "body_end": 46956,
+      "start_line": 487,
+      "end_line": 489,
+      "source_span_id": "srcspan_c669917435b025d77569"
     },
     {
       "kind": "theorem",
@@ -58,5 +162,13 @@
       "proof": "",
       "source_file": "output/paper_sources/golden10/2604.21616_expanded/SOAP.tex"
     }
-  ]
+  ],
+  "span_repair": {
+    "schema_version": "extracted_theorem_span_repair.v1",
+    "method": "extractor_unique_name_or_statement_match",
+    "rows": 8,
+    "repaired_rows": 4,
+    "unmatched_rows": 4,
+    "ambiguous_rows": 0
+  }
 }

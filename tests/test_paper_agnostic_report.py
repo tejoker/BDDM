@@ -19,7 +19,10 @@ def test_build_report_maps_statuses_and_blockers(tmp_path: Path) -> None:
                 "theorem_name": "t1",
                 "lean_statement": "theorem t1 : True",
                 "status": "FULLY_PROVEN",
+                "proof_method": "lean_verified",
                 "proof_text": "trivial",
+                "ledger_role": "audited_core_replacement",
+                "equivalence_scope": "critical_exponent_algebraic_component_only",
                 "step_obligations": [{"verified": True}],
                 "assumptions": [],
                 "provenance": {"paper_id": "2300.00001"},
@@ -45,10 +48,16 @@ def test_build_report_maps_statuses_and_blockers(tmp_path: Path) -> None:
 
     assert report["toolchain"] == "leanprover/lean4:v4.29.0-rc7"
     assert report["evidence_label"] == "partial_diagnostic_evidence"
-    assert report["primary_metric"] == "aggregate_statuses.FULLY_PROVEN"
+    assert report["primary_metric"] == "verified_proven"
     assert "do not read this as full suite closure" in report["claim_scope"]
     assert report["papers_evaluated"] == 1
     assert report["theorems_evaluated"] == 3
+    assert report["verified_proven"] == 1
+    assert report["verified_proven_scope_counts"]["audited_component"] == 1
+    assert report["verified_proven_audited_component"] == 1
+    assert report["verified_proven_full_source_claim"] == 0
+    assert report["gold_proof"] == 1
+    assert report["dataset_tier_counts"]["gold_proof"] == 1
     assert report["aggregate_statuses"]["FULLY_PROVEN"] == 1
     assert report["aggregate_statuses"]["AXIOM_BACKED"] == 1
     assert report["aggregate_statuses"]["TRANSLATION_UNCERTAIN"] == 1
@@ -58,9 +67,55 @@ def test_build_report_maps_statuses_and_blockers(tmp_path: Path) -> None:
     assert report["axiom_debt_burndown"]["axiom_backed_result_count"] == 1
     assert report["axiom_debt_burndown"]["result_buckets"]["missing_definitions_only"] == 1
     assert report["papers"][0]["evidence_label"] == "partial_diagnostic_evidence"
-    assert report["papers"][0]["primary_metric"] == "statuses.FULLY_PROVEN"
+    assert report["papers"][0]["primary_metric"] == "verified_proven"
+    assert report["papers"][0]["verified_proven"] == 1
+    assert report["papers"][0]["verified_proven_scope_counts"]["audited_component"] == 1
+    assert report["papers"][0]["gold_proof"] == 1
     assert report["papers"][0]["paper_local_axiom_disclosure"]["theorems"] == ["t2"]
     assert report["papers"][0]["axiom_debt_burndown"]["ranked_axioms"][0]["needed_by"] == ["t2"]
     assert report["aggregate_blockers"]["none"] == 1
     assert report["aggregate_blockers"]["missing_domain_library"] == 1
     assert report["aggregate_blockers"]["lean_elaboration"] == 1
+    assert report["aggregate_statement_validity"]["counts"] == {}
+    assert report["aggregate_novelty"]["counts"]["unknown"] == 3
+    assert report["papers"][0]["novelty_summary"]["counts"]["unknown"] == 3
+
+
+def test_build_report_includes_statement_validity_aggregate(tmp_path: Path) -> None:
+    root = tmp_path
+    ledger_dir = root / "output" / "verification_ledgers"
+    ledger_dir.mkdir(parents=True)
+    toolchain = root / "lean-toolchain"
+    toolchain.write_text("leanprover/lean4:v4.29.0-rc7\n", encoding="utf-8")
+    ledger = {
+        "paper_id": "2300.00002",
+        "entries": [
+            {
+                "theorem_name": "t",
+                "lean_statement": "theorem t : True",
+                "status": "UNRESOLVED",
+            }
+        ],
+    }
+    (ledger_dir / "2300.00002.json").write_text(json.dumps(ledger), encoding="utf-8")
+    validity_dir = root / "reproducibility" / "full_paper_reports" / "2300.00002"
+    validity_dir.mkdir(parents=True)
+    (validity_dir / "statement_validity.json").write_text(
+        json.dumps(
+            {
+                "total": 3,
+                "counts": {
+                    "proof_search_failure": 2,
+                    "bad_translation_artifact": 1,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = build_report(ledger_dir=ledger_dir, suite_json=None, toolchain_file=toolchain)
+
+    assert report["papers"][0]["statement_validity"]["dominant_blocker"] == "proof_search_failure"
+    assert report["aggregate_statement_validity"]["dominant_blocker"] == "proof_search_failure"
+    assert report["aggregate_statement_validity"]["translation_statement_total"] == 1
+    assert report["aggregate_novelty"]["total"] == 1

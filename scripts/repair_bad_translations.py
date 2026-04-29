@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -14,7 +15,7 @@ from typing import Any
 
 from paper_symbol_inventory import infer_symbols_from_text
 from repair_feedback_dataset import append_repair_row, default_run_dataset_path, make_repair_row
-from translator._translate import build_typed_statement_translation
+from translator._translate import _extract_literal_schema, build_typed_statement_translation
 
 
 def _safe_id(paper_id: str) -> str:
@@ -64,6 +65,10 @@ def _decl_target(decl: str) -> str:
 
 def _normalize_prop(text: str) -> str:
     return re.sub(r"\s+", " ", (text or "").strip())
+
+
+def _repair_target_text(decl: str) -> str:
+    return _normalize_prop(_decl_target(decl))
 
 
 def _leanish_name(text: str) -> str:
@@ -554,6 +559,355 @@ def _repair_abstraction_kind(changes: list[str]) -> str:
     return ""
 
 
+def _source_signal_count(text: str) -> int:
+    """Count coarse mathematical signals in source text for regeneration density checks."""
+    source = str(text or "")
+    patterns = [
+        r"\\(?:forall|exists|sum|int|frac|Theta|Omega|mathbb|operatorname)\b",
+        r"[∀∃≤≥≠↔∧∨]",
+        r"\b(?:there exists|there is|for all|if and only if|with high probability|bound|bounded|unique|precedes|quantum)\b",
+        r"\b(?:LDPC|QFM|Arthur|Merlin|simple|boundary|action|distance|length|rank|dimension)\b",
+        r"[_^{}]",
+    ]
+    return sum(1 for pattern in patterns if re.search(pattern, source, flags=re.IGNORECASE))
+
+
+def _repair_quality_blockers(
+    *,
+    repaired_decl: str,
+    source_statement: str = "",
+    changes: list[str] | None = None,
+) -> list[str]:
+    """Return hard blockers for repair candidates that are syntactically Lean-ish but semantically weak.
+
+    This intentionally runs before proof search and before ledger application.
+    Lean elaboration alone is not enough: a trivial existential or a `PaperClaim`
+    atom can elaborate while still destroying statement fidelity.
+    """
+    changes = changes or []
+    blockers: list[str] = []
+    statement = _strip_proof_body(repaired_decl)
+    target = _repair_target_text(statement)
+    normalized_decl = _normalize_prop(statement)
+    normalized_target = _normalize_prop(target)
+    source = _normalize_prop(source_statement)
+
+    if not statement:
+        blockers.append("missing_repaired_statement")
+    if not normalized_target:
+        blockers.append("missing_repaired_target")
+    if _is_schema_placeholder_decl(statement):
+        blockers.append("schema_placeholder_after_repair")
+    if normalized_target in {"True", "False", "Nonempty Unit", "Nonempty (Unit)"}:
+        blockers.append("trivial_target_after_repair")
+    if re.fullmatch(r"\(?\s*0\s*:\s*ℕ\s*\)?\s*=\s*0", normalized_target):
+        blockers.append("trivial_nat0eq0_after_repair")
+    if re.search(r"∃\s+([A-Za-z_][A-Za-z0-9_']*)\s*:\s*[^,]+,\s*\1\s*=\s*\1", normalized_decl):
+        blockers.append("vacuous_exists_self_equality_after_repair")
+    if re.search(r"\(([hH][A-Za-z0-9_']*)\s*:\s*([^()]+?)\)", statement, flags=re.DOTALL):
+        target_escaped = re.escape(normalized_target)
+        if target_escaped and re.search(rf"\(([hH][A-Za-z0-9_']*)\s*:\s*{target_escaped}\)", normalized_decl):
+            blockers.append("claim_copied_into_hypothesis_after_repair")
+    if "PaperClaim" in statement:
+        blockers.append("paper_claim_atom_after_repair")
+    if re.search(r"\\(?:frac|sum|int|mathbb|mathbf|operatorname|begin|end|leq|geq|infty)\b", statement):
+        blockers.append("raw_latex_after_repair")
+    if "$" in statement:
+        blockers.append("raw_latex_dollar_after_repair")
+
+    is_structured_regeneration = "regenerate_explicit_structured_statement" in changes
+    is_symbol_regeneration = "regenerate_faithful_statement" in changes or "use_paper_theory_statement_symbol" in changes
+    if is_structured_regeneration or is_symbol_regeneration:
+        if not source:
+            blockers.append("source_statement_missing_for_regeneration")
+        if normalized_target.endswith("RegeneratedStatement"):
+            blockers.append("regenerated_statement_atom_after_repair")
+        if _source_signal_count(source) >= 2 and len(normalized_target) < 24:
+            blockers.append("regenerated_target_too_short_for_source")
+        if source and _source_signal_count(source) >= 2:
+            target_signal_count = _source_signal_count(normalized_target)
+            if target_signal_count == 0 and not re.search(r"[=<>≤≥∧∨∃∀↔]", normalized_target):
+                blockers.append("regenerated_target_missing_math_structure")
+
+    return list(dict.fromkeys(blockers))
+
+
+def _quality_checked_validation(
+    validation: dict[str, Any],
+    quality_blockers: list[str],
+) -> dict[str, Any]:
+    if not quality_blockers:
+        return validation
+    return {
+        "ok": False,
+        "error": "repair_quality_blocked:" + ",".join(quality_blockers),
+        "quality_gate": {"ok": False, "blockers": quality_blockers},
+        "lean_validation_without_quality_gate": validation,
+    }
+
+
+def _ensure_sorry_body(decl: str) -> str:
+    text = (decl or "").strip()
+    if not text:
+        return ""
+    if re.search(r":=\s*by\s*$", text):
+        return text + "\n  sorry"
+    if ":= by" not in text:
+        return text + " := by\n  sorry"
+    return text
+
+
+def _text_tokens(text: str) -> set[str]:
+    stopwords = {
+        "the", "and", "for", "that", "with", "there", "exists", "such", "then",
+        "let", "where", "assume", "suppose", "from", "into", "onto", "this",
+        "these", "those", "have", "holds", "lean", "theorem", "lemma", "by",
+        "sorry", "real", "nat", "prop",
+    }
+    cleaned = re.sub(r"\\([A-Za-z]+)", r" \1 ", text or "")
+    raw_toks = re.findall(r"[A-Za-zΑ-ωξΨΓΘ][A-Za-z0-9_Α-ωξΨΓΘ']*", cleaned)
+    tokens: set[str] = set()
+    for tok in raw_toks:
+        t = tok.lower()
+        if len(t) >= 2 and t not in stopwords:
+            tokens.add(t)
+        # Also expose the individual words inside underscore-joined identifiers
+        # (e.g. hypothesis names like h_arbitrary_multisegment_1) so coverage
+        # checks can match them back to source assumption words.  Only add parts
+        # that are long enough to be meaningful (≥ 4 chars) to avoid polluting
+        # the token set with noise from single-letter subscripts.
+        if "_" in t:
+            for part in t.split("_"):
+                if len(part) >= 4 and part not in stopwords:
+                    tokens.add(part)
+    return tokens
+
+
+def _coverage_ratio(source: str, target: str) -> float:
+    source_tokens = _text_tokens(source)
+    if not source_tokens:
+        return 0.0
+    target_tokens = _text_tokens(target)
+    return len(source_tokens & target_tokens) / len(source_tokens)
+
+
+def _source_context_pack_id(context: dict[str, Any]) -> str:
+    payload = {
+        "paper_id": context.get("paper_id", ""),
+        "theorem_name": context.get("theorem_name", ""),
+        "source_span": context.get("source_span", {}),
+        "source_latex": context.get("source_latex", ""),
+    }
+    return "srcctx_" + hashlib.sha256(json.dumps(payload, sort_keys=True, ensure_ascii=True).encode("utf-8")).hexdigest()[:24]
+
+
+def _source_context_blockers(context: dict[str, Any]) -> list[str]:
+    blockers: list[str] = []
+    if not str(context.get("source_latex", "") or "").strip():
+        blockers.append("source_latex_missing_for_regeneration")
+    if str(context.get("source_span_quality", "") or "") not in {"extractor_native", "reviewed"}:
+        blockers.append("source_span_not_review_grade")
+    source_match = context.get("source_match") if isinstance(context.get("source_match"), dict) else {}
+    if str(source_match.get("match_status", "") or "missing") != "matched":
+        blockers.append("source_match_not_unique")
+    return blockers
+
+
+def _source_backed_coverage(
+    *,
+    source_latex: str,
+    repaired_decl: str,
+    schema: dict[str, Any],
+    structured: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], list[str]]:
+    assumptions = schema.get("assumptions", []) if isinstance(schema.get("assumptions"), list) else []
+    assumptions = [str(item).strip() for item in assumptions if str(item).strip()]
+    lean_text = _normalize_prop(repaired_decl)
+    target = _decl_target(repaired_decl)
+    source_coverage_value = _coverage_ratio(source_latex, lean_text)
+    assumption_hits = [
+        {
+            "assumption": assumption[:220],
+            "coverage": round(_coverage_ratio(assumption, lean_text), 4),
+            "covered": _coverage_ratio(assumption, lean_text) >= 0.08,
+        }
+        for assumption in assumptions[:8]
+    ]
+    conclusion = str(schema.get("claim", "") or structured.get("conclusion", "") or "").strip()
+    conclusion_coverage_value = _coverage_ratio(conclusion, target)
+    source_anchors = structured.get("source_anchors") if isinstance(structured.get("source_anchors"), list) else []
+    blockers: list[str] = []
+    if _source_signal_count(source_latex) >= 2 and source_coverage_value < 0.04 and not source_anchors:
+        blockers.append("weak_source_coverage")
+    if conclusion and _source_signal_count(conclusion) >= 1 and conclusion_coverage_value < 0.04 and not source_anchors:
+        blockers.append("weak_conclusion_coverage")
+    if assumptions and assumption_hits and not any(item["covered"] for item in assumption_hits):
+        blockers.append("weak_assumption_coverage")
+    return (
+        {
+            "score": round(source_coverage_value, 4),
+            "source_token_count": len(_text_tokens(source_latex)),
+            "lean_token_count": len(_text_tokens(lean_text)),
+            "source_anchors": source_anchors[:8],
+        },
+        {
+            "score": round(
+                sum(1 for item in assumption_hits if item["covered"]) / len(assumption_hits),
+                4,
+            )
+            if assumption_hits
+            else 1.0,
+            "items": assumption_hits,
+        },
+        {
+            "score": round(conclusion_coverage_value, 4),
+            "claim": conclusion[:260],
+            "target": target[:260],
+        },
+        blockers,
+    )
+
+
+def build_source_backed_repair_payload(
+    *,
+    paper_id: str,
+    project_root: Path,
+    source_contexts: list[dict[str, Any]],
+    out_dir: Path,
+    validate_candidates: bool = True,
+) -> dict[str, Any]:
+    """Build source-only statement regeneration candidates for repair-worker rows."""
+    preliminary: list[dict[str, Any]] = []
+    seed_text_parts: list[str] = []
+    for raw_context in source_contexts:
+        context = raw_context if isinstance(raw_context, dict) else {}
+        theorem_name = str(
+            context.get("ledger_theorem_name")
+            or context.get("theorem_name")
+            or context.get("theorem_id")
+            or ""
+        ).strip().rsplit(".", 1)[-1]
+        source_latex = str(context.get("source_latex", "") or context.get("normalized_text", "") or "").strip()
+        context_pack = context.get("context_pack") if isinstance(context.get("context_pack"), dict) else {}
+        schema = context_pack.get("translation_statement_schema") if isinstance(context_pack.get("translation_statement_schema"), dict) else None
+        if schema is None:
+            schema = _extract_literal_schema(source_latex)
+        structured = build_typed_statement_translation(
+            latex_statement=source_latex,
+            schema=schema,
+            theorem_name=theorem_name,
+            paper_id=paper_id,
+        ) or {}
+        repaired = _ensure_sorry_body(str(structured.get("lean_declaration", "") or ""))
+        source_context_pack = {
+            "schema_version": "source_context_pack.v2",
+            "source_context_pack_id": _source_context_pack_id({**context, "paper_id": paper_id, "theorem_name": theorem_name}),
+            "paper_id": paper_id,
+            "theorem_name": theorem_name,
+            "theorem_id": str(context.get("theorem_id", "") or theorem_name),
+            "source_latex": source_latex,
+            "normalized_text": str(context.get("normalized_text", "") or ""),
+            "source_span": context.get("source_span", {}),
+            "source_span_quality": str(context.get("source_span_quality", "") or ""),
+            "source_match": context.get("source_match", {}),
+            "context_pack": context_pack,
+        }
+        changes = ["source_backed_regeneration_v2", "source_grounded_statement_body"] if repaired else []
+        source_coverage, assumption_coverage, conclusion_coverage, coverage_blockers = _source_backed_coverage(
+            source_latex=source_latex,
+            repaired_decl=repaired,
+            schema=schema,
+            structured=structured,
+        )
+        blockers = (
+            _source_context_blockers(source_context_pack)
+            + coverage_blockers
+            + _repair_quality_blockers(
+                repaired_decl=repaired,
+                source_statement=source_latex,
+                changes=changes,
+            )
+        )
+        if not structured:
+            blockers.append("typed_statement_translation_unavailable")
+        preliminary.append(
+            {
+                "theorem_name": theorem_name,
+                "original_decl": str(context.get("lean_statement", "") or ""),
+                "repaired_decl": repaired,
+                "changes": changes,
+                "repair_abstraction_kind": "",
+                "statement_repair_kind": "source_backed_statement_regeneration",
+                "paper_theory_debt": [],
+                "direct_tactic": "",
+                "domain_assumption_backed": False,
+                "direct_proof_without_repair": False,
+                "needs_llm_repair": False,
+                "source_statement_available": bool(source_latex),
+                "source_statement_excerpt": re.sub(r"\s+", " ", source_latex).strip()[:1000],
+                "source_context_pack_id": source_context_pack["source_context_pack_id"],
+                "source_context_pack": source_context_pack,
+                "regeneration_protocol": "source_backed_v2",
+                "structured_translation": structured,
+                "source_coverage": source_coverage,
+                "assumption_coverage": assumption_coverage,
+                "conclusion_coverage": conclusion_coverage,
+                "repair_quality": {
+                    "ok": not blockers,
+                    "blockers": list(dict.fromkeys(blockers)),
+                    "protocol": "source_backed_v2",
+                    "source_backed": bool(source_latex),
+                },
+            }
+        )
+        seed_text_parts.extend([source_latex, repaired])
+
+    symbols = infer_symbol_table("\n\n".join(part for part in seed_text_parts if part))
+    theory_path = write_symbol_theory(project_root=project_root, paper_id=paper_id, symbols=symbols)
+    theory_build = build_repair_theory(project_root, theory_path) if validate_candidates else {"ok": None, "error": "validation_skipped"}
+
+    candidates: list[dict[str, Any]] = []
+    for cand in preliminary:
+        blockers = list((cand.get("repair_quality") or {}).get("blockers") or [])
+        validation = (
+            validate_repair_candidate(
+                project_root=project_root,
+                paper_id=paper_id,
+                decl=str(cand.get("repaired_decl", "") or ""),
+            )
+            if validate_candidates and not blockers
+            else {"ok": None, "error": "validation_skipped"}
+        )
+        validation = _quality_checked_validation(validation, blockers)
+        cand["lean_validation"] = validation
+        candidates.append(cand)
+
+    payload = {
+        "schema_version": "source_backed_repair_payload.v2",
+        "paper_id": paper_id,
+        "paper_theory": str(theory_path),
+        "repair_theory": str(theory_path),
+        "repair_theory_build": theory_build,
+        "symbols": [asdict(sym) for sym in symbols],
+        "repair_candidates": candidates,
+        "candidate_counts": {
+            "total": len(candidates),
+            "changed": sum(1 for c in candidates if c.get("changes")),
+            "changed_elaborating": sum(
+                1 for c in candidates if c.get("changes") and (c.get("lean_validation") or {}).get("ok") is True
+            ),
+            "source_backed_v2": len(candidates),
+            "quality_blocked": sum(1 for c in candidates if not (c.get("repair_quality") or {}).get("ok", True)),
+            "quality_ok": sum(1 for c in candidates if (c.get("repair_quality") or {}).get("ok", True)),
+            "failed_validation": sum(1 for c in candidates if (c.get("lean_validation") or {}).get("ok") is False),
+            "needs_llm_repair": 0,
+        },
+    }
+    out_dir.mkdir(parents=True, exist_ok=True)
+    _write_json(out_dir / "source_backed_repair_candidates.json", payload)
+    return payload
+
+
 def _strip_trailing_namespace_end(decl: str) -> str:
     return re.sub(r"(?m)^\s*end\s+[A-Za-z_][A-Za-z0-9_'.]*\s*$", "", decl or "").strip()
 
@@ -661,6 +1015,7 @@ def write_retry_lean_file(
         for c in candidates
         if isinstance(c, dict)
         and (bool(c.get("changes")) or bool(c.get("direct_proof_without_repair")))
+        and (c.get("repair_quality") or {}).get("ok", True) is True
         and (c.get("lean_validation") or {}).get("ok") is True
     ]
     body: list[str] = [
@@ -893,6 +1248,25 @@ def build_repair_pack(
             if validate_candidates
             else {"ok": None, "error": "validation_skipped"}
         )
+        quality_blockers = _repair_quality_blockers(
+            repaired_decl=repaired,
+            source_statement=source_statement,
+            changes=changes,
+        )
+        validation = _quality_checked_validation(validation, quality_blockers)
+        repair_quality = {
+            "ok": not quality_blockers,
+            "blockers": quality_blockers,
+            "protocol": (
+                "faithful_regeneration_v2"
+                if (
+                    "regenerate_faithful_statement" in changes
+                    or "regenerate_explicit_structured_statement" in changes
+                )
+                else "statement_repair_quality_v1"
+            ),
+            "source_backed": bool(source_statement),
+        }
         candidates.append(
             {
                 "theorem_name": name,
@@ -919,6 +1293,7 @@ def build_repair_pack(
                 "needs_llm_repair": not bool(changes),
                 "source_statement_available": bool(source_statement),
                 "source_statement_excerpt": re.sub(r"\s+", " ", source_statement).strip()[:1000],
+                "repair_quality": repair_quality,
                 "lean_validation": validation,
             }
         )
@@ -973,6 +1348,24 @@ def build_repair_pack(
             1 for c in candidates if not c.get("changes") and (c.get("lean_validation") or {}).get("ok") is True
         ),
         "failed_validation": sum(1 for c in candidates if (c.get("lean_validation") or {}).get("ok") is False),
+        "quality_blocked": sum(1 for c in candidates if not (c.get("repair_quality") or {}).get("ok", True)),
+        "quality_ok": sum(1 for c in candidates if (c.get("repair_quality") or {}).get("ok", True)),
+        "weak_regeneration_blocked": sum(
+            1
+            for c in candidates
+            if any(
+                blocker
+                in {
+                    "vacuous_exists_self_equality_after_repair",
+                    "trivial_target_after_repair",
+                    "schema_placeholder_after_repair",
+                    "paper_claim_atom_after_repair",
+                    "regenerated_target_too_short_for_source",
+                    "regenerated_target_missing_math_structure",
+                }
+                for blocker in ((c.get("repair_quality") or {}).get("blockers") or [])
+            )
+        ),
         "needs_llm_repair": sum(1 for c in candidates if c.get("needs_llm_repair")),
     }
     out_dir.mkdir(parents=True, exist_ok=True)

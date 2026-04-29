@@ -96,6 +96,35 @@ class ClaimEquivalenceVerdict(str, Enum):
     UNCLEAR = "unclear"
 
 
+class StatementAlignmentClass(str, Enum):
+    EXACT = "exact"
+    WEAKER = "weaker"
+    STRONGER = "stronger"
+    PARTIAL = "partial"
+    DIAGNOSTIC = "diagnostic"
+    UNRELATED = "unrelated"
+    UNKNOWN = "unknown"
+
+
+@dataclass
+class AlignmentDecision:
+    """Paper statement to Lean statement alignment decision."""
+
+    alignment_class: StatementAlignmentClass = StatementAlignmentClass.PARTIAL
+    confidence: float = 0.0
+    reasons: list[str] = field(default_factory=list)
+    evidence_sources: list[str] = field(default_factory=list)
+    paper_statement_id: str = ""
+    alignment_pair_id: str = ""
+    paper_text_coverage: float = 0.0
+    lean_text_coverage: float = 0.0
+    missing_assumptions: list[str] = field(default_factory=list)
+    added_assumptions: list[str] = field(default_factory=list)
+    conclusion_relation: str = "unknown"
+    diagnostic: bool = False
+    schema_version: str = "1.0"
+
+
 @dataclass
 class SemanticEquivalenceArtifact:
     """Auditable link between the paper theorem and generated Lean statement."""
@@ -109,6 +138,8 @@ class SemanticEquivalenceArtifact:
     reviewer_evaluator_evidence: list[str] = field(default_factory=list)
     adversarial_checks: dict[str, dict[str, Any]] = field(default_factory=dict)
     independent_semantic_evidence: bool = False
+    alignment_class: StatementAlignmentClass = StatementAlignmentClass.PARTIAL
+    alignment_decision: AlignmentDecision = field(default_factory=AlignmentDecision)
     schema_version: str = "1.0"
 
 
@@ -181,6 +212,12 @@ class TheoremLedgerEntry:
     gate_failures: list[str] = field(default_factory=list)
     claim_equivalence_verdict: ClaimEquivalenceVerdict = ClaimEquivalenceVerdict.UNCLEAR
     claim_equivalence_notes: list[str] = field(default_factory=list)
+    statement_alignment_class: StatementAlignmentClass = StatementAlignmentClass.PARTIAL
+    paper_statement_id: str = ""
+    canonical_theorem_id: str = ""
+    alignment_pair_id: str = ""
+    translation_fidelity_score: float | None = None
+    status_alignment_score: float | None = None
     semantic_equivalence_artifact: SemanticEquivalenceArtifact = field(
         default_factory=SemanticEquivalenceArtifact
     )
@@ -190,6 +227,10 @@ class TheoremLedgerEntry:
     axiom_debt: list[str] = field(default_factory=list)
     axiom_debt_hash: str = ""
     closure_claim: str = "unverified"
+    proof_eligible: bool = False
+    statement_fidelity_verdict: str = "blocked"
+    statement_fidelity_blockers: list[str] = field(default_factory=list)
+    statement_fidelity_source: str = "none"
 
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)
@@ -200,11 +241,20 @@ class TheoremLedgerEntry:
         d["trust_class"] = self.trust_class.value
         d["proof_method"] = self.proof_method.value
         d["claim_equivalence_verdict"] = self.claim_equivalence_verdict.value
+        d["statement_alignment_class"] = self.statement_alignment_class.value
         artifact = d.get("semantic_equivalence_artifact")
         if isinstance(artifact, dict):
             verdict = artifact.get("equivalence_verdict")
             if not isinstance(verdict, str) and hasattr(verdict, "value"):
                 artifact["equivalence_verdict"] = verdict.value
+            alignment_class = artifact.get("alignment_class")
+            if not isinstance(alignment_class, str) and hasattr(alignment_class, "value"):
+                artifact["alignment_class"] = alignment_class.value
+            decision = artifact.get("alignment_decision")
+            if isinstance(decision, dict):
+                decision_class = decision.get("alignment_class")
+                if not isinstance(decision_class, str) and hasattr(decision_class, "value"):
+                    decision["alignment_class"] = decision_class.value
         for a in d["assumptions"]:
             if not isinstance(a["grounding"], str):
                 a["grounding"] = a["grounding"].value

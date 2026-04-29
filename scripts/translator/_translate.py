@@ -356,6 +356,22 @@ def _normalize_source_formula_clause(raw: str) -> str:
     clause = clause.replace("\\cdot", "*")
     clause = clause.replace("\\,", " ")
     clause = _replace_latex_identifiers(clause)
+    # Normalize plain-identifier subscripts before flattening: m_{i,j} → m_i_j.
+    # Must run before the flatten so commas/hyphens in subscripts become underscores.
+    clause = re.sub(
+        r"([A-Za-z][A-Za-z0-9]*)\s*_\s*\{([^{}]*)\}",
+        lambda m: m.group(1) + "_" + re.sub(r"[^A-Za-z0-9]+", "_", m.group(2)).strip("_"),
+        clause,
+    )
+    # Flatten innermost brace groups left by nested LaTeX macros: {alpha} → alpha.
+    # This converts n_{tilde{alpha}} (after _replace_latex_identifiers) → n_{tildealpha}.
+    clause = re.sub(r"\{([^{}]*)\}", r"\1", clause)
+    # Second pass: pick up subscripts exposed by the flatten step.
+    clause = re.sub(
+        r"([A-Za-z][A-Za-z0-9]*)\s*_\s*\{([^{}]*)\}",
+        lambda m: m.group(1) + "_" + re.sub(r"[^A-Za-z0-9]+", "_", m.group(2)).strip("_"),
+        clause,
+    )
     clause = re.sub(r"\s+", " ", clause).strip()
     clause = re.sub(r"\s*([=≤≥<>≠])\s*", r" \1 ", clause)
     clause = re.sub(r"\s+", " ", clause).strip()
@@ -380,10 +396,10 @@ def _source_formula_clauses(latex_statement: str, schema: dict | None) -> list[s
         for part in re.split(r";|\\\\", expanded):
             if not any(tok in part for tok in ("=", "<", ">", "≤", "≥", "\\le", "\\ge")):
                 continue
-            if any(tok in part for tok in ("\\mathcal", "\\begin", "\\end", "\\label", "\\ref", "^\\", "_{")):
+            if any(tok in part for tok in ("\\mathcal", "\\begin", "\\end", "\\label", "\\ref", "^\\")):
                 continue
             clause = _normalize_source_formula_clause(part)
-            if not clause or "\\" in clause or "{" in clause or "}" in clause or "^" in clause:
+            if not clause or "\\" in clause or "{" in clause or "}" in clause or "$" in clause:
                 continue
             if len(clause) > 180:
                 continue
@@ -425,11 +441,29 @@ def _typed_ir_conclusion(schema: dict | None, latex_statement: str) -> tuple[str
     return _fallback_conclusion_for_shape(shape), shape, []
 
 
+_HYP_STOPWORDS = frozenset({
+    "assume", "assumes", "suppose", "supposes", "let", "given", "where",
+    "such", "that", "with", "then", "have", "holds", "from", "into",
+    "onto", "this", "these", "those", "and", "are", "is", "was", "were",
+    "an", "be", "it", "of", "in", "on", "for", "all", "any", "the",
+    "label", "cite", "ref", "there",
+})
+
+
 def _source_hypotheses_from_schema(schema: dict | None) -> list[str]:
     assumptions = schema.get("assumptions", []) if isinstance((schema or {}).get("assumptions"), list) else []
     out: list[str] = []
     for idx, asm in enumerate([str(a).strip() for a in assumptions if str(a).strip()][:6], start=1):
-        anchor = re.sub(r"[^A-Za-z0-9]+", "_", asm).strip("_").lower()[:28] or f"source_{idx}"
+        # Extract the most distinctive content words rather than truncating the
+        # raw text, so that coverage checks can match hypothesis names back to
+        # the source assumption tokens.
+        asm_clean = re.sub(r"\\[A-Za-z]+", " ", asm)
+        asm_clean = re.sub(r"[^A-Za-z0-9 ]+", " ", asm_clean)
+        words = [
+            w.lower() for w in asm_clean.split()
+            if len(w) >= 4 and w.lower() not in _HYP_STOPWORDS
+        ]
+        anchor = "_".join(words[:4]) or f"source_{idx}"
         out.append(f"(h_{anchor}_{idx} : True)")
     return out
 
@@ -447,7 +481,9 @@ def _collect_typed_variables(conclusion: str, hypotheses: list[str]) -> list[str
     for tok in sorted(tokens):
         if tok in reserved or tok.startswith("h_"):
             continue
-        if tok[0].isupper() and tok not in {"N", "C", "T", "K", "M"}:
+        # Skip bare uppercase identifiers that look like type names, but allow
+        # single-letter uppercase vars (N, C…) and uppercase subscripted vars (S_alpha).
+        if tok[0].isupper() and tok not in {"N", "C", "T", "K", "M"} and "_" not in tok:
             continue
         if tok in {"N", "n", "m", "k", "i", "j", "q", "l"}:
             variables.append(f"({tok} : ℕ)")
@@ -455,6 +491,13 @@ def _collect_typed_variables(conclusion: str, hypotheses: list[str]) -> list[str
             variables.append(f"({tok} : ℝ → ℝ)")
         elif tok in {"x", "y", "z", "t", "s", "T", "C", "K", "M", "alpha", "beta", "gamma", "theta", "epsilon", "rho", "rho_V", "s1", "s2"}:
             variables.append(f"({tok} : ℝ)")
+        elif re.fullmatch(r"[a-z][a-z0-9]*_[a-z0-9_]+", tok):
+            # Lowercase subscripted vars from formula clauses: m_i_j, r_i_j, n_alpha.
+            variables.append(f"({tok} : ℤ)")
+        elif re.fullmatch(r"[A-Z][a-z0-9]*_[a-z][a-z0-9_]*", tok):
+            # Uppercase subscripted vars extracted from formulae: S_alpha, N_alpha, etc.
+            # Use ℤ to stay consistent with lowercase subscripted siblings (n_alpha, m_i_j).
+            variables.append(f"({tok} : ℤ)")
     return list(dict.fromkeys(variables))[:12]
 
 

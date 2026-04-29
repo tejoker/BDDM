@@ -1,0 +1,226 @@
+{
+  "schema_version": "1.1.0",
+  "purpose": "Rank paper-local axioms by cheapest path to remove AXIOM_BACKED evidence.",
+  "axiom_backed_result_count": 0,
+  "paper_local_axiom_count": 7,
+  "result_buckets": {
+    "missing_definitions_only": 0,
+    "local_lemmas": 0,
+    "missing_mathlib": 0,
+    "deep_domain_theory": 0,
+    "translation_artifacts": 0,
+    "unclassified": 0
+  },
+  "summary_sentence": "0 axiom-backed results.",
+  "axiom_kind_counts": {
+    "definition": 7
+  },
+  "difficulty_counts": {
+    "medium": 7
+  },
+  "dependency_bucket_counts": {
+    "missing_definitions_only": 7
+  },
+  "ranked_axioms": [
+    {
+      "burn_down_id": "55219054f76ca384",
+      "paper_local_axiom": "paper_definition_stub:equ1",
+      "needed_by": [
+        "equ1"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "equ1",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "6ac170cf80d452fe",
+      "paper_local_axiom": "paper_definition_stub:nuclear_l1_norms",
+      "needed_by": [
+        "nuclear_l1_norms"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "nuclear_l1_norms",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "68c40a841f4f388a",
+      "paper_local_axiom": "paper_definition_stub:proof_4",
+      "needed_by": [
+        "proof_4"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "proof_4",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "71da8fde1c8c2368",
+      "paper_local_axiom": "paper_definition_stub:proof_6",
+      "needed_by": [
+        "proof_6"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "proof_6",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "proof_4"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "24f63fece5bd87a4",
+      "paper_local_axiom": "paper_symbol:Γ",
+      "needed_by": [
+        "proof_4"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "proof_4",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "e84bdfb6afb04d61",
+      "paper_local_axiom": "paper_definition_stub:sigma_F",
+      "needed_by": [
+        "main_theorem",
+        "momentum_bound_lemma",
+        "proof_4"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "main_theorem",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        },
+        {
+          "theorem_name": "momentum_bound_lemma",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "proof_4",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 3,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "9f94ea8a89be9fee",
+      "paper_local_axiom": "paper_definition_stub:theta",
+      "needed_by": [
+        "main_theorem",
+        "equ1",
+        "momentum_bound_lemma",
+        "proof_4"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "main_theorem",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        },
+        {
+          "theorem_name": "equ1",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        },
+        {
+          "theorem_name": "momentum_bound_lemma",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "proof_4",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 4,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    }
+  ]
+}

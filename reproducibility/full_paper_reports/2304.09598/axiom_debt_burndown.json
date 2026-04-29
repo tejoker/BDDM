@@ -1,0 +1,777 @@
+{
+  "schema_version": "1.1.0",
+  "purpose": "Rank paper-local axioms by cheapest path to remove AXIOM_BACKED evidence.",
+  "axiom_backed_result_count": 0,
+  "paper_local_axiom_count": 25,
+  "result_buckets": {
+    "missing_definitions_only": 0,
+    "local_lemmas": 0,
+    "missing_mathlib": 0,
+    "deep_domain_theory": 0,
+    "translation_artifacts": 0,
+    "unclassified": 0
+  },
+  "summary_sentence": "0 axiom-backed results.",
+  "axiom_kind_counts": {
+    "definition": 25
+  },
+  "difficulty_counts": {
+    "medium": 25
+  },
+  "dependency_bucket_counts": {
+    "missing_definitions_only": 25
+  },
+  "ranked_axioms": [
+    {
+      "burn_down_id": "60246891a4871dfc",
+      "paper_local_axiom": "paper_definition_stub:C",
+      "needed_by": [
+        "Cor_BoundaryRTandMS"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Cor_BoundaryRTandMS",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "2528e67b4dfe2819",
+      "paper_local_axiom": "paper_definition_stub:b_1",
+      "needed_by": [
+        "Precedes"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Precedes",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "1d54951d65f9240a",
+      "paper_local_axiom": "paper_definition_stub:b_2",
+      "needed_by": [
+        "Precedes"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Precedes",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "81c81258436e6593",
+      "paper_local_axiom": "paper_definition_stub:defin_1",
+      "needed_by": [
+        "defin_1"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "defin_1",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "3b7fca1bac87ab08",
+      "paper_local_axiom": "paper_definition_stub:defin_14",
+      "needed_by": [
+        "defin_14"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "defin_14",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "defin_1"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "909bd2f7a3238055",
+      "paper_local_axiom": "paper_definition_stub:e_1",
+      "needed_by": [
+        "Precedes"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Precedes",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "959ac6f676955e28",
+      "paper_local_axiom": "paper_definition_stub:e_2",
+      "needed_by": [
+        "Precedes"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Precedes",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "9e13d099c16a2bbe",
+      "paper_local_axiom": "paper_definition_stub:hC_le_def",
+      "needed_by": [
+        "Cor_BoundaryRTandMS"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Cor_BoundaryRTandMS",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "1482a9d166d7325c",
+      "paper_local_axiom": "paper_definition_stub:h_and_are_ladder_multisegments_1",
+      "needed_by": [
+        "Lem_QuantEquiv"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Lem_QuantEquiv",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "Prop_Actions",
+        "Cor_BoundaryRTandMS",
+        "Precedes",
+        "Basic",
+        "EqualLN",
+        "EqualAB",
+        "Thm_Simple",
+        "Exa_QFM",
+        "Lem_PrecedesQuantum",
+        "Lem_AB"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "a6851ab923b8f00d",
+      "paper_local_axiom": "paper_definition_stub:h_is_a_ladder_multisegment_1",
+      "needed_by": [
+        "Thm_Quant"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Thm_Quant",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "Prop_Actions",
+        "Def_Simple",
+        "Prop_SimpleFacts",
+        "Thm_Simple",
+        "defin_14",
+        "Exa_QFM",
+        "Lem_PrecedesQuantum",
+        "Lem_QuantEquiv",
+        "Lem_IrredQFM",
+        "Lem_Quant",
+        "Cor_Quant"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "cfd8a675071cb50c",
+      "paper_local_axiom": "paper_definition_stub:h_is_a_multisegment_formed_by__1",
+      "needed_by": [
+        "Thm_ManySimpleA_B"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Thm_ManySimpleA_B",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "Prop_Actions",
+        "Def_Simple",
+        "Prop_SimpleFacts",
+        "Thm_Simple",
+        "defin_14",
+        "Exa_QFM",
+        "Lem_PrecedesQuantum",
+        "Lem_IrredQFM",
+        "Lem_Quant",
+        "Cor_Quant",
+        "Thm_Quant",
+        "Lem_A1",
+        "Lem_A1b"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "2fd8451378e11066",
+      "paper_local_axiom": "paper_definition_stub:h_is_a_simple_multisegment_1",
+      "needed_by": [
+        "Thm_Simple"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Thm_Simple",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "Prop_Actions",
+        "Def_Simple",
+        "Prop_SimpleFacts",
+        "EqualAB"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "307cd6bd8f9cd00c",
+      "paper_local_axiom": "paper_definition_stub:h_is_not_a_ladder_multisegment_1",
+      "needed_by": [
+        "Cor_Quant"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Cor_Quant",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "Prop_Actions",
+        "Def_Simple",
+        "Prop_SimpleFacts",
+        "Thm_Simple",
+        "defin_14",
+        "Exa_QFM",
+        "Lem_PrecedesQuantum",
+        "Lem_QuantEquiv",
+        "Lem_IrredQFM",
+        "Lem_Quant"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "112162cea2d61b29",
+      "paper_local_axiom": "paper_definition_stub:h_is_simple_1",
+      "needed_by": [
+        "EqualAB"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "EqualAB",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "Def_Simple",
+        "Prop_SimpleFacts"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "adf92ccbb66ece18",
+      "paper_local_axiom": "paper_definition_stub:h_l_l_3",
+      "needed_by": [
+        "EqualAB"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "EqualAB",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "5729db5fcbe1b0a9",
+      "paper_local_axiom": "paper_definition_stub:h_label_prop_actions_let_delta_1",
+      "needed_by": [
+        "Prop_Actions"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Prop_Actions",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "defin_1"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "4681366cc5fd6ce1",
+      "paper_local_axiom": "paper_definition_stub:h_n_n_3",
+      "needed_by": [
+        "Lem_QuantEquiv"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Lem_QuantEquiv",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 1,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "5e295cb99a07e286",
+      "paper_local_axiom": "paper_definition_stub:a",
+      "needed_by": [
+        "Cor_BoundaryRTandMS",
+        "Exa_QFM"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Cor_BoundaryRTandMS",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Exa_QFM",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "7b28c5aaf5f86027",
+      "paper_local_axiom": "paper_definition_stub:alpha1",
+      "needed_by": [
+        "Lem_A1",
+        "Lem_A1b"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Lem_A1",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Lem_A1b",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "6a3e3ccf0736203f",
+      "paper_local_axiom": "paper_definition_stub:h1",
+      "needed_by": [
+        "EqualLN",
+        "Lem_AB"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "EqualLN",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Lem_AB",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "141e0ee699c4f2b2",
+      "paper_local_axiom": "paper_definition_stub:h2",
+      "needed_by": [
+        "EqualLN",
+        "Lem_AB"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "EqualLN",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Lem_AB",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "6983602279ba04e3",
+      "paper_local_axiom": "paper_definition_stub:h3",
+      "needed_by": [
+        "EqualLN",
+        "Lem_AB"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "EqualLN",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Lem_AB",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "c3f9a1041c5eedf0",
+      "paper_local_axiom": "paper_definition_stub:halpha1",
+      "needed_by": [
+        "Lem_A1",
+        "Lem_A1b"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Lem_A1",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Lem_A1b",
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
+        }
+      ],
+      "needed_by_count": 2,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "7752466d3bc2f962",
+      "paper_local_axiom": "paper_definition_stub:h_source_3_3",
+      "needed_by": [
+        "Thm_Simple",
+        "Thm_Quant",
+        "Thm_ManySimpleA_B"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "Thm_Simple",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Thm_Quant",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Thm_ManySimpleA_B",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 3,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "Prop_Actions",
+        "Cor_BoundaryRTandMS",
+        "Precedes",
+        "Prop_IncreasingLength",
+        "Basic",
+        "EqualLN",
+        "Def_Simple",
+        "Prop_SimpleFacts",
+        "EqualAB"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    },
+    {
+      "burn_down_id": "f49dc00d168d197f",
+      "paper_local_axiom": "paper_definition_stub:h_source_2_2",
+      "needed_by": [
+        "EqualAB",
+        "Thm_Simple",
+        "Lem_QuantEquiv",
+        "Thm_Quant",
+        "Thm_ManySimpleA_B"
+      ],
+      "needed_by_details": [
+        {
+          "theorem_name": "EqualAB",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Thm_Simple",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Lem_QuantEquiv",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Thm_Quant",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        },
+        {
+          "theorem_name": "Thm_ManySimpleA_B",
+          "status": "UNRESOLVED",
+          "proof_method": "translation_repaired_pending_proof"
+        }
+      ],
+      "needed_by_count": 5,
+      "axiom_kind": "definition",
+      "appears_explicitly_in_paper": true,
+      "mathlib_has_close_match": false,
+      "mathlib_candidates": [],
+      "can_be_proved_from_earlier_extracted_claims": "candidate",
+      "earlier_extracted_claim_candidates": [
+        "Prop_Actions",
+        "Cor_BoundaryRTandMS",
+        "Precedes",
+        "Prop_IncreasingLength",
+        "Basic",
+        "EqualLN",
+        "Def_Simple",
+        "Prop_SimpleFacts"
+      ],
+      "dependency_bucket": "missing_definitions_only",
+      "estimated_difficulty": "medium",
+      "difficulty_rank": 30
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.1.0",
+  "paper_id": "2604.21604",
+  "module_name": "Paper_2604_21604",
+  "grounding_policy": {
+    "proof_countable": false,
+    "claim_scope": "Paper-local symbol declarations ground notation for elaboration; they are not proofs of paper claims unless separately audited and Lean-verified."
+  },
+  "symbols": []
+}

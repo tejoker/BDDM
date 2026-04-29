@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from premise_retrieval import PremiseEntry, PremiseRetriever
+from statement_alignment import classify_row_alignment
 
 
 METADATA_FILE = "statement_metadata.jsonl"
@@ -26,6 +27,10 @@ class StatementMetadata:
     layer: str = ""
     lean_file: str = ""
     canonical_theorem_id: str = ""
+    paper_statement_id: str = ""
+    alignment_pair_id: str = ""
+    statement_alignment_class: str = ""
+    alignment_confidence: float = 0.0
     claim_shape: str = "unknown"
     original_latex_theorem: str = ""
     normalized_natural_language_theorem: str = ""
@@ -126,10 +131,18 @@ def statement_text_from_row(row: dict[str, Any]) -> str:
     theorem_name = str(row.get("theorem_name", "")).strip()
     status = str(row.get("status", "")).strip()
     claim_shape = str(row.get("claim_shape", "") or "").strip()
+    alignment_class = str(
+        row.get("statement_alignment_class")
+        or artifact.get("alignment_class")
+        or ""
+    ).strip()
+    if not alignment_class:
+        alignment_class = classify_row_alignment(row).alignment_class.value
 
     parts = [
         theorem_name,
         f"status: {status}" if status else "",
+        f"alignment: {alignment_class}" if alignment_class else "",
         f"claim_shape: {claim_shape}" if claim_shape else "",
         normalized,
         original,
@@ -157,6 +170,15 @@ def metadata_from_row(
     context = row.get("context_pack")
     if not isinstance(context, dict):
         context = {}
+    alignment_decision = artifact.get("alignment_decision")
+    if not isinstance(alignment_decision, dict):
+        inferred_alignment = classify_row_alignment(row, paper_id=paper_id)
+        alignment_decision = {
+            "alignment_class": inferred_alignment.alignment_class.value,
+            "confidence": inferred_alignment.confidence,
+            "paper_statement_id": inferred_alignment.paper_statement_id,
+            "alignment_pair_id": inferred_alignment.alignment_pair_id,
+        }
     status = str(row.get("status", "UNRESOLVED") or "UNRESOLVED")
     sid = statement_id(paper_id, theorem_name)
     return StatementMetadata(
@@ -167,6 +189,23 @@ def metadata_from_row(
         layer=str(row.get("layer", "") or _status_layer(status, bool(row.get("promotion_gate_passed", False)))),
         lean_file=str(row.get("lean_file", "") or ""),
         canonical_theorem_id=str(row.get("canonical_theorem_id", "") or ""),
+        paper_statement_id=str(
+            row.get("paper_statement_id")
+            or alignment_decision.get("paper_statement_id")
+            or ""
+        ),
+        alignment_pair_id=str(
+            row.get("alignment_pair_id")
+            or alignment_decision.get("alignment_pair_id")
+            or ""
+        ),
+        statement_alignment_class=str(
+            row.get("statement_alignment_class")
+            or artifact.get("alignment_class")
+            or alignment_decision.get("alignment_class")
+            or ""
+        ),
+        alignment_confidence=float(alignment_decision.get("confidence", 0.0) or 0.0),
         claim_shape=str(row.get("claim_shape", "unknown") or "unknown"),
         original_latex_theorem=str(
             artifact.get("original_latex_theorem")

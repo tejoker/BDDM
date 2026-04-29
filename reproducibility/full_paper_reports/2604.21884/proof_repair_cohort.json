@@ -39,7 +39,9 @@
       "theorem_name": "prop_det_contraction",
       "primary_blocker": "proof_search_failure",
       "reasons": [
-        "lean_proof_closed"
+        "assumptions_grounded",
+        "dependency_trust_complete",
+        "generated_row_has_axiom_or_domain_assumption_debt"
       ]
     },
     {

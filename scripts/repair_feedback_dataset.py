@@ -18,10 +18,26 @@ from typing import Any, Iterable
 
 SCHEMA_VERSION = "1.1.0"
 DATASET_FAMILY = "desol_compiler_feedback_repair"
+SILVER_SCHEMA_VERSION = "1.0.0"
+SILVER_DATASET_FAMILY = "desol_silver_repair_dataset"
+SILVER_DATASET_TIER = "silver"
 DEFAULT_DATASET_PATH = Path("output/flywheel/compiler_feedback_repair_dataset.jsonl")
 DEFAULT_SUMMARY_PATH = Path("output/flywheel/compiler_feedback_repair_dataset_summary.json")
+DEFAULT_SILVER_DATASET_PATH = Path("output/flywheel/silver_repair_dataset.jsonl")
+DEFAULT_SILVER_SUMMARY_PATH = Path("output/flywheel/silver_repair_dataset_summary.json")
 DEFAULT_RUN_ROOT = Path("output/flywheel/runs")
 RUN_DATASET_FILENAME = "compiler_feedback_repair_dataset.jsonl"
+
+SILVER_LABELS = (
+    "positive_repair",
+    "negative_failed_attempt",
+    "negative_bad_translation",
+    "diagnostic_only",
+)
+SILVER_NEGATIVE_LABELS = {
+    "negative_failed_attempt",
+    "negative_bad_translation",
+}
 
 _PROCESS_RUN_ID = ""
 _PIPELINE_COMMIT_CACHE: dict[str, str] = {}
@@ -508,6 +524,69 @@ def ensure_row_id(row: dict[str, Any]) -> dict[str, Any]:
     out["source_artifact"] = sources[0] if sources else str(out.get("source_artifact", "") or "")
     out["run_id"] = str(out.get("run_id", "") or "")
     out["pipeline_commit"] = str(out.get("pipeline_commit", "") or "unknown")
+    return out
+
+
+def silver_label_polarity(label: str) -> str:
+    """Return the training polarity for a silver repair row label."""
+    value = str(label or "").strip()
+    if value == "positive_repair":
+        return "positive"
+    if value in SILVER_NEGATIVE_LABELS:
+        return "negative"
+    return "diagnostic"
+
+
+def apply_silver_metadata(
+    row: dict[str, Any],
+    *,
+    label: str,
+    blocker_label: str = "",
+    statement_validity_blocker: str = "",
+    paper_split: str = "",
+    negative_reason: str = "",
+    provenance_confidence: str = "heuristic",
+    gold_eligible: bool = False,
+    source_artifacts: list[str] | None = None,
+) -> dict[str, Any]:
+    """Return a repair row decorated for the paper-agnostic silver dataset.
+
+    This does not change `make_repair_row`; it is an opt-in layer used by the
+    silver exporter so older APRIL-style repair rows remain backward-compatible.
+    """
+    if label not in SILVER_LABELS:
+        raise ValueError(f"unknown silver label: {label}")
+    out = ensure_row_id(row)
+    original_family = str(out.get("dataset_family", "") or DATASET_FAMILY)
+    sources = _merge_source_artifacts(out, {"source_artifacts": source_artifacts or []})
+    out.update(
+        {
+            "silver_schema_version": SILVER_SCHEMA_VERSION,
+            "dataset_family": SILVER_DATASET_FAMILY,
+            "source_dataset_family": original_family,
+            "dataset_tier": SILVER_DATASET_TIER,
+            "training_tier": "silver_repair",
+            "label": label,
+            "label_polarity": silver_label_polarity(label),
+            "gold_eligible": bool(gold_eligible),
+            "negative_reason": str(negative_reason or ""),
+            "blocker_label": str(blocker_label or ""),
+            "statement_validity_blocker": str(statement_validity_blocker or ""),
+            "paper_split": str(paper_split or ""),
+            "provenance_confidence": str(provenance_confidence or "heuristic"),
+            "source_artifacts": sources,
+            "source_artifact": sources[0] if sources else str(out.get("source_artifact", "") or ""),
+        }
+    )
+    silver_key = "|".join(
+        [
+            str(out.get("row_id", "")),
+            str(out.get("paper_id", "")),
+            str(out.get("theorem_name", "")),
+            label,
+        ]
+    )
+    out["silver_row_id"] = hashlib.sha256(silver_key.encode("utf-8")).hexdigest()[:24]
     return out
 
 

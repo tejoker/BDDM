@@ -29,11 +29,21 @@ def _write_ledger(ledger_dir: Path) -> Path:
                 "status": "FULLY_PROVEN",
                 "promotion_gate_passed": True,
                 "lean_statement": "theorem gaussian_integrable : Integrable X := by sorry",
+                "paper_statement_id": "pstmt_gaussian",
+                "alignment_pair_id": "align_gaussian",
+                "statement_alignment_class": "exact",
                 "semantic_equivalence_artifact": {
                     "original_latex_theorem": "Every Gaussian random variable is integrable.",
                     "normalized_natural_language_theorem": "Gaussian random variables are integrable.",
                     "extracted_assumptions": ["X has Gaussian law"],
                     "extracted_conclusion": "X is integrable",
+                    "alignment_class": "exact",
+                    "alignment_decision": {
+                        "alignment_class": "exact",
+                        "confidence": 0.93,
+                        "paper_statement_id": "pstmt_gaussian",
+                        "alignment_pair_id": "align_gaussian",
+                    },
                 },
             },
             {
@@ -66,6 +76,11 @@ def test_iter_statement_rows_extracts_semantic_artifact(tmp_path: Path) -> None:
     meta, text = rows[0]
     assert meta.statement_id == "2401.00001|gaussian_integrable"
     assert meta.layer == "trusted"
+    assert meta.paper_statement_id == "pstmt_gaussian"
+    assert meta.alignment_pair_id == "align_gaussian"
+    assert meta.statement_alignment_class == "exact"
+    assert meta.alignment_confidence == 0.93
+    assert "alignment: exact" in text
     assert "Gaussian random variables are integrable" in text
     assert "X has Gaussian law" in text
 

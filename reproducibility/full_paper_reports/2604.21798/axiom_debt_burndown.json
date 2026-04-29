@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.1.0",
+  "purpose": "Rank paper-local axioms by cheapest path to remove AXIOM_BACKED evidence.",
+  "axiom_backed_result_count": 0,
+  "paper_local_axiom_count": 0,
+  "result_buckets": {
+    "missing_definitions_only": 0,
+    "local_lemmas": 0,
+    "missing_mathlib": 0,
+    "deep_domain_theory": 0,
+    "translation_artifacts": 0,
+    "unclassified": 0
+  },
+  "summary_sentence": "0 axiom-backed results.",
+  "axiom_kind_counts": {},
+  "difficulty_counts": {},
+  "dependency_bucket_counts": {},
+  "ranked_axioms": []
+}

@@ -1,11 +1,11 @@
 {
-  "total": 24,
+  "total": 26,
   "counts": {
     "claim_review_pending": 1,
     "ill_typed_statement": 1,
     "paper_theory_debt": 7,
     "proof_search_failure": 11,
-    "release_ready": 2,
+    "release_ready": 4,
     "translation_limited": 2
   },
   "items": [
@@ -19,7 +19,52 @@
       "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
       "lean_statement": "-- Source claim excerpt: [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$. Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). \\end{equation*} Then the cutoff approximations converge almost surely in the path spaces \\begin{equation}\\label{eq:baseline-paths} \\Psi_i\\in C_T\\mathcal{C}^{\\alpha-3/2-}, \\qquad \\Theta\\in C_T\\mathcal{C}^{2\\alpha-3-}, \\qquad V_i\\in C_T\\mathcal{C}^{3\\alpha-3-}, \\qquad \\partial_tV_i\\in C_T\\mathcal{C}^{2\\alpha-3-}. \\end{equation} In particular, $\\Theta$ is a cross-Wick product without subtracting a scalar constant.\ntheorem thm_baseline_lift :\n  alpha > 3/4 := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "2ec9ad690a7ba4acc2bc5074da8ea4cf01c6f36ee939a43f17072dfd39e8f44e",
+      "canonical_theorem_id": "cth_2ec9ad690a7ba4acc2bc5074",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "prop_cubic_quartic_baseline",
+            "statement_id": "2604.21884|prop_cubic_quartic_baseline|1",
+            "statement_fingerprint": "571c30a868e4a59eded4c54d905174db8a9b54d8eef757ae4bfe8808c5772144",
+            "score": 2.0285
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "prop_cubic_quartic_baseline",
+            "statement_id": "2604.21884_repair_candidates|prop_cubic_quartic_baseline|21",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.5448
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "thm_baseline_lift",
+            "statement_id": "2604.21884_repair_candidates|thm_baseline_lift|19",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.5314
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "prop_cubic_quartic_baseline",
@@ -31,7 +76,52 @@
       "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
       "lean_statement": "-- Source claim excerpt: [Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$. The cubic resonant symbols \\begin{equation*} \\Gamma_1=V_2\\circ\\Psi_1, \\qquad \\Gamma_2=V_1\\circ\\Psi_2 \\end{equation*} admit canonical cutoff limits as stochastic distributions with baseline regularity \\begin{equation}\\label{eq:gamma-baseline} \\Gamma_i\\in C_T\\mathcal{C}^{4\\alpha-9/2-}. \\end{equation} The nonzero-chaos part of $V_1V_2$ admits a canonical baseline lift in \\begin{equation}\\label{eq:vv-nonzero-baseline} (V_1V_2)^{\\neq 0}\\in C_T\\mathcal{C}^{6\\alpha-6-}. \\end{equation} Moreover, the zero-chaos part of $V_1V_2$ is a deterministic scalar process; under the speed-separated double Volterra estimate its dyadic shell is $N^{6-7\\alpha+}$, so it converges in $C_T$ for $\\alpha>6/7$.\ntheorem prop_cubic_quartic_baseline :\n  alpha > 3/4 ∧ alpha > 6/7 := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "571c30a868e4a59eded4c54d905174db8a9b54d8eef757ae4bfe8808c5772144",
+      "canonical_theorem_id": "cth_571c30a868e4a59eded4c54d",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "thm_baseline_lift",
+            "statement_id": "2604.21884|thm_baseline_lift|0",
+            "statement_fingerprint": "2ec9ad690a7ba4acc2bc5074da8ea4cf01c6f36ee939a43f17072dfd39e8f44e",
+            "score": 1.5285
+          },
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "lem_volterra",
+            "statement_id": "2604.21884|lem_volterra|13",
+            "statement_fingerprint": "0a5bbc9249946719df523e6ae60a93a3d2905d938afd19dfcf2cefbe0e2b17c5",
+            "score": 1.4062
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "prop_cubic_quartic_baseline",
+            "statement_id": "2604.21884_repair_candidates|prop_cubic_quartic_baseline|21",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.0571
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "thm_operator_main",
@@ -43,7 +133,61 @@
       "next_action": "Re-translate from source; current statement is placeholder or non-substantive.",
       "lean_statement": "theorem thm_operator_main : False",
       "debt_tier": "none",
-      "proof_value": "none"
+      "proof_value": "none",
+      "novelty_status": "duplicate_in_corpus",
+      "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed",
+      "canonical_theorem_id": "cth_e25416f8743c6564e03b088a",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "canonical_fingerprint",
+        "reason": "canonical statement fingerprint matched another corpus statement",
+        "matches": [
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Folst",
+            "statement_id": "2604.21314|Thm_Folst|10",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Blowup_O4",
+            "statement_id": "2604.21314|Thm_Blowup_O4|12",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Mild",
+            "statement_id": "2604.21314|Mild|15",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "rem_HF0_main_input",
+            "statement_id": "2604.21583|rem_HF0_main_input|21",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "prop_shell_mode_local",
+            "statement_id": "2604.21583|prop_shell_mode_local|28",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "prop_mid_completion",
@@ -55,7 +199,52 @@
       "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
       "lean_statement": "-- Source claim excerpt: [Completion outside the strong low--high region]\\label{prop:mid-completion} Let the full paraproduct-resonant operator be decomposed into the strongly low--high region $|q|\\le N^\\theta$, the intermediate low--high region $N^\\theta\\lesssim |q|\\ll N$, finitely many low shells, and the nonresonant paraproduct geometries. If the input has positive regularity $U\\in C_TH^{s_1}$ with $s_1>0$, then the intermediate region contributes the dyadic shell \\begin{equation}\\label{eq:mid-shell-intro} N^{s_2+3-4\\alpha-\\theta s_1+\\varepsilon}, \\end{equation} and is therefore summable once \\eqref{eq:operator-cond-main} holds. The remaining nonresonant and finite-shell pieces are bounded by standard paraproduct and finite-rank estimates.\ntheorem prop_mid_completion :\n  s_1 > 0 := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "44fa4551d80d11a84fb45db7b91edad232c760e95df821eb9bc529957163c2c6",
+      "canonical_theorem_id": "cth_44fa4551d80d11a84fb45db7",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "RepairCandidates.prop_mid_completion",
+            "statement_id": "2604.21884_repair_candidates|RepairCandidates.prop_mid_completion|2",
+            "statement_fingerprint": "712eff393fb64d99ea8532ec91d27cee3899ae3fb031de165a618299e0fdcbb1",
+            "score": 1.4272
+          },
+          {
+            "paper_id": "ab_repair_proof_topk0",
+            "theorem_name": "prop_mid_completion",
+            "statement_id": "ab_repair_proof_topk0|prop_mid_completion|1",
+            "statement_fingerprint": "712eff393fb64d99ea8532ec91d27cee3899ae3fb031de165a618299e0fdcbb1",
+            "score": 1.4209
+          },
+          {
+            "paper_id": "ab_repair_proof_topk3",
+            "theorem_name": "prop_mid_completion",
+            "statement_id": "ab_repair_proof_topk3|prop_mid_completion|1",
+            "statement_fingerprint": "712eff393fb64d99ea8532ec91d27cee3899ae3fb031de165a618299e0fdcbb1",
+            "score": 1.4209
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "thm_conditional_closure_intro",
@@ -67,7 +256,52 @@
       "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
       "lean_statement": "-- Source claim excerpt: [Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm \\begin{equation}\\label{eq:source-hyp-intro} F^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha}, \\end{equation} and that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in \\begin{equation*} (X_T^{s_1})^2\\times (Y_T^{s_2})^2. \\end{equation*} The solution map is local...\ntheorem thm_conditional_closure_intro :\n  ∃ x : ℝ, x = x := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "78ceb40e845e7f0bfe0527713bc86f576be639905dc6e8b4f9ee1ea01c86b8b6",
+      "canonical_theorem_id": "cth_78ceb40e845e7f0bfe052771",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_18",
+            "statement_id": "2604.21821|theorem_18|17",
+            "statement_fingerprint": "b82b1ec65418411a9c94a771c970a8a3f6f7f69f02f555c74d88a996c9e2182d",
+            "score": 2.2279
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_3",
+            "statement_id": "2604.21821|theorem_3|2",
+            "statement_fingerprint": "fab90788b0547efb2cbe202389898ef50b0660e48a250d2c00533e8100f44fab",
+            "score": 2.165
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_2",
+            "statement_id": "2604.21821|theorem_2|1",
+            "statement_fingerprint": "3849473a6a1f2e43c2b1d3b90a54d78c9930e25144268a08ed9832c183c27047",
+            "score": 2.1517
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "cor_conditional_cutoff",
@@ -80,7 +314,52 @@
       "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
       "lean_statement": "-- Source claim excerpt: [Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff} If the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term.\ntheorem cor_conditional_cutoff :\n  ∃ x : ℝ, x = x := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "e5a63af7455dc8ea106334b9025645176c6cd36e4882b77be1cb2f22438690b6",
+      "canonical_theorem_id": "cth_e5a63af7455dc8ea106334b9",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_18",
+            "statement_id": "2604.21821|theorem_18|17",
+            "statement_fingerprint": "b82b1ec65418411a9c94a771c970a8a3f6f7f69f02f555c74d88a996c9e2182d",
+            "score": 1.6291
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_2",
+            "statement_id": "2604.21821|theorem_2|1",
+            "statement_fingerprint": "3849473a6a1f2e43c2b1d3b90a54d78c9930e25144268a08ed9832c183c27047",
+            "score": 1.6128
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_3",
+            "statement_id": "2604.21821|theorem_3|2",
+            "statement_fingerprint": "fab90788b0547efb2cbe202389898ef50b0660e48a250d2c00533e8100f44fab",
+            "score": 1.6093
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "rem_status_emphasis",
@@ -92,7 +371,52 @@
       "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
       "lean_statement": "-- Source claim excerpt: [Status and emphasis]\\label{rem:status-emphasis} The unconditional core of the paper is Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. The full stochastic Cauchy problem is conditional only because one still has to choose a closure route for the cubic forcing $F^V$ and insert an appropriate fractional periodic Klein--Gordon Strichartz theorem. In particular, the random-operator part is already complete at the level relevant to the no singular centering mechanism.\ntheorem rem_status_emphasis :\n  ∃ x : ℝ, x = x := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "52e931af8ba4e86bea8775d14491b58c7c88ac00a90408d5d31cff234ea661ce",
+      "canonical_theorem_id": "cth_52e931af8ba4e86bea8775d1",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_18",
+            "statement_id": "2604.21821|theorem_18|17",
+            "statement_fingerprint": "b82b1ec65418411a9c94a771c970a8a3f6f7f69f02f555c74d88a996c9e2182d",
+            "score": 2.1194
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_3",
+            "statement_id": "2604.21821|theorem_3|2",
+            "statement_fingerprint": "fab90788b0547efb2cbe202389898ef50b0660e48a250d2c00533e8100f44fab",
+            "score": 2.0941
+          },
+          {
+            "paper_id": "2604.21821",
+            "theorem_name": "theorem_2",
+            "statement_id": "2604.21821|theorem_2|1",
+            "statement_fingerprint": "3849473a6a1f2e43c2b1d3b90a54d78c9930e25144268a08ed9832c183c27047",
+            "score": 2.094
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "prop_sharpness",
@@ -102,9 +426,40 @@
         "paper_local_lemma:DyadicBlockBound"
       ],
       "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
-      "lean_statement": "-- Source claim excerpt: [Sharpness of the same-color shell]\\label{prop:sharpness} There exist a fixed low output frequency $q$, a conic sector of the resonant shell, and a smooth time profile $w(q,t)$ supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell $|\\ell|\\sim N$ satisfies \\begin{equation}\\label{eq:sharpness} \\|D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\\gtrsim N^{3-4\\alpha} \\end{equation} up to strictly lower-order terms. Consequently $\\alpha=3/4$ is logarithmically critical for the deterministic contraction channel.\ntheorem prop_sharpness :\n  alpha = 3/4 := by\n  sorry",
-      "debt_tier": "local_paper_theory",
-      "proof_value": "local_paper_theory_obligation"
+      "lean_statement": "theorem prop_sharpness :\n  ∃ N : ℕ, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "superseded_generated_diagnostic",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "64ba6ffd4aa51bf1aed03a5b01d570410dc9018178ecef7f252481a6cc8de6e5",
+      "canonical_theorem_id": "cth_64ba6ffd4aa51bf1aed03a5b",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "prop_sharpness__audited_core",
+            "statement_id": "2604.21884|prop_sharpness__audited_core|22",
+            "statement_fingerprint": "c16ff941d4514781ae7ca459bdbbc57d5e0847eb209df50f9d998f885b2c9035",
+            "score": 1.942
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "remark_9",
@@ -116,7 +471,30 @@
       "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
       "lean_statement": "-- Source claim excerpt: [Why $V_i$ is not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$, not on $V_1$ and $V_2$. In the fractional range $\\alpha<1$, the first Picard objects $V_i$ have negative baseline regularity $3\\alpha-3-$ and should be treated as part of the enhanced stochastic data, not as $L^2$ inputs of the random-operator theorem.\ntheorem remark_9 :\n  alpha < 1 := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "new_candidate",
+      "statement_fingerprint": "d6c4d75a6ad950e0a7deeb1b5e235abb1f50131ae1ab1590a814e881f6c39e5a",
+      "canonical_theorem_id": "cth_d6c4d75a6ad950e0a7deeb1b",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "remark_10",
@@ -128,7 +506,30 @@
       "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
       "lean_statement": "-- Source claim excerpt: [What is already complete here] At the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are finite. The real difficulty appears only if one insists on inserting the whole forcing into the conservative source norm $C_TH^{s_2-\\alpha}$.\ntheorem remark_10 :\n  ∃ x : ℝ, x = x := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "new_candidate",
+      "statement_fingerprint": "684d44b267fe88f63ab2f78b1ab94329ab55cfe41e4cb712c048bc6954330e44",
+      "canonical_theorem_id": "cth_684d44b267fe88f63ab2f78b",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "lem_centered_cov",
@@ -140,7 +541,45 @@
       "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
       "lean_statement": "theorem lem_centered_cov (N : ℕ) (i j k : ℕ) (n q : ℤ) (t s t' : ℝ) (alpha : ℝ) (η : ℝ) (h0 : 0 ≤ s) (h1 : s ≤ t) (h2 : t ≤ T) (h3 : 0 < η) (h4 : η ≤ 1/2) : Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (i, j, k) (n, q, t, s)| ^ 2) : ℝ)) (fun _ => C_T * N ^ (3 - 6 * alpha)) ∧ Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (i, j, k) (n, q, t, s) - B_N (i, j, k) (n, q, t', s)| ^ 2) : ℝ)) (fun _ => C_T * |t - t'| ^ (2 * η) * N ^ (3 - 6 * alpha + 2 * η * alpha))",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "5ab1245f36463d93ba9ed1e18e11c720195dad167f3099dcafb4945f556b0bc7",
+      "canonical_theorem_id": "cth_5ab1245f36463d93ba9ed1e1",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "lem_centered_cov",
+            "statement_id": "2604.21884_repair_candidates|lem_centered_cov|27",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.5474
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "RepairCandidates.lem_centered_cov",
+            "statement_id": "2604.21884_repair_candidates|RepairCandidates.lem_centered_cov|26",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.5221
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "thm_pathwise_fluct",
@@ -152,7 +591,61 @@
       "next_action": "Fix generated notation/types or add a typed PaperTheory declaration, then revalidate.",
       "lean_statement": "-- Source claim excerpt: [Pathwise centered fluctuations]\\label{thm:pathwise-fluct} Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0. \\end{equation} Then the centered dyadic fluctuation series \\begin{equation}\\label{eq:fluct-series} B^{i;j,k}:=\\sum_{N\\text{ dyadic}}B_N^{i;j,k} \\end{equation} converges almost surely in \\begin{equation}\\label{eq:fluct-op-space} \\mathcal L\\bigl(E_T,C_TH^{s_2-\\alpha}\\bigr). \\end{equation} More precisely, for every sufficiently small $\\kappa>0$ there is an almost surely finite random constant $C_\\omega$ such that \\begin{equation}\\label{eq:fluct-dyadic-bound} \\|B_N^{i;j,k}\\|_{E_T\\to C_TH^{s_2-\\alpha}} \\le C_\\omega N^{a/2+\\kappa} \\end{equation} for all dyadic $N$.\ntheorem thm_pathwise_fluct :\n  kappa > 0 := by\n  sorry",
       "debt_tier": "none",
-      "proof_value": "none"
+      "proof_value": "none",
+      "novelty_status": "duplicate_in_corpus",
+      "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed",
+      "canonical_theorem_id": "cth_e25416f8743c6564e03b088a",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "canonical_fingerprint",
+        "reason": "canonical statement fingerprint matched another corpus statement",
+        "matches": [
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Folst",
+            "statement_id": "2604.21314|Thm_Folst|10",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Blowup_O4",
+            "statement_id": "2604.21314|Thm_Blowup_O4|12",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Mild",
+            "statement_id": "2604.21314|Mild|15",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "rem_HF0_main_input",
+            "statement_id": "2604.21583|rem_HF0_main_input|21",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "prop_shell_mode_local",
+            "statement_id": "2604.21583|prop_shell_mode_local|28",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "lem_speed_gap",
@@ -166,7 +659,52 @@
       "next_action": "Apply human/hybrid claim-equivalence review only after other gates pass.",
       "lean_statement": "theorem lem_speed_gap :\n  ∃ N0 : ℕ, ∃ cstar : ℝ, 0 < cstar ∧ (N0 : ℝ) ≤ (N0 : ℝ)",
       "debt_tier": "none",
-      "proof_value": "none"
+      "proof_value": "none",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "05ea3e1887b1445ed669fbb5ec739faafb27c097a0e7003ab2549f0fa14cbf47",
+      "canonical_theorem_id": "cth_05ea3e1887b1445ed669fbb5",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "lem_speed_gap",
+            "statement_id": "2604.21884_repair_candidates|lem_speed_gap|9",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.1491
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates_fast_batch",
+            "theorem_name": "lem_speed_gap",
+            "statement_id": "2604.21884_repair_candidates_fast_batch|lem_speed_gap|3",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.1491
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "RepairCandidates.lem_speed_gap",
+            "statement_id": "2604.21884_repair_candidates|RepairCandidates.lem_speed_gap|8",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.0861
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "lem_volterra",
@@ -178,19 +716,82 @@
       "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
       "lean_statement": "-- Source claim excerpt: [Volterra oscillation estimate]\\label{lem:volterra} Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then \\begin{equation}\\label{eq:volterra-est} \\sup_{0\\le t\\le T} \\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr| \\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^\\infty_T}+\\|\\partial_t a\\|_{L^\\infty_T}\\bigr). \\end{equation} The same bound holds with $\\sin((t-s)\\Phi)$ or $\\cos((t-s)\\Phi)$ in place of the exponential.\ntheorem lem_volterra :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "new_candidate",
+      "statement_fingerprint": "0a5bbc9249946719df523e6ae60a93a3d2905d938afd19dfcf2cefbe0e2b17c5",
+      "canonical_theorem_id": "cth_0a5bbc9249946719df523e6a",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "prop_det_contraction",
       "valid_for_proof": true,
       "primary_blocker": "proof_search_failure",
       "reasons": [
-        "lean_proof_closed"
+        "assumptions_grounded",
+        "dependency_trust_complete",
+        "generated_row_has_axiom_or_domain_assumption_debt"
       ],
       "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
-      "lean_statement": "-- Source claim excerpt: [Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$. Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}} \\lesssim_T \\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr) \\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr). \\end{equation} Consequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second condition in \\eqref{eq:operator-cond-main} holds.\ntheorem prop_det_contraction :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
-      "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "lean_statement": "theorem prop_det_contraction (i j : ℕ) (w : ℝ → ℝ) (q t s : ℝ) (N : ℕ) (alpha theta eps s1 s2 T : ℝ) (h_i_ne_j : i ≠ j) (h_eps_pos : 0 < eps) (h_theta_pos : 0 < theta) (h_s1_pos : 0 < s1) (h_s1_lt_s2 : s1 < s2) (h_s2_bound : s2 < 4 * alpha - 3 - (3 / 2) * theta - eps) (h_N_bound : 3 - 4 * alpha + theta * (s2 + eps) > 0) : ∃ C > 0, ∀ N ≥ N0, ‖(fun q t => ∫ s in Set.Icc 0 t, D_N i j (q, t, s) * w q s)‖_{C [0 T], H^{s2 - alpha}} ≤ C * (N^(3 - 4 * alpha) + N^(3 - 4 * alpha + theta * (s2 + eps))) * (‖w‖_{C [0 T], L2} + ‖(fun q t => deriv (fun t => w q t) t)‖_{C [0 T], H^{-alpha - eps}})",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "superseded_generated_diagnostic",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "2de6f61d2c30397e23c4d0bcd90470d671e97fc2ce64470bc778cf109cc98335",
+      "canonical_theorem_id": "cth_2de6f61d2c30397e23c4d0bc",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "prop_HS_deFinetti_remainder_vanish",
+            "statement_id": "2604.21583|prop_HS_deFinetti_remainder_vanish|56",
+            "statement_fingerprint": "c0987d7e80446e84d7e00d1ebc91026e946996c9bc426481df8a55c70e308b88",
+            "score": 1.5171
+          },
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "prop_det_contraction__audited_core",
+            "statement_id": "2604.21884|prop_det_contraction__audited_core|23",
+            "statement_fingerprint": "a17bbb85f8274e055230242a036ae45cc6aa7b2e85e0935a636319885497d3a8",
+            "score": 0.9896
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "thm_no_singular_centering",
@@ -202,7 +803,52 @@
       "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
       "lean_statement": "-- Source claim excerpt: [No singular centering for mixed random operators]\\label{thm:no-singular-centering} Assume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator \\begin{equation*} E_T\\to C_TH^{s_2-\\alpha}. \\end{equation*} Cross-color blocks are automatically centered by independence. Same-color blocks decompose as \\begin{equation*} T^{i;j,j}=\\mathcal D^{i;j}+\\mathcal B^{i;j,j}, \\end{equation*} where $\\mathcal D^{i;j}$ is a finite speed-separated deterministic Volterra multiplier and $\\mathcal B^{i;j,j}$ is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.\ntheorem thm_no_singular_centering :\n  ∃ x : ℝ, x = x := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "0291e012198d7d5d64276a8c4253f64ae19856c0dda411d118f347121f1d58ba",
+      "canonical_theorem_id": "cth_0291e012198d7d5d64276a8c",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "lem_volterra",
+            "statement_id": "2604.21884|lem_volterra|13",
+            "statement_fingerprint": "0a5bbc9249946719df523e6ae60a93a3d2905d938afd19dfcf2cefbe0e2b17c5",
+            "score": 1.2091
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "lem_cross_terms_controlled",
+            "statement_id": "2604.21583|lem_cross_terms_controlled|34",
+            "statement_fingerprint": "2e2378230463964d76d517c92aa3154fca58707df43b4db14eb6d7177bede7a3",
+            "score": 1.1467
+          },
+          {
+            "paper_id": "2604.21663",
+            "theorem_name": "ex_lotka_volterra",
+            "statement_id": "2604.21663|ex_lotka_volterra|39",
+            "statement_fingerprint": "568b6dc5e0b19749a6659375b78e5d163a348413de19b3a969bb60877da35f8a",
+            "score": 1.1336
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "ass_strichartz",
@@ -214,7 +860,45 @@
       "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
       "lean_statement": "theorem ass_strichartz (T : ℝ) (alpha : ℝ) (s1 : ℝ) (s2 : ℝ) (delta : ℝ) (i : Fin 2) (hT : 0 < T ∧ T ≤ 1) (halpha : 0 < alpha) (hs1 : 0 < s1) (hs2 : 0 < s2) (hdelta : 0 < delta) : ∀ (X Y : ℝ → ℝ), (∀ t, X t ∈ C_T H^{s1}) → (∀ t, d_dtt X t ∈ C_T H^{s1 - alpha}) → (∀ t, X t ∈ L_T^8 W^{s1 - alpha/4, 8/3}) → (∀ t, Y t ∈ C_T H^{s2}) → (∀ t, d_dtt Y t ∈ C_T H^{s2 - alpha}) → (∀ t, Y t ∈ L_T^4 W^{s2 - alpha/2, 4}) → T^delta * (∥X∥_{X_T^{s1}} * ∥Y∥_{Y_T^{s2}}) ≤ C",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "a46391d847a5fc2b2a74974113a684f3587311217a3ec94de9bfb263812fbe21",
+      "canonical_theorem_id": "cth_a46391d847a5fc2b2a749741",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "ass_strichartz",
+            "statement_id": "2604.21884_repair_candidates|ass_strichartz|31",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.6064
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "RepairCandidates.ass_strichartz",
+            "statement_id": "2604.21884_repair_candidates|RepairCandidates.ass_strichartz|30",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.5913
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "remark_18",
@@ -226,7 +910,30 @@
       "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
       "lean_statement": "-- Source claim excerpt: For $\\alpha=1$ this is the usual local wave/Klein--Gordon package. For fractional flows on compact manifolds one may need derivative losses; if so, the closure inequalities below must be shifted accordingly. The present paper keeps this input explicit.\ntheorem remark_18 :\n  alpha = 1 := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "new_candidate",
+      "statement_fingerprint": "7cc73c75bc3c59f962946eace2974f3d1b09ea35f89ed37bbf3b6c2f07733c34",
+      "canonical_theorem_id": "cth_7cc73c75bc3c59f962946eac",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "def_admissible",
@@ -238,7 +945,52 @@
       "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
       "lean_statement": "theorem def_admissible :\n  ∃ alpha epsilon : ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 ≤ s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V",
       "debt_tier": "audited_core_alignment",
-      "proof_value": "superseded_generated_diagnostic"
+      "proof_value": "superseded_generated_diagnostic",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "291e1a5e8c8052d16b66daca83c94f8e5bed14dcf1310fc881386818e64f2504",
+      "canonical_theorem_id": "cth_291e1a5e8c8052d16b66daca",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "def_admissible__audited_core",
+            "statement_id": "2604.21884|def_admissible__audited_core|24",
+            "statement_fingerprint": "e83bf263d268c3c010763f75b0ec4ca82ddd7028b2af749d324a61bf72fc9f5d",
+            "score": 1.9215
+          },
+          {
+            "paper_id": "2604.21663",
+            "theorem_name": "defi_admissible_measure",
+            "statement_id": "2604.21663|defi_admissible_measure|9",
+            "statement_fingerprint": "de7b608b8898197f714932865834a12aca261a9a5c8965f9da07e6e80a90e6eb",
+            "score": 1.0756
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "def_admissible",
+            "statement_id": "2604.21884_repair_candidates|def_admissible|33",
+            "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+            "score": 1.0355
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "remark_20",
@@ -250,7 +1002,30 @@
       "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
       "lean_statement": "theorem remark_20 (alpha s1 s2 theta : ℝ) (hs1 : 0 < s1) (hs2 : s1 < s2) (htheta : 0 < theta) (htheta1 : theta < 1) (hs2alpha : s2 < 4 * alpha - 3 - (3 / 2) * theta) : ∃ eps : ℝ, 0 < eps ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - eps",
       "debt_tier": "audited_core_alignment",
-      "proof_value": "superseded_generated_diagnostic"
+      "proof_value": "superseded_generated_diagnostic",
+      "novelty_status": "new_candidate",
+      "statement_fingerprint": "565b8ed843fbcd67c62c92179e8f57cc48d89d856861eac4300a94e68b23c3a7",
+      "canonical_theorem_id": "cth_565b8ed843fbcd67c62c9217",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "no_overlap_detected",
+        "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+        "matches": [],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "rem_primitive_route",
@@ -262,7 +1037,52 @@
       "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
       "lean_statement": "-- Source claim excerpt: [Primitive route]\\label{rem:primitive-route} The deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving $G_i^V$.\ntheorem rem_primitive_route :\n  ∃ x : ℝ, x = x := by\n  sorry",
       "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding"
+      "proof_value": "definition_grounding",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "df0a8cc054569cf6f2f8828e49713b5bb1a6da0613cd3ac5311a56e1b7dc05c5",
+      "canonical_theorem_id": "cth_df0a8cc054569cf6f2f8828e",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "rem_primitive_route",
+            "statement_id": "2604.21884_repair_candidates|rem_primitive_route|15",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.3505
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates_fast_batch",
+            "theorem_name": "rem_primitive_route",
+            "statement_id": "2604.21884_repair_candidates_fast_batch|rem_primitive_route|9",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.3505
+          },
+          {
+            "paper_id": "2604.21884_repair_candidates",
+            "theorem_name": "RepairCandidates.rem_primitive_route",
+            "statement_id": "2604.21884_repair_candidates|RepairCandidates.rem_primitive_route|14",
+            "statement_fingerprint": "ce136e6a1b23c06bfdc047b77711f781a1eb421998aa49ba3eae9789c61878a6",
+            "score": 1.1686
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "cor_safe_range",
@@ -274,7 +1094,150 @@
       "next_action": "Re-translate from source; current statement is placeholder or non-substantive.",
       "lean_statement": "theorem cor_safe_range : False",
       "debt_tier": "none",
-      "proof_value": "none"
+      "proof_value": "none",
+      "novelty_status": "duplicate_in_corpus",
+      "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed",
+      "canonical_theorem_id": "cth_e25416f8743c6564e03b088a",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "canonical_fingerprint",
+        "reason": "canonical statement fingerprint matched another corpus statement",
+        "matches": [
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Folst",
+            "statement_id": "2604.21314|Thm_Folst|10",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Thm_Blowup_O4",
+            "statement_id": "2604.21314|Thm_Blowup_O4|12",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21314",
+            "theorem_name": "Mild",
+            "statement_id": "2604.21314|Mild|15",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "rem_HF0_main_input",
+            "statement_id": "2604.21583|rem_HF0_main_input|21",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          },
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "prop_shell_mode_local",
+            "statement_id": "2604.21583|prop_shell_mode_local|28",
+            "statement_fingerprint": "e25416f8743c6564e03b088a64865800acd6f737f75d3e3325b3a8e0755868ed"
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "prop_sharpness__audited_core",
+      "valid_for_proof": true,
+      "primary_blocker": "release_ready",
+      "reasons": [],
+      "next_action": "No blocker detected for release promotion.",
+      "lean_statement": "def AutoDyadicSharpnessCriticalExponent (alpha : ℝ) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :\n    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "audited_real_claim",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "c16ff941d4514781ae7ca459bdbbc57d5e0847eb209df50f9d998f885b2c9035",
+      "canonical_theorem_id": "cth_c16ff941d4514781ae7ca459",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "prop_sharpness",
+            "statement_id": "2604.21884|prop_sharpness|7",
+            "statement_fingerprint": "64ba6ffd4aa51bf1aed03a5b01d570410dc9018178ecef7f252481a6cc8de6e5",
+            "score": 1.9375
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
+    },
+    {
+      "theorem_name": "prop_det_contraction__audited_core",
+      "valid_for_proof": true,
+      "primary_blocker": "release_ready",
+      "reasons": [],
+      "next_action": "No blocker detected for release promotion.",
+      "lean_statement": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : ℝ) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta →\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 ∧\n    theta * (s2 + eps) < 4 * alpha - 3",
+      "debt_tier": "audited_core_alignment",
+      "proof_value": "audited_real_claim",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "a17bbb85f8274e055230242a036ae45cc6aa7b2e85e0935a636319885497d3a8",
+      "canonical_theorem_id": "cth_a17bbb85f8274e055230242a",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21583",
+            "theorem_name": "prop_HS_deFinetti_remainder_vanish",
+            "statement_id": "2604.21583|prop_HS_deFinetti_remainder_vanish|56",
+            "statement_fingerprint": "c0987d7e80446e84d7e00d1ebc91026e946996c9bc426481df8a55c70e308b88",
+            "score": 1.5112
+          },
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "prop_det_contraction",
+            "statement_id": "2604.21884|prop_det_contraction|14",
+            "statement_fingerprint": "2de6f61d2c30397e23c4d0bcd90470d671e97fc2ce64470bc778cf109cc98335",
+            "score": 0.9888
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "def_admissible__audited_core",
@@ -284,7 +1247,52 @@
       "next_action": "No blocker detected for release promotion.",
       "lean_statement": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV)",
       "debt_tier": "audited_core_alignment",
-      "proof_value": "audited_real_claim"
+      "proof_value": "audited_real_claim",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "e83bf263d268c3c010763f75b0ec4ca82ddd7028b2af749d324a61bf72fc9f5d",
+      "canonical_theorem_id": "cth_e83bf263d268c3c010763f75",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "def_admissible",
+            "statement_id": "2604.21884|def_admissible|18",
+            "statement_fingerprint": "291e1a5e8c8052d16b66daca83c94f8e5bed14dcf1310fc881386818e64f2504",
+            "score": 1.9197
+          },
+          {
+            "paper_id": "2604.21663",
+            "theorem_name": "defi_admissible_measure",
+            "statement_id": "2604.21663|defi_admissible_measure|9",
+            "statement_fingerprint": "de7b608b8898197f714932865834a12aca261a9a5c8965f9da07e6e80a90e6eb",
+            "score": 1.0251
+          },
+          {
+            "paper_id": "2604.21663",
+            "theorem_name": "ArxivPaper.prop_nonadmissible_comparison_of_classes",
+            "statement_id": "2604.21663|ArxivPaper.prop_nonadmissible_comparison_of_classes|55",
+            "statement_fingerprint": "bdc506d16e6be0d7734a12873815cbf6d3797d319ab8e1b282ed0c0d11e2eec3",
+            "score": 1.023
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     },
     {
       "theorem_name": "remark_20__audited_core",
@@ -294,7 +1302,45 @@
       "next_action": "No blocker detected for release promotion.",
       "lean_statement": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV ↔\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    (3 / 2 - alpha + eps < s2 ∧ s2 < s1 + 2 * alpha - 3 / 2 - eps) ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    (rhoV + s1 > 0 ∧ s2 - alpha < rhoV))",
       "debt_tier": "audited_core_alignment",
-      "proof_value": "audited_real_claim"
+      "proof_value": "audited_real_claim",
+      "novelty_status": "semantic_near_duplicate",
+      "statement_fingerprint": "eaf4ac6602c01a384d5576827455231361d69d7ec76d2667c8c1918bd71c11c6",
+      "canonical_theorem_id": "cth_eaf4ac6602c01a384d557682",
+      "novelty_evidence": {
+        "schema_version": "1.0.0",
+        "method": "statement_retrieval",
+        "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+        "matches": [
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "ass_strichartz",
+            "statement_id": "2604.21884|ass_strichartz|16",
+            "statement_fingerprint": "a46391d847a5fc2b2a74974113a684f3587311217a3ec94de9bfb263812fbe21",
+            "score": 0.969
+          },
+          {
+            "paper_id": "2604.21884",
+            "theorem_name": "def_admissible__audited_core",
+            "statement_id": "2604.21884|def_admissible__audited_core|24",
+            "statement_fingerprint": "e83bf263d268c3c010763f75b0ec4ca82ddd7028b2af749d324a61bf72fc9f5d",
+            "score": 0.8156
+          }
+        ],
+        "mathlib": {
+          "matched": false,
+          "method": "mathlib_no_overlap_found",
+          "reason": "no Mathlib overlap detected by available checks",
+          "unavailable_checks": [
+            "mathlib_seed_missing",
+            "lean_exact_check_disabled",
+            "mathlib_semantic_index_disabled"
+          ]
+        },
+        "thresholds": {
+          "semantic_near_duplicate": 0.78,
+          "mathlib_semantic_overlap": 0.86
+        }
+      }
     }
   ]
 }

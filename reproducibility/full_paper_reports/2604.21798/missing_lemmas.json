@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.1.0",
+  "purpose": "Queue for replacing paper-local axioms with unconditional Lean lemmas/definitions.",
+  "total_obligations": 0,
+  "counts_by_category": {
+    "easy_missing_definition": 0,
+    "local_paper_lemma": 0,
+    "missing_mathlib_theorem": 0,
+    "deep_domain_theory_gap": 0,
+    "bad_translation_artifact": 0
+  },
+  "definition_stub_grounding": {
+    "count": 0,
+    "total_references": 0,
+    "items": [],
+    "claim_scope": "Definition stubs are reported separately from theorem/lemma obligations; they do not count as proved paper claims."
+  },
+  "attack_queue": []
+}

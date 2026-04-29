@@ -17,6 +17,14 @@ import time
 from pathlib import Path
 from typing import Any
 
+from corpus_release_metadata import (
+    CORPUS_RELEASE_SCHEMA_VERSION,
+    artifact_entry as release_artifact_entry,
+    artifact_summary,
+    build_release_audit,
+)
+from statement_validity import summarize_statement_fidelity
+
 
 PUBLIC_ARTIFACTS = (
     "fetched_paper_metadata",
@@ -28,7 +36,13 @@ PUBLIC_ARTIFACTS = (
     "full_report",
     "compiler_feedback_repair_dataset",
     "compiler_feedback_repair_dataset_summary",
+    "silver_repair_dataset",
+    "silver_repair_dataset_summary",
     "manifest",
+)
+OPTIONAL_PUBLIC_ARTIFACTS = (
+    "claim_equivalence_review_queue",
+    "claim_equivalence_adjudications",
 )
 
 
@@ -211,19 +225,8 @@ def run_full_pipeline(
     return stage_rows
 
 
-def _artifact_entry(root: Path, role: str, path: Path, paper_id: str = "") -> dict[str, Any]:
-    exists = path.exists()
-    row: dict[str, Any] = {
-        "role": role,
-        "path": _relativize(root, path),
-        "exists": exists,
-    }
-    if paper_id:
-        row["paper_id"] = paper_id
-    if exists and path.is_file():
-        row["size_bytes"] = path.stat().st_size
-        row["sha256"] = _sha256(path)
-    return row
+def _artifact_entry(root: Path, role: str, path: Path, paper_id: str = "", *, required: bool = False) -> dict[str, Any]:
+    return release_artifact_entry(root, role, path, paper_id=paper_id, required=required)
 
 
 def _ledger_entries(raw: Any) -> list[dict[str, Any]]:
@@ -422,6 +425,41 @@ def build_public_claim_artifacts(
             }
         )
 
+    silver_dataset_path = out_root / "silver_repair_dataset.jsonl"
+    silver_dataset_summary_path = out_root / "silver_repair_dataset_summary.json"
+    silver_started = time.time()
+    try:
+        from export_silver_repair_dataset import export_silver_dataset
+
+        silver_result = export_silver_dataset(
+            input_paths=[project_root / "output" / "verification_ledgers", full_reports_root, project_root / "logs"],
+            run_roots=[project_root / "output" / "flywheel" / "runs", project_root / "output" / "flywheel" / "compiler_feedback_repair_dataset.jsonl"],
+            report_roots=[full_reports_root, project_root / "output" / "reports" / "full_paper"],
+            repair_queue_paths=[],
+            out_jsonl=silver_dataset_path,
+            out_summary=silver_dataset_summary_path,
+            include_tmp_repair_queues=False,
+        )
+        stage_rows.append(
+            {
+                "stage": "silver_repair_dataset",
+                "returncode": 0,
+                "elapsed_s": round(time.time() - silver_started, 3),
+                "stdout_tail": json.dumps(silver_result, ensure_ascii=False)[-5000:],
+                "stderr_tail": "",
+            }
+        )
+    except Exception as exc:
+        stage_rows.append(
+            {
+                "stage": "silver_repair_dataset",
+                "returncode": 1,
+                "elapsed_s": round(time.time() - silver_started, 3),
+                "stdout_tail": "",
+                "stderr_tail": str(exc)[-5000:],
+            }
+        )
+
     claim_review_queue_path = out_root / "claim_equivalence_review_queue.jsonl"
     claim_adjudications_path = out_root / "claim_equivalence_adjudications.jsonl"
     claim_review_lines: list[str] = []
@@ -454,6 +492,8 @@ def build_public_claim_artifacts(
         "full_report": aggregate_report_path,
         "compiler_feedback_repair_dataset": repair_dataset_path,
         "compiler_feedback_repair_dataset_summary": repair_dataset_summary_path,
+        "silver_repair_dataset": silver_dataset_path,
+        "silver_repair_dataset_summary": silver_dataset_summary_path,
         "claim_equivalence_review_queue": claim_review_queue_path,
         "claim_equivalence_adjudications": claim_adjudications_path,
         "manifest": out_root / "manifest.json",
@@ -461,6 +501,7 @@ def build_public_claim_artifacts(
 
     common_meta = {
         "schema_version": "1.0.0",
+        "corpus_release_schema_version": CORPUS_RELEASE_SCHEMA_VERSION,
         "generated_at": generated_at,
         "mode": mode,
         "suite_json": str(suite_path),
@@ -473,16 +514,62 @@ def build_public_claim_artifacts(
     _write_json(output_paths["proof_attempts"], {**common_meta, "rows": proof_rows})
     _write_json(output_paths["final_ledger"], {**common_meta, "rows": final_ledgers})
 
-    artifact_rows.extend(_artifact_entry(project_root, role, path) for role, path in output_paths.items() if role != "manifest")
+    artifact_rows.extend(
+        _artifact_entry(
+            project_root,
+            role,
+            path,
+            required=(role in PUBLIC_ARTIFACTS and role != "manifest"),
+        )
+        for role, path in output_paths.items()
+        if role != "manifest"
+    )
     missing = [row for row in artifact_rows if not row.get("exists")]
+    summary = artifact_summary(artifact_rows)
+    silver_summary_payload = _read_json(silver_dataset_summary_path)
+    aggregate_report_payload = _read_json(aggregate_report_path)
+    final_ledger_entries = [
+        entry
+        for ledger in final_ledgers
+        for entry in _ledger_entries(ledger.get("payload"))
+    ]
+    statement_fidelity_summary = summarize_statement_fidelity(final_ledger_entries)
+    dataset_tier_summary = {
+        "gold_proof": int((aggregate_report_payload or {}).get("gold_proof", 0) or 0) if isinstance(aggregate_report_payload, dict) else 0,
+        "verified_proven": int((aggregate_report_payload or {}).get("verified_proven", 0) or 0) if isinstance(aggregate_report_payload, dict) else 0,
+        "silver_rows": int((silver_summary_payload or {}).get("rows", 0) or 0) if isinstance(silver_summary_payload, dict) else 0,
+        "silver_training_tier_counts": (
+            silver_summary_payload.get("training_tier_counts", {}) if isinstance(silver_summary_payload, dict) else {}
+        ),
+        "statement_fidelity_gate": {
+            "total_extracted_statements": statement_fidelity_summary.get("total_extracted_statements", 0),
+            "proof_eligible": statement_fidelity_summary.get("proof_eligible", 0),
+            "blocked_before_proof": statement_fidelity_summary.get("blocked_before_proof", 0),
+            "repair_candidates": statement_fidelity_summary.get("repair_candidates", 0),
+            "review_needed": statement_fidelity_summary.get("review_needed", 0),
+            "verdict_counts": statement_fidelity_summary.get("verdict_counts", {}),
+        },
+    }
     manifest_payload = {
         **common_meta,
         "command": command,
         "public_artifacts": {role: str(path) for role, path in output_paths.items()},
+        "required_public_artifacts": [role for role in PUBLIC_ARTIFACTS if role != "manifest"],
+        "optional_public_artifacts": list(OPTIONAL_PUBLIC_ARTIFACTS),
         "stages": stage_rows,
         "artifacts": artifact_rows,
+        "artifact_count": summary["artifact_count"],
+        "missing_required_count": summary["missing_required_count"],
+        "checksum_coverage": summary["checksum_coverage"],
+        "dataset_tier_summary": dataset_tier_summary,
+        "release_audit": build_release_audit(
+            project_root=project_root,
+            generated_at=generated_at,
+            command=command,
+            artifacts=artifact_rows,
+        ),
         "missing_artifacts": missing,
-        "all_required_artifacts_present": all(output_paths[role].exists() for role in PUBLIC_ARTIFACTS if role != "manifest"),
+        "all_required_artifacts_present": summary["missing_required_count"] == 0,
     }
     _write_json(output_paths["manifest"], manifest_payload)
     return output_paths

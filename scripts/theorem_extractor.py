@@ -16,6 +16,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -64,21 +65,49 @@ _PROOF_END_RE = re.compile(r"\\end\{proof\}", re.IGNORECASE)
 
 
 @dataclass
+class SourceSpan:
+    source_file: str
+    start_byte: int
+    end_byte: int
+    start_line: int
+    start_col: int
+    end_line: int
+    end_col: int
+
+
+@dataclass
 class TheoremEntry:
     kind: str
     name: str          # label or "thm_<n>"
     statement: str     # raw LaTeX of the statement body
     proof: str         # raw LaTeX of the proof body (empty if none)
     source_file: str
+    source_span: SourceSpan | None = None
+    proof_span: SourceSpan | None = None
+    env_name: str = ""
+    label: str = ""
+    span_start: int = -1
+    span_end: int = -1
+    body_start: int = -1
+    body_end: int = -1
+    start_line: int = -1
+    end_line: int = -1
+    source_span_id: str = ""
 
 
 def _find_env_span(text: str, start: int, env_name: str) -> tuple[int, int]:
-    """Return the start/end span of \\end{env_name} after *start*."""
-    end_re = re.compile(_END_RE_TEMPLATE % re.escape(env_name), re.IGNORECASE)
-    m = end_re.search(text, start)
-    if m is None:
-        return len(text), len(text)
-    return m.start(), m.end()
+    """Return the body-end/env-end span for a possibly nested environment."""
+    env_key = env_name.lower().rstrip("*")
+    token_re = re.compile(r"\\(begin|end)\{" + re.escape(env_key) + r"\*?\}", re.IGNORECASE)
+    depth = 1
+    for m in token_re.finditer(text, start):
+        if m.group(1).lower() == "begin":
+            depth += 1
+            continue
+        depth -= 1
+        if depth == 0:
+            return m.start(), m.end()
+    return len(text), len(text)
 
 
 def _extract_label(body: str) -> str:
@@ -86,19 +115,79 @@ def _extract_label(body: str) -> str:
     return m.group(1) if m else ""
 
 
-def _extract_proof_after(text: str, env_end: int) -> str:
-    """Return proof body if a \\begin{proof} follows immediately (within 200 chars)."""
+def _line_col(text: str, offset: int) -> tuple[int, int]:
+    """Return 1-indexed line/column for a character offset."""
+    prefix = text[:offset]
+    line = prefix.count("\n") + 1
+    last_newline = prefix.rfind("\n")
+    if last_newline < 0:
+        return line, offset + 1
+    return line, offset - last_newline
+
+
+def _byte_offset(text: str, offset: int) -> int:
+    return len(text[:offset].encode("utf-8"))
+
+
+def _make_span(text: str, source_file: str, start: int, end: int) -> SourceSpan:
+    start_line, start_col = _line_col(text, start)
+    end_line, end_col = _line_col(text, end)
+    return SourceSpan(
+        source_file=source_file,
+        start_byte=_byte_offset(text, start),
+        end_byte=_byte_offset(text, end),
+        start_line=start_line,
+        start_col=start_col,
+        end_line=end_line,
+        end_col=end_col,
+    )
+
+
+def _source_span_id(
+    *,
+    source_file: Path,
+    env_name: str,
+    span_start: int,
+    span_end: int,
+    label: str,
+    statement: str,
+) -> str:
+    normalized = " ".join((statement or "").split())
+    payload = "\n".join(
+        [
+            str(source_file),
+            env_name.lower().rstrip("*"),
+            str(span_start),
+            str(span_end),
+            label,
+            normalized,
+        ]
+    )
+    return "srcspan_" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:20]
+
+
+def _trimmed_span(text: str, start: int, end: int) -> tuple[str, int, int]:
+    raw = text[start:end]
+    leading = len(raw) - len(raw.lstrip())
+    trailing = len(raw.rstrip())
+    trimmed_start = start + leading
+    trimmed_end = start + trailing
+    return text[trimmed_start:trimmed_end], trimmed_start, trimmed_end
+
+
+def _extract_proof_after(text: str, env_end: int) -> tuple[str, int, int]:
+    """Return proof body and span if a proof follows immediately (within 200 chars)."""
     window = text[env_end: env_end + 200]
     # Only blank lines / whitespace / comments between env end and proof begin.
     gap = window.lstrip()
     if not gap.startswith("\\begin{proof}") and not gap.startswith("\\begin{Proof}"):
-        return ""
+        return "", -1, -1
     proof_start_abs = env_end + (len(window) - len(gap))
     proof_body_start = text.index("{proof}", proof_start_abs) + len("{proof}")
     proof_end = _PROOF_END_RE.search(text, proof_body_start)
     if proof_end is None:
-        return ""
-    return text[proof_body_start: proof_end.start()].strip()
+        return "", -1, -1
+    return _trimmed_span(text, proof_body_start, proof_end.start())
 
 
 def register_environment_aliases(aliases: dict[str, str]) -> None:
@@ -127,13 +216,13 @@ def extract_theorems(tex_path: Path) -> list[TheoremEntry]:
     for m in _BEGIN_RE.finditer(text):
         env_name = m.group(1).lower().rstrip("*")
         body_start = m.end()
-        body_end, env_end = _find_env_span(text, body_start, m.group(1))
-        body = text[body_start:body_end].strip()
+        body_end, env_end = _find_env_span(text, body_start, env_name)
+        body, body_trimmed_start, body_trimmed_end = _trimmed_span(text, body_start, body_end)
 
         label = _extract_label(body)
         counter += 1
         name = label if label else f"{env_name}_{counter}"
-        proof = _extract_proof_after(text, env_end)
+        proof, proof_start, proof_end = _extract_proof_after(text, env_end)
 
         canonical_kind = _ENV_KIND.get(env_name, env_name)
         entries.append(TheoremEntry(
@@ -142,6 +231,24 @@ def extract_theorems(tex_path: Path) -> list[TheoremEntry]:
             statement=body,
             proof=proof,
             source_file=str(tex_path),
+            source_span=_make_span(text, str(tex_path), body_trimmed_start, body_trimmed_end),
+            proof_span=_make_span(text, str(tex_path), proof_start, proof_end) if proof_start >= 0 else None,
+            env_name=env_name,
+            label=label,
+            span_start=m.start(),
+            span_end=env_end,
+            body_start=body_trimmed_start,
+            body_end=body_trimmed_end,
+            start_line=_line_col(text, m.start())[0],
+            end_line=_line_col(text, env_end)[0],
+            source_span_id=_source_span_id(
+                source_file=tex_path,
+                env_name=env_name,
+                span_start=m.start(),
+                span_end=env_end,
+                label=label,
+                statement=body,
+            ),
         ))
 
     return entries

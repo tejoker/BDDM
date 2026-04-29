@@ -1,11 +1,148 @@
 {
   "paper_id": "2304.09598",
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "bundle_dir": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598",
   "files": {
     "report": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/suite_report.json",
     "ledger": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/verification_ledger.json",
-    "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/unresolved.json"
+    "unresolved": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/unresolved.json",
+    "missing_lemmas": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/missing_lemmas.json",
+    "axiom_debt_burndown": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/axiom_debt_burndown.json",
+    "statement_validity": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/statement_validity.json",
+    "proof_repair_cohort": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/proof_repair_cohort.json",
+    "paper_theory_manifest": "/home/projectx/BDDM/reproducibility/full_paper_reports/2304.09598/paper_theory_manifest.json"
   },
-  "regenerate_command": "python3 scripts/formalize_paper_full.py --paper-id 2304.09598 --project-root ."
+  "regenerate_command": "python3 scripts/formalize_paper_full.py --paper-id 2304.09598 --project-root .",
+  "corpus_release_schema_version": "1.1.0",
+  "artifacts": [
+    {
+      "role": "report",
+      "path": "reproducibility/full_paper_reports/2304.09598/suite_report.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2304.09598",
+      "size_bytes": 949148,
+      "sha256": "a7bb45edb896ced444c5ed028c7e4a137c2dbe6b807aa634fc303efff6be19aa"
+    },
+    {
+      "role": "ledger",
+      "path": "reproducibility/full_paper_reports/2304.09598/verification_ledger.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2304.09598",
+      "size_bytes": 323116,
+      "sha256": "e7ad73aec9460b7b03ae16680e83e131a5da6663d4e32ea007961d012eb6a6fb"
+    },
+    {
+      "role": "unresolved",
+      "path": "reproducibility/full_paper_reports/2304.09598/unresolved.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2304.09598",
+      "size_bytes": 30658,
+      "sha256": "a16c08bb0d70e491033a35c84e2022dbe8fedeacfcdb5d759371284f7a6705a9"
+    },
+    {
+      "role": "missing_lemmas",
+      "path": "reproducibility/full_paper_reports/2304.09598/missing_lemmas.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2304.09598",
+      "size_bytes": 26910,
+      "sha256": "1897fdf291a77c5c68cda320969bd1c8a12e82140e241a6106ed26c6e1a7c721",
+      "schema_version": "1.1.0"
+    },
+    {
+      "role": "axiom_debt_burndown",
+      "path": "reproducibility/full_paper_reports/2304.09598/axiom_debt_burndown.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2304.09598",
+      "size_bytes": 23761,
+      "sha256": "83538f3a0021b98326180ea1fcbcedad009bc3ef3dd948070ce108bb8928891f",
+      "schema_version": "1.1.0"
+    },
+    {
+      "role": "statement_validity",
+      "path": "reproducibility/full_paper_reports/2304.09598/statement_validity.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2304.09598",
+      "size_bytes": 20172,
+      "sha256": "f5bcd3834e123c96b56b598cdd527099956fa60238b14e119a80c24256c754ff"
+    },
+    {
+      "role": "proof_repair_cohort",
+      "path": "reproducibility/full_paper_reports/2304.09598/proof_repair_cohort.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2304.09598",
+      "size_bytes": 3258,
+      "sha256": "54a896823102f939f227957c11d3b121e8e3331e84414c5bfd455a0a76ddcd76"
+    },
+    {
+      "role": "paper_theory_manifest",
+      "path": "reproducibility/full_paper_reports/2304.09598/paper_theory_manifest.json",
+      "exists": true,
+      "required": true,
+      "paper_id": "2304.09598",
+      "size_bytes": 23429,
+      "sha256": "a04986e8ae75648bc100e75746d0072c0361d0b03afc9f4c9c4cd7c58644586a",
+      "schema_version": "1.1.0"
+    }
+  ],
+  "release_audit": {
+    "schema_version": "1.1.0",
+    "generated_at": "2026-04-27T09:46:35Z",
+    "command": [
+      "python3",
+      "scripts/formalize_paper_full.py",
+      "--paper-id",
+      "2304.09598",
+      "--project-root",
+      "."
+    ],
+    "repository": {
+      "git_commit": "cf8822bcabfded106a2a42264184223bd9ddf272",
+      "dirty_tree": true
+    },
+    "toolchain": {
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "lean_version": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
+      "python_version": "3.12.3",
+      "lake_dependencies": [
+        {
+          "name": "mathlib",
+          "git": "https://github.com/leanprover-community/mathlib4.git",
+          "rev": "5923a7573b523783de41ba3f73e518fb8dd9ce01"
+        },
+        {
+          "name": "repl",
+          "path": "third_party/repl_compat"
+        }
+      ],
+      "mathlib": {
+        "name": "mathlib",
+        "git": "https://github.com/leanprover-community/mathlib4.git",
+        "rev": "5923a7573b523783de41ba3f73e518fb8dd9ce01"
+      }
+    },
+    "environment": {
+      "platform": "linux",
+      "mistral_model": "unknown"
+    },
+    "provenance_policy": {
+      "source_traceability": "Rows must retain arXiv paper id and artifact paths; theorem span fields are required when extraction provides them.",
+      "license_note": "arXiv source text remains attributed to the source paper; DESol-generated Lean and audit metadata are derived artifacts.",
+      "trust_tiers": "Gold, silver, diagnostic, and blocker labels must not be collapsed into one training tier."
+    },
+    "artifact_summary": {
+      "artifact_count": 8,
+      "existing_artifact_count": 8,
+      "required_artifact_count": 8,
+      "missing_required_count": 0,
+      "checksum_count": 8,
+      "checksum_coverage": 1.0
+    }
+  }
 }

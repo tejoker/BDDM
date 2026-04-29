@@ -172,7 +172,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "alpha_0",
@@ -394,7 +400,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Thm_Blowup_O",
@@ -558,7 +570,29 @@
         "paper_symbol:ξ"
       ],
       "axiom_debt_hash": "67405582b9b79048",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:ξ",
+          "symbol": "ξ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:ξ"
+      ]
     },
     {
       "theorem_name": "Thm_Blowup_O2",
@@ -733,7 +767,29 @@
         "paper_symbol:ξ"
       ],
       "axiom_debt_hash": "67405582b9b79048",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:ξ",
+          "symbol": "ξ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:ξ"
+      ]
     },
     {
       "theorem_name": "Thm_Blowup_O3",
@@ -899,7 +955,29 @@
         "paper_symbol:ξ"
       ],
       "axiom_debt_hash": "67405582b9b79048",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:ξ",
+          "symbol": "ξ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:ξ"
+      ]
     },
     {
       "theorem_name": "infty",
@@ -1065,7 +1143,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Beta",
@@ -1204,7 +1288,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "defn_8",
@@ -1344,7 +1434,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_formalized_translation_limited",
+      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "thm_9",
@@ -1559,7 +1655,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Hardy",
@@ -1721,7 +1823,29 @@
         "paper_symbol:ξ"
       ],
       "axiom_debt_hash": "67405582b9b79048",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:ξ",
+          "symbol": "ξ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:ξ"
+      ]
     },
     {
       "theorem_name": "Thm_Folst",
@@ -1867,7 +1991,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Weak",
@@ -2007,7 +2137,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_formalized_translation_limited",
+      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Thm_Blowup_O4",
@@ -2149,7 +2285,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Thm_Blowup_O5",
@@ -2325,7 +2467,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "rem_15",
@@ -2494,7 +2642,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Mild",
@@ -2631,7 +2785,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_formalized_translation_limited",
+      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Weak2",
@@ -2774,7 +2934,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_formalized_translation_limited",
+      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "mild_to_weak",
@@ -2941,7 +3107,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Local",
@@ -3128,13 +3300,19 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_formalized_translation_limited",
+      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "rem_20",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem rem_20 (h1 : Prop) (h2 : Prop) (h3 : Prop) (h4 : Prop) (h5 : Prop) (h6 : Prop) : h1 ∧ h2 ∧ h3 ∧ h4 ∧ h5 ∧ h6 → (0 : ℕ) = 0",
-      "status": "TRANSLATION_LIMITED",
+      "lean_statement": "theorem rem_20 (gamma : ℝ) :\n  gamma = 0 := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "translation_failure",
@@ -3256,9 +3434,9 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "translation_acceptance_gate:placeholder_or_schema_signature",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body",
       "proof_mode": "full-draft",
-      "proof_method": "translation_limited",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 0,
       "time_s": 0.0,
       "timestamp": "2026-04-26T10:58:34Z",
@@ -3273,14 +3451,17 @@
         "reproducible_env": true,
         "claim_equivalent": false,
         "no_paper_axiom_debt": true,
-        "translation_acceptance_gate": false
+        "translation_acceptance_gate": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "translation_acceptance_gate",
-        "translation_limited_statement",
-        "lean_proof_closed",
-        "step_verdict_verified",
-        "claim_equivalent"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -3316,7 +3497,210 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "proved": false,
+      "source_context_pack_id": "srcctx_1123b1e878ba3ead797696de",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_1123b1e878ba3ead797696de",
+        "paper_id": "2604.21314",
+        "theorem_name": "rem_20",
+        "theorem_id": "rem_20",
+        "source_latex": "When $\\gamma=0,$ problem \\eqref{eq without} is well-studied by the second and third-named authors in \\cite{Oza Sur 2}. In fact, in this regime, we have the existence of a global-in-time solution to \\eqref{eq without}.",
+        "normalized_text": "When $\\gamma=0,$ problem \\eqref{eq without} is well-studied by the second and third-named authors in \\cite{Oza Sur 2}. In fact, in this regime, we have the existence of a global-in-time solution to \\eqref{eq without}.",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+          "start_byte": 40184,
+          "end_byte": 40401,
+          "start_line": 589,
+          "start_col": 2,
+          "end_line": 589,
+          "end_col": 219,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 24,
+          "top_score": 100,
+          "runner_up_score": 0,
+          "score_margin": 100,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 19,
+              "score": 100,
+              "name": "rem_20",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": [
+                "name_or_label_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Beta",
+              "label": "Beta",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Hardy",
+              "label": "Hardy",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 18,
+              "score": 0,
+              "name": "Local",
+              "label": "Local",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 15,
+              "score": 0,
+              "name": "Mild",
+              "label": "Mild",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 2,
+              "score": 0,
+              "name": "Thm Blowup O",
+              "label": "Thm Blowup O",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Thm Blowup O2",
+              "label": "Thm Blowup O2",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 4,
+              "score": 0,
+              "name": "Thm Blowup O3",
+              "label": "Thm Blowup O3",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 12,
+              "score": 0,
+              "name": "Thm Blowup O4",
+              "label": "Thm Blowup O4",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 13,
+              "score": 0,
+              "name": "Thm Blowup O5",
+              "label": "Thm Blowup O5",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "rem20"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "rem_20",
+                "label": "",
+                "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+                "score": 100,
+                "reasons": [
+                  "name_or_label_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 19,
+            "name": "rem_20",
+            "label": "",
+            "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0385,
+        "source_token_count": 26,
+        "lean_token_count": 2,
+        "source_anchors": [
+          "gamma = 0"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.0385,
+        "claim": "When $\\gamma=0,$ problem \\eqref{eq without} is well-studied by the second and third-named authors in \\cite{Oza Sur 2}. In fact, in this regime, we have the existence of a global-in-time solution to \\eqref{eq without}.",
+        "target": "gamma = 0"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21314.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_1123b1e878ba3ead797696de",
+        "source_coverage": {
+          "score": 0.0385,
+          "source_token_count": 26,
+          "lean_token_count": 2,
+          "source_anchors": [
+            "gamma = 0"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.0385,
+          "claim": "When $\\gamma=0,$ problem \\eqref{eq without} is well-studied by the second and third-named authors in \\cite{Oza Sur 2}. In fact, in this regime, we have the existence of a global-in-time solution to \\eqref{eq without}.",
+          "target": "gamma = 0"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "rem_21",
@@ -3466,7 +3850,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_formalized_translation_limited",
+      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "thm_22",
@@ -3690,7 +4080,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "life",
@@ -3873,7 +4269,29 @@
         "paper_symbol:ξ"
       ],
       "axiom_debt_hash": "67405582b9b79048",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:ξ",
+          "symbol": "ξ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:ξ"
+      ]
     }
   ]
 }

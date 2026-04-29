@@ -8,6 +8,9 @@ import re
 import sys
 from pathlib import Path
 
+from corpus_release_metadata import validate_release_manifest
+from build_release_index import build_release_index
+
 
 def _fail(msg: str) -> None:
     print(f"[FAIL] {msg}")
@@ -170,6 +173,86 @@ def check_weekly_release_gate(repo_root: Path) -> bool:
     return True
 
 
+def check_corpus_release_manifests(repo_root: Path) -> bool:
+    reports_root = repo_root / "reproducibility" / "full_paper_reports"
+    if not reports_root.exists():
+        _warn("full-paper reproducibility bundle directory missing; skipping corpus release manifest audit")
+        return True
+    manifests = sorted(reports_root.glob("*/manifest.json"))
+    if not manifests:
+        _warn("no full-paper manifest.json files found; skipping corpus release manifest audit")
+        return True
+
+    ok = True
+    for manifest_path in manifests:
+        try:
+            raw = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except Exception:
+            _fail(f"invalid JSON in {manifest_path.relative_to(repo_root)}")
+            ok = False
+            continue
+        if not isinstance(raw, dict):
+            _fail(f"manifest is not an object: {manifest_path.relative_to(repo_root)}")
+            ok = False
+            continue
+        errors = validate_release_manifest(raw, project_root=repo_root)
+        for error in errors:
+            _fail(f"{manifest_path.relative_to(repo_root)}: {error}")
+        ok = ok and not errors
+    if ok:
+        _ok(f"corpus release manifests include audit metadata ({len(manifests)} checked)")
+    return ok
+
+
+def check_public_claims_manifests(repo_root: Path) -> bool:
+    claims_root = repo_root / "output" / "reproducibility"
+    if not claims_root.exists():
+        _warn("public-claims output directory missing; skipping generated public manifest audit")
+        return True
+    manifests = sorted(claims_root.glob("public_claims*/manifest.json"))
+    if not manifests:
+        _warn("no public_claims*/manifest.json found; skipping generated public manifest audit")
+        return True
+
+    ok = True
+    for manifest_path in manifests:
+        try:
+            raw = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except Exception:
+            _fail(f"invalid JSON in {manifest_path.relative_to(repo_root)}")
+            ok = False
+            continue
+        if not isinstance(raw, dict):
+            _fail(f"manifest is not an object: {manifest_path.relative_to(repo_root)}")
+            ok = False
+            continue
+        errors = validate_release_manifest(raw, project_root=repo_root)
+        if raw.get("all_required_artifacts_present") is not True:
+            errors.append("all_required_artifacts_present is not true")
+        for error in errors:
+            _fail(f"{manifest_path.relative_to(repo_root)}: {error}")
+        ok = ok and not errors
+    if ok:
+        _ok(f"public-claims manifests include audit metadata ({len(manifests)} checked)")
+    return ok
+
+
+def check_release_artifact_drift(repo_root: Path) -> bool:
+    index = build_release_index(repo_root)
+    drift_count = int(index.get("duplicate_drift_count", 0) or 0)
+    if drift_count:
+        examples = [
+            row
+            for row in index.get("artifacts", [])
+            if isinstance(row, dict) and row.get("drift_status") == "duplicate_drift"
+        ][:5]
+        _fail(f"canonical release artifacts drift from generated duplicates ({drift_count} drift rows): {examples}")
+        return False
+    counts = index.get("drift_status_counts", {})
+    _ok(f"canonical release drift status: {counts}")
+    return True
+
+
 def main() -> int:
     repo_root = Path(__file__).resolve().parent.parent
     checks = [
@@ -177,6 +260,9 @@ def main() -> int:
         check_toolchain(repo_root),
         check_benchmark_artifact_schema(repo_root),
         check_claim_registry(repo_root),
+        check_corpus_release_manifests(repo_root),
+        check_public_claims_manifests(repo_root),
+        check_release_artifact_drift(repo_root),
         check_weekly_release_gate(repo_root),
     ]
     if all(checks):

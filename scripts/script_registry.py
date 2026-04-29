@@ -113,6 +113,16 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Applies claim-equivalence adjudications to verification ledgers.",
     },
+    "apply_statement_fidelity_reviews.py": {
+        "tier": "reporting",
+        "category": "review",
+        "summary": "Applies reviewed statement-fidelity adjudications to corpus rows.",
+    },
+    "assist_statement_review_adjudication.py": {
+        "tier": "reporting",
+        "category": "review",
+        "summary": "Conservatively assists reviewed-exact statement adjudication.",
+    },
     "axiom_debt_burndown.py": {
         "tier": "reporting",
         "category": "reporting",
@@ -153,6 +163,41 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Builds JSONL review queues for claim-equivalence blockers.",
     },
+    "build_alignment_review_queue.py": {
+        "tier": "reporting",
+        "category": "review",
+        "summary": "Builds review queues for weak or ambiguous source alignment.",
+    },
+    "build_gold_proof_queue.py": {
+        "tier": "reporting",
+        "category": "proof_search",
+        "summary": "Ranks strict proof-production candidates without changing proof metrics.",
+    },
+    "build_identity_review_queue.py": {
+        "tier": "reporting",
+        "category": "review",
+        "summary": "Builds semantic identity and novelty review queues.",
+    },
+    "build_release_index.py": {
+        "tier": "reporting",
+        "category": "reporting",
+        "summary": "Indexes canonical release artifacts and generated-output drift status.",
+    },
+    "build_statement_fidelity_queue.py": {
+        "tier": "reporting",
+        "category": "review",
+        "summary": "Builds statement-fidelity review queues for partial or low-confidence rows.",
+    },
+    "build_statement_repair_queue.py": {
+        "tier": "reporting",
+        "category": "review",
+        "summary": "Builds statement repair queues for rows blocked before exact review.",
+    },
+    "build_statement_review_batch.py": {
+        "tier": "reporting",
+        "category": "review",
+        "summary": "Builds span-bound reviewed-exact statement adjudication batches.",
+    },
     "build_repair_flywheel.py": {
         "tier": "research_experiment",
         "category": "repair",
@@ -192,6 +237,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "tier": "internal_support",
         "category": "review",
         "summary": "Shared schema and merge helpers for claim-equivalence review artifacts.",
+    },
+    "corpus_release_metadata.py": {
+        "tier": "internal_support",
+        "category": "support",
+        "summary": "Shared release metadata, checksum, and audit validation helpers.",
     },
     "conjecture_generator.py": {
         "tier": "research_experiment",
@@ -237,6 +287,21 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "tier": "reporting",
         "category": "repair",
         "summary": "Exports the DESol compiler-feedback repair dataset from ledgers and logs.",
+    },
+    "export_corpus.py": {
+        "tier": "reporting",
+        "category": "kg",
+        "summary": "Exports stable theorem-level corpus rows from paper artifacts.",
+    },
+    "export_curated_corpus.py": {
+        "tier": "reporting",
+        "category": "kg",
+        "summary": "Exports curated gold, alignment, silver, and excluded corpus surfaces.",
+    },
+    "export_silver_repair_dataset.py": {
+        "tier": "reporting",
+        "category": "repair",
+        "summary": "Exports paper-agnostic silver repair data with explicit positive and negative labels.",
     },
     "focus_blocker_loop.py": {
         "tier": "research_experiment",
@@ -312,6 +377,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "tier": "dev_tool",
         "category": "research",
         "summary": "Checks novelty and generates Mathlib contribution skeletons.",
+    },
+    "novelty_dedup.py": {
+        "tier": "reporting",
+        "category": "reporting",
+        "summary": "Annotates ledger statements with novelty and deduplication evidence.",
     },
     "mcts_core_types.py": {
         "tier": "internal_support",
@@ -468,6 +538,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "repair",
         "summary": "Repairs invalid translations during full-paper runs.",
     },
+    "repair_extracted_theorem_spans.py": {
+        "tier": "reporting",
+        "category": "review",
+        "summary": "Attaches extractor-native source spans to legacy theorem extraction artifacts.",
+    },
     "repair_feedback_dataset.py": {
         "tier": "internal_support",
         "category": "repair",
@@ -508,6 +583,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "orchestration",
         "summary": "Canonical fixed-config suite runner for paper-agnostic evidence.",
     },
+    "run_statement_repair_worker.py": {
+        "tier": "official_support",
+        "category": "repair",
+        "summary": "Processes statement-repair queue rows produced by the hard statement-fidelity gate.",
+    },
     "run_stratified_bottleneck_suite.py": {
         "tier": "research_experiment",
         "category": "reliability",
@@ -533,10 +613,20 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "ci",
         "summary": "No-API smoke test for installed repository basics.",
     },
+    "source_evidence_resolver.py": {
+        "tier": "internal_support",
+        "category": "review",
+        "summary": "Shared conservative resolver for source evidence and source-span repair.",
+    },
     "statement_translator.py": {
         "tier": "official_support",
         "category": "translation",
         "summary": "Translates extracted LaTeX statements to Lean candidates.",
+    },
+    "statement_alignment.py": {
+        "tier": "official_support",
+        "category": "translation",
+        "summary": "Provides deterministic LaTeX-to-Lean statement alignment helpers.",
     },
     "statement_validity.py": {
         "tier": "official_support",
@@ -552,6 +642,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "tier": "internal_support",
         "category": "proof_search",
         "summary": "Parses and checks proof-step entailment obligations.",
+    },
+    "sync_release_mirrors.py": {
+        "tier": "reporting",
+        "category": "reporting",
+        "summary": "Synchronizes existing generated mirrors from canonical release bundle artifacts.",
     },
     "tactic_training.py": {
         "tier": "research_experiment",

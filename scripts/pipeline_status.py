@@ -32,6 +32,7 @@ import re
 import subprocess
 import time
 import hashlib
+from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 from pipeline_status_classification import (
@@ -42,6 +43,7 @@ from pipeline_status_classification import (
     infer_status,
     reconstruct_step_obligations,
 )
+from canonicalization import canonical_record
 from pipeline_status_models import (
     Assumption,
     ClaimEquivalenceVerdict,
@@ -52,6 +54,7 @@ from pipeline_status_models import (
     ProofMethod,
     StatusDecision,
     SemanticEquivalenceArtifact,
+    StatementAlignmentClass,
     StepObligation,
     StepVerdict,
     TheoremLedgerEntry,
@@ -61,6 +64,7 @@ from pipeline_status_models import (
     derive_theorem_trust as _derive_theorem_trust,
     trust_for_grounding as _trust_for_grounding,
 )
+from statement_alignment import classify_statement_alignment, normalize_latex_statement
 
 try:
     from bridge_proofs import suggest_bridge_candidates
@@ -392,15 +396,7 @@ def _coerce_str_list(raw: object) -> list[str]:
 
 
 def _strip_latex_markup(text: str) -> str:
-    out = text or ""
-    out = re.sub(r"%.*", "", out)
-    out = re.sub(r"\\(?:begin|end)\{[^}]+\}", " ", out)
-    out = re.sub(r"\\(?:label|ref|cite|eqref)\{[^}]*\}", " ", out)
-    out = re.sub(r"\\[a-zA-Z]+\*?(?:\[[^\]]*\])?", " ", out)
-    out = out.replace("{", " ").replace("}", " ")
-    out = out.replace("$", " ")
-    out = re.sub(r"\s+", " ", out)
-    return out.strip()
+    return normalize_latex_statement(text)
 
 
 def _schema_from_context(
@@ -442,7 +438,7 @@ def _normalized_theorem_text(
             parts.append("Conclusion: " + claim)
         if parts:
             return " ".join(parts)
-    return _strip_latex_markup(original_latex_theorem)
+    return normalize_latex_statement(original_latex_theorem)
 
 
 def _lean_conclusion(lean_statement: str) -> str:
@@ -650,6 +646,15 @@ def build_semantic_equivalence_artifact(
     adversarial_flags: list[str] | None,
     roundtrip_flags: list[str] | None,
     context_pack: dict[str, Any] | None,
+    paper_id: str = "",
+    theorem_name: str = "",
+    translation_fidelity_score: float | None = None,
+    status_alignment_score: float | None = None,
+    translation_validated: bool | None = None,
+    status: VerificationStatus | None = None,
+    proof_method: ProofMethod | None = None,
+    failure_kind: FailureKind | None = None,
+    canonical_theorem_id: str = "",
     existing_artifact: dict[str, Any] | None = None,
 ) -> SemanticEquivalenceArtifact:
     existing = existing_artifact if isinstance(existing_artifact, dict) else {}
@@ -710,6 +715,29 @@ def build_semantic_equivalence_artifact(
     )
     if bool(existing.get("independent_semantic_evidence")):
         independent = True
+    alignment_decision = classify_statement_alignment(
+        paper_id=paper_id,
+        theorem_name=theorem_name,
+        original_latex_theorem=original,
+        normalized_paper_text=normalized,
+        extracted_assumptions=assumption_texts,
+        extracted_conclusion=conclusion,
+        lean_statement=lean_statement,
+        equivalence_verdict=equivalence_verdict,
+        claim_equivalence_notes=claim_equivalence_notes,
+        uncertainty_flags=uncertainty_flags,
+        adversarial_flags=adversarial_flags,
+        roundtrip_flags=roundtrip_flags,
+        context_pack=context,
+        translation_fidelity_score=translation_fidelity_score,
+        status_alignment_score=status_alignment_score,
+        translation_validated=translation_validated,
+        independent_semantic_evidence=independent,
+        status=status,
+        proof_method=proof_method,
+        failure_kind=failure_kind,
+        canonical_theorem_id=canonical_theorem_id,
+    )
 
     return SemanticEquivalenceArtifact(
         original_latex_theorem=original,
@@ -721,6 +749,8 @@ def build_semantic_equivalence_artifact(
         reviewer_evaluator_evidence=evidence,
         adversarial_checks=checks,
         independent_semantic_evidence=independent,
+        alignment_class=alignment_decision.alignment_class,
+        alignment_decision=alignment_decision,
     )
 
 
@@ -1492,6 +1522,13 @@ def build_ledger_entry(
         adversarial_flags=translation_adversarial_flags,
         roundtrip_flags=translation_roundtrip_flags,
     )
+    paper_id = provenance.paper_id if provenance else ""
+    canonical = canonical_record(
+        lean_statement=lean_statement,
+        theorem_name=theorem_name,
+        paper_id=paper_id,
+    )
+    canonical_theorem_id = str(canonical.get("canonical_theorem_id", "") or "")
     semantic_artifact = build_semantic_equivalence_artifact(
         original_latex_theorem=original_latex_theorem,
         normalized_natural_language_theorem=normalized_natural_language_theorem,
@@ -1506,6 +1543,15 @@ def build_ledger_entry(
         adversarial_flags=translation_adversarial_flags,
         roundtrip_flags=translation_roundtrip_flags,
         context_pack=context_pack,
+        paper_id=paper_id,
+        theorem_name=theorem_name,
+        translation_fidelity_score=auto_fidelity,
+        status_alignment_score=auto_alignment,
+        translation_validated=translation_validated,
+        status=status,
+        proof_method=proof_method,
+        failure_kind=failure_kind,
+        canonical_theorem_id=canonical_theorem_id,
         existing_artifact=semantic_equivalence_artifact,
     )
     semantic_checks_passed = all(
@@ -1550,6 +1596,13 @@ def build_ledger_entry(
         semantic_adversarial_checks_passed=semantic_checks_passed,
         axiom_debt=axiom_debt,
     )
+    validation_gates = dict(validation_gates)
+    validation_gates["statement_alignment_exact"] = (
+        semantic_artifact.alignment_class == StatementAlignmentClass.EXACT
+    )
+    validation_gates["statement_alignment_not_unrelated"] = (
+        semantic_artifact.alignment_class != StatementAlignmentClass.UNRELATED
+    )
 
     theorem_trust_class, theorem_trust_ref, promotion_gate = _derive_theorem_trust(
         assumptions=assumptions,
@@ -1557,11 +1610,23 @@ def build_ledger_entry(
     )
     if gate_failures:
         theorem_trust_ref = theorem_trust_ref + ";gate_failures=" + ",".join(gate_failures)
+    alignment_decision = semantic_artifact.alignment_decision
     review_required = bool(
         equiv_verdict != ClaimEquivalenceVerdict.EQUIVALENT
         or ("claim_equivalent" in set(gate_failures))
         or ("independent_semantic_equivalence_evidence" in set(gate_failures))
         or ("semantic_adversarial_checks_passed" in set(gate_failures))
+        or semantic_artifact.alignment_class
+        in {
+            StatementAlignmentClass.WEAKER,
+            StatementAlignmentClass.STRONGER,
+            StatementAlignmentClass.PARTIAL,
+            StatementAlignmentClass.UNRELATED,
+        }
+        or (
+            semantic_artifact.alignment_class == StatementAlignmentClass.EXACT
+            and alignment_decision.confidence < 0.75
+        )
     )
     review_queue_id = f"review::{theorem_name}" if review_required else ""
 
@@ -1580,6 +1645,33 @@ def build_ledger_entry(
                 proof_method = ProofMethod.UNKNOWN
         else:
             proof_method = ProofMethod.UNKNOWN
+
+    try:
+        from statement_validity import statement_fidelity_gate
+
+        _fidelity_gate = statement_fidelity_gate(
+            {
+                "theorem_name": theorem_name,
+                "lean_statement": lean_statement,
+                "status": status.value,
+                "validation_gates": validation_gates,
+                "gate_failures": gate_failures,
+                "claim_equivalence_verdict": equiv_verdict.value,
+                "statement_alignment_class": semantic_artifact.alignment_class.value,
+                "semantic_equivalence_artifact": asdict(semantic_artifact),
+                "axiom_debt": axiom_debt,
+                "error_message": error_message,
+            }
+        )
+        proof_eligible = _fidelity_gate.proof_eligible
+        statement_fidelity_verdict = _fidelity_gate.statement_fidelity_verdict
+        statement_fidelity_blockers = _fidelity_gate.statement_fidelity_blockers
+        statement_fidelity_source = _fidelity_gate.statement_fidelity_source
+    except Exception:
+        proof_eligible = False
+        statement_fidelity_verdict = "blocked"
+        statement_fidelity_blockers = ["statement_fidelity_gate_unavailable"]
+        statement_fidelity_source = "none"
 
     return TheoremLedgerEntry(
         theorem_name=theorem_name,
@@ -1607,6 +1699,12 @@ def build_ledger_entry(
         gate_failures=gate_failures,
         claim_equivalence_verdict=equiv_verdict,
         claim_equivalence_notes=equiv_notes,
+        statement_alignment_class=semantic_artifact.alignment_class,
+        paper_statement_id=alignment_decision.paper_statement_id,
+        canonical_theorem_id=canonical_theorem_id,
+        alignment_pair_id=alignment_decision.alignment_pair_id,
+        translation_fidelity_score=auto_fidelity,
+        status_alignment_score=auto_alignment,
         semantic_equivalence_artifact=semantic_artifact,
         review_required=review_required,
         review_queue_id=review_queue_id,
@@ -1620,4 +1718,8 @@ def build_ledger_entry(
             if status == VerificationStatus.AXIOM_BACKED and axiom_debt
             else "not_closed"
         ),
+        proof_eligible=proof_eligible,
+        statement_fidelity_verdict=statement_fidelity_verdict,
+        statement_fidelity_blockers=statement_fidelity_blockers,
+        statement_fidelity_source=statement_fidelity_source,
     )

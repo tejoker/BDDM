@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-from statement_validity import classify_statement, proof_repair_cohort, summarize_validity
+from statement_validity import (
+    classify_statement,
+    proof_repair_cohort,
+    statement_fidelity_gate,
+    summarize_statement_fidelity,
+    summarize_validity,
+)
 
 
 def test_statement_validity_classifies_current_bad_translation_fixtures() -> None:
@@ -143,3 +149,114 @@ def test_statement_validity_allows_explicit_faithful_regeneration_without_claim_
 
     assert item.primary_blocker == "proof_search_failure"
     assert item.valid_for_proof is True
+
+
+def test_statement_validity_blocks_vacuous_faithful_regeneration() -> None:
+    item = classify_statement(
+        {
+            "theorem_name": "weak_regen",
+            "lean_statement": "theorem weak_regen : ∃ x : ℝ, x = x",
+            "translation_repair": {"statement_repair_kind": "faithful_statement_regeneration"},
+        }
+    )
+
+    assert item.primary_blocker == "translation_limited"
+    assert "trivial_exists_self_equality_target" in item.reasons
+    assert item.valid_for_proof is False
+
+
+def test_statement_fidelity_gate_blocks_placeholders_raw_latex_and_elaboration_failures() -> None:
+    cases = [
+        {
+            "theorem_name": "placeholder",
+            "lean_statement": "theorem placeholder (p_c1 : Prop) (h_c1 : p_c1) : p_c1",
+        },
+        {
+            "theorem_name": "raw_latex",
+            "lean_statement": r"theorem raw_latex : \frac{x}{y} = z",
+        },
+        {
+            "theorem_name": "bad_elab",
+            "lean_statement": "theorem bad_elab : MissingSymbol = MissingSymbol",
+            "validation_gates": {"statement_elaborates": False},
+        },
+    ]
+
+    decisions = [statement_fidelity_gate(row) for row in cases]
+
+    assert all(decision.proof_eligible is False for decision in decisions)
+    assert decisions[0].statement_fidelity_verdict == "repair_candidate"
+    assert "raw_latex_command_leak" in decisions[1].statement_fidelity_blockers
+    assert "lean_elaboration_failed" in decisions[2].statement_fidelity_blockers
+
+
+def test_statement_fidelity_gate_allows_human_or_hybrid_reviewed_exact_rows() -> None:
+    row = {
+        "theorem_name": "good",
+        "lean_statement": "theorem good (n : Nat) : n = n",
+        "reviewed_statement_alignment_class": "exact",
+        "reviewed_equivalence_verdict": "equivalent",
+        "reviewed_alignment_confidence": 0.92,
+        "review_provenance": {"reviewer_type": "human", "reviewed_by": "alice"},
+    }
+
+    decision = statement_fidelity_gate(row)
+
+    assert decision.proof_eligible is True
+    assert decision.statement_fidelity_verdict == "reviewed_exact"
+    assert decision.statement_fidelity_source == "human"
+
+
+def test_statement_fidelity_gate_blocks_llm_only_review_even_if_equivalent() -> None:
+    row = {
+        "theorem_name": "llm_only",
+        "lean_statement": "theorem llm_only (n : Nat) : n = n",
+        "reviewed_statement_alignment_class": "exact",
+        "reviewed_equivalence_verdict": "equivalent",
+        "reviewed_alignment_confidence": 0.99,
+        "review_provenance": {"reviewer_type": "llm", "reviewed_by": "llm:test"},
+    }
+
+    decision = statement_fidelity_gate(row)
+
+    assert decision.proof_eligible is False
+    assert decision.statement_fidelity_source == "llm_triage"
+    assert "llm_review_not_release_eligible" in decision.statement_fidelity_blockers
+    assert "llm_triage_cannot_enable_proof_eligibility" in decision.statement_fidelity_blockers
+
+
+def test_statement_fidelity_gate_requires_repaired_statement_to_reenter_review() -> None:
+    row = {
+        "theorem_name": "repaired",
+        "lean_statement": "theorem repaired : ∃ alpha : ℝ, (3 / 4 : ℝ) < alpha",
+        "translation_repair": {"statement_repair_kind": "faithful_statement_regeneration"},
+    }
+
+    decision = statement_fidelity_gate(row)
+
+    assert decision.proof_eligible is False
+    assert decision.statement_fidelity_verdict == "blocked"
+    assert any("claim_equivalence_not_equivalent" in b for b in decision.statement_fidelity_blockers)
+
+
+def test_statement_fidelity_summary_exposes_release_denominators() -> None:
+    rows = [
+        {
+            "theorem_name": "eligible",
+            "lean_statement": "theorem eligible (n : Nat) : n = n",
+            "statement_alignment_class": "exact",
+            "alignment_gold_eligible": True,
+            "claim_equivalence_verdict": "equivalent",
+        },
+        {
+            "theorem_name": "blocked",
+            "lean_statement": "theorem blocked (p_c1 : Prop) (h_c1 : p_c1) : p_c1",
+        },
+    ]
+
+    summary = summarize_statement_fidelity(rows)
+
+    assert summary["total_extracted_statements"] == 2
+    assert summary["proof_eligible"] == 1
+    assert summary["blocked_before_proof"] == 1
+    assert summary["repair_candidates"] == 1

@@ -16,6 +16,7 @@ from pipeline_status_models import (
     ClaimEquivalenceVerdict,
     GroundingStatus,
     ProvenanceLink,
+    StatementAlignmentClass,
     StepVerdict,
     TrustClass,
     VerificationStatus,
@@ -728,12 +729,28 @@ def apply_adjudication_to_row(
         evidence_items.extend(["semantic_equivalence:verified", marker, "equivalent_independent_semantic_evidence"])
         artifact["equivalence_verdict"] = ClaimEquivalenceVerdict.EQUIVALENT.value
         artifact["independent_semantic_evidence"] = True
+        artifact["alignment_class"] = StatementAlignmentClass.EXACT.value
+        out["statement_alignment_class"] = StatementAlignmentClass.EXACT.value
         out["claim_equivalence_verdict"] = ClaimEquivalenceVerdict.EQUIVALENT.value
     else:
         verdict = str(adjudication.get("verdict", "unclear") or "unclear")
         artifact["equivalence_verdict"] = verdict if verdict in {"weaker", "stronger", "unclear"} else ClaimEquivalenceVerdict.UNCLEAR.value
         artifact["independent_semantic_evidence"] = False
+        if verdict in {StatementAlignmentClass.WEAKER.value, StatementAlignmentClass.STRONGER.value}:
+            artifact["alignment_class"] = verdict
+            out["statement_alignment_class"] = verdict
+        elif verdict == "not_equivalent":
+            artifact["alignment_class"] = StatementAlignmentClass.UNRELATED.value
+            out["statement_alignment_class"] = StatementAlignmentClass.UNRELATED.value
         out["claim_equivalence_verdict"] = artifact["equivalence_verdict"]
+    decision_payload = artifact.get("alignment_decision")
+    if isinstance(decision_payload, dict) and artifact.get("alignment_class"):
+        decision_payload["alignment_class"] = artifact["alignment_class"]
+        if approved:
+            decision_payload["confidence"] = max(float(decision_payload.get("confidence", 0.0) or 0.0), float(adjudication.get("confidence", 0.0) or 0.0))
+            reasons = decision_payload.get("reasons") if isinstance(decision_payload.get("reasons"), list) else []
+            decision_payload["reasons"] = list(dict.fromkeys([*reasons, "human_or_hybrid_adjudicated_exact"]))
+        artifact["alignment_decision"] = decision_payload
     artifact["reviewer_evaluator_evidence"] = list(dict.fromkeys([*evidence, *evidence_items]))
     artifact["adjudication"] = {
         "review_id": adjudication.get("review_id", ""),
@@ -792,6 +809,9 @@ def apply_adjudication_to_row(
         axiom_debt=[str(x) for x in (out.get("axiom_debt") or [])],
     )
     out["status"] = strict_status.value
+    gates = dict(gates)
+    gates["statement_alignment_exact"] = out.get("statement_alignment_class") == StatementAlignmentClass.EXACT.value
+    gates["statement_alignment_not_unrelated"] = out.get("statement_alignment_class") != StatementAlignmentClass.UNRELATED.value
     out["validation_gates"] = gates
     out["gate_failures"] = failures
     out["remaining_blockers_after_adjudication"] = remaining_blockers_if_equivalent(out)
