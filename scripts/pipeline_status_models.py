@@ -231,6 +231,9 @@ class TheoremLedgerEntry:
     statement_fidelity_verdict: str = "blocked"
     statement_fidelity_blockers: list[str] = field(default_factory=list)
     statement_fidelity_source: str = "none"
+    # Source-of-truth fields (P1 + P3)
+    source_content_hash: str = ""   # SHA256(paper_id|theorem_name|lean_statement) for staleness detection
+    source_span_id: str = ""        # extractor-native source span identifier (e.g. "theorem:5:42")
 
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)

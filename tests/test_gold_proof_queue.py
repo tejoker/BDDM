@@ -80,6 +80,7 @@ def test_gold_proof_queue_accepts_reviewed_exact_rows() -> None:
 
     assert len(queue) == 1
     assert queue[0]["reviewed_statement_alignment_class"] == "exact"
+    assert queue[0]["reviewed_equivalence_verdict"] == "equivalent"
     assert "status_not_fully_proven:UNRESOLVED" in queue[0]["proof_closure_blockers"]
     assert summary["candidate_rows"] == 1
 
@@ -111,3 +112,19 @@ def test_gold_proof_queue_rejects_metric_game_rows() -> None:
     assert queue == []
     assert summary["candidate_rows"] == 0
     assert summary["rejection_reason_counts"]["paper_claim_artifact"] == 1
+
+
+def test_gold_proof_queue_rejects_false_targets_without_contradiction_source() -> None:
+    row = _row(
+        row_id="false",
+        theorem_id="thm:false",
+        lean_statement="theorem false_target : False",
+        source_latex="For every n, n = n.",
+    )
+
+    blockers = proof_candidate_blockers(row)
+    queue, summary = build_gold_proof_queue([row])
+
+    assert "false_target_without_source_contradiction" in blockers
+    assert queue == []
+    assert summary["rejection_reason_counts"]["false_target_without_source_contradiction"] == 1

@@ -11,8 +11,44 @@ open scoped BigOperators
 namespace Paper_2604_21616_Repair
 
 -- symbol: C -> C (paper_scalar_or_distribution)
+-- symbol: h_algorithm_gsoap_eqnarray_aligned_3 -> h_algorithm_gsoap_eqnarray_aligned_3 (paper_scalar_or_distribution)
+-- symbol: h_aligned_eqnarray_plugging_equ6_4 -> h_aligned_eqnarray_plugging_equ6_4 (paper_scalar_or_distribution)
+-- symbol: h_aligned_eqnarray_since_random_3 -> h_aligned_eqnarray_since_random_3 (paper_scalar_or_distribution)
+-- symbol: h_applying_above_inequality_recursively_2 -> h_applying_above_inequality_recursively_2 (paper_scalar_or_distribution)
+-- symbol: h_denote_standard_basis_vector_1 -> h_denote_standard_basis_vector_1 (paper_scalar_or_distribution)
+-- symbol: h_gradient_lipschitz_eqnarray_aligned_1 -> h_gradient_lipschitz_eqnarray_aligned_1 (paper_scalar_or_distribution)
+-- symbol: h_lemma_nuclear_norms_eqnarray_5 -> h_lemma_nuclear_norms_eqnarray_5 (paper_scalar_or_distribution)
+-- symbol: h_main_theorem_assumptions_hold_1 -> h_main_theorem_assumptions_hold_1 (paper_scalar_or_distribution)
+-- symbol: h_recursion_eqnarray_aligned_aligned_1 -> h_recursion_eqnarray_aligned_aligned_1 (paper_scalar_or_distribution)
+-- symbol: h_second_moment_lemma_assumptions_1 -> h_second_moment_lemma_assumptions_1 (paper_scalar_or_distribution)
+-- symbol: h_source_2_2 -> h_source_2_2 (paper_scalar_or_distribution)
+-- symbol: h_taking_expectation_both_sides_2 -> h_taking_expectation_both_sides_2 (paper_scalar_or_distribution)
 
 -- Domain axioms / paper-local symbols. These are explicit formalization debt.
 def C : ℝ := 0
+
+def h_algorithm_gsoap_eqnarray_aligned_3 : ℝ := 0
+
+def h_aligned_eqnarray_plugging_equ6_4 : ℝ := 0
+
+def h_aligned_eqnarray_since_random_3 : ℝ := 0
+
+def h_applying_above_inequality_recursively_2 : ℝ := 0
+
+def h_denote_standard_basis_vector_1 : ℝ := 0
+
+def h_gradient_lipschitz_eqnarray_aligned_1 : ℝ := 0
+
+def h_lemma_nuclear_norms_eqnarray_5 : ℝ := 0
+
+def h_main_theorem_assumptions_hold_1 : ℝ := 0
+
+def h_recursion_eqnarray_aligned_aligned_1 : ℝ := 0
+
+def h_second_moment_lemma_assumptions_1 : ℝ := 0
+
+def h_source_2_2 : ℝ := 0
+
+def h_taking_expectation_both_sides_2 : ℝ := 0
 
 end Paper_2604_21616_Repair

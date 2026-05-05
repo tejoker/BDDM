@@ -36,20 +36,6 @@
       "proof_countable": false
     },
     {
-      "latex": "affilname1",
-      "lean": "affilname1",
-      "kind": "scalar",
-      "declaration": "def affilname1 : ℝ := 0",
-      "grounding": "definition_stub",
-      "reason": "paper_scalar_or_distribution",
-      "source": "seed_text",
-      "grounding_kind": "transparent_scalar_stub",
-      "grounding_source": "seed_text",
-      "grounding_trust": "syntax_only_not_semantic_proof",
-      "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-      "proof_countable": false
-    },
-    {
       "latex": "bL_0",
       "lean": "bL_0",
       "kind": "scalar",
@@ -418,20 +404,6 @@
       "lean": "theta",
       "kind": "scalar",
       "declaration": "def theta : ℝ := 0",
-      "grounding": "definition_stub",
-      "reason": "paper_scalar_or_distribution",
-      "source": "seed_text",
-      "grounding_kind": "transparent_scalar_stub",
-      "grounding_source": "seed_text",
-      "grounding_trust": "syntax_only_not_semantic_proof",
-      "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-      "proof_countable": false
-    },
-    {
-      "latex": "v2",
-      "lean": "v2",
-      "kind": "scalar",
-      "declaration": "def v2 : ℝ := 0",
       "grounding": "definition_stub",
       "reason": "paper_scalar_or_distribution",
       "source": "seed_text",

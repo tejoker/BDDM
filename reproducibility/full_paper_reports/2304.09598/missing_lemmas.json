@@ -10,8 +10,8 @@
     "bad_translation_artifact": 0
   },
   "definition_stub_grounding": {
-    "count": 25,
-    "total_references": 37,
+    "count": 31,
+    "total_references": 55,
     "items": [
       {
         "symbol": "C",
@@ -36,6 +36,78 @@
           "requires_verified_replacement": false
         },
         "suggested_action": "Replace paper-local symbol `C` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "IrreducibleLadderMultisegment",
+        "debt_item": "paper_definition_stub:IrreducibleLadderMultisegment",
+        "needed_by": [
+          "Lem_IrredQFM"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:IrreducibleLadderMultisegment",
+          "symbol": "IrreducibleLadderMultisegment",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `IrreducibleLadderMultisegment` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "IsLadderMultisegment",
+        "debt_item": "paper_definition_stub:IsLadderMultisegment",
+        "needed_by": [
+          "Lem_Quant"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:IsLadderMultisegment",
+          "symbol": "IsLadderMultisegment",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `IsLadderMultisegment` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "L_tilde",
+        "debt_item": "paper_definition_stub:L_tilde",
+        "needed_by": [
+          "EqualLN"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:L_tilde",
+          "symbol": "L_tilde",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `L_tilde` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
       },
       {
         "symbol": "b_1",
@@ -134,6 +206,30 @@
         "suggested_action": "Replace paper-local symbol `defin_14` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
       },
       {
+        "symbol": "dual",
+        "debt_item": "paper_definition_stub:dual",
+        "needed_by": [
+          "Basic"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:dual",
+          "symbol": "dual",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `dual` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
         "symbol": "e_1",
         "debt_item": "paper_definition_stub:e_1",
         "needed_by": [
@@ -180,30 +276,6 @@
           "requires_verified_replacement": false
         },
         "suggested_action": "Replace paper-local symbol `e_2` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
-      },
-      {
-        "symbol": "hC_le_def",
-        "debt_item": "paper_definition_stub:hC_le_def",
-        "needed_by": [
-          "Cor_BoundaryRTandMS"
-        ],
-        "needed_by_count": 1,
-        "mathlib_close_match": false,
-        "proof_value": "definition_grounding",
-        "proof_countable": false,
-        "grounding_metadata": {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:hC_le_def",
-          "symbol": "hC_le_def",
-          "grounding_kind": "transparent_definition_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.syntax_only",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        "suggested_action": "Replace paper-local symbol `hC_le_def` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
       },
       {
         "symbol": "h_and_are_ladder_multisegments_1",
@@ -422,6 +494,80 @@
         "suggested_action": "Replace paper-local symbol `h_n_n_3` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
       },
       {
+        "symbol": "n_tilde_alpha",
+        "debt_item": "paper_definition_stub:n_tilde_alpha",
+        "needed_by": [
+          "Lem_Quant"
+        ],
+        "needed_by_count": 1,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:n_tilde_alpha",
+          "symbol": "n_tilde_alpha",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `n_tilde_alpha` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "IsSimple",
+        "debt_item": "paper_definition_stub:IsSimple",
+        "needed_by": [
+          "Def_Simple",
+          "Prop_SimpleFacts"
+        ],
+        "needed_by_count": 2,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:IsSimple",
+          "symbol": "IsSimple",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `IsSimple` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "L_alpha",
+        "debt_item": "paper_definition_stub:L_alpha",
+        "needed_by": [
+          "Basic",
+          "Prop_SimpleFacts"
+        ],
+        "needed_by_count": 2,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:L_alpha",
+          "symbol": "L_alpha",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `L_alpha` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
         "symbol": "a",
         "debt_item": "paper_definition_stub:a",
         "needed_by": [
@@ -447,35 +593,10 @@
         "suggested_action": "Replace paper-local symbol `a` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
       },
       {
-        "symbol": "alpha1",
-        "debt_item": "paper_definition_stub:alpha1",
+        "symbol": "ntilde_alpha",
+        "debt_item": "paper_definition_stub:ntilde_alpha",
         "needed_by": [
-          "Lem_A1",
-          "Lem_A1b"
-        ],
-        "needed_by_count": 2,
-        "mathlib_close_match": false,
-        "proof_value": "definition_grounding",
-        "proof_countable": false,
-        "grounding_metadata": {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:alpha1",
-          "symbol": "alpha1",
-          "grounding_kind": "transparent_definition_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.syntax_only",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        "suggested_action": "Replace paper-local symbol `alpha1` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
-      },
-      {
-        "symbol": "h1",
-        "debt_item": "paper_definition_stub:h1",
-        "needed_by": [
-          "EqualLN",
+          "Prop_SimpleFacts",
           "Lem_AB"
         ],
         "needed_by_count": 2,
@@ -484,8 +605,8 @@
         "proof_countable": false,
         "grounding_metadata": {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:h1",
-          "symbol": "h1",
+          "debt_item": "paper_definition_stub:ntilde_alpha",
+          "symbol": "ntilde_alpha",
           "grounding_kind": "transparent_definition_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -494,23 +615,24 @@
           "hidden_assumption": false,
           "requires_verified_replacement": false
         },
-        "suggested_action": "Replace paper-local symbol `h1` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+        "suggested_action": "Replace paper-local symbol `ntilde_alpha` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
       },
       {
-        "symbol": "h2",
-        "debt_item": "paper_definition_stub:h2",
+        "symbol": "S_alpha",
+        "debt_item": "paper_definition_stub:S_alpha",
         "needed_by": [
-          "EqualLN",
-          "Lem_AB"
+          "Basic",
+          "Lem_IrredQFM",
+          "Lem_Quant"
         ],
-        "needed_by_count": 2,
+        "needed_by_count": 3,
         "mathlib_close_match": false,
         "proof_value": "definition_grounding",
         "proof_countable": false,
         "grounding_metadata": {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:h2",
-          "symbol": "h2",
+          "debt_item": "paper_definition_stub:S_alpha",
+          "symbol": "S_alpha",
           "grounding_kind": "transparent_definition_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -519,23 +641,24 @@
           "hidden_assumption": false,
           "requires_verified_replacement": false
         },
-        "suggested_action": "Replace paper-local symbol `h2` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+        "suggested_action": "Replace paper-local symbol `S_alpha` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
       },
       {
-        "symbol": "h3",
-        "debt_item": "paper_definition_stub:h3",
+        "symbol": "c_alpha",
+        "debt_item": "paper_definition_stub:c_alpha",
         "needed_by": [
-          "EqualLN",
-          "Lem_AB"
+          "Basic",
+          "Lem_IrredQFM",
+          "Lem_Quant"
         ],
-        "needed_by_count": 2,
+        "needed_by_count": 3,
         "mathlib_close_match": false,
         "proof_value": "definition_grounding",
         "proof_countable": false,
         "grounding_metadata": {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:h3",
-          "symbol": "h3",
+          "debt_item": "paper_definition_stub:c_alpha",
+          "symbol": "c_alpha",
           "grounding_kind": "transparent_definition_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -544,32 +667,7 @@
           "hidden_assumption": false,
           "requires_verified_replacement": false
         },
-        "suggested_action": "Replace paper-local symbol `h3` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
-      },
-      {
-        "symbol": "halpha1",
-        "debt_item": "paper_definition_stub:halpha1",
-        "needed_by": [
-          "Lem_A1",
-          "Lem_A1b"
-        ],
-        "needed_by_count": 2,
-        "mathlib_close_match": false,
-        "proof_value": "definition_grounding",
-        "proof_countable": false,
-        "grounding_metadata": {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:halpha1",
-          "symbol": "halpha1",
-          "grounding_kind": "transparent_definition_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.syntax_only",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        "suggested_action": "Replace paper-local symbol `halpha1` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+        "suggested_action": "Replace paper-local symbol `c_alpha` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
       },
       {
         "symbol": "h_source_3_3",
@@ -598,6 +696,33 @@
         "suggested_action": "Replace paper-local symbol `h_source_3_3` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
       },
       {
+        "symbol": "n_alpha",
+        "debt_item": "paper_definition_stub:n_alpha",
+        "needed_by": [
+          "Basic",
+          "EqualLN",
+          "Lem_IrredQFM",
+          "Lem_Quant"
+        ],
+        "needed_by_count": 4,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:n_alpha",
+          "symbol": "n_alpha",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `n_alpha` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
         "symbol": "h_source_2_2",
         "debt_item": "paper_definition_stub:h_source_2_2",
         "needed_by": [
@@ -624,6 +749,37 @@
           "requires_verified_replacement": false
         },
         "suggested_action": "Replace paper-local symbol `h_source_2_2` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
+      },
+      {
+        "symbol": "Multisegment",
+        "debt_item": "paper_definition_stub:Multisegment",
+        "needed_by": [
+          "Cor_BoundaryRTandMS",
+          "Basic",
+          "EqualLN",
+          "Def_Simple",
+          "Prop_SimpleFacts",
+          "defin_14",
+          "Lem_Quant",
+          "Lem_A1b"
+        ],
+        "needed_by_count": 8,
+        "mathlib_close_match": false,
+        "proof_value": "definition_grounding",
+        "proof_countable": false,
+        "grounding_metadata": {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:Multisegment",
+          "symbol": "Multisegment",
+          "grounding_kind": "transparent_definition_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.syntax_only",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        },
+        "suggested_action": "Replace paper-local symbol `Multisegment` with a conservative Lean definition or a domain-pack definition, then re-run the theorem without axiom debt."
       }
     ],
     "claim_scope": "Definition stubs are reported separately from theorem/lemma obligations; they do not count as proved paper claims."

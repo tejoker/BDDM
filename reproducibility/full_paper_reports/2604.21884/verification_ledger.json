@@ -3,7 +3,7 @@
     {
       "theorem_name": "thm_baseline_lift",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$. Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). \\end{equation*} Then the cutoff approximations converge almost surely in the path spaces \\begin{equation}\\label{eq:baseline-paths} \\Psi_i\\in C_T\\mathcal{C}^{\\alpha-3/2-}, \\qquad \\Theta\\in C_T\\mathcal{C}^{2\\alpha-3-}, \\qquad V_i\\in C_T\\mathcal{C}^{3\\alpha-3-}, \\qquad \\partial_tV_i\\in C_T\\mathcal{C}^{2\\alpha-3-}. \\end{equation} In particular, $\\Theta$ is a cross-Wick product without subtracting a scalar constant.\ntheorem thm_baseline_lift :\n  alpha > 3/4 := by\n  sorry",
+      "lean_statement": "theorem thm_baseline_lift (alpha : \u211d) (halpha : alpha > 3 / 4) :\n  BaselineLiftStatement := trivial",
       "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
@@ -92,7 +92,7 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift}\nAssume $\\alpha>3/4$. Let\n\\begin{equation*}\n\\Psi_i=I_i(\\xi_i),\n\\qquad\n\\Theta=\\Psi_1\\Psi_2,\n\\qquad\nV_i=I_i(\\Theta).\n\\end{equation*}\nThen the cutoff approximations converge almost surely in the path spaces\n\\begin{equation}\\label{eq:baseline-paths}\n\\Psi_i\\in C_T\\mathcal{C}^{\\alpha-3/2-},\n\\qquad\n\\Theta\\in C_T\\mathcal{C}^{2\\alpha-3-},\n\\qquad\nV_i\\in C_T\\mathcal{C}^{3\\alpha-3-},\n\\qquad\n\\partial_tV_i\\in C_T\\mathcal{C}^{2\\alpha-3-}.\n\\end{equation}\nIn particular, $\\Theta$ is a cross-Wick product without subtracting a scalar constant.",
         "normalized_natural_language_theorem": "Assumptions: [Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$.; Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta). Conclusion: \\end{equation*} Then the cutoff approximations converge almost surely in the path spaces \\begin{equation}\\label{eq:baseline-paths} \\Psi_i\\in C_T\\mathcal{C}^{\\alpha-3/2-}, \\qquad \\Theta\\in C_T\\mathcal{C}^{2\\alpha-3-}, \\qquad V_i\\in C_T\\mathcal{C}^{3\\alpha-3-}, \\qquad \\partial_tV_i\\in C_T\\mathcal{C}^{2\\alpha-3-}. \\end{equation} In particular, $\\Theta$ is a cross-Wick product without subtracting a scalar constant.",
-        "lean_statement": "theorem thm_baseline_lift (alpha : ℝ) (halpha : alpha > 3 / 4) (ξ1 ξ2 : ℝ) :\n    let Ψ1 := I1 ξ1;\n    let Ψ2 := I2 ξ2;\n    let Θ := Ψ1 * Ψ2;\n    let V1 := I1 Θ;\n    let V2 := I2 Θ;\n    Ψ1 ∈ C_T 𝒞 ^ (alpha - 3 / 2 -) ∧\n    Ψ2 ∈ C_T 𝒞 ^ (alpha - 3 / 2 -) ∧\n    Θ ∈ C_T 𝒞 ^ (2 * alpha - 3 -) ∧\n    V1 ∈ C_T 𝒞 ^ (3 * alpha - 3 -) ∧\n    V2 ∈ C_T 𝒞 ^ (3 * alpha - 3 -) ∧\n    d_dtt V1 ∈ C_T 𝒞 ^ (2 * alpha - 3 -) ∧\n    d_dtt V2 ∈ C_T 𝒞 ^ (2 * alpha - 3 -)",
+        "lean_statement": "theorem thm_baseline_lift (alpha : \u211d) (halpha : alpha > 3 / 4) :\n  BaselineLiftStatement := trivial",
         "extracted_assumptions": [
           "[Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift} Assume $\\alpha>3/4$.",
           "Let \\begin{equation*} \\Psi_i=I_i(\\xi_i), \\qquad \\Theta=\\Psi_1\\Psi_2, \\qquad V_i=I_i(\\Theta)."
@@ -247,11 +247,11 @@
       },
       "axiom_debt": [
         "paper_definition_stub:C_T",
-        "paper_definition_stub:Ψ1",
-        "paper_definition_stub:Ψ2",
-        "paper_definition_stub:ξ1",
-        "paper_definition_stub:ξ2",
-        "paper_symbol:Θ"
+        "paper_definition_stub:\u03a81",
+        "paper_definition_stub:\u03a82",
+        "paper_definition_stub:\u03be1",
+        "paper_definition_stub:\u03be2",
+        "paper_symbol:\u0398"
       ],
       "axiom_debt_hash": "b5f6f1e2706f5038",
       "closure_claim": "not_closed",
@@ -272,8 +272,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:Ψ1",
-          "symbol": "Ψ1",
+          "debt_item": "paper_definition_stub:\u03a81",
+          "symbol": "\u03a81",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -284,8 +284,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:Ψ2",
-          "symbol": "Ψ2",
+          "debt_item": "paper_definition_stub:\u03a82",
+          "symbol": "\u03a82",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -296,8 +296,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:ξ1",
-          "symbol": "ξ1",
+          "debt_item": "paper_definition_stub:\u03be1",
+          "symbol": "\u03be1",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -308,8 +308,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:ξ2",
-          "symbol": "ξ2",
+          "debt_item": "paper_definition_stub:\u03be2",
+          "symbol": "\u03be2",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -320,8 +320,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_symbol:Θ",
-          "symbol": "Θ",
+          "debt_item": "paper_symbol:\u0398",
+          "symbol": "\u0398",
           "grounding_kind": "domain_symbol_obligation",
           "grounding_source": "paper_symbol_reference",
           "grounding_trust": "unproved_domain_symbol",
@@ -336,13 +336,13 @@
       "modulo_paper_local_axioms": true,
       "paper_local_axiom_debt": [
         "paper_definition_stub:C_T",
-        "paper_definition_stub:Ψ1",
-        "paper_definition_stub:Ψ2",
-        "paper_definition_stub:ξ1",
-        "paper_definition_stub:ξ2",
-        "paper_symbol:Θ"
+        "paper_definition_stub:\u03a81",
+        "paper_definition_stub:\u03a82",
+        "paper_definition_stub:\u03be1",
+        "paper_definition_stub:\u03be2",
+        "paper_symbol:\u0398"
       ],
-      "canonical_statement": "theorem _ (u1 : ℝ) (u2 : alpha > 3 / 4) (ξ1 ξ2 : ℝ) : let Ψ1 : = I1 ξ1; let Ψ2 : = I2 ξ2; let Θ : = Ψ1 * Ψ2; let V1 : = I1 Θ; let V2 : = I2 Θ; Ψ1 ∈ C_T 𝒞 ^ (u1 - 3 / 2 -) ∧ Ψ2 ∈ C_T 𝒞 ^ (u1 - 3 / 2 -) ∧ Θ ∈ C_T 𝒞 ^ (2 * u1 - 3 -) ∧ V1 ∈ C_T 𝒞 ^ (3 * u1 - 3 -) ∧ V2 ∈ C_T 𝒞 ^ (3 * u1 - 3 -) ∧ d_dtt V1 ∈ C_T 𝒞 ^ (2 * u1 - 3 -) ∧ d_dtt V2 ∈ C_T 𝒞 ^ (2 * u1 - 3 -)",
+      "canonical_statement": "theorem _ (u1 : \u211d) (u2 : alpha > 3 / 4) (\u03be1 \u03be2 : \u211d) : let \u03a81 : = I1 \u03be1; let \u03a82 : = I2 \u03be2; let \u0398 : = \u03a81 * \u03a82; let V1 : = I1 \u0398; let V2 : = I2 \u0398; \u03a81 \u2208 C_T \ud835\udc9e ^ (u1 - 3 / 2 -) \u2227 \u03a82 \u2208 C_T \ud835\udc9e ^ (u1 - 3 / 2 -) \u2227 \u0398 \u2208 C_T \ud835\udc9e ^ (2 * u1 - 3 -) \u2227 V1 \u2208 C_T \ud835\udc9e ^ (3 * u1 - 3 -) \u2227 V2 \u2208 C_T \ud835\udc9e ^ (3 * u1 - 3 -) \u2227 d_dtt V1 \u2208 C_T \ud835\udc9e ^ (2 * u1 - 3 -) \u2227 d_dtt V2 \u2208 C_T \ud835\udc9e ^ (2 * u1 - 3 -)",
       "statement_fingerprint": "2ec9ad690a7ba4acc2bc5074da8ea4cf01c6f36ee939a43f17072dfd39e8f44e",
       "claim_shape": "inequality",
       "novelty_status": "semantic_near_duplicate",
@@ -402,7 +402,7 @@
     {
       "theorem_name": "prop_cubic_quartic_baseline",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline} Assume $\\alpha>3/4$. The cubic resonant symbols \\begin{equation*} \\Gamma_1=V_2\\circ\\Psi_1, \\qquad \\Gamma_2=V_1\\circ\\Psi_2 \\end{equation*} admit canonical cutoff limits as stochastic distributions with baseline regularity \\begin{equation}\\label{eq:gamma-baseline} \\Gamma_i\\in C_T\\mathcal{C}^{4\\alpha-9/2-}. \\end{equation} The nonzero-chaos part of $V_1V_2$ admits a canonical baseline lift in \\begin{equation}\\label{eq:vv-nonzero-baseline} (V_1V_2)^{\\neq 0}\\in C_T\\mathcal{C}^{6\\alpha-6-}. \\end{equation} Moreover, the zero-chaos part of $V_1V_2$ is a deterministic scalar process; under the speed-separated double Volterra estimate its dyadic shell is $N^{6-7\\alpha+}$, so it converges in $C_T$ for $\\alpha>6/7$.\ntheorem prop_cubic_quartic_baseline :\n  alpha > 3/4 ∧ alpha > 6/7 := by\n  sorry",
+      "lean_statement": "theorem prop_cubic_quartic_baseline (alpha : \u211d) (halpha : alpha > 3 / 4) :\n  CubicQuarticBaselineStatement := trivial",
       "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
       "failure_origin": "PROOF_SEARCH_ERROR",
@@ -429,7 +429,7 @@
           "step_index": 1,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_p9x_fo2g.lean:11:2: error: Tactic `apply` failed: could not unify the conclusion of `@And.intro`   ?a ∧ ?b with the goal   Γ1 = Γ1  Note: The full type of `@And.intro` is   ∀ {a b : Prop}, a → b → a ∧ b  case left ⊢ Γ1 = Γ1",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_p9x_fo2g.lean:11:2: error: Tactic `apply` failed: could not unify the conclusion of `@And.intro`   ?a \u2227 ?b with the goal   \u03931 = \u03931  Note: The full type of `@And.intro` is   \u2200 {a b : Prop}, a \u2192 b \u2192 a \u2227 b  case left \u22a2 \u03931 = \u03931",
           "verified": false
         },
         {
@@ -450,7 +450,7 @@
           "step_index": 2,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_0lszzogz.lean:9:37: error: unsolved goals case right ⊢ Γ2 = Γ2 ∧ Θ = Ψ1 * Ψ2",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_0lszzogz.lean:9:37: error: unsolved goals case right \u22a2 \u03932 = \u03932 \u2227 \u0398 = \u03a81 * \u03a82",
           "verified": false
         },
         {
@@ -471,7 +471,7 @@
           "step_index": 3,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_czmxj6_c.lean:9:37: error: unsolved goals case right ⊢ Γ2 = Γ2 ∧ Θ = Ψ1 * Ψ2",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_czmxj6_c.lean:9:37: error: unsolved goals case right \u22a2 \u03932 = \u03932 \u2227 \u0398 = \u03a81 * \u03a82",
           "verified": false
         },
         {
@@ -492,7 +492,7 @@
           "step_index": 4,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_1vg3rvfl.lean:9:37: error: unsolved goals case right ⊢ Γ2 = Γ2 ∧ Θ = Ψ1 * Ψ2",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_1vg3rvfl.lean:9:37: error: unsolved goals case right \u22a2 \u03932 = \u03932 \u2227 \u0398 = \u03a81 * \u03a82",
           "verified": false
         },
         {
@@ -513,7 +513,7 @@
           "step_index": 5,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_u8j9ekn_.lean:9:37: error: unsolved goals case right ⊢ Γ2 = Γ2 ∧ Θ = Ψ1 * Ψ2",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_u8j9ekn_.lean:9:37: error: unsolved goals case right \u22a2 \u03932 = \u03932 \u2227 \u0398 = \u03a81 * \u03a82",
           "verified": false
         }
       ],
@@ -586,9 +586,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline}\nAssume $\\alpha>3/4$. The cubic resonant symbols\n\\begin{equation*}\n\\Gamma_1=V_2\\circ\\Psi_1,\n\\qquad\n\\Gamma_2=V_1\\circ\\Psi_2\n\\end{equation*}\nadmit canonical cutoff limits as stochastic distributions with baseline regularity\n\\begin{equation}\\label{eq:gamma-baseline}\n\\Gamma_i\\in C_T\\mathcal{C}^{4\\alpha-9/2-}.\n\\end{equation}\nThe nonzero-chaos part of $V_1V_2$ admits a canonical baseline lift in\n\\begin{equation}\\label{eq:vv-nonzero-baseline}\n(V_1V_2)^{\\neq 0}\\in C_T\\mathcal{C}^{6\\alpha-6-}.\n\\end{equation}\nMoreover, the zero-chaos part of $V_1V_2$ is a deterministic scalar process; under the speed-separated double Volterra estimate its dyadic shell is $N^{6-7\\alpha+}$, so it converges in $C_T$ for $\\alpha>6/7$.",
         "normalized_natural_language_theorem": "[Baseline cubic and quartic stochastic symbols] Assume alpha>3/4 . The cubic resonant symbols Gamma_1=V_2circPsi_1, qquad Gamma_2=V_1circPsi_2 admit canonical cutoff limits as stochastic distributions with baseline regularity Gamma_iin C_Tmathcal C^ 4alpha-9/2- . The nonzero-chaos part of V_1V_2 admits a canonical baseline lift in (V_1V_2)^ neq 0 in C_Tmathcal C^ 6alpha-6- . Moreover, the zero-chaos part of V_1V_2 is a deterministic scalar process; under the speed-separated double Volterra estimate its dyadic shell is N^ 6-7alpha+ , so it converges in C_T for alpha>6/7 .",
-        "lean_statement": "theorem prop_cubic_quartic_baseline :\n  Γ1 = Γ1 ∧ Γ2 = Γ2 ∧ Θ = Ψ1 * Ψ2",
+        "lean_statement": "theorem prop_cubic_quartic_baseline (alpha : \u211d) (halpha : alpha > 3 / 4) :\n  CubicQuarticBaselineStatement := trivial",
         "extracted_assumptions": [],
-        "extracted_conclusion": "Γ1 = Γ1 ∧ Γ2 = Γ2 ∧ Θ = Ψ1 * Ψ2",
+        "extracted_conclusion": "\u03931 = \u03931 \u2227 \u03932 = \u03932 \u2227 \u0398 = \u03a81 * \u03a82",
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -667,11 +667,11 @@
         "translation_statement_schema": {}
       },
       "axiom_debt": [
-        "paper_definition_stub:Γ1",
-        "paper_definition_stub:Γ2",
-        "paper_definition_stub:Ψ1",
-        "paper_definition_stub:Ψ2",
-        "paper_symbol:Θ"
+        "paper_definition_stub:\u03931",
+        "paper_definition_stub:\u03932",
+        "paper_definition_stub:\u03a81",
+        "paper_definition_stub:\u03a82",
+        "paper_symbol:\u0398"
       ],
       "axiom_debt_hash": "7f51b432b0322ce4",
       "closure_claim": "not_closed",
@@ -680,8 +680,8 @@
       "grounding_metadata": [
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:Γ1",
-          "symbol": "Γ1",
+          "debt_item": "paper_definition_stub:\u03931",
+          "symbol": "\u03931",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -692,8 +692,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:Γ2",
-          "symbol": "Γ2",
+          "debt_item": "paper_definition_stub:\u03932",
+          "symbol": "\u03932",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -704,8 +704,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:Ψ1",
-          "symbol": "Ψ1",
+          "debt_item": "paper_definition_stub:\u03a81",
+          "symbol": "\u03a81",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -716,8 +716,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:Ψ2",
-          "symbol": "Ψ2",
+          "debt_item": "paper_definition_stub:\u03a82",
+          "symbol": "\u03a82",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -728,8 +728,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_symbol:Θ",
-          "symbol": "Θ",
+          "debt_item": "paper_symbol:\u0398",
+          "symbol": "\u0398",
           "grounding_kind": "domain_symbol_obligation",
           "grounding_source": "paper_symbol_reference",
           "grounding_trust": "unproved_domain_symbol",
@@ -743,13 +743,13 @@
       "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
       "modulo_paper_local_axioms": true,
       "paper_local_axiom_debt": [
-        "paper_definition_stub:Γ1",
-        "paper_definition_stub:Γ2",
-        "paper_definition_stub:Ψ1",
-        "paper_definition_stub:Ψ2",
-        "paper_symbol:Θ"
+        "paper_definition_stub:\u03931",
+        "paper_definition_stub:\u03932",
+        "paper_definition_stub:\u03a81",
+        "paper_definition_stub:\u03a82",
+        "paper_symbol:\u0398"
       ],
-      "canonical_statement": "theorem _ : Γ1 = Γ1 ∧ Γ2 = Γ2 ∧ Θ = Ψ1 * Ψ2",
+      "canonical_statement": "theorem _ : \u03931 = \u03931 \u2227 \u03932 = \u03932 \u2227 \u0398 = \u03a81 * \u03a82",
       "statement_fingerprint": "571c30a868e4a59eded4c54d905174db8a9b54d8eef757ae4bfe8808c5772144",
       "claim_shape": "equality",
       "novelty_status": "semantic_near_duplicate",
@@ -809,11 +809,11 @@
     {
       "theorem_name": "thm_operator_main",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "theorem thm_operator_main : False",
-      "status": "FLAWED",
+      "lean_statement": "theorem thm_operator_main (alpha eps s2 theta T : \u211d)\n    (halpha : (3:\u211d)/4 < alpha) (hT : 0 < T \u2227 T \u2264 1)\n    (heps : 0 < eps) (htheta : 0 < theta \u2227 theta < 1) (hs2 : 0 < s2)\n    (hs2_bound : s2 < 4 * alpha - 3 - (3/2) * theta - eps) :\n  \u2203 C : \u211d, 0 < C \u2227 \u2200 w : \u211d \u2192 \u211d,\n    Filter.Tendsto (fun N : \u2115 => (N : \u211d) ^ (3 - 4 * alpha + theta * (s2 + eps)) * \u2016w\u2016)\n      Filter.atTop (nhds 0) \u2192 \u2016w\u2016 \u2264 C",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
       "promotion_gate_passed": false,
@@ -850,7 +850,7 @@
       },
       "proof_text": "",
       "first_failing_step": 0,
-      "error_message": "translation_acceptance_gate:lean_elaboration_failed",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -895,7 +895,7 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Mixed random operators and no singular centering]\\label{thm:operator-main}\nLet\n\\begin{equation}\\label{eq:ET-def-intro}\nE_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}.\n\\end{equation}\nFix $0<\\theta<1$ and $s_2>0$ such that\n\\begin{equation}\\label{eq:operator-cond-main}\ns_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad\n3-4\\alpha+\\theta(s_2+\\varepsilon)<0.\n\\end{equation}\nThen the strongly low--high pieces of the four mixed operators\n\\begin{equation*}\nT^{1;2,2},\\qquad T^{2;1,1},\\qquad T^{1;1,2},\\qquad T^{2;2,1}\n\\end{equation*}\nconverge almost surely as bounded operators\n\\begin{equation}\\label{eq:operator-bound-main}\nE_T\\longrightarrow C_TH^{s_2-\\alpha}.\n\\end{equation}\nCross-color blocks are centered by independence. Same-color blocks decompose into finite speed-separated deterministic Volterra multipliers plus centered pathwise fluctuations. No divergent random-operator counterterm is subtracted in the limiting equation.",
         "normalized_natural_language_theorem": "[Mixed random operators and no singular centering] Let E_T:=C_TL^2cap C_T^1H^ -alpha-varepsilon . Fix 0<theta<1 and s_2>0 such that s_2<4alpha-3-frac32theta-varepsilon, qquad 3-4alpha+theta(s_2+varepsilon)<0. Then the strongly low--high pieces of the four mixed operators T^ 1;2,2 ,qquad T^ 2;1,1 ,qquad T^ 1;1,2 ,qquad T^ 2;2,1 converge almost surely as bounded operators E_Tlongrightarrow C_TH^ s_2-alpha . Cross-color blocks are centered by independence. Same-color blocks decompose into finite speed-separated deterministic Volterra multipliers plus centered pathwise fluctuations. No divergent random-operator counterterm is subtracted in the limiting equation.",
-        "lean_statement": "theorem thm_operator_main : False",
+        "lean_statement": "theorem thm_operator_main (alpha eps s2 theta T : \u211d)\n    (halpha : (3:\u211d)/4 < alpha) (hT : 0 < T \u2227 T \u2264 1)\n    (heps : 0 < eps) (htheta : 0 < theta \u2227 theta < 1) (hs2 : 0 < s2)\n    (hs2_bound : s2 < 4 * alpha - 3 - (3/2) * theta - eps) :\n  \u2203 C : \u211d, 0 < C \u2227 \u2200 w : \u211d \u2192 \u211d,\n    Filter.Tendsto (fun N : \u2115 => (N : \u211d) ^ (3 - 4 * alpha + theta * (s2 + eps)) * \u2016w\u2016)\n      Filter.atTop (nhds 0) \u2192 \u2016w\u2016 \u2264 C",
         "extracted_assumptions": [],
         "extracted_conclusion": "False",
         "equivalence_verdict": "unclear",
@@ -1057,7 +1057,7 @@
     {
       "theorem_name": "prop_mid_completion",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Completion outside the strong low--high region]\\label{prop:mid-completion} Let the full paraproduct-resonant operator be decomposed into the strongly low--high region $|q|\\le N^\\theta$, the intermediate low--high region $N^\\theta\\lesssim |q|\\ll N$, finitely many low shells, and the nonresonant paraproduct geometries. If the input has positive regularity $U\\in C_TH^{s_1}$ with $s_1>0$, then the intermediate region contributes the dyadic shell \\begin{equation}\\label{eq:mid-shell-intro} N^{s_2+3-4\\alpha-\\theta s_1+\\varepsilon}, \\end{equation} and is therefore summable once \\eqref{eq:operator-cond-main} holds. The remaining nonresonant and finite-shell pieces are bounded by standard paraproduct and finite-rank estimates.\ntheorem prop_mid_completion :\n  s_1 > 0 := by\n  sorry",
+      "lean_statement": "theorem prop_mid_completion (alpha s2 theta : \u211d)\n    (hadm : 0 < theta \u2227 theta < 1)\n    (ha : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0) :\n  MixedRandomOperatorConvergence := trivial",
       "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
       "failure_origin": "PROOF_SEARCH_ERROR",
@@ -1068,7 +1068,7 @@
       "step_obligations": [
         {
           "step_index": 1,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "lean-error",
           "detail": "line=1; message=error: external command 'git' exited with code 1",
           "verified": false
@@ -1077,12 +1077,12 @@
           "step_index": 1,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_jm4stlfx.lean:9:64: error: unsolved goals case h ⊢ 0 < { cauchy := 1 }",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_jm4stlfx.lean:9:64: error: unsolved goals case h \u22a2 0 < { cauchy := 1 }",
           "verified": false
         },
         {
           "step_index": 2,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "lean-error",
           "detail": "line=1; message=error: external command 'git' exited with code 1",
           "verified": false
@@ -1091,12 +1091,12 @@
           "step_index": 2,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_wcs6fag5.lean:12:9: error: Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_wcs6fag5.lean:12:9: error: Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
           "verified": false
         },
         {
           "step_index": 3,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "lean-error",
           "detail": "line=1; message=error: external command 'git' exited with code 1",
           "verified": false
@@ -1105,12 +1105,12 @@
           "step_index": 3,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_766b_wcw.lean:12:9: error: Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_766b_wcw.lean:12:9: error: Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
           "verified": false
         },
         {
           "step_index": 4,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "lean-error",
           "detail": "line=1; message=error: external command 'git' exited with code 1",
           "verified": false
@@ -1119,12 +1119,12 @@
           "step_index": 4,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_r9eftwkc.lean:12:9: error: Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_r9eftwkc.lean:12:9: error: Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
           "verified": false
         },
         {
           "step_index": 5,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "lean-error",
           "detail": "line=1; message=error: external command 'git' exited with code 1",
           "verified": false
@@ -1133,7 +1133,7 @@
           "step_index": 5,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_hxbmfu29.lean:12:9: error: Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_hxbmfu29.lean:12:9: error: Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
           "verified": false
         }
       ],
@@ -1206,9 +1206,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Completion outside the strong low--high region]\\label{prop:mid-completion}\nLet the full paraproduct-resonant operator be decomposed into the strongly low--high region $|q|\\le N^\\theta$, the intermediate low--high region $N^\\theta\\lesssim |q|\\ll N$, finitely many low shells, and the nonresonant paraproduct geometries. If the input has positive regularity $U\\in C_TH^{s_1}$ with $s_1>0$, then the intermediate region contributes the dyadic shell\n\\begin{equation}\\label{eq:mid-shell-intro}\nN^{s_2+3-4\\alpha-\\theta s_1+\\varepsilon},\n\\end{equation}\nand is therefore summable once \\eqref{eq:operator-cond-main} holds. The remaining nonresonant and finite-shell pieces are bounded by standard paraproduct and finite-rank estimates.",
         "normalized_natural_language_theorem": "[Completion outside the strong low--high region] Let the full paraproduct-resonant operator be decomposed into the strongly low--high region |q|le N^theta , the intermediate low--high region N^thetalesssim |q|ll N , finitely many low shells, and the nonresonant paraproduct geometries. If the input has positive regularity Uin C_TH^ s_1 with s_1>0 , then the intermediate region contributes the dyadic shell N^ s_2+3-4alpha-theta s_1+varepsilon , and is therefore summable once holds. The remaining nonresonant and finite-shell pieces are bounded by standard paraproduct and finite-rank estimates.",
-        "lean_statement": "theorem prop_mid_completion :\n  ∃ s1 s2 theta : ℝ, 0 < s1 ∧ 0 < s2 ∧ 0 < theta ∧ theta < 1",
+        "lean_statement": "theorem prop_mid_completion (alpha s2 theta : \u211d)\n    (hadm : 0 < theta \u2227 theta < 1)\n    (ha : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0) :\n  MixedRandomOperatorConvergence := trivial",
         "extracted_assumptions": [],
-        "extracted_conclusion": "ℝ, 0 < s1 ∧ 0 < s2 ∧ 0 < theta ∧ theta < 1",
+        "extracted_conclusion": "\u211d, 0 < s1 \u2227 0 < s2 \u2227 0 < theta \u2227 theta < 1",
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -1337,7 +1337,7 @@
         "paper_definition_stub:s2",
         "paper_definition_stub:theta"
       ],
-      "canonical_statement": "theorem _ : ∃ s1 s2 theta : ℝ, 0 < s1 ∧ 0 < s2 ∧ 0 < theta ∧ theta < 1",
+      "canonical_statement": "theorem _ : \u2203 s1 s2 theta : \u211d, 0 < s1 \u2227 0 < s2 \u2227 0 < theta \u2227 theta < 1",
       "statement_fingerprint": "44fa4551d80d11a84fb45db7b91edad232c760e95df821eb9bc529957163c2c6",
       "claim_shape": "inequality",
       "novelty_status": "semantic_near_duplicate",
@@ -1397,7 +1397,7 @@
     {
       "theorem_name": "thm_conditional_closure_intro",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm \\begin{equation}\\label{eq:source-hyp-intro} F^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha}, \\end{equation} and that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in \\begin{equation*} (X_T^{s_1})^2\\times (Y_T^{s_2})^2. \\end{equation*} The solution map is local...\ntheorem thm_conditional_closure_intro :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "lean_statement": "-- Source claim excerpt: [Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm \\begin{equation}\\label{eq:source-hyp-intro} F^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha}, \\end{equation} and that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in \\begin{equation*} (X_T^{s_1})^2\\times (Y_T^{s_2})^2. \\end{equation*} The solution map is local...\ntheorem thm_conditional_closure_intro :\n  \u2203 x : \u211d, x = x := by\n  sorry",
       "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
@@ -1408,7 +1408,7 @@
       "step_obligations": [
         {
           "step_index": 0,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "state-advanced",
           "detail": "goals=2",
           "verified": true
@@ -1457,7 +1457,7 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "  refine ⟨?_, ?_⟩\n  constructor\n  use 0\n  use 0",
+      "proof_text": "  refine \u27e8?_, ?_\u27e9\n  constructor\n  use 0\n  use 0",
       "first_failing_step": -1,
       "error_message": "translation_repaired_pending_proof:regenerate_explicit_structured_statement,source_grounded_statement_body",
       "proof_mode": "full-draft",
@@ -1504,9 +1504,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Conditional deterministic closure]\\label{thm:conditional-closure-intro}\nAssume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm\n\\begin{equation}\\label{eq:source-hyp-intro}\nF^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha},\n\\end{equation}\nand that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in\n\\begin{equation*}\n(X_T^{s_1})^2\\times (Y_T^{s_2})^2.\n\\end{equation*}\nThe solution map is locally Lipschitz in the enhanced-data norms.",
         "normalized_natural_language_theorem": "[Conditional deterministic closure] Assume the fractional periodic Klein--Gordon Strichartz package of Assumption . Assume that the enhanced stochastic data satisfy Theorem , Proposition , Theorem , and Proposition . Assume in addition that the pure stochastic forcing is available in the source norm F^V:=Psi_1V_2+Psi_2V_1+V_1V_2in C_TH^ s_2-alpha , and that the parameters (alpha,s_1,s_2,theta) satisfy the closure conditions listed in Definition . Then the paracontrolled system for the remainder variables (X_1,X_2,Y_1,Y_2) is locally well posed in (X_T^ s_1 )^2times (Y_T^ s_2 )^2. The solution map is locally Lipschitz in the enhanced-data norms.",
-        "lean_statement": "theorem thm_conditional_closure_intro :\n  ∃ s1 s2 : ℝ, HSobolev s1 = HSobolev s1 ∧ HSobolev s2 = HSobolev s2",
+        "lean_statement": "-- Source claim excerpt: [Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm \\begin{equation}\\label{eq:source-hyp-intro} F^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha}, \\end{equation} and that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in \\begin{equation*} (X_T^{s_1})^2\\times (Y_T^{s_2})^2. \\end{equation*} The solution map is local...\ntheorem thm_conditional_closure_intro :\n  \u2203 x : \u211d, x = x := by\n  sorry",
         "extracted_assumptions": [],
-        "extracted_conclusion": "ℝ, HSobolev s1 = HSobolev s1 ∧ HSobolev s2 = HSobolev s2",
+        "extracted_conclusion": "\u211d, HSobolev s1 = HSobolev s1 \u2227 HSobolev s2 = HSobolev s2",
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -1634,7 +1634,7 @@
         "paper_definition_stub:s1",
         "paper_definition_stub:s2"
       ],
-      "canonical_statement": "theorem _ : ∃ s1 s2 : ℝ, HSobolev s1 = HSobolev s1 ∧ HSobolev s2 = HSobolev s2",
+      "canonical_statement": "theorem _ : \u2203 s1 s2 : \u211d, HSobolev s1 = HSobolev s1 \u2227 HSobolev s2 = HSobolev s2",
       "statement_fingerprint": "78ceb40e845e7f0bfe0527713bc86f576be639905dc6e8b4f9ee1ea01c86b8b6",
       "claim_shape": "equality",
       "novelty_status": "semantic_near_duplicate",
@@ -1694,7 +1694,7 @@
     {
       "theorem_name": "cor_conditional_cutoff",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff} If the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term.\ntheorem cor_conditional_cutoff :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "lean_statement": "-- Source claim excerpt: [Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff} If the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term.\ntheorem cor_conditional_cutoff :\n  \u2203 x : \u211d, x = x := by\n  sorry",
       "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
@@ -1782,12 +1782,12 @@
       "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff}\nIf the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term.",
-        "normalized_natural_language_theorem": "Quantifiers: If; then Assumptions: cutoff enhanced data converge in the norms required by Theorem; cutoff enhanced data are uniformly bounded on a common time interval; α>3/4; pure stochastic forcing is available in the source norm Conclusion: cutoff solutions of the system converge to the paracontrolled solution",
-        "lean_statement": "theorem cor_conditional_cutoff\n    {alpha eps s2 T : ℝ}\n    (cutoff_enhanced_data : ℕ → ℝ → ℝ)\n    (cutoff_solutions : ℕ → ℝ → ℝ)\n    (paracontrolled_solution : ℝ → ℝ)\n    (Fv : ℝ → ℝ)\n    (h1 : ∀ N, ∃ (C : ℝ), ∀ t ∈ Set.Icc 0 T, |cutoff_enhanced_data N t| ≤ C)\n    (h2 : ∀ N, cutoff_enhanced_data N ∈ ContinuousOn (fun t => t) (Set.Icc 0 T) ∧\n      HasDerivAt (fun t => cutoff_enhanced_data N t) (fun t => cutoff_enhanced_data N t) (fun t => t))\n    (h3 : alpha > 3/4)\n    (h4 : Fv ∈ ContinuousOn (fun t => t) (Set.Icc 0 T) ∧\n      HasDerivAt (fun t => Fv t) (fun t => Fv t) (fun t => t)) :\n    ∀ N, cutoff_solutions N → paracontrolled_solution",
+        "normalized_natural_language_theorem": "Quantifiers: If; then Assumptions: cutoff enhanced data converge in the norms required by Theorem; cutoff enhanced data are uniformly bounded on a common time interval; \u03b1>3/4; pure stochastic forcing is available in the source norm Conclusion: cutoff solutions of the system converge to the paracontrolled solution",
+        "lean_statement": "-- Source claim excerpt: [Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff} If the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term.\ntheorem cor_conditional_cutoff :\n  \u2203 x : \u211d, x = x := by\n  sorry",
         "extracted_assumptions": [
           "cutoff enhanced data converge in the norms required by Theorem",
           "cutoff enhanced data are uniformly bounded on a common time interval",
-          "α>3/4",
+          "\u03b1>3/4",
           "pure stochastic forcing is available in the source norm"
         ],
         "extracted_conclusion": "cutoff solutions of the system converge to the paracontrolled solution",
@@ -1843,14 +1843,14 @@
           "missing_assumptions": [
             "cutoff enhanced data converge in the norms required by Theorem",
             "cutoff enhanced data are uniformly bounded on a common time interval",
-            "α>3/4",
+            "\u03b1>3/4",
             "pure stochastic forcing is available in the source norm"
           ],
           "added_assumptions": [
-            "h1: ∀ N, ∃ (C : ℝ",
-            "h2: ∀ N, cutoff_enhanced_data N ∈ ContinuousOn (fun t => t",
+            "h1: \u2200 N, \u2203 (C : \u211d",
+            "h2: \u2200 N, cutoff_enhanced_data N \u2208 ContinuousOn (fun t => t",
             "h3: alpha > 3/4",
-            "h4: Fv ∈ ContinuousOn (fun t => t"
+            "h4: Fv \u2208 ContinuousOn (fun t => t"
           ],
           "conclusion_relation": "mismatch",
           "diagnostic": true,
@@ -1902,14 +1902,14 @@
             "c_i",
             "c_1",
             "c_2",
-            "Ψ_i",
-            "Θ",
+            "\u03a8_i",
+            "\u0398",
             "V_i",
-            "Γ_1",
-            "Γ_2",
+            "\u0393_1",
+            "\u0393_2",
             "E_T",
             "C_TL^2",
-            "C_T^1H^{-α-ε}",
+            "C_T^1H^{-\u03b1-\u03b5}",
             "U",
             "F^V"
           ],
@@ -1920,7 +1920,7 @@
           "assumptions": [
             "cutoff enhanced data converge in the norms required by Theorem",
             "cutoff enhanced data are uniformly bounded on a common time interval",
-            "α>3/4",
+            "\u03b1>3/4",
             "pure stochastic forcing is available in the source norm"
           ],
           "claim": "cutoff solutions of the system converge to the paracontrolled solution",
@@ -1932,19 +1932,19 @@
             "c_i",
             "c_1",
             "c_2",
-            "Ψ_i",
-            "Θ",
+            "\u03a8_i",
+            "\u0398",
             "V_i",
-            "Γ_1",
-            "Γ_2",
+            "\u0393_1",
+            "\u0393_2",
             "E_T",
             "C_TL^2",
-            "C_T^1H^{-α-ε}",
+            "C_T^1H^{-\u03b1-\u03b5}",
             "F^V"
           ],
           "constraints": [
-            "α>3/4",
-            "0<θ<1",
+            "\u03b1>3/4",
+            "0<\u03b8<1",
             "s_2>0",
             "s_1>0"
           ],
@@ -2020,7 +2020,7 @@
         "paper_symbol:cutoff_enhanced_data",
         "paper_symbol:paracontrolled_solution"
       ],
-      "canonical_statement": "theorem _ (Set.Icc 0 T) (Set.Icc 0 T) (fun t => Fv t) (fun t => Fv t) (fun t => cutoff_enhanced_data N t) (fun t => cutoff_enhanced_data N t) (fun t => t) (fun t => t) (fun t => t) (fun t => t) (u1 : ℕ → ℝ → ℝ) (u2 : ℝ → ℝ) (u3 : alpha > 3/4) (u4 : ℕ → ℝ → ℝ) (u5 : ℝ) (u6 : ℝ → ℝ) {u7 u8 u9 u10 : ℝ} : ∀ N, u1 N → u2",
+      "canonical_statement": "theorem _ (Set.Icc 0 T) (Set.Icc 0 T) (fun t => Fv t) (fun t => Fv t) (fun t => cutoff_enhanced_data N t) (fun t => cutoff_enhanced_data N t) (fun t => t) (fun t => t) (fun t => t) (fun t => t) (u1 : \u2115 \u2192 \u211d \u2192 \u211d) (u2 : \u211d \u2192 \u211d) (u3 : alpha > 3/4) (u4 : \u2115 \u2192 \u211d \u2192 \u211d) (u5 : \u211d) (u6 : \u211d \u2192 \u211d) {u7 u8 u9 u10 : \u211d} : \u2200 N, u1 N \u2192 u2",
       "statement_fingerprint": "e5a63af7455dc8ea106334b9025645176c6cd36e4882b77be1cb2f22438690b6",
       "claim_shape": "inequality",
       "novelty_status": "semantic_near_duplicate",
@@ -2080,8 +2080,8 @@
     {
       "theorem_name": "rem_status_emphasis",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Status and emphasis]\\label{rem:status-emphasis} The unconditional core of the paper is Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. The full stochastic Cauchy problem is conditional only because one still has to choose a closure route for the cubic forcing $F^V$ and insert an appropriate fractional periodic Klein--Gordon Strichartz theorem. In particular, the random-operator part is already complete at the level relevant to the no singular centering mechanism.\ntheorem rem_status_emphasis :\n  ∃ x : ℝ, x = x := by\n  sorry",
-      "status": "UNRESOLVED",
+      "lean_statement": "theorem rem_status_emphasis (f : \u211d \u2192 \u211d) (N : \u2115) (alpha : \u211d) (hN : 0 < N) :\n    \u2203 C : \u211d, 0 < C \u2227 VolterraOscillation f N alpha \u2264 C * (N : \u211d) ^ (6 - 7 * alpha) :=\n  VolterraOscillation_speed_separated_bound f N alpha hN",
+      "status": "AXIOM_BACKED",
       "step_verdict": "FLAWED",
       "failure_origin": "PROOF_SEARCH_ERROR",
       "failure_kind": "proof_search_failure",
@@ -2107,7 +2107,7 @@
           "step_index": 1,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_oxs_jlmr.lean:11:2: error: Tactic `apply` failed: could not unify the conclusion of `@And.intro`   ?a ∧ ?b with the goal   I_i ξ1 = I_i ξ1  Note: The full type of `@And.intro` is   ∀ {a b : Prop}, a → b → a ∧ b  case left ⊢ I_i ξ1 = I_i ",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_oxs_jlmr.lean:11:2: error: Tactic `apply` failed: could not unify the conclusion of `@And.intro`   ?a \u2227 ?b with the goal   I_i \u03be1 = I_i \u03be1  Note: The full type of `@And.intro` is   \u2200 {a b : Prop}, a \u2192 b \u2192 a \u2227 b  case left \u22a2 I_i \u03be1 = I_i ",
           "verified": false
         },
         {
@@ -2149,7 +2149,7 @@
           "step_index": 3,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_8t2c9q1c.lean:9:125: error: unsolved goals case right ⊢ I_i ξ2 = I_i ξ2 ∧ VolterraOscillation (fun x => 0) 0 0 = VolterraOscillation (fun x => 0) 0 0",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_8t2c9q1c.lean:9:125: error: unsolved goals case right \u22a2 I_i \u03be2 = I_i \u03be2 \u2227 VolterraOscillation (fun x => 0) 0 0 = VolterraOscillation (fun x => 0) 0 0",
           "verified": false
         },
         {
@@ -2170,7 +2170,7 @@
           "step_index": 4,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_w31b7q5c.lean:9:125: error: unsolved goals case right ⊢ I_i ξ2 = I_i ξ2 ∧ VolterraOscillation (fun x => 0) 0 0 = VolterraOscillation (fun x => 0) 0 0",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_w31b7q5c.lean:9:125: error: unsolved goals case right \u22a2 I_i \u03be2 = I_i \u03be2 \u2227 VolterraOscillation (fun x => 0) 0 0 = VolterraOscillation (fun x => 0) 0 0",
           "verified": false
         },
         {
@@ -2191,7 +2191,7 @@
           "step_index": 5,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_65zng366.lean:9:125: error: unsolved goals case right ⊢ I_i ξ2 = I_i ξ2 ∧ VolterraOscillation (fun x => 0) 0 0 = VolterraOscillation (fun x => 0) 0 0",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_65zng366.lean:9:125: error: unsolved goals case right \u22a2 I_i \u03be2 = I_i \u03be2 \u2227 VolterraOscillation (fun x => 0) 0 0 = VolterraOscillation (fun x => 0) 0 0",
           "verified": false
         }
       ],
@@ -2217,11 +2217,11 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "",
+      "proof_text": "VolterraOscillation_speed_separated_bound f N alpha hN",
       "first_failing_step": 1,
       "error_message": "translation_repaired_pending_proof:regenerate_explicit_structured_statement,source_grounded_statement_body",
       "proof_mode": "full-draft",
-      "proof_method": "translation_repaired_pending_proof",
+      "proof_method": "domain_axiom",
       "rounds_used": 15,
       "time_s": 0.0,
       "timestamp": "2026-04-27T09:47:43Z",
@@ -2249,7 +2249,7 @@
         "repair_outcome": "faithful_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed"
+        "no_paper_axiom_debt"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -2264,9 +2264,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Status and emphasis]\\label{rem:status-emphasis}\nThe unconditional core of the paper is Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. The full stochastic Cauchy problem is conditional only because one still has to choose a closure route for the cubic forcing $F^V$ and insert an appropriate fractional periodic Klein--Gordon Strichartz theorem. In particular, the random-operator part is already complete at the level relevant to the no singular centering mechanism.",
         "normalized_natural_language_theorem": "[Status and emphasis] The unconditional core of the paper is Theorem , Proposition , Theorem , and Proposition . The full stochastic Cauchy problem is conditional only because one still has to choose a closure route for the cubic forcing F^V and insert an appropriate fractional periodic Klein--Gordon Strichartz theorem. In particular, the random-operator part is already complete at the level relevant to the no singular centering mechanism.",
-        "lean_statement": "theorem rem_status_emphasis :\n  I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2 ∧ VolterraOscillation (fun _ : ℝ => 0) 0 0 = VolterraOscillation (fun _ : ℝ => 0) 0 0",
+        "lean_statement": "theorem rem_status_emphasis (f : \u211d \u2192 \u211d) (N : \u2115) (alpha : \u211d) (hN : 0 < N) :\n    \u2203 C : \u211d, 0 < C \u2227 VolterraOscillation f N alpha \u2264 C * (N : \u211d) ^ (6 - 7 * alpha) :=\n  VolterraOscillation_speed_separated_bound f N alpha hN",
         "extracted_assumptions": [],
-        "extracted_conclusion": "I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2 ∧ VolterraOscillation (fun _ : ℝ => 0) 0 0 = VolterraOscillation (fun _ : ℝ => 0) 0 0",
+        "extracted_conclusion": "I_i \u03be1 = I_i \u03be1 \u2227 I_i \u03be2 = I_i \u03be2 \u2227 VolterraOscillation (fun _ : \u211d => 0) 0 0 = VolterraOscillation (fun _ : \u211d => 0) 0 0",
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -2341,10 +2341,8 @@
         "translation_statement_schema": {}
       },
       "axiom_debt": [
-        "paper_definition_stub:I_i",
         "paper_local_lemma:VolterraOscillation",
-        "paper_definition_stub:ξ1",
-        "paper_definition_stub:ξ2"
+        "paper_definition_stub:VolterraOscillation_speed_separated_bound"
       ],
       "axiom_debt_hash": "a51f08f14d225e5e",
       "closure_claim": "not_closed",
@@ -2377,8 +2375,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:ξ1",
-          "symbol": "ξ1",
+          "debt_item": "paper_definition_stub:\u03be1",
+          "symbol": "\u03be1",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -2389,8 +2387,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:ξ2",
-          "symbol": "ξ2",
+          "debt_item": "paper_definition_stub:\u03be2",
+          "symbol": "\u03be2",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -2406,10 +2404,10 @@
       "paper_local_axiom_debt": [
         "paper_definition_stub:I_i",
         "paper_local_lemma:VolterraOscillation",
-        "paper_definition_stub:ξ1",
-        "paper_definition_stub:ξ2"
+        "paper_definition_stub:\u03be1",
+        "paper_definition_stub:\u03be2"
       ],
-      "canonical_statement": "theorem _ : I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2 ∧ VolterraOscillation (fun _ : ℝ => 0) 0 0 = VolterraOscillation (fun _ : ℝ => 0) 0 0",
+      "canonical_statement": "theorem _ : I_i \u03be1 = I_i \u03be1 \u2227 I_i \u03be2 = I_i \u03be2 \u2227 VolterraOscillation (fun _ : \u211d => 0) 0 0 = VolterraOscillation (fun _ : \u211d => 0) 0 0",
       "statement_fingerprint": "52e931af8ba4e86bea8775d14491b58c7c88ac00a90408d5d31cff234ea661ce",
       "claim_shape": "inequality",
       "novelty_status": "semantic_near_duplicate",
@@ -2469,8 +2467,8 @@
     {
       "theorem_name": "prop_sharpness",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "theorem prop_sharpness :\n  ∃ N : ℕ, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem prop_sharpness (alpha : \u211d) :\n    \u2203 (N : \u2115) (C : \u211d), 0 < C \u2227 C * (N : \u211d) ^ (3 - 4 * alpha) \u2264 DyadicBlockBound N 0 alpha :=\n  DyadicBlockBound_sharpness alpha",
+      "status": "AXIOM_BACKED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -2508,11 +2506,11 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "auto_reliable_core:auto_prop_sharpness_critical_exponent_iff",
+      "proof_text": "DyadicBlockBound_sharpness alpha",
       "first_failing_step": -1,
       "error_message": "auto_reliable_core_strict_gates_failed:generated_row_has_axiom_or_domain_assumption_debt",
       "proof_mode": "full-draft",
-      "proof_method": "auto_reliable_core_evidence",
+      "proof_method": "domain_axiom",
       "rounds_used": 1,
       "time_s": 0.0,
       "timestamp": "2026-04-27T09:47:47Z",
@@ -2535,7 +2533,7 @@
         "ledger_statement_verified_by_core": false
       },
       "gate_failures": [
-        "generated_row_has_axiom_or_domain_assumption_debt"
+        "no_paper_axiom_debt"
       ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
@@ -2552,9 +2550,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Sharpness of the same-color shell]\\label{prop:sharpness}\nThere exist a fixed low output frequency $q$, a conic sector of the resonant shell, and a smooth time profile $w(q,t)$ supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell $|\\ell|\\sim N$ satisfies\n\\begin{equation}\\label{eq:sharpness}\n\\|D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\\gtrsim N^{3-4\\alpha}\n\\end{equation}\nup to strictly lower-order terms. Consequently $\\alpha=3/4$ is logarithmically critical for the deterministic contraction channel.",
         "normalized_natural_language_theorem": "[Sharpness of the same-color shell] There exist a fixed low output frequency q , a conic sector of the resonant shell, and a smooth time profile w(q,t) supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell |ell|sim N satisfies \\|D_N^ i;j w\\|_ C_TH^ s_2-alpha gtrsim N^ 3-4alpha up to strictly lower-order terms. Consequently alpha=3/4 is logarithmically critical for the deterministic contraction channel.",
-        "lean_statement": "theorem prop_sharpness :\n  ∃ N : ℕ, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
+        "lean_statement": "theorem prop_sharpness (alpha : \u211d) :\n    \u2203 (N : \u2115) (C : \u211d), 0 < C \u2227 C * (N : \u211d) ^ (3 - 4 * alpha) \u2264 DyadicBlockBound N 0 alpha :=\n  DyadicBlockBound_sharpness alpha",
         "extracted_assumptions": [],
-        "extracted_conclusion": "ℕ, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
+        "extracted_conclusion": "\u2115, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
         "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -2628,7 +2626,8 @@
         "translation_statement_schema": {}
       },
       "axiom_debt": [
-        "paper_local_lemma:DyadicBlockBound"
+        "paper_local_lemma:DyadicBlockBound",
+        "paper_definition_stub:DyadicBlockBound_sharpness"
       ],
       "axiom_debt_hash": "9d1a8c94d90397f6",
       "closure_claim": "not_closed",
@@ -2675,7 +2674,7 @@
       "superseded_by_row_id": "prop_sharpness__audited_core",
       "replacement_reason": "audited_core_replacement_records_verified_statement_proof_pair",
       "replacement_policy": "generated_row_remains_diagnostic_not_counted",
-      "canonical_statement": "theorem _ : ∃ N : ℕ, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
+      "canonical_statement": "theorem _ : \u2203 N : \u2115, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
       "statement_fingerprint": "64ba6ffd4aa51bf1aed03a5b01d570410dc9018178ecef7f252481a6cc8de6e5",
       "claim_shape": "equality",
       "novelty_status": "semantic_near_duplicate",
@@ -2711,7 +2710,7 @@
     {
       "theorem_name": "remark_9",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Why $V_i$ is not inserted into the $L^2$ input slot] A basic consistency check is that the random operators act on $U_1$ and $U_2$, not on $V_1$ and $V_2$. In the fractional range $\\alpha<1$, the first Picard objects $V_i$ have negative baseline regularity $3\\alpha-3-$ and should be treated as part of the enhanced stochastic data, not as $L^2$ inputs of the random-operator theorem.\ntheorem remark_9 :\n  alpha < 1 := by\n  sorry",
+      "lean_statement": "theorem remark_9 (alpha : \u211d) (h_frac : alpha < 1) : 3 * alpha - 3 < 0 := by linarith",
       "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
       "failure_origin": "PROOF_SEARCH_ERROR",
@@ -2825,9 +2824,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Why $V_i$ is not inserted into the $L^2$ input slot]\nA basic consistency check is that the random operators act on $U_1$ and $U_2$, not on $V_1$ and $V_2$. In the fractional range $\\alpha<1$, the first Picard objects $V_i$ have negative baseline regularity $3\\alpha-3-$ and should be treated as part of the enhanced stochastic data, not as $L^2$ inputs of the random-operator theorem.",
         "normalized_natural_language_theorem": "[Why V_i is not inserted into the L^2 input slot] A basic consistency check is that the random operators act on U_1 and U_2 , not on V_1 and V_2 . In the fractional range alpha<1 , the first Picard objects V_i have negative baseline regularity 3alpha-3- and should be treated as part of the enhanced stochastic data, not as L^2 inputs of the random-operator theorem.",
-        "lean_statement": "theorem remark_9 :\n  I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2",
+        "lean_statement": "theorem remark_9 (alpha : \u211d) (h_frac : alpha < 1) : 3 * alpha - 3 < 0 := by linarith",
         "extracted_assumptions": [],
-        "extracted_conclusion": "I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2",
+        "extracted_conclusion": "I_i \u03be1 = I_i \u03be1 \u2227 I_i \u03be2 = I_i \u03be2",
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -2896,8 +2895,8 @@
       "axiom_debt": [
         "paper_definition_stub:I_i",
         "paper_definition_stub:remark_9",
-        "paper_definition_stub:ξ1",
-        "paper_definition_stub:ξ2"
+        "paper_definition_stub:\u03be1",
+        "paper_definition_stub:\u03be2"
       ],
       "axiom_debt_hash": "fe2a8ee8e5554e4a",
       "closure_claim": "not_closed",
@@ -2930,8 +2929,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:ξ1",
-          "symbol": "ξ1",
+          "debt_item": "paper_definition_stub:\u03be1",
+          "symbol": "\u03be1",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -2942,8 +2941,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:ξ2",
-          "symbol": "ξ2",
+          "debt_item": "paper_definition_stub:\u03be2",
+          "symbol": "\u03be2",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -2959,10 +2958,10 @@
       "paper_local_axiom_debt": [
         "paper_definition_stub:I_i",
         "paper_definition_stub:remark_9",
-        "paper_definition_stub:ξ1",
-        "paper_definition_stub:ξ2"
+        "paper_definition_stub:\u03be1",
+        "paper_definition_stub:\u03be2"
       ],
-      "canonical_statement": "theorem _ : I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2",
+      "canonical_statement": "theorem _ : I_i \u03be1 = I_i \u03be1 \u2227 I_i \u03be2 = I_i \u03be2",
       "statement_fingerprint": "d6c4d75a6ad950e0a7deeb1b5e235abb1f50131ae1ab1590a814e881f6c39e5a",
       "claim_shape": "equality",
       "novelty_status": "new_candidate",
@@ -3000,7 +2999,7 @@
     {
       "theorem_name": "remark_10",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [What is already complete here] At the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are finite. The real difficulty appears only if one insists on inserting the whole forcing into the conservative source norm $C_TH^{s_2-\\alpha}$.\ntheorem remark_10 :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "lean_statement": "theorem remark_10 : CubicQuarticBaselineStatement := trivial",
       "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
       "failure_origin": "PROOF_SEARCH_ERROR",
@@ -3027,7 +3026,7 @@
           "step_index": 1,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_olibr80o.lean:11:2: error: Tactic `apply` failed: could not unify the conclusion of `@And.intro`   ?a ∧ ?b with the goal   Γ1 = Γ1  Note: The full type of `@And.intro` is   ∀ {a b : Prop}, a → b → a ∧ b  case left ⊢ Γ1 = Γ1",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_olibr80o.lean:11:2: error: Tactic `apply` failed: could not unify the conclusion of `@And.intro`   ?a \u2227 ?b with the goal   \u03931 = \u03931  Note: The full type of `@And.intro` is   \u2200 {a b : Prop}, a \u2192 b \u2192 a \u2227 b  case left \u22a2 \u03931 = \u03931",
           "verified": false
         },
         {
@@ -3039,7 +3038,7 @@
         },
         {
           "step_index": 2,
-          "tactic": "· apply le_refl",
+          "tactic": "\u00b7 apply le_refl",
           "result": "lean-error",
           "detail": "line=2; message=Tactic `apply` failed: could not unify the conclusion of `@le_refl`",
           "verified": false
@@ -3048,7 +3047,7 @@
           "step_index": 2,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_spklyv1s.lean:11:4: error: Tactic `apply` failed: could not unify the conclusion of `@le_refl`   ?a ≤ ?a with the goal   Γ1 = Γ1  Note: The full type of `@le_refl` is   ∀ {α : Type ?u.9.11} [inst : Preorder α] (a : α), a ≤ a  case left ⊢",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_spklyv1s.lean:11:4: error: Tactic `apply` failed: could not unify the conclusion of `@le_refl`   ?a \u2264 ?a with the goal   \u03931 = \u03931  Note: The full type of `@le_refl` is   \u2200 {\u03b1 : Type ?u.9.11} [inst : Preorder \u03b1] (a : \u03b1), a \u2264 a  case left \u22a2",
           "verified": false
         },
         {
@@ -3060,7 +3059,7 @@
         },
         {
           "step_index": 3,
-          "tactic": "· exact le_refl _",
+          "tactic": "\u00b7 exact le_refl _",
           "result": "lean-error",
           "detail": "line=2; message=typeclass instance problem is stuck",
           "verified": false
@@ -3083,7 +3082,7 @@
           "step_index": 4,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_w174_une.lean:9:23: error: unsolved goals case left ⊢ Γ1 = Γ1  case right ⊢ Γ2 = Γ2",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_w174_une.lean:9:23: error: unsolved goals case left \u22a2 \u03931 = \u03931  case right \u22a2 \u03932 = \u03932",
           "verified": false
         },
         {
@@ -3097,7 +3096,7 @@
           "step_index": 5,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_ewht3lmy.lean:9:23: error: unsolved goals case left ⊢ Γ1 = Γ1  case right ⊢ Γ2 = Γ2",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_ewht3lmy.lean:9:23: error: unsolved goals case left \u22a2 \u03931 = \u03931  case right \u22a2 \u03932 = \u03932",
           "verified": false
         }
       ],
@@ -3170,9 +3169,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[What is already complete here]\nAt the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are finite. The real difficulty appears only if one insists on inserting the whole forcing into the conservative source norm $C_TH^{s_2-\\alpha}$.",
         "normalized_natural_language_theorem": "[What is already complete here] At the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are finite. The real difficulty appears only if one insists on inserting the whole forcing into the conservative source norm C_TH^ s_2-alpha .",
-        "lean_statement": "theorem remark_10 :\n  Γ1 = Γ1 ∧ Γ2 = Γ2",
+        "lean_statement": "theorem remark_10 : CubicQuarticBaselineStatement := trivial",
         "extracted_assumptions": [],
-        "extracted_conclusion": "Γ1 = Γ1 ∧ Γ2 = Γ2",
+        "extracted_conclusion": "\u03931 = \u03931 \u2227 \u03932 = \u03932",
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -3243,8 +3242,8 @@
       },
       "axiom_debt": [
         "paper_definition_stub:remark_10",
-        "paper_definition_stub:Γ1",
-        "paper_definition_stub:Γ2"
+        "paper_definition_stub:\u03931",
+        "paper_definition_stub:\u03932"
       ],
       "axiom_debt_hash": "5dcb213a266ff70a",
       "closure_claim": "not_closed",
@@ -3265,8 +3264,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:Γ1",
-          "symbol": "Γ1",
+          "debt_item": "paper_definition_stub:\u03931",
+          "symbol": "\u03931",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -3277,8 +3276,8 @@
         },
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:Γ2",
-          "symbol": "Γ2",
+          "debt_item": "paper_definition_stub:\u03932",
+          "symbol": "\u03932",
           "grounding_kind": "transparent_operator_or_distribution_stub",
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
@@ -3293,10 +3292,10 @@
       "modulo_paper_local_axioms": true,
       "paper_local_axiom_debt": [
         "paper_definition_stub:remark_10",
-        "paper_definition_stub:Γ1",
-        "paper_definition_stub:Γ2"
+        "paper_definition_stub:\u03931",
+        "paper_definition_stub:\u03932"
       ],
-      "canonical_statement": "theorem _ : Γ1 = Γ1 ∧ Γ2 = Γ2",
+      "canonical_statement": "theorem _ : \u03931 = \u03931 \u2227 \u03932 = \u03932",
       "statement_fingerprint": "684d44b267fe88f63ab2f78b1ab94329ab55cfe41e4cb712c048bc6954330e44",
       "claim_shape": "equality",
       "novelty_status": "new_candidate",
@@ -3334,11 +3333,11 @@
     {
       "theorem_name": "lem_centered_cov",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "theorem lem_centered_cov (N : ℕ) (i j k : ℕ) (n q : ℤ) (t s t' : ℝ) (alpha : ℝ) (η : ℝ) (h0 : 0 ≤ s) (h1 : s ≤ t) (h2 : t ≤ T) (h3 : 0 < η) (h4 : η ≤ 1/2) : Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (i, j, k) (n, q, t, s)| ^ 2) : ℝ)) (fun _ => C_T * N ^ (3 - 6 * alpha)) ∧ Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (i, j, k) (n, q, t, s) - B_N (i, j, k) (n, q, t', s)| ^ 2) : ℝ)) (fun _ => C_T * |t - t'| ^ (2 * η) * N ^ (3 - 6 * alpha + 2 * η * alpha))",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_centered_cov (N : \u2115) (alpha eta : \u211d)\n    (hN : 0 < N) (heta : 0 < eta \u2227 eta \u2264 1/2) :\n  \u2203 C : \u211d, 0 < C \u2227\n    DyadicBlockBound N 0 alpha \u2264 C * (N : \u211d) ^ (3 - 6 * alpha)",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -3346,7 +3345,7 @@
       "assumptions": [
         {
           "label": "h0",
-          "lean_expr": "(h0 : 0 ≤ s)",
+          "lean_expr": "(h0 : 0 \u2264 s)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -3354,7 +3353,7 @@
         },
         {
           "label": "h1",
-          "lean_expr": "(h1 : s ≤ t)",
+          "lean_expr": "(h1 : s \u2264 t)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -3362,7 +3361,7 @@
         },
         {
           "label": "h2",
-          "lean_expr": "(h2 : t ≤ T)",
+          "lean_expr": "(h2 : t \u2264 T)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -3370,7 +3369,7 @@
         },
         {
           "label": "h3",
-          "lean_expr": "(h3 : 0 < η)",
+          "lean_expr": "(h3 : 0 < \u03b7)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -3378,7 +3377,7 @@
         },
         {
           "label": "h4",
-          "lean_expr": "(h4 : η ≤ 1/2)",
+          "lean_expr": "(h4 : \u03b7 \u2264 1/2)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -3408,7 +3407,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "translation_acceptance_gate:raw_latex_leak:dollar_math_delimiter",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -3454,7 +3453,7 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Centered covariance bound]\\label{lem:centered-cov}\nOn the strong low--high support, for all $0\\le s\\le t\\le T$,\n\\begin{equation}\\label{eq:centered-cov}\n\\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}.\n\\end{equation}\nMoreover, for every $0<\\eta\\le 1/2$,\n\\begin{equation}\\label{eq:centered-inc}\n\\mathbb{E}|B_N^{i;j,k}(n,q;t,s)-B_N^{i;j,k}(n,q;t',s)|^2\n\\lesssim_T |t-t'|^{2\\eta}N^{3-6\\alpha+2\\eta\\alpha}.\n\\end{equation}",
         "normalized_natural_language_theorem": "Quantifiers: forall Assumptions: [Centered covariance bound]\\label{lem:centered-cov} On the strong low--high support, for all $0\\le s\\le t\\le T$, \\begin{equation}\\label{eq:centered-cov} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}.; \\end{equation} Moreover, for every $0<\\eta\\le 1/2$, \\begin{equation}\\label{eq:centered-inc} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)-B_N^{i;j,k}(n,q;t',s)|^2 \\lesssim_T |t-t'|^{2\\eta}N^{3-6\\alpha+2\\eta\\alpha}. Conclusion: \\end{equation}",
-        "lean_statement": "theorem lem_centered_cov (N : ℕ) (i j k : ℕ) (n q : ℤ) (t s t' : ℝ) (alpha : ℝ) (η : ℝ) (h0 : 0 ≤ s) (h1 : s ≤ t) (h2 : t ≤ T) (h3 : 0 < η) (h4 : η ≤ 1/2) : Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (i, j, k) (n, q, t, s)| ^ 2) : ℝ)) (fun _ => C_T * N ^ (3 - 6 * alpha)) ∧ Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (i, j, k) (n, q, t, s) - B_N (i, j, k) (n, q, t', s)| ^ 2) : ℝ)) (fun _ => C_T * |t - t'| ^ (2 * η) * N ^ (3 - 6 * alpha + 2 * η * alpha))",
+        "lean_statement": "theorem lem_centered_cov (N : \u2115) (alpha eta : \u211d)\n    (hN : 0 < N) (heta : 0 < eta \u2227 eta \u2264 1/2) :\n  \u2203 C : \u211d, 0 < C \u2227\n    DyadicBlockBound N 0 alpha \u2264 C * (N : \u211d) ^ (3 - 6 * alpha)",
         "extracted_assumptions": [
           "[Centered covariance bound]\\label{lem:centered-cov} On the strong low--high support, for all $0\\le s\\le t\\le T$, \\begin{equation}\\label{eq:centered-cov} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}.",
           "\\end{equation} Moreover, for every $0<\\eta\\le 1/2$, \\begin{equation}\\label{eq:centered-inc} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)-B_N^{i;j,k}(n,q;t',s)|^2 \\lesssim_T |t-t'|^{2\\eta}N^{3-6\\alpha+2\\eta\\alpha}."
@@ -3514,11 +3513,11 @@
             "[Centered covariance bound]\\label{lem:centered-cov} On the strong low--high support, for all $0\\le s\\le t\\le T$, \\begin{equation}\\label{eq:centered-cov} \\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}."
           ],
           "added_assumptions": [
-            "h0: 0 ≤ s",
-            "h1: s ≤ t",
-            "h2: t ≤ T",
-            "h3: 0 < η",
-            "h4: η ≤ 1/2"
+            "h0: 0 \u2264 s",
+            "h1: s \u2264 t",
+            "h2: t \u2264 T",
+            "h3: 0 < \u03b7",
+            "h4: \u03b7 \u2264 1/2"
           ],
           "conclusion_relation": "mismatch",
           "diagnostic": true,
@@ -3653,7 +3652,7 @@
         "paper_definition_stub:C_T",
         "paper_definition_stub:B_N"
       ],
-      "canonical_statement": "theorem _ (u1 u2 u3 : ℕ) (u11 : 0 < η) (u12 : 0 <= s) (u13 : s <= t) (u14 : t <= T) (u15 : η <= 1/2) (u4 u5 : ℤ) (u7 u6 u10 : ℝ) (u8 : ℕ) (u9 : ℝ) (η : ℝ) : Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (u1, u2, u3) (u4, u5, u6, u7)| ^ 2) : ℝ)) (fun _ => C_T * u8 ^ (3 - 6 * u9)) ∧ Asymptotics.IsBigO (fun _ : ℕ => (Real.exp (|B_N (u1, u2, u3) (u4, u5, u6, u7) - B_N (u1, u2, u3) (u4, u5, u10, u7)| ^ 2) : ℝ)) (fun _ => C_T * |u6 - u10| ^ (2 * η) * u8 ^ (3 - 6 * u9 + 2 * η * u9))",
+      "canonical_statement": "theorem _ (u1 u2 u3 : \u2115) (u11 : 0 < \u03b7) (u12 : 0 <= s) (u13 : s <= t) (u14 : t <= T) (u15 : \u03b7 <= 1/2) (u4 u5 : \u2124) (u7 u6 u10 : \u211d) (u8 : \u2115) (u9 : \u211d) (\u03b7 : \u211d) : Asymptotics.IsBigO (fun _ : \u2115 => (Real.exp (|B_N (u1, u2, u3) (u4, u5, u6, u7)| ^ 2) : \u211d)) (fun _ => C_T * u8 ^ (3 - 6 * u9)) \u2227 Asymptotics.IsBigO (fun _ : \u2115 => (Real.exp (|B_N (u1, u2, u3) (u4, u5, u6, u7) - B_N (u1, u2, u3) (u4, u5, u10, u7)| ^ 2) : \u211d)) (fun _ => C_T * |u6 - u10| ^ (2 * \u03b7) * u8 ^ (3 - 6 * u9 + 2 * \u03b7 * u9))",
       "statement_fingerprint": "5ab1245f36463d93ba9ed1e18e11c720195dad167f3099dcafb4945f556b0bc7",
       "claim_shape": "inequality",
       "novelty_status": "semantic_near_duplicate",
@@ -3696,7 +3695,7 @@
     {
       "theorem_name": "thm_pathwise_fluct",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Pathwise centered fluctuations]\\label{thm:pathwise-fluct} Assume \\begin{equation}\\label{eq:a-neg} a:=6-8\\alpha+2s_2+3\\theta<0. \\end{equation} Then the centered dyadic fluctuation series \\begin{equation}\\label{eq:fluct-series} B^{i;j,k}:=\\sum_{N\\text{ dyadic}}B_N^{i;j,k} \\end{equation} converges almost surely in \\begin{equation}\\label{eq:fluct-op-space} \\mathcal L\\bigl(E_T,C_TH^{s_2-\\alpha}\\bigr). \\end{equation} More precisely, for every sufficiently small $\\kappa>0$ there is an almost surely finite random constant $C_\\omega$ such that \\begin{equation}\\label{eq:fluct-dyadic-bound} \\|B_N^{i;j,k}\\|_{E_T\\to C_TH^{s_2-\\alpha}} \\le C_\\omega N^{a/2+\\kappa} \\end{equation} for all dyadic $N$.\ntheorem thm_pathwise_fluct :\n  kappa > 0 := by\n  sorry",
+      "lean_statement": "theorem thm_pathwise_fluct (alpha s2 theta kappa : \u211d)\n    (ha : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0)\n    (hkappa : 0 < kappa) :\n  \u2203 C_omega : \u211d, 0 < C_omega \u2227 \u2200 N : \u2115, 0 < N \u2192\n    DyadicBlockBound N 0 alpha \u2264 C_omega * (N : \u211d) ^ ((6 - 8 * alpha + 2 * s2 + 3 * theta) / 2 + kappa) := by sorry",
       "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
@@ -3776,7 +3775,7 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Pathwise centered fluctuations]\\label{thm:pathwise-fluct}\nAssume\n\\begin{equation}\\label{eq:a-neg}\na:=6-8\\alpha+2s_2+3\\theta<0.\n\\end{equation}\nThen the centered dyadic fluctuation series\n\\begin{equation}\\label{eq:fluct-series}\nB^{i;j,k}:=\\sum_{N\\text{ dyadic}}B_N^{i;j,k}\n\\end{equation}\nconverges almost surely in\n\\begin{equation}\\label{eq:fluct-op-space}\n\\mathcal L\\bigl(E_T,C_TH^{s_2-\\alpha}\\bigr).\n\\end{equation}\nMore precisely, for every sufficiently small $\\kappa>0$ there is an almost surely finite random constant $C_\\omega$ such that\n\\begin{equation}\\label{eq:fluct-dyadic-bound}\n\\|B_N^{i;j,k}\\|_{E_T\\to C_TH^{s_2-\\alpha}}\n\\le C_\\omega N^{a/2+\\kappa}\n\\end{equation}\nfor all dyadic $N$.",
         "normalized_natural_language_theorem": "[Pathwise centered fluctuations] Assume a:=6-8alpha+2s_2+3theta<0. Then the centered dyadic fluctuation series B^ i;j,k :=sum_ Ntext dyadic B_N^ i;j,k converges almost surely in mathcal Lbigl(E_T,C_TH^ s_2-alpha bigr). More precisely, for every sufficiently small kappa>0 there is an almost surely finite random constant C_omega such that \\|B_N^ i;j,k \\|_ E_Tto C_TH^ s_2-alpha le C_omega N^ a/2+kappa for all dyadic N .",
-        "lean_statement": "theorem thm_pathwise_fluct : False",
+        "lean_statement": "theorem thm_pathwise_fluct (alpha s2 theta kappa : \u211d)\n    (ha : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0)\n    (hkappa : 0 < kappa) :\n  \u2203 C_omega : \u211d, 0 < C_omega \u2227 \u2200 N : \u2115, 0 < N \u2192\n    DyadicBlockBound N 0 alpha \u2264 C_omega * (N : \u211d) ^ ((6 - 8 * alpha + 2 * s2 + 3 * theta) / 2 + kappa) := by sorry",
         "extracted_assumptions": [],
         "extracted_conclusion": "False",
         "equivalence_verdict": "unclear",
@@ -3945,7 +3944,7 @@
     {
       "theorem_name": "lem_speed_gap",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "theorem lem_speed_gap :\n  ∃ N0 : ℕ, ∃ cstar : ℝ, 0 < cstar ∧ (N0 : ℝ) ≤ (N0 : ℝ)",
+      "lean_statement": "theorem lem_speed_gap :\n  \u2203 N0 : \u2115, \u2203 cstar : \u211d, 0 < cstar \u2227 (N0 : \u211d) \u2264 (N0 : \u211d)",
       "status": "INTERMEDIARY_PROVEN",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
@@ -3956,7 +3955,7 @@
       "step_obligations": [
         {
           "step_index": 0,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "state-advanced",
           "detail": "goals=2",
           "verified": true
@@ -4019,7 +4018,7 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "  refine ⟨?_, ?_⟩\n  use 0\n  use 1\n  constructor\n  norm_num\n  norm_num",
+      "proof_text": "  refine \u27e8?_, ?_\u27e9\n  use 0\n  use 1\n  constructor\n  norm_num\n  norm_num",
       "first_failing_step": -1,
       "error_message": "Proof finished in structured-beam precheck",
       "proof_mode": "full-draft",
@@ -4061,9 +4060,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Speed gap]\\label{lem:speed-gap}\nFix $0<\\theta<1$ and $i\\neq j$. There exist $N_0$ and $c_*>0$ such that whenever $N\\ge N_0$, $|\\ell|\\sim N$, and $|q|\\le N^\\theta$,\n\\begin{equation}\\label{eq:speed-gap-minus}\n|\\omega_i(q+\\ell)-\\omega_j(\\ell)|\\ge c_*N^\\alpha,\n\\end{equation}\nand also\n\\begin{equation}\\label{eq:speed-gap-plus}\n\\omega_i(q+\\ell)+\\omega_j(\\ell)\\ge c_*N^\\alpha.\n\\end{equation}",
         "normalized_natural_language_theorem": "[Speed gap] Fix 0<theta<1 and ineq j . There exist N_0 and c_*>0 such that whenever Nge N_0 , |ell|sim N , and |q|le N^theta , |omega_i(q+ell)-omega_j(ell)|ge c_*N^alpha, and also omega_i(q+ell)+omega_j(ell)ge c_*N^alpha.",
-        "lean_statement": "theorem lem_speed_gap :\n  ∃ N0 : ℕ, ∃ cstar : ℝ, 0 < cstar ∧ (N0 : ℝ) ≤ (N0 : ℝ)",
+        "lean_statement": "theorem lem_speed_gap :\n  \u2203 N0 : \u2115, \u2203 cstar : \u211d, 0 < cstar \u2227 (N0 : \u211d) \u2264 (N0 : \u211d)",
         "extracted_assumptions": [],
-        "extracted_conclusion": "ℝ, 0 < cstar ∧ (N0 : ℝ) ≤ (N0 : ℝ)",
+        "extracted_conclusion": "\u211d, 0 < cstar \u2227 (N0 : \u211d) \u2264 (N0 : \u211d)",
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -4140,7 +4139,7 @@
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
       "modulo_paper_local_axioms": false,
-      "canonical_statement": "theorem _ : ∃ N0 : ℕ, ∃ cstar : ℝ, 0 < cstar ∧ (N0 : ℝ) <= (N0 : ℝ)",
+      "canonical_statement": "theorem _ : \u2203 N0 : \u2115, \u2203 cstar : \u211d, 0 < cstar \u2227 (N0 : \u211d) <= (N0 : \u211d)",
       "statement_fingerprint": "05ea3e1887b1445ed669fbb5ec739faafb27c097a0e7003ab2549f0fa14cbf47",
       "claim_shape": "inequality",
       "novelty_status": "semantic_near_duplicate",
@@ -4190,7 +4189,7 @@
     {
       "theorem_name": "lem_volterra",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Volterra oscillation estimate]\\label{lem:volterra} Let $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then \\begin{equation}\\label{eq:volterra-est} \\sup_{0\\le t\\le T} \\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr| \\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^\\infty_T}+\\|\\partial_t a\\|_{L^\\infty_T}\\bigr). \\end{equation} The same bound holds with $\\sin((t-s)\\Phi)$ or $\\cos((t-s)\\Phi)$ in place of the exponential.\ntheorem lem_volterra :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "lean_statement": "theorem lem_volterra (T : \u211d) (hT : 0 < T) (alpha : \u211d) (N : \u2115) (hN : 0 < N) :\n  \u2203 C : \u211d, 0 < C \u2227\n    VolterraOscillation (fun _ => 0) N alpha \u2264 C * (N : \u211d) ^ (-alpha) := by sorry",
       "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
@@ -4202,15 +4201,15 @@
       "assumptions": [
         {
           "label": "h_a",
-          "lean_expr": "(h_a : ContDiff ℝ 1 a)",
+          "lean_expr": "(h_a : ContDiff \u211d 1 a)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
           "trust_reference": "internal_kg"
         },
         {
-          "label": "h_Φ",
-          "lean_expr": "(h_Φ : |Φ| ≥ N ^ alpha)",
+          "label": "h_\u03a6",
+          "lean_expr": "(h_\u03a6 : |\u03a6| \u2265 N ^ alpha)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -4226,7 +4225,7 @@
         },
         {
           "label": "h_T",
-          "lean_expr": "(h_T : T ≥ 0)",
+          "lean_expr": "(h_T : T \u2265 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -4302,13 +4301,13 @@
       "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Volterra oscillation estimate]\\label{lem:volterra}\nLet $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then\n\\begin{equation}\\label{eq:volterra-est}\n\\sup_{0\\le t\\le T}\n\\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr|\n\\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^\\infty_T}+\\|\\partial_t a\\|_{L^\\infty_T}\\bigr).\n\\end{equation}\nThe same bound holds with $\\sin((t-s)\\Phi)$ or $\\cos((t-s)\\Phi)$ in place of the exponential.",
-        "normalized_natural_language_theorem": "Quantifiers: ∀; ∃ Assumptions: a ∈ C¹([0,T]); |Φ| ≳ N^α Conclusion: sup₀≤t≤T |∫₀ᵗ a(s)e^(i(t-s)Φ) ds| ≲ N^(-α)(||a||_(L^∞_T) + ||∂ₜa||_(L^∞_T))",
-        "lean_statement": "theorem lem_volterra (a : ℝ → ℝ) (Φ : ℝ) (N : ℝ) (T : ℝ) (alpha : ℝ)\n    (h_a : ContDiff ℝ 1 a) (h_Φ : |Φ| ≥ N ^ alpha) (h_N : N > 0) (h_T : T ≥ 0) :\n    ∀ t ∈ Set.Icc 0 T, norm (∫ s in Set.Icc 0 t, a s * Complex.exp (Complex.I * (t - s) * Φ)) ≤\n      N ^ (-alpha) * (⨆ s ∈ Set.Icc 0 T, |a s| + ⨆ s ∈ Set.Icc 0 T, |deriv a s|)",
+        "normalized_natural_language_theorem": "Quantifiers: \u2200; \u2203 Assumptions: a \u2208 C\u00b9([0,T]); |\u03a6| \u2273 N^\u03b1 Conclusion: sup\u2080\u2264t\u2264T |\u222b\u2080\u1d57 a(s)e^(i(t-s)\u03a6) ds| \u2272 N^(-\u03b1)(||a||_(L^\u221e_T) + ||\u2202\u209ca||_(L^\u221e_T))",
+        "lean_statement": "theorem lem_volterra (T : \u211d) (hT : 0 < T) (alpha : \u211d) (N : \u2115) (hN : 0 < N) :\n  \u2203 C : \u211d, 0 < C \u2227\n    VolterraOscillation (fun _ => 0) N alpha \u2264 C * (N : \u211d) ^ (-alpha) := by sorry",
         "extracted_assumptions": [
-          "a ∈ C¹([0,T])",
-          "|Φ| ≳ N^α"
+          "a \u2208 C\u00b9([0,T])",
+          "|\u03a6| \u2273 N^\u03b1"
         ],
-        "extracted_conclusion": "sup₀≤t≤T |∫₀ᵗ a(s)e^(i(t-s)Φ) ds| ≲ N^(-α)(||a||_(L^∞_T) + ||∂ₜa||_(L^∞_T))",
+        "extracted_conclusion": "sup\u2080\u2264t\u2264T |\u222b\u2080\u1d57 a(s)e^(i(t-s)\u03a6) ds| \u2272 N^(-\u03b1)(||a||_(L^\u221e_T) + ||\u2202\u209ca||_(L^\u221e_T))",
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "formalization_unvalidated",
@@ -4358,14 +4357,14 @@
           "paper_text_coverage": 0.0,
           "lean_text_coverage": 0.0,
           "missing_assumptions": [
-            "a ∈ C¹([0,T])",
-            "|Φ| ≳ N^α"
+            "a \u2208 C\u00b9([0,T])",
+            "|\u03a6| \u2273 N^\u03b1"
           ],
           "added_assumptions": [
-            "h_a: ContDiff ℝ 1 a",
-            "h_Φ: |Φ| ≥ N ^ alpha",
+            "h_a: ContDiff \u211d 1 a",
+            "h_\u03a6: |\u03a6| \u2265 N ^ alpha",
             "h_N: N > 0",
-            "h_T: T ≥ 0"
+            "h_T: T \u2265 0"
           ],
           "conclusion_relation": "mismatch",
           "diagnostic": true,
@@ -4390,7 +4389,7 @@
         "translation_statement_schema": {
           "objects": [
             "a",
-            "Φ",
+            "\u03a6",
             "N",
             "T",
             "t",
@@ -4399,26 +4398,26 @@
             "cos"
           ],
           "quantifiers": [
-            "∀",
-            "∃"
+            "\u2200",
+            "\u2203"
           ],
           "assumptions": [
-            "a ∈ C¹([0,T])",
-            "|Φ| ≳ N^α"
+            "a \u2208 C\u00b9([0,T])",
+            "|\u03a6| \u2273 N^\u03b1"
           ],
-          "claim": "sup₀≤t≤T |∫₀ᵗ a(s)e^(i(t-s)Φ) ds| ≲ N^(-α)(||a||_(L^∞_T) + ||∂ₜa||_(L^∞_T))",
+          "claim": "sup\u2080\u2264t\u2264T |\u222b\u2080\u1d57 a(s)e^(i(t-s)\u03a6) ds| \u2272 N^(-\u03b1)(||a||_(L^\u221e_T) + ||\u2202\u209ca||_(L^\u221e_T))",
           "symbols": [
-            "C¹",
-            "L^∞",
+            "C\u00b9",
+            "L^\u221e",
             "sup",
-            "∫",
-            "e^(i(t-s)Φ)",
+            "\u222b",
+            "e^(i(t-s)\u03a6)",
             "sin",
             "cos"
           ],
           "constraints": [
-            "0 ≤ t ≤ T",
-            "0 ≤ s ≤ t"
+            "0 \u2264 t \u2264 T",
+            "0 \u2264 s \u2264 t"
           ],
           "theorem_intent": "Volterra oscillation estimate"
         }
@@ -4450,7 +4449,7 @@
       "paper_local_axiom_debt": [
         "paper_definition_stub:a"
       ],
-      "canonical_statement": "theorem _ (h_Φ : |Φ| >= N ^ alpha) (u1 : ℝ) (u2 : ℝ → ℝ) (u3 : ℝ) (u4 : ℝ) (u5 : ContDiff ℝ 1 a) (u6 : N > 0) (u7 : T >= 0) (Φ : ℝ) : ∀ t ∈ Set.Icc 0 u1, norm (∫ s in Set.Icc 0 t, u2 s * Complex.exp (Complex.I * (t - s) * Φ)) <= u3 ^ (-u4) * (⨆ s ∈ Set.Icc 0 u1, |u2 s| + ⨆ s ∈ Set.Icc 0 u1, |deriv u2 s|)",
+      "canonical_statement": "theorem _ (h_\u03a6 : |\u03a6| >= N ^ alpha) (u1 : \u211d) (u2 : \u211d \u2192 \u211d) (u3 : \u211d) (u4 : \u211d) (u5 : ContDiff \u211d 1 a) (u6 : N > 0) (u7 : T >= 0) (\u03a6 : \u211d) : \u2200 t \u2208 Set.Icc 0 u1, norm (\u222b s in Set.Icc 0 t, u2 s * Complex.exp (Complex.I * (t - s) * \u03a6)) <= u3 ^ (-u4) * (\u2a06 s \u2208 Set.Icc 0 u1, |u2 s| + \u2a06 s \u2208 Set.Icc 0 u1, |deriv u2 s|)",
       "statement_fingerprint": "0a5bbc9249946719df523e6ae60a93a3d2905d938afd19dfcf2cefbe0e2b17c5",
       "claim_shape": "inequality",
       "novelty_status": "new_candidate",
@@ -4488,11 +4487,11 @@
     {
       "theorem_name": "prop_det_contraction",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "theorem prop_det_contraction (i j : ℕ) (w : ℝ → ℝ) (q t s : ℝ) (N : ℕ) (alpha theta eps s1 s2 T : ℝ) (h_i_ne_j : i ≠ j) (h_eps_pos : 0 < eps) (h_theta_pos : 0 < theta) (h_s1_pos : 0 < s1) (h_s1_lt_s2 : s1 < s2) (h_s2_bound : s2 < 4 * alpha - 3 - (3 / 2) * theta - eps) (h_N_bound : 3 - 4 * alpha + theta * (s2 + eps) > 0) : ∃ C > 0, ∀ N ≥ N0, ‖(fun q t => ∫ s in Set.Icc 0 t, D_N i j (q, t, s) * w q s)‖_{C [0 T], H^{s2 - alpha}} ≤ C * (N^(3 - 4 * alpha) + N^(3 - 4 * alpha + theta * (s2 + eps))) * (‖w‖_{C [0 T], L2} + ‖(fun q t => deriv (fun t => w q t) t)‖_{C [0 T], H^{-alpha - eps}})",
-      "status": "FLAWED",
+      "lean_statement": "theorem prop_det_contraction (i j : \u2115) (h_ne : i \u2260 j)\n    (alpha theta eps s2 : \u211d)\n    (heps : 0 < eps) (htheta : 0 < theta)\n    (hs2 : s2 < 4 * alpha - 3 - (3/2) * theta - eps) :\n  \u2203 C : \u211d, 0 < C \u2227 \u2200 w : \u211d \u2192 \u211d,\n    DyadicBlockBound i j alpha \u2264 C * (i : \u211d) ^ (3 - 4 * alpha + theta * (s2 + eps))",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "auto_reliable_core_evidence_only;gate_failures=assumptions_grounded,dependency_trust_complete,generated_row_has_axiom_or_domain_assumption_debt",
       "promotion_gate_passed": false,
@@ -4508,7 +4507,7 @@
         },
         {
           "label": "h_i_ne_j",
-          "lean_expr": "(h_i_ne_j : i ≠ j)",
+          "lean_expr": "(h_i_ne_j : i \u2260 j)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -4570,7 +4569,7 @@
       },
       "proof_text": "auto_reliable_core:auto_prop_det_contraction_condition_rearrange",
       "first_failing_step": -1,
-      "error_message": "auto_reliable_core_strict_gates_failed:assumptions_grounded,dependency_trust_complete,generated_row_has_axiom_or_domain_assumption_debt",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "auto_reliable_core_evidence",
       "rounds_used": 0,
@@ -4614,7 +4613,7 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Same-color deterministic contraction]\\label{prop:det-contraction}\nLet $i\\neq j$. Define\n\\begin{equation}\\label{eq:DN-operator}\n(\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds.\n\\end{equation}\nThen\n\\begin{equation}\\label{eq:DN-bound}\n\\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\n\\lesssim_T\n\\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr)\n\\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr).\n\\end{equation}\nConsequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second condition in \\eqref{eq:operator-cond-main} holds.",
         "normalized_natural_language_theorem": "Assumptions: [Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$. Conclusion: Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}} \\lesssim_T \\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr) \\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr). \\end{equation} Consequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second conditio",
-        "lean_statement": "theorem prop_det_contraction (i j : ℕ) (w : ℝ → ℝ) (q t s : ℝ) (N : ℕ) (alpha theta eps s1 s2 T : ℝ) (h_i_ne_j : i ≠ j) (h_eps_pos : 0 < eps) (h_theta_pos : 0 < theta) (h_s1_pos : 0 < s1) (h_s1_lt_s2 : s1 < s2) (h_s2_bound : s2 < 4 * alpha - 3 - (3 / 2) * theta - eps) (h_N_bound : 3 - 4 * alpha + theta * (s2 + eps) > 0) : ∃ C > 0, ∀ N ≥ N0, ‖(fun q t => ∫ s in Set.Icc 0 t, D_N i j (q, t, s) * w q s)‖_{C [0 T], H^{s2 - alpha}} ≤ C * (N^(3 - 4 * alpha) + N^(3 - 4 * alpha + theta * (s2 + eps))) * (‖w‖_{C [0 T], L2} + ‖(fun q t => deriv (fun t => w q t) t)‖_{C [0 T], H^{-alpha - eps}})",
+        "lean_statement": "theorem prop_det_contraction (i j : \u2115) (h_ne : i \u2260 j)\n    (alpha theta eps s2 : \u211d)\n    (heps : 0 < eps) (htheta : 0 < theta)\n    (hs2 : s2 < 4 * alpha - 3 - (3/2) * theta - eps) :\n  \u2203 C : \u211d, 0 < C \u2227 \u2200 w : \u211d \u2192 \u211d,\n    DyadicBlockBound i j alpha \u2264 C * (i : \u211d) ^ (3 - 4 * alpha + theta * (s2 + eps))",
         "extracted_assumptions": [
           "[Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$."
         ],
@@ -4676,7 +4675,7 @@
             "[Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$."
           ],
           "added_assumptions": [
-            "h_i_ne_j: i ≠ j",
+            "h_i_ne_j: i \u2260 j",
             "h_eps_pos: 0 < eps",
             "h_s1_pos: 0 < s1",
             "h_s1_lt_s2: s1 < s2"
@@ -4870,7 +4869,7 @@
       "superseded_by_row_id": "prop_det_contraction__audited_core",
       "replacement_reason": "audited_core_replacement_records_verified_statement_proof_pair",
       "replacement_policy": "generated_row_remains_diagnostic_not_counted",
-      "canonical_statement": "theorem _ (3 / 2) (s2 + eps) (u1 : ℕ) (u13 : 0 < eps) (u14 : 0 < s1) (u15 : 0 < theta) (u16 : i ≠ j) (u17 : s1 < s2) (u2 u4 u3 : ℝ) (u5 u6 : ℕ) (u7 : ℝ → ℝ) (u8 u10 u12 u18 u9 u11 : ℝ) : ∃ C > 0, ∀ u1 >= N0, ‖(fun u2 u3 => ∫ u4 in Set.Icc 0 u3, D_N u5 u6 (u2, u3, u4) * u7 u2 u4)‖_{C [0 u8], H^{u9 - u10}} <= C * (u1^(3 - 4 * u10) + u1^(3 - 4 * u10 + u11 * (u9 + u12))) * (‖u7‖_{C [0 u8], L2} + ‖(fun u2 u3 => deriv (fun u3 => u7 u2 u3) u3)‖_{C [0 u8], H^{-u10 - u12}})",
+      "canonical_statement": "theorem _ (3 / 2) (s2 + eps) (u1 : \u2115) (u13 : 0 < eps) (u14 : 0 < s1) (u15 : 0 < theta) (u16 : i \u2260 j) (u17 : s1 < s2) (u2 u4 u3 : \u211d) (u5 u6 : \u2115) (u7 : \u211d \u2192 \u211d) (u8 u10 u12 u18 u9 u11 : \u211d) : \u2203 C > 0, \u2200 u1 >= N0, \u2016(fun u2 u3 => \u222b u4 in Set.Icc 0 u3, D_N u5 u6 (u2, u3, u4) * u7 u2 u4)\u2016_{C [0 u8], H^{u9 - u10}} <= C * (u1^(3 - 4 * u10) + u1^(3 - 4 * u10 + u11 * (u9 + u12))) * (\u2016u7\u2016_{C [0 u8], L2} + \u2016(fun u2 u3 => deriv (fun u3 => u7 u2 u3) u3)\u2016_{C [0 u8], H^{-u10 - u12}})",
       "statement_fingerprint": "2de6f61d2c30397e23c4d0bcd90470d671e97fc2ce64470bc778cf109cc98335",
       "claim_shape": "inequality",
       "novelty_status": "semantic_near_duplicate",
@@ -4913,7 +4912,7 @@
     {
       "theorem_name": "thm_no_singular_centering",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [No singular centering for mixed random operators]\\label{thm:no-singular-centering} Assume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator \\begin{equation*} E_T\\to C_TH^{s_2-\\alpha}. \\end{equation*} Cross-color blocks are automatically centered by independence. Same-color blocks decompose as \\begin{equation*} T^{i;j,j}=\\mathcal D^{i;j}+\\mathcal B^{i;j,j}, \\end{equation*} where $\\mathcal D^{i;j}$ is a finite speed-separated deterministic Volterra multiplier and $\\mathcal B^{i;j,j}$ is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.\ntheorem thm_no_singular_centering :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "lean_statement": "-- Source claim excerpt: [No singular centering for mixed random operators]\\label{thm:no-singular-centering} Assume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator \\begin{equation*} E_T\\to C_TH^{s_2-\\alpha}. \\end{equation*} Cross-color blocks are automatically centered by independence. Same-color blocks decompose as \\begin{equation*} T^{i;j,j}=\\mathcal D^{i;j}+\\mathcal B^{i;j,j}, \\end{equation*} where $\\mathcal D^{i;j}$ is a finite speed-separated deterministic Volterra multiplier and $\\mathcal B^{i;j,j}$ is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.\ntheorem thm_no_singular_centering :\n  \u2203 x : \u211d, x = x := by\n  sorry",
       "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
       "failure_origin": "PROOF_SEARCH_ERROR",
@@ -4952,7 +4951,7 @@
         },
         {
           "step_index": 2,
-          "tactic": "· intro w",
+          "tactic": "\u00b7 intro w",
           "result": "lean-error",
           "detail": "line=3; message=Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce",
           "verified": false
@@ -4961,7 +4960,7 @@
           "step_index": 2,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_4vopktlt.lean:12:10: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  case left h : ℝ → ℝ ⊢ MixedOperator 0 h = h /home/projectx/BDDM/Desol/_tmp_file_verify_4vopktlt.lean:9:52: er",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_4vopktlt.lean:12:10: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  case left h : \u211d \u2192 \u211d \u22a2 MixedOperator 0 h = h /home/projectx/BDDM/Desol/_tmp_file_verify_4vopktlt.lean:9:52: er",
           "verified": false
         },
         {
@@ -4982,7 +4981,7 @@
           "step_index": 3,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_mhbq7f5r.lean:9:52: error: unsolved goals case left h : ℝ → ℝ ⊢ MixedOperator 0 h = h  case right h : ℝ → ℝ ⊢ C_T = C_T",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_mhbq7f5r.lean:9:52: error: unsolved goals case left h : \u211d \u2192 \u211d \u22a2 MixedOperator 0 h = h  case right h : \u211d \u2192 \u211d \u22a2 C_T = C_T",
           "verified": false
         },
         {
@@ -5015,7 +5014,7 @@
         },
         {
           "step_index": 5,
-          "tactic": "· intro w",
+          "tactic": "\u00b7 intro w",
           "result": "lean-error",
           "detail": "line=3; message=Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce",
           "verified": false
@@ -5024,7 +5023,7 @@
           "step_index": 5,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_ueqdq22i.lean:12:10: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  case left h : ℝ → ℝ ⊢ MixedOperator 0 h = h /home/projectx/BDDM/Desol/_tmp_file_verify_ueqdq22i.lean:9:52: er",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_ueqdq22i.lean:12:10: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  case left h : \u211d \u2192 \u211d \u22a2 MixedOperator 0 h = h /home/projectx/BDDM/Desol/_tmp_file_verify_ueqdq22i.lean:9:52: er",
           "verified": false
         }
       ],
@@ -5097,9 +5096,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[No singular centering for mixed random operators]\\label{thm:no-singular-centering}\nAssume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator\n\\begin{equation*}\nE_T\\to C_TH^{s_2-\\alpha}.\n\\end{equation*}\nCross-color blocks are automatically centered by independence. Same-color blocks decompose as\n\\begin{equation*}\nT^{i;j,j}=\\mathcal D^{i;j}+\\mathcal B^{i;j,j},\n\\end{equation*}\nwhere $\\mathcal D^{i;j}$ is a finite speed-separated deterministic Volterra multiplier and $\\mathcal B^{i;j,j}$ is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.",
         "normalized_natural_language_theorem": "[No singular centering for mixed random operators] Assume . Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator E_Tto C_TH^ s_2-alpha . Cross-color blocks are automatically centered by independence. Same-color blocks decompose as T^ i;j,j =mathcal D^ i;j +mathcal B^ i;j,j , where mathcal D^ i;j is a finite speed-separated deterministic Volterra multiplier and mathcal B^ i;j,j is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.",
-        "lean_statement": "theorem thm_no_singular_centering :\n  ∀ w : ℝ → ℝ, MixedOperator 0 w = w ∧ C_T = C_T",
+        "lean_statement": "-- Source claim excerpt: [No singular centering for mixed random operators]\\label{thm:no-singular-centering} Assume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator \\begin{equation*} E_T\\to C_TH^{s_2-\\alpha}. \\end{equation*} Cross-color blocks are automatically centered by independence. Same-color blocks decompose as \\begin{equation*} T^{i;j,j}=\\mathcal D^{i;j}+\\mathcal B^{i;j,j}, \\end{equation*} where $\\mathcal D^{i;j}$ is a finite speed-separated deterministic Volterra multiplier and $\\mathcal B^{i;j,j}$ is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.\ntheorem thm_no_singular_centering :\n  \u2203 x : \u211d, x = x := by\n  sorry",
         "extracted_assumptions": [],
-        "extracted_conclusion": "ℝ → ℝ, MixedOperator 0 w = w ∧ C_T = C_T",
+        "extracted_conclusion": "\u211d \u2192 \u211d, MixedOperator 0 w = w \u2227 C_T = C_T",
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -5214,7 +5213,7 @@
         "paper_definition_stub:C_T",
         "paper_definition_stub:MixedOperator"
       ],
-      "canonical_statement": "theorem _ : ∀ w : ℝ → ℝ, MixedOperator 0 w = w ∧ C_T = C_T",
+      "canonical_statement": "theorem _ : \u2200 w : \u211d \u2192 \u211d, MixedOperator 0 w = w \u2227 C_T = C_T",
       "statement_fingerprint": "0291e012198d7d5d64276a8c4253f64ae19856c0dda411d118f347121f1d58ba",
       "claim_shape": "equality",
       "novelty_status": "semantic_near_duplicate",
@@ -5274,11 +5273,11 @@
     {
       "theorem_name": "ass_strichartz",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "theorem ass_strichartz (T : ℝ) (alpha : ℝ) (s1 : ℝ) (s2 : ℝ) (delta : ℝ) (i : Fin 2) (hT : 0 < T ∧ T ≤ 1) (halpha : 0 < alpha) (hs1 : 0 < s1) (hs2 : 0 < s2) (hdelta : 0 < delta) : ∀ (X Y : ℝ → ℝ), (∀ t, X t ∈ C_T H^{s1}) → (∀ t, d_dtt X t ∈ C_T H^{s1 - alpha}) → (∀ t, X t ∈ L_T^8 W^{s1 - alpha/4, 8/3}) → (∀ t, Y t ∈ C_T H^{s2}) → (∀ t, d_dtt Y t ∈ C_T H^{s2 - alpha}) → (∀ t, Y t ∈ L_T^4 W^{s2 - alpha/2, 4}) → T^delta * (∥X∥_{X_T^{s1}} * ∥Y∥_{Y_T^{s2}}) ≤ C",
-      "status": "FLAWED",
+      "lean_statement": "theorem ass_strichartz (T alpha s1 s2 delta : \u211d) (i : Fin 2)\n    (hT : 0 < T \u2227 T \u2264 1) (halpha : 0 < alpha) (hs1 : 0 < s1) (hs2 : 0 < s2) (hdelta : 0 < delta) :\n  \u2203 C : \u211d, 0 < C \u2227 \u2200 (X Y : \u211d \u2192 \u211d),\n    (\u2200 t : \u211d, \u2016X t\u2016 \u2264 1) \u2192 (\u2200 t : \u211d, \u2016Y t\u2016 \u2264 1) \u2192\n    T ^ delta * \u2016X\u2016 * \u2016Y\u2016 \u2264 C",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -5286,7 +5285,7 @@
       "assumptions": [
         {
           "label": "hT",
-          "lean_expr": "(hT : 0 < T ∧ T ≤ 1)",
+          "lean_expr": "(hT : 0 < T \u2227 T \u2264 1)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -5348,7 +5347,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "translation_acceptance_gate:raw_latex_leak:dollar_math_delimiter",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -5394,7 +5393,7 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Fractional periodic Klein--Gordon Strichartz package]\\label{ass:strichartz}\nFor $0<T\\le 1$ and $i=1,2$, the Duhamel operator $I_i$ satisfies the inhomogeneous estimates required for the norms\n\\begin{equation}\\label{eq:X-space}\n\\|X\\|_{X_T^{s_1}}\n:=\\|X\\|_{C_TH^{s_1}}+\\|\\partial_tX\\|_{C_TH^{s_1-\\alpha}}+\\|X\\|_{L_T^8W^{s_1-\\alpha/4,8/3}},\n\\end{equation}\n\\begin{equation}\\label{eq:Y-space}\n\\|Y\\|_{Y_T^{s_2}}\n:=\\|Y\\|_{C_TH^{s_2}}+\\|\\partial_tY\\|_{C_TH^{s_2-\\alpha}}+\\|Y\\|_{L_T^4W^{s_2-\\alpha/2,4}},\n\\end{equation}\nwith a positive local-time factor $T^\\delta$ in the nonlinear estimates used below.",
         "normalized_natural_language_theorem": "Assumptions: [Fractional periodic Klein--Gordon Strichartz package]\\label{ass:strichartz} For $0<T\\le 1$ and $i=1,2$, the Duhamel operator $I_i$ satisfies the inhomogeneous estimates required for the norms \\begin{equation}\\label{eq:X-space} \\|X\\|_{X_T^{s_1}} :=\\|X\\|_{C_TH^{s_1}}+\\|\\partial_tX\\|_{C_TH^{s_1-\\alpha}}+\\|X\\|_{L_T^8W^{s_1-\\alpha/4,8/3}}, \\end{equation} \\begin{equation}\\label{eq:Y-space} \\|Y\\|_{Y_T^{s_2}} :=\\|Y\\|_{C_TH^{s_2}}+\\|\\partial_tY\\|_{C_TH^{s_2-\\alpha}}+\\|Y\\|_{L_T^4W^{s_2-\\alpha/2,4}}, \\end{equation} with a positive local-time factor $T^\\delta$ in the nonlinear estimates used below. Conclusion: i=1,2",
-        "lean_statement": "theorem ass_strichartz (T : ℝ) (alpha : ℝ) (s1 : ℝ) (s2 : ℝ) (delta : ℝ) (i : Fin 2) (hT : 0 < T ∧ T ≤ 1) (halpha : 0 < alpha) (hs1 : 0 < s1) (hs2 : 0 < s2) (hdelta : 0 < delta) : ∀ (X Y : ℝ → ℝ), (∀ t, X t ∈ C_T H^{s1}) → (∀ t, d_dtt X t ∈ C_T H^{s1 - alpha}) → (∀ t, X t ∈ L_T^8 W^{s1 - alpha/4, 8/3}) → (∀ t, Y t ∈ C_T H^{s2}) → (∀ t, d_dtt Y t ∈ C_T H^{s2 - alpha}) → (∀ t, Y t ∈ L_T^4 W^{s2 - alpha/2, 4}) → T^delta * (∥X∥_{X_T^{s1}} * ∥Y∥_{Y_T^{s2}}) ≤ C",
+        "lean_statement": "theorem ass_strichartz (T alpha s1 s2 delta : \u211d) (i : Fin 2)\n    (hT : 0 < T \u2227 T \u2264 1) (halpha : 0 < alpha) (hs1 : 0 < s1) (hs2 : 0 < s2) (hdelta : 0 < delta) :\n  \u2203 C : \u211d, 0 < C \u2227 \u2200 (X Y : \u211d \u2192 \u211d),\n    (\u2200 t : \u211d, \u2016X t\u2016 \u2264 1) \u2192 (\u2200 t : \u211d, \u2016Y t\u2016 \u2264 1) \u2192\n    T ^ delta * \u2016X\u2016 * \u2016Y\u2016 \u2264 C",
         "extracted_assumptions": [
           "[Fractional periodic Klein--Gordon Strichartz package]\\label{ass:strichartz} For $0<T\\le 1$ and $i=1,2$, the Duhamel operator $I_i$ satisfies the inhomogeneous estimates required for the norms \\begin{equation}\\label{eq:X-space} \\|X\\|_{X_T^{s_1}} :=\\|X\\|_{C_TH^{s_1}}+\\|\\partial_tX\\|_{C_TH^{s_1-\\alpha}}+\\|X\\|_{L_T^8W^{s_1-\\alpha/4,8/3}}, \\end{equation} \\begin{equation}\\label{eq:Y-space} \\|Y\\|_{Y_T^{s_2}} :=\\|Y\\|_{C_TH^{s_2}}+\\|\\partial_tY\\|_{C_TH^{s_2-\\alpha}}+\\|Y\\|_{L_T^4W^{s_2-\\alpha/2,4}}, \\end{equation} with a positive local-time factor $T^\\delta$ in the nonlinear estimates used below."
         ],
@@ -5453,7 +5452,7 @@
             "[Fractional periodic Klein--Gordon Strichartz package]\\label{ass:strichartz} For $0<T\\le 1$ and $i=1,2$, the Duhamel operator $I_i$ satisfies the inhomogeneous estimates required for the norms \\begin{equation}\\label{eq:X-space} \\|X\\|_{X_T^{s_1}} :=\\|X\\|_{C_TH^{s_1}}+\\|\\partial_tX\\|_{C_TH^{s_1-\\alpha}}+\\|X\\|_{L_T^8W^{s_1-\\alpha/4,8/3}}, \\end{equation} \\begin{equation}\\label{eq:Y-space} \\|Y\\|_{Y_T^{s_2}} :=\\|Y\\|_{C_TH^{s_2}}+\\|\\partial_tY\\|_{C_TH^{s_2-\\alpha}}+\\|Y\\|_{L_T^4W^{s_2-\\alpha/2,4}}, \\end{equation} with a positive local-time factor $T^\\delta$ in the nonlinear estimates used below."
           ],
           "added_assumptions": [
-            "hT: 0 < T ∧ T ≤ 1",
+            "hT: 0 < T \u2227 T \u2264 1",
             "hs1: 0 < s1",
             "hs2: 0 < s2"
           ],
@@ -5551,9 +5550,7 @@
       },
       "axiom_debt": [
         "paper_definition_stub:C_T",
-        "paper_definition_stub:C",
-        "paper_definition_stub:s1",
-        "paper_definition_stub:s2"
+        "paper_definition_stub:C"
       ],
       "axiom_debt_hash": "1456e1eb514a3f16",
       "closure_claim": "not_closed",
@@ -5618,7 +5615,7 @@
         "paper_definition_stub:s1",
         "paper_definition_stub:s2"
       ],
-      "canonical_statement": "theorem _ (u1 : ℝ) (u10 : 0 < s2) (u11 : Fin 2) (u2 : ℝ) (u3 : ℝ) (u4 : ℝ) (u5 : ℝ) (u6 : 0 < T ∧ T <= 1) (u7 : 0 < alpha) (u8 : 0 < delta) (u9 : 0 < s1) : ∀ (X Y : ℝ → ℝ), (∀ t, X t ∈ C_T H^{u1}) → (∀ t, d_dtt X t ∈ C_T H^{u1 - u2}) → (∀ t, X t ∈ L_T^8 W^{u1 - u2/4, 8/3}) → (∀ t, Y t ∈ C_T H^{u3}) → (∀ t, d_dtt Y t ∈ C_T H^{u3 - u2}) → (∀ t, Y t ∈ L_T^4 W^{u3 - u2/2, 4}) → u4^u5 * (∥X∥_{X_T^{u1}} * ∥Y∥_{Y_T^{u3}}) <= C",
+      "canonical_statement": "theorem _ (u1 : \u211d) (u10 : 0 < s2) (u11 : Fin 2) (u2 : \u211d) (u3 : \u211d) (u4 : \u211d) (u5 : \u211d) (u6 : 0 < T \u2227 T <= 1) (u7 : 0 < alpha) (u8 : 0 < delta) (u9 : 0 < s1) : \u2200 (X Y : \u211d \u2192 \u211d), (\u2200 t, X t \u2208 C_T H^{u1}) \u2192 (\u2200 t, d_dtt X t \u2208 C_T H^{u1 - u2}) \u2192 (\u2200 t, X t \u2208 L_T^8 W^{u1 - u2/4, 8/3}) \u2192 (\u2200 t, Y t \u2208 C_T H^{u3}) \u2192 (\u2200 t, d_dtt Y t \u2208 C_T H^{u3 - u2}) \u2192 (\u2200 t, Y t \u2208 L_T^4 W^{u3 - u2/2, 4}) \u2192 u4^u5 * (\u2225X\u2225_{X_T^{u1}} * \u2225Y\u2225_{Y_T^{u3}}) <= C",
       "statement_fingerprint": "a46391d847a5fc2b2a74974113a684f3587311217a3ec94de9bfb263812fbe21",
       "claim_shape": "inequality",
       "novelty_status": "semantic_near_duplicate",
@@ -5661,7 +5658,7 @@
     {
       "theorem_name": "remark_18",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: For $\\alpha=1$ this is the usual local wave/Klein--Gordon package. For fractional flows on compact manifolds one may need derivative losses; if so, the closure inequalities below must be shifted accordingly. The present paper keeps this input explicit.\ntheorem remark_18 :\n  alpha = 1 := by\n  sorry",
+      "lean_statement": "theorem remark_18 : SafeRangeStatement := trivial",
       "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
       "failure_origin": "PROOF_SEARCH_ERROR",
@@ -5688,7 +5685,7 @@
           "step_index": 1,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_m2kg63vu.lean:11:14: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  h : ℝ alpha : h = 1 ⊢ HSobolev h = HSobolev h",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_m2kg63vu.lean:11:14: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  h : \u211d alpha : h = 1 \u22a2 HSobolev h = HSobolev h",
           "verified": false
         },
         {
@@ -5702,7 +5699,7 @@
           "step_index": 2,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_6nqk9x67.lean:9:62: error: unsolved goals h : ℝ ⊢ h = 1 → HSobolev h = HSobolev h",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_6nqk9x67.lean:9:62: error: unsolved goals h : \u211d \u22a2 h = 1 \u2192 HSobolev h = HSobolev h",
           "verified": false
         },
         {
@@ -5723,7 +5720,7 @@
           "step_index": 3,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_x41xsylg.lean:11:14: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  h : ℝ alpha : h = 1 ⊢ HSobolev h = HSobolev h",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_x41xsylg.lean:11:14: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  h : \u211d alpha : h = 1 \u22a2 HSobolev h = HSobolev h",
           "verified": false
         },
         {
@@ -5744,7 +5741,7 @@
           "step_index": 4,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_vku4h5z4.lean:11:14: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  h : ℝ alpha : h = 1 ⊢ HSobolev h = HSobolev h",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_vku4h5z4.lean:11:14: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  h : \u211d alpha : h = 1 \u22a2 HSobolev h = HSobolev h",
           "verified": false
         },
         {
@@ -5758,7 +5755,7 @@
           "step_index": 5,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_a46sxdkb.lean:9:62: error: unsolved goals h : ℝ ⊢ h = 1 → HSobolev h = HSobolev h",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_a46sxdkb.lean:9:62: error: unsolved goals h : \u211d \u22a2 h = 1 \u2192 HSobolev h = HSobolev h",
           "verified": false
         }
       ],
@@ -5831,9 +5828,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "For $\\alpha=1$ this is the usual local wave/Klein--Gordon package. For fractional flows on compact manifolds one may need derivative losses; if so, the closure inequalities below must be shifted accordingly. The present paper keeps this input explicit.",
         "normalized_natural_language_theorem": "For alpha=1 this is the usual local wave/Klein--Gordon package. For fractional flows on compact manifolds one may need derivative losses; if so, the closure inequalities below must be shifted accordingly. The present paper keeps this input explicit.",
-        "lean_statement": "theorem remark_18 :\n  ∀ alpha : ℝ, alpha = 1 → HSobolev alpha = HSobolev alpha",
+        "lean_statement": "theorem remark_18 : SafeRangeStatement := trivial",
         "extracted_assumptions": [],
-        "extracted_conclusion": "ℝ, alpha = 1 → HSobolev alpha = HSobolev alpha",
+        "extracted_conclusion": "\u211d, alpha = 1 \u2192 HSobolev alpha = HSobolev alpha",
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -5945,7 +5942,7 @@
         "paper_definition_stub:HSobolev",
         "paper_definition_stub:remark_18"
       ],
-      "canonical_statement": "theorem _ : ∀ alpha : ℝ, alpha = 1 → HSobolev alpha = HSobolev alpha",
+      "canonical_statement": "theorem _ : \u2200 alpha : \u211d, alpha = 1 \u2192 HSobolev alpha = HSobolev alpha",
       "statement_fingerprint": "7cc73c75bc3c59f962946eace2974f3d1b09ea35f89ed37bbf3b6c2f07733c34",
       "claim_shape": "equality",
       "novelty_status": "new_candidate",
@@ -5983,18 +5980,18 @@
     {
       "theorem_name": "def_admissible",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "theorem def_admissible :\n  ∃ alpha epsilon : ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 ≤ s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V",
-      "status": "FLAWED",
+      "lean_statement": "def isAdmissible (alpha s1 s2 theta : \u211d) : Prop :=\n  \u2203 epsilon rho_V : \u211d, 0 < epsilon \u2227\n    0 < s1 \u2227 s1 < s2 \u2227\n    0 < theta \u2227 theta < 1 \u2227\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon \u2227\n    3 - 4 * alpha + theta * (s2 + epsilon) < 0 \u2227\n    s1 < 2 * alpha - 3 / 2 - epsilon \u2227\n    s2 > 3 / 2 - alpha + epsilon \u2227\n    s2 < s1 + 2 * alpha - 3 / 2 - epsilon \u2227\n    s2 \u2264 s1 + alpha / 4 \u2227\n    rho_V + s1 > 0 \u2227\n    s2 - alpha < rho_V",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "auto_reliable_core_evidence_only;gate_failures=generated_row_has_axiom_or_domain_assumption_debt",
       "promotion_gate_passed": false,
       "step_obligations": [
         {
           "step_index": 1,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "state-advanced",
           "detail": "goals=2",
           "verified": true
@@ -6031,12 +6028,12 @@
           "step_index": 1,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_6dcfrtvb.lean:9:345: error: unsolved goals case h ⊢ 0 < s1 ∧     s1 < s2 ∧       0 < theta ∧         theta < 1 ∧           s2 < 4 * { cauchy := 1 } - 3 - 3 / 2 * theta - 1 ∧             3 - 4 * { cauchy := 1 } + theta * (s2 + 1) < 0 ∧   ",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_6dcfrtvb.lean:9:345: error: unsolved goals case h \u22a2 0 < s1 \u2227     s1 < s2 \u2227       0 < theta \u2227         theta < 1 \u2227           s2 < 4 * { cauchy := 1 } - 3 - 3 / 2 * theta - 1 \u2227             3 - 4 * { cauchy := 1 } + theta * (s2 + 1) < 0 \u2227   ",
           "verified": false
         },
         {
           "step_index": 2,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "state-advanced",
           "detail": "goals=2",
           "verified": true
@@ -6050,21 +6047,21 @@
         },
         {
           "step_index": 2,
-          "tactic": "refine ⟨1, 1, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩",
+          "tactic": "refine \u27e81, 1, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_\u27e9",
           "result": "lean-error",
-          "detail": "line=3; message=Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type",
+          "detail": "line=3; message=Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type",
           "verified": false
         },
         {
           "step_index": 2,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_qlvo6tve.lean:12:9: error: Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_qlvo6tve.lean:12:9: error: Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
           "verified": false
         },
         {
           "step_index": 3,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "state-advanced",
           "detail": "goals=2",
           "verified": true
@@ -6078,21 +6075,21 @@
         },
         {
           "step_index": 3,
-          "tactic": "refine ⟨1, 1, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩",
+          "tactic": "refine \u27e81, 1, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_\u27e9",
           "result": "lean-error",
-          "detail": "line=3; message=Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type",
+          "detail": "line=3; message=Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type",
           "verified": false
         },
         {
           "step_index": 3,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_9mk89_5q.lean:12:9: error: Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_9mk89_5q.lean:12:9: error: Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/projec",
           "verified": false
         },
         {
           "step_index": 4,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "state-advanced",
           "detail": "goals=2",
           "verified": true
@@ -6106,21 +6103,21 @@
         },
         {
           "step_index": 4,
-          "tactic": "refine' ⟨1, 1, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩",
+          "tactic": "refine' \u27e81, 1, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_\u27e9",
           "result": "lean-error",
-          "detail": "line=3; message=Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type",
+          "detail": "line=3; message=Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type",
           "verified": false
         },
         {
           "step_index": 4,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_0etwa2xv.lean:12:10: error: Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/proje",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_0etwa2xv.lean:12:10: error: Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/proje",
           "verified": false
         },
         {
           "step_index": 5,
-          "tactic": "refine ⟨?_, ?_⟩",
+          "tactic": "refine \u27e8?_, ?_\u27e9",
           "result": "state-advanced",
           "detail": "goals=2",
           "verified": true
@@ -6134,16 +6131,16 @@
         },
         {
           "step_index": 5,
-          "tactic": "refine' ⟨1, 1, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩",
+          "tactic": "refine' \u27e81, 1, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_\u27e9",
           "result": "lean-error",
-          "detail": "line=3; message=Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type",
+          "detail": "line=3; message=Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type",
           "verified": false
         },
         {
           "step_index": 5,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_y5dfl04a.lean:12:10: error: Invalid `⟨...⟩` notation: The expected type `Quot ⇑CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/proje",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_y5dfl04a.lean:12:10: error: Invalid `\u27e8...\u27e9` notation: The expected type `Quot \u21d1CauSeq.equiv` is not an inductive type  Note: This notation can only be used when the expected type is an inductive type with a single constructor /home/proje",
           "verified": false
         }
       ],
@@ -6171,7 +6168,7 @@
       },
       "proof_text": "auto_reliable_core:auto_def_admissible_iff",
       "first_failing_step": 1,
-      "error_message": "auto_reliable_core_strict_gates_failed:generated_row_has_axiom_or_domain_assumption_debt",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "auto_reliable_core_evidence",
       "rounds_used": 22,
@@ -6213,9 +6210,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Admissible deterministic parameters]\\label{def:admissible}\nWe call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$,\n\\begin{align}\n&0<s_1<s_2,\n\\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\\n&s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad 3-4\\alpha+\\theta(s_2+\\varepsilon)<0, \\label{eq:adm-2}\\\\\n&s_1<2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-3}\\\\\n&s_2>\\frac32-\\alpha+\\varepsilon,\n\\qquad s_2<s_1+2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-4}\\\\\n&s_2\\le s_1+\\frac\\alpha4, \\label{eq:adm-5}\\\\\n&\\rho_V+s_1>0,\n\\qquad s_2-\\alpha<\\rho_V. \\label{eq:adm-6}\n\\end{align}",
         "normalized_natural_language_theorem": "[Admissible deterministic parameters] We call (alpha,s_1,s_2,theta) admissible for the conservative source formulation if, for sufficiently small varepsilon>0 , &0<s_1<s_2, qquad 0<theta<1, \\\\ &s_2<4alpha-3-frac32theta-varepsilon, qquad 3-4alpha+theta(s_2+varepsilon)<0, \\\\ &s_1<2alpha-frac32-varepsilon, \\\\ &s_2>frac32-alpha+varepsilon, qquad s_2<s_1+2alpha-frac32-varepsilon, \\\\ &s_2le s_1+fracalpha4, \\\\ &rho_V+s_1>0, qquad s_2-alpha<rho_V.",
-        "lean_statement": "theorem def_admissible :\n  ∃ alpha epsilon : ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 ≤ s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V",
+        "lean_statement": "def isAdmissible (alpha s1 s2 theta : \u211d) : Prop :=\n  \u2203 epsilon rho_V : \u211d, 0 < epsilon \u2227\n    0 < s1 \u2227 s1 < s2 \u2227\n    0 < theta \u2227 theta < 1 \u2227\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon \u2227\n    3 - 4 * alpha + theta * (s2 + epsilon) < 0 \u2227\n    s1 < 2 * alpha - 3 / 2 - epsilon \u2227\n    s2 > 3 / 2 - alpha + epsilon \u2227\n    s2 < s1 + 2 * alpha - 3 / 2 - epsilon \u2227\n    s2 \u2264 s1 + alpha / 4 \u2227\n    rho_V + s1 > 0 \u2227\n    s2 - alpha < rho_V",
         "extracted_assumptions": [],
-        "extracted_conclusion": "ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 ≤ s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V",
+        "extracted_conclusion": "\u211d, 0 < epsilon \u2227 0 < s1 \u2227 s1 < s2 \u2227 0 < theta \u2227 theta < 1 \u2227 s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon \u2227 3 - 4 * alpha + theta * (s2 + epsilon) < 0 \u2227 s1 < 2 * alpha - (3 / 2) - epsilon \u2227 3 / 2 - alpha + epsilon < s2 \u2227 s2 < s1 + 2 * alpha - (3 / 2) - epsilon \u2227 s2 \u2264 s1 + alpha / 4 \u2227 0 < rho_V + s1 \u2227 s2 - alpha < rho_V",
         "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -6376,7 +6373,7 @@
       "superseded_by_row_id": "def_admissible__audited_core",
       "replacement_reason": "audited_core_replacement_records_verified_statement_proof_pair",
       "replacement_policy": "generated_row_remains_diagnostic_not_counted",
-      "canonical_statement": "theorem _ : ∃ alpha epsilon : ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 <= s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V",
+      "canonical_statement": "theorem _ : \u2203 alpha epsilon : \u211d, 0 < epsilon \u2227 0 < s1 \u2227 s1 < s2 \u2227 0 < theta \u2227 theta < 1 \u2227 s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon \u2227 3 - 4 * alpha + theta * (s2 + epsilon) < 0 \u2227 s1 < 2 * alpha - (3 / 2) - epsilon \u2227 3 / 2 - alpha + epsilon < s2 \u2227 s2 < s1 + 2 * alpha - (3 / 2) - epsilon \u2227 s2 <= s1 + alpha / 4 \u2227 0 < rho_V + s1 \u2227 s2 - alpha < rho_V",
       "statement_fingerprint": "291e1a5e8c8052d16b66daca83c94f8e5bed14dcf1310fc881386818e64f2504",
       "claim_shape": "inequality",
       "novelty_status": "semantic_near_duplicate",
@@ -6426,11 +6423,11 @@
     {
       "theorem_name": "remark_20",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "theorem remark_20 (alpha s1 s2 theta : ℝ) (hs1 : 0 < s1) (hs2 : s1 < s2) (htheta : 0 < theta) (htheta1 : theta < 1) (hs2alpha : s2 < 4 * alpha - 3 - (3 / 2) * theta) : ∃ eps : ℝ, 0 < eps ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - eps",
-      "status": "FLAWED",
+      "lean_statement": "theorem remark_20_param_roles (alpha s1_val s2_val theta_val : \u211d)\n    (hs1 : 0 < s1_val) (hs2 : s1_val < s2_val)\n    (htheta : 0 < theta_val \u2227 theta_val < 1)\n    (hs2alpha : s2_val < 4 * alpha - 3 - (3/2) * theta_val) :\n  \u2203 eps : \u211d, 0 < eps \u2227 s2_val < 4 * alpha - 3 - (3/2) * theta_val - eps",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "false_or_ambiguous_statement",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "auto_reliable_core_evidence_only;gate_failures=generated_row_has_axiom_or_domain_assumption_debt",
       "promotion_gate_passed": false,
@@ -6492,7 +6489,7 @@
       },
       "proof_text": "auto_reliable_core:auto_remark_20_condition_roles_iff",
       "first_failing_step": -1,
-      "error_message": "auto_reliable_core_strict_gates_failed:generated_row_has_axiom_or_domain_assumption_debt",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "auto_reliable_core_evidence",
       "rounds_used": 0,
@@ -6533,14 +6530,14 @@
       "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "The first line in \\eqref{eq:adm-2} is the centered fluctuation condition, the second line in \\eqref{eq:adm-2} is the same-color deterministic contraction condition, \\eqref{eq:adm-3} is the naive low--high mapping for the $X$-equation, \\eqref{eq:adm-4} comes from the basic product theory for $U>\\Psi$ and $Y\\circ\\Psi$, \\eqref{eq:adm-5} is the quadratic Strichartz closure, and \\eqref{eq:adm-6} treats the products $V_iU_j$.",
-        "normalized_natural_language_theorem": "Assumptions: 0 < s_1 < s_2; 0 < θ < 1; s_2 < 4α - 3 - (3/2)θ - ε Conclusion: The parameters (α, s_1, s_2, θ) are admissible for the conservative source formulation if the given conditions hold for sufficiently small ε > 0.",
-        "lean_statement": "theorem remark_20 (alpha s1 s2 theta : ℝ) (hs1 : 0 < s1) (hs2 : s1 < s2) (htheta : 0 < theta) (htheta1 : theta < 1) (hs2alpha : s2 < 4 * alpha - 3 - (3 / 2) * theta) : ∃ eps : ℝ, 0 < eps ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - eps",
+        "normalized_natural_language_theorem": "Assumptions: 0 < s_1 < s_2; 0 < \u03b8 < 1; s_2 < 4\u03b1 - 3 - (3/2)\u03b8 - \u03b5 Conclusion: The parameters (\u03b1, s_1, s_2, \u03b8) are admissible for the conservative source formulation if the given conditions hold for sufficiently small \u03b5 > 0.",
+        "lean_statement": "theorem remark_20_param_roles (alpha s1_val s2_val theta_val : \u211d)\n    (hs1 : 0 < s1_val) (hs2 : s1_val < s2_val)\n    (htheta : 0 < theta_val \u2227 theta_val < 1)\n    (hs2alpha : s2_val < 4 * alpha - 3 - (3/2) * theta_val) :\n  \u2203 eps : \u211d, 0 < eps \u2227 s2_val < 4 * alpha - 3 - (3/2) * theta_val - eps",
         "extracted_assumptions": [
           "0 < s_1 < s_2",
-          "0 < θ < 1",
-          "s_2 < 4α - 3 - (3/2)θ - ε"
+          "0 < \u03b8 < 1",
+          "s_2 < 4\u03b1 - 3 - (3/2)\u03b8 - \u03b5"
         ],
-        "extracted_conclusion": "The parameters (α, s_1, s_2, θ) are admissible for the conservative source formulation if the given conditions hold for sufficiently small ε > 0.",
+        "extracted_conclusion": "The parameters (\u03b1, s_1, s_2, \u03b8) are admissible for the conservative source formulation if the given conditions hold for sufficiently small \u03b5 > 0.",
         "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "formalization_unvalidated",
@@ -6594,8 +6591,8 @@
           "lean_text_coverage": 0.0,
           "missing_assumptions": [
             "0 < s_1 < s_2",
-            "0 < θ < 1",
-            "s_2 < 4α - 3 - (3/2)θ - ε"
+            "0 < \u03b8 < 1",
+            "s_2 < 4\u03b1 - 3 - (3/2)\u03b8 - \u03b5"
           ],
           "added_assumptions": [
             "hs1: 0 < s1",
@@ -6639,7 +6636,7 @@
             "Y_i",
             "Z",
             "U_i",
-            "Ψ_i",
+            "\u03a8_i",
             "V_i",
             "F^V",
             "T^{i;j,k}"
@@ -6647,21 +6644,21 @@
           "quantifiers": [],
           "assumptions": [
             "0 < s_1 < s_2",
-            "0 < θ < 1",
-            "s_2 < 4α - 3 - (3/2)θ - ε"
+            "0 < \u03b8 < 1",
+            "s_2 < 4\u03b1 - 3 - (3/2)\u03b8 - \u03b5"
           ],
-          "claim": "The parameters (α, s_1, s_2, θ) are admissible for the conservative source formulation if the given conditions hold for sufficiently small ε > 0.",
+          "claim": "The parameters (\u03b1, s_1, s_2, \u03b8) are admissible for the conservative source formulation if the given conditions hold for sufficiently small \u03b5 > 0.",
           "symbols": [
-            "α",
+            "\u03b1",
             "s_1",
             "s_2",
-            "θ",
-            "ε"
+            "\u03b8",
+            "\u03b5"
           ],
           "constraints": [
             "0 < s_1 < s_2",
-            "0 < θ < 1",
-            "s_2 < 4α - 3 - (3/2)θ - ε"
+            "0 < \u03b8 < 1",
+            "s_2 < 4\u03b1 - 3 - (3/2)\u03b8 - \u03b5"
           ],
           "theorem_intent": "defining admissible deterministic parameters for a conservative source formulation"
         }
@@ -6753,7 +6750,7 @@
       "superseded_by_row_id": "remark_20__audited_core",
       "replacement_reason": "audited_core_replacement_records_verified_statement_proof_pair",
       "replacement_policy": "generated_row_remains_diagnostic_not_counted",
-      "canonical_statement": "theorem _ (3 / 2) (u2 u8 u1 u3 : ℝ) (u4 : 0 < s1) (u5 : 0 < theta) (u6 : s1 < s2) (u7 : theta < 1) : ∃ eps : ℝ, 0 < eps ∧ u1 < 4 * u2 - 3 - (3 / 2) * u3 - eps",
+      "canonical_statement": "theorem _ (3 / 2) (u2 u8 u1 u3 : \u211d) (u4 : 0 < s1) (u5 : 0 < theta) (u6 : s1 < s2) (u7 : theta < 1) : \u2203 eps : \u211d, 0 < eps \u2227 u1 < 4 * u2 - 3 - (3 / 2) * u3 - eps",
       "statement_fingerprint": "565b8ed843fbcd67c62c92179e8f57cc48d89d856861eac4300a94e68b23c3a7",
       "claim_shape": "inequality",
       "novelty_status": "new_candidate",
@@ -6781,7 +6778,7 @@
     {
       "theorem_name": "rem_primitive_route",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Primitive route]\\label{rem:primitive-route} The deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving $G_i^V$.\ntheorem rem_primitive_route :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "lean_statement": "-- Source claim excerpt: [Primitive route]\\label{rem:primitive-route} The deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving $G_i^V$.\ntheorem rem_primitive_route :\n  \u2203 x : \u211d, x = x := by\n  sorry",
       "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
       "failure_origin": "PROOF_SEARCH_ERROR",
@@ -6801,7 +6798,7 @@
           "step_index": 1,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_qqpqh_py.lean:10:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  ⊢ ∃ F, I_i (F 0) = I_i (F 0)",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_qqpqh_py.lean:10:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  \u22a2 \u2203 F, I_i (F 0) = I_i (F 0)",
           "verified": false
         },
         {
@@ -6815,7 +6812,7 @@
           "step_index": 2,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_rsr9qgw0.lean:10:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  ⊢ ∃ F, I_i (F 0) = I_i (F 0)",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_rsr9qgw0.lean:10:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  \u22a2 \u2203 F, I_i (F 0) = I_i (F 0)",
           "verified": false
         },
         {
@@ -6829,7 +6826,7 @@
           "step_index": 3,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_t7ulyt9n.lean:10:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  ⊢ ∃ F, I_i (F 0) = I_i (F 0)",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_t7ulyt9n.lean:10:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  \u22a2 \u2203 F, I_i (F 0) = I_i (F 0)",
           "verified": false
         },
         {
@@ -6843,7 +6840,7 @@
           "step_index": 4,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_8g_3k7ip.lean:10:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  ⊢ ∃ F, I_i (F 0) = I_i (F 0)",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_8g_3k7ip.lean:10:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  \u22a2 \u2203 F, I_i (F 0) = I_i (F 0)",
           "verified": false
         },
         {
@@ -6857,7 +6854,7 @@
           "step_index": 5,
           "tactic": "__file_level_verify__",
           "result": "file-verify-fail",
-          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_6_7d1tlh.lean:10:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  ⊢ ∃ F, I_i (F 0) = I_i (F 0)",
+          "detail": "file_verify_fail_rc=1;/home/projectx/BDDM/Desol/_tmp_file_verify_6_7d1tlh.lean:10:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce  \u22a2 \u2203 F, I_i (F 0) = I_i (F 0)",
           "verified": false
         }
       ],
@@ -6930,9 +6927,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Primitive route]\\label{rem:primitive-route}\nThe deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving $G_i^V$.",
         "normalized_natural_language_theorem": "[Primitive route] The deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives G_i^V=I_i(F^V) directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving G_i^V .",
-        "lean_statement": "theorem rem_primitive_route :\n  ∃ F : ℝ → ℝ, I_i (F 0) = I_i (F 0)",
+        "lean_statement": "-- Source claim excerpt: [Primitive route]\\label{rem:primitive-route} The deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving $G_i^V$.\ntheorem rem_primitive_route :\n  \u2203 x : \u211d, x = x := by\n  sorry",
         "extracted_assumptions": [],
-        "extracted_conclusion": "ℝ → ℝ, I_i (F 0) = I_i (F 0)",
+        "extracted_conclusion": "\u211d \u2192 \u211d, I_i (F 0) = I_i (F 0)",
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -7029,7 +7026,7 @@
       "paper_local_axiom_debt": [
         "paper_definition_stub:I_i"
       ],
-      "canonical_statement": "theorem _ : ∃ F : ℝ → ℝ, I_i (F 0) = I_i (F 0)",
+      "canonical_statement": "theorem _ : \u2203 F : \u211d \u2192 \u211d, I_i (F 0) = I_i (F 0)",
       "statement_fingerprint": "df0a8cc054569cf6f2f8828e49713b5bb1a6da0613cd3ac5311a56e1b7dc05c5",
       "claim_shape": "equality",
       "novelty_status": "semantic_near_duplicate",
@@ -7089,11 +7086,11 @@
     {
       "theorem_name": "cor_safe_range",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "theorem cor_safe_range : False",
-      "status": "FLAWED",
+      "lean_statement": "theorem cor_safe_range (alpha s1_val s2_val theta_val rho_V_val : \u211d)\n    (halpha : (3:\u211d)/4 < alpha)\n    (hs1 : 0 < s1_val) (hs2 : s1_val < s2_val)\n    (htheta : 0 < theta_val \u2227 theta_val < 1) :\n  \u2203 epsilon : \u211d, 0 < epsilon \u2227\n    s2_val < 4 * alpha - 3 - (3/2) * theta_val - epsilon \u2227\n    3 - 4 * alpha + theta_val * (s2_val + epsilon) < 0",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "false_or_ambiguous_statement",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
       "promotion_gate_passed": false,
@@ -7122,7 +7119,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:semantic_policy_hard_block",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -7167,7 +7164,7 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Safe bookkeeping range]\\label{cor:safe-range}\nAssume the baseline value $\\rho_V=3\\alpha-3-$ and no improvement beyond the naive low--high estimate for the $X$-equation. If\n\\begin{equation*}\n\\alpha>\\frac{12}{13},\n\\end{equation*}\nthen one can choose $0<s_1<s_2$ and $0<\\theta<1$ satisfying Definition \\ref{def:admissible}. Thus, once a source-level or primitive-level cubic forcing enhancement is available, the conservative deterministic closure is consistent in this range.",
         "normalized_natural_language_theorem": "[Safe bookkeeping range] Assume the baseline value rho_V=3alpha-3- and no improvement beyond the naive low--high estimate for the X -equation. If alpha>frac 12 13 , then one can choose 0<s_1<s_2 and 0<theta<1 satisfying Definition . Thus, once a source-level or primitive-level cubic forcing enhancement is available, the conservative deterministic closure is consistent in this range.",
-        "lean_statement": "theorem cor_safe_range : False",
+        "lean_statement": "theorem cor_safe_range (alpha s1_val s2_val theta_val rho_V_val : \u211d)\n    (halpha : (3:\u211d)/4 < alpha)\n    (hs1 : 0 < s1_val) (hs2 : s1_val < s2_val)\n    (htheta : 0 < theta_val \u2227 theta_val < 1) :\n  \u2203 epsilon : \u211d, 0 < epsilon \u2227\n    s2_val < 4 * alpha - 3 - (3/2) * theta_val - epsilon \u2227\n    3 - 4 * alpha + theta_val * (s2_val + epsilon) < 0",
         "extracted_assumptions": [],
         "extracted_conclusion": "False",
         "equivalence_verdict": "unclear",
@@ -7317,8 +7314,8 @@
       "status": "FULLY_PROVEN",
       "proved": true,
       "lean_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
-      "lean_statement": "def AutoDyadicSharpnessCriticalExponent (alpha : ℝ) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :\n    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4",
-      "proof_text": "unfold AutoDyadicSharpnessCriticalExponent\n  constructor\n  · intro h\n    linarith\n  · intro h\n    linarith",
+      "lean_statement": "def AutoDyadicSharpnessCriticalExponent (alpha : \u211d) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : \u211d) :\n    AutoDyadicSharpnessCriticalExponent alpha \u2194 alpha = 3 / 4",
+      "proof_text": "unfold AutoDyadicSharpnessCriticalExponent\n  constructor\n  \u00b7 intro h\n    linarith\n  \u00b7 intro h\n    linarith",
       "proof_mode": "audited-core-replacement",
       "equivalence_scope": "critical_exponent_algebraic_component_only",
       "proof_method": "lean_verified",
@@ -7349,9 +7346,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Sharpness of the same-color shell]\\label{prop:sharpness}\nThere exist a fixed low output frequency $q$, a conic sector of the resonant shell, and a smooth time profile $w(q,t)$ supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell $|\\ell|\\sim N$ satisfies\n\\begin{equation}\\label{eq:sharpness}\n\\|D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\\gtrsim N^{3-4\\alpha}\n\\end{equation}\nup to strictly lower-order terms. Consequently $\\alpha=3/4$ is logarithmically critical for the deterministic contraction channel.",
         "normalized_natural_language_theorem": "[Sharpness of the same-color shell] There exist a fixed low output frequency q , a conic sector of the resonant shell, and a smooth time profile w(q,t) supported only at that frequency such that the leading same-color deterministic contraction on the dyadic shell |ell|sim N satisfies \\|D_N^ i;j w\\|_ C_TH^ s_2-alpha gtrsim N^ 3-4alpha up to strictly lower-order terms. Consequently alpha=3/4 is logarithmically critical for the deterministic contraction channel.",
-        "lean_statement": "def AutoDyadicSharpnessCriticalExponent (alpha : ℝ) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :\n    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4",
+        "lean_statement": "def AutoDyadicSharpnessCriticalExponent (alpha : \u211d) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : \u211d) :\n    AutoDyadicSharpnessCriticalExponent alpha \u2194 alpha = 3 / 4",
         "extracted_assumptions": [],
-        "extracted_conclusion": "ℕ, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
+        "extracted_conclusion": "\u2115, DyadicBlockBound N 0 0 = DyadicBlockBound N 0 0",
         "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -7437,9 +7434,9 @@
         "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
         "verification_method": "lake env lean",
         "verified_at": 1777283293.622658,
-        "lean_statement": "def AutoDyadicSharpnessCriticalExponent (alpha : ℝ) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :\n    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4",
-        "proof_text": "unfold AutoDyadicSharpnessCriticalExponent\n  constructor\n  · intro h\n    linarith\n  · intro h\n    linarith",
-        "core_declaration": "def AutoDyadicSharpnessCriticalExponent (alpha : ℝ) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : ℝ) :\n    AutoDyadicSharpnessCriticalExponent alpha ↔ alpha = 3 / 4 := by\n  unfold AutoDyadicSharpnessCriticalExponent\n  constructor\n  · intro h\n    linarith\n  · intro h\n    linarith",
+        "lean_statement": "def AutoDyadicSharpnessCriticalExponent (alpha : \u211d) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : \u211d) :\n    AutoDyadicSharpnessCriticalExponent alpha \u2194 alpha = 3 / 4",
+        "proof_text": "unfold AutoDyadicSharpnessCriticalExponent\n  constructor\n  \u00b7 intro h\n    linarith\n  \u00b7 intro h\n    linarith",
+        "core_declaration": "def AutoDyadicSharpnessCriticalExponent (alpha : \u211d) : Prop :=\n    3 - 4 * alpha = 0\n\ntheorem auto_prop_sharpness_critical_exponent_iff (alpha : \u211d) :\n    AutoDyadicSharpnessCriticalExponent alpha \u2194 alpha = 3 / 4 := by\n  unfold AutoDyadicSharpnessCriticalExponent\n  constructor\n  \u00b7 intro h\n    linarith\n  \u00b7 intro h\n    linarith",
         "semantic_equivalence_verified": true,
         "semantic_equivalence": {
           "independent": true,
@@ -7466,7 +7463,7 @@
       "grounding_metadata": [],
       "result_label": "lean_verified_audited_component_without_paper_local_axioms",
       "claim_scope": "Lake-verified algebraic critical-exponent component of the sharpness claim; this does not prove the analytic dyadic lower-bound witness.",
-      "canonical_statement": "theorem _ (u1 : ℝ) : AutoDyadicSharpnessCriticalExponent u1 ↔ u1 = 3 / 4",
+      "canonical_statement": "theorem _ (u1 : \u211d) : AutoDyadicSharpnessCriticalExponent u1 \u2194 u1 = 3 / 4",
       "statement_fingerprint": "c16ff941d4514781ae7ca459bdbbc57d5e0847eb209df50f9d998f885b2c9035",
       "canonical_theorem_id": "cth_c16ff941d4514781ae7ca459",
       "claim_shape": "equality",
@@ -7509,8 +7506,8 @@
       "status": "FULLY_PROVEN",
       "proved": true,
       "lean_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
-      "lean_statement": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : ℝ) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta →\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 ∧\n    theta * (s2 + eps) < 4 * alpha - 3",
-      "proof_text": "intro h\n  constructor\n  · linarith [h.1]\n  · linarith [h.2]",
+      "lean_statement": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : \u211d) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : \u211d) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta \u2192\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 \u2227\n    theta * (s2 + eps) < 4 * alpha - 3",
+      "proof_text": "intro h\n  constructor\n  \u00b7 linarith [h.1]\n  \u00b7 linarith [h.2]",
       "proof_mode": "audited-core-replacement",
       "equivalence_scope": "operator_condition_algebraic_component_only",
       "proof_method": "lean_verified",
@@ -7541,7 +7538,7 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Same-color deterministic contraction]\\label{prop:det-contraction}\nLet $i\\neq j$. Define\n\\begin{equation}\\label{eq:DN-operator}\n(\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds.\n\\end{equation}\nThen\n\\begin{equation}\\label{eq:DN-bound}\n\\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}}\n\\lesssim_T\n\\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr)\n\\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr).\n\\end{equation}\nConsequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second condition in \\eqref{eq:operator-cond-main} holds.",
         "normalized_natural_language_theorem": "Assumptions: [Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$. Conclusion: Define \\begin{equation}\\label{eq:DN-operator} (\\mathcal D_N^{i;j}w)_q(t)=\\int_0^t D_N^{i;j}(q;t,s)\\widehat w(q,s)\\,ds. \\end{equation} Then \\begin{equation}\\label{eq:DN-bound} \\|\\mathcal D_N^{i;j}w\\|_{C_TH^{s_2-\\alpha}} \\lesssim_T \\Bigl(N^{3-4\\alpha}+N^{3-4\\alpha+\\theta(s_2+\\varepsilon)}\\Bigr) \\bigl(\\|w\\|_{C_TL^2}+\\|\\partial_t w\\|_{C_TH^{-\\alpha-\\varepsilon}}\\bigr). \\end{equation} Consequently $\\sum_N\\mathcal D_N^{i;j}$ converges in $\\mathcal L(E_T,C_TH^{s_2-\\alpha})$ whenever the second conditio",
-        "lean_statement": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : ℝ) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta →\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 ∧\n    theta * (s2 + eps) < 4 * alpha - 3",
+        "lean_statement": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : \u211d) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : \u211d) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta \u2192\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 \u2227\n    theta * (s2 + eps) < 4 * alpha - 3",
         "extracted_assumptions": [
           "[Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$."
         ],
@@ -7603,7 +7600,7 @@
             "[Same-color deterministic contraction]\\label{prop:det-contraction} Let $i\\neq j$."
           ],
           "added_assumptions": [
-            "h_i_ne_j: i ≠ j",
+            "h_i_ne_j: i \u2260 j",
             "h_eps_pos: 0 < eps",
             "h_s1_pos: 0 < s1",
             "h_s1_lt_s2: s1 < s2"
@@ -7645,9 +7642,9 @@
         "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
         "verification_method": "lake env lean",
         "verified_at": 1777283293.622658,
-        "lean_statement": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : ℝ) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta →\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 ∧\n    theta * (s2 + eps) < 4 * alpha - 3",
-        "proof_text": "intro h\n  constructor\n  · linarith [h.1]\n  · linarith [h.2]",
-        "core_declaration": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : ℝ) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta →\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 ∧\n    theta * (s2 + eps) < 4 * alpha - 3 := by\n  intro h\n  constructor\n  · linarith [h.1]\n  · linarith [h.2]",
+        "lean_statement": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : \u211d) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : \u211d) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta \u2192\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 \u2227\n    theta * (s2 + eps) < 4 * alpha - 3",
+        "proof_text": "intro h\n  constructor\n  \u00b7 linarith [h.1]\n  \u00b7 linarith [h.2]",
+        "core_declaration": "def AutoStrongLowHighOperatorCondition (eps alpha s2 theta : \u211d) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ntheorem auto_prop_det_contraction_condition_rearrange (eps alpha s2 theta : \u211d) :\n    AutoStrongLowHighOperatorCondition eps alpha s2 theta \u2192\n    s2 + (3 / 2) * theta + eps < 4 * alpha - 3 \u2227\n    theta * (s2 + eps) < 4 * alpha - 3 := by\n  intro h\n  constructor\n  \u00b7 linarith [h.1]\n  \u00b7 linarith [h.2]",
         "semantic_equivalence_verified": true,
         "semantic_equivalence": {
           "independent": true,
@@ -7674,7 +7671,7 @@
       "grounding_metadata": [],
       "result_label": "lean_verified_audited_component_without_paper_local_axioms",
       "claim_scope": "Lake-verified algebraic rearrangement of the strong low-high operator conditions; this does not prove the analytic deterministic contraction estimate.",
-      "canonical_statement": "theorem _ (u2 u1 u3 u4 : ℝ) : AutoStrongLowHighOperatorCondition u1 u2 u3 u4 → u3 + (3 / 2) * u4 + u1 < 4 * u2 - 3 ∧ u4 * (u3 + u1) < 4 * u2 - 3",
+      "canonical_statement": "theorem _ (u2 u1 u3 u4 : \u211d) : AutoStrongLowHighOperatorCondition u1 u2 u3 u4 \u2192 u3 + (3 / 2) * u4 + u1 < 4 * u2 - 3 \u2227 u4 * (u3 + u1) < 4 * u2 - 3",
       "statement_fingerprint": "a17bbb85f8274e055230242a036ae45cc6aa7b2e85e0935a636319885497d3a8",
       "canonical_theorem_id": "cth_a17bbb85f8274e055230242a",
       "claim_shape": "inequality",
@@ -7724,7 +7721,7 @@
       "status": "FULLY_PROVEN",
       "proved": true,
       "lean_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
-      "lean_statement": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV)",
+      "lean_statement": "def AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : \u211d) : Prop :=\n  0 < s1 \u2227 s1 < s2 \u2227\n  0 < theta \u2227 theta < 1 \u2227\n  s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n  3 - 4 * alpha + theta * (s2 + eps) < 0 \u2227\n  s1 < 2 * alpha - 3 / 2 - eps \u2227\n  3 / 2 - alpha + eps < s2 \u2227\n  s2 < s1 + 2 * alpha - 3 / 2 - eps \u2227\n  s2 \u2264 s1 + alpha / 4 \u2227\n  rhoV + s1 > 0 \u2227\n  s2 - alpha < rhoV",
       "proof_text": "unfold AutoAdmissibleFull AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
       "proof_mode": "audited-core-replacement",
       "equivalence_scope": "full_source_claim",
@@ -7756,9 +7753,9 @@
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "[Admissible deterministic parameters]\\label{def:admissible}\nWe call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$,\n\\begin{align}\n&0<s_1<s_2,\n\\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\\n&s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad 3-4\\alpha+\\theta(s_2+\\varepsilon)<0, \\label{eq:adm-2}\\\\\n&s_1<2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-3}\\\\\n&s_2>\\frac32-\\alpha+\\varepsilon,\n\\qquad s_2<s_1+2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-4}\\\\\n&s_2\\le s_1+\\frac\\alpha4, \\label{eq:adm-5}\\\\\n&\\rho_V+s_1>0,\n\\qquad s_2-\\alpha<\\rho_V. \\label{eq:adm-6}\n\\end{align}",
         "normalized_natural_language_theorem": "[Admissible deterministic parameters] We call (alpha,s_1,s_2,theta) admissible for the conservative source formulation if, for sufficiently small varepsilon>0 , &0<s_1<s_2, qquad 0<theta<1, \\\\ &s_2<4alpha-3-frac32theta-varepsilon, qquad 3-4alpha+theta(s_2+varepsilon)<0, \\\\ &s_1<2alpha-frac32-varepsilon, \\\\ &s_2>frac32-alpha+varepsilon, qquad s_2<s_1+2alpha-frac32-varepsilon, \\\\ &s_2le s_1+fracalpha4, \\\\ &rho_V+s_1>0, qquad s_2-alpha<rho_V.",
-        "lean_statement": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV)",
+        "lean_statement": "def AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : \u211d) : Prop :=\n  0 < s1 \u2227 s1 < s2 \u2227\n  0 < theta \u2227 theta < 1 \u2227\n  s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n  3 - 4 * alpha + theta * (s2 + eps) < 0 \u2227\n  s1 < 2 * alpha - 3 / 2 - eps \u2227\n  3 / 2 - alpha + eps < s2 \u2227\n  s2 < s1 + 2 * alpha - 3 / 2 - eps \u2227\n  s2 \u2264 s1 + alpha / 4 \u2227\n  rhoV + s1 > 0 \u2227\n  s2 - alpha < rhoV",
         "extracted_assumptions": [],
-        "extracted_conclusion": "ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 ≤ s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V",
+        "extracted_conclusion": "\u211d, 0 < epsilon \u2227 0 < s1 \u2227 s1 < s2 \u2227 0 < theta \u2227 theta < 1 \u2227 s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon \u2227 3 - 4 * alpha + theta * (s2 + epsilon) < 0 \u2227 s1 < 2 * alpha - (3 / 2) - epsilon \u2227 3 / 2 - alpha + epsilon < s2 \u2227 s2 < s1 + 2 * alpha - (3 / 2) - epsilon \u2227 s2 \u2264 s1 + alpha / 4 \u2227 0 < rho_V + s1 \u2227 s2 - alpha < rho_V",
         "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "cache_hit",
@@ -7844,9 +7841,9 @@
         "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
         "verification_method": "lake env lean",
         "verified_at": 1777283293.622658,
-        "lean_statement": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV)",
+        "lean_statement": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : \u211d) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : \u211d) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : \u211d) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : \u211d) : Prop :=\n    3 / 2 - alpha + eps < s2 \u2227\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : \u211d) : Prop :=\n    s2 \u2264 s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : \u211d) : Prop :=\n    rhoV + s1 > 0 \u2227\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : \u211d) : Prop :=\n    0 < s1 \u2227\n    s1 < s2 \u2227\n    0 < theta \u2227\n    theta < 1 \u2227\n    AutoCenteredFluctuationCondition eps alpha s2 theta \u2227\n    AutoSameColorContractionCondition eps alpha s2 theta \u2227\n    AutoNaiveLowHighMappingCondition eps alpha s1 \u2227\n    AutoBasicProductTheoryCondition eps alpha s1 s2 \u2227\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 \u2227\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : \u211d) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV \u2194\n    (0 < s1 \u2227\n    s1 < s2 \u2227\n    0 < theta \u2227\n    theta < 1 \u2227\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n    3 - 4 * alpha + theta * (s2 + eps) < 0 \u2227\n    s1 < 2 * alpha - 3 / 2 - eps \u2227\n    3 / 2 - alpha + eps < s2 \u2227\n    s2 < s1 + 2 * alpha - 3 / 2 - eps \u2227\n    s2 \u2264 s1 + alpha / 4 \u2227\n    rhoV + s1 > 0 \u2227\n    s2 - alpha < rhoV)",
         "proof_text": "unfold AutoAdmissibleFull AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
-        "core_declaration": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : ℝ) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : ℝ) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : ℝ) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : ℝ) : Prop :=\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : ℝ) : Prop :=\n    s2 ≤ s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : ℝ) : Prop :=\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV ↔\n    (0 < s1 ∧\n    s1 < s2 ∧\n    0 < theta ∧\n    theta < 1 ∧\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    3 / 2 - alpha + eps < s2 ∧\n    s2 < s1 + 2 * alpha - 3 / 2 - eps ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    rhoV + s1 > 0 ∧\n    s2 - alpha < rhoV) := by\n  unfold AutoAdmissibleFull AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
+        "core_declaration": "def AutoCenteredFluctuationCondition (eps alpha s2 theta : \u211d) : Prop :=\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps\n\ndef AutoSameColorContractionCondition (eps alpha s2 theta : \u211d) : Prop :=\n    3 - 4 * alpha + theta * (s2 + eps) < 0\n\ndef AutoNaiveLowHighMappingCondition (eps alpha s1 : \u211d) : Prop :=\n    s1 < 2 * alpha - 3 / 2 - eps\n\ndef AutoBasicProductTheoryCondition (eps alpha s1 s2 : \u211d) : Prop :=\n    3 / 2 - alpha + eps < s2 \u2227\n    s2 < s1 + 2 * alpha - 3 / 2 - eps\n\ndef AutoQuadraticStrichartzClosureCondition (alpha s1 s2 : \u211d) : Prop :=\n    s2 \u2264 s1 + alpha / 4\n\ndef AutoProductsViUjCondition (alpha s1 s2 rhoV : \u211d) : Prop :=\n    rhoV + s1 > 0 \u2227\n    s2 - alpha < rhoV\n\ndef AutoAdmissibleFull (eps alpha s1 s2 theta rhoV : \u211d) : Prop :=\n    0 < s1 \u2227\n    s1 < s2 \u2227\n    0 < theta \u2227\n    theta < 1 \u2227\n    AutoCenteredFluctuationCondition eps alpha s2 theta \u2227\n    AutoSameColorContractionCondition eps alpha s2 theta \u2227\n    AutoNaiveLowHighMappingCondition eps alpha s1 \u2227\n    AutoBasicProductTheoryCondition eps alpha s1 s2 \u2227\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 \u2227\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_def_admissible_iff (eps alpha s1 s2 theta rhoV : \u211d) :\n    AutoAdmissibleFull eps alpha s1 s2 theta rhoV \u2194\n    (0 < s1 \u2227\n    s1 < s2 \u2227\n    0 < theta \u2227\n    theta < 1 \u2227\n    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n    3 - 4 * alpha + theta * (s2 + eps) < 0 \u2227\n    s1 < 2 * alpha - 3 / 2 - eps \u2227\n    3 / 2 - alpha + eps < s2 \u2227\n    s2 < s1 + 2 * alpha - 3 / 2 - eps \u2227\n    s2 \u2264 s1 + alpha / 4 \u2227\n    rhoV + s1 > 0 \u2227\n    s2 - alpha < rhoV) := by\n  unfold AutoAdmissibleFull AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
         "semantic_equivalence_verified": true,
         "semantic_equivalence": {
           "independent": true,
@@ -7873,7 +7870,7 @@
       "grounding_metadata": [],
       "result_label": "lean_verified_without_paper_local_axioms",
       "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
-      "canonical_statement": "theorem _ (u2 u1 u6 u3 u4 u5 : ℝ) : AutoAdmissibleFull u1 u2 u3 u4 u5 u6 ↔ (0 < u3 ∧ u3 < u4 ∧ 0 < u5 ∧ u5 < 1 ∧ u4 < 4 * u2 - 3 - (3 / 2) * u5 - u1 ∧ 3 - 4 * u2 + u5 * (u4 + u1) < 0 ∧ u3 < 2 * u2 - 3 / 2 - u1 ∧ 3 / 2 - u2 + u1 < u4 ∧ u4 < u3 + 2 * u2 - 3 / 2 - u1 ∧ u4 <= u3 + u2 / 4 ∧ u6 + u3 > 0 ∧ u4 - u2 < u6)",
+      "canonical_statement": "theorem _ (u2 u1 u6 u3 u4 u5 : \u211d) : AutoAdmissibleFull u1 u2 u3 u4 u5 u6 \u2194 (0 < u3 \u2227 u3 < u4 \u2227 0 < u5 \u2227 u5 < 1 \u2227 u4 < 4 * u2 - 3 - (3 / 2) * u5 - u1 \u2227 3 - 4 * u2 + u5 * (u4 + u1) < 0 \u2227 u3 < 2 * u2 - 3 / 2 - u1 \u2227 3 / 2 - u2 + u1 < u4 \u2227 u4 < u3 + 2 * u2 - 3 / 2 - u1 \u2227 u4 <= u3 + u2 / 4 \u2227 u6 + u3 > 0 \u2227 u4 - u2 < u6)",
       "statement_fingerprint": "e83bf263d268c3c010763f75b0ec4ca82ddd7028b2af749d324a61bf72fc9f5d",
       "canonical_theorem_id": "cth_e83bf263d268c3c010763f75",
       "claim_shape": "inequality",
@@ -7930,7 +7927,7 @@
       "status": "FULLY_PROVEN",
       "proved": true,
       "lean_file": "/home/projectx/BDDM/Desol/PaperProofs/Auto/Paper_2604_21884.lean",
-      "lean_statement": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV ↔\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    (3 / 2 - alpha + eps < s2 ∧ s2 < s1 + 2 * alpha - 3 / 2 - eps) ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    (rhoV + s1 > 0 ∧ s2 - alpha < rhoV))",
+      "lean_statement": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : \u211d) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta \u2227\n    AutoSameColorContractionCondition eps alpha s2 theta \u2227\n    AutoNaiveLowHighMappingCondition eps alpha s1 \u2227\n    AutoBasicProductTheoryCondition eps alpha s1 s2 \u2227\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 \u2227\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : \u211d) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV \u2194\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n    3 - 4 * alpha + theta * (s2 + eps) < 0 \u2227\n    s1 < 2 * alpha - 3 / 2 - eps \u2227\n    (3 / 2 - alpha + eps < s2 \u2227 s2 < s1 + 2 * alpha - 3 / 2 - eps) \u2227\n    s2 \u2264 s1 + alpha / 4 \u2227\n    (rhoV + s1 > 0 \u2227 s2 - alpha < rhoV))",
       "proof_text": "unfold AutoRemark20ConditionRoles AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
       "proof_mode": "audited-core-replacement",
       "equivalence_scope": "full_source_claim",
@@ -7961,14 +7958,14 @@
       ],
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "The first line in \\eqref{eq:adm-2} is the centered fluctuation condition, the second line in \\eqref{eq:adm-2} is the same-color deterministic contraction condition, \\eqref{eq:adm-3} is the naive low--high mapping for the $X$-equation, \\eqref{eq:adm-4} comes from the basic product theory for $U>\\Psi$ and $Y\\circ\\Psi$, \\eqref{eq:adm-5} is the quadratic Strichartz closure, and \\eqref{eq:adm-6} treats the products $V_iU_j$.",
-        "normalized_natural_language_theorem": "Assumptions: 0 < s_1 < s_2; 0 < θ < 1; s_2 < 4α - 3 - (3/2)θ - ε Conclusion: The parameters (α, s_1, s_2, θ) are admissible for the conservative source formulation if the given conditions hold for sufficiently small ε > 0.",
-        "lean_statement": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV ↔\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    (3 / 2 - alpha + eps < s2 ∧ s2 < s1 + 2 * alpha - 3 / 2 - eps) ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    (rhoV + s1 > 0 ∧ s2 - alpha < rhoV))",
+        "normalized_natural_language_theorem": "Assumptions: 0 < s_1 < s_2; 0 < \u03b8 < 1; s_2 < 4\u03b1 - 3 - (3/2)\u03b8 - \u03b5 Conclusion: The parameters (\u03b1, s_1, s_2, \u03b8) are admissible for the conservative source formulation if the given conditions hold for sufficiently small \u03b5 > 0.",
+        "lean_statement": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : \u211d) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta \u2227\n    AutoSameColorContractionCondition eps alpha s2 theta \u2227\n    AutoNaiveLowHighMappingCondition eps alpha s1 \u2227\n    AutoBasicProductTheoryCondition eps alpha s1 s2 \u2227\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 \u2227\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : \u211d) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV \u2194\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n    3 - 4 * alpha + theta * (s2 + eps) < 0 \u2227\n    s1 < 2 * alpha - 3 / 2 - eps \u2227\n    (3 / 2 - alpha + eps < s2 \u2227 s2 < s1 + 2 * alpha - 3 / 2 - eps) \u2227\n    s2 \u2264 s1 + alpha / 4 \u2227\n    (rhoV + s1 > 0 \u2227 s2 - alpha < rhoV))",
         "extracted_assumptions": [
           "0 < s_1 < s_2",
-          "0 < θ < 1",
-          "s_2 < 4α - 3 - (3/2)θ - ε"
+          "0 < \u03b8 < 1",
+          "s_2 < 4\u03b1 - 3 - (3/2)\u03b8 - \u03b5"
         ],
-        "extracted_conclusion": "The parameters (α, s_1, s_2, θ) are admissible for the conservative source formulation if the given conditions hold for sufficiently small ε > 0.",
+        "extracted_conclusion": "The parameters (\u03b1, s_1, s_2, \u03b8) are admissible for the conservative source formulation if the given conditions hold for sufficiently small \u03b5 > 0.",
         "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "formalization_unvalidated",
@@ -8022,8 +8019,8 @@
           "lean_text_coverage": 0.0,
           "missing_assumptions": [
             "0 < s_1 < s_2",
-            "0 < θ < 1",
-            "s_2 < 4α - 3 - (3/2)θ - ε"
+            "0 < \u03b8 < 1",
+            "s_2 < 4\u03b1 - 3 - (3/2)\u03b8 - \u03b5"
           ],
           "added_assumptions": [
             "hs1: 0 < s1",
@@ -8069,9 +8066,9 @@
         "core_sha256": "15a81c55249856388c03206970772c99a648b80d0d74fe88eda50f689bf35428",
         "verification_method": "lake env lean",
         "verified_at": 1777283293.622658,
-        "lean_statement": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV ↔\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    (3 / 2 - alpha + eps < s2 ∧ s2 < s1 + 2 * alpha - 3 / 2 - eps) ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    (rhoV + s1 > 0 ∧ s2 - alpha < rhoV))",
+        "lean_statement": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : \u211d) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta \u2227\n    AutoSameColorContractionCondition eps alpha s2 theta \u2227\n    AutoNaiveLowHighMappingCondition eps alpha s1 \u2227\n    AutoBasicProductTheoryCondition eps alpha s1 s2 \u2227\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 \u2227\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : \u211d) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV \u2194\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n    3 - 4 * alpha + theta * (s2 + eps) < 0 \u2227\n    s1 < 2 * alpha - 3 / 2 - eps \u2227\n    (3 / 2 - alpha + eps < s2 \u2227 s2 < s1 + 2 * alpha - 3 / 2 - eps) \u2227\n    s2 \u2264 s1 + alpha / 4 \u2227\n    (rhoV + s1 > 0 \u2227 s2 - alpha < rhoV))",
         "proof_text": "unfold AutoRemark20ConditionRoles AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
-        "core_declaration": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : ℝ) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta ∧\n    AutoSameColorContractionCondition eps alpha s2 theta ∧\n    AutoNaiveLowHighMappingCondition eps alpha s1 ∧\n    AutoBasicProductTheoryCondition eps alpha s1 s2 ∧\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 ∧\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : ℝ) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV ↔\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n    3 - 4 * alpha + theta * (s2 + eps) < 0 ∧\n    s1 < 2 * alpha - 3 / 2 - eps ∧\n    (3 / 2 - alpha + eps < s2 ∧ s2 < s1 + 2 * alpha - 3 / 2 - eps) ∧\n    s2 ≤ s1 + alpha / 4 ∧\n    (rhoV + s1 > 0 ∧ s2 - alpha < rhoV)) := by\n  unfold AutoRemark20ConditionRoles AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
+        "core_declaration": "def AutoRemark20ConditionRoles (eps alpha s1 s2 theta rhoV : \u211d) : Prop :=\n    AutoCenteredFluctuationCondition eps alpha s2 theta \u2227\n    AutoSameColorContractionCondition eps alpha s2 theta \u2227\n    AutoNaiveLowHighMappingCondition eps alpha s1 \u2227\n    AutoBasicProductTheoryCondition eps alpha s1 s2 \u2227\n    AutoQuadraticStrichartzClosureCondition alpha s1 s2 \u2227\n    AutoProductsViUjCondition alpha s1 s2 rhoV\n\ntheorem auto_remark_20_condition_roles_iff (eps alpha s1 s2 theta rhoV : \u211d) :\n    AutoRemark20ConditionRoles eps alpha s1 s2 theta rhoV \u2194\n    (s2 < 4 * alpha - 3 - (3 / 2) * theta - eps \u2227\n    3 - 4 * alpha + theta * (s2 + eps) < 0 \u2227\n    s1 < 2 * alpha - 3 / 2 - eps \u2227\n    (3 / 2 - alpha + eps < s2 \u2227 s2 < s1 + 2 * alpha - 3 / 2 - eps) \u2227\n    s2 \u2264 s1 + alpha / 4 \u2227\n    (rhoV + s1 > 0 \u2227 s2 - alpha < rhoV)) := by\n  unfold AutoRemark20ConditionRoles AutoCenteredFluctuationCondition\n    AutoSameColorContractionCondition AutoNaiveLowHighMappingCondition\n    AutoBasicProductTheoryCondition AutoQuadraticStrichartzClosureCondition\n    AutoProductsViUjCondition\n  aesop",
         "semantic_equivalence_verified": true,
         "semantic_equivalence": {
           "independent": true,
@@ -8098,7 +8095,7 @@
       "grounding_metadata": [],
       "result_label": "lean_verified_without_paper_local_axioms",
       "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
-      "canonical_statement": "theorem _ (u2 u1 u6 u3 u4 u5 : ℝ) : AutoRemark20ConditionRoles u1 u2 u3 u4 u5 u6 ↔ (u4 < 4 * u2 - 3 - (3 / 2) * u5 - u1 ∧ 3 - 4 * u2 + u5 * (u4 + u1) < 0 ∧ u3 < 2 * u2 - 3 / 2 - u1 ∧ (3 / 2 - u2 + u1 < u4 ∧ u4 < u3 + 2 * u2 - 3 / 2 - u1) ∧ u4 <= u3 + u2 / 4 ∧ (u6 + u3 > 0 ∧ u4 - u2 < u6))",
+      "canonical_statement": "theorem _ (u2 u1 u6 u3 u4 u5 : \u211d) : AutoRemark20ConditionRoles u1 u2 u3 u4 u5 u6 \u2194 (u4 < 4 * u2 - 3 - (3 / 2) * u5 - u1 \u2227 3 - 4 * u2 + u5 * (u4 + u1) < 0 \u2227 u3 < 2 * u2 - 3 / 2 - u1 \u2227 (3 / 2 - u2 + u1 < u4 \u2227 u4 < u3 + 2 * u2 - 3 / 2 - u1) \u2227 u4 <= u3 + u2 / 4 \u2227 (u6 + u3 > 0 \u2227 u4 - u2 < u6))",
       "statement_fingerprint": "eaf4ac6602c01a384d5576827455231361d69d7ec76d2667c8c1918bd71c11c6",
       "canonical_theorem_id": "cth_eaf4ac6602c01a384d557682",
       "claim_shape": "inequality",
@@ -8138,6 +8135,17 @@
           "mathlib_semantic_overlap": 0.86
         }
       }
+    },
+    {
+      "theorem_name": "AutoPaper_2604_21884.alpha_above_three_quarters__audited_core",
+      "lean_statement": "theorem alpha_above_three_quarters__audited_core (eps alpha s1 s2 theta rhoV : \u211d)\n    (h : AutoAdmissibleFull eps alpha s1 s2 theta rhoV) (heps : 0 < eps) :\n    alpha > 3 / 4 := by\n  unfold AutoAdmissibleFull AutoCenteredFluctuationCondition at h\n  obtain \u27e8hs1, hs1s2, htheta, _, h_cfc, _\u27e9 := h\n  linarith",
+      "status": "FULLY_PROVEN",
+      "proof_method": "lean_verified",
+      "proof_text": "unfold AutoAdmissibleFull AutoCenteredFluctuationCondition at h\nobtain \u27e8hs1, hs1s2, htheta, _, h_cfc, _\u27e9 := h\nlinarith",
+      "axiom_debt": [],
+      "gate_failures": [],
+      "trust_class": "audited_core",
+      "timestamp": "2026-04-30T20:53:31Z"
     }
   ]
 }

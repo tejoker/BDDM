@@ -85,6 +85,57 @@ except ModuleNotFoundError:
 
 TheoremStatus = VerificationStatus
 
+# Patterns that indicate a missing Mathlib/project definition in a Lean error.
+_UNKNOWN_IDENT_RE = re.compile(
+    r"unknown (?:identifier|constant) '([^']+)'",
+    re.IGNORECASE,
+)
+_FAILED_SYNTH_RE = re.compile(
+    r"failed to synthesize\s+([A-Z][A-Za-z0-9_.]*)",
+    re.IGNORECASE,
+)
+
+
+def _emit_frontier_gap(
+    *,
+    paper_id: str,
+    theorem_name: str,
+    error_message: str,
+    lean_attempt: str,
+    latex_stmt: str,
+    output_root: Path | None = None,
+) -> None:
+    """Append a structured gap entry to output/frontier_gaps/<paper_id>.jsonl.
+
+    Each entry records which Lean identifier is missing so the gap file can be
+    used as a signal for Mathlib coverage work or library prioritisation.
+    """
+    missing: list[str] = list(dict.fromkeys(
+        _UNKNOWN_IDENT_RE.findall(error_message)
+        + _FAILED_SYNTH_RE.findall(error_message)
+    ))
+    if not missing and not error_message:
+        return
+
+    base = (output_root or Path("output")) / "frontier_gaps"
+    base.mkdir(parents=True, exist_ok=True)
+    target = base / f"{paper_id or 'unknown'}.jsonl"
+
+    entry = {
+        "paper_id": paper_id,
+        "theorem_name": theorem_name,
+        "missing_identifiers": missing,
+        "lean_attempt": lean_attempt[:800] if lean_attempt else "",
+        "latex_statement": latex_stmt[:600] if latex_stmt else "",
+        "error_summary": error_message[:400] if error_message else "",
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    }
+    try:
+        with target.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+
 
 def _auto_reproducible_env(project_root: Path | None) -> bool:
     if project_root is None:
@@ -290,7 +341,9 @@ def infer_claim_equivalence(
     independent_positive_markers = (
         "human_equivalent",
         "claim_equivalent:human",
+        "claim_equivalent:leanstral",   # automated judge (leanstral_judge.py)
         "semantic_equivalence:verified",
+        "independent_semantic_evidence:leanstral",
         "roundtrip_equivalent",
         "adversarial_passed",
     )
@@ -378,6 +431,8 @@ def infer_claim_equivalence(
 _INDEPENDENT_SEMANTIC_EVIDENCE_MARKERS = (
     "human_equivalent",
     "claim_equivalent:human",
+    "claim_equivalent:leanstral",
+    "independent_semantic_evidence:leanstral",
     "semantic_equivalence:verified",
     "roundtrip_equivalent",
     "adversarial_passed",
@@ -1447,6 +1502,7 @@ def build_ledger_entry(
     had_exception: bool = False,
     proof_method: ProofMethod | None = None,
     failure_kind: FailureKind | None = None,
+    source_span_id: str = "",
 ) -> TheoremLedgerEntry:
     """Build a TheoremLedgerEntry from raw pipeline step_records."""
     step_obligations, first_failing = reconstruct_step_obligations(
@@ -1500,6 +1556,18 @@ def build_ledger_entry(
         step_verdict=step_verdict,
         error=error_message,
     )
+
+    # Emit a frontier gap entry when the failure is a missing definition so
+    # the gap file accumulates a paper-level inventory of Mathlib coverage holes.
+    if failure_kind == FailureKind.MISSING_DEFINITION:
+        _emit_frontier_gap(
+            paper_id=provenance.paper_id if provenance else "",
+            theorem_name=theorem_name,
+            error_message=error_message,
+            lean_attempt=lean_statement,
+            latex_stmt=original_latex_theorem,
+            output_root=(project_root / "output") if project_root else None,
+        )
 
     auto_fidelity, auto_alignment = infer_quality_scores(
         proved=proved,
@@ -1673,6 +1741,9 @@ def build_ledger_entry(
         statement_fidelity_blockers = ["statement_fidelity_gate_unavailable"]
         statement_fidelity_source = "none"
 
+    _hash_src = f"{provenance.paper_id if provenance else ''}|{theorem_name}|{lean_statement}"
+    source_content_hash = hashlib.sha256(_hash_src.encode("utf-8")).hexdigest()[:16]
+
     return TheoremLedgerEntry(
         theorem_name=theorem_name,
         lean_file=lean_file,
@@ -1722,4 +1793,6 @@ def build_ledger_entry(
         statement_fidelity_verdict=statement_fidelity_verdict,
         statement_fidelity_blockers=statement_fidelity_blockers,
         statement_fidelity_source=statement_fidelity_source,
+        source_content_hash=source_content_hash,
+        source_span_id=source_span_id,
     )

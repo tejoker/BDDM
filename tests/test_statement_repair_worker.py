@@ -80,6 +80,40 @@ def test_worker_filters_queue_rows_by_route_and_kind() -> None:
     assert [row["row_id"] for row in filtered] == ["r2"]
 
 
+def test_worker_filters_queue_rows_by_paper_route_and_kind() -> None:
+    rows = [
+        _queue_row(row_id="r1", arxiv_id="2604.21583", repair_kind="replace_placeholder_statement"),
+        _queue_row(row_id="r2", arxiv_id="2304.09598", repair_kind="replace_placeholder_statement"),
+        _queue_row(row_id="r3", arxiv_id="2604.21583", repair_kind="regenerate_flawed_statement"),
+    ]
+
+    filtered = worker._filter_queue_rows(
+        rows,
+        paper_id="2604.21583",
+        repair_route="statement_regeneration",
+        repair_kind="replace_placeholder_statement",
+    )
+
+    assert [row["row_id"] for row in filtered] == ["r1"]
+
+
+def test_worker_action_targets_include_source_context_lean_names() -> None:
+    action = _action(
+        theorem_ids=["lem:NQ-double-commutator-direct"],
+        source_contexts=[
+            {
+                "theorem_id": "lem:NQ-double-commutator-direct",
+                "lean_statement": "theorem lem_NQ_double_commutator_direct : True := by\n  trivial",
+            }
+        ],
+    )
+
+    targets = worker._action_target_names(action)
+
+    assert "lem:NQ-double-commutator-direct" in targets
+    assert "lem_NQ_double_commutator_direct" in targets
+
+
 def test_worker_write_keeps_non_write_routes_queued() -> None:
     executed = worker.execute_worker_actions(
         [
@@ -307,6 +341,139 @@ def test_statement_regeneration_uses_source_backed_payload_before_legacy_pack(mo
     assert result["status"] == "written_source_backed_regeneration"
     assert result["repair_summary"]["changed_elaborating"] == 1
     assert result["regeneration_protocol"] == "source_backed_v2"
+
+
+def test_statement_regeneration_dry_run_builds_source_backed_candidate_preview(monkeypatch, tmp_path: Path) -> None:
+    fake_module = types.SimpleNamespace(
+        build_source_backed_repair_payload=lambda **_kwargs: {
+            "candidate_counts": {"total": 1, "changed_elaborating": 0, "quality_blocked": 1},
+            "repair_candidates": [
+                {
+                    "theorem_name": "bad",
+                    "repaired_decl": "theorem bad : ∃ x : ℝ, x = x := by\n  sorry",
+                    "changes": ["source_backed_regeneration_v2"],
+                    "repair_quality": {
+                        "ok": False,
+                        "blockers": ["vacuous_exists_self_equality_after_repair"],
+                    },
+                    "lean_validation": {
+                        "ok": False,
+                        "error": "repair_quality_blocked:vacuous_exists_self_equality_after_repair",
+                    },
+                    "review_batch_eligibility_preview": {
+                        "eligible": False,
+                        "blockers": ["placeholder_or_trivial_lean_statement"],
+                    },
+                    "statement_repair_kind": "source_backed_statement_regeneration",
+                    "regeneration_protocol": "source_backed_v2",
+                }
+            ],
+        }
+    )
+    monkeypatch.setitem(sys.modules, "repair_bad_translations", fake_module)
+    monkeypatch.setattr(worker, "apply_validated_repair_pack_to_ledger", lambda **_kwargs: (_ for _ in ()).throw(AssertionError("ledger must not be touched in dry-run")))
+
+    result = worker._execute_statement_regeneration(
+        {
+            **_action(
+                repair_route="statement_regeneration",
+                repair_kind="replace_placeholder_statement",
+                theorem_ids=["bad"],
+                source_contexts=[
+                    {
+                        "row_id": "r1",
+                        "paper_id": "2604.21314",
+                        "theorem_id": "bad",
+                        "theorem_name": "bad",
+                        "source_latex": "For every natural number n, n equals itself.",
+                        "source_span_quality": "extractor_native",
+                        "source_span": {"source_file": "paper.tex", "start_byte": 0, "end_byte": 10},
+                        "source_match": {"match_status": "matched"},
+                    }
+                ],
+            ),
+            "artifacts": {"report": "report.json", "lean_file": "paper.lean", "ledger": "ledger.json"},
+        },
+        project_root=tmp_path,
+        write=False,
+        repair_output_root=tmp_path / "repair",
+        validate_candidates=True,
+    )
+
+    assert result["status"] == "dry_run_source_backed_preview"
+    assert result["mutated"] is False
+    assert result["repair_blocker_counts"]["repair_quality:vacuous_exists_self_equality_after_repair"] == 1
+    assert result["candidate_graduation_preview"][0]["reviewable"] is False
+    assert "review_batch:placeholder_or_trivial_lean_statement" in result["candidate_graduation_preview"][0]["blockers"]
+
+
+def test_statement_regeneration_write_refuses_review_batch_blocked_candidate(monkeypatch, tmp_path: Path) -> None:
+    fake_module = types.SimpleNamespace(
+        build_source_backed_repair_payload=lambda **_kwargs: {
+            "candidate_counts": {"total": 1, "changed_elaborating": 1},
+            "repair_candidates": [
+                {
+                    "theorem_name": "bad",
+                    "repaired_decl": "theorem bad (n : Nat) : n = n := by\n  sorry",
+                    "changes": ["source_backed_regeneration_v2"],
+                    "repair_quality": {"ok": True, "blockers": []},
+                    "lean_validation": {"ok": True},
+                    "review_batch_eligibility_preview": {
+                        "eligible": False,
+                        "blockers": ["source_match_not_unique"],
+                    },
+                    "statement_repair_kind": "source_backed_statement_regeneration",
+                    "regeneration_protocol": "source_backed_v2",
+                }
+            ],
+        }
+    )
+    monkeypatch.setitem(sys.modules, "repair_bad_translations", fake_module)
+    monkeypatch.setattr(worker, "apply_validated_repair_pack_to_ledger", lambda **_kwargs: (_ for _ in ()).throw(AssertionError("blocked candidate must not be applied")))
+
+    result = worker._execute_statement_regeneration(
+        {
+            **_action(
+                repair_route="statement_regeneration",
+                repair_kind="replace_placeholder_statement",
+                theorem_ids=["bad"],
+                source_contexts=[{"theorem_name": "bad", "source_latex": "For all n, n = n."}],
+            ),
+            "artifacts": {"report": "report.json", "lean_file": "paper.lean", "ledger": "ledger.json"},
+        },
+        project_root=tmp_path,
+        write=True,
+        repair_output_root=tmp_path / "repair",
+        validate_candidates=True,
+    )
+
+    assert result["status"] == "source_backed_regeneration_no_ledger_change"
+    assert result["mutated"] is False
+    assert result["write_eligibility_filter"]["eligible_candidate_count"] == 0
+    assert "review_batch:source_match_not_unique" in result["candidate_graduation_preview"][0]["blockers"]
+
+
+def test_candidate_preview_preserves_paper_theory_debt_without_blocking_review() -> None:
+    row = worker._preview_row_for_candidate(
+        {
+            "row_id": "r1",
+            "paper_id": "2604.21583",
+            "theorem_id": "hard_formula",
+            "source_latex": "A hard source-backed claim.",
+            "source_span_quality": "extractor_native",
+            "source_span": {"source_file": "paper.tex", "start_byte": 0, "end_byte": 10},
+            "source_match": {"match_status": "matched"},
+        },
+        {
+            "repaired_decl": "theorem hard_formula :\n  HardFormulaSourceStatement := by\n  sorry",
+            "paper_theory_debt": ["paper_definition_stub:HardFormulaSourceStatement"],
+            "statement_repair_kind": "source_backed_statement_regeneration",
+            "regeneration_protocol": "source_backed_v2",
+        },
+    )
+
+    assert row["axiom_debt"] == ["paper_definition_stub:HardFormulaSourceStatement"]
+    assert worker.graduation_blockers(row) == []
 
 
 def test_statement_regeneration_filters_repair_pack_to_action_targets() -> None:

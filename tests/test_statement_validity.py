@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from statement_validity import (
     classify_statement,
+    false_target_reason,
     proof_repair_cohort,
     statement_fidelity_gate,
     summarize_statement_fidelity,
@@ -207,6 +208,43 @@ def test_statement_fidelity_gate_allows_human_or_hybrid_reviewed_exact_rows() ->
     assert decision.statement_fidelity_source == "human"
 
 
+def test_statement_fidelity_gate_reviewed_exact_overrides_claim_review_pending_only() -> None:
+    row = {
+        "theorem_name": "reviewed_claim",
+        "lean_statement": "theorem reviewed_claim (n : Nat) : n = n",
+        "gate_failures": ["lean_proof_closed", "step_verdict_verified", "translation_fidelity_ok", "claim_equivalent"],
+        "reviewed_statement_alignment_class": "exact",
+        "reviewed_equivalence_verdict": "equivalent",
+        "reviewed_alignment_confidence": 0.9,
+        "review_provenance": {"reviewer_type": "hybrid", "reviewed_by": "hybrid:auto-alignment-review"},
+    }
+
+    decision = statement_fidelity_gate(row)
+
+    assert decision.proof_eligible is True
+    assert decision.statement_fidelity_verdict == "reviewed_exact"
+    assert decision.validity_primary_blocker == "claim_review_pending"
+
+
+def test_statement_fidelity_gate_reviewed_exact_does_not_override_axiom_debt() -> None:
+    row = {
+        "theorem_name": "debt",
+        "lean_statement": "theorem debt (x : Foo) : x = x",
+        "gate_failures": ["no_paper_axiom_debt", "claim_equivalent"],
+        "axiom_debt": ["paper_symbol:Foo"],
+        "reviewed_statement_alignment_class": "exact",
+        "reviewed_equivalence_verdict": "equivalent",
+        "reviewed_alignment_confidence": 0.9,
+        "review_provenance": {"reviewer_type": "hybrid", "reviewed_by": "hybrid:auto-alignment-review"},
+    }
+
+    decision = statement_fidelity_gate(row)
+
+    assert decision.proof_eligible is False
+    assert decision.validity_primary_blocker == "paper_theory_debt"
+    assert "statement_validity:paper_theory_debt" in decision.statement_fidelity_blockers
+
+
 def test_statement_fidelity_gate_blocks_llm_only_review_even_if_equivalent() -> None:
     row = {
         "theorem_name": "llm_only",
@@ -260,3 +298,38 @@ def test_statement_fidelity_summary_exposes_release_denominators() -> None:
     assert summary["proof_eligible"] == 1
     assert summary["blocked_before_proof"] == 1
     assert summary["repair_candidates"] == 1
+
+
+def test_false_target_is_bad_translation_unless_source_is_contradiction() -> None:
+    row = {
+        "theorem_name": "bad",
+        "lean_statement": "theorem bad : False",
+        "source_latex": "For every n, n = n.",
+    }
+
+    classified = classify_statement(row)
+
+    assert false_target_reason(row) == "false_target_without_source_contradiction"
+    assert classified.valid_for_proof is False
+    assert classified.primary_blocker == "bad_translation_artifact"
+    assert "false_target_without_source_contradiction" in classified.reasons
+
+
+def test_false_target_can_represent_explicit_contradiction_source() -> None:
+    row = {
+        "theorem_name": "contradiction",
+        "lean_statement": "theorem contradiction : False",
+        "source_latex": "This hypothesis package implies a contradiction.",
+    }
+
+    assert false_target_reason(row) == ""
+
+
+def test_false_target_does_not_represent_plain_nonexistence_claim() -> None:
+    row = {
+        "theorem_name": "nonexistence",
+        "lean_statement": "theorem nonexistence : False",
+        "source_latex": "There does not exist a continuous solution satisfying the boundary condition.",
+    }
+
+    assert false_target_reason(row) == "false_target_without_source_contradiction"

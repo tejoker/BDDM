@@ -2,19 +2,19 @@
   "total": 18,
   "counts": {
     "bad_translation_artifact": 2,
-    "paper_theory_debt": 9,
-    "proof_search_failure": 7
+    "paper_theory_debt": 13,
+    "translation_limited": 3
   },
   "items": [
     {
       "theorem_name": "th_lions",
-      "valid_for_proof": true,
-      "primary_blocker": "proof_search_failure",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
       "reasons": [
-        "lean_proof_closed"
+        "no_paper_axiom_debt_gate"
       ],
-      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
-      "lean_statement": "-- Source claim excerpt: [Lion's theorem]\\label{th:lions} Let $V$ and $H$ be Hilbert spaces satisfying: \\begin{equation} V \\subset H \\subset V^* \\text{ (the dual of } V) \\end{equation} \\noindent with the injection from $V$ to $H$ is dense and continuous. \\noindent Assuming a bilinear form $a(\\cdot,\\cdot): V \\times V \\to \\mathbb{R}$ satisfies \\begin{equation} \\begin{cases} |a(v,w)| \\leq M \\|v\\|_V \\|w\\|_V \\\\ |a(v,v)| \\geq c \\|v\\|_V^2 - c_1 \\|v\\|_H^2 \\end{cases} \\label{eq25} \\end{equation} \\noindent then for $u_0 \\in H$ and $F(t) \\in L^2(0,T;V^*)$, the initial value problem \\begin{equation} \\begin{cases} \\left \\langle #1 \\right \\rangle{u_t,v}_H + a(u(t),v) = \\left \\langle #1 \\right \\rangle{ F(t), v }_{H} \\\\ u(0) = u_0 \\end{cases} \\end{equation} \\noindent admits a unique solution u, satisfying: \\begin{equation} u \\in L^2(0,T;V) \\cap C(0,T;H), \\quad \\frac{du}{dt} \\in L^2(0,T;H). \\end{equation}\ntheorem th_lions :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem th_lions (V H : Type*) [Hilbert V] [Hilbert H] (a : V → V → ℝ) (u0 : H) (F : ℝ → V*) (T : ℝ) (hVH : V ⊆ H) (hHcont : Continuous (fun v : V => (v : H))) (hVHdense : DenseEmbedding V H) (hbilin : ∀ v w : V, |a v w| ≤ M * ‖v‖ * ‖w‖) (hcoercive : ∀ v : V, |a v v| ≥ c * ‖v‖^2 - c1 * ‖v‖^2) (hF : F ∈ L2 (Set.Icc 0 T) (dual V)) : ∃! u : ℝ → V, u ∈ L2 (Set.Icc 0 T) V ∧ ContinuousOn u (Set.Icc 0 T) ∧ (∀ t ∈ Set.Icc 0 T, HasDerivAt u (deriv u t) t) ∧ (∀ t ∈ Set.Icc 0 T, ∀ v : V, ⟪deriv u t, v⟫ + a (u t) v = ⟪F t, v⟫) ∧ u 0 = u0",
       "debt_tier": "definition_stub_grounding",
       "proof_value": "definition_grounding",
       "novelty_status": "new_candidate",
@@ -33,6 +33,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -43,13 +46,13 @@
     },
     {
       "theorem_name": "theorem_2",
-      "valid_for_proof": true,
-      "primary_blocker": "proof_search_failure",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
       "reasons": [
-        "lean_proof_closed"
+        "no_paper_axiom_debt_gate"
       ],
-      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
-      "lean_statement": "-- Source claim excerpt: The space \\( H^1_{D,f}(0,z_F) \\) is a Hilbert space with respect to the norm \\[ \\|v\\|_{D,f}^1 = \\left( \\int_0^{z_F} f(z) v^2(z) \\, dz + \\int_0^{z_F} D(z) (v'(z))^2 \\, dz \\right)^{\\frac{1}{2}} \\]\ntheorem theorem_2 :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem theorem_2 {alpha : Type*} [MeasurableSpace alpha] [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha] (f D : alpha → ℝ) (hf : ∀ z, 0 < f z) (hD : ∃ K : ℝ≥0, LipschitzWith K D) : IsHilbertSpace (H1_D_f (Set.Ioo 0 z_F))",
       "debt_tier": "definition_stub_grounding",
       "proof_value": "definition_grounding",
       "novelty_status": "new_candidate",
@@ -68,6 +71,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -78,13 +84,13 @@
     },
     {
       "theorem_name": "theorem_3",
-      "valid_for_proof": true,
-      "primary_blocker": "proof_search_failure",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
       "reasons": [
-        "lean_proof_closed"
+        "no_paper_axiom_debt_gate"
       ],
-      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
-      "lean_statement": "-- Source claim excerpt: The set of test functions is a closed subspace of $H^1_{D,f}$, $$\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq H^1_{D,f}. $$ i.e. a Hilbert Space with respect to the $H^1_{D,f}$ norm.\ntheorem theorem_3 :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem theorem_3 {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha] (zF : ℝ) (D : alpha) (hD : D ≠ 0) :\n    IsClosed {v : alpha | v = 0}",
       "debt_tier": "definition_stub_grounding",
       "proof_value": "definition_grounding",
       "novelty_status": "new_candidate",
@@ -103,6 +109,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -116,10 +125,10 @@
       "valid_for_proof": false,
       "primary_blocker": "paper_theory_debt",
       "reasons": [
-        "paper_symbol:d_dtvolume"
+        "no_paper_axiom_debt_gate"
       ],
       "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
-      "lean_statement": "-- Source claim excerpt: \\label{rem} Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F)$ such that $$u(z) = \\int_0^z g(x)dx$$ a.e. on $(0,z_F)$. The converse is also true.\ntheorem rem :\n  ∃ x : ℝ, 0 ≤ x := by\n  sorry",
+      "lean_statement": "theorem rem (u : ℝ → ℝ) (z_F : ℝ) (h1 : ContinuousOn u (Set.Ioo 0 z_F)) (h2 : Filter.Tendsto u (nhdsWithin (0 : ℝ) (Set.Ioi 0)) (nhds 0)) : ∃ g : ℝ → ℝ, IntegrableOn g volume (Set.Icc 0 z_F) ∧ ∀ z ∈ Set.Ioo 0 z_F, u z = ∫ x in Set.Icc 0 z, g x d_dtvolume",
       "debt_tier": "definition_stub_grounding",
       "proof_value": "definition_grounding",
       "novelty_status": "new_candidate",
@@ -138,6 +147,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -170,21 +182,21 @@
             "theorem_name": "prop_weighted_lower_symbol",
             "statement_id": "2604.21583|prop_weighted_lower_symbol|49",
             "statement_fingerprint": "d8130ee0ef9e4b9e69f312db81d0eb72cb55c042e05f8459ad571dfadc7297b3",
-            "score": 2.5034
+            "score": 2.5101
           },
           {
             "paper_id": "2604.21583",
             "theorem_name": "prop_weighted_mixed",
             "statement_id": "2604.21583|prop_weighted_mixed|35",
             "statement_fingerprint": "c53d317859cd87ac35a430e7e8bd574a1551d9e52e1e59efdc16c0ea014bdb28",
-            "score": 2.5034
+            "score": 2.51
           },
           {
             "paper_id": "2604.21663",
             "theorem_name": "lem_measurable_density",
             "statement_id": "2604.21663|lem_measurable_density|35",
             "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
-            "score": 1.005
+            "score": 1.0096
           }
         ],
         "mathlib": {
@@ -195,6 +207,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -205,13 +220,13 @@
     },
     {
       "theorem_name": "lem_tc",
-      "valid_for_proof": true,
-      "primary_blocker": "proof_search_failure",
+      "valid_for_proof": false,
+      "primary_blocker": "translation_limited",
       "reasons": [
-        "lean_proof_closed"
+        "translation_limited_status"
       ],
-      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
-      "lean_statement": "-- Source claim excerpt: \\label{lem:tc} $\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq C_a(0,z_F) $\ntheorem lem_tc :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "next_action": "Re-translate from source; current statement is placeholder or non-substantive.",
+      "lean_statement": "theorem lem_tc {alpha : Type*} (v : alpha) (h : v ∈ H1_Df (0 : ℝ) z_F) (hv : v 0 = 0) :\n    v ∈ Ca (0 : ℝ) z_F",
       "debt_tier": "definition_stub_grounding",
       "proof_value": "definition_grounding",
       "novelty_status": "new_candidate",
@@ -230,6 +245,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -262,14 +280,14 @@
             "theorem_name": "prop_weighted_lower_symbol",
             "statement_id": "2604.21583|prop_weighted_lower_symbol|49",
             "statement_fingerprint": "d8130ee0ef9e4b9e69f312db81d0eb72cb55c042e05f8459ad571dfadc7297b3",
-            "score": 2.5062
+            "score": 2.5122
           },
           {
             "paper_id": "2604.21583",
             "theorem_name": "prop_weighted_mixed",
             "statement_id": "2604.21583|prop_weighted_mixed|35",
             "statement_fingerprint": "c53d317859cd87ac35a430e7e8bd574a1551d9e52e1e59efdc16c0ea014bdb28",
-            "score": 2.5062
+            "score": 2.5121
           }
         ],
         "mathlib": {
@@ -280,6 +298,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -290,13 +311,13 @@
     },
     {
       "theorem_name": "eq_zf",
-      "valid_for_proof": true,
-      "primary_blocker": "proof_search_failure",
+      "valid_for_proof": false,
+      "primary_blocker": "paper_theory_debt",
       "reasons": [
-        "lean_proof_closed"
+        "no_paper_axiom_debt_gate"
       ],
-      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
-      "lean_statement": "-- Source claim excerpt: Assume that the condition \\eqref{cond:WI} is satisfied. Then the following inequality \\begin{eqnarray} \\sqrt{f(z)} |v(z)| \\leq C_0 \\|v\\|_{D, f}, \\qquad z\\in [0, z_F],\\label{eq:zf} \\end{eqnarray} holds for all $ v \\in \\mathcal T$, where $C_0$ is some positive constant that only depends on $f, \\,D$ and $z_F$.\ntheorem eq_zf :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
+      "next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
+      "lean_statement": "theorem eq_zf (f D : ℝ → ℝ) (z_F : ℝ) (C_0 : ℝ) (T : Set (ℝ → ℝ)) (hD : ∃ K : ℝ≥0, LipschitzWith K D) (hf : ∀ z ∈ Set.Ioo 0 z_F, 0 < f z) (hcond : ∀ z ∈ Set.Ioo 0 z_F, (z_F - z) * ∫ x in Set.Ioo 0 z, 1 / D x < infty) (hv : v ∈ T) : ∀ z ∈ Set.Icc 0 z_F, Real.sqrt (f z) * |v z| ≤ C_0 * Real.sqrt (∫ x in Set.Icc 0 z_F, D x * (deriv v x)^2 + f x * (v x)^2)",
       "debt_tier": "definition_stub_grounding",
       "proof_value": "definition_grounding",
       "novelty_status": "new_candidate",
@@ -315,6 +336,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -350,6 +374,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -360,13 +387,13 @@
     },
     {
       "theorem_name": "lemm_M",
-      "valid_for_proof": true,
-      "primary_blocker": "proof_search_failure",
+      "valid_for_proof": false,
+      "primary_blocker": "translation_limited",
       "reasons": [
-        "lean_proof_closed"
+        "trivial_exists_self_equality_target"
       ],
-      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
-      "lean_statement": "-- Source claim excerpt: \\label{lemm:M} The triadiagonal mass matrix $M$ is a symmetric positive definite matrix.\ntheorem lemm_M :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "next_action": "Re-translate from source; current statement is placeholder or non-substantive.",
+      "lean_statement": "theorem lemm_M (x : ℝ) :\n  ∃ x : ℝ, x = x",
       "debt_tier": "definition_stub_grounding",
       "proof_value": "definition_grounding",
       "novelty_status": "duplicate_in_corpus",
@@ -398,6 +425,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -430,7 +460,7 @@
             "theorem_name": "lemm_SD",
             "statement_id": "2604.21821|lemm_SD|12",
             "statement_fingerprint": "5f2d3c91752d0878ca3a5a39a056bc9e08c6a5560db9295990f14dc3a11f0d65",
-            "score": 0.7866
+            "score": 0.7822
           }
         ],
         "mathlib": {
@@ -441,6 +471,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -473,7 +506,7 @@
             "theorem_name": "lemma_14",
             "statement_id": "2604.21821|lemma_14|13",
             "statement_fingerprint": "9f296f190a493d4ebc6253a158163ba9f4fef5fcf1f439a5b29ac173da162aea",
-            "score": 0.797
+            "score": 0.8083
           }
         ],
         "mathlib": {
@@ -484,6 +517,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -519,6 +555,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -529,13 +568,13 @@
     },
     {
       "theorem_name": "lemma_14",
-      "valid_for_proof": true,
-      "primary_blocker": "proof_search_failure",
+      "valid_for_proof": false,
+      "primary_blocker": "translation_limited",
       "reasons": [
-        "lean_proof_closed"
+        "trivial_exists_self_equality_target"
       ],
-      "next_action": "Add targeted proof repair or deterministic tactics for this goal shape.",
-      "lean_statement": "-- Source claim excerpt: Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite.\ntheorem lemma_14 :\n  ∃ x : ℝ, x = x := by\n  sorry",
+      "next_action": "Re-translate from source; current statement is placeholder or non-substantive.",
+      "lean_statement": "theorem lemma_14 (x : ℝ) (h_d_z_is_a_strictly_decreasing_1 : True) :\n  ∃ x : ℝ, x = x",
       "debt_tier": "definition_stub_grounding",
       "proof_value": "definition_grounding",
       "novelty_status": "semantic_near_duplicate",
@@ -551,7 +590,7 @@
             "theorem_name": "lemma_2_8",
             "statement_id": "2604.21821|lemma_2_8|11",
             "statement_fingerprint": "a34ba78a73d0b6346efd8ff802458721eade38dfdd8a5ae76be8e80133574b42",
-            "score": 0.8169
+            "score": 0.8365
           }
         ],
         "mathlib": {
@@ -562,6 +601,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -597,6 +639,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -629,7 +674,7 @@
             "theorem_name": "eqn_notation_Delta_s",
             "statement_id": "2604.15191|eqn_notation_Delta_s|25",
             "statement_fingerprint": "f452ae4eeba1dcdaa07ec8a2c84b7d90bb6764388df2261b3a26d115f02b3b70",
-            "score": 1.0524
+            "score": 1.0718
           }
         ],
         "mathlib": {
@@ -640,6 +685,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -672,7 +720,7 @@
             "theorem_name": "thm_density_matrix_convergence_final",
             "statement_id": "2604.21583|thm_density_matrix_convergence_final|50",
             "statement_fingerprint": "b077aff4dc6b73241abeb6733bfda554807f3b6be20614f09d97d2b3527830bb",
-            "score": 1.141
+            "score": 1.1628
           }
         ],
         "mathlib": {
@@ -683,6 +731,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {
@@ -715,7 +766,7 @@
             "theorem_name": "eqn_notation_Delta_s",
             "statement_id": "2604.15191|eqn_notation_Delta_s|25",
             "statement_fingerprint": "f452ae4eeba1dcdaa07ec8a2c84b7d90bb6764388df2261b3a26d115f02b3b70",
-            "score": 4.1165
+            "score": 4.1368
           }
         ],
         "mathlib": {
@@ -726,6 +777,9 @@
             "mathlib_seed_missing",
             "lean_exact_check_disabled",
             "mathlib_semantic_index_disabled"
+          ],
+          "checks_run": [
+            "mathlib_fingerprint"
           ]
         },
         "thresholds": {

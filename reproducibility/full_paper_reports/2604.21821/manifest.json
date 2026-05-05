@@ -1,6 +1,7 @@
 {
   "paper_id": "2604.21821",
   "schema_version": "1.1.0",
+  "corpus_release_schema_version": "1.1.0",
   "bundle_dir": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21821",
   "files": {
     "report": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21821/suite_report.json",
@@ -13,8 +14,6 @@
     "paper_theory_manifest": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21821/paper_theory_manifest.json",
     "claim_equivalence_review_queue": "/home/projectx/BDDM/reproducibility/full_paper_reports/2604.21821/claim_equivalence_review_queue.jsonl"
   },
-  "regenerate_command": "python3 scripts/formalize_paper_full.py --paper-id 2604.21821 --project-root .",
-  "corpus_release_schema_version": "1.1.0",
   "artifacts": [
     {
       "role": "report",
@@ -22,8 +21,8 @@
       "exists": true,
       "required": true,
       "paper_id": "2604.21821",
-      "size_bytes": 1274138,
-      "sha256": "45703e3c80ca69e7a70a40a0b95bad33ef74eeece87f10502a71c55f3a774f65"
+      "size_bytes": 641059,
+      "sha256": "2ef5f7bc681387bc38296f6a3a39d23612fda070b49e982301474c9e071a38bf"
     },
     {
       "role": "ledger",
@@ -31,8 +30,8 @@
       "exists": true,
       "required": true,
       "paper_id": "2604.21821",
-      "size_bytes": 265747,
-      "sha256": "6fc769aba089af5afbf6c528827c603514215347073101f8ce69e228fa3b6f1d"
+      "size_bytes": 316582,
+      "sha256": "8abb186afac7be5adc51d73f99610e74b97daaec54556bbc867ad23dcec9893a"
     },
     {
       "role": "unresolved",
@@ -40,8 +39,8 @@
       "exists": true,
       "required": true,
       "paper_id": "2604.21821",
-      "size_bytes": 39242,
-      "sha256": "983f26588c49d65088f444c01a3ab5ecbd4e232f1af5b05280e5121cb3ef2edc"
+      "size_bytes": 55192,
+      "sha256": "b680f6c16f7ffe9e36e4581979cab39a1a7b26f861c7ce79d03ed4998a65a905"
     },
     {
       "role": "missing_lemmas",
@@ -49,8 +48,8 @@
       "exists": true,
       "required": true,
       "paper_id": "2604.21821",
-      "size_bytes": 42862,
-      "sha256": "55c4158114048074e1115cf2c41eceec88a200800facc7b9f061376e0a5c336f",
+      "size_bytes": 21467,
+      "sha256": "361a23b75aebb9fe13b53cd1f90e1ed5d9c20739e7806a223ca639d73b812683",
       "schema_version": "1.1.0"
     },
     {
@@ -59,8 +58,8 @@
       "exists": true,
       "required": true,
       "paper_id": "2604.21821",
-      "size_bytes": 34880,
-      "sha256": "441b0f788785cf1bf9fdc14f2ddd37a49df4d45d3858e22886476cdb3ad8430b",
+      "size_bytes": 18580,
+      "sha256": "d9a24be07115e2eb70f22320b635e78b80824957e99712521a8885a8dfca948a",
       "schema_version": "1.1.0"
     },
     {
@@ -69,8 +68,8 @@
       "exists": true,
       "required": true,
       "paper_id": "2604.21821",
-      "size_bytes": 15490,
-      "sha256": "43248b18a2204668ccda7d7c6f92c437b23ca645d7f9489e705c4a5e30d1b9dd"
+      "size_bytes": 36264,
+      "sha256": "4c3a6ce37c8dc052e5815895304246a1abb3ebf0a31954d9cc633f9365758e06"
     },
     {
       "role": "proof_repair_cohort",
@@ -78,8 +77,8 @@
       "exists": true,
       "required": true,
       "paper_id": "2604.21821",
-      "size_bytes": 1074,
-      "sha256": "6563d4ab0eb582b9e422d4a40860b2d18ab9e0d413412b9abd8d201e178b15c8"
+      "size_bytes": 20,
+      "sha256": "1ac6ddb08281ca725c4fc62ad4e9b83d05343789292971a677ba5c19be08e85c"
     },
     {
       "role": "paper_theory_manifest",
@@ -87,8 +86,8 @@
       "exists": true,
       "required": true,
       "paper_id": "2604.21821",
-      "size_bytes": 41587,
-      "sha256": "27ff6c216dbfa31703f4764c8d4c9ef132290a9dc8c15fa339bec77df2c026e9",
+      "size_bytes": 24279,
+      "sha256": "a840a6f83b548bee8b15b36094ead6eb09fad99986019b5d5c8f5d8b33d7d636",
       "schema_version": "1.1.0"
     },
     {
@@ -103,7 +102,7 @@
   ],
   "release_audit": {
     "schema_version": "1.1.0",
-    "generated_at": "2026-04-27T09:46:35Z",
+    "generated_at": "2026-05-01T08:39:45Z",
     "command": [
       "python3",
       "scripts/formalize_paper_full.py",
@@ -113,7 +112,7 @@
       "."
     ],
     "repository": {
-      "git_commit": "cf8822bcabfded106a2a42264184223bd9ddf272",
+      "git_commit": "0c7163c89bf8f6568dea661e482f56a19cf3051d",
       "dirty_tree": true
     },
     "toolchain": {
@@ -154,5 +153,6 @@
       "checksum_count": 9,
       "checksum_coverage": 1.0
     }
-  }
+  },
+  "regenerate_command": "python3 scripts/formalize_paper_full.py --paper-id 2604.21821 --project-root ."
 }

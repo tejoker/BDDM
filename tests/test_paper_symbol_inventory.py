@@ -69,3 +69,17 @@ def test_inventory_mines_second_paper_generated_symbols() -> None:
     assert names["IsHilbertSpace"].declaration.startswith("def IsHilbertSpace")
     assert names["d_dtvolume"].grounding == "domain_axiom"
     assert names["infty"].declaration == "def infty : ℝ := 0"
+
+
+def test_inventory_mines_multisegment_definition_stubs_as_non_countable_grounding() -> None:
+    symbols = infer_symbols_from_text(
+        "Let alpha and beta be multisegments. The dual multisegment tilde alpha is a ladder multisegment.",
+        source="source_context",
+    )
+    names = {sym.lean: sym for sym in symbols}
+
+    assert names["Multisegment"].declaration == "abbrev Multisegment : Type := ℕ"
+    assert names["dual"].declaration.startswith("def dual")
+    assert names["n_alpha"].paper_agnostic_rule_id.startswith("definition_stub.")
+    assert names["IsLadderMultisegment"].declaration.startswith("def IsLadderMultisegment")
+    assert all(names[key].proof_countable is False for key in ("Multisegment", "dual", "n_alpha"))

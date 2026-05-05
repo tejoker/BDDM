@@ -120,7 +120,12 @@ def derive_step_verdict(
 
     if not step_obligations:
         err_l = (error_message or "").lower()
-        if any(tok in err_l for tok in ("lean-error", "tactic failed", "proof-given-up", "could not", "failed")):
+        # Only return FLAWED for actual Lean compilation/elaboration errors.
+        # Proof-search exhaustion signals ("proof-given-up", "full-draft failed",
+        # "mcts -> FAILED") mean no proof was found — that is INCOMPLETE → UNRESOLVED,
+        # not a statement flaw.  Broad tokens like "failed" / "could not" would catch
+        # pipeline-level messages and incorrectly downgrade genuine UNRESOLVED entries.
+        if any(tok in err_l for tok in ("lean-error", "tactic failed")):
             return StepVerdict.FLAWED
         return StepVerdict.INCOMPLETE
 
@@ -281,7 +286,11 @@ def reconstruct_step_obligations(
 
     if not obligations:
         err_l = (error_message or "").lower()
-        if any(tok in err_l for tok in ("lean-error", "tactic failed", "proof-given-up", "could not", "failed")):
+        # Only synthesize a lean-error obligation for actual Lean compilation errors.
+        # Proof-search exhaustion tokens ("proof-given-up", "failed", "could not") must
+        # not generate a fake lean-error obligation — they indicate the proof was not
+        # found (INCOMPLETE → UNRESOLVED), not that the statement itself is broken.
+        if any(tok in err_l for tok in ("lean-error", "tactic failed")):
             obligations.append(
                 StepObligation(
                     step_index=0,

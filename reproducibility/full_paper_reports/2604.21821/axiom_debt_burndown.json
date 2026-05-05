@@ -2,7 +2,7 @@
   "schema_version": "1.1.0",
   "purpose": "Rank paper-local axioms by cheapest path to remove AXIOM_BACKED evidence.",
   "axiom_backed_result_count": 0,
-  "paper_local_axiom_count": 41,
+  "paper_local_axiom_count": 20,
   "result_buckets": {
     "missing_definitions_only": 0,
     "local_lemmas": 0,
@@ -13,63 +13,15 @@
   },
   "summary_sentence": "0 axiom-backed results.",
   "axiom_kind_counts": {
-    "definition": 41
+    "definition": 20
   },
   "difficulty_counts": {
-    "medium": 41
+    "medium": 20
   },
   "dependency_bucket_counts": {
-    "missing_definitions_only": 41
+    "missing_definitions_only": 20
   },
   "ranked_axioms": [
-    {
-      "burn_down_id": "06d12960bba06cc7",
-      "paper_local_axiom": "paper_definition_stub:H1_D_f",
-      "needed_by": [
-        "theorem_2"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "theorem_2",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "fc2efea4d63956ed",
-      "paper_local_axiom": "paper_definition_stub:IsHilbertSpace",
-      "needed_by": [
-        "theorem_2"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "theorem_2",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
     {
       "burn_down_id": "5e295cb99a07e286",
       "paper_local_axiom": "paper_definition_stub:a",
@@ -79,32 +31,8 @@
       "needed_by_details": [
         {
           "theorem_name": "th_lions",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "70d850ffa9050445",
-      "paper_local_axiom": "paper_definition_stub:c1",
-      "needed_by": [
-        "th_lions"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "th_lions",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
         }
       ],
       "needed_by_count": 1,
@@ -127,301 +55,6 @@
       "needed_by_details": [
         {
           "theorem_name": "lemma_g",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "b913b3aad28ee086",
-      "paper_local_axiom": "paper_definition_stub:c_D_bounds",
-      "needed_by": [
-        "lemma_g"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "lemma_g",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "2b616be8b7c44fa3",
-      "paper_local_axiom": "paper_definition_stub:f_zF_pos",
-      "needed_by": [
-        "rem_fh"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "rem_fh",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": "candidate",
-      "earlier_extracted_claim_candidates": [
-        "th_4g",
-        "lemm_SD"
-      ],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "6a3e3ccf0736203f",
-      "paper_local_axiom": "paper_definition_stub:h1",
-      "needed_by": [
-        "rem"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "rem",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "141e0ee699c4f2b2",
-      "paper_local_axiom": "paper_definition_stub:h2",
-      "needed_by": [
-        "rem"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "rem",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "68849d4407b565ee",
-      "paper_local_axiom": "paper_definition_stub:hB_0",
-      "needed_by": [
-        "cor_wpi"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "cor_wpi",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "128e3b4e637288b5",
-      "paper_local_axiom": "paper_definition_stub:hB_0_fin",
-      "needed_by": [
-        "cor_wpi"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "cor_wpi",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": "candidate",
-      "earlier_extracted_claim_candidates": [
-        "th_WPICa"
-      ],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "94edf938a6138191",
-      "paper_local_axiom": "paper_definition_stub:hC_p",
-      "needed_by": [
-        "cor_wpi"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "cor_wpi",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "5535aef9962a240f",
-      "paper_local_axiom": "paper_definition_stub:hD_lip",
-      "needed_by": [
-        "theorem_18"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "theorem_18",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "e380ba855ec26d5f",
-      "paper_local_axiom": "paper_definition_stub:hD_nonneg",
-      "needed_by": [
-        "lemm_SD"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "lemm_SD",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": "candidate",
-      "earlier_extracted_claim_candidates": [
-        "th_WPICa"
-      ],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "d0a8e1584c15ee70",
-      "paper_local_axiom": "paper_definition_stub:hF_pos",
-      "needed_by": [
-        "th_4g"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "th_4g",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "7ff3a0a717ee5c1c",
-      "paper_local_axiom": "paper_definition_stub:hG_pos",
-      "needed_by": [
-        "th_4g"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "th_4g",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "726fb6fce9d3bd0e",
-      "paper_local_axiom": "paper_definition_stub:hM_pos",
-      "needed_by": [
-        "th_4g"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "th_4g",
           "status": "FLAWED",
           "proof_method": "translation_limited"
         }
@@ -470,8 +103,8 @@
       "needed_by_details": [
         {
           "theorem_name": "lemma_14",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
+          "status": "INTERMEDIARY_PROVEN",
+          "proof_method": "lean_verified"
         }
       ],
       "needed_by_count": 1,
@@ -505,11 +138,8 @@
       "appears_explicitly_in_paper": true,
       "mathlib_has_close_match": false,
       "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": "candidate",
-      "earlier_extracted_claim_candidates": [
-        "eq_zf",
-        "lemm_M"
-      ],
+      "can_be_proved_from_earlier_extracted_claims": false,
+      "earlier_extracted_claim_candidates": [],
       "dependency_bucket": "missing_definitions_only",
       "estimated_difficulty": "medium",
       "difficulty_rank": 30
@@ -539,54 +169,6 @@
       "difficulty_rank": 30
     },
     {
-      "burn_down_id": "1490c46122e27150",
-      "paper_local_axiom": "paper_definition_stub:hz_F",
-      "needed_by": [
-        "th_4g"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "th_4g",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "25203d63d7301b0e",
-      "paper_local_axiom": "paper_definition_stub:hz_F_pos",
-      "needed_by": [
-        "th_4g"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "th_4g",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
       "burn_down_id": "86399217323653ab",
       "paper_local_axiom": "paper_definition_stub:lemm_M",
       "needed_by": [
@@ -595,8 +177,8 @@
       "needed_by_details": [
         {
           "theorem_name": "lemm_M",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
+          "status": "INTERMEDIARY_PROVEN",
+          "proof_method": "lean_verified"
         }
       ],
       "needed_by_count": 1,
@@ -672,8 +254,8 @@
       "needed_by_details": [
         {
           "theorem_name": "lemma_14",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
+          "status": "INTERMEDIARY_PROVEN",
+          "proof_method": "lean_verified"
         }
       ],
       "needed_by_count": 1,
@@ -709,36 +291,6 @@
       "mathlib_candidates": [],
       "can_be_proved_from_earlier_extracted_claims": false,
       "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "fa60cbf8253c55be",
-      "paper_local_axiom": "paper_definition_stub:subset_Icc",
-      "needed_by": [
-        "rem_fh"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "rem_fh",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": "candidate",
-      "earlier_extracted_claim_candidates": [
-        "th_lions",
-        "rem",
-        "th_WPICa",
-        "cor_wpi",
-        "th_4g"
-      ],
       "dependency_bucket": "missing_definitions_only",
       "estimated_difficulty": "medium",
       "difficulty_rank": 30
@@ -842,8 +394,8 @@
       "needed_by_details": [
         {
           "theorem_name": "theorem_2",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
         }
       ],
       "needed_by_count": 1,
@@ -869,7 +421,7 @@
         {
           "theorem_name": "theorem_3",
           "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
+          "proof_method": "unknown"
         }
       ],
       "needed_by_count": 1,
@@ -882,84 +434,6 @@
         "th_lions",
         "theorem_2"
       ],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "ea8aebd010c5b684",
-      "paper_local_axiom": "paper_definition_stub:u0",
-      "needed_by": [
-        "th_lions"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "th_lions",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "ff846b1a68c9dd21",
-      "paper_local_axiom": "paper_symbol:d_dtvolume",
-      "needed_by": [
-        "rem"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "rem",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
-        }
-      ],
-      "needed_by_count": 1,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
-      "dependency_bucket": "missing_definitions_only",
-      "estimated_difficulty": "medium",
-      "difficulty_rank": 30
-    },
-    {
-      "burn_down_id": "3ce9ed09ff9a1628",
-      "paper_local_axiom": "paper_definition_stub:hD_pos",
-      "needed_by": [
-        "th_4g",
-        "lemm_SD"
-      ],
-      "needed_by_details": [
-        {
-          "theorem_name": "th_4g",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        },
-        {
-          "theorem_name": "lemm_SD",
-          "status": "FLAWED",
-          "proof_method": "translation_limited"
-        }
-      ],
-      "needed_by_count": 2,
-      "axiom_kind": "definition",
-      "appears_explicitly_in_paper": true,
-      "mathlib_has_close_match": false,
-      "mathlib_candidates": [],
-      "can_be_proved_from_earlier_extracted_claims": false,
-      "earlier_extracted_claim_candidates": [],
       "dependency_bucket": "missing_definitions_only",
       "estimated_difficulty": "medium",
       "difficulty_rank": 30
@@ -1052,8 +526,8 @@
         },
         {
           "theorem_name": "eq_zf",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
         },
         {
           "theorem_name": "lemma_g",
@@ -1091,13 +565,13 @@
       "needed_by_details": [
         {
           "theorem_name": "theorem_2",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
         },
         {
           "theorem_name": "rem",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
         },
         {
           "theorem_name": "th_WPICa",
@@ -1106,8 +580,8 @@
         },
         {
           "theorem_name": "lem_tc",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
+          "status": "TRANSLATION_LIMITED",
+          "proof_method": "translation_limited"
         },
         {
           "theorem_name": "cor_wpi",
@@ -1116,8 +590,8 @@
         },
         {
           "theorem_name": "eq_zf",
-          "status": "UNRESOLVED",
-          "proof_method": "translation_repaired_pending_proof"
+          "status": "FLAWED",
+          "proof_method": "translation_limited"
         },
         {
           "theorem_name": "th_4g",

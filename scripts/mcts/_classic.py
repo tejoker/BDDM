@@ -645,40 +645,101 @@ def _get_platt_params() -> tuple[float, float] | None:
     return _PLATT_PARAMS_CACHE  # type: ignore[return-value]
 
 
+# Patterns indicating the goal is trivially closable without LLM help.
+_TRIVIAL_GOAL_RE = re.compile(
+    r"⊢\s*(True|rfl|trivial|@rfl\b|Eq\.refl\b)",
+    re.IGNORECASE,
+)
+# Arithmetic/decidable patterns: goal is a numeric comparison or decidable prop.
+_ARITHMETIC_GOAL_RE = re.compile(
+    r"⊢.*?(?:\d+\s*[+\-*/%]\s*\d+|\d+\s*[≤≥<>=≠]+\s*\d+|[nNmMkK]\s*[≤≥<>]\s*\d)",
+)
+# Reflexivity shortcut: ⊢ X = X or ⊢ X ↔ X
+_REFL_GOAL_RE = re.compile(r"⊢\s*(.+?)\s*[=↔]\s*\1\s*$", re.MULTILINE)
+# Case analysis underway: goal has been split.
+_CASE_RE = re.compile(r"^case\s+\w", re.MULTILINE)
+
+
+def _hypothesis_matches_goal(state_text: str) -> bool:
+    """Return True if any hypothesis type exactly matches the goal."""
+    lines = state_text.splitlines()
+    goal = ""
+    hyp_types: list[str] = []
+    for ln in lines:
+        ln = ln.strip()
+        if ln.startswith("⊢"):
+            goal = ln[1:].strip()
+        elif ":" in ln and not ln.startswith("⊢"):
+            parts = ln.split(":", 1)
+            if len(parts) == 2:
+                hyp_types.append(parts[1].strip())
+    return bool(goal) and any(h == goal for h in hyp_types)
+
+
 def structural_value(state_text: str) -> float:
-    """Zero-API structural value estimate from proof state syntax.
+    """Structural value estimate from proof state syntax.
 
-    Uses three signals:
-    1. Goal count (⊢ occurrences) — more goals = further from done.
-    2. Type expression depth — deeply nested types suggest hard goals.
-    3. Trivial-state detection — single goal with only atomic type → near 1.0.
+    Signals (in priority order):
+    1. No open goals → solved.
+    2. Trivially closable goal pattern (True, rfl, exact hypothesis).
+    3. Arithmetic / decidable goal → likely omega/norm_num/decide.
+    4. Case analysis underway → decomposition progress bonus.
+    5. Goal count + depth penalty (original heuristic).
+    6. Hypothesis count bonus.
 
-    Returns a value in [0.0, 1.0]. This is used as a floor signal blended
-    with the model-based value to avoid wasting API calls on obvious states.
+    Returns a value in [0.0, 1.0].
     """
     if not state_text or not state_text.strip():
         return 0.5
 
     goals = state_text.count("⊢")
     if goals == 0:
-        # No open goals in state text — likely already solved or error state.
         return 0.95
 
-    # Depth proxy: count nesting via angle brackets and parens in goal expressions.
+    # Fast-path: hypothesis exactly matches goal → `exact h` closes it.
+    if _hypothesis_matches_goal(state_text):
+        return 0.93
+
+    # Fast-path: syntactically trivial goal.
+    if _TRIVIAL_GOAL_RE.search(state_text):
+        return 0.92
+
+    # Fast-path: reflexivity pattern.
+    if _REFL_GOAL_RE.search(state_text):
+        return 0.90
+
+    # Arithmetic goal: likely closable by omega / norm_num / linarith.
+    if _ARITHMETIC_GOAL_RE.search(state_text):
+        return 0.78
+
+    # Depth proxy: count nesting in goal lines.
     goal_lines = [ln for ln in state_text.splitlines() if "⊢" in ln]
     avg_depth = 0.0
     if goal_lines:
         depths = []
         for line in goal_lines:
             after_turnstile = line.split("⊢", 1)[-1]
-            depth = after_turnstile.count("(") + after_turnstile.count("[") + after_turnstile.count("∀") + after_turnstile.count("∃")
+            depth = (
+                after_turnstile.count("(")
+                + after_turnstile.count("[")
+                + after_turnstile.count("∀")
+                + after_turnstile.count("∃")
+            )
             depths.append(depth)
         avg_depth = sum(depths) / len(depths)
 
-    # Score: fewer goals + shallower depth = higher value.
     goal_penalty = 1.0 / (1.0 + goals)
     depth_penalty = 1.0 / (1.0 + avg_depth * 0.3)
     score = goal_penalty * depth_penalty
+
+    # Bonus if case analysis is in progress (goal was decomposed).
+    if _CASE_RE.search(state_text):
+        score = min(1.0, score * 1.15)
+
+    # Small bonus for number of available hypotheses (more tools to work with).
+    hyp_count = sum(1 for ln in state_text.splitlines()
+                    if ":" in ln and "⊢" not in ln and ln.strip())
+    score = min(1.0, score + min(0.08, hyp_count * 0.01))
 
     return round(max(0.0, min(1.0, score)), 6)
 
@@ -821,6 +882,23 @@ def backpropagate(path: list[MCTSNode], value: float) -> None:
         node.value_sum += value
 
 
+# Deterministic tactics tried before LLM proposals. These are fast, correct,
+# and free — no API call needed. Ordered by expected speed (fastest first).
+_DETERMINISTIC_TACTICS: tuple[str, ...] = (
+    "rfl",
+    "trivial",
+    "assumption",
+    "contradiction",
+    "omega",
+    "norm_num",
+    "ring",
+    "norm_cast",
+    "decide",
+    "tauto",
+    "simp only []",
+)
+
+
 def expand_leaf(
     *,
     leaf: MCTSNode,
@@ -835,12 +913,57 @@ def expand_leaf(
     use_tactics_estimate: bool = True,
 ) -> list[MCTSNode]:
     """Expand leaf by generating tactic options and executing them via dojo.
-    
-    Each child node inherits tactic_history from parent and appends its tactic.
+
+    Deterministic tactics (rfl, omega, norm_num, …) are tried first before
+    any LLM call. If one closes the proof we return immediately. Any that make
+    progress are prepended to the LLM candidates so they rank highest.
     """
     if leaf.is_terminal:
         return []
 
+    children: list[MCTSNode] = []
+    seen_states: set[str] = set()
+
+    # --- Phase 1: deterministic pre-screening (no API call) ---
+    for tactic in _DETERMINISTIC_TACTICS:
+        outcome = dojo.run_tac(leaf.state, tactic)
+
+        if isinstance(outcome, ProofFinished):
+            child = MCTSNode(
+                state=leaf.state,
+                state_text="no goals",
+                tactic_from_parent=tactic,
+                tactic_history=leaf.tactic_history + [tactic],
+                parent=leaf,
+                is_terminal=True,
+                terminal_reason="proof-finished",
+                depth=leaf.depth + 1,
+                first_visit_time=time.time(),
+            )
+            children.append(child)
+            collect_calibration_sample(
+                state_text=leaf.state_text,
+                raw_value=leaf.mean_value,
+                proof_succeeded=True,
+            )
+            leaf.children.extend(children)
+            return children  # proof found — no LLM needed
+
+        if isinstance(outcome, TacticState):
+            key = outcome.pp.strip()
+            if key and key not in seen_states:
+                seen_states.add(key)
+                children.append(MCTSNode(
+                    state=outcome,
+                    state_text=outcome.pp,
+                    tactic_from_parent=tactic,
+                    tactic_history=leaf.tactic_history + [tactic],
+                    parent=leaf,
+                    depth=leaf.depth + 1,
+                    first_visit_time=time.time(),
+                ))
+
+    # --- Phase 2: LLM tactic proposals ---
     n_options = random.randint(branch_min, branch_max)
     candidates = generate_tactic_options(
         lean_state=leaf.state_text,
@@ -853,20 +976,14 @@ def expand_leaf(
         retrieval_top_k=retrieval_top_k,
     )
 
-    children: list[MCTSNode] = []
-    seen_states: set[str] = set()
-
     for tactic in candidates:
-        # P1 mitigation: Validate tactic length to prevent DoS
         if len(tactic) > MAX_TACTIC_LEN:
             logger.warning(
                 "Tactic exceeds max length (%d > %d): %s...",
-                len(tactic),
-                MAX_TACTIC_LEN,
-                tactic[:100],
+                len(tactic), MAX_TACTIC_LEN, tactic[:100],
             )
-            continue  # Skip oversized tactic
-        
+            continue
+
         outcome = dojo.run_tac(leaf.state, tactic)
 
         if isinstance(outcome, TacticState):
@@ -874,27 +991,23 @@ def expand_leaf(
             if not key or key in seen_states:
                 continue
             seen_states.add(key)
-            
-            child_history = leaf.tactic_history + [tactic]
-            child = MCTSNode(
+            children.append(MCTSNode(
                 state=outcome,
                 state_text=outcome.pp,
                 tactic_from_parent=tactic,
-                tactic_history=child_history,
+                tactic_history=leaf.tactic_history + [tactic],
                 parent=leaf,
                 depth=leaf.depth + 1,
                 first_visit_time=time.time(),
-            )
-            children.append(child)
+            ))
             continue
 
         if isinstance(outcome, ProofFinished):
-            child_history = leaf.tactic_history + [tactic]
             child = MCTSNode(
                 state=leaf.state,
                 state_text="no goals",
                 tactic_from_parent=tactic,
-                tactic_history=child_history,
+                tactic_history=leaf.tactic_history + [tactic],
                 parent=leaf,
                 is_terminal=True,
                 terminal_reason="proof-finished",
@@ -902,13 +1015,19 @@ def expand_leaf(
                 first_visit_time=time.time(),
             )
             children.append(child)
-            # Record a positive calibration sample for this node's value estimate
-            collect_calibration_sample(score=leaf.mean_value, outcome=1)
+            collect_calibration_sample(
+                state_text=leaf.state_text,
+                raw_value=leaf.mean_value,
+                proof_succeeded=True,
+            )
             continue
 
         if isinstance(outcome, (LeanError, ProofGivenUp)):
-            # Record a negative calibration sample
-            collect_calibration_sample(score=leaf.mean_value, outcome=0)
+            collect_calibration_sample(
+                state_text=leaf.state_text,
+                raw_value=leaf.mean_value,
+                proof_succeeded=False,
+            )
             continue
 
     leaf.children.extend(children)
@@ -1874,6 +1993,63 @@ def run_hierarchical_mcts(
     return final_ok, all_records, summary
 
 
+def _shared_proofs_path(project_root: Path, paper_id: str) -> Path:
+    return project_root / "output" / "shared_proofs" / f"{paper_id or 'unknown'}.jsonl"
+
+
+def _write_proven_stub(
+    project_root: Path,
+    paper_id: str,
+    theorem_name: str,
+    summary: str,
+) -> None:
+    """Record a successfully closed proof to the per-paper shared stubs file.
+
+    Subsequent workers for the same paper load this file and prepend the proven
+    theorem names to their premise context, avoiding redundant search.
+    """
+    target = _shared_proofs_path(project_root, paper_id)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    entry = {
+        "theorem_name": theorem_name,
+        "summary": summary[:400] if summary else "",
+        "timestamp": time.time(),
+    }
+    try:
+        with target.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+
+
+def _load_proven_stubs_as_context(project_root: Path, paper_id: str) -> str:
+    """Return a premise-context prefix listing theorems proven so far in this paper.
+
+    Workers prepend this to their premise_context so the LLM knows which lemmas
+    are already available for use in subsequent proofs.
+    """
+    target = _shared_proofs_path(project_root, paper_id)
+    if not target.exists():
+        return ""
+    lines: list[str] = []
+    try:
+        for raw in target.read_text(encoding="utf-8").splitlines():
+            try:
+                row = json.loads(raw)
+            except Exception:
+                continue
+            name = str(row.get("theorem_name", "")).strip()
+            summary = str(row.get("summary", "")).strip()
+            if name:
+                lines.append(f"  • {name}: {summary}" if summary else f"  • {name}")
+    except Exception:
+        return ""
+    if not lines:
+        return ""
+    header = "Theorems already proven in this paper (available as lemmas):\n"
+    return header + "\n".join(lines) + "\n\n"
+
+
 def _isolate_project_for_worker(project_root: Path, worker_id: int) -> Path:
     """Copy project tree (excluding .lake/) into a temp dir for process isolation.
 
@@ -1909,6 +2085,7 @@ def _run_draft_mcts_worker(
     retrieval_index_path: str,
     retrieval_top_k: int,
     informal_proof_hint: str,
+    paper_id: str = "",
 ) -> DraftMCTSParallelResult:
     import shutil as _shutil
 
@@ -1922,6 +2099,11 @@ def _run_draft_mcts_worker(
             iso_file = iso_root / rel
         except ValueError:
             iso_file = file_path  # outside project — use as-is
+
+        # Prepend already-proven theorems from this paper so the LLM can reuse them.
+        stub_context = _load_proven_stubs_as_context(project_root, paper_id)
+        augmented_context = (stub_context + premise_context).strip()
+
         client = Mistral(api_key=api_key)
         ok, records, summary = run_draft_mcts(
             project_root=iso_root,
@@ -1935,11 +2117,16 @@ def _run_draft_mcts_worker(
             exploration_c=exploration_c,
             temperature=temperature,
             dojo_timeout=dojo_timeout,
-            premise_context=premise_context,
+            premise_context=augmented_context,
             retrieval_index_path=retrieval_index_path,
             retrieval_top_k=retrieval_top_k,
             informal_proof_hint=informal_proof_hint,
         )
+
+        # Persist successful proof so later workers in this paper can see it.
+        if ok and paper_id:
+            _write_proven_stub(project_root, paper_id, theorem_name, summary)
+
         return DraftMCTSParallelResult(
             worker_id=worker_id,
             ok=ok,
@@ -1983,6 +2170,7 @@ def run_draft_mcts_parallel(
     retrieval_index_path: str = "",
     retrieval_top_k: int = 12,
     informal_proof_hint: str = "",
+    paper_id: str = "",
 ) -> tuple[bool, list[dict[str, Any]], str, list[DraftMCTSParallelResult]]:
     """Run independent draft-MCTS trees in parallel and keep the best result."""
     workers = max(1, min(num_workers, mp.cpu_count()))
@@ -2015,6 +2203,7 @@ def run_draft_mcts_parallel(
                 retrieval_index_path,
                 retrieval_top_k,
                 informal_proof_hint,
+                paper_id,
             )
             for worker_id in range(workers)
         ]

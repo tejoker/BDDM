@@ -58,3 +58,18 @@ def test_assisted_review_skips_existing_reviews() -> None:
 
     assert reviews == []
     assert summary["skipped_existing_reviews"] == 1
+
+
+def test_assisted_review_rejects_false_target_rows() -> None:
+    item = _item(
+        theorem_id="false-target",
+        source_latex="For every n, n = n.",
+        lean_statement="theorem false_target : False",
+    )
+
+    blockers = adjudication_blockers(item)
+    reviews, summary = build_assisted_reviews([item], reviewed_at="2026-04-27T14:00:00Z")
+
+    assert "lean_contains_placeholder_or_ungrounded_shape" in blockers
+    assert reviews == []
+    assert summary["blocked_rows"] == 1

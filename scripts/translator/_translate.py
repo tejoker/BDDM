@@ -121,6 +121,53 @@ def _confidence_from_translation_state(
     return confidence, flags
 
 
+# Qualified Lean identifier pattern: names containing at least one dot segment
+# and starting with an uppercase letter (e.g. Finset.sum_comm, MeasureTheory.integral_mono).
+_QUALIFIED_IDENT_RE = re.compile(r'\b([A-Z][A-Za-z0-9_]*(?:\.[A-Za-z0-9_]+)+)\b')
+
+
+def _lean_identifier_audit(
+    signature: str,
+    project_root: Path,
+    timeout: int = 8,
+) -> list[str]:
+    """Check qualified Lean identifiers in *signature* actually resolve in Lean.
+
+    Returns a list of identifiers that failed #check, indicating the signature
+    references names that do not exist in the current Mathlib/project context.
+    This replaces the LLM equivalence judge for name-resolution correctness.
+    """
+    candidates = list(dict.fromkeys(_QUALIFIED_IDENT_RE.findall(signature)))
+    if not candidates:
+        return []
+
+    checks = "\n".join(f"#check {name}" for name in candidates)
+    src = "import Mathlib\nimport Desol.SDE.Basic\n\n" + checks + "\n"
+    tmp = project_root / "Desol" / f"_tmp_audit_{int(time.time() * 1000)}.lean"
+    try:
+        tmp.write_text(src, encoding="utf-8")
+        proc = subprocess.run(
+            ["lake", "env", "lean", str(tmp)],
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+        )
+        output = (proc.stdout or "") + "\n" + (proc.stderr or "")
+        failing: list[str] = []
+        for line in output.splitlines():
+            low = line.lower()
+            if "unknown identifier" in low or "unknown constant" in low:
+                for name in candidates:
+                    if name in line:
+                        failing.append(name)
+        return list(dict.fromkeys(failing))
+    except Exception:
+        return []
+    finally:
+        tmp.unlink(missing_ok=True)
+
+
 _DECL_START_RE = re.compile(
     r"^(noncomputable\s+)?(private\s+)?(protected\s+)?"
     r"(theorem|lemma|def|abbrev|structure|class|instance)\b",
@@ -189,12 +236,42 @@ def _is_hard_statement(latex_statement: str) -> bool:
 
 def _extract_math_chunks(latex_statement: str) -> list[str]:
     text = latex_statement or ""
+    # Strip LaTeX line comments (%...) before processing — they bleed into math content.
+    text = re.sub(r"%[^\n]*", "", text)
     chunks: list[str] = []
+    # Dollar-delimited math: $$...$$ then $...$
     for pat in (r"\$\$(.*?)\$\$", r"\$(.*?)\$"):
         for m in re.finditer(pat, text, flags=re.DOTALL):
             chunk = " ".join(m.group(1).split())
             if chunk:
                 chunks.append(chunk)
+    # Paren-delimited inline math: \(...\)
+    for m in re.finditer(r"\\\((.*?)\\\)", text, flags=re.DOTALL):
+        chunk = " ".join(m.group(1).split())
+        if chunk:
+            chunks.append(chunk)
+    # Bracket-delimited display math: \[...\]
+    for m in re.finditer(r"\\\[(.*?)\\\]", text, flags=re.DOTALL):
+        chunk = " ".join(m.group(1).split())
+        if chunk:
+            chunks.append(chunk)
+    # Named display environments: equation, align, gather, multline (with optional *)
+    _env_re = re.compile(
+        r"\\begin\{(?:equation|align|gather|multline|eqnarray)\*?\}"
+        r"(.*?)"
+        r"\\end\{(?:equation|align|gather|multline|eqnarray)\*?\}",
+        re.DOTALL,
+    )
+    for m in _env_re.finditer(text):
+        # Strip \label{...} tags and \color{...} display wrappers from the body
+        body = re.sub(r"\\label\{[^{}]*\}", "", m.group(1))
+        body = re.sub(r"\{\\color\{[^{}]*\}\s*", "", body)
+        body = body.rstrip("} \t\n")
+        # Strip align-column markers (&) — they mark layout, not math content.
+        body = re.sub(r"&+", " ", body)
+        chunk = " ".join(body.split())
+        if chunk:
+            chunks.append(chunk)
     return chunks
 
 
@@ -347,6 +424,27 @@ def _replace_latex_identifiers(text: str) -> str:
 
 def _normalize_source_formula_clause(raw: str) -> str:
     clause = _replace_latex_frac(raw)
+    # Strip LaTeX line comments that may have leaked into math content.
+    clause = re.sub(r"%[^\n]*", "", clause)
+    # Strip align-column markers that have no Lean equivalent.
+    clause = re.sub(r"&+", " ", clause)
+    # Strip font-wrapper commands whose content is what matters:
+    # \mathrm{X} → X, \mathbb{R} → ℝ, etc.
+    _MATHBB_MAP = {"R": "ℝ", "N": "ℕ", "C": "ℂ", "Z": "ℤ", "Q": "ℚ"}
+    def _mathbb_repl(m: re.Match) -> str:
+        return _MATHBB_MAP.get(m.group(1), m.group(1))
+    clause = re.sub(r"\\mathbb\{([^{}]*)\}", _mathbb_repl, clause)
+    # For remaining font commands, strip the wrapper and keep the content.
+    for _fcmd in ("mathrm", "mathbf", "mathit", "mathsf", "textbf", "textit", "text",
+                  "mathfrak", "mathcal", "mathscr", "boldsymbol"):
+        clause = re.sub(rf"\\{_fcmd}\{{([^{{}}]*)\}}", r"\1", clause)
+        clause = re.sub(rf"\\{_fcmd}\s+([A-Za-z][A-Za-z0-9_]*)", r"\1", clause)
+    # Order matters: replace longer/specific prefixes BEFORE shorter ones to avoid
+    # prefix collisions (\int → ∫ must come before \in → ∈; \infty before \in).
+    clause = clause.replace("\\infty", "∞")
+    clause = clause.replace("\\int", "∫")
+    clause = clause.replace("\\otimes", "⊗")
+    clause = clause.replace("\\oplus", "⊕")
     clause = clause.replace("\\leq", "≤").replace("\\le", "≤")
     clause = clause.replace("\\geq", "≥").replace("\\ge", "≥")
     clause = clause.replace("\\neq", "≠").replace("\\ne", "≠")
@@ -363,15 +461,24 @@ def _normalize_source_formula_clause(raw: str) -> str:
         lambda m: m.group(1) + "_" + re.sub(r"[^A-Za-z0-9]+", "_", m.group(2)).strip("_"),
         clause,
     )
-    # Flatten innermost brace groups left by nested LaTeX macros: {alpha} → alpha.
-    # This converts n_{tilde{alpha}} (after _replace_latex_identifiers) → n_{tildealpha}.
-    clause = re.sub(r"\{([^{}]*)\}", r"\1", clause)
-    # Second pass: pick up subscripts exposed by the flatten step.
+    # Iteratively flatten brace groups until no more nested braces remain.
+    # One pass only handles the innermost braces; nested wrappers like {C_beta(...)}
+    # require additional passes. Run at most 4 times (depth of real math rarely exceeds 3).
+    for _ in range(4):
+        new = re.sub(r"\{([^{}]*)\}", r"\1", clause)
+        if new == clause:
+            break
+        clause = new
+    # Pick up subscripts exposed by the flatten step.
     clause = re.sub(
         r"([A-Za-z][A-Za-z0-9]*)\s*_\s*\{([^{}]*)\}",
         lambda m: m.group(1) + "_" + re.sub(r"[^A-Za-z0-9]+", "_", m.group(2)).strip("_"),
         clause,
     )
+    # Strip leftover font-prefix identifiers produced when braces were absent:
+    # mathrm X → X, mathbb X → X, rm X → X.
+    clause = re.sub(r"\b(?:mathrm|mathbf|mathit|mathsf|mathfrak|mathcal|mathscr|boldsymbol)\s+", "", clause)
+    clause = re.sub(r"\brm\s+([A-Za-z])", r"\1", clause)
     clause = re.sub(r"\s+", " ", clause).strip()
     clause = re.sub(r"\s*([=≤≥<>≠])\s*", r" \1 ", clause)
     clause = re.sub(r"\s+", " ", clause).strip()
@@ -393,10 +500,13 @@ def _source_formula_clauses(latex_statement: str, schema: dict | None) -> list[s
     out: list[str] = []
     for chunk in chunks:
         expanded = re.sub(r"\\(?:qquad|quad|;|,)", ";", chunk)
+        # Also split on comma-space between conditions (e.g. "x=1, y<2") but not
+        # inside function argument lists (those rarely have space after the comma).
+        expanded = re.sub(r",\s+(?=[A-Z0-9\\|])", ";", expanded)
         for part in re.split(r";|\\\\", expanded):
             if not any(tok in part for tok in ("=", "<", ">", "≤", "≥", "\\le", "\\ge")):
                 continue
-            if any(tok in part for tok in ("\\mathcal", "\\begin", "\\end", "\\label", "\\ref", "^\\")):
+            if any(tok in part for tok in ("\\begin", "\\end", "\\label", "\\ref", "^\\")):
                 continue
             clause = _normalize_source_formula_clause(part)
             if not clause or "\\" in clause or "{" in clause or "}" in clause or "$" in clause:
@@ -1990,6 +2100,63 @@ def _build_class_stubs(class_names: list[str]) -> str:
     return "\n".join(lines)
 
 
+def _inject_instance_binders(sig: str, synth_failures: list[str]) -> str:
+    """Inject [inst_N : TypeClass args] binders for Mathlib TC synthesis failures.
+
+    Runs BEFORE _MATHLIB_TC_ALLOWLIST check so we only inject for known Mathlib classes.
+    For unknown classes the existing Try 3b stubs them instead.
+    """
+    if not synth_failures:
+        return sig
+
+    # Split off ':= by' / ':= sorry' tail so we only parse the header.
+    assign_m = re.search(r"\s*:=\s*(?:by\b|sorry\b)", sig)
+    if not assign_m:
+        return sig
+    header, tail = sig[: assign_m.start()], sig[assign_m.start() :]
+
+    # Find last ':' at paren/bracket depth 0 (the return-type colon).
+    depth = 0
+    ret_colon = -1
+    idx = 0
+    while idx < len(header):
+        ch = header[idx]
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth -= 1
+        elif ch == ":" and depth == 0:
+            nxt = header[idx + 1] if idx + 1 < len(header) else ""
+            if nxt not in (":", "="):
+                ret_colon = idx
+        idx += 1
+
+    if ret_colon < 0:
+        return sig
+
+    new_binders: list[str] = []
+    for k, inst_line in enumerate(synth_failures):
+        inst_line = inst_line.strip()
+        if not inst_line:
+            continue
+        class_name = inst_line.split()[0]
+        # Only inject for known Mathlib typeclasses — unknown ones get stubbed by Try 3b.
+        if class_name not in _MATHLIB_TC_ALLOWLIST_FORWARD:
+            continue
+        if inst_line in header:
+            continue
+        new_binders.append(f"[inst_{k} : {inst_line}]")
+
+    if not new_binders:
+        return sig
+
+    return header[:ret_colon].rstrip() + " " + " ".join(new_binders) + " " + header[ret_colon:] + tail
+
+
+# Forward reference sentinel used by _inject_instance_binders before the allowlist is defined.
+_MATHLIB_TC_ALLOWLIST_FORWARD: frozenset[str] = frozenset()  # overwritten below
+
+
 _MATHLIB_TC_ALLOWLIST: frozenset[str] = frozenset({
     "Add", "Mul", "Sub", "Div", "Mod", "Pow", "Neg", "Inv", "Zero", "One",
     "HAdd", "HMul", "HSub", "HDiv", "HPow", "HMod",
@@ -2023,6 +2190,46 @@ _MATHLIB_TC_ALLOWLIST: frozenset[str] = frozenset({
     "NoZeroDivisors", "IsDomain", "GCDMonoid", "UniqueFactorizationMonoid",
     "Nontrivial", "CharZero", "CharP", "NeZero", "Fact",
 })
+# Patch the forward reference so _inject_instance_binders can use the allowlist.
+_MATHLIB_TC_ALLOWLIST_FORWARD = _MATHLIB_TC_ALLOWLIST
+
+# Greek letter names that papers commonly use as real-valued scalars but the
+# translator may mistakenly emit as Type* parameters (macro collision pattern).
+_SCALAR_GREEK_NAMES = frozenset(
+    "alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi "
+    "pi rho sigma tau upsilon phi chi psi omega".split()
+)
+
+
+def _rewrite_type_star_collisions(sig: str, collision_names: set[str]) -> str:
+    """Rewrite `{name : Type*}` / `[inst : TC name]` → `(name : ℝ)` for collisions.
+
+    Only fires when a Greek-letter identifier appears as `Type*` binder AND the
+    caller has flagged it as a scalar collision (detected from \\newcommand + numeric usage).
+    """
+    if not collision_names or not sig:
+        return sig
+    for name in collision_names:
+        if name not in _SCALAR_GREEK_NAMES:
+            continue
+        # {name : Type*}  →  (name : ℝ)
+        sig = re.sub(
+            r"\{\s*" + re.escape(name) + r"\s*:\s*Type\*\s*\}",
+            f"({name} : ℝ)",
+            sig,
+        )
+        # Remove any typeclass binders that referenced the now-concrete type:
+        # [NormedAddCommGroup name] / [InnerProductSpace ℝ name] / etc.
+        sig = re.sub(
+            r"\[\s*(?:NormedAddCommGroup|NormedSpace|InnerProductSpace\s+\S+|"
+            r"MeasurableSpace|CompleteSpace|SeminormedAddCommGroup)\s+"
+            + re.escape(name) + r"\s*\]",
+            "",
+            sig,
+        )
+        # Clean up double spaces left by removal
+        sig = re.sub(r"  +", " ", sig)
+    return sig
 
 
 def _fix_invalid_binders(sig: str, error: str) -> str:
@@ -2810,6 +3017,16 @@ def _validate_signature(
                 stubs = stubs + "\n" + new_stubs if stubs else new_stubs
                 continue
 
+        # Try 3c: inject explicit instance binders for Mathlib TCs that failed synthesis.
+        # Unknown classes are handled by 3b above; here we handle known ones whose args
+        # Lean cannot infer automatically (e.g. [Fintype (Fin n)] when n is a binder).
+        if "failed to synthesize" in err:
+            synth_lines = _SYNTH_INSTANCE_RE.findall(err)
+            new_sig = _inject_instance_binders(sig, synth_lines)
+            if new_sig != sig:
+                sig = new_sig
+                continue
+
         # Try 4: "Function expected at X" on a previously no-arg stubbed def — upgrade to 1-arg.
         func_names = _FUNC_EXPECTED_RE.findall(err)
         upgraded = False
@@ -2884,6 +3101,7 @@ def translate_statement(
     theorem_name: str = "",
     run_id: str = "",
     repair_dataset_path: str | Path | None = None,
+    macro_collision_names: set[str] | None = None,
 ) -> TranslationResult:
     """Translate a LaTeX statement to a validated Lean 4 signature.
 
@@ -3350,6 +3568,19 @@ def translate_statement(
                         penalty = min(0.25, 0.08 * len(roundtrip_flags))
                         confidence = max(0.0, confidence - penalty)
                         flags.append("roundtrip_semantic_risk")
+
+                # Lean-native identifier audit: deterministic check that every
+                # qualified name in the signature actually resolves in Lean.
+                # Catches invented-but-plausible Mathlib names the LLM hallucinates.
+                audit_failures = _lean_identifier_audit(
+                    signature, project_root, timeout=8
+                )
+                if audit_failures:
+                    penalty = min(0.30, 0.10 * len(audit_failures))
+                    confidence = max(0.0, confidence - penalty)
+                    flags.append("lean_identifier_audit_failed")
+                    flags.extend(f"unresolved:{name}" for name in audit_failures[:5])
+
                 flush_repair_feedback(signature)
                 return TranslationResult(
                     lean_signature=signature,

@@ -1,10 +1,18 @@
 [
   {
     "theorem_name": "th_lions",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "assumptions_grounded",
+      "dependency_trust_complete",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -23,39 +31,49 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:c1",
-        "symbol": "c1",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:u0",
-        "symbol": "u0",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (Set.Icc 0 T) (dual V) (u10 : ∀ v : V, |a v v| >= c * ‖v‖^2 - c1 * ‖v‖^2) (u11 : ∀ v w : V, |a v w| <= M * ‖v‖ * ‖w‖) (u2 : ℝ) (u3 : H) (u4 : V → V → ℝ) (u5 : ℝ → V*) (u6 : H) (u7 : DenseEmbedding V H) (u8 u1 : Type*) (u9 : V ⊆ H) [Hilbert H] [Hilbert V] : ∃! u : ℝ → u1, u ∈ L2 (Set.Icc 0 u2) u1 ∧ ContinuousOn u (Set.Icc 0 u2) ∧ (∀ t ∈ Set.Icc 0 u2, HasDerivAt u (deriv u t) t) ∧ (∀ t ∈ Set.Icc 0 u2, ∀ u3 : u1, ⟪deriv u t, u3⟫ + u4 (u t) u3 = ⟪u5 t, u3⟫) ∧ u 0 = u6",
+    "statement_fingerprint": "9cfb905552d7f9098121f628f12aff62ca7574a5d2e0e932f7de4995653b8a95",
+    "canonical_theorem_id": "cth_9cfb905552d7f9098121f628",
+    "claim_shape": "inequality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "theorem_2",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -86,39 +104,48 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:H1_D_f",
-        "symbol": "H1_D_f",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:IsHilbertSpace",
-        "symbol": "IsHilbertSpace",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 u2 : alpha → ℝ) (u3 : ∀ z, 0 < f z) (u4 : ∃ K : ℝ>=0, LipschitzWith K D) [CompleteSpace alpha] [InnerProductSpace ℝ alpha] [MeasurableSpace alpha] [NormedAddCommGroup alpha] {u5 : Type*} : IsHilbertSpace (H1_D_f (Set.Ioo 0 z_F))",
+    "statement_fingerprint": "3849473a6a1f2e43c2b1d3b90a54d78c9930e25144268a08ed9832c183c27047",
+    "canonical_theorem_id": "cth_3849473a6a1f2e43c2b1d3b9",
+    "claim_shape": "inequality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "theorem_3",
     "status": "UNRESOLVED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -138,14 +165,48 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u2 : D ≠ 0) (u3 : alpha) (u4 : ℝ) [CompleteSpace alpha] [InnerProductSpace ℝ alpha] [NormedAddCommGroup alpha] {u1 : Type*} : IsClosed {v : u1 | v = 0}",
+    "statement_fingerprint": "fab90788b0547efb2cbe202389898ef50b0660e48a250d2c00533e8100f44fab",
+    "canonical_theorem_id": "cth_fab90788b0547efb2cbe2023",
+    "claim_shape": "equality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "rem",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -164,44 +225,36 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_symbol:d_dtvolume",
-        "symbol": "d_dtvolume",
-        "grounding_kind": "paper_symbol_obligation",
-        "grounding_source": "paper_symbol_reference",
-        "grounding_trust": "unproved_paper_symbol",
-        "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
-        "proof_countable": false,
-        "hidden_assumption": true,
-        "requires_verified_replacement": true
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h1",
-        "symbol": "h1",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h2",
-        "symbol": "h2",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (0 : ℝ) (Set.Ioi 0) (Set.Ioo 0 z_F) (nhds 0) (u1 : ℝ) (u2 : ℝ → ℝ) : ∃ g : ℝ → ℝ, IntegrableOn g volume (Set.Icc 0 u1) ∧ ∀ z ∈ Set.Ioo 0 u1, u2 z = ∫ x in Set.Icc 0 z, g x d_dtvolume",
+    "statement_fingerprint": "3d781d6f7ab0e61e83341886a7b2a4e7c9c3c70f14903761fcf0bf40b548dbe7",
+    "canonical_theorem_id": "cth_3d781d6f7ab0e61e83341886",
+    "claim_shape": "equality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "th_WPICa",
@@ -270,34 +323,57 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
-  },
-  {
-    "theorem_name": "lem_tc",
-    "status": "UNRESOLVED",
-    "grounding_status": "",
-    "gate_failures": [
-      "lean_proof_closed"
     ],
-    "result_label": "not_verified_with_paper_local_axiom_debt",
-    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-    "modulo_paper_local_axioms": true,
-    "debt_tier": "definition_stub_grounding",
-    "proof_value": "definition_grounding",
-    "grounding_metadata": [
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:z_F",
-        "symbol": "z_F",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
+    "canonical_statement": "theorem _ (u1 : ℝ) (u10 : ∀ z, 0 <= w z) (u11 : ∀ z, v z < infty) (u12 : ∀ z, w z < infty) (u2 : ℝ → ℝ) (u3 u4 : ℝ → ℝ) (u5 : AbsolutelyContinuous u) (u6 : Measurable v) (u7 : Measurable w) (u8 : u 0 = 0) (u9 : ∀ z, 0 <= v z) : ∃ (C : ℝ), (∀ z, 0 < z → z < u1 → (∫ x in Set.Icc 0 u1, (u2 x)^2 * u3 x d_dtx)^(1/2) <= C * (∫ x in Set.Icc 0 u1, (deriv u2 x)^2 * u4 x d_dtx)^(1/2)) ∧ (∃ (B : ℝ), B = ⨆ (z : ℝ) (hz : 0 < z ∧ z < u1), (∫ x in Set.Icc z u1, u3 x d_dtx)^(1/2) * (∫ x in Set.Icc 0 z, 1 / u4 x d_dtx)^(1/2) ∧ B < infty ∧ B <= C ∧ C <= 2 * B)",
+    "statement_fingerprint": "f2d99b1d1b2eb724ce03ea8b1935dd16733eec90acc5f7eebaec21648c98675e",
+    "canonical_theorem_id": "cth_f2d99b1d1b2eb724ce03ea8b",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "prop_weighted_lower_symbol",
+          "statement_id": "2604.21583|prop_weighted_lower_symbol|49",
+          "statement_fingerprint": "d8130ee0ef9e4b9e69f312db81d0eb72cb55c042e05f8459ad571dfadc7297b3",
+          "score": 2.5101
+        },
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "prop_weighted_mixed",
+          "statement_id": "2604.21583|prop_weighted_mixed|35",
+          "statement_fingerprint": "c53d317859cd87ac35a430e7e8bd574a1551d9e52e1e59efdc16c0ea014bdb28",
+          "score": 2.51
+        },
+        {
+          "paper_id": "2604.21663",
+          "theorem_name": "lem_measurable_density",
+          "statement_id": "2604.21663|lem_measurable_density|35",
+          "statement_fingerprint": "4214574a470fc734d26439b4ef3a025184bc01e41cad69a3493e1f2d8c05a27a",
+          "score": 1.0096
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
       }
-    ]
+    }
   },
   {
     "theorem_name": "cor_wpi",
@@ -341,51 +417,64 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hB_0",
-        "symbol": "hB_0",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hB_0_fin",
-        "symbol": "hB_0_fin",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hC_p",
-        "symbol": "hC_p",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (1 / 2) (u1 : ℝ) (u10 : ∀ z ∈ Set.Ioo 0 z_F, D z > 0) (u11 : ∀ z ∈ Set.Ioo 0 z_F, f z > 0) (u2 : ℝ → ℝ) (u3 : ℝ) (u4 : ℝ → ℝ) (u5 : ℝ → ℝ) (u6 : B_0 < infty) (u7 : C_p < 2 * B_0) (u8 : ℝ) (u9 : ℝ) (z_F - z) : (∀ z ∈ Set.Icc 0 u1, DifferentiableAt ℝ u2 z) → (∀ z ∈ Set.Icc 0 u1, deriv u2 z = deriv u2 z) → (∀ z ∈ Set.Icc 0 u1, u2 z = ∫ x in Set.Icc 0 z, deriv u2 x) → ∫ z in Set.Icc 0 u1, u2 z ^ 2 <= u3 ^ 2 * ∫ z in Set.Icc 0 u1, (deriv u2 z) ^ 2 * u4 z ∧ ∫ z in Set.Icc 0 u1, u5 z * u2 z ^ 2 <= (Classical.choose hf_bdd) * ∫ z in Set.Icc 0 u1, u2 z ^ 2 ∧ ∫ z in Set.Icc 0 u1, u5 z * u2 z ^ 2 <= (Classical.choose hf_bdd) * u3 ^ 2 * ∫ z in Set.Icc 0 u1, (deriv u2 z) ^ 2 * u4 z",
+    "statement_fingerprint": "c5b923dfe651cbe3c0db444566c25482cdc21b0af6c6de1a07cbbd557b147399",
+    "canonical_theorem_id": "cth_c5b923dfe651cbe3c0db4445",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "prop_weighted_lower_symbol",
+          "statement_id": "2604.21583|prop_weighted_lower_symbol|49",
+          "statement_fingerprint": "d8130ee0ef9e4b9e69f312db81d0eb72cb55c042e05f8459ad571dfadc7297b3",
+          "score": 2.5122
+        },
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "prop_weighted_mixed",
+          "statement_id": "2604.21583|prop_weighted_mixed|35",
+          "statement_fingerprint": "c53d317859cd87ac35a430e7e8bd574a1551d9e52e1e59efdc16c0ea014bdb28",
+          "score": 2.5121
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "eq_zf",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -417,7 +506,35 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) (u3 : ℝ) (u4 u2 : ℝ → ℝ) (u5 : v ∈ T) (u6 : ∀ z ∈ Set.Ioo 0 z_F, 0 < f z) (u7 : ∃ K : ℝ>=0, LipschitzWith K D) (z_F - z) (ℝ → ℝ) : ∀ z ∈ Set.Icc 0 u1, Real.sqrt (u2 z) * |v z| <= u3 * Real.sqrt (∫ x in Set.Icc 0 u1, u4 x * (deriv v x)^2 + u2 x * (v x)^2)",
+    "statement_fingerprint": "b11509e33666d28fb95f5524eb48efc54d8f6a41c4181ef9e76ffc5c5fc67d07",
+    "canonical_theorem_id": "cth_b11509e33666d28fb95f5524",
+    "claim_shape": "inequality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "th_4g",
@@ -452,90 +569,6 @@
       },
       {
         "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:z_F",
-        "symbol": "z_F",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hD_pos",
-        "symbol": "hD_pos",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hF_pos",
-        "symbol": "hF_pos",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hG_pos",
-        "symbol": "hG_pos",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hM_pos",
-        "symbol": "hM_pos",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hz_F",
-        "symbol": "hz_F",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hz_F_pos",
-        "symbol": "hz_F_pos",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
         "debt_item": "paper_definition_stub:th_4g",
         "symbol": "th_4g",
         "grounding_kind": "transparent_definition_stub",
@@ -545,15 +578,57 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:z_F",
+        "symbol": "z_F",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (f x) (u10 : 0 < z_F) (u11 : z_F ≠ 0) (u12 : ∀ v, ‖v‖_2 <= C_p * ‖v_z‖_D) (u13 : ∀ v, ‖v‖_f <= ‖f‖_infty * ‖v‖_2) (u14 : ∀ x, 0 < D x) (u15 : ∀ x, 0 < F x) (u16 : ∀ x, 0 < F x) (u17 : ∀ x, 0 < M x) (u18 : ∀ x, 0 < M x) (u19 : ∀ x, 0 < f x) (u2 : alpha → ℝ) (u20 : ∃ K : ℝ>=0, LipschitzWith K D) (u3 : alpha → ℝ) (u4 : alpha → ℝ) (u5 : alpha → ℝ) (u6 : ℝ) (u7 : alpha) (u8 : ℝ) (u8 : ℝ) (u9 : 0 < G) [CompleteSpace alpha] [InnerProductSpace ℝ alpha] [NormedAddCommGroup alpha] {u1 : Type*} : ∀ v w : u1, |⟨u2 • v_z, w_z⟩ - ⟨(u3 • u2 + u4 • u5) • v, w_z⟩ + u6 * ⟨v, w⟩ + u5 u7 * v u7 * w u7| <= u8 * ‖v‖_D_f * ‖w‖_D_f ∧ ∀ v : u1, ⟨v, v⟩ >= C_1 * ‖v‖_D_f ^ 2 - C_2 * ‖v‖_f ^ 2 ∧ ∀ v : u1, (∫ t in Set.Icc 0 T, |⟨(rho_atm t)', v⟩_2 + ⟨A (rho_atm t), v⟩| ^ 2) ^ (1 / 2) <= C_3 * ‖v‖_D_f",
+    "statement_fingerprint": "0e0ea1c1a67392388ecdd833c75458d1c5254173709c0306cb796b0749801d9e",
+    "canonical_theorem_id": "cth_0e0ea1c1a67392388ecdd833",
+    "claim_shape": "inequality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "lemm_M",
-    "status": "UNRESOLVED",
+    "status": "INTERMEDIARY_PROVEN",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -573,7 +648,48 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) : ∃ u1 : ℝ, u1 = u1",
+    "statement_fingerprint": "f221dc01559ba644b3e7b15b3e618a817c2d51621afb0ff76da34b94e1ac8774",
+    "canonical_theorem_id": "cth_f221dc01559ba644b3e7b15b",
+    "claim_shape": "equality",
+    "novelty_status": "duplicate_in_corpus",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "canonical_fingerprint",
+      "reason": "canonical statement fingerprint matched another corpus statement",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Prop_IncreasingLength",
+          "statement_id": "2304.09598|Prop_IncreasingLength|5",
+          "statement_fingerprint": "f221dc01559ba644b3e7b15b3e618a817c2d51621afb0ff76da34b94e1ac8774"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Cor_Arthur",
+          "statement_id": "2304.09598|Cor_Arthur|24",
+          "statement_fingerprint": "f221dc01559ba644b3e7b15b3e618a817c2d51621afb0ff76da34b94e1ac8774"
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "lemm_Mf",
@@ -617,7 +733,43 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ → ℝ) (u2 : ℝ) (u3 : True) : u1 u2 >= 0",
+    "statement_fingerprint": "1b48a6f6faeef03a9cf14eb02b91f8f5bcb2a8a4d0b71f5a3ddf31a468a87c9f",
+    "canonical_theorem_id": "cth_1b48a6f6faeef03a9cf14eb0",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "lemm_SD",
+          "statement_id": "2604.21821|lemm_SD|12",
+          "statement_fingerprint": "5f2d3c91752d0878ca3a5a39a056bc9e08c6a5560db9295990f14dc3a11f0d65",
+          "score": 0.7822
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "lemma_2_8",
@@ -651,18 +803,6 @@
       },
       {
         "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:lemma_2_8",
-        "symbol": "lemma_2_8",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
         "debt_item": "paper_definition_stub:h_f_z_is_positive_3",
         "symbol": "h_f_z_is_positive_3",
         "grounding_kind": "transparent_definition_stub",
@@ -684,8 +824,56 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:lemma_2_8",
+        "symbol": "lemma_2_8",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ → ℝ) (u2 : ℝ) (u3 : True) (u4 : True) (u5 : True) : u1 u2 >= 0",
+    "statement_fingerprint": "a34ba78a73d0b6346efd8ff802458721eade38dfdd8a5ae76be8e80133574b42",
+    "canonical_theorem_id": "cth_a34ba78a73d0b6346efd8ff8",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "lemma_14",
+          "statement_id": "2604.21821|lemma_14|13",
+          "statement_fingerprint": "9f296f190a493d4ebc6253a158163ba9f4fef5fcf1f439a5b29ac173da162aea",
+          "score": 0.8083
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "lemm_SD",
@@ -709,30 +897,6 @@
     "grounding_metadata": [
       {
         "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hD_pos",
-        "symbol": "hD_pos",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hD_nonneg",
-        "symbol": "hD_nonneg",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
         "debt_item": "paper_definition_stub:lemm_SD",
         "symbol": "lemm_SD",
         "grounding_kind": "transparent_definition_stub",
@@ -743,14 +907,44 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ → ℝ) (u2 : ∀ z ∈ Set.Ico 0 1, D z > 0) (u3 : ∀ z, D z >= 0) : Symmetric (Matrix.fromBlocks (u1 0) (u1 0) (u1 0) (u1 0)) ∧ (Matrix.fromBlocks (u1 0) (u1 0) (u1 0) (u1 0)).PosDef ∧ (Matrix.fromBlocks (u1 0) (u1 0) (u1 0) (u1 0)).PosDef",
+    "statement_fingerprint": "5f2d3c91752d0878ca3a5a39a056bc9e08c6a5560db9295990f14dc3a11f0d65",
+    "canonical_theorem_id": "cth_5f2d3c91752d0878ca3a5a39",
+    "claim_shape": "inequality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "lemma_14",
-    "status": "UNRESOLVED",
+    "status": "INTERMEDIARY_PROVEN",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -758,18 +952,6 @@
     "debt_tier": "definition_stub_grounding",
     "proof_value": "definition_grounding",
     "grounding_metadata": [
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:lemma_14",
-        "symbol": "lemma_14",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
       {
         "schema_version": "1.0.0",
         "debt_item": "paper_definition_stub:h_d_z_is_a_strictly_decreasing_1",
@@ -781,8 +963,56 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:lemma_14",
+        "symbol": "lemma_14",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) (u2 : True) : ∃ u1 : ℝ, u1 = u1",
+    "statement_fingerprint": "9f296f190a493d4ebc6253a158163ba9f4fef5fcf1f439a5b29ac173da162aea",
+    "canonical_theorem_id": "cth_9f296f190a493d4ebc6253a1",
+    "claim_shape": "equality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "lemma_2_8",
+          "statement_id": "2604.21821|lemma_2_8|11",
+          "statement_fingerprint": "a34ba78a73d0b6346efd8ff802458721eade38dfdd8a5ae76be8e80133574b42",
+          "score": 0.8365
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "rem_fh",
@@ -814,32 +1044,36 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:f_zF_pos",
-        "symbol": "f_zF_pos",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:subset_Icc",
-        "symbol": "subset_Icc",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (1 - h) (1 - h) (u1 : ℝ) (u2 : ℝ → ℝ) (u3 : ℝ) (u4 : f z_F > 0) (u5 : h > 0) : let f_h : = ⨅ (z : ℝ) (H : z ∈ Set.Icc 0 (1 - u1)), u2 z; f_h > 0 ∧ f_h >= u3 ∧ u3 > 0",
+    "statement_fingerprint": "c8c900eb32aee2c980dc98fc326536cfc476af43b25bcd2b66cba5de2cf9efcb",
+    "canonical_theorem_id": "cth_c8c900eb32aee2c980dc98fc",
+    "claim_shape": "inequality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "lemma_m",
@@ -873,7 +1107,43 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (6 * F) (n - 1) (n - 1) (n - 1) (u10 : ∀ z, f z > 0) (u11 : ∀ z, f z >= 0) (u4 : ℝ) (u5 : f_h > 0) (u6 : y ≠ 0) (u7 u1 u3 u8 u2 : ℝ) (u9 : ℝ → ℝ) (z_F / T_e) {u12 : ℕ} : yT * M_f * y - (u1 / u2) * u3 * (yT * K_f * y) > (u4 / 24) * ‖y‖_h ^ 2 ∧ (u4 / 24) * ‖y‖_h ^ 2 >= (u4 / 24) * ‖y‖_M ^ 2",
+    "statement_fingerprint": "cd079789fb0cff49a29c42939ab925a49f62d76a2a354a07c0a390428e765c3e",
+    "canonical_theorem_id": "cth_cd079789fb0cff49a29c4293",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.15191",
+          "theorem_name": "eqn_notation_Delta_s",
+          "statement_id": "2604.15191|eqn_notation_Delta_s|25",
+          "statement_fingerprint": "f452ae4eeba1dcdaa07ec8a2c84b7d90bb6764388df2261b3a26d115f02b3b70",
+          "score": 1.0718
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "lemma_g",
@@ -929,20 +1199,44 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:c_D_bounds",
-        "symbol": "c_D_bounds",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (n - 1) (n - 1) (n - 1) (n - 1) (n - 1) (u1 : ℝ) (u10 : ℝ) (u11 : ℝ) (u12 : ℝ) (u13 : ℝ → ℝ) (u14 : ∀ i j, G i j = G j i) (u15 : ∀ i, M i i > 0) (u16 : ∀ z, D z >= 0) (u2 : 0 < c_D ∧ c_D < 2) (u3 : 0 < h) (u4 : I_D < infty) (u5 : I_D = z_F.integral fun z => 1 / D z) (u6 : LipschitzWith L_delta D) (u7 : Set ℝ) (u8 : n > 1) (u9 : ℝ) [CompleteSpace alpha] [InnerProductSpace ℝ alpha] [NormedAddCommGroup alpha] {u17 : Type*} {u18 : ℕ} : v.transpose ⬝ G ⬝ v >= -|u1| * (v.transpose ⬝ M ⬝ v)",
+    "statement_fingerprint": "f33d5089b0ec97b2ff9b1a1b6827df863c9e25642e60d764e0c79acae054e0b6",
+    "canonical_theorem_id": "cth_f33d5089b0ec97b2ff9b1a1b",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "thm_density_matrix_convergence_final",
+          "statement_id": "2604.21583|thm_density_matrix_convergence_final|50",
+          "statement_fingerprint": "b077aff4dc6b73241abeb6733bfda554807f3b6be20614f09d97d2b3527830bb",
+          "score": 1.1628
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "theorem_18",
@@ -1010,19 +1304,43 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hD_lip",
-        "symbol": "hD_lip",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (1 - h) (4 * |z_F * G - |K_G||) (6 * T_e) (h / F) (u10 : h < h_0) (u16 : ∀ z, D z >= 0) (u17 : ∀ z, f z >= 0) (u2 u3 u13 u14 u15 : ℝ) (u4 u11 u1 u12 : ℝ) (u5 : 0 < deltat) (u6 : Lipschitz D) (u7 : alpha → ℝ) (u8 : alpha → ℝ) (u9 : f_h > 0) [CompleteSpace alpha] [InnerProductSpace ℝ alpha] [NormedAddCommGroup alpha] {u18 : Type*} : IsUnit (u1 + u2 * u3 * u4)",
+    "statement_fingerprint": "b82b1ec65418411a9c94a771c970a8a3f6f7f69f02f555c74d88a996c9e2182d",
+    "canonical_theorem_id": "cth_b82b1ec65418411a9c94a771",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.15191",
+          "theorem_name": "eqn_notation_Delta_s",
+          "statement_id": "2604.15191|eqn_notation_Delta_s|25",
+          "statement_fingerprint": "f452ae4eeba1dcdaa07ec8a2c84b7d90bb6764388df2261b3a26d115f02b3b70",
+          "score": 4.1368
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   }
 ]

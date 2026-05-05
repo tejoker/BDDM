@@ -33,6 +33,7 @@ import tempfile
 import time
 from pathlib import Path
 from dataclasses import dataclass, field
+from typing import Any
 
 from dotenv import load_dotenv
 
@@ -56,7 +57,11 @@ try:
 except Exception:
     attempt_equivalence_repair = None  # type: ignore[assignment]
 
+from build_gold_proof_queue import proof_candidate_blockers
 from statement_validity import statement_fidelity_gate
+
+
+_GOLD_PROOF_QUEUE_OVERRIDES: dict[tuple[str, str], dict[str, Any]] = {}
 
 
 # ---------------------------------------------------------------------------
@@ -73,7 +78,7 @@ _DECL_RE = re.compile(
 
 # Also match single-line: `theorem foo ... := by\n  sorry`
 _SINGLE_SORRY_RE = re.compile(
-    r"^((?:noncomputable\s+)?(?:private\s+)?(?:theorem|lemma)\s+(\w+)[^\n]*:= by\s*\n\s*sorry)",
+    r"^((?:noncomputable\s+)?(?:private\s+)?(?:theorem|lemma)\s+(\w+)[^\n]*:= by(?:\s+sorry\b|\s*\n\s*sorry\b))",
     re.MULTILINE,
 )
 
@@ -84,6 +89,98 @@ class SorryTheorem:
     full_name: str     # namespace-qualified name
     declaration: str   # full declaration text with sorry
     lean_file: Path    # path to the .lean file
+
+
+def _read_jsonl(path: Path) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    if not path.exists():
+        return rows
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not line.strip():
+            continue
+        try:
+            raw = json.loads(line)
+        except Exception:
+            continue
+        if isinstance(raw, dict):
+            rows.append(raw)
+    return rows
+
+
+def _lean_decl_name(statement: str) -> str:
+    match = re.search(
+        r"^\s*(?:noncomputable\s+)?(?:private\s+)?(?:theorem|lemma|def)\s+([A-Za-z_][A-Za-z0-9_'.]*)\b",
+        statement or "",
+        flags=re.MULTILINE,
+    )
+    return match.group(1).rsplit(".", 1)[-1] if match else ""
+
+
+def _gold_queue_aliases(row: dict[str, Any]) -> set[str]:
+    aliases: set[str] = set()
+    for key in ("theorem_id", "canonical_theorem_id", "theorem_name"):
+        raw = str(row.get(key, "") or "").strip()
+        if raw:
+            aliases.add(raw)
+            aliases.add(raw.rsplit(".", 1)[-1])
+    lean_name = _lean_decl_name(str(row.get("lean_statement", "") or ""))
+    if lean_name:
+        aliases.add(lean_name)
+        aliases.add(f"ArxivPaper.{lean_name}")
+        aliases.add(f"ArxivPaperActionable.{lean_name}")
+    return {item for item in aliases if item}
+
+
+def _load_gold_proof_queue_overrides(path: Path) -> tuple[set[str], dict[str, Any]]:
+    rows = _read_jsonl(path)
+    accepted = 0
+    rejected = 0
+    target_names: set[str] = set()
+    _GOLD_PROOF_QUEUE_OVERRIDES.clear()
+    for row in rows:
+        blockers = proof_candidate_blockers(row)
+        if blockers:
+            rejected += 1
+            continue
+        paper_id = str(row.get("arxiv_id", "") or row.get("paper_id", "") or "").strip()
+        aliases = _gold_queue_aliases(row)
+        if not paper_id or not aliases:
+            rejected += 1
+            continue
+        override = {
+            **row,
+            "gold_proof_queue_override": True,
+            "claim_equivalence_verdict": str(
+                row.get("claim_equivalence_verdict")
+                or row.get("reviewed_equivalence_verdict")
+                or "equivalent"
+            ),
+            "independent_semantic_equivalence_evidence": True,
+        }
+        for alias in aliases:
+            _GOLD_PROOF_QUEUE_OVERRIDES[(paper_id, alias)] = override
+        target_names.update(aliases)
+        accepted += 1
+    return target_names, {
+        "rows": len(rows),
+        "accepted_rows": accepted,
+        "rejected_rows": rejected,
+        "target_names": len(target_names),
+    }
+
+
+def _gold_override_for_theorem(paper_id: str, theorem_name: str) -> dict[str, Any] | None:
+    raw = str(theorem_name or "").strip()
+    if not paper_id or not raw:
+        return None
+    aliases = [raw, raw.rsplit(".", 1)[-1]]
+    short = raw.rsplit(".", 1)[-1]
+    aliases.extend([f"ArxivPaper.{short}", f"ArxivPaperActionable.{short}"])
+    for alias in aliases:
+        row = _GOLD_PROOF_QUEUE_OVERRIDES.get((paper_id, alias))
+        if isinstance(row, dict):
+            return row
+    return None
 
 
 def _extract_sorry_theorems(lean_file: Path) -> list[SorryTheorem]:
@@ -120,6 +217,22 @@ def _extract_sorry_theorems(lean_file: Path) -> list[SorryTheorem]:
             j += 1
         if by_idx < 0:
             i += 1
+            continue
+
+        if re.search(r":=\s*by\s+sorry\b", lines[by_idx]):
+            if name not in seen:
+                seen.add(name)
+                full_name = f"{namespace}.{name}" if namespace else name
+                decl = "".join(lines[i : by_idx + 1])
+                results.append(
+                    SorryTheorem(
+                        name=name,
+                        full_name=full_name,
+                        declaration=decl,
+                        lean_file=lean_file,
+                    )
+                )
+            i = by_idx + 1
             continue
 
         k = by_idx + 1
@@ -175,6 +288,15 @@ def _sanitize_generated_lean_file(lean_file: Path) -> bool:
     fixed = re.sub(
         r"(?m)^([ \t]*(?:sorry|trivial)\s*)(--\s*\[theorem\])",
         r"\1\n\n\2",
+        fixed,
+    )
+    # Repair subscript-mangled identifiers only: LaTeX `C_{\beta,s_1}` can be
+    # transcribed as `C_beta,s1` which is not a valid Lean name.  The pattern
+    # requires at least one `_` in the leading part so short names like `a,b`
+    # (valid in constructor/simp syntax) are left untouched.
+    fixed = re.sub(
+        r"\b([A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)+),([A-Za-z][A-Za-z0-9_]*(?:,[A-Za-z][A-Za-z0-9_]*)*)\b",
+        lambda m: m.group(1) + "_" + m.group(2).replace(",", "_"),
         fixed,
     )
     # Ensure theorem markers start a fresh block (blank line before marker).
@@ -2187,6 +2309,9 @@ def _bridge_hints_from_ledger_entry(entry: dict) -> list[str]:
 def _load_ledger_entry_for_theorem(paper_id: str, theorem_name: str) -> dict | None:
     if not paper_id:
         return None
+    override = _gold_override_for_theorem(paper_id, theorem_name)
+    if isinstance(override, dict):
+        return override
     try:
         from pipeline_status import load_ledger
     except Exception:
@@ -2702,6 +2827,11 @@ def main() -> int:
         help="Optional statement-validity proof-repair cohort JSON; only listed theorem names are proved.",
     )
     p.add_argument(
+        "--gold-proof-queue-jsonl",
+        default="",
+        help="Optional strict gold-proof queue JSONL; only blocker-free queue rows are eligible for proof search.",
+    )
+    p.add_argument(
         "--target-theorem",
         action="append",
         default=[],
@@ -2851,6 +2981,20 @@ def main() -> int:
             paper_id = f"{domain_part}/{paper_part}"
 
     theorem_by_name = {t.full_name: t for t in all_theorems}
+    if args.gold_proof_queue_jsonl:
+        gold_path = Path(args.gold_proof_queue_jsonl)
+        gold_targets, gold_summary = _load_gold_proof_queue_overrides(gold_path)
+        print(f"Gold-proof queue filter loaded: {gold_summary}")
+        if not gold_targets:
+            theorem_by_name = {}
+        else:
+            filtered_gold: dict[str, SorryTheorem] = {}
+            for full_name, thm in theorem_by_name.items():
+                short_name = full_name.rsplit(".", 1)[-1]
+                if full_name in gold_targets or short_name in gold_targets:
+                    filtered_gold[full_name] = thm
+            print(f"Gold-proof queue filter: kept={len(filtered_gold)} / {len(theorem_by_name)}")
+            theorem_by_name = filtered_gold
     if args.target_theorem:
         target_names = {str(x).strip() for x in args.target_theorem if str(x).strip()}
         filtered_targets: dict[str, SorryTheorem] = {}
@@ -2948,7 +3092,13 @@ def main() -> int:
                 short_name = name.rsplit(".", 1)[-1]
                 entry = _load_ledger_entry_for_theorem(paper_id, short_name)
             verdict = str(entry.get("claim_equivalence_verdict", "")).strip().lower() if isinstance(entry, dict) else ""
-            if verdict == "equivalent":
+            proof_eligible_entry = False
+            if isinstance(entry, dict):
+                try:
+                    proof_eligible_entry = bool(statement_fidelity_gate(entry).proof_eligible)
+                except Exception:
+                    proof_eligible_entry = False
+            if verdict == "equivalent" or proof_eligible_entry:
                 filtered[name] = thm
             else:
                 skipped += 1

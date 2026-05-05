@@ -9,7 +9,7 @@ open MeasureTheory ProbabilityTheory Filter Set
 
 namespace Paper_2604_21616
 
--- note: declared 33 paper-local symbol(s) from inventory
+-- note: declared 31 paper-local symbol(s) from inventory
 -- note: definition stubs are notation grounding only and are not proof-countable
 
 -- ------------------------------------------------------------------
@@ -23,8 +23,6 @@ namespace Paper_2604_21616
 def L2Space : Set (ℝ → ℝ) := Set.univ
 
 def a : ℝ := 0
-
-def affilname1 : ℝ := 0
 
 def bL_0 : ℝ := 0
 
@@ -80,8 +78,6 @@ def sigma_F : ℝ := 0
 
 def theta : ℝ := 0
 
-def v2 : ℝ := 0
-
 def zeta_1 : ℝ := 0
 
 def zeta_2 : ℝ := 0
@@ -91,4 +87,4 @@ def zeta_2 : ℝ := 0
 
 end Paper_2604_21616
 
-export Paper_2604_21616 (L2Space a affilname1 bL_0 bL_k bP_0 bP_k bQ_0 bQ_k bR_0 bR_k ell_1 ell_2 equ1 equ2 equ3 equ4 equ5 equ6 icml2020 l1 muon2024 nuclear_l1_norms proof_4 proof_6 proof_8 rate1 rate2 sigma_F theta v2 zeta_1 zeta_2)
+export Paper_2604_21616 (L2Space a bL_0 bL_k bP_0 bP_k bQ_0 bQ_k bR_0 bR_k ell_1 ell_2 equ1 equ2 equ3 equ4 equ5 equ6 icml2020 l1 muon2024 nuclear_l1_norms proof_4 proof_6 proof_8 rate1 rate2 sigma_F theta zeta_1 zeta_2)

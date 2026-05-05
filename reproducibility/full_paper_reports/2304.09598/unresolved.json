@@ -30,7 +30,35 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (Finset ℤ) (u1 : ℕ) (u2 u3 : ℤ) (u4 : 0 < r) (u5 : b <= e) (u6 : ∀ delta ∈ alpha, ∃ b' e' : ℤ, delta = Finset.Icc b' e') : ∀ delta ∈ alpha, ∃ i : Fin u1, delta = Finset.Icc u2 u3",
+    "statement_fingerprint": "7f62c94d5c12c240e50b1d89cb80587c63afe4f164fc87d08a9e6465c1eefa0c",
+    "canonical_theorem_id": "cth_7f62c94d5c12c240e50b1d89",
+    "claim_shape": "inequality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "multiplicity",
@@ -50,7 +78,35 @@
     "modulo_paper_local_axioms": false,
     "debt_tier": "none",
     "proof_value": "none",
-    "grounding_metadata": []
+    "grounding_metadata": [],
+    "canonical_statement": "theorem _ (i - 1) (i - 1) (i <= j) (j + 1) (j + 1) (u1 : ℕ → ℕ → ℕ) (u2 u3 : ℕ) (u4 : ℕ → ℕ → ℕ) : u1 u2 u3 = u4 u2 u3 - u4 (u2 - 1) u3 - u4 u2 (u3 + 1) + u4 (u2 - 1) (u3 + 1)",
+    "statement_fingerprint": "7fff73b91a0daf7623093ae98a0887e78403a04106c6f54275c42c54a03bc894",
+    "canonical_theorem_id": "cth_7fff73b91a0daf7623093ae9",
+    "claim_shape": "equality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Prop_Actions",
@@ -77,14 +133,48 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) (u2 : ℝ) (u3 : True) : u1 <= u2",
+    "statement_fingerprint": "75b627125d5fbb740aafe49c48af60012ac7249ec0fa8444e93fb853704bf03e",
+    "canonical_theorem_id": "cth_75b627125d5fbb740aafe49c",
+    "claim_shape": "inequality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Cor_BoundaryRTandMS",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -92,6 +182,18 @@
     "debt_tier": "definition_stub_grounding",
     "proof_value": "definition_grounding",
     "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Multisegment",
+        "symbol": "Multisegment",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
       {
         "schema_version": "1.0.0",
         "debt_item": "paper_definition_stub:C",
@@ -115,27 +217,62 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:hC_le_def",
-        "symbol": "hC_le_def",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (a <= b) (c <= d) (u1 : alpha → alpha → Prop) (u10 : alpha = Multisegment) (u11 : alpha.corr_conj_class = C ∧ beta.corr_conj_class = D) (u12 : beta = Multisegment) (u4 : C → C → Prop) (u7 : C = ConjugacyClass) (u8 : C.top_rows = D.top_rows) (u9 : D = ConjugacyClass) {u2 u3 : Type*} {u5 u6 : Type*} : (u1 u2 u3) ↔ (u4 u5 u6)",
+    "statement_fingerprint": "58c233c579c95003cf9c4ef436d5258c3574e9ee829c88eabd323913cf1a563f",
+    "canonical_theorem_id": "cth_58c233c579c95003cf9c4ef4",
+    "claim_shape": "equality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2012.09271",
+          "theorem_name": "corollary_2",
+          "statement_id": "2012.09271|corollary_2|1",
+          "statement_fingerprint": "d86d39e7a866e974d64ea4870023fb923023b560e1410ffff2500598345027ab",
+          "score": 1.8507
+        },
+        {
+          "paper_id": "2604.15152",
+          "theorem_name": "corollary_3",
+          "statement_id": "2604.15152|corollary_3|2",
+          "statement_fingerprint": "6623e7db5af4f00124292ce1290d67d2735c2fbae35a258f4642fef49938889b",
+          "score": 1.6435
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Precedes",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -191,38 +328,102 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ : Delta1 = (b_1, dots, e_1) ∧ Delta2 = (b_2, dots, e_2) ∧ b_1 < b_2 ∧ e_1 < e_2",
+    "statement_fingerprint": "118373bcd5ed6dd004954b119ae9266286e7507e571c6c3c4d155c5082ce4d5d",
+    "canonical_theorem_id": "cth_118373bcd5ed6dd004954b11",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_PrecedesQuantum",
+          "statement_id": "2304.09598|Lem_PrecedesQuantum|14",
+          "statement_fingerprint": "4369ef108d8eefe7bcce5910c137aa711873731207e11ead1437b79081d597f6",
+          "score": 1.7247
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Prop_IncreasingLength",
-    "status": "UNRESOLVED",
+    "status": "INTERMEDIARY_PROVEN",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence"
     ],
     "result_label": "not_verified",
     "claim_scope": "No verified closure claim is made for this result.",
     "modulo_paper_local_axioms": false,
     "debt_tier": "none",
     "proof_value": "none",
-    "grounding_metadata": []
+    "grounding_metadata": [],
+    "canonical_statement": "theorem _ (u1 : ℝ) : ∃ u1 : ℝ, u1 = u1",
+    "statement_fingerprint": "f221dc01559ba644b3e7b15b3e618a817c2d51621afb0ff76da34b94e1ac8774",
+    "canonical_theorem_id": "cth_f221dc01559ba644b3e7b15b",
+    "claim_shape": "equality",
+    "novelty_status": "duplicate_in_corpus",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "canonical_fingerprint",
+      "reason": "canonical statement fingerprint matched another corpus statement",
+      "matches": [
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "lemm_M",
+          "statement_id": "2604.21821|lemm_M|9",
+          "statement_fingerprint": "f221dc01559ba644b3e7b15b3e618a817c2d51621afb0ff76da34b94e1ac8774"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Cor_Arthur",
+          "statement_id": "2304.09598|Cor_Arthur|24",
+          "statement_fingerprint": "f221dc01559ba644b3e7b15b3e618a817c2d51621afb0ff76da34b94e1ac8774"
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Basic",
-    "status": "UNRESOLVED",
-    "grounding_status": "",
-    "gate_failures": [
-      "lean_proof_closed"
-    ],
-    "result_label": "not_verified",
-    "claim_scope": "No verified closure claim is made for this result.",
-    "modulo_paper_local_axioms": false,
-    "debt_tier": "none",
-    "proof_value": "none",
-    "grounding_metadata": []
-  },
-  {
-    "theorem_name": "EqualLN",
     "status": "UNRESOLVED",
     "grounding_status": "",
     "gate_failures": [
@@ -236,8 +437,8 @@
     "grounding_metadata": [
       {
         "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h1",
-        "symbol": "h1",
+        "debt_item": "paper_definition_stub:Multisegment",
+        "symbol": "Multisegment",
         "grounding_kind": "transparent_definition_stub",
         "grounding_source": "paper_symbol_inventory",
         "grounding_trust": "syntax_only_not_semantic_proof",
@@ -248,8 +449,8 @@
       },
       {
         "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h2",
-        "symbol": "h2",
+        "debt_item": "paper_definition_stub:dual",
+        "symbol": "dual",
         "grounding_kind": "transparent_definition_stub",
         "grounding_source": "paper_symbol_inventory",
         "grounding_trust": "syntax_only_not_semantic_proof",
@@ -260,8 +461,44 @@
       },
       {
         "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h3",
-        "symbol": "h3",
+        "debt_item": "paper_definition_stub:c_alpha",
+        "symbol": "c_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:S_alpha",
+        "symbol": "S_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:L_alpha",
+        "symbol": "L_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:n_alpha",
+        "symbol": "n_alpha",
         "grounding_kind": "transparent_definition_stub",
         "grounding_source": "paper_symbol_inventory",
         "grounding_trust": "syntax_only_not_semantic_proof",
@@ -270,35 +507,356 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 u2 : Multisegment) (u3 : alpha = dual alpha) (u4 : beta = dual beta) : c_alpha = c_beta ∧ S_alpha = S_beta ∧ (u1 <= u2 → L_alpha <= L_beta) ∧ (u1 <= u2 → n_alpha >= n_beta) ∧ n_dual u1 >= L_alpha ∧ n_alpha >= L_dual u1 ∧ C_alpha >= c_alpha",
+    "statement_fingerprint": "f27c876bd3404170dca834f1f04006970eb9b54127aba0f4acb65ac4143fccca",
+    "canonical_theorem_id": "cth_f27c876bd3404170dca834f1",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.21583",
+          "theorem_name": "lem_nonzero_explicit_corrected",
+          "statement_id": "2604.21583|lem_nonzero_explicit_corrected|40",
+          "statement_fingerprint": "059baeb7080b68d3638f38ad5948e9277c651809f1c20a90bef7a271e66fbe6f",
+          "score": 0.8362
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_AB",
+          "statement_id": "2304.09598|Lem_AB|15",
+          "statement_fingerprint": "c84fde0ccb05b323b3583f44200e765ac1cecc4adaaeab9ca7a39e3db1b89055",
+          "score": 0.8351
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "EqualLN",
+          "statement_id": "2304.09598|EqualLN|7",
+          "statement_fingerprint": "e59023fb6a4bbe1bb7dead22819b38a66517aaf522d3be1f3b5a2ecc437a48e6",
+          "score": 0.8342
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
+  },
+  {
+    "theorem_name": "EqualLN",
+    "status": "FLAWED",
+    "grounding_status": "",
+    "gate_failures": [
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
+    ],
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Multisegment",
+        "symbol": "Multisegment",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:n_alpha",
+        "symbol": "n_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:L_tilde",
+        "symbol": "L_tilde",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ],
+    "canonical_statement": "theorem _ (alpha) (alpha_tilde) (u1 u2 : Multisegment) (u3 u4 : Multisegment) (u5 : alpha <= beta) (u6 : alpha_tilde <= beta_tilde) : n_alpha (u1) = n_alpha (u2) ∧ L_tilde (u3) = L_tilde (u4)",
+    "statement_fingerprint": "e59023fb6a4bbe1bb7dead22819b38a66517aaf522d3be1f3b5a2ecc437a48e6",
+    "canonical_theorem_id": "cth_e59023fb6a4bbe1bb7dead22",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_AB",
+          "statement_id": "2304.09598|Lem_AB|15",
+          "statement_fingerprint": "c84fde0ccb05b323b3583f44200e765ac1cecc4adaaeab9ca7a39e3db1b89055",
+          "score": 0.9325
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Quant",
+          "statement_id": "2304.09598|Thm_Quant|20",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+          "score": 0.8565
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Basic",
+          "statement_id": "2304.09598|Basic|6",
+          "statement_fingerprint": "f27c876bd3404170dca834f1f04006970eb9b54127aba0f4acb65ac4143fccca",
+          "score": 0.8348
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Def_Simple",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "translation_acceptance_gate",
+      "strict_statement_validity",
+      "translation_fidelity_ok",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
-    "result_label": "not_verified",
-    "claim_scope": "No verified closure claim is made for this result.",
-    "modulo_paper_local_axioms": false,
-    "debt_tier": "none",
-    "proof_value": "none",
-    "grounding_metadata": []
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Multisegment",
+        "symbol": "Multisegment",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:IsSimple",
+        "symbol": "IsSimple",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ],
+    "canonical_statement": "theorem _ (u1 : Multisegment) (u3 u4 u2 : ℕ) : IsSimple u1 ↔ ∃ (segments : List Segment), segments.length = u2 ∧ ∀ i : Fin u2, segments.get i = ⟨u3 + i, u4 + i⟩",
+    "statement_fingerprint": "90fcfe8ba6a15e063ccd9e42a87cca2476c648e228c3b7b8abf9327a796e4cbc",
+    "canonical_theorem_id": "cth_90fcfe8ba6a15e063ccd9e42",
+    "claim_shape": "equality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Prop_SimpleFacts",
+          "statement_id": "2304.09598|Prop_SimpleFacts|9",
+          "statement_fingerprint": "29e7b243951999452de50bfec044fb99d29caa759abd15616051b8c904e793c8",
+          "score": 1.1467
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_ManySimpleA_B",
+          "statement_id": "2304.09598|Thm_ManySimpleA_B|23",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+          "score": 1.1143
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Simple",
+          "statement_id": "2304.09598|Thm_Simple|11",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+          "score": 1.0292
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Prop_SimpleFacts",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
-    "result_label": "not_verified",
-    "claim_scope": "No verified closure claim is made for this result.",
-    "modulo_paper_local_axioms": false,
-    "debt_tier": "none",
-    "proof_value": "none",
-    "grounding_metadata": []
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Multisegment",
+        "symbol": "Multisegment",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:L_alpha",
+        "symbol": "L_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:ntilde_alpha",
+        "symbol": "ntilde_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:IsSimple",
+        "symbol": "IsSimple",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ],
+    "canonical_statement": "theorem _ (u1 : IsSimple) (u2 : Multisegment) : ntilde_alpha = L_alpha",
+    "statement_fingerprint": "29e7b243951999452de50bfec044fb99d29caa759abd15616051b8c904e793c8",
+    "canonical_theorem_id": "cth_29e7b243951999452de50bfe",
+    "claim_shape": "equality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "EqualAB",
@@ -349,14 +907,72 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) (u2 : ℝ) (u3 : True) (u4 : True) (u5 : True) : u1 <= u2 ∧ u1 = u2 ∧ α = β",
+    "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+    "canonical_theorem_id": "cth_ff9aaed4732fe1bb0255598f",
+    "claim_shape": "inequality",
+    "novelty_status": "duplicate_in_corpus",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "canonical_fingerprint",
+      "reason": "canonical statement fingerprint matched another corpus statement",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Simple",
+          "statement_id": "2304.09598|Thm_Simple|11",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_QuantEquiv",
+          "statement_id": "2304.09598|Lem_QuantEquiv|16",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Quant",
+          "statement_id": "2304.09598|Thm_Quant|20",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_ManySimpleA_B",
+          "statement_id": "2304.09598|Thm_ManySimpleA_B|23",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Thm_Simple",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence",
+      "semantic_adversarial_checks_passed",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -366,8 +982,8 @@
     "grounding_metadata": [
       {
         "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h_source_2_2",
-        "symbol": "h_source_2_2",
+        "debt_item": "paper_definition_stub:h_is_a_simple_multisegment_1",
+        "symbol": "h_is_a_simple_multisegment_1",
         "grounding_kind": "transparent_definition_stub",
         "grounding_source": "paper_symbol_inventory",
         "grounding_trust": "syntax_only_not_semantic_proof",
@@ -378,8 +994,8 @@
       },
       {
         "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h_is_a_simple_multisegment_1",
-        "symbol": "h_is_a_simple_multisegment_1",
+        "debt_item": "paper_definition_stub:h_source_2_2",
+        "symbol": "h_source_2_2",
         "grounding_kind": "transparent_definition_stub",
         "grounding_source": "paper_symbol_inventory",
         "grounding_trust": "syntax_only_not_semantic_proof",
@@ -400,7 +1016,60 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) (u2 : ℝ) (u3 : True) (u4 : True) (u5 : True) : u1 <= u2 ∧ u1 = u2 ∧ α = β",
+    "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+    "canonical_theorem_id": "cth_ff9aaed4732fe1bb0255598f",
+    "claim_shape": "inequality",
+    "novelty_status": "duplicate_in_corpus",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "canonical_fingerprint",
+      "reason": "canonical statement fingerprint matched another corpus statement",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "EqualAB",
+          "statement_id": "2304.09598|EqualAB|10",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_QuantEquiv",
+          "statement_id": "2304.09598|Lem_QuantEquiv|16",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Quant",
+          "statement_id": "2304.09598|Thm_Quant|20",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_ManySimpleA_B",
+          "statement_id": "2304.09598|Thm_ManySimpleA_B|23",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "defin_14",
@@ -423,6 +1092,18 @@
     "grounding_metadata": [
       {
         "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Multisegment",
+        "symbol": "Multisegment",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
         "debt_item": "paper_definition_stub:defin_14",
         "symbol": "defin_14",
         "grounding_kind": "transparent_definition_stub",
@@ -433,14 +1114,50 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : Multisegment) : ∃ (segments : List Segment) (b e : List ℤ), u1 = segments.toFinset ∧ segments.length = b.length ∧ segments.length = e.length ∧ ∀ i j : Fin segments.length, i < j → b.get i < b.get j ∧ e.get i < e.get j",
+    "statement_fingerprint": "6d1e90b40d948759a05f91427f8cec526d09f44b26f91bed8799bd6037ab9028",
+    "canonical_theorem_id": "cth_6d1e90b40d948759a05f9142",
+    "claim_shape": "inequality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Exa_QFM",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "assumptions_grounded",
+      "dependency_trust_complete",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -460,28 +1177,106 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (segments a) (segments a) (segments b) (segments b) (u1 : Type*) (u2 : alpha → alpha → Prop) (u3 : alpha → ℕ × ℕ) (ℕ × ℕ) [(1, 2, 3, 4), (4, 5, 6), (5, 6, 7)] [Fintype alpha] : ∃ (original_segments : List (ℕ × ℕ)), original_segments = [(1, ), (2, ), (3, 4, 5), (4, 5, 6), (6, 7)]",
+    "statement_fingerprint": "0f619319ff3fb20c5734a914a433162457611480ca274d17af73c4d6889292ca",
+    "canonical_theorem_id": "cth_0f619319ff3fb20c5734a914",
+    "claim_shape": "equality",
+    "novelty_status": "new_candidate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "no_overlap_detected",
+      "reason": "no Mathlib, exact corpus, or semantic corpus overlap detected by available checks",
+      "matches": [],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Lem_PrecedesQuantum",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "translation_acceptance_gate",
+      "strict_statement_validity",
+      "translation_fidelity_ok",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "assumptions_grounded",
+      "dependency_trust_complete",
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence"
     ],
     "result_label": "not_verified",
     "claim_scope": "No verified closure claim is made for this result.",
     "modulo_paper_local_axioms": false,
     "debt_tier": "none",
     "proof_value": "none",
-    "grounding_metadata": []
+    "grounding_metadata": [],
+    "canonical_statement": "theorem _ (u3 : Fin n → alpha) (u4 : ∀ i j, i < j → segments i <= segments j) [Preorder alpha] {u1 : ℕ} {u2 : Type*} : ∃ ladder : Fin u1 → u2, (∀ i, ladder i = u3 i) ∧ IsIrreducibleLadderMultisegment ladder",
+    "statement_fingerprint": "4369ef108d8eefe7bcce5910c137aa711873731207e11ead1437b79081d597f6",
+    "canonical_theorem_id": "cth_4369ef108d8eefe7bcce5910",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Prop_IncreasingLength",
+          "statement_id": "2304.09598|Prop_IncreasingLength|5",
+          "statement_fingerprint": "f221dc01559ba644b3e7b15b3e618a817c2d51621afb0ff76da34b94e1ac8774",
+          "score": 0.9662
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Lem_AB",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "translation_acceptance_gate",
+      "translation_fidelity_ok",
+      "claim_equivalent",
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -491,32 +1286,8 @@
     "grounding_metadata": [
       {
         "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h1",
-        "symbol": "h1",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h2",
-        "symbol": "h2",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h3",
-        "symbol": "h3",
+        "debt_item": "paper_definition_stub:ntilde_alpha",
+        "symbol": "ntilde_alpha",
         "grounding_kind": "transparent_definition_stub",
         "grounding_source": "paper_symbol_inventory",
         "grounding_trust": "syntax_only_not_semantic_proof",
@@ -525,7 +1296,57 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u10 u6 u11 u5 u3 u4 u1 u2 : ℕ) (u7 : alpha <= beta) (u8 : ntilde_alpha + nalpha = Salpha + Calpha) (u9 : ntilde_alpha <= ntilde_beta) {u12 u13 : ℕ} : u1 = u2 ∧ u3 = u4 ∧ u2 + u4 = u5 + u6",
+    "statement_fingerprint": "c84fde0ccb05b323b3583f44200e765ac1cecc4adaaeab9ca7a39e3db1b89055",
+    "canonical_theorem_id": "cth_c84fde0ccb05b323b3583f44",
+    "claim_shape": "inequality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "EqualLN",
+          "statement_id": "2304.09598|EqualLN|7",
+          "statement_fingerprint": "e59023fb6a4bbe1bb7dead22819b38a66517aaf522d3be1f3b5a2ecc437a48e6",
+          "score": 0.9298
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Quant",
+          "statement_id": "2304.09598|Thm_Quant|20",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+          "score": 0.8619
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Basic",
+          "statement_id": "2304.09598|Basic|6",
+          "statement_fingerprint": "f27c876bd3404170dca834f1f04006970eb9b54127aba0f4acb65ac4143fccca",
+          "score": 0.8334
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Lem_QuantEquiv",
@@ -540,18 +1361,6 @@
     "debt_tier": "definition_stub_grounding",
     "proof_value": "definition_grounding",
     "grounding_metadata": [
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h_source_2_2",
-        "symbol": "h_source_2_2",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
       {
         "schema_version": "1.0.0",
         "debt_item": "paper_definition_stub:h_and_are_ladder_multisegments_1",
@@ -575,8 +1384,73 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:h_source_2_2",
+        "symbol": "h_source_2_2",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) (u2 : ℝ) (u3 : True) (u4 : True) (u5 : True) : u1 <= u2 ∧ u1 = u2 ∧ α = β",
+    "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+    "canonical_theorem_id": "cth_ff9aaed4732fe1bb0255598f",
+    "claim_shape": "inequality",
+    "novelty_status": "duplicate_in_corpus",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "canonical_fingerprint",
+      "reason": "canonical statement fingerprint matched another corpus statement",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "EqualAB",
+          "statement_id": "2304.09598|EqualAB|10",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Simple",
+          "statement_id": "2304.09598|Thm_Simple|11",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Quant",
+          "statement_id": "2304.09598|Thm_Quant|20",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_ManySimpleA_B",
+          "statement_id": "2304.09598|Thm_ManySimpleA_B|23",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Lem_IrredQFM",
@@ -585,12 +1459,97 @@
     "gate_failures": [
       "lean_proof_closed"
     ],
-    "result_label": "not_verified",
-    "claim_scope": "No verified closure claim is made for this result.",
-    "modulo_paper_local_axioms": false,
-    "debt_tier": "none",
-    "proof_value": "none",
-    "grounding_metadata": []
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:c_alpha",
+        "symbol": "c_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:S_alpha",
+        "symbol": "S_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:n_alpha",
+        "symbol": "n_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:IrreducibleLadderMultisegment",
+        "symbol": "IrreducibleLadderMultisegment",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ],
+    "canonical_statement": "theorem _ (u2 u3 u1 u1 : ℕ) (u4 : alpha ∈ IrreducibleLadderMultisegment) {u5 : Type*} : u1 + u1 = u2 + u3",
+    "statement_fingerprint": "7c16eb231898bcaccb69b94ce328cb99f12c0dc2fe851932dcf681427d20fe9c",
+    "canonical_theorem_id": "cth_7c16eb231898bcaccb69b94c",
+    "claim_shape": "equality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_Quant",
+          "statement_id": "2304.09598|Lem_Quant|18",
+          "statement_fingerprint": "dd652e4a3293962bc50e2b011c36d1fe1c9d0e5dabea3eaa396598663743458c",
+          "score": 0.819
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Lem_Quant",
@@ -599,19 +1558,145 @@
     "gate_failures": [
       "lean_proof_closed"
     ],
-    "result_label": "not_verified",
-    "claim_scope": "No verified closure claim is made for this result.",
-    "modulo_paper_local_axioms": false,
-    "debt_tier": "none",
-    "proof_value": "none",
-    "grounding_metadata": []
+    "result_label": "not_verified_with_paper_local_axiom_debt",
+    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+    "modulo_paper_local_axioms": true,
+    "debt_tier": "definition_stub_grounding",
+    "proof_value": "definition_grounding",
+    "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:Multisegment",
+        "symbol": "Multisegment",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:c_alpha",
+        "symbol": "c_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:S_alpha",
+        "symbol": "S_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:n_alpha",
+        "symbol": "n_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:n_tilde_alpha",
+        "symbol": "n_tilde_alpha",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:IsLadderMultisegment",
+        "symbol": "IsLadderMultisegment",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      }
+    ],
+    "canonical_statement": "theorem _ (u1 : Multisegment) (u2 : n_tilde_alpha + n_alpha = S_alpha + c_alpha) (u3 : ℕ) (u4 : ℕ) (u5 : ℕ) (u6 : ℕ) : IsLadderMultisegment u1",
+    "statement_fingerprint": "dd652e4a3293962bc50e2b011c36d1fe1c9d0e5dabea3eaa396598663743458c",
+    "canonical_theorem_id": "cth_dd652e4a3293962bc50e2b01",
+    "claim_shape": "equality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_QuantEquiv",
+          "statement_id": "2304.09598|Lem_QuantEquiv|16",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+          "score": 2.0086
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Cor_Quant",
+          "statement_id": "2304.09598|Cor_Quant|19",
+          "statement_fingerprint": "cb21e83b9be0a778cadb6e419f3866efa17e2b7dfe9bcb41241bc8aca0b779e0",
+          "score": 1.3405
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Quant",
+          "statement_id": "2304.09598|Thm_Quant|20",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+          "score": 1.152
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Cor_Quant",
-    "status": "UNRESOLVED",
+    "status": "INTERMEDIARY_PROVEN",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence",
+      "semantic_adversarial_checks_passed",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -631,14 +1716,69 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) (u2 : True) : (∃ u1 : ℝ, u1 = u1) ↔ (∃ u1 : ℝ, u1 = u1)",
+    "statement_fingerprint": "cb21e83b9be0a778cadb6e419f3866efa17e2b7dfe9bcb41241bc8aca0b779e0",
+    "canonical_theorem_id": "cth_cb21e83b9be0a778cadb6e41",
+    "claim_shape": "equality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_Quant",
+          "statement_id": "2304.09598|Lem_Quant|18",
+          "statement_fingerprint": "dd652e4a3293962bc50e2b011c36d1fe1c9d0e5dabea3eaa396598663743458c",
+          "score": 1.3289
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Quant",
+          "statement_id": "2304.09598|Thm_Quant|20",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+          "score": 1.2173
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_QuantEquiv",
+          "statement_id": "2304.09598|Lem_QuantEquiv|16",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+          "score": 1.0728
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Thm_Quant",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence",
+      "semantic_adversarial_checks_passed",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -646,6 +1786,18 @@
     "debt_tier": "definition_stub_grounding",
     "proof_value": "definition_grounding",
     "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:h_is_a_ladder_multisegment_1",
+        "symbol": "h_is_a_ladder_multisegment_1",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
       {
         "schema_version": "1.0.0",
         "debt_item": "paper_definition_stub:h_source_2_2",
@@ -669,20 +1821,61 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h_is_a_ladder_multisegment_1",
-        "symbol": "h_is_a_ladder_multisegment_1",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) (u2 : ℝ) (u3 : True) (u4 : True) (u5 : True) : u1 <= u2 ∧ u1 = u2 ∧ α = β",
+    "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+    "canonical_theorem_id": "cth_ff9aaed4732fe1bb0255598f",
+    "claim_shape": "inequality",
+    "novelty_status": "duplicate_in_corpus",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "canonical_fingerprint",
+      "reason": "canonical statement fingerprint matched another corpus statement",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "EqualAB",
+          "statement_id": "2304.09598|EqualAB|10",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Simple",
+          "statement_id": "2304.09598|Thm_Simple|11",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_QuantEquiv",
+          "statement_id": "2304.09598|Lem_QuantEquiv|16",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_ManySimpleA_B",
+          "statement_id": "2304.09598|Thm_ManySimpleA_B|23",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Lem_A1",
@@ -691,37 +1884,48 @@
     "gate_failures": [
       "lean_proof_closed"
     ],
-    "result_label": "not_verified_with_paper_local_axiom_debt",
-    "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-    "modulo_paper_local_axioms": true,
-    "debt_tier": "definition_stub_grounding",
-    "proof_value": "definition_grounding",
-    "grounding_metadata": [
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:alpha1",
-        "symbol": "alpha1",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
+    "result_label": "not_verified",
+    "claim_scope": "No verified closure claim is made for this result.",
+    "modulo_paper_local_axioms": false,
+    "debt_tier": "none",
+    "proof_value": "none",
+    "grounding_metadata": [],
+    "canonical_statement": "theorem _ (u1 u2 : Type*) (u3 u4 : ℤ) (u5 : alpha is simple and symmetric) (u6 : alpha1 contains shortest segments containing -e and e in alpha) (u7 : alpha1 ⊆ alpha) {x | x ∈ [(-e, b), (-e + 1, b + 1), ..., (-b - 1, e - 1), (-b, e)]} : ¬∃ gamma ⊆ u1, gamma ≠ u2 ∧ (u3, u4) ∈ gamma",
+    "statement_fingerprint": "e63a72c2ad3611b1829a1e92c1e26e13dad1481d787801bb7da7a5e482cb0166",
+    "canonical_theorem_id": "cth_e63a72c2ad3611b1829a1e92",
+    "claim_shape": "conjunction",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_A1b",
+          "statement_id": "2304.09598|Lem_A1b|22",
+          "statement_fingerprint": "cbfc46ac27a56a31971a33b3e6c8bdf5b7d309c3fda149768ac2b0c6605fd3cf",
+          "score": 1.7295
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
       },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:halpha1",
-        "symbol": "halpha1",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
       }
-    ]
+    }
   },
   {
     "theorem_name": "Lem_A1b",
@@ -746,20 +1950,8 @@
     "grounding_metadata": [
       {
         "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:alpha1",
-        "symbol": "alpha1",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:halpha1",
-        "symbol": "halpha1",
+        "debt_item": "paper_definition_stub:Multisegment",
+        "symbol": "Multisegment",
         "grounding_kind": "transparent_definition_stub",
         "grounding_source": "paper_symbol_inventory",
         "grounding_trust": "syntax_only_not_semantic_proof",
@@ -768,14 +1960,55 @@
         "hidden_assumption": false,
         "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (-b) (-e ∈ alpha ∧ e ∈ alpha) (-e) (u1 u2 : Multisegment) (u3 : alpha1 ⊆ alpha) (u4 u5 : ℤ) (x = -e ∨ x = e) [Segment.mk (-e) b, Segment.mk (-e+1) (b+1), Segment.mk (-b-1) (e-1), Segment.mk (-b) e] : u1 = u2 ⊔ (u1 - u2) ∧ Dual u1 = Dual u2 ⊔ Dual (u1 - u2)",
+    "statement_fingerprint": "cbfc46ac27a56a31971a33b3e6c8bdf5b7d309c3fda149768ac2b0c6605fd3cf",
+    "canonical_theorem_id": "cth_cbfc46ac27a56a31971a33b3",
+    "claim_shape": "equality",
+    "novelty_status": "semantic_near_duplicate",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "statement_retrieval",
+      "reason": "semantic corpus retrieval score crossed near-duplicate threshold",
+      "matches": [
+        {
+          "paper_id": "2604.15191",
+          "theorem_name": "eqn_notation_Delta_s",
+          "statement_id": "2604.15191|eqn_notation_Delta_s|25",
+          "statement_fingerprint": "f452ae4eeba1dcdaa07ec8a2c84b7d90bb6764388df2261b3a26d115f02b3b70",
+          "score": 10.1457
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Thm_ManySimpleA_B",
-    "status": "UNRESOLVED",
+    "status": "FLAWED",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence",
+      "semantic_adversarial_checks_passed",
+      "no_paper_axiom_debt"
     ],
     "result_label": "not_verified_with_paper_local_axiom_debt",
     "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
@@ -783,6 +2016,18 @@
     "debt_tier": "definition_stub_grounding",
     "proof_value": "definition_grounding",
     "grounding_metadata": [
+      {
+        "schema_version": "1.0.0",
+        "debt_item": "paper_definition_stub:h_is_a_multisegment_formed_by__1",
+        "symbol": "h_is_a_multisegment_formed_by__1",
+        "grounding_kind": "transparent_definition_stub",
+        "grounding_source": "paper_symbol_inventory",
+        "grounding_trust": "syntax_only_not_semantic_proof",
+        "paper_agnostic_rule_id": "definition_stub.syntax_only",
+        "proof_countable": false,
+        "hidden_assumption": false,
+        "requires_verified_replacement": false
+      },
       {
         "schema_version": "1.0.0",
         "debt_item": "paper_definition_stub:h_source_2_2",
@@ -806,33 +2051,116 @@
         "proof_countable": false,
         "hidden_assumption": false,
         "requires_verified_replacement": false
-      },
-      {
-        "schema_version": "1.0.0",
-        "debt_item": "paper_definition_stub:h_is_a_multisegment_formed_by__1",
-        "symbol": "h_is_a_multisegment_formed_by__1",
-        "grounding_kind": "transparent_definition_stub",
-        "grounding_source": "paper_symbol_inventory",
-        "grounding_trust": "syntax_only_not_semantic_proof",
-        "paper_agnostic_rule_id": "definition_stub.syntax_only",
-        "proof_countable": false,
-        "hidden_assumption": false,
-        "requires_verified_replacement": false
       }
-    ]
+    ],
+    "canonical_statement": "theorem _ (u1 : ℝ) (u2 : ℝ) (u3 : True) (u4 : True) (u5 : True) : u1 <= u2 ∧ u1 = u2 ∧ α = β",
+    "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e",
+    "canonical_theorem_id": "cth_ff9aaed4732fe1bb0255598f",
+    "claim_shape": "inequality",
+    "novelty_status": "duplicate_in_corpus",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "canonical_fingerprint",
+      "reason": "canonical statement fingerprint matched another corpus statement",
+      "matches": [
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "EqualAB",
+          "statement_id": "2304.09598|EqualAB|10",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Simple",
+          "statement_id": "2304.09598|Thm_Simple|11",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Lem_QuantEquiv",
+          "statement_id": "2304.09598|Lem_QuantEquiv|16",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Thm_Quant",
+          "statement_id": "2304.09598|Thm_Quant|20",
+          "statement_fingerprint": "ff9aaed4732fe1bb0255598f1d9ced9280ac083f1ace257a532acff36a34d80e"
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   },
   {
     "theorem_name": "Cor_Arthur",
-    "status": "UNRESOLVED",
+    "status": "INTERMEDIARY_PROVEN",
     "grounding_status": "",
     "gate_failures": [
-      "lean_proof_closed"
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence"
     ],
     "result_label": "not_verified",
     "claim_scope": "No verified closure claim is made for this result.",
     "modulo_paper_local_axioms": false,
     "debt_tier": "none",
     "proof_value": "none",
-    "grounding_metadata": []
+    "grounding_metadata": [],
+    "canonical_statement": "theorem _ (u1 : ℝ) : ∃ u1 : ℝ, u1 = u1",
+    "statement_fingerprint": "f221dc01559ba644b3e7b15b3e618a817c2d51621afb0ff76da34b94e1ac8774",
+    "canonical_theorem_id": "cth_f221dc01559ba644b3e7b15b",
+    "claim_shape": "equality",
+    "novelty_status": "duplicate_in_corpus",
+    "novelty_evidence": {
+      "schema_version": "1.0.0",
+      "method": "canonical_fingerprint",
+      "reason": "canonical statement fingerprint matched another corpus statement",
+      "matches": [
+        {
+          "paper_id": "2604.21821",
+          "theorem_name": "lemm_M",
+          "statement_id": "2604.21821|lemm_M|9",
+          "statement_fingerprint": "f221dc01559ba644b3e7b15b3e618a817c2d51621afb0ff76da34b94e1ac8774"
+        },
+        {
+          "paper_id": "2304.09598",
+          "theorem_name": "Prop_IncreasingLength",
+          "statement_id": "2304.09598|Prop_IncreasingLength|5",
+          "statement_fingerprint": "f221dc01559ba644b3e7b15b3e618a817c2d51621afb0ff76da34b94e1ac8774"
+        }
+      ],
+      "mathlib": {
+        "matched": false,
+        "method": "mathlib_no_overlap_found",
+        "reason": "no Mathlib overlap detected by available checks",
+        "unavailable_checks": [
+          "mathlib_seed_missing",
+          "lean_exact_check_disabled",
+          "mathlib_semantic_index_disabled"
+        ],
+        "checks_run": [
+          "mathlib_fingerprint"
+        ]
+      },
+      "thresholds": {
+        "semantic_near_duplicate": 0.78,
+        "mathlib_semantic_overlap": 0.86
+      }
+    }
   }
 ]

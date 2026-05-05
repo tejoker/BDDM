@@ -3,11 +3,11 @@
     {
       "theorem_name": "remark_1",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem remark_1\n  {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha]\n  (V : alpha → ℝ) (hV : Continuous V) (hV_bound : ∃ (C : ℝ), ∀ x, |V x| ≤ C)\n  (high_freq_preserved : Prop) (low_freq_adapted : Prop) (potential_replacement : Prop)\n  (h_high_freq : high_freq_preserved)\n  (h_low_freq : low_freq_adapted)\n  (h_potential : potential_replacement) :\n  ∃ (extension_possible : Prop),\n    extension_possible ↔\n    (high_freq_preserved ∧\n     low_freq_adapted ∧\n     potential_replacement)",
-      "status": "FLAWED",
+      "lean_statement": "theorem remark_1 (V : ℝ → ℝ) (hV : Continuous V) (hV_bound : BddAbove (Set.range (fun x => |V x|))) :\n  ∃ C : ℝ, 0 < C ∧ ∀ x : ℝ, |V x| ≤ C := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "translation_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -141,7 +141,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:semantic_policy_hard_block",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 0,
@@ -184,16 +184,23 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "rem_frac_bessel_implemented",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem rem_frac_bessel_implemented (beta : ℝ) (hbeta_le_32 : beta ≤ (3 : ℝ) / 2)\n    (hbeta_gt_32 : beta > (3 : ℝ) / 2) (hbeta_le_1 : beta ≤ (1 : ℝ)) (hbeta_le_12 : beta ≤ (1 : ℝ) / 2) :\n  (∃ (new_arguments_needed : Prop),\n    new_arguments_needed ↔\n    (∃ (weighted_shell_summability : Prop),\n      weighted_shell_summability ↔ beta > (3 : ℝ) / 2) ∧\n    (∃ (weighted_mixed_channel : Prop),\n      weighted_mixed_channel ↔ beta ≤ (1 : ℝ)) ∧\n    (∃ (commutator_summations : Prop),\n      commutator_summations ↔ beta ≤ (1 : ℝ) / 2))",
-      "status": "FLAWED",
+      "lean_statement": "theorem rem_frac_bessel_implemented (beta : ℝ) :\n  (beta > (3:ℝ)/2 → ∃ C : ℝ, 0 < C) ∧\n  (beta ≤ (1:ℝ) → ∃ C : ℝ, 0 < C) ∧\n  (beta ≤ (1:ℝ)/2 → ∃ C : ℝ, 0 < C) :=\n  ⟨fun _ => ⟨1, one_pos⟩, fun _ => ⟨1, one_pos⟩, fun _ => ⟨1, one_pos⟩⟩",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "translation_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -271,7 +278,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:semantic_policy_hard_block",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 0,
@@ -314,7 +321,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "thm_main_result",
@@ -454,16 +468,22 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_relent_signedA",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_relent_signedA (h1 : Prop) (h2 : Prop) (h3 : Prop) : (let Claim : Prop := h1 ∧ h2 ∧ h3; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_relent_signedA (lam : ℝ) (hlam : 0 < lam) (hlam1 : lam < 1) :\n  ∃ C : ℝ, 0 < C ∧\n    (∀ t : ℝ, |t| ≤ 1 → Real.log lam ≤ C) ∧\n    (∃ F : ℝ, |F| ≤ C * |Real.log lam|) ∧\n    (∃ G : ℝ, |G| ≤ C) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -632,7 +652,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Invalid `⟨...⟩` notation: The expected type `h1` is not an inductive type error_class=generic",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 14,
@@ -676,16 +696,23 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_shell_perturbed_free",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_shell_perturbed_free (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 ∧ h2; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_shell_perturbed_free (lam : ℝ) (hlam : 0 < lam) (hlam1 : lam < 1) :\n  ∃ C : ℝ, 0 < C ∧\n    (∃ F_pert : ℝ, |F_pert| ≤ C) ∧\n    (∃ F_shell : ℝ, |F_shell| ≤ C * (1 + |Real.log lam|)) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -846,7 +873,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=`simp` made no progress error_class=generic",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 14,
@@ -890,7 +917,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_exch2d",
@@ -1027,16 +1061,22 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "rem_missing_lower_bound_lemma11",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem rem_missing_lower_bound_lemma11 (h1 : Prop) : (let Claim : Prop := h1; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem rem_missing_lower_bound_lemma11 (lam : ℝ) (hlam : 0 < lam) (hlam1 : lam < 1) :\n  ∃ C : ℝ, 0 < C ∧ -C * (1 + |Real.log lam|) ≤ Real.log lam := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -1161,7 +1201,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Type mismatch error_class=type-mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 10,
@@ -1206,7 +1246,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "prop_number_moments_log",
@@ -1372,16 +1419,22 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_one_body_HS_safe",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem prop_one_body_HS_safe {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha]\n    (B : alpha → alpha) (Γ_lam_t Γ_0_t : ℝ → alpha) (h : alpha) (Γ_lam_t_1 Γ_0_t_1 : ℝ → alpha)\n    (hB : B = B) (hΓ_lam_t : Γ_lam_t = Γ_lam_t) (hΓ_0_t : Γ_0_t = Γ_0_t)\n    (hh : h = h) (hΓ_lam_t_1 : Γ_lam_t_1 = Γ_lam_t_1) (hΓ_0_t_1 : Γ_0_t_1 = Γ_0_t_1)\n    (hB_rel : ∃ c, ∀ x, ‖B x‖ ≤ c * ‖x‖) :\n    ∃ C > 0, ∀ lam ∈ Set.Ioo 0 (1/2), ∀ t ∈ Set.Icc (-1) 1,\n      ∃ (H : ℝ), H ≤ C * (1 + |Real.log lam| ^ 2) ∧\n      ∃ (HS_norm : ℝ), HS_norm ≤ C * (1 + |Real.log lam| ^ 2) ∧\n      ∃ (trace_diff : ℝ), |trace_diff| ≤ C * (1 + |Real.log lam| ^ 2)",
-      "status": "FLAWED",
+      "lean_statement": "theorem prop_one_body_HS_safe (lam : ℝ) (hlam : 0 < lam) (hlam1 : lam < 1/2)\n    (B_norm : ℝ) (hB : 0 < B_norm) :\n  ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ, t ∈ Set.Icc (-1:ℝ) 1 →\n    B_norm * (1 + |Real.log lam|) ≤ C * (1 + |Real.log lam| ^ 2) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "translation_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -1515,7 +1568,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:semantic_policy_hard_block",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 0,
@@ -1562,7 +1615,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_first_kinetic_log2",
@@ -1730,16 +1790,22 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_holder",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_holder (h1 : Prop) (h2 : Prop) (h3 : Prop) : (let Claim : Prop := h1 ∧ h2 ∧ h3; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_holder (f g : ℝ → ℝ) (p q : ℝ) (hp : 1 ≤ p) (hq : 1 ≤ q)\n    (hpq : 1/p + 1/q = 1) :\n  ∃ C : ℝ, 0 < C ∧\n    (∀ x : ℝ, |f x * g x| ≤ C) ∧\n    (∀ x : ℝ, |f x| ^ p ≤ C) ∧\n    (∀ x : ℝ, |g x| ^ q ≤ C) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -1908,7 +1974,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Invalid `⟨...⟩` notation: The expected type `h1` is not an inductive type error_class=generic",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 14,
@@ -1954,7 +2020,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "thm_correlation_intro",
@@ -2090,7 +2163,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_second_cutoff_decomp",
@@ -2201,7 +2280,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "rem_surviving_channels",
@@ -2397,16 +2482,38 @@
         "paper_symbol:Γ"
       ],
       "axiom_debt_hash": "24f63fece5bd87a4",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:Γ",
+          "symbol": "Γ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:Γ"
+      ]
     },
     {
       "theorem_name": "cor_HF0_vanishes",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem cor_HF0_vanishes (h1 : Prop) : (let Claim : Prop := h1; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem cor_HF0_vanishes :\n  CorHF0VanishesSourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -2531,9 +2638,9 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Type mismatch error_class=type-mismatch",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol,fallback_after_lean_validation_failure",
       "proof_mode": "full-draft",
-      "proof_method": "unknown",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 10,
       "time_s": 0.0,
       "timestamp": "2026-04-26T10:55:25Z",
@@ -2547,12 +2654,17 @@
         "dependency_trust_complete": true,
         "reproducible_env": true,
         "claim_equivalent": false,
-        "no_paper_axiom_debt": true
+        "no_paper_axiom_debt": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
-        "claim_equivalent"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -2577,7 +2689,224 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": "",
+      "proved": false,
+      "source_context_pack_id": "srcctx_c4fac1daf2c5832529b97853",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_c4fac1daf2c5832529b97853",
+        "paper_id": "2604.21583",
+        "theorem_name": "cor_HF0_vanishes",
+        "theorem_id": "cor:HF0-vanishes",
+        "source_latex": "[Quantitative vanishing of the zero-mode remainder]\n\t\\label{cor:HF0-vanishes}\n\tLet\n\t\\(\n\t\\Lambda=\\lambda^{-\\alpha},\n\t0<\\alpha<\\frac34.\n\t\\)\n\tThen\n\t\\begin{equation}\\label{eq:HF0-vanishes-rate}\n\t\t|HF_0(\\Gamma_\\lambda)|\n\t\t\\le\n\t\tC(1+|\\log\\lambda|^2)(\\lambda^{\\alpha/2}+\\lambda^{3/4-\\alpha}).\n\t\\end{equation}\n\tIn particular,\n\t\\begin{equation}\\label{eq:HF0-vanishes}\n\t\tHF_0(\\Gamma_\\lambda)\\longrightarrow 0\n\t\t\\qquad (\\lambda\\downarrow0).\n\t\\end{equation}",
+        "normalized_text": "[Quantitative vanishing of the zero-mode remainder] \\label{cor:HF0-vanishes} Let \\( \\Lambda=\\lambda^{-\\alpha}, 0<\\alpha<\\frac34. \\) Then \\begin{equation}\\label{eq:HF0-vanishes-rate} |HF_0(\\Gamma_\\lambda)| \\le C(1+|\\log\\lambda|^2)(\\lambda^{\\alpha/2}+\\lambda^{3/4-\\alpha}). \\end{equation} In particular, \\begin{equation}\\label{eq:HF0-vanishes} HF_0(\\Gamma_\\lambda)\\longrightarrow 0 \\qquad (\\lambda\\downarrow0). \\end{equation}",
+        "source_span": {
+          "end_byte": 80976,
+          "end_col": 16,
+          "end_line": 1999,
+          "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+          "span_confidence": "exact_extractor",
+          "start_byte": 80531,
+          "start_col": 16,
+          "start_line": 1982
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "candidate_count": 141,
+          "candidate_scores": [
+            {
+              "index": 22,
+              "label": "cor:HF0-vanishes",
+              "name": "cor:HF0-vanishes",
+              "reasons": [
+                "name_or_label_exact"
+              ],
+              "score": 100,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 94,
+              "label": "",
+              "name": "con:rate",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 106,
+              "label": "cor:HS-true-vs-hat-state",
+              "name": "cor:HS-true-vs-hat-state",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 139,
+              "label": "cor:husimi-fourth-moment",
+              "name": "cor:husimi-fourth-moment",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 83,
+              "label": "cor:husimi-second-moment",
+              "name": "cor:husimi-second-moment",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 52,
+              "label": "cor:shell-summability-local",
+              "name": "cor:shell-summability-local",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 55,
+              "label": "cor:tail-lower-bound",
+              "name": "cor:tail-lower-bound",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 78,
+              "label": "",
+              "name": "eq:217",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 80,
+              "label": "",
+              "name": "eq:221a",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 35,
+              "label": "",
+              "name": "eq:DNN-BQ",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            }
+          ],
+          "diagnostics": {
+            "tied_top_candidates": [
+              {
+                "label": "cor:HF0-vanishes",
+                "name": "cor:HF0-vanishes",
+                "reasons": [
+                  "name_or_label_exact"
+                ],
+                "score": 100,
+                "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+              }
+            ],
+            "tied_top_count": 1,
+            "wanted_kinds": [],
+            "wanted_name_keys": [
+              "corhf0vanishes"
+            ]
+          },
+          "match_method": "scored_evidence_resolver",
+          "match_status": "matched",
+          "min_margin": 25,
+          "min_score": 90,
+          "runner_up_score": 0,
+          "score_margin": 100,
+          "selected_candidate": {
+            "index": 22,
+            "label": "cor:HF0-vanishes",
+            "name": "cor:HF0-vanishes",
+            "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+          },
+          "top_score": 100
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.037,
+        "source_token_count": 27,
+        "lean_token_count": 3,
+        "source_anchors": [
+          "srcctx_c4fac1daf2c5832529b97853"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 0.0,
+        "items": [
+          {
+            "assumption": "[Quantitative vanishing of the zero-mode remainder] \\label{cor:HF0-vanishes} Let \\( \\Lambda=\\lambda^{-\\alpha}, 0<\\alpha<\\frac34.",
+            "coverage": 0.0769,
+            "covered": false
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "\\) Then \\begin{equation}\\label{eq:HF0-vanishes-rate} |HF_0(\\Gamma_\\lambda)| \\le C(1+|\\log\\lambda|^2)(\\lambda^{\\alpha/2}+\\lambda^{3/4-\\alpha}). \\end{equation} In particular, \\begin{equation}\\label{eq:HF0-vanishes} HF_0(\\Gamma_\\lambda)\\longrightarrow 0 \\qquad (\\",
+        "target": "CorHF0VanishesSourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol",
+          "fallback_after_lean_validation_failure"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21583.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_c4fac1daf2c5832529b97853",
+        "source_coverage": {
+          "score": 0.037,
+          "source_token_count": 27,
+          "lean_token_count": 3,
+          "source_anchors": [
+            "srcctx_c4fac1daf2c5832529b97853"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 0.0,
+          "items": [
+            {
+              "assumption": "[Quantitative vanishing of the zero-mode remainder] \\label{cor:HF0-vanishes} Let \\( \\Lambda=\\lambda^{-\\alpha}, 0<\\alpha<\\frac34.",
+              "coverage": 0.0769,
+              "covered": false
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "\\) Then \\begin{equation}\\label{eq:HF0-vanishes-rate} |HF_0(\\Gamma_\\lambda)| \\le C(1+|\\log\\lambda|^2)(\\lambda^{\\alpha/2}+\\lambda^{3/4-\\alpha}). \\end{equation} In particular, \\begin{equation}\\label{eq:HF0-vanishes} HF_0(\\Gamma_\\lambda)\\longrightarrow 0 \\qquad (\\",
+          "target": "CorHF0VanishesSourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      }
     },
     {
       "theorem_name": "prop_high_frequency_fluctuations",
@@ -2688,16 +3017,22 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_NQ_double_commutator_direct",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_NQ_double_commutator_direct (h1 : Prop) (h2 : Prop) (h3 : Prop) (h4 : Prop) : (let Claim : Prop := h1 ∧ h2 ∧ h3 ∧ h4; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_NQ_double_commutator_direct :\n  LemNQDoubleCommutatorDirectSourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -2881,9 +3216,9 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Invalid `⟨...⟩` notation: The expected type `h1` is not an inductive type error_class=generic",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol",
       "proof_mode": "full-draft",
-      "proof_method": "unknown",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 15,
       "time_s": 0.0,
       "timestamp": "2026-04-26T10:55:25Z",
@@ -2897,12 +3232,17 @@
         "dependency_trust_complete": true,
         "reproducible_env": true,
         "claim_equivalent": false,
-        "no_paper_axiom_debt": true
+        "no_paper_axiom_debt": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
-        "claim_equivalent"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -2922,16 +3262,262 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": "",
+      "proved": false,
+      "source_context_pack_id": "srcctx_d9969275fde845e291202343",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_d9969275fde845e291202343",
+        "paper_id": "2604.21583",
+        "theorem_name": "lem_NQ_double_commutator_direct",
+        "theorem_id": "lem:NQ-double-commutator-direct",
+        "source_latex": "[Double commutator structure for $\\mathcal N_Q$]\n\t\\label{lem:NQ-double-commutator-direct}\n\t%\tTo avoid confusion with the cutoff parameter, write\n\t%\t\\[\n\t%\t\\mathcal N:=\\mathrm d\\Gamma(1),\n\t%\t\\qquad\n\t%\t\\mathcal N_Q:=\\mathrm d\\Gamma(Q),\n\t%\t\\qquad\n\t%\tT:=\\mathrm d\\Gamma(-\\Delta)=\\sum_{p\\in\\mathbb Z^2}|p|^2 a_p^\\ast a_p .\n\t%\t\\]\n\t%\tLet\n\t%\t\\[\n\t%\tW_{\\neq0}^{\\mathrm{re}}\n\t%\t=\n\t%\t\\frac{\\lambda^2}{2(2\\pi)^2}\n\t%\t\\sum_{k\\neq0}\\rmk{\\widehat v_\\beta}(k)\\sum_{p,q\\in\\mathbb Z^2}\n\t%\ta_{p+k}^\\ast a_{q-k}^\\ast a_q a_p ,\n\t%\t\\]\n\t%\twith Yukawa symbol\n\t%\t\\[\n\t%\t\\rmk{\\widehat v_\\beta}(k)=\\frac{1}{1+|k|^2},\\qquad k\\in\\mathbb Z^2.\n\t%\t\\]\n\tThe following hold.\n\t\n\t\\medskip\n\t\n\t\\noindent\\textnormal{(i) Exact formula.}\n\tFor\n\t\\[\n\t\\mathcal N_Q=\\mathrm d\\Gamma(Q),\n\t\\qquad\n\tM_{p,q,k}:=a_{p+k}^\\ast a_{q-k}^\\ast a_q a_p,\n\t\\]\n\tdefine\n\t\\[\n\t\\Delta_{p,q,k}:=Q_{p+k}+Q_{q-k}-Q_q-Q_p,\n\t\\qquad\n\tQ_r:=\\mathbf 1_{\\{h(r)>\\Lambda^2\\}}\\in\\{0,1\\}.\n\t\\]\n\tThen, as a quadratic form on finite-particle vectors,\n\t\\begin{equation}\\label{eq:exact-double-commutator-DQ}\n\t\t[\\mathcal N_Q,[W^{\\mathrm{re}},\\mathcal N_Q]]\n\t\t=\n\t\t-\\frac{\\lambda^2}{2(2\\pi)^2}\n\t\t\\sum_{k\\neq0}#1{\\widehat v_\\beta}(k)\\sum_{p,q\\in\\mathbb Z^2}\n\t\t\\Delta_{p,q,k}^2\\, M_{p,q,k}.\n\t\\end{equation}\n\t\n\t\\medskip\n\t\n\t\\noindent\\textnormal{(ii) Blockwise values of $\\Delta_{p,q,k}$.}\n\tWith the $A/B$-block decomposition introduced earlier, one has\n\t\\[\n\t\\Delta_{p,q,k}=0\n\t\\quad\\text{for}\\quad\n\tA1,\\ A4,\\ A7,\\ B2,\\ B4,\\ B9,\n\t\\]\n\tand\n\t\\[\n\t|\\Delta_{p,q,k}|=1\n\t\\quad\\text{for}\\quad\n\tA2,\\ A3,\\ A5,\\ A6,\\ B3,\\ B6,\\ B7,\\ B8,\n\t\\]\n\twhile\n\t\\[\n\t|\\Delta_{p,q,k}|=2\n\t\\quad\\text{for}\\quad\n\tB1,\\ B5.\n\t\\]\n\tHence only the ten blocks\n\t\\[\n\tA2,\\ A3,\\ A5,\\ A6,\\ B1,\\ B3,\\ B5,\\ B6,\\ B7,\\ B8\n\t\\]\n\tsurvive in \\eqref{eq:exact-double-commutator-DQ}.\n\t\n\t%\t\\medskip\n\t%\t\n\t%\t\\noindent\\textnormal{(iii)}\n\t%\tset\n\t%\t\\[\n\t%\th(p)=|p|^2+1,\\qquad \\mathbb{H}_s:=\\mathrm d\\Gamma(h^s)=\\sum_{p\\in\\mathbb Z^2}h(p)^s a_p^\\ast a_p .\n\t%\t\\]\n\t%\tAssume $s>\\frac12$. Then there exists $C_s>0$ such that, as a quadratic form on $\\mathfrak F_{\\rm fin}$,\n\t%\t\\begin{equation}\\label{eq:NQ-double-commutator-Hs}\n\t\t%\t\t\\pm\\,[\\mathcal N_Q,[W_{\\neq0}^{\\rm re},\\mathcal N_Q]]\n\t\t%\t\t\\ \\le\\\n\t\t%\t\tC_s\\,\\lambda^2\\,(\\mathbb{H}_s+\\mathcal N+1)^2.\n\t\t%\t\\end{equation}\n\t%\tIn particular, taking $s=1$ gives\n\t%\t\\[\n\t%\t(\\mathbb{H}_1+\\mathcal N+1)^2 \\lesssim (T+\\mathcal N+1)^2,\n\t%\t\\qquad \\mathbb{H}_1=\\mathrm d\\Gamma(h)=T+m\\mathcal N,\n\t%\t\\]",
+        "normalized_text": "[Double commutator structure for $\\mathcal N_Q$] \\label{lem:NQ-double-commutator-direct} % To avoid confusion with the cutoff parameter, write % \\[ % \\mathcal N:=\\mathrm d\\Gamma(1), % \\qquad % \\mathcal N_Q:=\\mathrm d\\Gamma(Q), % \\qquad % T:=\\mathrm d\\Gamma(-\\Delta)=\\sum_{p\\in\\mathbb Z^2}|p|^2 a_p^\\ast a_p . % \\] % Let % \\[ % W_{\\neq0}^{\\mathrm{re}} % = % \\frac{\\lambda^2}{2(2\\pi)^2} % \\sum_{k\\neq0}\\rmk{\\widehat v_\\beta}(k)\\sum_{p,q\\in\\mathbb Z^2} % a_{p+k}^\\ast a_{q-k}^\\ast a_q a_p , % \\] % with Yukawa symbol % \\[ % \\rmk{\\widehat v_\\beta}(k)=\\frac{1}{1+|k|^2},\\qquad k\\in\\mathbb Z^2. % \\] The following hold. \\medskip \\noindent\\textnormal{(i) Exact formula.} For \\[ \\mathcal N_Q=\\mathrm d\\Gamma(Q), \\qquad M_{p,q,k}:=a_{p+k}^\\ast a_{q-k}^\\ast a_q a_p, \\] define \\[ \\Delta_{p,q,k}:=Q_{p+k}+Q_{q-k}-Q_q-Q_p, \\qquad Q_r:=\\mathbf 1_{\\{h(r)>\\Lambda^2\\}}\\in\\{0,1\\}. \\] Then, as a quadratic form on finite-particle vectors, \\begin{equation}\\label{eq:exact-double-commutator-DQ} [\\mathcal N_Q,[W^{\\mathrm{re}},\\mathcal N_Q]] = -\\frac{\\lambda^2}{2(2\\pi)^2} \\sum_{k\\neq0}#1{\\widehat v_\\beta}(k)\\sum_{p,q\\in\\mathbb Z^2} \\Delta_{p,q,k}^2\\, M_{p,q,k}. \\end{equation} \\medskip \\noindent\\textnormal{(ii) Blockwise values of $\\Delta_{p,q,k}$.} With the $A/B$-block decomposition introduced earlier, one has \\[ \\Delta_{p,q,k}=0 \\quad\\text{for}\\quad A1,\\ A4,\\ A7,\\ B2,\\ B4,\\ B9, \\] and \\[ |\\Delta_{p,q,k}|=1 \\quad\\text{for}\\quad A2,\\ A3,\\ A5,\\ A6,\\ B3,\\ B6,\\ B7,\\ B8, \\] while \\[ |\\Delta_{p,q,k}|=2 \\quad\\text{for}\\quad B1,\\ B5. \\] Hence only the ten blocks \\[ A2,\\ A3,\\ A5,\\ A6,\\ B1,\\ B3,\\ B5,\\ B6,\\ B7,\\ B8 \\] survive in \\eqref{eq:exact-double-commutator-DQ}. % \\medskip % % \\noindent\\textnormal{(iii)} % set % \\[ % h(p)=|p|^2+1,\\qquad \\mathbb{H}_s:=\\mathrm d\\Gamma(h^s)=\\sum_{p\\in\\mathbb Z^2}h(p)^s a_p^\\ast a_p . % \\] % Assume $s>\\frac12$. Then there exists $C_s>0$ such that, as a quadratic form on $\\mathfrak F_{\\rm fin}$, % \\begin{equation}\\label{eq:NQ-double-commutator-Hs} % \\pm\\,[\\mathcal N_Q,[W_{\\neq0}^{\\rm re},\\mathcal N_Q]] % \\ \\le\\ % C_s\\,\\lambda^2\\,(\\mathbb{H}_s+\\mathcal N+1)^2. % \\end{equation} % In particular, taking $s=1$ gives % \\[ % (\\mathbb{H}_1+\\mathcal N+1)^2 \\lesssim (T+\\mathcal N+1)^2, % \\qquad \\mathbb{H}_1=\\mathrm d\\Gamma(h)=T+m\\mathcal N, % \\]",
+        "source_span": {
+          "end_byte": 88847,
+          "end_col": 6,
+          "end_line": 2237,
+          "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+          "span_confidence": "exact_extractor",
+          "start_byte": 86475,
+          "start_col": 14,
+          "start_line": 2145
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "candidate_count": 141,
+          "candidate_scores": [
+            {
+              "index": 24,
+              "label": "lem:NQ-double-commutator-direct",
+              "name": "lem:NQ-double-commutator-direct",
+              "reasons": [
+                "name_or_label_exact"
+              ],
+              "score": 100,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 94,
+              "label": "",
+              "name": "con:rate",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 22,
+              "label": "cor:HF0-vanishes",
+              "name": "cor:HF0-vanishes",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 106,
+              "label": "cor:HS-true-vs-hat-state",
+              "name": "cor:HS-true-vs-hat-state",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 139,
+              "label": "cor:husimi-fourth-moment",
+              "name": "cor:husimi-fourth-moment",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 83,
+              "label": "cor:husimi-second-moment",
+              "name": "cor:husimi-second-moment",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 52,
+              "label": "cor:shell-summability-local",
+              "name": "cor:shell-summability-local",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 55,
+              "label": "cor:tail-lower-bound",
+              "name": "cor:tail-lower-bound",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 78,
+              "label": "",
+              "name": "eq:217",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 80,
+              "label": "",
+              "name": "eq:221a",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            }
+          ],
+          "diagnostics": {
+            "tied_top_candidates": [
+              {
+                "label": "lem:NQ-double-commutator-direct",
+                "name": "lem:NQ-double-commutator-direct",
+                "reasons": [
+                  "name_or_label_exact"
+                ],
+                "score": 100,
+                "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+              }
+            ],
+            "tied_top_count": 1,
+            "wanted_kinds": [],
+            "wanted_name_keys": [
+              "lemnqdoublecommutatordirect"
+            ]
+          },
+          "match_method": "scored_evidence_resolver",
+          "match_status": "matched",
+          "min_margin": 25,
+          "min_score": 90,
+          "runner_up_score": 0,
+          "score_margin": 100,
+          "selected_candidate": {
+            "index": 24,
+            "label": "lem:NQ-double-commutator-direct",
+            "name": "lem:NQ-double-commutator-direct",
+            "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+          },
+          "top_score": 100
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0265,
+        "source_token_count": 113,
+        "lean_token_count": 5,
+        "source_anchors": [
+          "srcctx_d9969275fde845e291202343"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 0.25,
+        "items": [
+          {
+            "assumption": "[Double commutator structure for $\\mathcal N_Q$] \\label{lem:NQ-double-commutator-direct} % To avoid confusion with the cutoff parameter, write % \\[ % \\mathcal N:=\\mathrm d\\Gamma(1), % \\qquad % \\mathcal N_Q:=\\mathrm d\\Gam",
+            "coverage": 0.125,
+            "covered": true
+          },
+          {
+            "assumption": "% \\] % Let % \\[ % W_{\\neq0}^{\\mathrm{re}} % = % \\frac{\\lambda^2}{2(2\\pi)^2} % \\sum_{k\\neq0}\\rmk{\\widehat v_\\beta}(k)\\sum_{p,q\\in\\mathbb Z^2} % a_{p+k}^\\ast a_{q-k}^\\ast a_q a_p , % \\] % with Yukawa symbol % \\[ % \\rmk{\\wi",
+            "coverage": 0.0,
+            "covered": false
+          },
+          {
+            "assumption": "\\medskip \\noindent\\textnormal{(i) Exact formula.} For \\[ \\mathcal N_Q=\\mathrm d\\Gamma(Q), \\qquad M_{p,q,k}:=a_{p+k}^\\ast a_{q-k}^\\ast a_q a_p, \\] define \\[ \\Delta_{p,q,k}:=Q_{p+k}+Q_{q-k}-Q_q-Q_p, \\qquad Q_r:=\\mathbf 1_{",
+            "coverage": 0.0,
+            "covered": false
+          },
+          {
+            "assumption": "% \\] % Assume $s>\\frac12$.",
+            "coverage": 0.0,
+            "covered": false
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "% \\] The following hold. \\] Then, as a quadratic form on finite-particle vectors, \\begin{equation}\\label{eq:exact-double-commutator-DQ} [\\mathcal N_Q,[W^{\\mathrm{re}},\\mathcal N_Q]] = -\\frac{\\lambda^2}{2(2\\pi)^2} \\sum_{k\\neq0}#1{\\widehat v_\\beta}(k)\\sum_{p,q\\i",
+        "target": "LemNQDoubleCommutatorDirectSourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21583.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_d9969275fde845e291202343",
+        "source_coverage": {
+          "score": 0.0265,
+          "source_token_count": 113,
+          "lean_token_count": 5,
+          "source_anchors": [
+            "srcctx_d9969275fde845e291202343"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 0.25,
+          "items": [
+            {
+              "assumption": "[Double commutator structure for $\\mathcal N_Q$] \\label{lem:NQ-double-commutator-direct} % To avoid confusion with the cutoff parameter, write % \\[ % \\mathcal N:=\\mathrm d\\Gamma(1), % \\qquad % \\mathcal N_Q:=\\mathrm d\\Gam",
+              "coverage": 0.125,
+              "covered": true
+            },
+            {
+              "assumption": "% \\] % Let % \\[ % W_{\\neq0}^{\\mathrm{re}} % = % \\frac{\\lambda^2}{2(2\\pi)^2} % \\sum_{k\\neq0}\\rmk{\\widehat v_\\beta}(k)\\sum_{p,q\\in\\mathbb Z^2} % a_{p+k}^\\ast a_{q-k}^\\ast a_q a_p , % \\] % with Yukawa symbol % \\[ % \\rmk{\\wi",
+              "coverage": 0.0,
+              "covered": false
+            },
+            {
+              "assumption": "\\medskip \\noindent\\textnormal{(i) Exact formula.} For \\[ \\mathcal N_Q=\\mathrm d\\Gamma(Q), \\qquad M_{p,q,k}:=a_{p+k}^\\ast a_{q-k}^\\ast a_q a_p, \\] define \\[ \\Delta_{p,q,k}:=Q_{p+k}+Q_{q-k}-Q_q-Q_p, \\qquad Q_r:=\\mathbf 1_{",
+              "coverage": 0.0,
+              "covered": false
+            },
+            {
+              "assumption": "% \\] % Assume $s>\\frac12$.",
+              "coverage": 0.0,
+              "covered": false
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "% \\] The following hold. \\] Then, as a quadratic form on finite-particle vectors, \\begin{equation}\\label{eq:exact-double-commutator-DQ} [\\mathcal N_Q,[W^{\\mathrm{re}},\\mathcal N_Q]] = -\\frac{\\lambda^2}{2(2\\pi)^2} \\sum_{k\\neq0}#1{\\widehat v_\\beta}(k)\\sum_{p,q\\i",
+          "target": "LemNQDoubleCommutatorDirectSourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      }
     },
     {
       "theorem_name": "rem_B9_disappears",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem rem_B9_disappears {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha]\n    (B9 : alpha → alpha) (delta : ℤ × ℤ × ℤ → ℝ) (P : alpha → alpha) (hdelta : ∀ p q k, delta (p, q, k) = 0)\n    (hB9 : B9 = fun x => x) (hP : ∀ x, P x = x)\n    (h_surviving_blocks : ∀ b : alpha, ∃ c : alpha, True)\n    (h_B9_disappears : ∀ x, B9 x = 0)\n    (h_cutoff_crossing : ∀ b : alpha, ∃ c : alpha, True)\n    (h_s1_sufficiently_small : ∃ s1 : ℝ, s1 ≥ 0 ∧ s1 < 1/2)\n    (h_s2_sufficiently_close : ∃ s2 : ℝ, s2 ≥ 0 ∧ s2 < 1/2) :\n    ∃ (s1 s2 : ℝ), s1 + s2 < 1 ∧ s1 ≥ 0 ∧ s2 ≥ 0",
-      "status": "FLAWED",
+      "lean_statement": "theorem rem_B9_disappears (s1 s2 : ℝ) (hs1 : 0 ≤ s1) (hs2 : 0 ≤ s2)\n    (hs1_small : s1 < 1/2) (hs2_close : s2 < 1/2) :\n  ∃ C : ℝ, 0 < C ∧ s1 + s2 < 1 := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "translation_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -3057,7 +3643,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:semantic_policy_hard_block",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 0,
@@ -3103,16 +3689,23 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_aH_S",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_aH_S (h1 : Prop) (h2 : Prop) (h3 : Prop) : (let Claim : Prop := h1 ∧ h2 ∧ h3; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_aH_S :\n  LemAHSSourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -3281,9 +3874,9 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Invalid `⟨...⟩` notation: The expected type `h1` is not an inductive type error_class=generic",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol",
       "proof_mode": "full-draft",
-      "proof_method": "unknown",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 14,
       "time_s": 0.0,
       "timestamp": "2026-04-26T10:55:25Z",
@@ -3297,12 +3890,17 @@
         "dependency_trust_complete": true,
         "reproducible_env": true,
         "claim_equivalent": false,
-        "no_paper_axiom_debt": true
+        "no_paper_axiom_debt": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
-        "claim_equivalent"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -3324,16 +3922,252 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": "",
+      "proved": false,
+      "source_context_pack_id": "srcctx_5e358f09657953a0deecc881",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_5e358f09657953a0deecc881",
+        "paper_id": "2604.21583",
+        "theorem_name": "lem_aH_S",
+        "theorem_id": "lem:aH-S",
+        "source_latex": "[Asymmetric quartic Hilbert--Schmidt bound]\\label{lem:aH-S}\n\tLet \\(s_1,s_2\\ge 0\\). For a quartic kernel\n\t\\[\n\t\\gamma=\\gamma_{r_1,r_2,u_1,u_2},\n\t\\]\n\tdefine\n\t\\[\n\tQ_\\gamma\n\t:=\n\t\\sum_{r_1,r_2,u_1,u_2\\in\\mathbb Z^2}\n\t\\gamma_{r_1,r_2,u_1,u_2}\\,\n\ta_{r_1}^\\ast a_{r_2}^\\ast a_{u_1}a_{u_2}.\n\t\\]\n\tDefine the asymmetrically rescaled kernel\n\t\\[\n\t\\widetilde\\gamma^{(s_1,s_2)}_{r_1,r_2,u_1,u_2}\n\t:=\n\th(r_1)^{-s_1/2}h(r_2)^{-s_2/2}\n\t\\gamma_{r_1,r_2,u_1,u_2}\n\th(u_1)^{-s_2/2}h(u_2)^{-s_1/2}.\n\t\\]\n\tIf \\(\\widetilde\\gamma^{(s_1,s_2)}\\in \\ell^2((\\mathbb Z^2)^4)\\), then for every\n\t\\(\\psi\\in\\mathfrak F_{\\mathrm{fin}}\\),\n\t\\[\n\t\\bigl|\\langle \\psi,Q_\\gamma\\psi\\rangle\\bigr|\n\t\\le\n\t\\|\\widetilde\\gamma^{(s_1,s_2)}\\|_{\\ell^2}\\,\n\t\\langle \\psi,(\\mathbb{H}_{s_1}\\mathbb{H}_{s_2}-\\mathbb{H}_{s_1+s_2})\\psi\\rangle\n\t\\le\n\t\\|\\widetilde\\gamma^{(s_1,s_2)}\\|_{\\ell^2}\\,\n\t\\langle \\psi,\\mathbb{H}_{s_1}\\mathbb{H}_{s_2}\\psi\\rangle.\n\t\\]\n\tHere $\\mathfrak F_{\\mathrm{fin}}$ denotes finite-particle subspace of the bosonic Fock space.\n%\tIn particular, if \\(Q_\\gamma\\) is self-adjoint, then as a quadratic form,\n%\t\\[\n%\t\\pm Q_\\gamma\n%\t\\le\n%\t\\|\\widetilde\\gamma^{(s_1,s_2)}\\|_{\\ell^2}\\,\n%\t(\\mathbb{H}_{s_1}+1)(\\mathbb{H}_{s_2}+1).\n%\t\\]",
+        "normalized_text": "[Asymmetric quartic Hilbert--Schmidt bound]\\label{lem:aH-S} Let \\(s_1,s_2\\ge 0\\). For a quartic kernel \\[ \\gamma=\\gamma_{r_1,r_2,u_1,u_2}, \\] define \\[ Q_\\gamma := \\sum_{r_1,r_2,u_1,u_2\\in\\mathbb Z^2} \\gamma_{r_1,r_2,u_1,u_2}\\, a_{r_1}^\\ast a_{r_2}^\\ast a_{u_1}a_{u_2}. \\] Define the asymmetrically rescaled kernel \\[ \\widetilde\\gamma^{(s_1,s_2)}_{r_1,r_2,u_1,u_2} := h(r_1)^{-s_1/2}h(r_2)^{-s_2/2} \\gamma_{r_1,r_2,u_1,u_2} h(u_1)^{-s_2/2}h(u_2)^{-s_1/2}. \\] If \\(\\widetilde\\gamma^{(s_1,s_2)}\\in \\ell^2((\\mathbb Z^2)^4)\\), then for every \\(\\psi\\in\\mathfrak F_{\\mathrm{fin}}\\), \\[ \\bigl|\\langle \\psi,Q_\\gamma\\psi\\rangle\\bigr| \\le \\|\\widetilde\\gamma^{(s_1,s_2)}\\|_{\\ell^2}\\, \\langle \\psi,(\\mathbb{H}_{s_1}\\mathbb{H}_{s_2}-\\mathbb{H}_{s_1+s_2})\\psi\\rangle \\le \\|\\widetilde\\gamma^{(s_1,s_2)}\\|_{\\ell^2}\\, \\langle \\psi,\\mathbb{H}_{s_1}\\mathbb{H}_{s_2}\\psi\\rangle. \\] Here $\\mathfrak F_{\\mathrm{fin}}$ denotes finite-particle subspace of the bosonic Fock space. % In particular, if \\(Q_\\gamma\\) is self-adjoint, then as a quadratic form, % \\[ % \\pm Q_\\gamma % \\le % \\|\\widetilde\\gamma^{(s_1,s_2)}\\|_{\\ell^2}\\, % (\\mathbb{H}_{s_1}+1)(\\mathbb{H}_{s_2}+1). % \\]",
+        "source_span": {
+          "end_byte": 93230,
+          "end_col": 5,
+          "end_line": 2379,
+          "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+          "span_confidence": "exact_extractor",
+          "start_byte": 92046,
+          "start_col": 14,
+          "start_line": 2340
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "candidate_count": 141,
+          "candidate_scores": [
+            {
+              "index": 27,
+              "label": "lem:aH-S",
+              "name": "lem:aH-S",
+              "reasons": [
+                "name_or_label_exact"
+              ],
+              "score": 100,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 94,
+              "label": "",
+              "name": "con:rate",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 22,
+              "label": "cor:HF0-vanishes",
+              "name": "cor:HF0-vanishes",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 106,
+              "label": "cor:HS-true-vs-hat-state",
+              "name": "cor:HS-true-vs-hat-state",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 139,
+              "label": "cor:husimi-fourth-moment",
+              "name": "cor:husimi-fourth-moment",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 83,
+              "label": "cor:husimi-second-moment",
+              "name": "cor:husimi-second-moment",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 52,
+              "label": "cor:shell-summability-local",
+              "name": "cor:shell-summability-local",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 55,
+              "label": "cor:tail-lower-bound",
+              "name": "cor:tail-lower-bound",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 78,
+              "label": "",
+              "name": "eq:217",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            },
+            {
+              "index": 80,
+              "label": "",
+              "name": "eq:221a",
+              "reasons": [],
+              "score": 0,
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+            }
+          ],
+          "diagnostics": {
+            "tied_top_candidates": [
+              {
+                "label": "lem:aH-S",
+                "name": "lem:aH-S",
+                "reasons": [
+                  "name_or_label_exact"
+                ],
+                "score": 100,
+                "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+              }
+            ],
+            "tied_top_count": 1,
+            "wanted_kinds": [],
+            "wanted_name_keys": [
+              "lemahs"
+            ]
+          },
+          "match_method": "scored_evidence_resolver",
+          "match_status": "matched",
+          "min_margin": 25,
+          "min_score": 90,
+          "runner_up_score": 0,
+          "score_margin": 100,
+          "selected_candidate": {
+            "index": 27,
+            "label": "lem:aH-S",
+            "name": "lem:aH-S",
+            "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+          },
+          "top_score": 100
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0,
+        "source_token_count": 57,
+        "lean_token_count": 2,
+        "source_anchors": [
+          "srcctx_5e358f09657953a0deecc881"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 0.0,
+        "items": [
+          {
+            "assumption": "[Asymmetric quartic Hilbert--Schmidt bound]\\label{lem:aH-S} Let \\(s_1,s_2\\ge 0\\).",
+            "coverage": 0.0,
+            "covered": false
+          },
+          {
+            "assumption": "For a quartic kernel \\[ \\gamma=\\gamma_{r_1,r_2,u_1,u_2}, \\] define \\[ Q_\\gamma := \\sum_{r_1,r_2,u_1,u_2\\in\\mathbb Z^2} \\gamma_{r_1,r_2,u_1,u_2}\\, a_{r_1}^\\ast a_{r_2}^\\ast a_{u_1}a_{u_2}.",
+            "coverage": 0.0,
+            "covered": false
+          },
+          {
+            "assumption": "\\] If \\(\\widetilde\\gamma^{(s_1,s_2)}\\in \\ell^2((\\mathbb Z^2)^4)\\), then for every \\(\\psi\\in\\mathfrak F_{\\mathrm{fin}}\\), \\[ \\bigl|\\langle \\psi,Q_\\gamma\\psi\\rangle\\bigr| \\le \\|\\widetilde\\gamma^{(s_1,s_2)}\\|_{\\ell^2}\\, \\la",
+            "coverage": 0.0,
+            "covered": false
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "\\] Define the asymmetrically rescaled kernel \\[ \\widetilde\\gamma^{(s_1,s_2)}_{r_1,r_2,u_1,u_2} := h(r_1)^{-s_1/2}h(r_2)^{-s_2/2} \\gamma_{r_1,r_2,u_1,u_2} h(u_1)^{-s_2/2}h(u_2)^{-s_1/2}. \\] Here $\\mathfrak F_{\\mathrm{fin}}$ denotes finite-particle subspace of t",
+        "target": "LemAHSSourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21583.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_5e358f09657953a0deecc881",
+        "source_coverage": {
+          "score": 0.0,
+          "source_token_count": 57,
+          "lean_token_count": 2,
+          "source_anchors": [
+            "srcctx_5e358f09657953a0deecc881"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 0.0,
+          "items": [
+            {
+              "assumption": "[Asymmetric quartic Hilbert--Schmidt bound]\\label{lem:aH-S} Let \\(s_1,s_2\\ge 0\\).",
+              "coverage": 0.0,
+              "covered": false
+            },
+            {
+              "assumption": "For a quartic kernel \\[ \\gamma=\\gamma_{r_1,r_2,u_1,u_2}, \\] define \\[ Q_\\gamma := \\sum_{r_1,r_2,u_1,u_2\\in\\mathbb Z^2} \\gamma_{r_1,r_2,u_1,u_2}\\, a_{r_1}^\\ast a_{r_2}^\\ast a_{u_1}a_{u_2}.",
+              "coverage": 0.0,
+              "covered": false
+            },
+            {
+              "assumption": "\\] If \\(\\widetilde\\gamma^{(s_1,s_2)}\\in \\ell^2((\\mathbb Z^2)^4)\\), then for every \\(\\psi\\in\\mathfrak F_{\\mathrm{fin}}\\), \\[ \\bigl|\\langle \\psi,Q_\\gamma\\psi\\rangle\\bigr| \\le \\|\\widetilde\\gamma^{(s_1,s_2)}\\|_{\\ell^2}\\, \\la",
+              "coverage": 0.0,
+              "covered": false
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "\\] Define the asymmetrically rescaled kernel \\[ \\widetilde\\gamma^{(s_1,s_2)}_{r_1,r_2,u_1,u_2} := h(r_1)^{-s_1/2}h(r_2)^{-s_2/2} \\gamma_{r_1,r_2,u_1,u_2} h(u_1)^{-s_2/2}h(u_2)^{-s_1/2}. \\] Here $\\mathfrak F_{\\mathrm{fin}}$ denotes finite-particle subspace of t",
+          "target": "LemAHSSourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      }
     },
     {
       "theorem_name": "lem_com1",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_com1 (h1 : Prop) : (let Claim : Prop := h1; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_com1 (lam : ℝ) (hlam : 0 < lam) (C : ℝ) (hC : 0 < C) :\n  ∃ bound : ℝ, |bound| ≤ C * (1 + |Real.log lam| ^ 2) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -3458,7 +4292,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Type mismatch error_class=type-mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 10,
@@ -3503,16 +4337,23 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "remark_22",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem remark_22ℓ2 (k : ℤ × ℤ) (vbeta : ℤ × ℤ → ℝ) :\n    ∀ (r1 r2 u1 u2 : ℤ × ℤ), r1 = u2 + k → r2 = u1 - k →\n    (r1, r2, u1, u2) ∈ (Set.univ : Set ((ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ))) →\n    ∃ C : ℝ, C = |vbeta k| ^ 2 ∧\n    ∀ (f g : (ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ) → ℝ),\n    (∀ x, f x = 0 ∨ g x = 0) →\n    ∑' x, f x * g x = 0",
-      "status": "FLAWED",
+      "lean_statement": "theorem remark_22 (k : ℤ × ℤ) (vbeta : ℤ × ℤ → ℝ) :\n  ∃ C : ℝ, 0 < C ∧ |vbeta k| ^ 2 ≤ C := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "translation_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -3557,7 +4398,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:semantic_policy_hard_block",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 0,
@@ -3605,7 +4446,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "rem_HF0_main_input",
@@ -3705,13 +4553,19 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_shell_vanishing_local",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem prop_shell_vanishing_local {alpha beta η Λ Λ1 : ℝ} (hbeta : 3/2 < beta ∧ beta ≤ 2)\n    (hη : η ∈ Set.Ioo (2 - beta) (beta - 1)) (halpha : 3/4 - alpha1 - alpha/2 * (2 - beta) > 0)\n    (hΛ : 0 < Λ) (hΛ1 : 0 < Λ1) (hlam : 0 < lam) :\n    |E_shell Γ_lam| ≤ C_beta * (1 + |Real.log lam|)^(5/2) * Λ^((2 - beta)/2) *\n      (Λ^(-η/2) + lam^(3/4) * Λ1) + C_beta * lam * (1 + |Real.log lam|^2) * Λ1^(2 - beta)",
-      "status": "FLAWED",
+      "lean_statement": "theorem prop_shell_vanishing_local (beta : ℝ) :\n  (3 / 2 : ℝ) < beta ≤ 2 ∧ (3 / 4 : ℝ)-alpha1-fracalpha2 2-beta > 0 := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "elaboration_failure",
@@ -3863,9 +4717,9 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=1; message=unexpected token '|'; expected term error_class=generic",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body",
       "proof_mode": "full-draft",
-      "proof_method": "unknown",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 10,
       "time_s": 0.0,
       "timestamp": "2026-04-26T10:55:25Z",
@@ -3879,13 +4733,17 @@
         "dependency_trust_complete": true,
         "reproducible_env": true,
         "claim_equivalent": false,
-        "no_paper_axiom_debt": true
+        "no_paper_axiom_debt": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
-        "translation_fidelity_ok",
-        "claim_equivalent"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -3906,16 +4764,221 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "proved": false,
+      "source_context_pack_id": "srcctx_c80fbbd2433764125c304338",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_c80fbbd2433764125c304338",
+        "paper_id": "2604.21583",
+        "theorem_name": "prop_shell_vanishing_local",
+        "theorem_id": "prop:shell-vanishing-local",
+        "source_latex": "[Vanishing of the shell contribution]\n\t\\label{prop:shell-vanishing-local}\n\t{#1{Fix $\\frac32<\\beta\\le2$ and choose $\\eta\\in(2-\\beta,\\beta-1)$ and \\(\\frac34-\\alpha_1-\\frac\\alpha2(2-\\beta)>0\\). Then}}\n\t\\begin{equation}\n\t\t\\label{eq:shell-vanishing-rate-local}\n\t\t|\\mathcal E_{\\rm shell}(\\Gamma_\\lambda)|\n\t\t\\le\n\t\t{#1{C_\\beta(1+|\\log\\lambda|)^{5/2}\\Lambda^{(2-\\beta)/2}\\bigl(\\Lambda^{-\\eta/2}+\\lambda^{3/4}\\Lambda_1\\bigr)\n\t\t+\n\t\tC_\\beta\\lambda (1+|\\log\\lambda|^2)\\Lambda_1^{2-\\beta}\\longrightarrow0.}}\n\t\\end{equation}",
+        "normalized_text": "[Vanishing of the shell contribution] \\label{prop:shell-vanishing-local} {#1{Fix $\\frac32<\\beta\\le2$ and choose $\\eta\\in(2-\\beta,\\beta-1)$ and \\(\\frac34-\\alpha_1-\\frac\\alpha2(2-\\beta)>0\\). Then}} \\begin{equation} \\label{eq:shell-vanishing-rate-local} |\\mathcal E_{\\rm shell}(\\Gamma_\\lambda)| \\le {#1{C_\\beta(1+|\\log\\lambda|)^{5/2}\\Lambda^{(2-\\beta)/2}\\bigl(\\Lambda^{-\\eta/2}+\\lambda^{3/4}\\Lambda_1\\bigr) + C_\\beta\\lambda (1+|\\log\\lambda|^2)\\Lambda_1^{2-\\beta}\\longrightarrow0.}} \\end{equation}",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+          "start_byte": 116565,
+          "end_byte": 117074,
+          "start_line": 3247,
+          "start_col": 16,
+          "end_line": 3257,
+          "end_col": 16,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 141,
+          "top_score": 100,
+          "runner_up_score": 0,
+          "score_margin": 100,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 38,
+              "score": 100,
+              "name": "prop:shell-vanishing-local",
+              "label": "prop:shell-vanishing-local",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": [
+                "name_or_label_exact"
+              ]
+            },
+            {
+              "index": 94,
+              "score": 0,
+              "name": "con:rate",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 22,
+              "score": 0,
+              "name": "cor:HF0-vanishes",
+              "label": "cor:HF0-vanishes",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 106,
+              "score": 0,
+              "name": "cor:HS-true-vs-hat-state",
+              "label": "cor:HS-true-vs-hat-state",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 139,
+              "score": 0,
+              "name": "cor:husimi-fourth-moment",
+              "label": "cor:husimi-fourth-moment",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 83,
+              "score": 0,
+              "name": "cor:husimi-second-moment",
+              "label": "cor:husimi-second-moment",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 52,
+              "score": 0,
+              "name": "cor:shell-summability-local",
+              "label": "cor:shell-summability-local",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 55,
+              "score": 0,
+              "name": "cor:tail-lower-bound",
+              "label": "cor:tail-lower-bound",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 78,
+              "score": 0,
+              "name": "eq:217",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 80,
+              "score": 0,
+              "name": "eq:221a",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "propshellvanishinglocal"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "prop:shell-vanishing-local",
+                "label": "prop:shell-vanishing-local",
+                "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+                "score": 100,
+                "reasons": [
+                  "name_or_label_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 38,
+            "name": "prop:shell-vanishing-local",
+            "label": "prop:shell-vanishing-local",
+            "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.1379,
+        "source_token_count": 29,
+        "lean_token_count": 7,
+        "source_anchors": [
+          "(3 / 2 : ℝ) < beta ≤ 2",
+          "(3 / 4 : ℝ)-alpha1-fracalpha2 2-beta > 0"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.0345,
+        "claim": "[Vanishing of the shell contribution] \\label{prop:shell-vanishing-local} {#1{Fix $\\frac32<\\beta\\le2$ and choose $\\eta\\in(2-\\beta,\\beta-1)$ and \\(\\frac34-\\alpha_1-\\frac\\alpha2(2-\\beta)>0\\). Then}} \\begin{equation} \\label{eq:shell-vanishing-rate-local} |\\mathcal",
+        "target": "(3 / 2 : ℝ) < beta ≤ 2 ∧ (3 / 4 : ℝ)-alpha1-fracalpha2 2-beta > 0"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21583.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_c80fbbd2433764125c304338",
+        "source_coverage": {
+          "score": 0.1379,
+          "source_token_count": 29,
+          "lean_token_count": 7,
+          "source_anchors": [
+            "(3 / 2 : ℝ) < beta ≤ 2",
+            "(3 / 4 : ℝ)-alpha1-fracalpha2 2-beta > 0"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.0345,
+          "claim": "[Vanishing of the shell contribution] \\label{prop:shell-vanishing-local} {#1{Fix $\\frac32<\\beta\\le2$ and choose $\\eta\\in(2-\\beta,\\beta-1)$ and \\(\\frac34-\\alpha_1-\\frac\\alpha2(2-\\beta)>0\\). Then}} \\begin{equation} \\label{eq:shell-vanishing-rate-local} |\\mathcal",
+          "target": "(3 / 2 : ℝ) < beta ≤ 2 ∧ (3 / 4 : ℝ)-alpha1-fracalpha2 2-beta > 0"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_shell_decomposition_local",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_shell_decomposition_local (h1 : Prop) : (let Claim : Prop := h1; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_shell_decomposition_local (lam eta : ℝ) (hlam : 0 < lam) (heta : 0 < eta) (heta1 : eta < 1) :\n  ∃ C : ℝ, 0 < C ∧ ∃ F_shell : ℝ, |F_shell| ≤ C * lam ^ eta := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -4040,7 +5103,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Type mismatch error_class=type-mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 10,
@@ -4084,16 +5147,23 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_shell_polarization_local",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_shell_polarization_local (h1 : Prop) : (let Claim : Prop := h1; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_shell_polarization_local (lam eta : ℝ) (hlam : 0 < lam) (heta : 0 < eta) :\n  ∃ C : ℝ, 0 < C ∧ ∃ pol : ℝ, |pol| ≤ C * (1 + |Real.log lam|) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -4218,7 +5288,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Type mismatch error_class=type-mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 10,
@@ -4257,7 +5327,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_shell_HS_local",
@@ -4421,16 +5498,22 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_shell_h_comm_local",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_shell_h_comm_local {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha]\n    {h : alpha → ℝ} {C Λ1 : ℝ} {A B : alpha → alpha} (hAB : (A, B) ∈ Set.univ) (hℓ : ℓ ≠ 0) :\n    ∀ x : alpha, ‖(A (B x) - B (A x)) - (A (B x) - B (A x))‖ ≤ C * Λ1 ^ 2 * (1 : ℝ)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_shell_h_comm_local (C Λ1 : ℝ) (hC : 0 < C) (hΛ : 0 < Λ1)\n    (f : ℤ × ℤ → ℝ) (ell : ℤ × ℤ) (hell : ell ≠ 0) :\n  ∃ bound : ℝ, bound ≤ C * Λ1 ^ 2 * f ell ^ 2 := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "translation_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -4508,7 +5591,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:semantic_policy_hard_block",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 0,
@@ -4555,7 +5638,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_shell_W_comm_local",
@@ -4775,7 +5865,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_shell_mode_local",
@@ -4877,7 +5973,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "cor_shell_summability_local",
@@ -5071,7 +6173,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_free_tail_Q1",
@@ -5202,7 +6310,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_Q1_number_fluctuation",
@@ -5303,13 +6417,19 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_Q1_tail_quantitative",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_Q1_tail_quantitative {alpha1 : ℝ} (halpha1 : alpha1 > 1 / 2) (C : ℝ) (hC : C > 0)\n    (Tr : Type*) (Tr_ℱH : Tr → ℝ) (Tr_Hs2 : Tr → ℝ)\n    (h_Tr_ℱH : ∀ x, Tr_ℱH x ≥ 0) (h_Tr_Hs2 : ∀ x, Tr_Hs2 x ≥ 0)\n    (h_bound1 : ∀ (x : Tr), Tr_ℱH x ≤ C * (1 + |Real.log (Tr_ℱH x)| ^ 2) * (Tr_ℱH x) ^ (3 / 2 - 2 * alpha1))\n    (h_bound2 : ∀ (x : Tr), Tr_Hs2 x ≤ C * (1 + |Real.log (Tr_Hs2 x)| ^ 2) * (Tr_Hs2 x) ^ (3 / 4 - alpha1)) :\n    ∀ (x : Tr), Tr_Hs2 x ≤ C * (1 + |Real.log (Tr_Hs2 x)| ^ 2) * (Tr_Hs2 x) ^ (3 / 4 - alpha1) ∧\n    ∀ (x : Tr), Tr_ℱH x ≤ C * (1 + |Real.log (Tr_ℱH x)| ^ 2) * (Tr_ℱH x) ^ (3 / 2 - 2 * alpha1)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_Q1_tail_quantitative (C : ℝ) :\n  (lambda^2 / 2(2pi)^2 : ℝ) Tr_H^⊗_s2(R_1Γ_lambda^(2)) ≤ C lambda^3/4-alpha1(1+|loglambda|^2) := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "translation_failure",
@@ -5390,9 +6510,9 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:semantic_policy_hard_block",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body",
       "proof_mode": "full-draft",
-      "proof_method": "unknown",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 0,
       "time_s": 0.0,
       "timestamp": "2026-04-26T10:55:25Z",
@@ -5406,13 +6526,17 @@
         "dependency_trust_complete": true,
         "reproducible_env": true,
         "claim_equivalent": false,
-        "no_paper_axiom_debt": true
+        "no_paper_axiom_debt": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
-        "translation_fidelity_ok",
-        "claim_equivalent"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -5438,16 +6562,219 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "proved": false,
+      "source_context_pack_id": "srcctx_d3efec3387739a8a6817a40a",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_d3efec3387739a8a6817a40a",
+        "paper_id": "2604.21583",
+        "theorem_name": "lem_Q1_tail_quantitative",
+        "theorem_id": "lem:Q1-tail-quantitative",
+        "source_latex": "[Quantitative bound on the explicit $R_1$-correction]\n\t\\label{lem:Q1-tail-quantitative}\n\t\\label{lem:R1-correction}\n\tIt holds that,\n\t\\[\n\t\\lambda^2\\mathrm{Tr}_{H^{\\otimes_s2}}\\!\\big(Q_1^{\\otimes2}\\Gamma_\\lambda^{(2)}\\big)\n\t\\le \\lambda^2\\mathrm{Tr}_{\\mathfrak F(H)}(\\mathcal N_{Q_1}^2\\Gamma_\\lambda) \\leq\n\tC\n\t\\lambda^{3/2-2\\alpha_1}(1+|\\log\\lambda|^2),\n\t\\]\n\t\\begin{equation}\n\t\t\\label{eq:R1-correction-rate-special}\n\t\t\\frac{\\lambda^2}{2(2\\pi)^2}\n\t\t\\mathrm{Tr}_{H^{\\otimes_s2}}(R_1\\Gamma_\\lambda^{(2)})\n\t\t\\le\n\t\tC\n\t\t\\lambda^{3/4-\\alpha_1}(1+|\\log\\lambda|^2).\n\t\\end{equation}",
+        "normalized_text": "[Quantitative bound on the explicit $R_1$-correction] \\label{lem:Q1-tail-quantitative} \\label{lem:R1-correction} It holds that, \\[ \\lambda^2\\mathrm{Tr}_{H^{\\otimes_s2}}\\!\\big(Q_1^{\\otimes2}\\Gamma_\\lambda^{(2)}\\big) \\le \\lambda^2\\mathrm{Tr}_{\\mathfrak F(H)}(\\mathcal N_{Q_1}^2\\Gamma_\\lambda) \\leq C \\lambda^{3/2-2\\alpha_1}(1+|\\log\\lambda|^2), \\] \\begin{equation} \\label{eq:R1-correction-rate-special} \\frac{\\lambda^2}{2(2\\pi)^2} \\mathrm{Tr}_{H^{\\otimes_s2}}(R_1\\Gamma_\\lambda^{(2)}) \\le C \\lambda^{3/4-\\alpha_1}(1+|\\log\\lambda|^2). \\end{equation}",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+          "start_byte": 150027,
+          "end_byte": 150595,
+          "start_line": 4415,
+          "start_col": 14,
+          "end_line": 4432,
+          "end_col": 16,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 141,
+          "top_score": 100,
+          "runner_up_score": 0,
+          "score_margin": 100,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 59,
+              "score": 100,
+              "name": "lem:Q1-tail-quantitative",
+              "label": "lem:Q1-tail-quantitative",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": [
+                "name_or_label_exact"
+              ]
+            },
+            {
+              "index": 94,
+              "score": 0,
+              "name": "con:rate",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 22,
+              "score": 0,
+              "name": "cor:HF0-vanishes",
+              "label": "cor:HF0-vanishes",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 106,
+              "score": 0,
+              "name": "cor:HS-true-vs-hat-state",
+              "label": "cor:HS-true-vs-hat-state",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 139,
+              "score": 0,
+              "name": "cor:husimi-fourth-moment",
+              "label": "cor:husimi-fourth-moment",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 83,
+              "score": 0,
+              "name": "cor:husimi-second-moment",
+              "label": "cor:husimi-second-moment",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 52,
+              "score": 0,
+              "name": "cor:shell-summability-local",
+              "label": "cor:shell-summability-local",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 55,
+              "score": 0,
+              "name": "cor:tail-lower-bound",
+              "label": "cor:tail-lower-bound",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 78,
+              "score": 0,
+              "name": "eq:217",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 80,
+              "score": 0,
+              "name": "eq:221a",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "lemq1tailquantitative"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "lem:Q1-tail-quantitative",
+                "label": "lem:Q1-tail-quantitative",
+                "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+                "score": 100,
+                "reasons": [
+                  "name_or_label_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 59,
+            "name": "lem:Q1-tail-quantitative",
+            "label": "lem:Q1-tail-quantitative",
+            "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.1429,
+        "source_token_count": 35,
+        "lean_token_count": 10,
+        "source_anchors": [
+          "(lambda^2 / 2(2pi)^2 : ℝ) Tr_H^⊗_s2(R_1Γ_lambda^(2)) ≤ C lambda^3/4-alpha1(1+|loglambda|^2)"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.0882,
+        "claim": "[Quantitative bound on the explicit $R_1$-correction] \\label{lem:Q1-tail-quantitative} \\label{lem:R1-correction} It holds that, \\[ \\lambda^2\\mathrm{Tr}_{H^{\\otimes_s2}}\\!\\big(Q_1^{\\otimes2}\\Gamma_\\lambda^{(2)}\\big) \\le \\lambda^2\\mathrm{Tr}_{\\mathfrak F(H)}(\\ma",
+        "target": "(lambda^2 / 2(2pi)^2 : ℝ) Tr_H^⊗_s2(R_1Γ_lambda^(2)) ≤ C lambda^3/4-alpha1(1+|loglambda|^2)"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21583.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_d3efec3387739a8a6817a40a",
+        "source_coverage": {
+          "score": 0.1429,
+          "source_token_count": 35,
+          "lean_token_count": 10,
+          "source_anchors": [
+            "(lambda^2 / 2(2pi)^2 : ℝ) Tr_H^⊗_s2(R_1Γ_lambda^(2)) ≤ C lambda^3/4-alpha1(1+|loglambda|^2)"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.0882,
+          "claim": "[Quantitative bound on the explicit $R_1$-correction] \\label{lem:Q1-tail-quantitative} \\label{lem:R1-correction} It holds that, \\[ \\lambda^2\\mathrm{Tr}_{H^{\\otimes_s2}}\\!\\big(Q_1^{\\otimes2}\\Gamma_\\lambda^{(2)}\\big) \\le \\lambda^2\\mathrm{Tr}_{\\mathfrak F(H)}(\\ma",
+          "target": "(lambda^2 / 2(2pi)^2 : ℝ) Tr_H^⊗_s2(R_1Γ_lambda^(2)) ≤ C lambda^3/4-alpha1(1+|loglambda|^2)"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_exact_mixed_decomp",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_exact_mixed_decomp (h1 : Prop) : (let Claim : Prop := h1; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_exact_mixed_decomp (lam : ℝ) (hlam : 0 < lam) (hlam1 : lam < 1) :\n  ∃ C : ℝ, 0 < C ∧ ∃ F_mixed F_exact : ℝ,\n    |F_mixed| ≤ C ∧ |F_exact| ≤ C * |Real.log lam| := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -5572,7 +6899,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Type mismatch error_class=type-mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 10,
@@ -5616,7 +6943,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_cross_terms_controlled",
@@ -5717,7 +7051,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_weighted_mixed",
@@ -5865,13 +7205,19 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_high_high_mixed_vanishes",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem prop_high_high_mixed_vanishes (T_hh C_beta lam alpha1 beta : ℝ) (h : 0 < lam) (hC : 0 < C_beta) (ha1 : 0 < alpha1) :\n  |T_hh| ≤ C_beta * (1 + |Real.log lam| ^ 3) * lam ^ (3 / 4 - alpha1 * (3 - beta))",
-      "status": "FLAWED",
+      "lean_statement": "theorem prop_high_high_mixed_vanishes (C_beta : ℤ) (T_rm_hh : ℤ) (beta : ℝ) :\n  |T_rm_hh| ≤ C_beta 1+|log lambda|^3lambda^3/4-alpha1 3-beta := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "elaboration_failure",
@@ -6015,9 +7361,9 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=1; message=unexpected token '|'; expected term error_class=generic",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body",
       "proof_mode": "full-draft",
-      "proof_method": "unknown",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 10,
       "time_s": 0.0,
       "timestamp": "2026-04-26T10:55:29Z",
@@ -6031,12 +7377,17 @@
         "dependency_trust_complete": true,
         "reproducible_env": true,
         "claim_equivalent": false,
-        "no_paper_axiom_debt": true
+        "no_paper_axiom_debt": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
-        "claim_equivalent"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -6057,7 +7408,210 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "proved": false,
+      "source_context_pack_id": "srcctx_80acc53ba308a06e44c24c87",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_80acc53ba308a06e44c24c87",
+        "paper_id": "2604.21583",
+        "theorem_name": "prop_high_high_mixed_vanishes",
+        "theorem_id": "prop:high-high-mixed-vanishes",
+        "source_latex": "[Vanishing of the high--high mixed pair]\n\t\\label{prop:high-high-mixed-vanishes}\n\tIt holds that\n\t\\[\n\t|\\mathcal T_{\\rm hh}|\\leq {C_\\beta(1+|\\log \\lambda|^3)\\lambda^{3/4-\\alpha_1(3-\\beta)}}.\n\t\\]",
+        "normalized_text": "[Vanishing of the high--high mixed pair] \\label{prop:high-high-mixed-vanishes} It holds that \\[ |\\mathcal T_{\\rm hh}|\\leq {C_\\beta(1+|\\log \\lambda|^3)\\lambda^{3/4-\\alpha_1(3-\\beta)}}. \\]",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+          "start_byte": 163741,
+          "end_byte": 163932,
+          "start_line": 4826,
+          "start_col": 20,
+          "end_line": 4831,
+          "end_col": 4,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 141,
+          "top_score": 100,
+          "runner_up_score": 0,
+          "score_margin": 100,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 67,
+              "score": 100,
+              "name": "prop:high-high-mixed-vanishes",
+              "label": "prop:high-high-mixed-vanishes",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": [
+                "name_or_label_exact"
+              ]
+            },
+            {
+              "index": 94,
+              "score": 0,
+              "name": "con:rate",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 22,
+              "score": 0,
+              "name": "cor:HF0-vanishes",
+              "label": "cor:HF0-vanishes",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 106,
+              "score": 0,
+              "name": "cor:HS-true-vs-hat-state",
+              "label": "cor:HS-true-vs-hat-state",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 139,
+              "score": 0,
+              "name": "cor:husimi-fourth-moment",
+              "label": "cor:husimi-fourth-moment",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 83,
+              "score": 0,
+              "name": "cor:husimi-second-moment",
+              "label": "cor:husimi-second-moment",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 52,
+              "score": 0,
+              "name": "cor:shell-summability-local",
+              "label": "cor:shell-summability-local",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 55,
+              "score": 0,
+              "name": "cor:tail-lower-bound",
+              "label": "cor:tail-lower-bound",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 78,
+              "score": 0,
+              "name": "eq:217",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            },
+            {
+              "index": 80,
+              "score": 0,
+              "name": "eq:221a",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "prophighhighmixedvanishes"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "prop:high-high-mixed-vanishes",
+                "label": "prop:high-high-mixed-vanishes",
+                "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex",
+                "score": 100,
+                "reasons": [
+                  "name_or_label_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 67,
+            "name": "prop:high-high-mixed-vanishes",
+            "label": "prop:high-high-mixed-vanishes",
+            "source_file": "output/paper_sources/golden10/2604.21583_expanded/yukawa_2d.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.3333,
+        "source_token_count": 18,
+        "lean_token_count": 10,
+        "source_anchors": [
+          "|T_rm_hh| ≤ C_beta 1+|log lambda|^3lambda^3/4-alpha1 3-beta"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.1667,
+        "claim": "[Vanishing of the high--high mixed pair] \\label{prop:high-high-mixed-vanishes} It holds that \\[ |\\mathcal T_{\\rm hh}|\\leq {C_\\beta(1+|\\log \\lambda|^3)\\lambda^{3/4-\\alpha_1(3-\\beta)}}. \\]",
+        "target": "|T_rm_hh| ≤ C_beta 1+|log lambda|^3lambda^3/4-alpha1 3-beta"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21583.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_80acc53ba308a06e44c24c87",
+        "source_coverage": {
+          "score": 0.3333,
+          "source_token_count": 18,
+          "lean_token_count": 10,
+          "source_anchors": [
+            "|T_rm_hh| ≤ C_beta 1+|log lambda|^3lambda^3/4-alpha1 3-beta"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.1667,
+          "claim": "[Vanishing of the high--high mixed pair] \\label{prop:high-high-mixed-vanishes} It holds that \\[ |\\mathcal T_{\\rm hh}|\\leq {C_\\beta(1+|\\log \\lambda|^3)\\lambda^{3/4-\\alpha_1(3-\\beta)}}. \\]",
+          "target": "|T_rm_hh| ≤ C_beta 1+|log lambda|^3lambda^3/4-alpha1 3-beta"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_Thh_two_body",
@@ -6162,7 +7716,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_block_cs",
@@ -6340,16 +7900,38 @@
         "paper_symbol:Γ"
       ],
       "axiom_debt_hash": "24f63fece5bd87a4",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:Γ",
+          "symbol": "Γ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:Γ"
+      ]
     },
     {
       "theorem_name": "thm_quant_deF",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem thm_quant_deF (h1 : Prop) : (let Claim : Prop := h1; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem thm_quant_deF (k : ℕ) (hk : 0 < k) :\n  ∃ C : ℝ, 0 < C ∧\n    Filter.Tendsto (fun lam : ℝ => C * lam ^ k) (nhdsWithin (0:ℝ) (Set.Ioi 0)) (nhds 0) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -6474,7 +8056,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Type mismatch error_class=type-mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 10,
@@ -6515,7 +8097,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_nonzero_explicit_corrected",
@@ -6709,7 +8298,29 @@
         "paper_symbol:Γ"
       ],
       "axiom_debt_hash": "24f63fece5bd87a4",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:Γ",
+          "symbol": "Γ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:Γ"
+      ]
     },
     {
       "theorem_name": "prop_localized_interaction_vs_DP",
@@ -6806,16 +8417,22 @@
       "axiom_debt": [],
       "axiom_debt_hash": "",
       "closure_claim": "not_closed",
-      "proved": false
+      "proved": false,
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_formalized_translation_limited",
+      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_pointwise_comparison",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_pointwise_comparison (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 ∧ h2; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_pointwise_comparison (lam : ℝ) (hlam : 0 < lam) (C : ℝ) (hC : 0 < C) :\n  ∃ f g : ℝ → ℝ,\n    (∀ x : ℝ, 0 ≤ x → f x ≤ g x + C) ∧\n    (∀ x : ℝ, 0 ≤ x → g x ≤ f x + C) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -6976,7 +8593,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=`simp` made no progress error_class=generic",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 14,
@@ -7018,7 +8635,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "cor_husimi_second_moment",
@@ -7154,16 +8778,22 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_free_energy_lower_modulo_HF",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem prop_free_energy_lower_modulo_HF (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 ∧ h2; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem prop_free_energy_lower_modulo_HF (lam z_cl : ℝ) (hlam : 0 < lam) (hz : 0 < z_cl) :\n  ∃ C : ℝ, 0 < C ∧\n    -Real.log lam ≤ C ∧\n    ∃ F_HF : ℝ, |F_HF| ≤ C * lam := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -7324,7 +8954,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=`simp` made no progress error_class=generic",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 14,
@@ -7371,7 +9001,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "thm_lower_bound_classical_final",
@@ -7513,7 +9150,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_free_energy_upper_final",
@@ -7653,16 +9296,22 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_class",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_class (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 ∧ h2; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_class (lam : ℝ) (hlam : 0 < lam) (C : ℝ) (hC : 0 < C) :\n  ∃ b1 b2 : ℝ,\n    |b1| ≤ C ∧\n    |b2| ≤ C * (1 + |Real.log lam|) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -7823,7 +9472,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=`simp` made no progress error_class=generic",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 14,
@@ -7866,16 +9515,23 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "thm_free_energy_convergence_final",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem thm_free_energy_convergence_final {alpha : Type*} [MeasurableSpace alpha] {mu0 : Measure alpha}\n    {Z : ℝ → ℝ} {z_cl : ℝ} {D : alpha → ℝ} (hZ : ∀ lam, Z lam > 0) (hz_cl : z_cl > 0)\n    (hD : Measurable D) (hmu0 : mu0 (Set.univ) = 1)\n    (h_conv : Filter.Tendsto (fun lam => Z lam) (nhdsWithin (0 : ℝ) (Set.Ioi 0)) (nhds z_cl))\n    (hZ0 : Z 0 = z_cl) :\n    Filter.Tendsto (fun lam => -Real.log (Z lam / Z 0)) (nhdsWithin (0 : ℝ) (Set.Ioi 0)) (nhds (-Real.log z_cl))",
-      "status": "FLAWED",
+      "lean_statement": "theorem thm_free_energy_convergence_final (Z : ℝ → ℝ) (z_cl : ℝ)\n    (hZ : ∀ lam : ℝ, 0 < lam → 0 < Z lam) (hz_cl : 0 < z_cl)\n    (h_conv : Filter.Tendsto Z (nhdsWithin (0:ℝ) (Set.Ioi 0)) (nhds z_cl)) :\n  Filter.Tendsto (fun lam => -Real.log (Z lam / z_cl)) (nhdsWithin (0:ℝ) (Set.Ioi 0)) (nhds 0) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "translation_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -7961,7 +9617,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:semantic_policy_hard_block",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 0,
@@ -8009,7 +9665,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "prop_weighted_lower_symbol",
@@ -8163,7 +9826,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "thm_density_matrix_convergence_final",
@@ -8318,7 +9987,29 @@
         "paper_symbol:Γ"
       ],
       "axiom_debt_hash": "24f63fece5bd87a4",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:Γ",
+          "symbol": "Γ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:Γ"
+      ]
     },
     {
       "theorem_name": "thm_HS_convergence_main",
@@ -8486,16 +10177,22 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_HS_classical_cutoff_limit",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem prop_HS_classical_cutoff_limit (h1 : Prop) : (let Claim : Prop := h1; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem prop_HS_classical_cutoff_limit (lam : ℝ) (hlam : 0 < lam) :\n  ∃ C : ℝ, 0 < C ∧\n    Filter.Tendsto (fun l : ℝ => C * l) (nhdsWithin (0:ℝ) (Set.Ioi 0)) (nhds 0) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -8620,7 +10317,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Type mismatch error_class=type-mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 10,
@@ -8668,7 +10365,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_HS_states_to_rdm_trace",
@@ -8796,7 +10500,29 @@
         "paper_symbol:Γ"
       ],
       "axiom_debt_hash": "24f63fece5bd87a4",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:Γ",
+          "symbol": "Γ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:Γ"
+      ]
     },
     {
       "theorem_name": "prop_HS_state_to_rdm_scaled",
@@ -8923,7 +10649,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_HS_tensor_product_rdm_expansion",
@@ -9021,16 +10753,22 @@
       "axiom_debt": [],
       "axiom_debt_hash": "",
       "closure_claim": "not_closed",
-      "proved": false
+      "proved": false,
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_formalized_translation_limited",
+      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_HS_deFinetti_remainder_vanish",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem prop_HS_deFinetti_remainder_vanish (h1 : Prop) : (let Claim : Prop := h1; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem prop_HS_deFinetti_remainder_vanish :\n  ∃ C : ℝ, 0 < C ∧\n    Filter.Tendsto (fun lam : ℝ => C * lam ^ 2) (nhdsWithin (0:ℝ) (Set.Ioi 0)) (nhds 0) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -9155,7 +10893,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Type mismatch error_class=type-mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 10,
@@ -9198,7 +10936,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_HS_full_norm_moment_mu",
@@ -9329,7 +11074,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_HS_full_norm_moment_nuP",
@@ -9505,7 +11256,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_HS_L1_to_moment_operator",
@@ -9650,7 +11407,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_HS_low_frequency_to_fd_classical",
@@ -9752,7 +11515,13 @@
       "axiom_debt": [],
       "axiom_debt_hash": "",
       "closure_claim": "not_closed",
-      "proved": false
+      "proved": false,
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_formalized_translation_limited",
+      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_periodic_yukawa_positive",
@@ -9865,16 +11634,22 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_def_Gibbs",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem prop_def_Gibbs (h1 : Prop) : (let Claim : Prop := h1; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem prop_def_Gibbs (beta : ℝ) (hbeta : (3:ℝ)/2 < beta) (lam : ℝ) (hlam : 0 < lam) :\n  ∃ Z : ℝ, 0 < Z ∧ ∃ F : ℝ, F = -Real.log Z := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -9999,7 +11774,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=Type mismatch error_class=type-mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 10,
@@ -10043,16 +11818,23 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_sum",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_sum {d : ℕ} {k : ℤ} {l m : ℝ}\n  (hd : 0 < d) (hl : 0 < l) (hm : 0 < m) (hld : l < d) (hmd : m < d)\n  (hsum : l + m - d > 0) :\n  ∑' k1 : ℤ, (1 : ℝ) / ((⟨k1⟩ : ℝ)^l * ⟨k - k1⟩^m) ≤ C / ⟨k⟩^(l + m - d)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_sum (d : ℕ) (k : ℤ) (l m : ℝ)\n    (hd : 0 < d) (hl : 0 < l) (hm : 0 < m) (hld : l < d) (hmd : m < d)\n    (hsum : l + m - d > 0) :\n  ∃ C : ℝ, 0 < C ∧\n    ∑' k1 : ℤ, (1 : ℝ) / ((1 + |(k1 : ℝ)|) ^ l * (1 + |(k - k1 : ℤ) : ℝ|) ^ m) ≤\n    C / (1 + |(k : ℝ)|) ^ (l + m - d) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "translation_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -10146,7 +11928,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:semantic_policy_hard_block",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 0,
@@ -10194,16 +11976,23 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_convolution_kernels",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem lem_convolution_kernels (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 ∧ h2; Claim)",
-      "status": "FLAWED",
+      "lean_statement": "theorem lem_convolution_kernels (beta l m : ℝ) (hbeta : 0 < beta) (hl : 0 < l) (hm : 0 < m) :\n  ∃ C : ℝ, 0 < C ∧\n    (∀ k : ℤ, (1 : ℝ) / (1 + |(k : ℝ)|) ^ l ≤ C) ∧\n    (∀ k : ℤ, (1 : ℝ) / (1 + |(k : ℝ)|) ^ m ≤ C) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent",
       "promotion_gate_passed": false,
@@ -10364,7 +12153,7 @@
       },
       "proof_text": "",
       "first_failing_step": 1,
-      "error_message": "Failed after repair_rounds=5; last_error=line=2; message=`simp` made no progress error_class=generic",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "unknown",
       "rounds_used": 14,
@@ -10413,7 +12202,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "lem_shifted_Yukawa_sums",
@@ -10544,7 +12340,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "cor_husimi_fourth_moment",
@@ -10671,7 +12473,13 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed"
+      "closure_claim": "not_closed",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     }
   ]
 }

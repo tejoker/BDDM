@@ -124,6 +124,16 @@ def apply_review(row: dict[str, Any], review: dict[str, Any]) -> tuple[dict[str,
     return reviewed, "applied_review_only"
 
 
+def _review_authority(review: dict[str, Any]) -> int:
+    """Return review authority level: 3=human, 2=hybrid(non-auto), 1=auto-LLM/unknown."""
+    rb = str(review.get("reviewed_by", "") or "").lower()
+    if "human" in rb:
+        return 3
+    if "hybrid" in rb and "auto_llm" not in rb:
+        return 2
+    return 1
+
+
 def apply_reviews(rows: list[dict[str, Any]], reviews: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     grouped_reviews: dict[str, list[dict[str, Any]]] = {}
     for review in reviews:
@@ -140,8 +150,17 @@ def apply_reviews(rows: list[dict[str, Any]], reviews: list[dict[str, Any]]) -> 
             continue
         unique_payloads = {json.dumps(review, sort_keys=True, ensure_ascii=True) for review in row_reviews}
         if len(row_reviews) > 1 and len(unique_payloads) > 1:
-            status_counts["duplicate_review_conflict"] += 1
-            out.append(row)
+            # Conflict: if reviews differ in authority level, take the highest-authority one.
+            # If they have equal authority, block (ambiguous human/hybrid conflict).
+            authorities = [_review_authority(r) for r in row_reviews]
+            if max(authorities) > min(authorities):
+                review = max(row_reviews, key=_review_authority)
+                applied, status = apply_review(row, review)
+                status_counts[status] += 1
+                out.append(applied)
+            else:
+                status_counts["duplicate_review_conflict"] += 1
+                out.append(row)
             continue
         if len(row_reviews) > 1:
             status_counts["duplicate_review_identical"] += len(row_reviews) - 1

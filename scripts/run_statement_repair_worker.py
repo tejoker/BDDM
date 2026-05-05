@@ -305,6 +305,17 @@ def _action_target_names(action: dict[str, Any]) -> set[str]:
         base = _base_name(value)
         if base:
             names.add(base)
+    contexts = action.get("source_contexts") if isinstance(action.get("source_contexts"), list) else []
+    for context in contexts:
+        if not isinstance(context, dict):
+            continue
+        for key in ("ledger_theorem_name", "theorem_name", "theorem_id"):
+            base = _base_name(context.get(key))
+            if base:
+                names.add(base)
+        lean_name = _lean_theorem_name_from_statement(str(context.get("lean_statement", "") or ""))
+        if lean_name:
+            names.add(_base_name(lean_name))
     return names
 
 
@@ -354,6 +365,88 @@ def _repair_candidate_blocker_counts(candidates: list[dict[str, Any]]) -> dict[s
         if candidate.get("needs_llm_repair"):
             counts["needs_llm_repair"] += 1
     return dict(counts.most_common())
+
+
+def _candidate_graduation_previews(candidates: list[dict[str, Any]], *, limit: int = 12) -> list[dict[str, Any]]:
+    previews: list[dict[str, Any]] = []
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            continue
+        quality = candidate.get("repair_quality") if isinstance(candidate.get("repair_quality"), dict) else {}
+        validation = candidate.get("lean_validation") if isinstance(candidate.get("lean_validation"), dict) else {}
+        review_preview = (
+            candidate.get("review_batch_eligibility_preview")
+            if isinstance(candidate.get("review_batch_eligibility_preview"), dict)
+            else {}
+        )
+        blockers: list[str] = []
+        for blocker in quality.get("blockers") or []:
+            if str(blocker).strip():
+                blockers.append(f"repair_quality:{blocker}")
+        if validation.get("ok") is False:
+            error = str(validation.get("error", "") or "lean_validation_failed").splitlines()[0][:160]
+            blockers.append(f"lean_validation:{error}")
+        for blocker in review_preview.get("blockers") or []:
+            raw_blocker = str(blocker).strip()
+            if raw_blocker:
+                clean_blocker = raw_blocker
+                if clean_blocker.startswith("review_batch_exclusion:"):
+                    clean_blocker = clean_blocker.split(":", 1)[1]
+                blockers.append(f"review_batch:{clean_blocker}")
+        previews.append(
+            {
+                "theorem_name": str(candidate.get("theorem_name", "") or ""),
+                "reviewable": bool(review_preview.get("eligible"))
+                and quality.get("ok", True) is True
+                and validation.get("ok") is True,
+                "repair_quality_ok": quality.get("ok", None),
+                "lean_validation_ok": validation.get("ok", None),
+                "review_batch_eligible": review_preview.get("eligible", None),
+                "blockers": list(dict.fromkeys(blockers)),
+                "regeneration_protocol": str(candidate.get("regeneration_protocol", "") or ""),
+                "statement_repair_kind": str(candidate.get("statement_repair_kind", "") or ""),
+            }
+        )
+    previews.sort(
+        key=lambda item: (
+            not bool(item.get("reviewable")),
+            len(item.get("blockers", [])) if isinstance(item.get("blockers"), list) else 999,
+            str(item.get("theorem_name", "")),
+        )
+    )
+    return previews[:limit]
+
+
+def _candidate_is_write_eligible(candidate: dict[str, Any]) -> bool:
+    quality = candidate.get("repair_quality") if isinstance(candidate.get("repair_quality"), dict) else {}
+    validation = candidate.get("lean_validation") if isinstance(candidate.get("lean_validation"), dict) else {}
+    preview = (
+        candidate.get("review_batch_eligibility_preview")
+        if isinstance(candidate.get("review_batch_eligibility_preview"), dict)
+        else {}
+    )
+    return (
+        bool(candidate.get("changes"))
+        and quality.get("ok", True) is True
+        and validation.get("ok") is True
+        and preview.get("eligible") is True
+    )
+
+
+def _write_eligible_repair_payload(repair_payload: dict[str, Any]) -> dict[str, Any]:
+    candidates = repair_payload.get("repair_candidates", [])
+    if not isinstance(candidates, list):
+        return repair_payload
+    eligible = [candidate for candidate in candidates if isinstance(candidate, dict) and _candidate_is_write_eligible(candidate)]
+    out = dict(repair_payload)
+    out["repair_candidates"] = eligible
+    out["candidate_counts"] = _candidate_counts(eligible)
+    out["write_eligibility_filter"] = {
+        "input_candidate_count": len(candidates),
+        "eligible_candidate_count": len(eligible),
+        "policy": "repair_quality_ok_and_lean_validation_ok_and_review_batch_eligible",
+    }
+    return out
 
 
 def _repair_payload_for_action(repair_payload: dict[str, Any], action: dict[str, Any]) -> dict[str, Any]:
@@ -419,6 +512,7 @@ def _context_by_theorem(action: dict[str, Any]) -> dict[str, dict[str, Any]]:
 
 
 def _preview_row_for_candidate(context: dict[str, Any], candidate: dict[str, Any]) -> dict[str, Any]:
+    paper_theory_debt = candidate.get("paper_theory_debt") if isinstance(candidate.get("paper_theory_debt"), list) else []
     row = {
         "row_id": context.get("row_id", ""),
         "arxiv_id": context.get("paper_id", ""),
@@ -437,7 +531,7 @@ def _preview_row_for_candidate(context: dict[str, Any], candidate: dict[str, Any
         "claim_equivalence_verdict": "unclear",
         "identity_status": "unknown",
         "gate_failures": ["lean_proof_closed"],
-        "axiom_debt": [],
+        "axiom_debt": [str(item) for item in paper_theory_debt if str(item).strip()],
         "translation_repair": {
             "statement_repair_kind": candidate.get("statement_repair_kind", ""),
             "regeneration_protocol": candidate.get("regeneration_protocol", ""),
@@ -530,8 +624,6 @@ def _apply_source_backed_payload(
     source_contexts = action.get("source_contexts") if isinstance(action.get("source_contexts"), list) else []
     if not source_contexts:
         return _non_mutating_action(action, "skipped_missing_source_contexts")
-    if not write:
-        return _non_mutating_action(action, "dry_run_write_required")
 
     repair_payload = _build_source_backed_payload_for_action(
         action,
@@ -539,21 +631,49 @@ def _apply_source_backed_payload(
         repair_output_root=repair_output_root,
         validate_candidates=validate_candidates,
     )
-    dry_apply = apply_validated_repair_pack_to_ledger(
-        ledger_path=_resolve_path(project_root, ledger),
-        repair_payload=repair_payload,
-        write=False,
-    )
-    updated_count = int(dry_apply.get("updated_count", 0) or 0)
-    if updated_count <= 0:
-        candidates = repair_payload.get("repair_candidates", [])
-        if not isinstance(candidates, list):
-            candidates = []
+    candidates = repair_payload.get("repair_candidates", [])
+    if not isinstance(candidates, list):
+        candidates = []
+    candidate_previews = _candidate_graduation_previews(candidates)
+    repair_blockers = _repair_candidate_blocker_counts(candidates)
+    write_payload = _write_eligible_repair_payload(repair_payload)
+    eligible_count = int((write_payload.get("write_eligibility_filter") or {}).get("eligible_candidate_count", 0) or 0)
+    if not write:
+        return _non_mutating_action(
+            action,
+            "dry_run_source_backed_preview",
+            repair_summary=repair_payload.get("candidate_counts", {}),
+            repair_blocker_counts=repair_blockers,
+            candidate_graduation_preview=candidate_previews,
+            write_eligibility_filter=write_payload.get("write_eligibility_filter", {}),
+            wrote_repair_pack=True,
+            regeneration_protocol="source_backed_v2",
+        )
+    if eligible_count <= 0:
         return _non_mutating_action(
             action,
             no_change_status,
             repair_summary=repair_payload.get("candidate_counts", {}),
-            repair_blocker_counts=_repair_candidate_blocker_counts(candidates),
+            repair_blocker_counts=repair_blockers,
+            candidate_graduation_preview=candidate_previews,
+            write_eligibility_filter=write_payload.get("write_eligibility_filter", {}),
+            wrote_repair_pack=True,
+            regeneration_protocol="source_backed_v2",
+        )
+    dry_apply = apply_validated_repair_pack_to_ledger(
+        ledger_path=_resolve_path(project_root, ledger),
+        repair_payload=write_payload,
+        write=False,
+    )
+    updated_count = int(dry_apply.get("updated_count", 0) or 0)
+    if updated_count <= 0:
+        return _non_mutating_action(
+            action,
+            no_change_status,
+            repair_summary=repair_payload.get("candidate_counts", {}),
+            repair_blocker_counts=repair_blockers,
+            candidate_graduation_preview=candidate_previews,
+            write_eligibility_filter=write_payload.get("write_eligibility_filter", {}),
             ledger_application=dry_apply,
             wrote_repair_pack=True,
             regeneration_protocol="source_backed_v2",
@@ -561,7 +681,7 @@ def _apply_source_backed_payload(
 
     ledger_result = apply_validated_repair_pack_to_ledger(
         ledger_path=_resolve_path(project_root, ledger),
-        repair_payload=repair_payload,
+        repair_payload=write_payload,
         write=True,
     )
     final_updated_count = int(ledger_result.get("updated_count", 0) or 0)
@@ -572,6 +692,9 @@ def _apply_source_backed_payload(
         "mutated": final_updated_count > 0,
         "mutated_rows": final_updated_count,
         "repair_summary": repair_payload.get("candidate_counts", {}),
+        "repair_blocker_counts": repair_blockers,
+        "candidate_graduation_preview": candidate_previews,
+        "write_eligibility_filter": write_payload.get("write_eligibility_filter", {}),
         "ledger_application": ledger_result,
         "regeneration_protocol": "source_backed_v2",
     }
@@ -591,8 +714,6 @@ def _execute_statement_regeneration(
     ledger = str(artifacts.get("ledger", "") or "")
     if not (report and lean_file and ledger):
         return _non_mutating_action(action, "skipped_missing_repair_artifacts")
-    if not write:
-        return _non_mutating_action(action, "dry_run_write_required")
     if action.get("source_contexts"):
         return _apply_source_backed_payload(
             action,
@@ -603,6 +724,8 @@ def _execute_statement_regeneration(
             no_change_status="source_backed_regeneration_no_ledger_change",
             written_status="written_source_backed_regeneration",
         )
+    if not write:
+        return _non_mutating_action(action, "dry_run_write_required")
     from repair_bad_translations import build_repair_pack
 
     paper_id = str(action.get("paper_id", ""))
@@ -686,7 +809,7 @@ def _execute_source_translation_recovery(
     repair_output_root: Path,
     validate_candidates: bool,
 ) -> dict[str, Any]:
-    if not write:
+    if not write and not action.get("source_contexts"):
         return _non_mutating_action(
             action,
             "dry_run_source_retranslation_required",
@@ -697,7 +820,7 @@ def _execute_source_translation_recovery(
                 "proof_promotion": False,
             },
         )
-    return _apply_source_backed_payload(
+    result = _apply_source_backed_payload(
         action,
         project_root=project_root,
         write=write,
@@ -706,6 +829,14 @@ def _execute_source_translation_recovery(
         no_change_status="source_retranslation_no_ledger_change",
         written_status="written_source_retranslation_candidate",
     )
+    if not write:
+        result["translation_recovery_policy"] = {
+            "write_capable": True,
+            "allowed_auto_write": "only_after_validation_and_review_batch_preview",
+            "required_exit_gate": "validator_passing_and_review_batch_eligible",
+            "proof_promotion": False,
+        }
+    return result
 
 
 def execute_worker_actions(
@@ -1063,7 +1194,12 @@ def run_worker(
 def _load_or_build_queue(args: argparse.Namespace) -> tuple[list[dict[str, Any]], int]:
     if args.repair_queue_jsonl is not None:
         rows = _read_jsonl(args.repair_queue_jsonl)
-        return _filter_queue_rows(rows, repair_route=args.repair_route, repair_kind=args.repair_kind), len(rows)
+        return _filter_queue_rows(
+            rows,
+            paper_id=args.paper_id,
+            repair_route=args.repair_route,
+            repair_kind=args.repair_kind,
+        ), len(rows)
     corpus_rows, corpus_summary = build_corpus_rows(
         ledger_paths=[_project_path(args.project_root, path) for path in (args.ledger_path or [DEFAULT_LEDGER_DIR])],
         project_root=args.project_root,
@@ -1071,16 +1207,30 @@ def _load_or_build_queue(args: argparse.Namespace) -> tuple[list[dict[str, Any]]
         evidence_roots=[_project_path(args.project_root, path) for path in (args.evidence_root or [DEFAULT_EVIDENCE_DIR])],
     )
     queue, _summary = build_statement_repair_queue(corpus_rows, limit=args.limit)
-    return _filter_queue_rows(queue, repair_route=args.repair_route, repair_kind=args.repair_kind), int(corpus_summary.get("rows", len(corpus_rows)))
+    return _filter_queue_rows(
+        queue,
+        paper_id=args.paper_id,
+        repair_route=args.repair_route,
+        repair_kind=args.repair_kind,
+    ), int(corpus_summary.get("rows", len(corpus_rows)))
 
 
-def _filter_queue_rows(rows: list[dict[str, Any]], *, repair_route: str = "", repair_kind: str = "") -> list[dict[str, Any]]:
+def _filter_queue_rows(
+    rows: list[dict[str, Any]],
+    *,
+    paper_id: str = "",
+    repair_route: str = "",
+    repair_kind: str = "",
+) -> list[dict[str, Any]]:
+    paper = str(paper_id or "").strip()
     route = str(repair_route or "").strip()
     kind = str(repair_kind or "").strip()
-    if not route and not kind:
+    if not paper and not route and not kind:
         return rows
     out: list[dict[str, Any]] = []
     for row in rows:
+        if paper and str(row.get("arxiv_id", "") or row.get("paper_id", "") or "") != paper:
+            continue
         if route and str(row.get("repair_route", "") or "") != route:
             continue
         if kind and str(row.get("repair_kind", "") or "") != kind:
@@ -1123,6 +1273,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--repair-output-root", type=Path, default=None)
     parser.add_argument("--limit", type=int, default=500)
     parser.add_argument("--max-write-groups", type=int, default=1)
+    parser.add_argument("--paper-id", default="", help="Optional arXiv paper-id filter for bounded repair runs")
     parser.add_argument("--repair-route", default="", help="Optional route filter for bounded repair runs")
     parser.add_argument("--repair-kind", default="", help="Optional kind filter for bounded repair runs")
     parser.add_argument("--write", action="store_true")

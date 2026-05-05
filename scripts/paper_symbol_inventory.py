@@ -93,6 +93,16 @@ def _decl_name(declaration: str) -> str:
 
 def _definition_declaration(lean: str, kind: str) -> tuple[str, str]:
     """Return a conservative elaboration scaffold plus grounding class."""
+    if kind == "multisegment_type":
+        return "abbrev Multisegment : Type := ℕ", "definition_stub"
+    if kind == "multisegment_dual":
+        return "def dual (α : Multisegment) : Multisegment := α", "definition_stub"
+    if kind == "multisegment_nat_invariant":
+        return f"def {lean} (_α : Multisegment) : ℕ := 0", "definition_stub"
+    if kind == "multisegment_predicate":
+        return f"def {lean} (_α : Multisegment) : Prop := True", "definition_stub"
+    if kind == "multisegment_set":
+        return f"def {lean} : Set Multisegment := Set.univ", "definition_stub"
     if kind == "statement_predicate":
         return f"def {lean} : Prop := True", "definition_stub"
     if kind == "type_family":
@@ -190,6 +200,30 @@ def infer_symbols_from_text(text: str, *, source: str = "seed_text") -> list[Pap
 
     if any(tok in s for tok in ("HSobolev", "C_T HSobolev", "C_T_H", "H^s", "Sobolev")):
         add("H^s / HSobolev", "HSobolev", "function_space", "sobolev_space_reference")
+    if "multisegment" in s.lower() or "Multisegment" in s:
+        add("multisegment", "Multisegment", "multisegment_type", "paper_multisegment_carrier")
+        add("tilde alpha / dual multisegment", "dual", "multisegment_dual", "paper_multisegment_dual_notation")
+        for latex, lean in (
+            ("c_alpha", "c_alpha"),
+            ("S_alpha", "S_alpha"),
+            ("L_alpha", "L_alpha"),
+            ("n_alpha", "n_alpha"),
+            ("L_tilde", "L_tilde"),
+            ("n_tilde_alpha", "n_tilde_alpha"),
+            ("ntilde_alpha", "ntilde_alpha"),
+        ):
+            add(latex, lean, "multisegment_nat_invariant", "paper_multisegment_numeric_invariant")
+        for latex, lean in (
+            ("simple multisegment", "IsSimple"),
+            ("ladder multisegment", "IsLadderMultisegment"),
+        ):
+            add(latex, lean, "multisegment_predicate", "paper_multisegment_predicate")
+        add(
+            "irreducible ladder multisegment",
+            "IrreducibleLadderMultisegment",
+            "multisegment_set",
+            "paper_multisegment_set_predicate",
+        )
     if "C_T" in s or "C([0,T]" in s or "C([0, T]" in s:
         add("C_T", "C_T", "function_space", "time_continuity_space")
     if "L2Space" in s or "L^2" in s or "L²" in s:

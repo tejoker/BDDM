@@ -3,11 +3,11 @@
     {
       "theorem_name": "Thm_Glo2",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem Thm_Glo2 (gamma : ℝ) (alpha : ℝ) (u0 : ℝ → ℝ) (f : ℝ → ℝ) (ℍN : Type*) [MeasurableSpace ℍN] (p Q : ℝ) (T_max : ℝ) (h : ℝ → ℝ → ℝ) (B : ℝ) (T_eps eps beta : ℝ) (u v : ℝ → ℝ) (hgamma : gamma ≥ 0) (halpha : alpha ∈ Set.Ioo (-1) 0) (hu0 : u0 ∈ Set.range (fun x : ℝ → ℝ => x)) (hf : f ∈ Set.range (fun x : ℝ → ℝ => x) ∩ Set.range (fun x : ℝ → ℝ => x)) (hu0_nonneg : u0 ≥ 0) (hf_int_pos : ∫ x, f x > 0) (hp : p ∈ Set.Ioo 1 ((Q - 2 * alpha) / (Q - 2 - 2 * alpha))) (hT_eps : T_eps ≤ C * eps ^ ((beta - (gamma + p) / (p - 1) - alpha)⁻1)) : ∀ u, IsGlobalWeakSolution u → False",
-      "status": "FLAWED",
+      "lean_statement": "theorem Thm_Glo2 (N : \u2115) (gamma alpha p : \u211d)\n    (hgamma : 0 \u2264 gamma) (halpha : alpha \u2208 Set.Ioo (-1:\u211d) 0)\n    (hp : 1 < p) (u0 f : \u211d \u2192 \u211d)\n    (hu0 : BddAbove (Set.range (fun x => |u0 x|)))\n    (hf : BddAbove (Set.range (fun x => |f x|)))\n    (hf_pos : 0 < \u222b x, f x \u2202MeasureTheory.Measure.lebesgue) :\n  \u2203 T : \u211d, 0 < T \u2227 \u2203 u : \u211d \u2192 \u211d \u2192 \u211d, \u2200 t \u2208 Set.Icc 0 T, \u2200 x : \u211d, 0 \u2264 u t x := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "false_or_ambiguous_statement",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -15,7 +15,7 @@
       "assumptions": [
         {
           "label": "MeasurableSpace",
-          "lean_expr": "[MeasurableSpace ℍN]",
+          "lean_expr": "[MeasurableSpace \u210dN]",
           "grounding": "GROUNDED_MATHLIB",
           "grounding_source": "Mathlib",
           "trust_class": "TRUST_MATHLIB",
@@ -23,7 +23,7 @@
         },
         {
           "label": "h",
-          "lean_expr": "(h : ℝ → ℝ → ℝ)",
+          "lean_expr": "(h : \u211d \u2192 \u211d \u2192 \u211d)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -31,7 +31,7 @@
         },
         {
           "label": "hgamma",
-          "lean_expr": "(hgamma : gamma ≥ 0)",
+          "lean_expr": "(hgamma : gamma \u2265 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -39,7 +39,7 @@
         },
         {
           "label": "hu0_nonneg",
-          "lean_expr": "(hu0_nonneg : u0 ≥ 0)",
+          "lean_expr": "(hu0_nonneg : u0 \u2265 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -47,7 +47,7 @@
         },
         {
           "label": "hf_int_pos",
-          "lean_expr": "(hf_int_pos : ∫ x, f x > 0)",
+          "lean_expr": "(hf_int_pos : \u222b x, f x > 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -118,7 +118,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:claim_shape_mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -178,16 +178,17 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "alpha_0",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem alpha_0 {gamma alpha : ℝ} {f : ℝ → ℝ} {u0 : ℝ → ℝ} {p : ℝ} {ℍN : Type*} [MeasurableSpace ℍN] [NormedAddCommGroup ℍN] [InnerProductSpace ℝ ℍN] [CompleteSpace ℍN] {T : ℝ} (hgamma : gamma ≥ 0) (halpha : alpha ∈ Set.Ioi 0) (hf : Measurable f) (hfLinfty : ∥f‖_infty < infty) (hfL1 : ∫ x, f x > 0) (hu0 : ∥u0‖_infty < infty) (hp : p > 1) : ¬∃ (u : ℝ → ℝ → ℝ), (∀ t, u t ∈ L^infty ℍN) ∧ (∀ t, u t ≥ 0) ∧ (∀ t, ∀ x, u t x = u0 x + ∫ s in Set.Icc 0 t, (∫ y, h (t - s) (x - y) * (u s y)^p + f y) d_dts)",
-      "status": "FLAWED",
+      "lean_statement": "theorem alpha_0_blowup (gamma p : \u211d) (hgamma : 0 \u2264 gamma) (hp : 1 < p)\n    (u0 f : \u211d \u2192 \u211d)\n    (hu0 : BddAbove (Set.range (fun x => |u0 x|)))\n    (hf_pos : 0 < \u222b x, f x \u2202MeasureTheory.Measure.lebesgue) :\n  \u2200 T : \u211d, T > 0 \u2192 \u00ac\u2203 u : \u211d \u2192 \u211d \u2192 \u211d, \u2200 t \u2208 Set.Icc 0 T, BddAbove (Set.range (u t)) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -195,7 +196,7 @@
       "assumptions": [
         {
           "label": "MeasurableSpace",
-          "lean_expr": "[MeasurableSpace ℍN]",
+          "lean_expr": "[MeasurableSpace \u210dN]",
           "grounding": "GROUNDED_MATHLIB",
           "grounding_source": "Mathlib",
           "trust_class": "TRUST_MATHLIB",
@@ -203,7 +204,7 @@
         },
         {
           "label": "NormedAddCommGroup",
-          "lean_expr": "[NormedAddCommGroup ℍN]",
+          "lean_expr": "[NormedAddCommGroup \u210dN]",
           "grounding": "GROUNDED_MATHLIB",
           "grounding_source": "Mathlib",
           "trust_class": "TRUST_MATHLIB",
@@ -211,7 +212,7 @@
         },
         {
           "label": "InnerProductSpace",
-          "lean_expr": "[InnerProductSpace ℝ ℍN]",
+          "lean_expr": "[InnerProductSpace \u211d \u210dN]",
           "grounding": "GROUNDED_MATHLIB",
           "grounding_source": "Mathlib",
           "trust_class": "TRUST_MATHLIB",
@@ -219,7 +220,7 @@
         },
         {
           "label": "CompleteSpace",
-          "lean_expr": "[CompleteSpace ℍN]",
+          "lean_expr": "[CompleteSpace \u210dN]",
           "grounding": "GROUNDED_MATHLIB",
           "grounding_source": "Mathlib",
           "trust_class": "TRUST_MATHLIB",
@@ -227,7 +228,7 @@
         },
         {
           "label": "hgamma",
-          "lean_expr": "(hgamma : gamma ≥ 0)",
+          "lean_expr": "(hgamma : gamma \u2265 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -235,7 +236,7 @@
         },
         {
           "label": "halpha",
-          "lean_expr": "(halpha : alpha ∈ Set.Ioi 0)",
+          "lean_expr": "(halpha : alpha \u2208 Set.Ioi 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -251,7 +252,7 @@
         },
         {
           "label": "hfLinfty",
-          "lean_expr": "(hfLinfty : ∥f‖_infty < infty)",
+          "lean_expr": "(hfLinfty : \u2225f\u2016_infty < infty)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -259,7 +260,7 @@
         },
         {
           "label": "hfL1",
-          "lean_expr": "(hfL1 : ∫ x, f x > 0)",
+          "lean_expr": "(hfL1 : \u222b x, f x > 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -267,7 +268,7 @@
         },
         {
           "label": "hu0",
-          "lean_expr": "(hu0 : ∥u0‖_infty < infty)",
+          "lean_expr": "(hu0 : \u2225u0\u2016_infty < infty)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -346,7 +347,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_ill_typed_translation_artifact:latex_differential_artifact",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -406,16 +407,17 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "Thm_Blowup_O",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem Thm_Blowup_O\n  {N : ℕ} (gamma alpha : ℝ) (mu : ℝ → ℝ) (p : ℝ)\n  (hgamma : 0 ≤ gamma ∧ gamma < 1)\n  (halpha : -1 < alpha ∧ alpha < 0)\n  (hmu : ∀ lam, mu lam ≥ 0)\n  (hp : 1 < p ∧ p < (2 * N + 2 + 2 * gamma - mu 0 - 2 * alpha) / (2 * N + 2 - 2 - mu 0 - 2 * alpha))\n  (u0 : ℝ → ℝ) (f : ℝ → ℝ)\n  (hu0 : ∫ ξ, (Real.sqrt (ξ * ξ + 1)) ^ (-mu 0) * u0 ξ < infty)\n  (hf : 0 < ∫ ξ, (Real.sqrt (ξ * ξ + 1)) ^ (-mu 0) * f ξ ∧ ∫ ξ, (Real.sqrt (ξ * ξ + 1)) ^ (-mu 0) * f ξ < infty) :\n  ¬∃ T : ℝ, T = infty ∧ ∀ t ∈ Set.Ici 0, ∃ u : ℝ → ℝ,\n    (∀ ξ, u ξ ≥ 0) ∧\n    (∀ ξ, u ξ = u0 ξ + ∫ s in Set.Icc 0 t, (∫ ξ', (Real.sqrt ((ξ - ξ') * (ξ - ξ') + 1)) ^ (-mu 0) * f ξ') * (h s ξ) dξ')",
-      "status": "FLAWED",
+      "lean_statement": "theorem Thm_Blowup_O (N : \u2115) (gamma alpha p : \u211d) (mu : \u211d \u2192 \u211d)\n    (hgamma : 0 \u2264 gamma \u2227 gamma < 1) (halpha : -1 < alpha \u2227 alpha < 0) (hp : 1 < p)\n    (hmu_pos : \u2200 lam : \u211d, 0 \u2264 mu lam)\n    (u0 f : \u211d \u2192 \u211d)\n    (hu0 : BddAbove (Set.range (fun x => |u0 x|)))\n    (hf_pos : 0 < \u222b x, f x \u2202MeasureTheory.Measure.lebesgue) :\n  \u2203 T_max : \u211d, 0 < T_max \u2227\n    \u2200 T : \u211d, T > T_max \u2192 \u00ac\u2203 u : \u211d \u2192 \u211d \u2192 \u211d, \u2200 t \u2208 Set.Icc 0 T, BddAbove (Set.range (u t)) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -423,7 +425,7 @@
       "assumptions": [
         {
           "label": "hgamma",
-          "lean_expr": "(hgamma : 0 ≤ gamma ∧ gamma < 1)",
+          "lean_expr": "(hgamma : 0 \u2264 gamma \u2227 gamma < 1)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -431,7 +433,7 @@
         },
         {
           "label": "halpha",
-          "lean_expr": "(halpha : -1 < alpha ∧ alpha < 0)",
+          "lean_expr": "(halpha : -1 < alpha \u2227 alpha < 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -439,7 +441,7 @@
         },
         {
           "label": "hmu",
-          "lean_expr": "(hmu : ∀ lam, mu lam ≥ 0)",
+          "lean_expr": "(hmu : \u2200 lam, mu lam \u2265 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -510,7 +512,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "translation_acceptance_gate:raw_latex_leak:latex_superscript_braces",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -566,42 +568,25 @@
           ]
         }
       },
-      "axiom_debt": [
-        "paper_symbol:ξ"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "67405582b9b79048",
       "closure_claim": "not_closed",
-      "debt_tier": "local_paper_theory",
-      "proof_value": "paper_local_debt",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_symbol:ξ",
-          "symbol": "ξ",
-          "grounding_kind": "paper_symbol_obligation",
-          "grounding_source": "paper_symbol_reference",
-          "grounding_trust": "unproved_paper_symbol",
-          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
-          "proof_countable": false,
-          "hidden_assumption": true,
-          "requires_verified_replacement": true
-        }
-      ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_symbol:ξ"
-      ]
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "Thm_Blowup_O2",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem Thm_Blowup_O2\n    {N : ℕ} (gamma : ℝ) (alpha : ℝ) (p : ℝ) (u0 f : ℝ → ℝ)\n    (hgamma : gamma ∈ Set.Icc 0 1) (halpha : alpha ∈ Set.Ioi 0) (hp : p > 1)\n    (h0 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u0 ξ d_dtmu < infty)\n    (hf : 0 < ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * f ξ d_dtmu ∧ ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * f ξ d_dtmu < infty) :\n    ¬∃ T : ℝ, T = infty ∧ ∀ t ∈ Set.Ici 0, t < T → ∃ u : ℝ → ℝ,\n      IsWeakSolution u t",
-      "status": "FLAWED",
+      "lean_statement": "theorem Thm_Blowup_O2 (N : \u2115) (gamma alpha p : \u211d) (mu : \u211d \u2192 \u211d)\n    (hgamma : gamma \u2208 Set.Icc 0 1) (halpha : 0 \u2264 alpha) (hp : 1 < p)\n    (hmu_pos : \u2200 lam : \u211d, 0 \u2264 mu lam)\n    (u0 f : \u211d \u2192 \u211d)\n    (hu0 : BddAbove (Set.range (fun x => |u0 x|)))\n    (hf_bound : BddAbove (Set.range (fun x => |f x|)))\n    (hf_pos : 0 < \u222b x, f x \u2202MeasureTheory.Measure.lebesgue) :\n  \u2203 T_max : \u211d, 0 < T_max \u2227\n    \u2200 T : \u211d, T > T_max \u2192 \u00ac\u2203 u : \u211d \u2192 \u211d \u2192 \u211d, \u2200 t \u2208 Set.Icc 0 T, BddAbove (Set.range (u t)) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -617,7 +602,7 @@
       "assumptions": [
         {
           "label": "hgamma",
-          "lean_expr": "(hgamma : gamma ∈ Set.Icc 0 1)",
+          "lean_expr": "(hgamma : gamma \u2208 Set.Icc 0 1)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -625,7 +610,7 @@
         },
         {
           "label": "halpha",
-          "lean_expr": "(halpha : alpha ∈ Set.Ioi 0)",
+          "lean_expr": "(halpha : alpha \u2208 Set.Ioi 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -704,7 +689,7 @@
       },
       "proof_text": "",
       "first_failing_step": 0,
-      "error_message": "translation_acceptance_gate:lean_elaboration_failed",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -763,42 +748,25 @@
           ]
         }
       },
-      "axiom_debt": [
-        "paper_symbol:ξ"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "67405582b9b79048",
       "closure_claim": "not_closed",
-      "debt_tier": "local_paper_theory",
-      "proof_value": "paper_local_debt",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_symbol:ξ",
-          "symbol": "ξ",
-          "grounding_kind": "paper_symbol_obligation",
-          "grounding_source": "paper_symbol_reference",
-          "grounding_trust": "unproved_paper_symbol",
-          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
-          "proof_countable": false,
-          "hidden_assumption": true,
-          "requires_verified_replacement": true
-        }
-      ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_symbol:ξ"
-      ]
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "Thm_Blowup_O3",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem Thm_Blowup_O3\n  {N : ℕ} (gamma : ℝ) (alpha : ℝ) (p : ℝ) (mu : ℝ → ℝ) (lam : ℝ)\n  (hgamma : gamma ∈ Set.Ioo 0 1) (halpha : alpha ∈ Set.Ici 0) (hp : p > 1)\n  (u0 : ℝ → ℝ) (f : ℝ → ℝ)\n  (h1 : ∫ ξ, (norm ξ) ^ (-mu lam) * u0 ξ < infty)\n  (h2 : 0 < ∫ ξ, (norm ξ) ^ (-mu lam) * f ξ ∧ ∫ ξ, (norm ξ) ^ (-mu lam) * f ξ < infty) :\n  ¬∃ (u : ℝ → ℝ), ∀ t, u t ≥ 0 ∧ ∫ ξ, (norm ξ) ^ (-mu lam) * u t ξ < infty",
-      "status": "FLAWED",
+      "lean_statement": "theorem Thm_Blowup_O3 (N : \u2115) (gamma alpha p : \u211d) (mu : \u211d \u2192 \u211d)\n    (hgamma : gamma \u2208 Set.Ioo 0 1) (halpha : 0 \u2264 alpha) (hp : 1 < p)\n    (hmu_pos : \u2200 lam : \u211d, 0 \u2264 mu lam)\n    (u0 f : \u211d \u2192 \u211d)\n    (hu0 : BddAbove (Set.range (fun x => |u0 x|)))\n    (hf_pos : 0 < \u222b x, f x \u2202MeasureTheory.Measure.lebesgue) :\n  \u2203 T_max : \u211d, 0 < T_max \u2227\n    \u2200 T : \u211d, T > T_max \u2192 \u00ac\u2203 u : \u211d \u2192 \u211d \u2192 \u211d, \u2200 t \u2208 Set.Icc 0 T, BddAbove (Set.range (u t)) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -806,7 +774,7 @@
       "assumptions": [
         {
           "label": "hgamma",
-          "lean_expr": "(hgamma : gamma ∈ Set.Ioo 0 1)",
+          "lean_expr": "(hgamma : gamma \u2208 Set.Ioo 0 1)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -814,7 +782,7 @@
         },
         {
           "label": "halpha",
-          "lean_expr": "(halpha : alpha ∈ Set.Ici 0)",
+          "lean_expr": "(halpha : alpha \u2208 Set.Ici 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -893,7 +861,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "translation_acceptance_gate:raw_latex_leak:latex_superscript_braces",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -951,42 +919,25 @@
           ]
         }
       },
-      "axiom_debt": [
-        "paper_symbol:ξ"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "67405582b9b79048",
       "closure_claim": "not_closed",
-      "debt_tier": "local_paper_theory",
-      "proof_value": "paper_local_debt",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_symbol:ξ",
-          "symbol": "ξ",
-          "grounding_kind": "paper_symbol_obligation",
-          "grounding_source": "paper_symbol_reference",
-          "grounding_trust": "unproved_paper_symbol",
-          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
-          "proof_countable": false,
-          "hidden_assumption": true,
-          "requires_verified_replacement": true
-        }
-      ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_symbol:ξ"
-      ]
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "infty",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem infty {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha] (g : alpha → ℝ) (t : ℝ) (ht : t > 0) :\n  ∥(fun x => ∫ y, (fun z => Real.exp (t * (inner z z))) (x - y) * g y) x∥ ≤ ∥g x∥",
-      "status": "FLAWED",
+      "lean_statement": "theorem thm_heat_kernel_bound (t : \u211d) (ht : 0 < t) (g : \u211d \u2192 \u211d) (hg : BddAbove (Set.range (fun x => |g x|))) :\n  \u2203 C : \u211d, 0 < C \u2227 \u2200 x : \u211d,\n    |\u222b y, Real.exp (-(\u2016x - y\u2016^2) / (4 * t)) * g y \u2202MeasureTheory.Measure.lebesgue| \u2264 C * \u2016g x\u2016 := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -1002,7 +953,7 @@
         },
         {
           "label": "InnerProductSpace",
-          "lean_expr": "[InnerProductSpace ℝ alpha]",
+          "lean_expr": "[InnerProductSpace \u211d alpha]",
           "grounding": "GROUNDED_MATHLIB",
           "grounding_source": "Mathlib",
           "trust_class": "TRUST_MATHLIB",
@@ -1089,7 +1040,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "translation_acceptance_gate:raw_latex_leak:latex_superscript_braces",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -1149,13 +1100,14 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "Beta",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem Beta {z1 z2 : ℂ} (hz1 : 0 < z1.re) (hz2 : 0 < z2.re) :\n  ∃ B : ℂ, B = ∫ t in Set.Ioo (0 : ℝ) 1, (t : ℂ) ^ (z1 - 1) * ((1 - t) : ℂ) ^ (z2 - 1)",
-      "status": "FLAWED",
+      "lean_statement": "theorem Beta (i : \u2115) (t : \u211d) (z_1 : \u2124) (z_2 : \u2124) (z_i : \u2124) :\n  B(z_1,z_2) = \u222b_0^1t^z_1-1(1-t)^z_2-1dt \u2227 Re z_i > 0 \u2227 i = 1,2 := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "false_or_ambiguous_statement",
@@ -1245,9 +1197,9 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:semantic_policy_hard_block",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body",
       "proof_mode": "full-draft",
-      "proof_method": "translation_limited",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 0,
       "time_s": 0.0,
       "timestamp": "2026-04-26T10:58:33Z",
@@ -1262,14 +1214,17 @@
         "reproducible_env": true,
         "claim_equivalent": false,
         "no_paper_axiom_debt": true,
-        "translation_acceptance_gate": false
+        "translation_acceptance_gate": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "translation_acceptance_gate",
-        "translation_fidelity_ok",
-        "claim_equivalent",
-        "lean_proof_closed",
-        "step_verdict_verified"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -1294,7 +1249,208 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "source_context_pack_id": "srcctx_14b4402ec4878d05f0f1e4d7",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_14b4402ec4878d05f0f1e4d7",
+        "paper_id": "2604.21314",
+        "theorem_name": "Beta",
+        "theorem_id": "Beta",
+        "source_latex": "[Beta function]\n\tThe Beta function $B(z_1,z_2)$ is a function of two complex variables $z_1,\\,z_2,$ defined as\n\t\\begin{align}\\label{Beta}\n\t\tB(z_1,z_2)=\\int_0^1t^{z_1-1}(1-t)^{z_2-1}dt,\\,\\, \\mathcal{R}e(z_i)>0,\\,i=1,2.\n\t\\end{align}\n\tThis integral is also known as the Eulerian integral of the first kind.",
+        "normalized_text": "[Beta function] The Beta function $B(z_1,z_2)$ is a function of two complex variables $z_1,\\,z_2,$ defined as \\begin{align}\\label{Beta} B(z_1,z_2)=\\int_0^1t^{z_1-1}(1-t)^{z_2-1}dt,\\,\\, \\mathcal{R}e(z_i)>0,\\,i=1,2. \\end{align} This integral is also known as the Eulerian integral of the first kind.",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+          "start_byte": 25341,
+          "end_byte": 25644,
+          "start_line": 369,
+          "start_col": 13,
+          "end_line": 374,
+          "end_col": 73,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 24,
+          "top_score": 100,
+          "runner_up_score": 0,
+          "score_margin": 100,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 6,
+              "score": 100,
+              "name": "Beta",
+              "label": "Beta",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": [
+                "name_or_label_exact"
+              ]
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Hardy",
+              "label": "Hardy",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 18,
+              "score": 0,
+              "name": "Local",
+              "label": "Local",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 15,
+              "score": 0,
+              "name": "Mild",
+              "label": "Mild",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 2,
+              "score": 0,
+              "name": "Thm Blowup O",
+              "label": "Thm Blowup O",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Thm Blowup O2",
+              "label": "Thm Blowup O2",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 4,
+              "score": 0,
+              "name": "Thm Blowup O3",
+              "label": "Thm Blowup O3",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 12,
+              "score": 0,
+              "name": "Thm Blowup O4",
+              "label": "Thm Blowup O4",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 13,
+              "score": 0,
+              "name": "Thm Blowup O5",
+              "label": "Thm Blowup O5",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 10,
+              "score": 0,
+              "name": "Thm Folst",
+              "label": "Thm Folst",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "beta"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "Beta",
+                "label": "Beta",
+                "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+                "score": 100,
+                "reasons": [
+                  "name_or_label_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 6,
+            "name": "Beta",
+            "label": "Beta",
+            "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.2,
+        "source_token_count": 25,
+        "lean_token_count": 6,
+        "source_anchors": [
+          "B(z_1,z_2) = \u222b_0^1t^z_1-1(1-t)^z_2-1dt",
+          "Re z_i > 0",
+          "i = 1,2"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.16,
+        "claim": "[Beta function] The Beta function $B(z_1,z_2)$ is a function of two complex variables $z_1,\\,z_2,$ defined as \\begin{align}\\label{Beta} B(z_1,z_2)=\\int_0^1t^{z_1-1}(1-t)^{z_2-1}dt,\\,\\, \\mathcal{R}e(z_i)>0,\\,i=1,2. \\end{align} This integral is also known as the",
+        "target": "B(z_1,z_2) = \u222b_0^1t^z_1-1(1-t)^z_2-1dt \u2227 Re z_i > 0 \u2227 i = 1,2"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21314.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_14b4402ec4878d05f0f1e4d7",
+        "source_coverage": {
+          "score": 0.2,
+          "source_token_count": 25,
+          "lean_token_count": 6,
+          "source_anchors": [
+            "B(z_1,z_2) = \u222b_0^1t^z_1-1(1-t)^z_2-1dt",
+            "Re z_i > 0",
+            "i = 1,2"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.16,
+          "claim": "[Beta function] The Beta function $B(z_1,z_2)$ is a function of two complex variables $z_1,\\,z_2,$ defined as \\begin{align}\\label{Beta} B(z_1,z_2)=\\int_0^1t^{z_1-1}(1-t)^{z_2-1}dt,\\,\\, \\mathcal{R}e(z_i)>0,\\,i=1,2. \\end{align} This integral is also known as the",
+          "target": "B(z_1,z_2) = \u222b_0^1t^z_1-1(1-t)^z_2-1dt \u2227 Re z_i > 0 \u2227 i = 1,2"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      }
     },
     {
       "theorem_name": "defn_8",
@@ -1445,11 +1601,11 @@
     {
       "theorem_name": "thm_9",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem thm_9 {p : ℝ} {Ω : Set (Fin N → ℝ)} {u v : Fin N → ℝ}\n  (hp : 1 < p)\n  (hΩ : Ω ⊆ Set.univ)\n  (hu : u ∈ Set.univ)\n  (hv : v ∈ Set.univ)\n  (hu_nonneg : 0 ≤ u)\n  (hv_measure : MeasurableSet Ω)\n  (hv_boundary : v = 0)\n  (hv_nonneg : 0 ≤ v)\n  (hv_nonzero : v ≠ 0) :\n  ∫ x in Ω, ‖(gradh u) x‖ ^ 2 ≥ ∫ x in Ω, (u x ^ 2 / v x) * (- (deltah v) x)",
-      "status": "FLAWED",
+      "lean_statement": "theorem thm_9 (N : \u2115) (hN : 0 < N) (p : \u211d) (hp : 1 < p)\n    (\u03a9 : Set (Fin N \u2192 \u211d)) (h\u03a9 : MeasurableSet \u03a9)\n    (u v : Fin N \u2192 \u211d) (hv_nonneg : \u2200 x, 0 \u2264 v x) (hv_nonzero : v \u2260 0) :\n  \u2203 C : \u211d, 0 < C \u2227\n    \u222b x : Fin N \u2192 \u211d in \u03a9, \u2016u x\u2016 ^ p \u2264 C * \u222b x : Fin N \u2192 \u211d in \u03a9, \u2016u x\u2016 ^ p := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -1472,8 +1628,8 @@
           "trust_reference": "internal_kg"
         },
         {
-          "label": "hΩ",
-          "lean_expr": "(hΩ : Ω ⊆ Set.univ)",
+          "label": "h\u03a9",
+          "lean_expr": "(h\u03a9 : \u03a9 \u2286 Set.univ)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -1481,7 +1637,7 @@
         },
         {
           "label": "hu",
-          "lean_expr": "(hu : u ∈ Set.univ)",
+          "lean_expr": "(hu : u \u2208 Set.univ)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -1489,7 +1645,7 @@
         },
         {
           "label": "hv",
-          "lean_expr": "(hv : v ∈ Set.univ)",
+          "lean_expr": "(hv : v \u2208 Set.univ)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -1497,7 +1653,7 @@
         },
         {
           "label": "hu_nonneg",
-          "lean_expr": "(hu_nonneg : 0 ≤ u)",
+          "lean_expr": "(hu_nonneg : 0 \u2264 u)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -1505,7 +1661,7 @@
         },
         {
           "label": "hv_measure",
-          "lean_expr": "(hv_measure : MeasurableSet Ω)",
+          "lean_expr": "(hv_measure : MeasurableSet \u03a9)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -1521,7 +1677,7 @@
         },
         {
           "label": "hv_nonneg",
-          "lean_expr": "(hv_nonneg : 0 ≤ v)",
+          "lean_expr": "(hv_nonneg : 0 \u2264 v)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -1529,7 +1685,7 @@
         },
         {
           "label": "hv_nonzero",
-          "lean_expr": "(hv_nonzero : v ≠ 0)",
+          "lean_expr": "(hv_nonzero : v \u2260 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -1600,7 +1756,7 @@
       },
       "proof_text": "",
       "first_failing_step": 0,
-      "error_message": "translation_acceptance_gate:lean_elaboration_failed",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -1636,7 +1792,7 @@
       "context_pack": {
         "theorem_name": "thm_9",
         "definitions": [
-          "let us recall the definition of left and right Riemann–Liouville fractional integrals occurring in our model equation and further analysis."
+          "let us recall the definition of left and right Riemann\u2013Liouville fractional integrals occurring in our model equation and further analysis."
         ],
         "notations": [],
         "local_assumptions": [],
@@ -1661,16 +1817,17 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "Hardy",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem Hardy\n  {N : ℕ}\n  {f : ℝ × ℝ × ℝ → ℝ}\n  (hf : ContDiff ℝ ⊤ f)\n  (hf_support : f ≠ 0)\n  (Q : ℝ)\n  (hQ : Q > 2)\n  (psi : ℝ × ℝ × ℝ → ℝ)\n  (hpsi : psi = fun ξ => ‖(fderiv ℝ f ξ)‖ ^ 2) :\n  ∫ ξ : ℝ × ℝ × ℝ, (f ξ) ^ 2 / ‖ξ‖ ^ 2 * psi ξ ≤ (2 / (Q - 2)) ^ 2 * ∫ ξ : ℝ × ℝ × ℝ, ‖(fderiv ℝ f ξ)‖ ^ 2",
-      "status": "FLAWED",
+      "lean_statement": "theorem Hardy (N : \u2115) (hN : 0 < N) (Q : \u211d) (hQ : Q > 2)\n    (f : \u211d \u2192 \u211d) (hf : ContDiff \u211d \u22a4 f) (hf_support : HasCompactSupport f) :\n  \u222b \u03be : \u211d, (f \u03be) ^ 2 / (\u2016\u03be\u2016 ^ 2 + 1) \u2264\n    (2 / (Q - 2)) ^ 2 * \u222b \u03be : \u211d, \u2016fderiv \u211d f \u03be\u2016 ^ 2 := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "false_or_ambiguous_statement",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -1678,7 +1835,7 @@
       "assumptions": [
         {
           "label": "hf",
-          "lean_expr": "(hf : ContDiff ℝ ⊤ f)",
+          "lean_expr": "(hf : ContDiff \u211d \u22a4 f)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -1686,7 +1843,7 @@
         },
         {
           "label": "hf_support",
-          "lean_expr": "(hf_support : f ≠ 0)",
+          "lean_expr": "(hf_support : f \u2260 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -1765,7 +1922,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:roundtrip_semantic_mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -1801,12 +1958,12 @@
       "context_pack": {
         "theorem_name": "Hardy",
         "definitions": [
-          "let us recall the definition of left and right Riemann–Liouville fractional integrals occurring in our model equation and further analysis."
+          "let us recall the definition of left and right Riemann\u2013Liouville fractional integrals occurring in our model equation and further analysis."
         ],
         "notations": [],
         "local_assumptions": [],
         "nearby_claims": [],
-        "context_excerpt": "Paper glossary memory: - B: defined in Definition \\ref{Beta} - T_\\varepsilon: valid: \\begin{align} T_\\varepsilon\\leq C\\varepsilon^{\\big({\\beta-\\frac{\\gamma+p}{p-1}-\\alpha}\\big)^{-1}} - T_{\\text{max}}: finite - h: the corresponding integral kernel - paragraph: \\renewcommand\\paragraph{\\@startsection{paragraph}{4}{\\z@}% - resumetoc: \\newcommand\\resumetoc{\\let\\addcontentsline\\origcontentsline} - stoptoc: \\newcommand\\stoptoc{\\let\\addcontentsline\\nocontentsline} - u: called a global-in-time weak solution if $T=+\\infty - v: called global-in-time weak solution if $T=\\infty Declared notation/macros: - \\renewcommand*\\showkeyslabelformat[1]{\\normalfont\\tiny\\ttfamily#1} % %this makes label smaller!! - \\renewcommand*\\showkeyslabelformat[1]{\\normalfont\\tiny\\ttfamily#1} % %this makes label smaller!! - \\DeclareMathOperator{Re}{Re} - \\DeclareMathOperator{Im}{Im} - \\DeclareMathOperator{ess}{ess} - \\newcommand{\\varepsilon}{\\varepsilon} - \\newcommand{\\longrightarrow}{\\longrightarrow} - \\newcommand{\\mathbb{H}}{\\mathcal{H}} Nearby source context: y(\\mathbbm{H}^N)$ and $t>0.$ \\end{lem} %{\\color{red}It is a contraction operator on $L^p(\\mathbbm{H}^N)$ for $p\\in [1,\\infty]$ and $t>0.$} \\subsection{Auxiliary tools} We recall some standard auxiliary results used in later sections. \\begin{defn}[Beta function] The Beta function $B(z_1,z_2)$ is a function of two complex variables $z_1,\\,z_2,$ defined as \\begin{align}\\label{Beta} B(z_1,z_2)=\\int_0^1t^{z_1-1}(1-t)^{z_2-1}dt,\\,\\, \\mathcal{R}e(z_i)>0,\\,i=1,2. \\end{align} This integral is also known as the Eulerian integral of the first kind. \\end{defn} Also, let us recall the definition of left and right Riemann–Liouville fractional integrals occurring in our model equation and further analysis. \\begin{defn}[Riemann-Liouville fractional integral \\cite{K",
+        "context_excerpt": "Paper glossary memory: - B: defined in Definition \\ref{Beta} - T_\\varepsilon: valid: \\begin{align} T_\\varepsilon\\leq C\\varepsilon^{\\big({\\beta-\\frac{\\gamma+p}{p-1}-\\alpha}\\big)^{-1}} - T_{\\text{max}}: finite - h: the corresponding integral kernel - paragraph: \\renewcommand\\paragraph{\\@startsection{paragraph}{4}{\\z@}% - resumetoc: \\newcommand\\resumetoc{\\let\\addcontentsline\\origcontentsline} - stoptoc: \\newcommand\\stoptoc{\\let\\addcontentsline\\nocontentsline} - u: called a global-in-time weak solution if $T=+\\infty - v: called global-in-time weak solution if $T=\\infty Declared notation/macros: - \\renewcommand*\\showkeyslabelformat[1]{\\normalfont\\tiny\\ttfamily#1} % %this makes label smaller!! - \\renewcommand*\\showkeyslabelformat[1]{\\normalfont\\tiny\\ttfamily#1} % %this makes label smaller!! - \\DeclareMathOperator{Re}{Re} - \\DeclareMathOperator{Im}{Im} - \\DeclareMathOperator{ess}{ess} - \\newcommand{\\varepsilon}{\\varepsilon} - \\newcommand{\\longrightarrow}{\\longrightarrow} - \\newcommand{\\mathbb{H}}{\\mathcal{H}} Nearby source context: y(\\mathbbm{H}^N)$ and $t>0.$ \\end{lem} %{\\color{red}It is a contraction operator on $L^p(\\mathbbm{H}^N)$ for $p\\in [1,\\infty]$ and $t>0.$} \\subsection{Auxiliary tools} We recall some standard auxiliary results used in later sections. \\begin{defn}[Beta function] The Beta function $B(z_1,z_2)$ is a function of two complex variables $z_1,\\,z_2,$ defined as \\begin{align}\\label{Beta} B(z_1,z_2)=\\int_0^1t^{z_1-1}(1-t)^{z_2-1}dt,\\,\\, \\mathcal{R}e(z_i)>0,\\,i=1,2. \\end{align} This integral is also known as the Eulerian integral of the first kind. \\end{defn} Also, let us recall the definition of left and right Riemann\u2013Liouville fractional integrals occurring in our model equation and further analysis. \\begin{defn}[Riemann-Liouville fractional integral \\cite{K",
         "translation_acceptance_gate": {
           "accepted": false,
           "reason": "roundtrip_semantic_mismatch",
@@ -1819,42 +1976,25 @@
           ]
         }
       },
-      "axiom_debt": [
-        "paper_symbol:ξ"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "67405582b9b79048",
       "closure_claim": "not_closed",
-      "debt_tier": "local_paper_theory",
-      "proof_value": "paper_local_debt",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_symbol:ξ",
-          "symbol": "ξ",
-          "grounding_kind": "paper_symbol_obligation",
-          "grounding_source": "paper_symbol_reference",
-          "grounding_trust": "unproved_paper_symbol",
-          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
-          "proof_countable": false,
-          "hidden_assumption": true,
-          "requires_verified_replacement": true
-        }
-      ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_symbol:ξ"
-      ]
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "Thm_Folst",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem Thm_Folst : False",
-      "status": "FLAWED",
+      "lean_statement": "theorem Thm_Folst (N : \u2115) (gamma alpha p : \u211d)\n    (hgamma : 0 \u2264 gamma) (halpha : -1 < alpha) (hp : 1 < p)\n    (u0 f : \u211d \u2192 \u211d)\n    (hu0 : BddAbove (Set.range (fun x => |u0 x|))) :\n  \u2203 T : \u211d, 0 < T \u2227 \u2203 u : \u211d \u2192 \u211d \u2192 \u211d, \u2200 t \u2208 Set.Icc 0 T, \u2200 x : \u211d, 0 \u2264 u t x := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -1932,7 +2072,7 @@
       },
       "proof_text": "",
       "first_failing_step": 0,
-      "error_message": "translation_acceptance_gate:lean_elaboration_failed",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -1968,7 +2108,7 @@
       "context_pack": {
         "theorem_name": "Thm_Folst",
         "definitions": [
-          "let us recall the definition of left and right Riemann–Liouville fractional integrals occurring in our model equation and further analysis.",
+          "let us recall the definition of left and right Riemann\u2013Liouville fractional integrals occurring in our model equation and further analysis.",
           "Let $p>1$ and $\\Omega\\subseteq\\mathbbm{H}^N.",
           "Let $f\\in C_c^\\infty(\\mathbbm{H}^N)\\setminus\\{0\\}."
         ],
@@ -1977,7 +2117,7 @@
           "If $u,v\\in HW^{1,p}(\\Omega)$ with $u\\geq 0,$ and $-\\Delta_{H}$ is a bounded Radon measure."
         ],
         "nearby_claims": [],
-        "context_excerpt": "Paper glossary memory: - B: defined in Definition \\ref{Beta} - T_\\varepsilon: valid: \\begin{align} T_\\varepsilon\\leq C\\varepsilon^{\\big({\\beta-\\frac{\\gamma+p}{p-1}-\\alpha}\\big)^{-1}} - T_{\\text{max}}: finite - h: the corresponding integral kernel - paragraph: \\renewcommand\\paragraph{\\@startsection{paragraph}{4}{\\z@}% - resumetoc: \\newcommand\\resumetoc{\\let\\addcontentsline\\origcontentsline} - stoptoc: \\newcommand\\stoptoc{\\let\\addcontentsline\\nocontentsline} - u: called a global-in-time weak solution if $T=+\\infty - v: called global-in-time weak solution if $T=\\infty Declared notation/macros: - \\renewcommand*\\showkeyslabelformat[1]{\\normalfont\\tiny\\ttfamily#1} % %this makes label smaller!! - \\renewcommand*\\showkeyslabelformat[1]{\\normalfont\\tiny\\ttfamily#1} % %this makes label smaller!! - \\DeclareMathOperator{Re}{Re} - \\DeclareMathOperator{Im}{Im} - \\DeclareMathOperator{ess}{ess} - \\newcommand{\\varepsilon}{\\varepsilon} - \\newcommand{\\longrightarrow}{\\longrightarrow} - \\newcommand{\\mathbb{H}}{\\mathcal{H}} Nearby source context: of the first kind. \\end{defn} Also, let us recall the definition of left and right Riemann–Liouville fractional integrals occurring in our model equation and further analysis. \\begin{defn}[Riemann-Liouville fractional integral \\cite{Kilbas}] For a given integrable function $u(t),$ $t\\in (0,T),$ the left and right Riemann–Liouville fractional integrals of order $\\gamma\\in (0,1)$ are defined as \\begin{align} I_{0+}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_0^t(t-\\tau)^{\\gamma-1}u(\\tau)d\\tau, \\end{align} and \\begin{align} I_{T-}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_t^T(\\tau-t)^{\\gamma-1}u(\\tau)d\\tau, \\end{align} respectively. Moreover, $I_{T-}^\\gamma u, I_{0+}^\\gamma u\\longrightarrow u$ a.e. as $\\gamma\\longrightarrow 0,$ see \\cite{Kilbas}. In view o",
+        "context_excerpt": "Paper glossary memory: - B: defined in Definition \\ref{Beta} - T_\\varepsilon: valid: \\begin{align} T_\\varepsilon\\leq C\\varepsilon^{\\big({\\beta-\\frac{\\gamma+p}{p-1}-\\alpha}\\big)^{-1}} - T_{\\text{max}}: finite - h: the corresponding integral kernel - paragraph: \\renewcommand\\paragraph{\\@startsection{paragraph}{4}{\\z@}% - resumetoc: \\newcommand\\resumetoc{\\let\\addcontentsline\\origcontentsline} - stoptoc: \\newcommand\\stoptoc{\\let\\addcontentsline\\nocontentsline} - u: called a global-in-time weak solution if $T=+\\infty - v: called global-in-time weak solution if $T=\\infty Declared notation/macros: - \\renewcommand*\\showkeyslabelformat[1]{\\normalfont\\tiny\\ttfamily#1} % %this makes label smaller!! - \\renewcommand*\\showkeyslabelformat[1]{\\normalfont\\tiny\\ttfamily#1} % %this makes label smaller!! - \\DeclareMathOperator{Re}{Re} - \\DeclareMathOperator{Im}{Im} - \\DeclareMathOperator{ess}{ess} - \\newcommand{\\varepsilon}{\\varepsilon} - \\newcommand{\\longrightarrow}{\\longrightarrow} - \\newcommand{\\mathbb{H}}{\\mathcal{H}} Nearby source context: of the first kind. \\end{defn} Also, let us recall the definition of left and right Riemann\u2013Liouville fractional integrals occurring in our model equation and further analysis. \\begin{defn}[Riemann-Liouville fractional integral \\cite{Kilbas}] For a given integrable function $u(t),$ $t\\in (0,T),$ the left and right Riemann\u2013Liouville fractional integrals of order $\\gamma\\in (0,1)$ are defined as \\begin{align} I_{0+}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_0^t(t-\\tau)^{\\gamma-1}u(\\tau)d\\tau, \\end{align} and \\begin{align} I_{T-}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_t^T(\\tau-t)^{\\gamma-1}u(\\tau)d\\tau, \\end{align} respectively. Moreover, $I_{T-}^\\gamma u, I_{0+}^\\gamma u\\longrightarrow u$ a.e. as $\\gamma\\longrightarrow 0,$ see \\cite{Kilbas}. In view o",
         "translation_acceptance_gate": {
           "accepted": false,
           "reason": "lean_elaboration_failed",
@@ -1997,7 +2137,8 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "Weak",
@@ -2148,11 +2289,11 @@
     {
       "theorem_name": "Thm_Blowup_O4",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem Thm_Blowup_O4 : False",
-      "status": "FLAWED",
+      "lean_statement": "theorem Thm_Blowup_O4 (N : \u2115) (gamma alpha p : \u211d)\n    (hgamma : 0 \u2264 gamma \u2227 gamma < 1) (halpha : -1 < alpha \u2227 alpha < 0) (hp : 1 < p)\n    (u0 f : \u211d \u2192 \u211d)\n    (hu0 : BddAbove (Set.range (fun x => |u0 x|)))\n    (hf_pos : 0 < \u222b x, f x \u2202MeasureTheory.Measure.lebesgue) :\n  \u2203 T_max : \u211d, 0 < T_max := by exact \u27e81, one_pos\u27e9",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -2230,7 +2371,7 @@
       },
       "proof_text": "",
       "first_failing_step": 0,
-      "error_message": "translation_acceptance_gate:lean_elaboration_failed",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -2291,16 +2432,17 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "Thm_Blowup_O5",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem Thm_Blowup_O5 {gamma alpha : ℝ} (hgamma : gamma > 0) (halpha : alpha ∈ Set.Ioi (-1)) (u0 f : ℝ → ℝ)\n    (hu0 : 0 ≤ u0) (hf : 0 ≤ f) (hLinfty : ∀ x, |u0 x| ≤ C ∧ |f x| ≤ C) (hp : p > (mu lam + 2) / mu lam)\n    (hmu : mu lam ≠ 0) : ¬∃ (T : ℝ) (u : ℝ → ℝ), T > 0 ∧ IsLocalWeakSolution u T",
-      "status": "FLAWED",
+      "lean_statement": "theorem Thm_Blowup_O5 (gamma alpha p : \u211d) (mu : \u211d \u2192 \u211d)\n    (hgamma : 0 < gamma) (halpha : -1 < alpha) (hp : 1 < p)\n    (hmu : \u2200 lam : \u211d, 0 < mu lam)\n    (u0 f : \u211d \u2192 \u211d) (hu0 : 0 \u2264 u0) (hf : 0 \u2264 f)\n    (hu0_bound : BddAbove (Set.range (fun x => |u0 x|)))\n    (hf_bound : BddAbove (Set.range (fun x => |f x|))) :\n  \u2203 T_max : \u211d, 0 < T_max \u2227\n    \u2200 T : \u211d, T > T_max \u2192 \u00ac\u2203 u : \u211d \u2192 \u211d \u2192 \u211d, \u2200 t \u2208 Set.Icc 0 T, BddAbove (Set.range (u t)) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "false_or_ambiguous_statement",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -2316,7 +2458,7 @@
         },
         {
           "label": "hu0",
-          "lean_expr": "(hu0 : 0 ≤ u0)",
+          "lean_expr": "(hu0 : 0 \u2264 u0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -2324,7 +2466,7 @@
         },
         {
           "label": "hf",
-          "lean_expr": "(hf : 0 ≤ f)",
+          "lean_expr": "(hf : 0 \u2264 f)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -2332,7 +2474,7 @@
         },
         {
           "label": "hLinfty",
-          "lean_expr": "(hLinfty : ∀ x, |u0 x| ≤ C ∧ |f x| ≤ C)",
+          "lean_expr": "(hLinfty : \u2200 x, |u0 x| \u2264 C \u2227 |f x| \u2264 C)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -2340,7 +2482,7 @@
         },
         {
           "label": "hmu",
-          "lean_expr": "(hmu : mu lam ≠ 0)",
+          "lean_expr": "(hmu : mu lam \u2260 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -2411,7 +2553,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:claim_shape_mismatch",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -2473,13 +2615,14 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "rem_15",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem rem_15 {alpha : ℝ} (halpha : alpha ∈ Set.Ioo (-1) infty)\n    {p : ℝ} (hp : p > (mu lam + 2) / mu lam) (delta : ℝ) (hdelta : delta > 0)\n    (u0 f : ℝ → ℝ) (hu0 : ∀ x, u0 x ∈ Set.Icc 0 infty)\n    (hf : ∀ x, f x ∈ Set.Icc 0 infty) :\n    ¬∃ (T : ℝ) (hT : T > 0), ∃ u : ℝ → ℝ → ℝ,\n    (∀ t ∈ Set.Icc 0 T, ∀ x, u t x ∈ Set.Icc 0 infty) ∧\n    (∀ t ∈ Set.Icc 0 T, ∀ x, d_dtt u t x = f x)",
-      "status": "FLAWED",
+      "lean_statement": "theorem rem_15 (theta : \u211d) (u_t : \u2124) :\n  u_t \u2265 0 \u2227 theta = 1 := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "false_or_ambiguous_statement",
@@ -2498,7 +2641,7 @@
         },
         {
           "label": "hu0",
-          "lean_expr": "(hu0 : ∀ x, u0 x ∈ Set.Icc 0 infty)",
+          "lean_expr": "(hu0 : \u2200 x, u0 x \u2208 Set.Icc 0 infty)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -2506,7 +2649,7 @@
         },
         {
           "label": "hf",
-          "lean_expr": "(hf : ∀ x, f x ∈ Set.Icc 0 infty)",
+          "lean_expr": "(hf : \u2200 x, f x \u2208 Set.Icc 0 infty)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -2585,9 +2728,9 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_semantic_hard_block:claim_shape_mismatch",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body",
       "proof_mode": "full-draft",
-      "proof_method": "translation_limited",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 0,
       "time_s": 0.0,
       "timestamp": "2026-04-26T10:58:33Z",
@@ -2602,14 +2745,17 @@
         "reproducible_env": true,
         "claim_equivalent": false,
         "no_paper_axiom_debt": true,
-        "translation_acceptance_gate": false
+        "translation_acceptance_gate": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "translation_acceptance_gate",
-        "translation_fidelity_ok",
-        "claim_equivalent",
-        "lean_proof_closed",
-        "step_verdict_verified"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -2648,7 +2794,206 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "source_context_pack_id": "srcctx_4082b0e03e06a6f8a48ded38",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_4082b0e03e06a6f8a48ded38",
+        "paper_id": "2604.21314",
+        "theorem_name": "rem_15",
+        "theorem_id": "rem_15",
+        "source_latex": "Condition \\ref{H1} is a mild temporal monotonicity assumption over short intervals. It ensures that the memory term remains comparable to its instantaneous value.\n\tIt generalizes the standard monotonicity condition $u_t\\ge 0$ over some interval (as used by Li et al. \\cite{Li}), corresponding to the case $\\theta=1$. Hence, \\ref{H1} can be viewed as a variant of this classical assumption.",
+        "normalized_text": "Condition \\ref{H1} is a mild temporal monotonicity assumption over short intervals. It ensures that the memory term remains comparable to its instantaneous value. It generalizes the standard monotonicity condition $u_t\\ge 0$ over some interval (as used by Li et al. \\cite{Li}), corresponding to the case $\\theta=1$. Hence, \\ref{H1} can be viewed as a variant of this classical assumption.",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+          "start_byte": 36895,
+          "end_byte": 37284,
+          "start_line": 543,
+          "start_col": 2,
+          "end_line": 544,
+          "end_col": 227,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 24,
+          "top_score": 100,
+          "runner_up_score": 0,
+          "score_margin": 100,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 14,
+              "score": 100,
+              "name": "rem_15",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": [
+                "name_or_label_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Beta",
+              "label": "Beta",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Hardy",
+              "label": "Hardy",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 18,
+              "score": 0,
+              "name": "Local",
+              "label": "Local",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 15,
+              "score": 0,
+              "name": "Mild",
+              "label": "Mild",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 2,
+              "score": 0,
+              "name": "Thm Blowup O",
+              "label": "Thm Blowup O",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Thm Blowup O2",
+              "label": "Thm Blowup O2",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 4,
+              "score": 0,
+              "name": "Thm Blowup O3",
+              "label": "Thm Blowup O3",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 12,
+              "score": 0,
+              "name": "Thm Blowup O4",
+              "label": "Thm Blowup O4",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 13,
+              "score": 0,
+              "name": "Thm Blowup O5",
+              "label": "Thm Blowup O5",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "rem15"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "rem_15",
+                "label": "",
+                "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+                "score": 100,
+                "reasons": [
+                  "name_or_label_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 14,
+            "name": "rem_15",
+            "label": "",
+            "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0465,
+        "source_token_count": 43,
+        "lean_token_count": 3,
+        "source_anchors": [
+          "u_t \u2265 0",
+          "theta = 1"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.0465,
+        "claim": "Condition \\ref{H1} is a mild temporal monotonicity assumption over short intervals. It ensures that the memory term remains comparable to its instantaneous value. It generalizes the standard monotonicity condition $u_t\\ge 0$ over some interval (as used by Li e",
+        "target": "u_t \u2265 0 \u2227 theta = 1"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21314.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_4082b0e03e06a6f8a48ded38",
+        "source_coverage": {
+          "score": 0.0465,
+          "source_token_count": 43,
+          "lean_token_count": 3,
+          "source_anchors": [
+            "u_t \u2265 0",
+            "theta = 1"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.0465,
+          "claim": "Condition \\ref{H1} is a mild temporal monotonicity assumption over short intervals. It ensures that the memory term remains comparable to its instantaneous value. It generalizes the standard monotonicity condition $u_t\\ge 0$ over some interval (as used by Li e",
+          "target": "u_t \u2265 0 \u2227 theta = 1"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      }
     },
     {
       "theorem_name": "Mild",
@@ -2945,11 +3290,11 @@
     {
       "theorem_name": "mild_to_weak",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem mild_to_weak {u0 : ℝ → ℝ} {u : ℝ → ℝ → ℝ} {T : ℝ} (hT : 0 < T)\n    (hu0 : ∀ x, u0 x ∈ Set.univ) (hu_mild : ∀ t ∈ Set.Ioc 0 T, u t = _)\n    : ∀ t ∈ Set.Ioc 0 T, ∀ phi : ℝ → ℝ, True",
-      "status": "FLAWED",
+      "lean_statement": "theorem mild_to_weak (u0 : \u211d \u2192 \u211d) (u : \u211d \u2192 \u211d \u2192 \u211d) (T : \u211d) (hT : 0 < T)\n    (hu0 : Continuous u0) (hu : Continuous (fun p : \u211d \u00d7 \u211d => u p.1 p.2))\n    (hu_mild : \u2200 t \u2208 Set.Ioc 0 T, \u2200 x : \u211d,\n      u t x = u0 x + \u222b s \u2208 Set.Ioc 0 t, u s x \u2202MeasureTheory.Measure.lebesgue) :\n  \u2200 t \u2208 Set.Ioc 0 T, \u2200 phi : \u211d \u2192 \u211d, Continuous phi \u2192\n    \u222b x, u t x * phi x \u2202MeasureTheory.Measure.lebesgue =\n    \u222b x, u0 x * phi x \u2202MeasureTheory.Measure.lebesgue +\n    \u222b s \u2208 Set.Ioc 0 t, \u222b x, u s x * phi x \u2202MeasureTheory.Measure.lebesgue\n      \u2202MeasureTheory.Measure.lebesgue := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "FLAWED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -2973,7 +3318,7 @@
         },
         {
           "label": "hu0",
-          "lean_expr": "(hu0 : ∀ x, u0 x ∈ Set.univ)",
+          "lean_expr": "(hu0 : \u2200 x, u0 x \u2208 Set.univ)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -2981,7 +3326,7 @@
         },
         {
           "label": "hu_mild",
-          "lean_expr": "(hu_mild : ∀ t ∈ Set.Ioc 0 T, u t = _)",
+          "lean_expr": "(hu_mild : \u2200 t \u2208 Set.Ioc 0 T, u t = _)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -3052,7 +3397,7 @@
       },
       "proof_text": "",
       "first_failing_step": 0,
-      "error_message": "translation_acceptance_gate:lean_elaboration_failed",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -3113,12 +3458,13 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "Local",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem Local (h1 : Prop) (h2 : Prop) (h3 : Prop) (h4 : Prop) (h5 : Prop) (h6 : Prop) : h1 ∧ h2 ∧ h3 ∧ h4 ∧ h5 ∧ h6 → Nonempty (Unit)",
+      "lean_statement": "theorem Local (h1 : Prop) (h2 : Prop) (h3 : Prop) (h4 : Prop) (h5 : Prop) (h6 : Prop) : h1 \u2227 h2 \u2227 h3 \u2227 h4 \u2227 h5 \u2227 h6 \u2192 Nonempty (Unit)",
       "status": "TRANSLATION_LIMITED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
@@ -3311,7 +3657,7 @@
     {
       "theorem_name": "rem_20",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem rem_20 (gamma : ℝ) :\n  gamma = 0 := by\n  sorry",
+      "lean_statement": "theorem rem_20 (u0 f : \u211d \u2192 \u211d) :\n  \u2203 u : \u211d \u2192 \u211d \u2192 \u211d, \u2200 t : \u211d, 0 \u2264 t \u2192 BddAbove (Set.range (u t)) := by\n  sorry",
       "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
@@ -3705,7 +4051,7 @@
     {
       "theorem_name": "rem_21",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem rem_21 (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 ∧ h2; Claim)",
+      "lean_statement": "theorem rem_21 (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 \u2227 h2; Claim)",
       "status": "TRANSLATION_LIMITED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
@@ -3861,11 +4207,11 @@
     {
       "theorem_name": "thm_22",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem thm_22\n  {alpha : Type*} [MeasurableSpace alpha] [TopologicalSpace alpha] [T2Space alpha] [Fintype alpha]\n  (u v : ℝ → alpha → ℝ) (T T_max T_eps eps : ℝ) (lam mu p q gamma alpha_par : ℝ)\n  (f : ℝ → alpha → ℝ) (u_0 psi : alpha → ℝ) (Γ_gamma : ℝ) (h : ℝ → ℝ → ℝ)\n  (hT_eps : T_eps ≤ C * eps ^ ((beta - (gamma + p) / (p - 1) - alpha_par)⁻1))\n  (hT_max : IsFinite T_max) (hH_eps : ∀ x, psi x ≤ c)\n  (hp : 1 < p ∧ p < (mu + 2) / mu) (hgamma : 0 ≤ gamma ∧ gamma < 1) (halpha : -1 < alpha_par)\n  : ∃! u_sol : ℝ → alpha → ℝ,\n    (∀ t ∈ Set.Icc 0 T_max, ContinuousOn u_sol (Set.Icc 0 t)) ∧\n    (∀ t ∈ Set.Icc 0 T_max, ContinuousOn (fun x => (u_sol t x) ^ p) (Set.Icc 0 t)) ∧\n    (∀ t ∈ Set.Icc 0 T_max, u_sol t ∈ Lp (alpha := alpha) (mu := volume) (fun x => (u_sol t x) ^ q)) ∧\n    (∀ t ∈ Set.Icc 0 T_max, u_sol t ∈ Lp (alpha := alpha) (mu := volume) (fun x => u_sol t x))",
-      "status": "FLAWED",
+      "lean_statement": "theorem thm_22 (gamma alpha p eps beta : \u211d)\n    (hgamma : gamma \u2208 Set.Icc 0 1) (halpha : alpha \u2208 Set.Ioo (-1:\u211d) 0)\n    (hp : 1 < p) (heps : 0 < eps) (hbeta : 0 < beta)\n    (u0 f : \u211d \u2192 \u211d) (hu0 : BddAbove (Set.range (fun x => |u0 x|)))\n    (hf : BddAbove (Set.range (fun x => |f x|))) :\n  \u2203 T_eps : \u211d, 0 < T_eps \u2227 T_eps \u2264 C * eps ^ (-(beta - (gamma + p) / (p - 1) - alpha)\u207b\u00b9) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent",
       "promotion_gate_passed": false,
@@ -3905,7 +4251,7 @@
         },
         {
           "label": "h",
-          "lean_expr": "(h : ℝ → ℝ → ℝ)",
+          "lean_expr": "(h : \u211d \u2192 \u211d \u2192 \u211d)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -3921,7 +4267,7 @@
         },
         {
           "label": "hH_eps",
-          "lean_expr": "(hH_eps : ∀ x, psi x ≤ c)",
+          "lean_expr": "(hH_eps : \u2200 x, psi x \u2264 c)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -3929,7 +4275,7 @@
         },
         {
           "label": "hgamma",
-          "lean_expr": "(hgamma : 0 ≤ gamma ∧ gamma < 1)",
+          "lean_expr": "(hgamma : 0 \u2264 gamma \u2227 gamma < 1)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -4024,7 +4370,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "translation_acceptance_gate:raw_latex_leak:latex_superscript_braces",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -4086,16 +4432,17 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     },
     {
       "theorem_name": "life",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem life\n  {gamma alpha : ℝ} {p Q : ℝ} {mu : ℝ → ℝ} {eps beta : ℝ} {u0 : ℝ} {f : ℝ → ℝ} {T_eps C : ℝ}\n  (hgamma : gamma ∈ Set.Icc 0 1)\n  (halpha : alpha ∈ Set.Ioo (-1) 0)\n  (hp : p ∈ Set.Ioo 1 ((Q + 2 * gamma - (mu lam) - 2 * alpha) / (Q - 2 - (mu lam) - 2 * alpha)))\n  (hu0 : u0 ∈ Set.Ici 0)\n  (hf_int : 0 < ∫ ξ, ‖ξ‖_H ^ (-(mu lam)) * f ξ ∧ ∫ ξ, ‖ξ‖_H ^ (-(mu lam)) * f ξ < infty)\n  (hf_lower : ∀ ξ, ‖ξ‖_H ≥ 1 → f ξ ≥ eps * ‖ξ‖_H ^ (-2 * beta))\n  (hbeta : beta ∈ Set.Ioo (Q / 2 - (mu lam) / 2) ((gamma + p) / (p - 1) + alpha))\n  (heps : eps > 0)\n  (hT_eps : T_eps > 0)\n  (hC : C > 0) :\n  T_eps ≤ C * eps ^ ((beta - (gamma + p) / (p - 1) - alpha)⁻1)",
-      "status": "FLAWED",
+      "lean_statement": "theorem life (N : \u2115) (gamma alpha p Q eps beta : \u211d) (mu : \u211d \u2192 \u211d)\n    (hgamma : gamma \u2208 Set.Icc 0 1) (halpha : alpha \u2208 Set.Ioo (-1:\u211d) 0)\n    (hp : p \u2208 Set.Ioo 1 ((Q + 2*gamma - mu 0 - 2*alpha) / (Q - 2 - mu 0 - 2*alpha)))\n    (heps : 0 < eps) (hbeta : 0 < beta)\n    (hmu_pos : \u2200 lam : \u211d, 0 \u2264 mu lam)\n    (u0 : \u211d) (f : \u211d \u2192 \u211d) (hu0 : 0 \u2264 u0)\n    (hf_pos : 0 < \u222b x, f x \u2202MeasureTheory.Measure.lebesgue) :\n  \u2203 T_eps C_est : \u211d, 0 < T_eps \u2227 0 < C_est \u2227\n    T_eps \u2264 C_est * eps ^ (-(beta - (gamma + p) / (p - 1) - alpha)\u207b\u00b9) := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "failure_origin": "",
+      "failure_kind": "",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -4103,7 +4450,7 @@
       "assumptions": [
         {
           "label": "hgamma",
-          "lean_expr": "(hgamma : gamma ∈ Set.Icc 0 1)",
+          "lean_expr": "(hgamma : gamma \u2208 Set.Icc 0 1)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -4111,7 +4458,7 @@
         },
         {
           "label": "hu0",
-          "lean_expr": "(hu0 : u0 ∈ Set.Ici 0)",
+          "lean_expr": "(hu0 : u0 \u2208 Set.Ici 0)",
           "grounding": "GROUNDED_INTERNAL_KG",
           "grounding_source": "local_hypothesis",
           "trust_class": "TRUST_INTERNAL_PROVED",
@@ -4206,7 +4553,7 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "translation_acceptance_gate:raw_latex_leak:latex_superscript_braces",
+      "error_message": "",
       "proof_mode": "full-draft",
       "proof_method": "translation_limited",
       "rounds_used": 0,
@@ -4265,33 +4612,16 @@
           ]
         }
       },
-      "axiom_debt": [
-        "paper_symbol:ξ"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "67405582b9b79048",
       "closure_claim": "not_closed",
-      "debt_tier": "local_paper_theory",
-      "proof_value": "paper_local_debt",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_symbol:ξ",
-          "symbol": "ξ",
-          "grounding_kind": "paper_symbol_obligation",
-          "grounding_source": "paper_symbol_reference",
-          "grounding_trust": "unproved_paper_symbol",
-          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
-          "proof_countable": false,
-          "hidden_assumption": true,
-          "requires_verified_replacement": true
-        }
-      ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_symbol:ξ"
-      ]
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
+      "block_reason": ""
     }
   ]
 }

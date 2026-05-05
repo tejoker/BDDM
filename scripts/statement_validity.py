@@ -123,19 +123,56 @@ def translation_limited_reason(lean_statement: str) -> str:
     target = decl_target(lean_statement)
     if not stmt:
         return "empty_translation"
+    if "statement_repair_needed" in stmt.lower() or "schema_unavailable" in stmt.lower():
+        return "statement_repair_needed_marker"
     if re.search(r"\(p_c\d+\s*:\s*Prop\)\s*\(h_c\d+\s*:\s*p_c\d+\)", stmt):
         return "schema_placeholder_identity"
     if re.search(r"\(p_c\d+\s*:\s*Prop\)", stmt):
         return "prop_slot_placeholder"
     if re.search(r"\b(?:schema_translation|schema_fallback|literal_schema_translation)\b", stmt):
         return "schema_translation_placeholder"
-    if target in {"True", "False", "Nonempty Unit", "Nonempty (Unit)"}:
+    if target in {"True", "Nonempty Unit", "Nonempty (Unit)"}:
         return "trivial_target"
     if re.fullmatch(r"\(?\s*0\s*:\s*ℕ\s*\)?\s*=\s*0", target):
         return "trivial_nat0eq0_target"
     if re.search(r"∃\s+([A-Za-z_][A-Za-z0-9_']*)\s*:\s*[^,]+,\s*\1\s*=\s*\1", stmt):
         return "trivial_exists_self_equality_target"
     return ""
+
+
+def _source_claim_is_contradiction(row: dict[str, Any]) -> bool:
+    source = " ".join(
+        str(row.get(key, "") or "")
+        for key in ("source_latex", "normalized_text", "original_latex_theorem")
+    ).lower()
+    if not source.strip():
+        return False
+    # Be deliberately strict here.  In mathematical prose, phrases like
+    # "does not exist" or "no such object" usually formalize as a negated
+    # existential, not as the proposition `False`.
+    contradiction_patterns = (
+        r"\bimplies?\s+(?:a\s+)?contradiction\b",
+        r"\bleads?\s+to\s+(?:a\s+)?contradiction\b",
+        r"\bderive(?:s|d)?\s+(?:a\s+)?contradiction\b",
+        r"\bis\s+(?:a\s+)?contradiction\b",
+        r"\bcontradictory\b",
+        r"\babsurd(?:ity)?\b",
+        r"\bfalse\s+proposition\b",
+        r"\bempty\s+proposition\b",
+        r"\\bot\b",
+    )
+    return any(re.search(pattern, source) for pattern in contradiction_patterns)
+
+
+def false_target_reason(row: dict[str, Any]) -> str:
+    """Return a blocker for generated `: False` statements unless source demands it."""
+    statement = str(row.get("lean_statement", "") or "")
+    target = _norm(decl_target(statement))
+    if target != "False":
+        return ""
+    if _source_claim_is_contradiction(row):
+        return ""
+    return "false_target_without_source_contradiction"
 
 
 def ill_typed_artifact_reason(lean_statement: str) -> str:
@@ -314,6 +351,11 @@ def classify_statement(row: dict[str, Any]) -> StatementValidity:
         reasons.append(tl or "translation_limited_status")
         blocker = "translation_limited"
         return validity(False, blocker, reasons)
+
+    false_target = false_target_reason(row)
+    if false_target:
+        blocker = "bad_translation_artifact"
+        return validity(False, blocker, [false_target])
 
     semantic = semantic_hard_reason(row)
     weakened = weakened_statement_reason(statement)
@@ -551,8 +593,20 @@ def statement_fidelity_gate(row: dict[str, Any]) -> StatementFidelityGate:
     if not decl_target(validity.lean_statement):
         blockers.append("bad_theorem_shape:missing_target")
     blockers.extend(_elaboration_blockers(row))
+    reviewed_ok, review_source, review_blockers = _reviewed_exact(row)
 
     if not validity.valid_for_proof:
+        if validity.primary_blocker == "claim_review_pending" and reviewed_ok and not blockers:
+            return StatementFidelityGate(
+                theorem_name=validity.theorem_name,
+                proof_eligible=True,
+                statement_fidelity_verdict="reviewed_exact",
+                statement_fidelity_blockers=[],
+                statement_fidelity_source=review_source if review_source in _RELEASE_REVIEW_SOURCES else "hybrid",
+                lean_statement=validity.lean_statement,
+                validity_primary_blocker=validity.primary_blocker,
+                next_action="Proceed to proof search.",
+            )
         blockers.append(f"statement_validity:{validity.primary_blocker}")
         blockers.extend(f"statement_validity_reason:{r}" for r in validity.reasons)
         repairable = validity.primary_blocker in {
@@ -584,7 +638,6 @@ def statement_fidelity_gate(row: dict[str, Any]) -> StatementFidelityGate:
             next_action="Repair statement/elaboration, then re-run fidelity validation before proof search.",
         )
 
-    reviewed_ok, review_source, review_blockers = _reviewed_exact(row)
     if reviewed_ok:
         return StatementFidelityGate(
             theorem_name=validity.theorem_name,

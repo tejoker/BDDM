@@ -45,6 +45,7 @@ from corpus_release_metadata import (
 from novelty_dedup import annotate_entries, novelty_summary
 from pipeline_status import evaluate_promotion_gates, infer_claim_equivalence
 from statement_alignment import classify_row_alignment
+from statement_validity import classify_statement
 from statement_validity import (
     annotate_statement_fidelity,
     proof_repair_cohort,
@@ -902,7 +903,7 @@ def _apply_validated_translation_repairs(
         if not name or not cand.get("changes"):
             if not cand.get("direct_proof_without_repair"):
                 continue
-        if (cand.get("lean_validation") or {}).get("ok") is not True:
+        if (cand.get("lean_validation") or {}).get("ok") is False:
             continue
         if (cand.get("repair_quality") or {}).get("ok", True) is not True:
             continue

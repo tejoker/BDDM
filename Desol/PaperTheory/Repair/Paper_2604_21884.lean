@@ -10,9 +10,12 @@ open scoped BigOperators
 
 namespace Paper_2604_21884_Repair
 
-
+-- symbol: h_equation_more_precisely_every_2 -> h_equation_more_precisely_every_2 (paper_scalar_or_distribution)
+-- symbol: h_pathwise_centered_fluctuations_pathwise_1 -> h_pathwise_centered_fluctuations_pathwise_1 (paper_scalar_or_distribution)
 
 -- Domain axioms / paper-local symbols. These are explicit formalization debt.
--- No additional repair symbols were needed.
+def h_equation_more_precisely_every_2 : ℝ := 0
+
+def h_pathwise_centered_fluctuations_pathwise_1 : ℝ := 0
 
 end Paper_2604_21884_Repair

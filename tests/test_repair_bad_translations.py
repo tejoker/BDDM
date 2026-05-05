@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import repair_bad_translations as rbt
 from repair_bad_translations import (
+    SymbolDecl,
     _extract_decl_blocks,
     _is_schema_placeholder_decl,
     _direct_tactic_for_decl,
@@ -14,6 +16,7 @@ from repair_bad_translations import (
     infer_symbol_table,
     repair_statement_with_symbols,
     write_retry_lean_file,
+    write_symbol_theory,
 )
 
 
@@ -403,6 +406,91 @@ def test_source_backed_repair_payload_records_reviewable_context(tmp_path: Path)
     assert cand["source_coverage"]["score"] > 0
     assert cand["repair_quality"]["ok"] is True
     assert cand["lean_validation"]["error"] == "validation_skipped"
+
+
+def test_source_backed_repair_payload_falls_back_after_malformed_lean_validation(monkeypatch, tmp_path: Path) -> None:
+    project = tmp_path / "proj"
+    project.mkdir()
+    validation_calls: list[str] = []
+
+    monkeypatch.setattr(
+        rbt,
+        "build_typed_statement_translation",
+        lambda **_kwargs: {
+            "lean_declaration": "theorem hard_formula :\n  Delta commutator bound := by\n  sorry",
+            "conclusion": "Delta commutator bound",
+            "claim_shape": "raw_formula",
+        },
+    )
+    monkeypatch.setattr(rbt, "build_repair_theory", lambda *_args, **_kwargs: {"ok": True})
+
+    def fake_validate(**kwargs: object) -> dict[str, object]:
+        decl = str(kwargs.get("decl", "") or "")
+        validation_calls.append(decl)
+        if "SourceStatement" in decl:
+            return {"ok": True, "error": ""}
+        return {"ok": False, "error": "unexpected token ':'; expected command"}
+
+    monkeypatch.setattr(rbt, "validate_repair_candidate", fake_validate)
+
+    payload = build_source_backed_repair_payload(
+        paper_id="2604.21583",
+        project_root=project,
+        out_dir=tmp_path / "source_backed_fallback",
+        validate_candidates=True,
+        source_contexts=[
+            {
+                "theorem_name": "hard_formula",
+                "theorem_id": "hard_formula",
+                "source_latex": r"Let $\Delta_{p,q,k}$ be the commutator bound from equation (4.1).",
+                "source_span_quality": "extractor_native",
+                "source_match": {"match_status": "matched"},
+                "source_span": {"source_file": "paper.tex", "start_byte": 0, "end_byte": 80},
+                "lean_statement": "theorem hard_formula : True := by\n  trivial",
+            }
+        ],
+    )
+
+    cand = payload["repair_candidates"][0]
+    assert cand["lean_validation"]["ok"] is True
+    assert cand["repair_quality"]["ok"] is True
+    assert "fallback_after_lean_validation_failure" in cand["changes"]
+    assert "HardFormulaSourceStatement" in cand["repaired_decl"]
+    assert cand["paper_theory_debt"] == ["paper_definition_stub:HardFormulaSourceStatement"]
+    assert len(validation_calls) == 2
+
+
+def test_write_symbol_theory_disables_unbuildable_base_import(monkeypatch, tmp_path: Path) -> None:
+    project = tmp_path / "proj"
+    base = project / "Desol" / "PaperTheory" / "Paper_2604_21583.lean"
+    base.parent.mkdir(parents=True)
+    base.write_text("def Broken : Prop := True\nexport Paper_2604_21583 (Missing)\n", encoding="utf-8")
+
+    class Proc:
+        returncode = 1
+        stdout = ""
+        stderr = "Unknown constant `Paper_2604_21583.Missing`"
+
+    monkeypatch.setattr(rbt.subprocess, "run", lambda *_args, **_kwargs: Proc())
+
+    theory = write_symbol_theory(
+        project_root=project,
+        paper_id="2604.21583",
+        symbols=[
+            SymbolDecl(
+                latex="source",
+                lean="HardFormulaSourceStatement",
+                kind="source_statement_review_stub",
+                declaration="def HardFormulaSourceStatement : Prop := True",
+                reason="test",
+            )
+        ],
+    )
+
+    text = theory.read_text(encoding="utf-8")
+    assert "import Desol.PaperTheory.Paper_2604_21583" not in text
+    assert "base paper theory import: disabled" in text
+    assert "def HardFormulaSourceStatement : Prop := True" in text
 
 
 def test_source_backed_repair_payload_blocks_ambiguous_source_context(tmp_path: Path) -> None:

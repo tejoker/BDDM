@@ -12,6 +12,7 @@ from typing import Any
 
 from build_statement_fidelity_queue import fidelity_review_reasons
 from export_corpus import DEFAULT_EVIDENCE_DIR, DEFAULT_LEDGER_DIR, DEFAULT_REPORT_DIR, build_corpus_rows
+from statement_validity import false_target_reason
 
 
 DEFAULT_OUT_JSONL = Path("output/corpus/statement_review_batch.jsonl")
@@ -60,8 +61,25 @@ def _source_match(row: dict[str, Any]) -> dict[str, Any]:
 
 def _placeholder_statement(row: dict[str, Any]) -> bool:
     statement = " ".join(str(row.get("lean_statement", "") or "").split())
-    patterns = ("∃ x : ℝ, x = x", "x = x", ": True", "let Claim : Prop :=", "PaperClaim")
+    patterns = (
+        "∃ x : ℝ, x = x",
+        "x = x",
+        ": True",
+        "let Claim : Prop :=",
+        "PaperClaim",
+    )
+    if "p_c1 : Prop" in statement and "h_c1 : p_c1" in statement:
+        return True
     return any(pattern in statement for pattern in patterns)
+
+
+def _raw_latex_statement(row: dict[str, Any]) -> bool:
+    statement = str(row.get("lean_statement", "") or "")
+    return bool(
+        "\\" in statement
+        or "$" in statement
+        or any(token in statement for token in ("\\frac", "\\sum", "\\int", "\\mathbb", "\\operatorname"))
+    )
 
 
 def review_batch_exclusion_reasons(row: dict[str, Any]) -> list[str]:
@@ -76,10 +94,15 @@ def review_batch_exclusion_reasons(row: dict[str, Any]) -> list[str]:
         reasons.append("source_latex_missing")
     if not str(row.get("lean_statement", "")).strip():
         reasons.append("lean_statement_missing")
+    false_target = false_target_reason(row)
+    if false_target:
+        reasons.append(false_target)
     if str(row.get("status", "")) in {"FLAWED", "TRANSLATION_LIMITED"}:
         reasons.append(f"status_needs_statement_repair:{row.get('status')}")
     if _placeholder_statement(row):
         reasons.append("placeholder_or_trivial_lean_statement")
+    if _raw_latex_statement(row):
+        reasons.append("raw_latex_lean_statement")
     return list(dict.fromkeys(reasons))
 
 

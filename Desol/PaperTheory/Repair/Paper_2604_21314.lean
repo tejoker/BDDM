@@ -10,30 +10,36 @@ open scoped BigOperators
 
 namespace Paper_2604_21314_Repair
 
--- symbol: C_T -> C_T (time_continuity_space)
 -- symbol: infty -> infty (infinity_symbol_placeholder)
 -- symbol: C -> C (paper_scalar_or_distribution)
 -- symbol: a -> a (paper_scalar_or_distribution)
--- symbol: h_item_ii_the_solution_can_be__2 -> h_item_ii_the_solution_can_be__2 (paper_scalar_or_distribution)
--- symbol: h_label_local_let_gamma_0_alph_1 -> h_label_local_let_gamma_0_alph_1 (paper_scalar_or_distribution)
--- symbol: h_mild_solution_label_mild_a_f_1 -> h_mild_solution_label_mild_a_f_1 (paper_scalar_or_distribution)
+-- symbol: defn_8 -> defn_8 (paper_scalar_or_distribution)
+-- symbol: h_easy_observe_using_theorem_1 -> h_easy_observe_using_theorem_1 (paper_scalar_or_distribution)
+-- symbol: h_hence_infinitesimal_generator_denoted_2 -> h_hence_infinitesimal_generator_denoted_2 (paper_scalar_or_distribution)
+-- symbol: h_riemann_liouville_fractional_integral_1 -> h_riemann_liouville_fractional_integral_1 (paper_scalar_or_distribution)
+-- symbol: h_weak_solution_weak2_called_1 -> h_weak_solution_weak2_called_1 (paper_scalar_or_distribution)
+-- symbol: h_weak_solution_weak_called_1 -> h_weak_solution_weak_called_1 (paper_scalar_or_distribution)
 -- symbol: int_0 -> int_0 (paper_scalar_or_distribution)
 -- symbol: u_0 -> u_0 (paper_scalar_or_distribution)
 
 -- Domain axioms / paper-local symbols. These are explicit formalization debt.
-def C_T : Set (ℝ → ℝ) := Set.univ
-
 def infty : ℝ := 0
 
 def C : ℝ := 0
 
 def a : ℝ := 0
 
-def h_item_ii_the_solution_can_be__2 : ℝ := 0
+def defn_8 : ℝ := 0
 
-def h_label_local_let_gamma_0_alph_1 : ℝ := 0
+def h_easy_observe_using_theorem_1 : ℝ := 0
 
-def h_mild_solution_label_mild_a_f_1 : ℝ := 0
+def h_hence_infinitesimal_generator_denoted_2 : ℝ := 0
+
+def h_riemann_liouville_fractional_integral_1 : ℝ := 0
+
+def h_weak_solution_weak2_called_1 : ℝ := 0
+
+def h_weak_solution_weak_called_1 : ℝ := 0
 
 def int_0 : ℝ := 0
 

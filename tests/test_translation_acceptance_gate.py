@@ -265,3 +265,91 @@ def test_rejected_translations_are_written_to_repair_queue_rows() -> None:
     assert len(rows) == 1
     assert rows[0]["gate_reason"] == "wrong_quantifier:missing_forall"
     assert rows[0]["lean_signature"] == "theorem t : P 0 := by"
+
+
+# --- P2 schema fidelity checks ---
+
+def _tr_with_schema(signature: str, *, claim: str = "", assumptions: list[str] | None = None, validated: bool = True) -> TranslationResult:
+    schema: dict = {}
+    if claim:
+        schema["claim"] = claim
+    if assumptions is not None:
+        schema["assumptions"] = assumptions
+    return TranslationResult(
+        lean_signature=signature,
+        validated=validated,
+        rounds_used=1,
+        last_error="",
+        confidence=0.9,
+        statement_schema=schema,
+    )
+
+
+def test_schema_claim_trivialized_true_is_blocked() -> None:
+    gate = translation_acceptance_gate(
+        entry=_entry("If P holds then P holds."),
+        translation=_tr_with_schema("theorem t (h : P) : P := h", claim="True"),
+    )
+    assert gate.accepted is False
+    assert "schema_claim_trivialized" in gate.reason
+    assert gate.failure_kind == FailureKind.FALSE_OR_AMBIGUOUS_STATEMENT
+
+
+def test_schema_claim_trivialized_sorry_is_blocked() -> None:
+    gate = translation_acceptance_gate(
+        entry=_entry("Theorem about something."),
+        translation=_tr_with_schema("theorem t : P := by sorry", claim="sorry"),
+    )
+    assert gate.accepted is False
+    assert "schema_claim_trivialized" in gate.reason
+
+
+def test_schema_claim_nontrivial_is_allowed() -> None:
+    gate = translation_acceptance_gate(
+        entry=_entry("For all n ≥ 1, the sum is bounded by n log n."),
+        translation=_tr_with_schema(
+            "theorem t (n : ℕ) (hn : 1 ≤ n) : sum n ≤ n * Nat.log 2 n := by",
+            claim="sum n ≤ n * log n",
+        ),
+    )
+    assert gate.accepted is True
+
+
+def test_schema_hypothesis_coverage_gap_is_blocked() -> None:
+    # 3 assumptions in schema but Lean signature has no binders at all
+    gate = translation_acceptance_gate(
+        entry=_entry("Given measurability, continuity, and compactness, the integral converges."),
+        translation=_tr_with_schema(
+            "theorem t : Integrable f μ := by",
+            claim="Integrable f μ",
+            assumptions=["f is measurable", "f is continuous", "X is compact"],
+        ),
+    )
+    assert gate.accepted is False
+    assert "schema_hypothesis_coverage_gap" in gate.reason
+
+
+def test_schema_hypothesis_coverage_with_binders_is_allowed() -> None:
+    gate = translation_acceptance_gate(
+        entry=_entry("Given measurability, continuity, and compactness, the integral converges."),
+        translation=_tr_with_schema(
+            "theorem t (hm : Measurable f) (hc : Continuous f) (hk : IsCompact (Set.univ : Set X)) : Integrable f μ := by",
+            claim="Integrable f μ",
+            assumptions=["f is measurable", "f is continuous", "X is compact"],
+        ),
+    )
+    assert gate.accepted is True
+
+
+def test_schema_fewer_than_three_assumptions_no_binders_allowed() -> None:
+    # Only 2 assumptions — gap check does not fire (threshold is 3)
+    gate = translation_acceptance_gate(
+        entry=_entry("Given A and B, C holds."),
+        translation=_tr_with_schema(
+            "theorem t : C := by",
+            claim="C holds",
+            assumptions=["A", "B"],
+        ),
+    )
+    # Should not be blocked by the coverage gap check (may be blocked by other checks)
+    assert "schema_hypothesis_coverage_gap" not in (gate.reason or "")

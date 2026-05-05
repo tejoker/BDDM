@@ -7,6 +7,7 @@ from prove_arxiv_batch import (
     _binder_groups_before_target,
     _decl_target,
     _domain_proof_hint,
+    _extract_sorry_theorems,
     _hypotheses_by_type,
     _is_nontrivial_declaration,
     _is_repl_startup_failure,
@@ -201,6 +202,56 @@ def test_sanitize_generated_lean_file_splits_sorry_theorem_separator(tmp_path) -
     text = f.read_text(encoding="utf-8")
     assert changed is True
     assert "sorry\n\n-- [theorem] B" in text
+
+
+def test_extract_sorry_theorems_detects_one_line_by_sorry(tmp_path) -> None:
+    f = tmp_path / "paper_oneline.lean"
+    f.write_text(
+        "namespace ArxivPaper\n"
+        "theorem nuclear_l1_norms : False := by sorry\n"
+        "end ArxivPaper\n",
+        encoding="utf-8",
+    )
+
+    theorems = _extract_sorry_theorems(f)
+
+    assert [t.name for t in theorems] == ["nuclear_l1_norms"]
+
+
+def test_sanitize_generated_lean_file_repairs_comma_identifier_artifacts(tmp_path) -> None:
+    # Subscript-mangled identifiers (first part contains `_`) are fixed.
+    f = tmp_path / "paper_comma.lean"
+    f.write_text(
+        "namespace ArxivPaper\n"
+        "theorem A : C_beta,s1,s2 ≤ C_beta,s := by\n"
+        "  sorry\n"
+        "end ArxivPaper\n",
+        encoding="utf-8",
+    )
+
+    changed = _sanitize_generated_lean_file(f)
+    text = f.read_text(encoding="utf-8")
+
+    assert changed is True
+    assert "C_beta_s1_s2" in text
+    assert "C_beta_s" in text
+
+
+def test_sanitize_generated_lean_file_leaves_short_comma_pairs_intact(tmp_path) -> None:
+    # Short identifier pairs like `a,b` are valid in simp lists / constructors
+    # and must not be rewritten (no underscore in leading name).
+    f = tmp_path / "paper_safe.lean"
+    original = (
+        "namespace ArxivPaper\n"
+        "theorem B : True := by simp [ha,hb]\n"
+        "end ArxivPaper\n"
+    )
+    f.write_text(original, encoding="utf-8")
+
+    _sanitize_generated_lean_file(f)
+    text = f.read_text(encoding="utf-8")
+
+    assert "ha,hb" in text, "short comma pair inside simp list must not be rewritten"
 
 
 def test_sanitize_generated_lean_file_inserts_blank_before_theorem_marker(tmp_path) -> None:

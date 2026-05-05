@@ -244,14 +244,18 @@ class PremiseRetriever:
         embeddings: list[list[float]] = []
         if encoder_name == "hash":
             for e in entries:
-                text = f"{e.name} {e.namespace} {e.statement}"
+                # Use statement type only: the type is the semantically relevant
+                # content for retrieval; name/namespace are handled by the boost layer.
+                text = e.statement or f"{e.name} {e.namespace}"
                 embeddings.append(_embed_hash(text, dims))
             return cls(entries=entries, embeddings=embeddings, dims=dims, encoder_name="hash")
 
-        # Sentence-transformer path.
+        # Sentence-transformer path: embed statement types only, not names.
+        # Names get a separate exact-match boost in query(), so mixing them into
+        # the embedding just dilutes the semantic signal with surface noise.
         st = get_st_encoder(encoder_name)
         actual_dims = st.dims
-        texts = [f"{e.name} {e.namespace} {e.statement}" for e in entries]
+        texts = [e.statement or f"{e.name} {e.namespace}" for e in entries]
         embeddings = st.encode(texts)
         return cls(
             entries=entries,
@@ -376,31 +380,43 @@ class PremiseRetriever:
             "data": any(kw in goal_lower for kw in ["list", "finset", "multiset", "array"]),
         }
 
+        # Unicode math type symbols present in the goal. Entries sharing the
+        # same symbols are more likely to operate on the same types.
+        _MATH_SYMBOLS = frozenset("ℕℤℚℝℂ∀∃→↔⊆⊂∈∉∩∪≤≥≠∑∏⟨⟩⟦⟧")
+        goal_symbols = frozenset(c for c in goal if c in _MATH_SYMBOLS)
+
         q = self._encode_query(goal)
         scored: list[tuple[int, float]] = []
         for i, emb in enumerate(self.embeddings):
             base = _dot(q, emb)
             boost = 0.0
-            
-            # Phase 2: Enhanced name matching
+
             name_lower = self.entries[i].name.lower()
             namespace_lower = self.entries[i].namespace.lower()
-            
+
             # Exact lemma name matches get highest boost
             for ident in lean_idents:
-                if ident.lower() == name_lower.split(".")[-1]:  # Match against final part of name
+                if ident.lower() == name_lower.split(".")[-1]:
                     boost += 1.5
                 elif ident.lower() in name_lower:
                     boost += 0.5
-            
+
             # Namespace heuristics: prefer matching namespaces
             for ns_hint, present in namespace_hints.items():
                 if present and ns_hint in namespace_lower:
                     boost += 0.3
                 elif present and ns_hint not in namespace_lower and "mathlib" in namespace_lower:
-                    # Down-weight mismatched namespaces
                     boost -= 0.1
-            
+
+            # Unicode type symbol overlap: boost entries whose statement uses
+            # the same math symbols as the goal (same type universe / domain).
+            if goal_symbols:
+                stmt = self.entries[i].statement
+                entry_symbols = frozenset(c for c in stmt if c in _MATH_SYMBOLS)
+                overlap = len(goal_symbols & entry_symbols)
+                if overlap:
+                    boost += 0.2 * overlap
+
             scored.append((i, base + boost))
         scored.sort(key=lambda x: x[1], reverse=True)
 

@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from export_corpus import DEFAULT_EVIDENCE_DIR, DEFAULT_LEDGER_DIR, DEFAULT_REPORT_DIR, build_corpus_rows
-from statement_validity import statement_fidelity_gate
+from statement_validity import false_target_reason, statement_fidelity_gate
 
 
 DEFAULT_OUT_JSONL = Path("output/corpus/gold_proof_growth_queue.jsonl")
@@ -77,6 +77,9 @@ def proof_candidate_blockers(row: dict[str, Any]) -> list[str]:
         blockers.append("source_span_not_gold_quality")
     if not str(row.get("lean_statement", "")).strip():
         blockers.append("lean_statement_missing")
+    false_target = false_target_reason(row)
+    if false_target:
+        blockers.append(false_target)
     if _placeholder_statement(row):
         blockers.append("placeholder_or_trivial_lean_statement")
     return list(dict.fromkeys(blockers))
@@ -177,8 +180,11 @@ def build_gold_proof_queue(rows: list[dict[str, Any]], *, limit: int = 200) -> t
                 "statement_alignment_class": row.get("statement_alignment_class", ""),
                 "alignment_confidence": row.get("alignment_confidence", 0.0),
                 "reviewed_statement_alignment_class": row.get("reviewed_statement_alignment_class", ""),
+                "reviewed_equivalence_verdict": row.get("reviewed_equivalence_verdict", ""),
                 "reviewed_alignment_confidence": row.get("reviewed_alignment_confidence", 0.0),
                 "review_provenance": row.get("review_provenance", {}),
+                "claim_equivalence_verdict": row.get("claim_equivalence_verdict", ""),
+                "independent_semantic_equivalence_evidence": row.get("independent_semantic_equivalence_evidence", False),
                 "source_span_quality": row.get("source_span_quality", ""),
                 "identity_status": row.get("identity_status", ""),
                 "mathlib_novelty_status": row.get("mathlib_novelty_status", ""),

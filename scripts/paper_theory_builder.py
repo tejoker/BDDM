@@ -59,6 +59,7 @@ def plan_paper_theory(
     glossary: dict[str, str] | None = None,
     schemas: list[dict] | None = None,
     entries: list[object] | None = None,
+    real_definitions: list[str] | None = None,
 ) -> PaperTheoryPlan:
     pack = get_domain_pack(domain)
     module = _module_name(paper_id)
@@ -84,11 +85,39 @@ def plan_paper_theory(
     definitions: list[str] = []
     lemmas: list[str] = []
     axioms: list[str] = []
+
+    # Real definitions extracted from the paper take priority — inject them first
+    # so they shadow any LLM-invented axiom stubs for the same names.
+    _real_def_names: set[str] = set()
+    for raw_sig in (real_definitions or []):
+        sig = raw_sig.strip()
+        if not sig:
+            continue
+        # Rewrite theorem/lemma → noncomputable def with sorry body for type-only stubs.
+        if re.match(r"^(theorem|lemma)\s+", sig):
+            sig = re.sub(r"^(theorem|lemma)\s+", "noncomputable def ", sig, count=1)
+            if ":= by" not in sig and ":= sorry" not in sig:
+                sig = re.sub(r"\s*:=\s*by\s*$", " := sorry", sig)
+                if ":= sorry" not in sig:
+                    sig = sig.rstrip() + " := sorry"
+        elif not re.match(r"^(noncomputable\s+)?(def|abbrev|opaque)\s+", sig):
+            sig = "noncomputable def " + sig
+        name = declaration_name(sig)
+        if name:
+            _real_def_names.add(name)
+        definitions.append(sig)
+    if _real_def_names:
+        notes.append(f"{len(_real_def_names)} real definition(s) from paper extraction (grounded)")
+
     for sym in symbols:
         decl = sym.declaration.strip()
         if not decl:
             continue
-        if decl.startswith(("def ", "abbrev ", "opaque ")):
+        # Skip if a real extracted definition already covers this name.
+        sym_name = declaration_name(decl)
+        if sym_name and sym_name in _real_def_names:
+            continue
+        if decl.startswith(("def ", "abbrev ", "opaque ", "noncomputable ")):
             definitions.append(decl)
         elif decl.startswith(("lemma ", "theorem ")):
             lemmas.append(decl)

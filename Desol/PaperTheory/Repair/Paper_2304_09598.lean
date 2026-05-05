@@ -10,24 +10,24 @@ open scoped BigOperators
 
 namespace Paper_2304_09598_Repair
 
--- symbol: h_cite_riddlesden2022combinato_1 -> h_cite_riddlesden2022combinato_1 (paper_scalar_or_distribution)
--- symbol: h_for_any_multisegment_beta_wh_2 -> h_for_any_multisegment_beta_wh_2 (paper_scalar_or_distribution)
--- symbol: h_label_cor_arthur_abv_packets_1 -> h_label_cor_arthur_abv_packets_1 (paper_scalar_or_distribution)
--- symbol: h_label_thm_manysimplea_b_let__1 -> h_label_thm_manysimplea_b_let__1 (paper_scalar_or_distribution)
--- symbol: h_label_thm_quant_let_alpha_be_1 -> h_label_thm_quant_let_alpha_be_1 (paper_scalar_or_distribution)
--- symbol: h_label_thm_simple_let_alpha_b_1 -> h_label_thm_simple_let_alpha_b_1 (paper_scalar_or_distribution)
+-- symbol: multisegment -> Multisegment (paper_multisegment_carrier)
+-- symbol: r_i_1_j -> r_i_1_j (paper_scalar_or_distribution)
+-- symbol: r_i_1_j_1 -> r_i_1_j_1 (paper_scalar_or_distribution)
+-- symbol: r_i_j_1 -> r_i_j_1 (paper_scalar_or_distribution)
+-- symbol: alpha1 -> alpha1 (paper_scalar_or_distribution)
+-- symbol: widetildealpha1 -> widetildealpha1 (paper_scalar_or_distribution)
 
 -- Domain axioms / paper-local symbols. These are explicit formalization debt.
-def h_cite_riddlesden2022combinato_1 : ℝ := 0
+abbrev Multisegment : Type := ℕ
 
-def h_for_any_multisegment_beta_wh_2 : ℝ := 0
+def r_i_1_j : ℝ := 0
 
-def h_label_cor_arthur_abv_packets_1 : ℝ := 0
+def r_i_1_j_1 : ℝ := 0
 
-def h_label_thm_manysimplea_b_let__1 : ℝ := 0
+def r_i_j_1 : ℝ := 0
 
-def h_label_thm_quant_let_alpha_be_1 : ℝ := 0
+def alpha1 : ℝ := 0
 
-def h_label_thm_simple_let_alpha_b_1 : ℝ := 0
+def widetildealpha1 : ℝ := 0
 
 end Paper_2304_09598_Repair

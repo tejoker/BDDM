@@ -273,6 +273,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "repair",
         "summary": "Repairs statement-equivalence failures experimentally.",
     },
+    "leanstral_judge.py": {
+        "tier": "official_support",
+        "category": "translation",
+        "summary": "Leanstral-powered claim equivalence judge for the FULLY_PROVEN gate.",
+    },
     "eval_translation_fidelity.py": {
         "tier": "ci_gate",
         "category": "ci",
@@ -578,10 +583,30 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "translation",
         "summary": "Runs translation-only experiments over the golden10 suite.",
     },
+    "run_auto_alignment_review.py": {
+        "tier": "official_support",
+        "category": "review",
+        "summary": "Runs structured auto alignment review and triage for statement-review batches.",
+    },
     "run_paper_agnostic_suite.py": {
         "tier": "official_pipeline",
         "category": "orchestration",
         "summary": "Canonical fixed-config suite runner for paper-agnostic evidence.",
+    },
+    "run_gold_proof_queue.py": {
+        "tier": "official_support",
+        "category": "proof_search",
+        "summary": "Runs or dry-runs strict gold-proof queue proof-search commands.",
+    },
+    "run_proof_candidate_factory.py": {
+        "tier": "official_support",
+        "category": "proof_search",
+        "summary": "End-to-end proof-candidate factory: statement repair → auto alignment review → gold proof queue.",
+    },
+    "run_review_to_gold_proof_bridge.py": {
+        "tier": "official_support",
+        "category": "proof_search",
+        "summary": "Bridges conservative reviewed-exact statement rows into strict gold proof queues.",
     },
     "run_statement_repair_worker.py": {
         "tier": "official_support",

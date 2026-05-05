@@ -8,27 +8,6 @@
       ]
     },
     {
-      "theorem_name": "Cor_BoundaryRTandMS",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
-      "theorem_name": "Precedes",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
-      "theorem_name": "Prop_IncreasingLength",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
       "theorem_name": "Basic",
       "primary_blocker": "proof_search_failure",
       "reasons": [
@@ -36,56 +15,7 @@
       ]
     },
     {
-      "theorem_name": "EqualLN",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
-      "theorem_name": "Def_Simple",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
-      "theorem_name": "Prop_SimpleFacts",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
       "theorem_name": "EqualAB",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
-      "theorem_name": "Thm_Simple",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
-      "theorem_name": "Exa_QFM",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
-      "theorem_name": "Lem_PrecedesQuantum",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
-      "theorem_name": "Lem_AB",
       "primary_blocker": "proof_search_failure",
       "reasons": [
         "lean_proof_closed"
@@ -113,35 +43,7 @@
       ]
     },
     {
-      "theorem_name": "Cor_Quant",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
-      "theorem_name": "Thm_Quant",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
       "theorem_name": "Lem_A1",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
-      "theorem_name": "Thm_ManySimpleA_B",
-      "primary_blocker": "proof_search_failure",
-      "reasons": [
-        "lean_proof_closed"
-      ]
-    },
-    {
-      "theorem_name": "Cor_Arthur",
       "primary_blocker": "proof_search_failure",
       "reasons": [
         "lean_proof_closed"
