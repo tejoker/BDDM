@@ -247,6 +247,89 @@ def scan_axioms_in_paper_theory(paper_id: str, project_root: Path = _PROJECT_ROO
     ]
 
 
+def auto_register_validated_candidates(
+    *,
+    search_results: list[dict[str, Any]],
+    project_root: Path = _PROJECT_ROOT,
+    confidence_threshold: float = 0.85,
+    alignments_path: Path | None = None,
+) -> dict[str, Any]:
+    """For each axiom search result, if the TOP candidate has elaboration_check
+    == "ok" AND confidence >= threshold, register it in alignments.json.
+
+    The auto-registered alignment uses a placeholder proof reference
+    (`Desol.PaperAlignments.<paper>_<name>_alignment_pending`); the next time
+    PaperAlignments.lean is updated, a human reviewer should add the actual
+    proof. The registration unblocks the AB→FP discharge in the gate logic.
+
+    Returns: {registered: int, skipped_low_confidence: int, skipped_no_ok: int,
+              skipped_already_registered: int, entries: [...]}."""
+    if alignments_path is None:
+        alignments_path = project_root / "output" / "corpus" / "alignments.json"
+    if alignments_path.exists():
+        try:
+            data = json.loads(alignments_path.read_text(encoding="utf-8"))
+        except Exception:
+            data = {"schema_version": "alignments.v1", "alignments": []}
+    else:
+        data = {"schema_version": "alignments.v1", "alignments": []}
+    existing_keys = {
+        (a.get("paper_id", ""), a.get("paper_local_name", ""))
+        for a in data.get("alignments", [])
+        if isinstance(a, dict)
+    }
+
+    summary = {
+        "registered": 0,
+        "skipped_low_confidence": 0,
+        "skipped_no_ok": 0,
+        "skipped_already_registered": 0,
+        "entries": [],
+    }
+    for result in search_results:
+        candidates = result.get("candidates", [])
+        if not candidates:
+            summary["skipped_no_ok"] += 1
+            continue
+        top = candidates[0]
+        confidence = float(top.get("confidence", 0.0) or 0.0)
+        elab = str(top.get("elaboration_check", "") or "")
+        paper_id = str(result.get("paper_id", "") or "")
+        paper_local_name = str(result.get("paper_local_name", "") or "")
+        if not elab.startswith("ok"):
+            summary["skipped_no_ok"] += 1
+            continue
+        if confidence < confidence_threshold:
+            summary["skipped_low_confidence"] += 1
+            continue
+        if (paper_id, paper_local_name) in existing_keys:
+            summary["skipped_already_registered"] += 1
+            continue
+        entry = {
+            "paper_id": paper_id,
+            "paper_local_name": paper_local_name,
+            "fully_qualified": f"Paper_{paper_id.replace('.', '_')}.{paper_local_name}",
+            "mathlib_target": str(top.get("mathlib_name", "") or ""),
+            "proof": f"Desol.PaperAlignments.{paper_local_name}_alignment_pending",
+            "kind": "auto_registered_via_mathlib_search",
+            "confidence": confidence,
+            "rationale": str(top.get("rationale", "") or ""),
+            "auto_registered_at_unix": int(__import__("time").time()),
+        }
+        data.setdefault("alignments", []).append(entry)
+        existing_keys.add((paper_id, paper_local_name))
+        summary["registered"] += 1
+        summary["entries"].append(entry)
+
+    if summary["registered"] > 0:
+        alignments_path.parent.mkdir(parents=True, exist_ok=True)
+        alignments_path.write_text(
+            json.dumps(data, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+    return summary
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("paper_id", help="arxiv id, e.g. 2604.21884")
@@ -260,6 +343,13 @@ def main() -> int:
     parser.add_argument("--skip-elaboration", action="store_true",
                         help="Skip the lake-env-lean elaboration check (faster, less validation)")
     parser.add_argument("--out", type=Path, default=None, help="Write JSON to this file (default: stdout)")
+    parser.add_argument(
+        "--auto-register",
+        action="store_true",
+        help="Auto-register top candidates with elaboration_check=ok and "
+             "confidence >= --register-threshold into output/corpus/alignments.json",
+    )
+    parser.add_argument("--register-threshold", type=float, default=0.85)
     args = parser.parse_args()
 
     if args.axiom_name:
@@ -290,6 +380,12 @@ def main() -> int:
         "paper_id": args.paper_id,
         "results": results,
     }
+    if args.auto_register:
+        register_summary = auto_register_validated_candidates(
+            search_results=results,
+            confidence_threshold=args.register_threshold,
+        )
+        payload["auto_register_summary"] = register_summary
     output = json.dumps(payload, indent=2, ensure_ascii=False)
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)

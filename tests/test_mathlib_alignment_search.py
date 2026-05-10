@@ -191,3 +191,90 @@ def test_scan_axioms_in_paper_theory_returns_axiom_declarations(tmp_path: Path) 
 def test_scan_axioms_in_paper_theory_returns_empty_when_no_paper_theory(tmp_path: Path) -> None:
     targets = scan_axioms_in_paper_theory("9999.99999", project_root=tmp_path)
     assert targets == []
+
+
+def test_auto_register_promotes_ok_high_confidence_only(tmp_path: Path) -> None:
+    """A search result whose top candidate has elaboration_check='ok' AND
+    confidence >= threshold gets auto-registered into alignments.json. Lower
+    confidence or non-ok elaboration is skipped."""
+    from mathlib_alignment_search import auto_register_validated_candidates
+    alignments_path = tmp_path / "alignments.json"
+    alignments_path.write_text(json.dumps({"schema_version": "alignments.v1", "alignments": []}), encoding="utf-8")
+
+    results = [
+        # Should register: ok + high confidence.
+        {
+            "paper_id": "p1",
+            "paper_local_name": "fooBound",
+            "axiom_signature": "ℕ → ℝ",
+            "candidates": [
+                {"mathlib_name": "Nat.cast_le", "confidence": 0.92, "elaboration_check": "ok", "rationale": "..."},
+                {"mathlib_name": "Other", "confidence": 0.5, "elaboration_check": "ok"},
+            ],
+        },
+        # Should skip: top candidate's elaboration_check failed.
+        {
+            "paper_id": "p1",
+            "paper_local_name": "barNorm",
+            "axiom_signature": "ℝ → ℝ",
+            "candidates": [
+                {"mathlib_name": "FakeName", "confidence": 0.99, "elaboration_check": "failed:unknown"},
+            ],
+        },
+        # Should skip: confidence below threshold.
+        {
+            "paper_id": "p1",
+            "paper_local_name": "bazFunc",
+            "axiom_signature": "ℝ → ℝ",
+            "candidates": [
+                {"mathlib_name": "Real.exp", "confidence": 0.6, "elaboration_check": "ok"},
+            ],
+        },
+    ]
+    summary = auto_register_validated_candidates(
+        search_results=results,
+        project_root=tmp_path,
+        confidence_threshold=0.85,
+        alignments_path=alignments_path,
+    )
+    assert summary["registered"] == 1
+    assert summary["skipped_no_ok"] == 1
+    assert summary["skipped_low_confidence"] == 1
+    persisted = json.loads(alignments_path.read_text())
+    names = [a["paper_local_name"] for a in persisted["alignments"]]
+    assert names == ["fooBound"]
+    assert persisted["alignments"][0]["mathlib_target"] == "Nat.cast_le"
+    assert persisted["alignments"][0]["kind"] == "auto_registered_via_mathlib_search"
+
+
+def test_auto_register_skips_already_registered(tmp_path: Path) -> None:
+    """If (paper_id, paper_local_name) already exists in alignments.json,
+    the auto-registration is a no-op (preserves the existing entry's proof
+    field, which may point to a real human-written theorem)."""
+    from mathlib_alignment_search import auto_register_validated_candidates
+    alignments_path = tmp_path / "alignments.json"
+    alignments_path.write_text(json.dumps({
+        "schema_version": "alignments.v1",
+        "alignments": [
+            {"paper_id": "p1", "paper_local_name": "fooBound",
+             "fully_qualified": "Paper_p1.fooBound",
+             "mathlib_target": "ManuallyChosen", "proof": "Desol.PaperAlignments.foo_real_proof",
+             "kind": "real_lean_theorem"},
+        ],
+    }), encoding="utf-8")
+    results = [{
+        "paper_id": "p1",
+        "paper_local_name": "fooBound",
+        "candidates": [{"mathlib_name": "Nat.cast_le", "confidence": 0.99, "elaboration_check": "ok"}],
+    }]
+    summary = auto_register_validated_candidates(
+        search_results=results,
+        project_root=tmp_path,
+        confidence_threshold=0.85,
+        alignments_path=alignments_path,
+    )
+    assert summary["registered"] == 0
+    assert summary["skipped_already_registered"] == 1
+    persisted = json.loads(alignments_path.read_text())
+    assert persisted["alignments"][0]["proof"] == "Desol.PaperAlignments.foo_real_proof"
+    assert persisted["alignments"][0]["mathlib_target"] == "ManuallyChosen"
