@@ -328,6 +328,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Queries Leanstral for Mathlib counterparts of a paper-local axiom (signature + description). Returns ranked candidates with elaboration check. Generalizes per-area starter types to per-symbol search; the scalable answer to AB→FP discharge for non-trivial axioms.",
     },
+    "ledger_from_closed_lean.py": {
+        "tier": "dev_tool",
+        "category": "review",
+        "summary": "Populates a verification ledger from an already-closed `output/<paper>.lean` file (every theorem has a real proof body, no `sorry`). Bridges hand-formalized files to the BDDM ledger machinery without re-running translation or proof search.",
+    },
     "mark_ghost_translation_failures.py": {
         "tier": "dev_tool",
         "category": "review",
