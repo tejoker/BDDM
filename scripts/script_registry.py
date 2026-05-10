@@ -313,6 +313,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "translation",
         "summary": "Rewrites placeholder theorems in output/<paper>.lean using full signatures stored in the verification ledger; gives proof search a chance to attempt translator-rejected (false-positive) signatures.",
     },
+    "paper_area_classifier.py": {
+        "tier": "official_support",
+        "category": "translation",
+        "summary": "Classifies a paper into a math area (analysis / probability / algebra / combinatorics / numbertheory / generic) by keyword-matching its source LaTeX. Drives area-aware CoT prompts and per-area paper-theory generation.",
+    },
     "mark_ghost_translation_failures.py": {
         "tier": "dev_tool",
         "category": "review",

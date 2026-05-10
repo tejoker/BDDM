@@ -143,6 +143,61 @@ def plan_paper_theory(
     )
 
 
+# Underlying types whose Mathlib instances we know carry over to a transparent
+# `abbrev`. Extending this list is safe; entries here just enable auto-emission
+# of the paper-local instance lines. If a paper introduces an `abbrev Foo := T`
+# where `T` is not in this list, no instances are auto-emitted and the stub
+# remains the same as before this change.
+_INSTANCE_BEARING_UNDERLYING_TYPES = (
+    "ℕ", "Nat",
+    "ℤ", "Int",
+    "ℝ", "Real",
+    "ℚ", "Rat",
+)
+_AUTO_INSTANCE_CLASSES = (
+    "LE", "LT", "Preorder", "PartialOrder", "DecidableEq",
+)
+_ABBREV_TYPE_RE = re.compile(
+    r"^\s*(?:noncomputable\s+)?abbrev\s+([A-Za-z_][A-Za-z0-9_']*)\s*:\s*Type\s*:=\s*(.+?)\s*$",
+    re.MULTILINE,
+)
+
+
+def _underlying_carries_instances(underlying: str) -> bool:
+    underlying = underlying.strip().rstrip(".").strip()
+    return any(underlying == t or underlying.startswith(t + " ") for t in _INSTANCE_BEARING_UNDERLYING_TYPES)
+
+
+def _auto_instance_lines(definitions: list[str]) -> list[str]:
+    """Emit `instance : <Class> <Name> := inferInstance` for every type abbrev
+    whose underlying type is a known instance-bearing Mathlib type. Generalises
+    the manually-curated 5-instance block in Paper_2304_09598.lean to all papers."""
+    lines: list[str] = []
+    for decl in definitions:
+        for match in _ABBREV_TYPE_RE.finditer(decl):
+            name, underlying = match.group(1), match.group(2)
+            if not _underlying_carries_instances(underlying):
+                continue
+            for cls in _AUTO_INSTANCE_CLASSES:
+                lines.append(f"instance : {cls} {name} := inferInstance")
+    return lines
+
+
+def _aesop_attribute_lines(axioms: list[str]) -> list[str]:
+    """Tag every paper-local axiom with `attribute [aesop safe apply]` so that
+    when proof search runs `aesop`, the axiom is in the apply set. Without this,
+    bare `axiom X : ...` declarations are invisible to tactic-based search."""
+    lines: list[str] = []
+    for decl in axioms:
+        name = declaration_name(decl)
+        if not name:
+            continue
+        if not re.match(r"^\s*axiom\s+", decl):
+            continue
+        lines.append(f"attribute [aesop safe apply] {name}")
+    return lines
+
+
 def write_paper_theory(*, project_root: Path, plan: PaperTheoryPlan) -> Path:
     out_dir = project_root / "Desol" / "PaperTheory"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -157,17 +212,30 @@ def write_paper_theory(*, project_root: Path, plan: PaperTheoryPlan) -> Path:
     if plan.notes:
         notes_block = "\n".join(f"-- note: {n}" for n in plan.notes) + "\n\n"
 
+    auto_instance_lines = _auto_instance_lines(plan.definitions)
+    auto_instance_block = ("\n".join(auto_instance_lines) + "\n\n") if auto_instance_lines else ""
     definitions_block = "\n\n".join(plan.definitions) + ("\n\n" if plan.definitions else "")
     lemmas_block = "\n\n".join(plan.lemmas) + ("\n\n" if plan.lemmas else "")
     axioms_block = "\n\n".join(plan.axioms) + ("\n" if plan.axioms else "")
+    aesop_attribute_lines = _aesop_attribute_lines(plan.axioms)
+    aesop_attribute_block = ("\n".join(aesop_attribute_lines) + "\n") if aesop_attribute_lines else ""
     exported_names: list[str] = []
+    defined_names: set[str] = set()
     for decl in [*plan.definitions, *plan.lemmas, *plan.axioms]:
         name = declaration_name(decl)
         if name:
             exported_names.append(name)
+            defined_names.add(name)
+    # Defensive filter: drop any export entry that is not actually a `def`/
+    # `abbrev`/`axiom`/`theorem`/`lemma` in the rendered file. Without this,
+    # a name that diverges from the declaration form (e.g., `ξ` exported
+    # while only `ξ'` is defined) crashes `lake build` with an "Unknown
+    # constant" error and silently knocks the whole paper out of the
+    # PaperImportsAnchor fallback. Pure safety: never adds, only removes.
+    exported_names = [n for n in dict.fromkeys(exported_names) if n in defined_names]
     export_block = ""
     if exported_names:
-        export_block = "\nexport " + plan.module_name + " (" + " ".join(dict.fromkeys(exported_names)) + ")\n"
+        export_block = "\nexport " + plan.module_name + " (" + " ".join(exported_names) + ")\n"
 
     out.write_text(
         f"-- Auto-generated paper theory module\n"
@@ -185,10 +253,12 @@ def write_paper_theory(*, project_root: Path, plan: PaperTheoryPlan) -> Path:
         f"-- Definition stubs ground paper-local identifiers before proof search.\n"
         f"-- They are transparent Lean definitions for elaboration, not hidden proofs of paper claims.\n"
         f"{definitions_block}"
+        f"{('-- Standard typeclass instances inherited from the underlying Mathlib type.\n' + auto_instance_block) if auto_instance_block else ''}"
         f"-- Local lemmas / theorem-like facts.\n"
         f"{lemmas_block}"
         f"-- Explicit axioms / unresolved paper assumptions.\n"
         f"{axioms_block}\n"
+        f"{('-- Aesop tactic registration for paper-local axioms.\n' + aesop_attribute_block + '\n') if aesop_attribute_block else ''}"
         f"end {plan.module_name}\n"
         f"{export_block}",
         encoding="utf-8",
@@ -196,6 +266,37 @@ def write_paper_theory(*, project_root: Path, plan: PaperTheoryPlan) -> Path:
     manifest_path = out.with_suffix(".manifest.json")
     manifest_path.write_text(json.dumps(plan.manifest, indent=2, ensure_ascii=False), encoding="utf-8")
     return out
+
+
+_AREA_TO_DOMAIN = {
+    "analysis": "analysis",
+    "probability": "probability",
+    "algebra": "algebra",
+    "combinatorics": "combinatorics",
+    "numbertheory": "number_theory",
+    "generic": "",  # falls back to default pack (full Mathlib)
+}
+
+
+def _auto_classify_domain(paper_id: str, project_root: Path) -> str:
+    """When the caller doesn't pass an explicit domain, use the area
+    classifier to pick a domain pack. The classifier returns a math area
+    (e.g. `analysis`) which we map to the domain-pack registry's name.
+
+    Falls back to "" (default pack) on any classification failure."""
+    if not paper_id:
+        return ""
+    try:
+        import sys
+        scripts_dir = Path(__file__).resolve().parent
+        if str(scripts_dir) not in sys.path:
+            sys.path.insert(0, str(scripts_dir))
+        from paper_area_classifier import classify_paper
+        result = classify_paper(paper_id, project_root)
+        area = str(result.get("area", "generic") or "generic")
+        return _AREA_TO_DOMAIN.get(area, "")
+    except Exception:
+        return ""
 
 
 def build_paper_theory_module(
@@ -209,6 +310,12 @@ def build_paper_theory_module(
     schemas: list[dict] | None = None,
     entries: list[object] | None = None,
 ) -> tuple[PaperTheoryPlan, Path]:
+    # If no domain passed, auto-classify from extracted_theorems.json content.
+    # This routes paper-local symbol generation through the area-specific
+    # domain pack (open scopes, micro-tactics) so paper-theory files match
+    # the paper's mathematical content.
+    if not (domain or "").strip():
+        domain = _auto_classify_domain(paper_id, project_root)
     plan = plan_paper_theory(
         paper_id=paper_id,
         domain=domain,
