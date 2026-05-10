@@ -308,6 +308,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "translation",
         "summary": "Re-translates placeholder `theorem foo : False := by sorry` rows by calling Leanstral with explicit recovery hints derived from the BLOCKED reason.",
     },
+    "rewrite_lean_from_ledger.py": {
+        "tier": "dev_tool",
+        "category": "translation",
+        "summary": "Rewrites placeholder theorems in output/<paper>.lean using full signatures stored in the verification ledger; gives proof search a chance to attempt translator-rejected (false-positive) signatures.",
+    },
     "mark_ghost_translation_failures.py": {
         "tier": "dev_tool",
         "category": "review",

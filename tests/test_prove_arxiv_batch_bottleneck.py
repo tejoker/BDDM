@@ -4,13 +4,16 @@ import pipeline_status
 import re
 
 from prove_arxiv_batch import (
+    _GOLD_PROOF_QUEUE_OVERRIDES,
     _binder_groups_before_target,
     _decl_target,
     _domain_proof_hint,
     _extract_sorry_theorems,
+    _gold_override_for_theorem,
     _hypotheses_by_type,
     _is_nontrivial_declaration,
     _is_repl_startup_failure,
+    _load_gold_proof_queue_overrides,
     _load_ledger_entry_for_theorem,
     _micro_prover_scripts_for_decl,
     _nontrivial_drop_reasons,
@@ -69,6 +72,40 @@ def test_micro_prover_scripts_cover_conjunction_and_exists_unique() -> None:
     scripts = _micro_prover_scripts_for_decl(decl)
     assert "intros <;> aesop" in scripts
     assert "aesop" in scripts
+
+
+def test_micro_prover_scripts_close_trivial_conjunction_of_rfls() -> None:
+    """A theorem of the shape `a = a ∧ b = b` (paper-local placeholder pattern
+    after stub recovery) must include `exact ⟨rfl, rfl⟩` and the repeat-fixpoint
+    scaffold-closer in the candidate set."""
+    decl = "theorem remark_9 : I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2 := by sorry"
+    scripts = _micro_prover_scripts_for_decl(decl)
+    assert "exact ⟨rfl, rfl⟩" in scripts
+    assert "constructor <;> rfl" in scripts
+    assert "repeat (first | constructor | rfl | assumption | trivial)" in scripts
+
+
+def test_micro_prover_scripts_close_schema_scaffold_propositional_conjunction() -> None:
+    """Scaffold rows of the form `(p₁ : Prop) (h₁ : p₁) … : p₁ ∧ p₂ ∧ p₃` are
+    closed by the multi-arity refine-and-assumption tactic."""
+    decl = (
+        "theorem Local (h1 : Prop) (h2 : Prop) (h3 : Prop) "
+        "(p1 : h1) (p2 : h2) (p3 : h3) : h1 ∧ h2 ∧ h3 := by sorry"
+    )
+    scripts = _micro_prover_scripts_for_decl(decl)
+    assert "refine ⟨?_, ?_, ?_⟩ <;> assumption" in scripts
+    assert "repeat (first | constructor | rfl | assumption | trivial)" in scripts
+
+
+def test_micro_prover_scripts_close_trivial_existential_with_explicit_witness() -> None:
+    """`∃ x : ℝ, x = x` scaffold rows are closed by the explicit-witness
+    candidates we add (`exact ⟨0, rfl⟩` etc.) — the bare `exact ⟨_, rfl⟩` was
+    insufficient because Lean couldn't always infer the witness."""
+    decl = "theorem Cor_Arthur (x : ℝ) : ∃ x : ℝ, x = x := by sorry"
+    scripts = _micro_prover_scripts_for_decl(decl)
+    assert "exact ⟨0, rfl⟩" in scripts
+    assert "exact ⟨(0 : ℝ), rfl⟩" in scripts
+    assert "simp" in scripts
 
 
 def test_statement_shape_router_marks_definition_lane() -> None:
@@ -294,3 +331,103 @@ def test_decl_target_uses_theorem_colon_not_binder_colons() -> None:
         "  sorry\n"
     )
     assert _decl_target(decl) == "h1 ∧ h2 ∧ h3 → (0 : ℕ) = 0"
+
+
+def test_micro_prover_emits_field_simp_for_division_goals() -> None:
+    """Field-of-fractions sub/div goals should pull in field_simp; without it,
+    ring/linarith stall on inverses. Generalises to every paper that has rational
+    or real-valued statements."""
+    decl = "theorem t (a b : ℝ) (h : b ≠ 0) : a / b = a * b⁻¹ := by\n  sorry"
+    scripts = _micro_prover_scripts_for_decl(decl)
+    assert "field_simp" in scripts
+    assert "field_simp; ring" in scripts
+
+
+def test_micro_prover_emits_norm_cast_for_mixed_nat_real_goals() -> None:
+    """Goals that mix ℕ and ℝ need norm_cast to push the embedding through."""
+    decl = "theorem t (n : ℕ) (x : ℝ) (h : (n : ℝ) ≤ x) : (n + 1 : ℝ) ≤ x + 1 := by\n  sorry"
+    scripts = _micro_prover_scripts_for_decl(decl)
+    assert "norm_cast" in scripts
+    assert "push_cast; norm_num" in scripts
+
+
+def test_micro_prover_emits_gcongr_for_inequality_goals() -> None:
+    """Inequalities over ordered structures benefit from gcongr (generalised
+    congruence for ordered ops). Universal across every analysis-style paper."""
+    decl = "theorem t (a b c : ℝ) (h : a ≤ b) : a + c ≤ b + c := by\n  sorry"
+    scripts = _micro_prover_scripts_for_decl(decl)
+    assert "gcongr" in scripts
+
+
+def test_micro_prover_emits_polyrith_for_polynomial_ring_goals() -> None:
+    """Polynomial identity goals get polyrith (Gröbner-basis oracle)."""
+    decl = (
+        "theorem t {R : Type*} [CommRing R] (a b : R) : "
+        "(a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2 := by\n  sorry"
+    )
+    scripts = _micro_prover_scripts_for_decl(decl)
+    assert "polyrith" in scripts
+
+
+def test_micro_prover_emits_interval_cases_for_finite_goals() -> None:
+    """Finite-case goals get interval_cases combined with simp_all to close each branch."""
+    decl = "theorem t (n : Fin 4) : n.val < 4 := by\n  sorry"
+    scripts = _micro_prover_scripts_for_decl(decl)
+    assert "interval_cases <;> simp_all" in scripts
+
+
+def test_micro_prover_skips_field_tactics_for_pure_nat_goals() -> None:
+    """A pure-ℕ goal must NOT pull in field_simp / norm_cast / polyrith — those
+    tactics require richer structure and would just be wasted attempts."""
+    decl = "theorem t (n : ℕ) : n + 0 = n := by\n  sorry"
+    scripts = _micro_prover_scripts_for_decl(decl)
+    assert "field_simp" not in scripts
+    assert "field_simp; ring" not in scripts
+
+
+def test_gold_queue_override_prefers_reviewed_verdict_over_unclear() -> None:
+    """_load_gold_proof_queue_overrides must use reviewed_equivalence_verdict='equivalent'
+    when claim_equivalence_verdict='unclear'. Skipped when the live queue is empty."""
+    import pathlib
+    qpath = pathlib.Path("output/corpus/gold_proof_growth_queue.jsonl")
+    if not qpath.exists() or qpath.stat().st_size == 0:
+        import pytest
+        pytest.skip("gold queue file not available or empty")
+    _GOLD_PROOF_QUEUE_OVERRIDES.clear()
+    _load_gold_proof_queue_overrides(qpath)
+    if not _GOLD_PROOF_QUEUE_OVERRIDES:
+        import pytest
+        pytest.skip("no rows in gold queue passed proof_candidate_blockers")
+    # Every accepted override that had claim_equivalence_verdict='unclear'
+    # should have been upgraded to 'equivalent' via reviewed_equivalence_verdict.
+    unclear_and_not_upgraded = [
+        (k, v["claim_equivalence_verdict"])
+        for k, v in _GOLD_PROOF_QUEUE_OVERRIDES.items()
+        if v.get("claim_equivalence_verdict", "") == "unclear"
+    ]
+    assert unclear_and_not_upgraded == [], (
+        f"These overrides still carry 'unclear' verdict: {unclear_and_not_upgraded}"
+    )
+
+
+def test_gold_queue_stmt_substitution_replaces_false_target() -> None:
+    """When a gold queue override exists with a real lean_statement,
+    _decl_target on the gold statement must not be 'False'.
+    Skipped when the live queue lacks the EqualLN entry."""
+    import pathlib
+    qpath = pathlib.Path("output/corpus/gold_proof_growth_queue.jsonl")
+    if not qpath.exists() or qpath.stat().st_size == 0:
+        import pytest
+        pytest.skip("gold queue file not available or empty")
+    _GOLD_PROOF_QUEUE_OVERRIDES.clear()
+    _load_gold_proof_queue_overrides(qpath)
+    override = _gold_override_for_theorem("2304.09598", "EqualLN")
+    if override is None:
+        import pytest
+        pytest.skip("EqualLN not currently in live gold queue")
+    gq_stmt = str((override or {}).get("lean_statement", "") or "").strip()
+    assert gq_stmt, "lean_statement should be non-empty"
+    assert _decl_target(gq_stmt).strip() != "False", (
+        "gold queue lean_statement must not have 'False' as target"
+    )
+    assert "n_alpha" in gq_stmt, "gold queue EqualLN statement should mention n_alpha"
