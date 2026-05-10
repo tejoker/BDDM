@@ -128,7 +128,69 @@ def _collect_definitions(text: str) -> tuple[dict[str, MacroDefinition], dict[st
                 idx += 1
                 continue
             env_name = match.group(1)
-            env_aliases[env_name] = "theorem"
+            # Read the optional and required arguments to determine the
+            # printed display name. `\newtheorem{foo}[counter]{Display}`
+            # — the display name (LAST braced group) tells us whether
+            # this env is a definition, theorem, lemma, etc. Without
+            # this classification, every `\newtheorem`-declared env
+            # was unconditionally aliased to "theorem", which silently
+            # mis-classified \begin{definition} as a theorem.
+            scan_pos = match.end()
+            display_name = ""
+            # Skip an optional [counter] argument.
+            while scan_pos < len(text) and text[scan_pos].isspace():
+                scan_pos += 1
+            if scan_pos < len(text) and text[scan_pos] == "[":
+                depth = 1
+                scan_pos += 1
+                while scan_pos < len(text) and depth > 0:
+                    if text[scan_pos] == "[":
+                        depth += 1
+                    elif text[scan_pos] == "]":
+                        depth -= 1
+                    scan_pos += 1
+                while scan_pos < len(text) and text[scan_pos].isspace():
+                    scan_pos += 1
+            # Read the display-name braced group.
+            if scan_pos < len(text) and text[scan_pos] == "{":
+                try:
+                    display_name, scan_pos = _read_braced(text, scan_pos)
+                except Exception:
+                    pass
+                # An optional shared-counter `[name]` may follow; skip it for cleanliness.
+                while scan_pos < len(text) and text[scan_pos].isspace():
+                    scan_pos += 1
+                if scan_pos < len(text) and text[scan_pos] == "[":
+                    depth = 1
+                    scan_pos += 1
+                    while scan_pos < len(text) and depth > 0:
+                        if text[scan_pos] == "[":
+                            depth += 1
+                        elif text[scan_pos] == "]":
+                            depth -= 1
+                        scan_pos += 1
+            display_lower = display_name.strip().lower()
+            # Classify the env_name's canonical kind from the display name.
+            # Defaults to "theorem" when the display name doesn't match a
+            # known category — preserves backwards compatibility.
+            if display_lower in {"definition", "defn", "notation", "convention"}:
+                env_aliases[env_name] = "definition"
+            elif display_lower in {"lemma"}:
+                env_aliases[env_name] = "lemma"
+            elif display_lower in {"proposition", "prop"}:
+                env_aliases[env_name] = "proposition"
+            elif display_lower in {"corollary", "coro"}:
+                env_aliases[env_name] = "corollary"
+            elif display_lower in {"remark", "rem"}:
+                env_aliases[env_name] = "remark"
+            elif display_lower in {"fact"}:
+                env_aliases[env_name] = "fact"
+            elif display_lower in {"claim"}:
+                env_aliases[env_name] = "claim"
+            elif display_lower in {"observation"}:
+                env_aliases[env_name] = "observation"
+            else:
+                env_aliases[env_name] = "theorem"
             idx = match.end()
             continue
 
