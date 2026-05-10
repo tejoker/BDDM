@@ -171,78 +171,6 @@
       "kind": "trivial_prop_stub"
     },
     {
-      "paper_id": "2604.21314",
-      "paper_local_name": "C",
-      "fully_qualified": "Paper_2604_21314.C",
-      "mathlib_target": "(0 : ℝ)",
-      "proof": "Desol.PaperAlignments.p_2604_21314_C_eq_zero",
-      "kind": "constant_zero_stub"
-    },
-    {
-      "paper_id": "2604.21314",
-      "paper_local_name": "infty",
-      "fully_qualified": "Paper_2604_21314.infty",
-      "mathlib_target": "(0 : ℝ)",
-      "proof": "Desol.PaperAlignments.p_2604_21314_infty_eq_zero",
-      "kind": "constant_zero_stub"
-    },
-    {
-      "paper_id": "2604.21583",
-      "paper_local_name": "C",
-      "fully_qualified": "Paper_2604_21583.C",
-      "mathlib_target": "(0 : ℝ)",
-      "proof": "Desol.PaperAlignments.p_2604_21583_C_eq_zero",
-      "kind": "constant_zero_stub"
-    },
-    {
-      "paper_id": "2604.21583",
-      "paper_local_name": "a",
-      "fully_qualified": "Paper_2604_21583.a",
-      "mathlib_target": "(0 : ℝ)",
-      "proof": "Desol.PaperAlignments.p_2604_21583_a_eq_zero",
-      "kind": "constant_zero_stub"
-    },
-    {
-      "paper_id": "2604.21583",
-      "paper_local_name": "alpha1",
-      "fully_qualified": "Paper_2604_21583.alpha1",
-      "mathlib_target": "(0 : ℝ)",
-      "proof": "Desol.PaperAlignments.p_2604_21583_alpha1_eq_zero",
-      "kind": "constant_zero_stub"
-    },
-    {
-      "paper_id": "2604.21616",
-      "paper_local_name": "a",
-      "fully_qualified": "Paper_2604_21616.a",
-      "mathlib_target": "(0 : ℝ)",
-      "proof": "Desol.PaperAlignments.p_2604_21616_a_eq_zero",
-      "kind": "constant_zero_stub"
-    },
-    {
-      "paper_id": "2604.21821",
-      "paper_local_name": "C",
-      "fully_qualified": "Paper_2604_21821.C",
-      "mathlib_target": "(0 : ℝ)",
-      "proof": "Desol.PaperAlignments.p_2604_21821_C_eq_zero",
-      "kind": "constant_zero_stub"
-    },
-    {
-      "paper_id": "2604.21821",
-      "paper_local_name": "a",
-      "fully_qualified": "Paper_2604_21821.a",
-      "mathlib_target": "(0 : ℝ)",
-      "proof": "Desol.PaperAlignments.p_2604_21821_a_eq_zero",
-      "kind": "constant_zero_stub"
-    },
-    {
-      "paper_id": "2604.21821",
-      "paper_local_name": "infty",
-      "fully_qualified": "Paper_2604_21821.infty",
-      "mathlib_target": "(0 : ℝ)",
-      "proof": "Desol.PaperAlignments.p_2604_21821_infty_eq_zero",
-      "kind": "constant_zero_stub"
-    },
-    {
       "paper_id": "2304.09598",
       "paper_local_name": "C",
       "fully_qualified": "Paper_2304_09598.C",
@@ -480,6 +408,30 @@
       "fully_qualified": "Paper_2304_09598.utf8",
       "mathlib_target": "(0 : ℝ)",
       "proof": "Desol.PaperAlignments.p_2304_09598_utf8_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21314",
+      "paper_local_name": "HSobolev",
+      "fully_qualified": "Paper_2604_21314.HSobolev",
+      "mathlib_target": "Set.univ",
+      "proof": "Desol.PaperAlignments.p_2604_21314_HSobolev_eq_zero",
+      "kind": "set_univ_stub_param"
+    },
+    {
+      "paper_id": "2604.21314",
+      "paper_local_name": "infty",
+      "fully_qualified": "Paper_2604_21314.infty",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21314_infty_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21314",
+      "paper_local_name": "C",
+      "fully_qualified": "Paper_2604_21314.C",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21314_C_eq_zero",
       "kind": "constant_zero_stub"
     },
     {
@@ -820,11 +772,59 @@
     },
     {
       "paper_id": "2604.21314",
+      "paper_local_name": "Γ_gamma",
+      "fully_qualified": "Paper_2604_21314.Γ_gamma",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21314___gamma_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21314",
+      "paper_local_name": "ξ'",
+      "fully_qualified": "Paper_2604_21314.ξ'",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21314____eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21314",
+      "paper_local_name": "C_T",
+      "fully_qualified": "Paper_2604_21314.C_T",
+      "mathlib_target": "Set.univ",
+      "proof": "Desol.PaperAlignments.p_2604_21314_C_T_eq_zero",
+      "kind": "set_univ_stub"
+    },
+    {
+      "paper_id": "2604.21314",
       "paper_local_name": "VolterraEstimateStatement",
       "fully_qualified": "Paper_2604_21314.VolterraEstimateStatement",
       "mathlib_target": "True",
       "proof": "Desol.PaperAlignments.p_2604_21314_VolterraEstimateStatement_eq_zero",
       "kind": "prop_true_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "C",
+      "fully_qualified": "Paper_2604_21583.C",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583_C_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "a",
+      "fully_qualified": "Paper_2604_21583.a",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583_a_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "alpha1",
+      "fully_qualified": "Paper_2604_21583.alpha1",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583_alpha1_eq_zero",
+      "kind": "constant_zero_stub"
     },
     {
       "paper_id": "2604.21583",
@@ -1323,6 +1323,94 @@
       "kind": "constant_zero_stub"
     },
     {
+      "paper_id": "2604.21583",
+      "paper_local_name": "Γ'",
+      "fully_qualified": "Paper_2604_21583.Γ'",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583____eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "Γ_0_t",
+      "fully_qualified": "Paper_2604_21583.Γ_0_t",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583___0_t_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "Γ_0_t_1",
+      "fully_qualified": "Paper_2604_21583.Γ_0_t_1",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583___0_t_1_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "Γ_0t",
+      "fully_qualified": "Paper_2604_21583.Γ_0t",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583___0t_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "Γ_lam",
+      "fully_qualified": "Paper_2604_21583.Γ_lam",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583___lam_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "Γ_lam_k",
+      "fully_qualified": "Paper_2604_21583.Γ_lam_k",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583___lam_k_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "Γ_lam_t",
+      "fully_qualified": "Paper_2604_21583.Γ_lam_t",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583___lam_t_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "Γ_lam_t_1",
+      "fully_qualified": "Paper_2604_21583.Γ_lam_t_1",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583___lam_t_1_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "Γ_lambda",
+      "fully_qualified": "Paper_2604_21583.Γ_lambda",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583___lambda_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21583",
+      "paper_local_name": "Γ_lamt",
+      "fully_qualified": "Paper_2604_21583.Γ_lamt",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21583___lamt_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21616",
+      "paper_local_name": "a",
+      "fully_qualified": "Paper_2604_21616.a",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21616_a_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
       "paper_id": "2604.21616",
       "paper_local_name": "bL_0",
       "fully_qualified": "Paper_2604_21616.bL_0",
@@ -1552,6 +1640,46 @@
       "fully_qualified": "Paper_2604_21616.zeta_2",
       "mathlib_target": "(0 : ℝ)",
       "proof": "Desol.PaperAlignments.p_2604_21616_zeta_2_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21616",
+      "paper_local_name": "L2Space",
+      "fully_qualified": "Paper_2604_21616.L2Space",
+      "mathlib_target": "Set.univ",
+      "proof": "Desol.PaperAlignments.p_2604_21616_L2Space_eq_zero",
+      "kind": "set_univ_stub"
+    },
+    {
+      "paper_id": "2604.21821",
+      "paper_local_name": "HSobolev",
+      "fully_qualified": "Paper_2604_21821.HSobolev",
+      "mathlib_target": "Set.univ",
+      "proof": "Desol.PaperAlignments.p_2604_21821_HSobolev_eq_zero",
+      "kind": "set_univ_stub_param"
+    },
+    {
+      "paper_id": "2604.21821",
+      "paper_local_name": "infty",
+      "fully_qualified": "Paper_2604_21821.infty",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21821_infty_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21821",
+      "paper_local_name": "C",
+      "fully_qualified": "Paper_2604_21821.C",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21821_C_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21821",
+      "paper_local_name": "a",
+      "fully_qualified": "Paper_2604_21821.a",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21821_a_eq_zero",
       "kind": "constant_zero_stub"
     },
     {
@@ -1889,6 +2017,54 @@
       "mathlib_target": "(0 : ℝ)",
       "proof": "Desol.PaperAlignments.p_2604_21821_h_2_eq_zero",
       "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21821",
+      "paper_local_name": "L2Space",
+      "fully_qualified": "Paper_2604_21821.L2Space",
+      "mathlib_target": "Set.univ",
+      "proof": "Desol.PaperAlignments.p_2604_21821_L2Space_eq_zero",
+      "kind": "set_univ_stub"
+    },
+    {
+      "paper_id": "2604.21884",
+      "paper_local_name": "omega",
+      "fully_qualified": "Paper_2604_21884.omega",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21884_omega_eq_zero",
+      "kind": "constant_zero_stub_param"
+    },
+    {
+      "paper_id": "2604.21884",
+      "paper_local_name": "B_N",
+      "fully_qualified": "Paper_2604_21884.B_N",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21884_B_N_eq_zero",
+      "kind": "constant_zero_stub_param"
+    },
+    {
+      "paper_id": "2604.21884",
+      "paper_local_name": "D_N",
+      "fully_qualified": "Paper_2604_21884.D_N",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21884_D_N_eq_zero",
+      "kind": "constant_zero_stub_param"
+    },
+    {
+      "paper_id": "2604.21884",
+      "paper_local_name": "HSobolev",
+      "fully_qualified": "Paper_2604_21884.HSobolev",
+      "mathlib_target": "Set.univ",
+      "proof": "Desol.PaperAlignments.p_2604_21884_HSobolev_eq_zero",
+      "kind": "set_univ_stub_param"
+    },
+    {
+      "paper_id": "2604.21884",
+      "paper_local_name": "I_i",
+      "fully_qualified": "Paper_2604_21884.I_i",
+      "mathlib_target": "id",
+      "proof": "Desol.PaperAlignments.p_2604_21884_I_i_eq_zero",
+      "kind": "identity_function_stub"
     },
     {
       "paper_id": "2604.21884",
@@ -2489,6 +2665,38 @@
       "mathlib_target": "(0 : ℝ)",
       "proof": "Desol.PaperAlignments.p_2604_21884_xi_2_eq_zero",
       "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21884",
+      "paper_local_name": "ξ1",
+      "fully_qualified": "Paper_2604_21884.ξ1",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21884__1_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21884",
+      "paper_local_name": "ξ2",
+      "fully_qualified": "Paper_2604_21884.ξ2",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "Desol.PaperAlignments.p_2604_21884__2_eq_zero",
+      "kind": "constant_zero_stub"
+    },
+    {
+      "paper_id": "2604.21884",
+      "paper_local_name": "C_T",
+      "fully_qualified": "Paper_2604_21884.C_T",
+      "mathlib_target": "Set.univ",
+      "proof": "Desol.PaperAlignments.p_2604_21884_C_T_eq_zero",
+      "kind": "set_univ_stub"
+    },
+    {
+      "paper_id": "2604.21884",
+      "paper_local_name": "L2Space",
+      "fully_qualified": "Paper_2604_21884.L2Space",
+      "mathlib_target": "Set.univ",
+      "proof": "Desol.PaperAlignments.p_2604_21884_L2Space_eq_zero",
+      "kind": "set_univ_stub"
     }
   ]
 }
