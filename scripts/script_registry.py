@@ -318,6 +318,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "translation",
         "summary": "Classifies a paper into a math area (analysis / probability / algebra / combinatorics / numbertheory / generic) by keyword-matching its source LaTeX. Drives area-aware CoT prompts and per-area paper-theory generation.",
     },
+    "generate_trivial_alignments.py": {
+        "tier": "dev_tool",
+        "category": "review",
+        "summary": "Batch-generates trivial paper-theory alignments (constant-zero stubs, Set.univ stubs, Prop=True stubs) as Lean theorems + alignments.json entries. Feeds the AB→FP debt discharge in apply_reviews_to_ledger.py.",
+    },
     "mark_ghost_translation_failures.py": {
         "tier": "dev_tool",
         "category": "review",

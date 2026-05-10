@@ -48,6 +48,74 @@ REVIEW_FIELDS = (
 _HYBRID_FIDELITY_FLOOR = 0.90
 _HYBRID_ALIGNMENT_FLOOR = 0.90
 
+# Alignment registry path. Each entry maps a paper-local symbol to a Mathlib
+# counterpart with a Lean proof discharging the equivalence. When a row's
+# `axiom_debt` references a symbol with a registered alignment, that debt
+# entry is discharged: it moves from `axiom_debt` to `discharged_axiom_debt`
+# so the `no_paper_axiom_debt` gate can flip True and AB → FP.
+_ALIGNMENTS_PATH = Path("output/corpus/alignments.json")
+
+
+def _load_aligned_debts_by_paper(path: Path = _ALIGNMENTS_PATH) -> dict[str, set[str]]:
+    """Return {paper_id: {paper_local_name, ...}} from the alignment registry.
+
+    Empty dict on any failure — callers treat absence as "no alignments
+    registered" (debt stays as-is)."""
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    alignments = data.get("alignments") if isinstance(data, dict) else data if isinstance(data, list) else []
+    out: dict[str, set[str]] = {}
+    for a in alignments:
+        if not isinstance(a, dict):
+            continue
+        pid = str(a.get("paper_id", "") or "").strip()
+        name = str(a.get("paper_local_name", "") or a.get("name", "") or "").strip()
+        if pid and name:
+            out.setdefault(pid, set()).add(name)
+    return out
+
+
+def _discharge_aligned_axiom_debt(
+    entry: dict[str, Any],
+    paper_id: str,
+    aligned_names: set[str],
+) -> bool:
+    """Move aligned debt entries from `axiom_debt` to `discharged_axiom_debt`.
+
+    A debt entry like `paper_definition_stub:Multisegment` is "aligned" iff
+    `Multisegment` appears in `aligned_names` (the paper-local symbols that
+    have a registered alignment to a Mathlib counterpart with a Lean proof).
+
+    Returns True iff any debt was discharged."""
+    if not aligned_names:
+        return False
+    debt = list(entry.get("axiom_debt") or [])
+    if not debt:
+        return False
+    remaining: list[str] = []
+    discharged: list[str] = []
+    for d in debt:
+        s = str(d).strip()
+        if not s:
+            continue
+        # Extract the symbol name from `paper_definition_stub:Foo` etc.
+        name = s.split(":", 1)[1].strip() if ":" in s else s
+        if name in aligned_names:
+            discharged.append(s)
+        else:
+            remaining.append(s)
+    if not discharged:
+        return False
+    entry["axiom_debt"] = remaining
+    # Append to existing discharged list (preserve history across reruns).
+    existing_discharged = list(entry.get("discharged_axiom_debt") or [])
+    entry["discharged_axiom_debt"] = list(dict.fromkeys(existing_discharged + discharged))
+    return True
+
 
 def _compute_project_repro_info() -> tuple[str, str]:
     """Return (pipeline_commit, lean_toolchain) for the current repo.
@@ -319,15 +387,28 @@ def apply_reviews_to_ledger_file(
     *,
     pipeline_commit: str = "",
     lean_toolchain: str = "",
+    aligned_names: set[str] | None = None,
 ) -> dict[str, int]:
     if not ledger_path.exists():
-        return {"updated": 0, "skipped_no_match": 0, "rows": 0, "promoted": 0, "name_fallback": 0, "backfilled": 0}
+        return {"updated": 0, "skipped_no_match": 0, "rows": 0, "promoted": 0, "name_fallback": 0, "backfilled": 0, "axioms_discharged": 0}
     # Lazily import the existing gate-flipping helper. This is heavy (pulls in
     # pipeline_status which imports a lot), so only when we actually have rows.
     from claim_equivalence_review import apply_adjudication_to_row
 
     data = json.loads(ledger_path.read_text(encoding="utf-8"))
     entries = data if isinstance(data, list) else data.get("entries", [])
+    aligned_names = aligned_names or set()
+
+    # Pass 0: discharge aligned axiom debts on EVERY entry (regardless of
+    # whether a review matches). An aligned debt is provable in Lean — the
+    # alignment proof IS the discharge — so it shouldn't gate promotion.
+    # Run before the per-row review loop so the gate evaluation in
+    # apply_adjudication_to_row sees a clean axiom_debt list.
+    axioms_discharged = 0
+    for entry in entries:
+        if _discharge_aligned_axiom_debt(entry, paper_id, aligned_names):
+            axioms_discharged += 1
+
     updated = 0
     promoted = 0  # rows whose status was lifted (e.g. INTERMEDIARY_PROVEN → AXIOM_BACKED)
     skipped = 0
@@ -411,6 +492,14 @@ def apply_reviews_to_ledger_file(
             json.dumps(data if isinstance(data, list) else {**data, "entries": entries}, indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",
         )
+    # If we discharged any axioms but never reached the review loop (e.g.
+    # because the paper has no review match), still write the file so the
+    # discharged_axiom_debt + filtered axiom_debt persist.
+    if axioms_discharged > 0 and updated == 0:
+        ledger_path.write_text(
+            json.dumps(data if isinstance(data, list) else {**data, "entries": entries}, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
     return {
         "updated": updated,
         "skipped_no_match": skipped,
@@ -418,6 +507,7 @@ def apply_reviews_to_ledger_file(
         "promoted": promoted,
         "name_fallback": name_fallback,
         "backfilled": backfilled,
+        "axioms_discharged": axioms_discharged,
     }
 
 
@@ -431,6 +521,7 @@ def apply_reviews_to_ledgers(
     reviewed = _read_jsonl(reviewed_corpus_path)
     reviewed_index, name_index = _index_reviewed_rows(reviewed)
     pipeline_commit, lean_toolchain = _compute_project_repro_info()
+    aligned_debts_by_paper = _load_aligned_debts_by_paper()
     summary: dict[str, Any] = {
         "reviewed_corpus": str(reviewed_corpus_path),
         "ledger_dir": str(ledger_dir),
@@ -438,9 +529,13 @@ def apply_reviews_to_ledgers(
         "indexed_by_name": len(name_index),
         "pipeline_commit": pipeline_commit[:12] if pipeline_commit else "",
         "lean_toolchain": lean_toolchain,
+        "alignment_papers": len(aligned_debts_by_paper),
+        "alignment_total_names": sum(len(v) for v in aligned_debts_by_paper.values()),
         "papers": {},
     }
-    paper_ids = sorted({k[0] for k in reviewed_index.keys()} | {k[0] for k in name_index.keys()})
+    # Walk every ledger present (not just those with reviews) so alignment-
+    # discharge runs across the whole corpus, not just papers with new reviews.
+    paper_ids = sorted({k[0] for k in reviewed_index.keys()} | {k[0] for k in name_index.keys()} | set(aligned_debts_by_paper.keys()))
     for paper_id in paper_ids:
         ledger_path = ledger_dir / f"{paper_id}.json"
         if not ledger_path.exists():
@@ -450,6 +545,7 @@ def apply_reviews_to_ledgers(
             ledger_path, paper_id, reviewed_index, name_index,
             pipeline_commit=pipeline_commit,
             lean_toolchain=lean_toolchain,
+            aligned_names=aligned_debts_by_paper.get(paper_id, set()),
         )
         summary["papers"][paper_id] = result
         if publish and result["updated"] and repro_dir is not None:
@@ -459,6 +555,7 @@ def apply_reviews_to_ledgers(
     summary["total_updated"] = sum(p.get("updated", 0) for p in summary["papers"].values())
     summary["total_name_fallback"] = sum(p.get("name_fallback", 0) for p in summary["papers"].values())
     summary["total_backfilled"] = sum(p.get("backfilled", 0) for p in summary["papers"].values())
+    summary["total_axioms_discharged"] = sum(p.get("axioms_discharged", 0) for p in summary["papers"].values())
     return summary
 
 
