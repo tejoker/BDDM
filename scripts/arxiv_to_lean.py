@@ -850,7 +850,10 @@ def _write_translation_repair_queue(*, work_dir: Path, paper_id: str, results: l
 
 # Increment when translation logic changes enough to invalidate old entries.
 # On mismatch, the cache file is ignored and a fresh empty cache is written.
-_TRANSLATION_CACHE_VERSION = 4
+# Bump on prompt-shape change so prior cached translations (which were
+# generated WITHOUT the paper-theory signature hint) don't shadow the
+# improved candidates the new prompt will produce.
+_TRANSLATION_CACHE_VERSION = 5
 
 
 class _TranslationCache:
@@ -1684,6 +1687,35 @@ def run_pipeline(
     # --- Definition pre-pass: translate paper-local definitions → PaperTheory module ---
     # Definitions are extracted but excluded from the theorem loop by the kinds filter.
     # Translating them here grounds paper-local identifiers so theorems don't see axiom stubs.
+    def _paper_theory_signature_hint() -> str:
+        """Extract the `def`/`abbrev`/`axiom` signatures from the
+        paper-theory file as a hint for the translator. Each line:
+        `Paper_X.foo : <type>`. Without this, Leanstral guesses
+        types and the validator rejects the resulting candidates."""
+        if not paper_theory_module_name:
+            return ""
+        pt_path = project_root / "Desol" / "PaperTheory" / f"{paper_theory_module_name}.lean"
+        if not pt_path.exists():
+            return ""
+        try:
+            text = pt_path.read_text(encoding="utf-8")
+        except Exception:
+            return ""
+        lines: list[str] = []
+        for m in re.finditer(
+            r"^\s*(?:noncomputable\s+)?(?:def|abbrev|axiom)\s+([A-Za-z_][\w']*)\s*([^:=]*):\s*([^:]+?)(?::=|$)",
+            text,
+            flags=re.MULTILINE,
+        ):
+            name = m.group(1).strip()
+            params = m.group(2).strip()
+            typ = m.group(3).strip()
+            if name and typ:
+                # Format as Paper_X.name (params) : type
+                line = f"  {paper_theory_module_name}.{name} {params} : {typ}".rstrip()
+                lines.append(line)
+        return "\n".join(lines)
+
     if definition_entries and not disable_paper_theory_refresh:
         print(f"\n[def-pass] Translating {len(definition_entries)} definition(s) → PaperTheory ...")
         # Build-order fix: the def-pass validates each candidate signature by
@@ -1727,6 +1759,7 @@ def run_pipeline(
                     model=model,
                     project_root=project_root,
                     imports=_def_pass_imports,
+                    paper_theory_hint=_paper_theory_signature_hint(),
                     retrieval_index_path=retrieval_index_path,
                     max_repair_rounds=3,
                     translation_candidates=1,
@@ -1997,6 +2030,7 @@ def run_pipeline(
                 enable_schema_template_synthesis=bool(enable_schema_template_synthesis),
                 enable_schema_self_check=bool(enable_schema_self_check),
                 glossary_hint=_format_glossary_hint(paper_glossary, _macro_collisions),
+                paper_theory_hint=_paper_theory_signature_hint(),
                 paper_id=paper_id,
                 theorem_name=_lean_name(entry.name),
                 run_id=repair_run_id,
@@ -2151,6 +2185,7 @@ def run_pipeline(
                 enable_schema_template_synthesis=bool(enable_schema_template_synthesis),
                 enable_schema_self_check=False,
                 glossary_hint=_format_glossary_hint(paper_glossary, _macro_collisions),
+                paper_theory_hint=_paper_theory_signature_hint(),
                 paper_id=paper_id,
                 theorem_name=_lean_name(entry.name),
                 run_id=f"{repair_run_id}_strict_retry",

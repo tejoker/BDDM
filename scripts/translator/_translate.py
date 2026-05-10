@@ -1355,6 +1355,7 @@ def extract_structured_translation(
     latex_proof_hint: str = "",
     schema: dict | None = None,
     glossary_hint: str = "",
+    paper_theory_hint: str = "",
     client: object,
     model: str,
     api_log_hook: object = None,
@@ -1365,6 +1366,18 @@ def extract_structured_translation(
         user_parts.append(f"Informal proof / local context:\n{latex_proof_hint.strip()}")
     if glossary_hint.strip():
         user_parts.append(f"Paper-local glossary extracted before translation:\n{glossary_hint.strip()}")
+    if paper_theory_hint.strip():
+        # Standards-positive: passing the EXACT Lean type signatures of paper-
+        # local symbols lets Leanstral generate type-compatible candidates
+        # (e.g. `(a_f : Fin (2^n) → Bool)` rather than `(a_f : ℤ)`).
+        # Without this, Leanstral guesses the type and the validation gate
+        # correctly rejects type-mismatched candidates — but the rejection
+        # is salvageable at translation time, not at validation time.
+        user_parts.append(
+            "Paper-theory Lean signatures (these symbols already exist; "
+            "USE THEIR EXACT TYPES — do not redeclare or pick incompatible types):\n"
+            f"{paper_theory_hint.strip()}"
+        )
     if schema is not None:
         user_parts.append(
             "Stage-A statement schema:\n"
@@ -1617,6 +1630,67 @@ def _quantifier_mismatch_issue(latex_statement: str, signature: str) -> str | No
     return None
 
 
+def _quantifier_scope_flip_issue(latex_statement: str, signature: str) -> str | None:
+    """Detect quantifier-scope reversals: `∀x ∃y` vs `∃y ∀x` are NOT
+    equivalent in general (the second is strictly stronger). The previous
+    `_quantifier_mismatch_issue` only caught dropped quantifiers; this
+    additional check tightens the gate against scope inversions, which
+    are subtle but mathematically wrong.
+
+    Heuristic: read the LaTeX's left-to-right quantifier order, read the
+    Lean's left-to-right quantifier order, and flag a mismatch ONLY when
+    both orders are unambiguous. Treats `for every X there exists Y`
+    (latex_order=∀∃) different from `there exists Y such that for every X`
+    (latex_order=∃∀)."""
+    source = (latex_statement or "").lower()
+    if not source:
+        return None
+    sig_no_body = re.sub(r":=\s*by\b.*$", "", signature or "", flags=re.DOTALL)
+
+    # Extract the latex quantifier order. Markers:
+    #  ∀ / \forall / "for all" / "for every" / "for each"  → "U"
+    #  ∃ / \exists / "there exists" / "there is"           → "E"
+    latex_quants: list[str] = []
+    pattern = re.compile(
+        r"(\\forall|∀|for\s+all|for\s+every|for\s+each)|"
+        r"(\\exists|∃|there\s+exists|there\s+is\s+(?:a|an))",
+    )
+    for m in pattern.finditer(source):
+        if m.group(1):
+            latex_quants.append("U")
+        elif m.group(2):
+            latex_quants.append("E")
+    if len(latex_quants) < 2:
+        return None  # need at least two consecutive quantifiers to flip
+
+    # Extract the lean quantifier order from the signature (top-level only).
+    lean_quants: list[str] = []
+    for ch in sig_no_body:
+        if ch == "∀":
+            lean_quants.append("U")
+        elif ch == "∃":
+            lean_quants.append("E")
+    # Also count Lean parenthesized binders before `:` as universal binders.
+    # `theorem foo (x : ℝ) (y : ℝ) : ...` is `∀ x ∀ y`. We approximate by
+    # counting only the binders BEFORE the first ∀/∃ in the signature.
+    pre_binder_count = 0
+    for m in re.finditer(r"\(([^()]+?)\)", sig_no_body):
+        # Only count if it precedes any explicit ∀/∃
+        if "∀" in sig_no_body[: m.start()] or "∃" in sig_no_body[: m.start()]:
+            break
+        pre_binder_count += 1
+    lean_quants = (["U"] * pre_binder_count) + lean_quants
+    if len(lean_quants) < 2:
+        return None
+
+    # Compare ONLY the first two: the dominant scope reversal we want to catch.
+    latex_first2 = "".join(latex_quants[:2])
+    lean_first2 = "".join(lean_quants[:2])
+    if latex_first2 in {"UE", "EU"} and lean_first2 in {"UE", "EU"} and latex_first2 != lean_first2:
+        return f"quantifier_scope_flipped:latex_{latex_first2}_vs_lean_{lean_first2}"
+    return None
+
+
 def _semantic_policy_issues(
     *,
     latex_statement: str,
@@ -1646,6 +1720,12 @@ def _semantic_policy_issues(
     quantifier_issue = _quantifier_mismatch_issue(latex_statement, signature)
     if quantifier_issue:
         issues.append(quantifier_issue)
+
+    # Tighter gate: detect ∀∃ ↔ ∃∀ scope flips. The earlier check only
+    # flagged DROPPED quantifiers, missing this stronger violation.
+    scope_flip = _quantifier_scope_flip_issue(latex_statement, signature)
+    if scope_flip:
+        issues.append(scope_flip)
 
     coverage_issues = _schema_coverage_issues(schema, signature)
     if coverage_issues and strict_assumption_slot_coverage:
@@ -3097,6 +3177,7 @@ def translate_statement(
     enable_schema_template_synthesis: bool = False,
     enable_schema_self_check: bool = True,
     glossary_hint: str = "",
+    paper_theory_hint: str = "",
     paper_id: str = "",
     theorem_name: str = "",
     run_id: str = "",
@@ -3229,6 +3310,7 @@ def translate_statement(
         latex_proof_hint=latex_proof_hint,
         schema=schema,
         glossary_hint=glossary_hint,
+        paper_theory_hint=paper_theory_hint,
         client=client,
         model=model,
         api_log_hook=api_log_hook,
@@ -3306,6 +3388,19 @@ def translate_statement(
         user_parts.append(f"Informal proof context:\n{latex_proof_hint.strip()}")
     if glossary_hint.strip():
         user_parts.append(f"Paper glossary memory:\n{glossary_hint.strip()}")
+    if paper_theory_hint.strip():
+        # Type-aware grounding: list the EXACT Lean signatures of paper-local
+        # symbols already declared in `Desol.PaperTheory.Paper_<id>`. Without
+        # this, Leanstral guesses the type of a paper-local function (e.g.
+        # `w_H : ℤ → ℕ` instead of `Fin (2^n) → Bool → ℕ`), producing
+        # type-mismatched candidates that the validator correctly rejects.
+        # Standards-positive: this raises candidate quality without touching
+        # the acceptance gate.
+        user_parts.append(
+            "Paper-theory Lean signatures (these symbols already exist; "
+            "USE THEIR EXACT TYPES — do not redeclare or pick incompatible types):\n"
+            f"{paper_theory_hint.strip()}"
+        )
     if schema is not None:
         user_parts.append(
             "Stage-A extracted schema (use this structure faithfully when writing Lean):\n"
