@@ -323,6 +323,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Batch-generates trivial paper-theory alignments (constant-zero stubs, Set.univ stubs, Prop=True stubs) as Lean theorems + alignments.json entries. Feeds the AB→FP debt discharge in apply_reviews_to_ledger.py.",
     },
+    "mathlib_alignment_search.py": {
+        "tier": "official_support",
+        "category": "review",
+        "summary": "Queries Leanstral for Mathlib counterparts of a paper-local axiom (signature + description). Returns ranked candidates with elaboration check. Generalizes per-area starter types to per-symbol search; the scalable answer to AB→FP discharge for non-trivial axioms.",
+    },
     "mark_ghost_translation_failures.py": {
         "tier": "dev_tool",
         "category": "review",
