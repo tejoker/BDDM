@@ -14,6 +14,9 @@ namespace Paper_2012_09271
 -- ------------------------------------------------------------------
 
 axiom C : ℝ
+-- Aesop tactic registration for paper-local axioms.
+attribute [aesop safe apply] C
+
 
 end Paper_2012_09271
 

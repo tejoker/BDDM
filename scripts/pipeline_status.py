@@ -1423,18 +1423,68 @@ def save_ledger(
     return path
 
 
+def _normalised_theorem_name(name: str) -> str:
+    """Strip the leading namespace (e.g. `ArxivPaper.`) so `ArxivPaper.lem_X`
+    and `lem_X` are recognised as the same row. Without this, prove_arxiv_batch
+    runs that write back with `thm.full_name` create duplicate ledger entries
+    of rows originally written with the bare theorem_id."""
+    return (name or "").rsplit(".", 1)[-1]
+
+
+_STATUS_RANK: dict[str, int] = {
+    "FULLY_PROVEN": 5,
+    "AXIOM_BACKED": 4,
+    "INTERMEDIARY_PROVEN": 3,
+    "UNRESOLVED": 2,
+    "FLAWED": 1,
+    "TRANSLATION_LIMITED": 0,
+    "": -1,
+}
+
+
+def _ledger_status_rank(entry: dict[str, Any]) -> int:
+    return _STATUS_RANK.get(str(entry.get("status", "") or ""), -1)
+
+
 def upsert_ledger_entry(
     paper_id: str,
     entry: TheoremLedgerEntry,
     output_root: Path | None = None,
 ) -> Path:
-    """Insert or replace the ledger entry for one theorem (matched by theorem_name)."""
+    """Insert or replace the ledger entry for one theorem (matched by theorem_name).
+
+    Matching is done both on the literal theorem_name AND on the namespace-
+    stripped form so that `ArxivPaper.lem_X` and `lem_X` are recognised as
+    the same row. When a match is found by stripped name, the existing
+    `theorem_name` is preserved on overwrite (we don't promote `lem_X` to
+    `ArxivPaper.lem_X` mid-flight, since downstream tools may join on the
+    bare form).
+
+    Rank-aware overwrite: a new entry only replaces an existing one when its
+    status rank is at-least-equal. Without this safeguard a follow-up prove run
+    that fails statement-fidelity (writes TRANSLATION_LIMITED) would silently
+    clobber an already-FULLY_PROVEN row from a previous successful run. This
+    matters in particular for repeat-prove sweeps over multi-paper corpora.
+    """
     entries = load_ledger(paper_id, output_root=output_root)
     entry_dict = entry.to_dict()
+    new_norm = _normalised_theorem_name(entry.theorem_name)
+    new_rank = _STATUS_RANK.get(str(entry_dict.get("status", "") or ""), -1)
     replaced = False
     for i, existing in enumerate(entries):
-        if existing.get("theorem_name") == entry.theorem_name:
-            entries[i] = entry_dict
+        existing_name = existing.get("theorem_name") or ""
+        if existing_name == entry.theorem_name or _normalised_theorem_name(existing_name) == new_norm:
+            existing_rank = _ledger_status_rank(existing)
+            if new_rank >= existing_rank:
+                # Preserve the existing theorem_name on overwrite (avoid silently
+                # changing the row's identity from `lem_X` to `ArxivPaper.lem_X`).
+                merged = dict(entry_dict)
+                if existing_name:
+                    merged["theorem_name"] = existing_name
+                entries[i] = merged
+            # When the new entry is strictly worse than the existing one, we
+            # keep the existing one untouched and skip the append (the row is
+            # already present at a higher tier).
             replaced = True
             break
     if not replaced:

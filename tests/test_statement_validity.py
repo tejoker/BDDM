@@ -333,3 +333,35 @@ def test_false_target_does_not_represent_plain_nonexistence_claim() -> None:
     }
 
     assert false_target_reason(row) == "false_target_without_source_contradiction"
+
+
+def test_classify_statement_stub_debt_no_paper_axiom_debt_gate_passes() -> None:
+    """paper_definition_stub:* debt with no_paper_axiom_debt in gate_failures must not
+    trigger the paper_theory_debt blocker.  The statement_debt filter already exempts
+    stub entries; the gate check was redundant and inconsistent with that filter."""
+    row = {
+        "theorem_name": "EqualLN",
+        "lean_statement": "theorem EqualLN (alpha beta : Multisegment) : n_alpha alpha = n_alpha beta := by sorry",
+        "status": "UNRESOLVED",
+        "axiom_debt": ["paper_definition_stub:Multisegment", "paper_definition_stub:n_alpha"],
+        "gate_failures": ["lean_proof_closed", "claim_equivalent", "no_paper_axiom_debt"],
+    }
+    validity = classify_statement(row)
+    assert validity.primary_blocker != "paper_theory_debt", (
+        f"Expected stub-only debt + no_paper_axiom_debt gate NOT to trigger paper_theory_debt, "
+        f"got primary_blocker={validity.primary_blocker!r}"
+    )
+
+
+def test_classify_statement_real_debt_still_blocked() -> None:
+    """Non-stub debt (paper_local_lemma:*, bare entries) must still trigger paper_theory_debt."""
+    row = {
+        "theorem_name": "Foo",
+        "lean_statement": "theorem Foo (x : ℝ) : x = x",
+        "status": "UNRESOLVED",
+        "axiom_debt": ["paper_local_lemma:SomePaperLemma"],
+        "gate_failures": ["lean_proof_closed"],
+    }
+    validity = classify_statement(row)
+    assert validity.primary_blocker == "paper_theory_debt"
+    assert "SomePaperLemma" in " ".join(validity.reasons)

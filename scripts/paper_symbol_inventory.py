@@ -84,8 +84,10 @@ def _has_ident(text: str, ident: str) -> bool:
 
 
 def _decl_name(declaration: str) -> str:
+    # Use a negative lookahead instead of \b: \b fails after ' (apostrophe/prime)
+    # because ' is not a \w character, so \b backtracks and drops the prime.
     m = re.match(
-        rf"\s*(?:axiom|constant|def|abbrev|opaque|lemma|theorem)\s+({_LEAN_NAME_RE})\b",
+        rf"\s*(?:axiom|constant|def|abbrev|opaque|lemma|theorem)\s+({_LEAN_NAME_RE})(?![A-Za-z0-9_ξΨΓΘΩαβγδℓ'])",
         declaration,
     )
     return m.group(1) if m else ""

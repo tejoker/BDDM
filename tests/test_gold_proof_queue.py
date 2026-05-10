@@ -114,6 +114,36 @@ def test_gold_proof_queue_rejects_metric_game_rows() -> None:
     assert summary["rejection_reason_counts"]["paper_claim_artifact"] == 1
 
 
+def test_proof_candidate_blockers_allows_paper_definition_stub_debt() -> None:
+    """paper_definition_stub:* entries are transparent stubs; the fidelity gate already
+    exempts them, so proof_candidate_blockers must not add a redundant block."""
+    row_stub_only = _row(axiom_debt=["paper_definition_stub:Multisegment", "paper_definition_stub:IsSimple"])
+    blockers = proof_candidate_blockers(row_stub_only)
+    assert "axiom_or_paper_theory_debt" not in blockers
+
+    row_mixed = _row(axiom_debt=["paper_definition_stub:Multisegment", "paper_local_axiom:Foo"])
+    mixed_blockers = proof_candidate_blockers(row_mixed)
+    assert "axiom_or_paper_theory_debt" in mixed_blockers
+
+
+def test_gold_proof_queue_accepts_reviewed_exact_with_stub_debt() -> None:
+    """A reviewed-exact row with only paper_definition_stub debt should enter the queue."""
+    row = _row(
+        alignment_gold_eligible=True,
+        reviewed_statement_alignment_class="exact",
+        reviewed_equivalence_verdict="equivalent",
+        reviewed_alignment_confidence=0.85,
+        review_provenance={"reviewed_by": "hybrid:conservative-assisted-review"},
+        axiom_debt=["paper_definition_stub:MyPaperType"],
+        gate_failures=["lean_proof_closed"],
+    )
+    blockers = proof_candidate_blockers(row)
+    assert "axiom_or_paper_theory_debt" not in blockers
+    queue, summary = build_gold_proof_queue([row])
+    assert len(queue) == 1
+    assert summary["candidate_rows"] == 1
+
+
 def test_gold_proof_queue_rejects_false_targets_without_contradiction_source() -> None:
     row = _row(
         row_id="false",

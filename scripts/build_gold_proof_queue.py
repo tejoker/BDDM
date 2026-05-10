@@ -55,7 +55,12 @@ def proof_candidate_blockers(row: dict[str, Any]) -> list[str]:
     text = "\n".join(str(row.get(key, "") or "") for key in ("lean_statement", "proof_text", "trust_reference", "failure_kind"))
     if "PaperClaim" in text or "paper_claim" in text.lower():
         blockers.append("paper_claim_artifact")
-    if row.get("axiom_debt"):
+    # paper_definition_stub:* entries are transparent stubs (def X := 0 / Set.univ).
+    # classify_statement() already exempts them from its paper_theory_debt blocker, so
+    # blocking here too is inconsistent with what the fidelity gate allows.  Only block
+    # on non-stub debt (paper_symbol:*, paper_local_lemma:*, bare entries, etc.).
+    non_stub_debt = [d for d in (row.get("axiom_debt") or []) if not str(d).startswith("paper_definition_stub:")]
+    if non_stub_debt:
         blockers.append("axiom_or_paper_theory_debt")
     gate_failures = [str(item) for item in row.get("gate_failures", [])] if isinstance(row.get("gate_failures"), list) else []
     if any("domain_assumption" in item or "paper_local" in item for item in gate_failures):

@@ -29,5 +29,12 @@ def r_i_j_1 : ℝ := 0
 def alpha1 : ℝ := 0
 
 def widetildealpha1 : ℝ := 0
+-- Standard typeclass instances inherited from the underlying Mathlib type.
+instance : LE Multisegment := inferInstance
+instance : LT Multisegment := inferInstance
+instance : Preorder Multisegment := inferInstance
+instance : PartialOrder Multisegment := inferInstance
+instance : DecidableEq Multisegment := inferInstance
+
 
 end Paper_2304_09598_Repair

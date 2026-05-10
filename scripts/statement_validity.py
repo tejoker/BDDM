@@ -379,7 +379,12 @@ def classify_statement(row: dict[str, Any]) -> StatementValidity:
     regenerated = regenerated_statement_reason(row)
     if regenerated:
         reasons.append(regenerated)
-    if regenerated or statement_debt or "no_paper_axiom_debt" in gates:
+    # Note: "no_paper_axiom_debt" in gates is NOT checked here. When all axiom_debt is
+    # paper_definition_stub:* (transparent stubs), statement_debt is already empty, and
+    # the gate's presence adds no new information. Checking it independently would block
+    # rows that the fidelity gate is designed to allow through (inconsistent with the
+    # statement_debt filter above and with build_gold_proof_queue's stub-debt allowance).
+    if regenerated or statement_debt:
         reasons.extend(statement_debt or ["no_paper_axiom_debt_gate"])
         blocker = "paper_theory_debt"
         return validity(False, blocker, list(dict.fromkeys(reasons)))

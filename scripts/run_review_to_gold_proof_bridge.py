@@ -63,6 +63,54 @@ def _is_release_eligible_review(review: dict[str, Any]) -> bool:
     return ("hybrid" in rb and "auto_llm" not in rb) or "human" in rb
 
 
+_AUTO_ALIGN_FIELDS = (
+    "reviewed_equivalence_verdict",
+    "reviewed_statement_alignment_class",
+    "reviewed_alignment_confidence",
+)
+
+
+def _augment_batch_with_auto_alignment(
+    batch_rows: list[dict[str, Any]],
+    additional_reviews: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Merge confident auto-alignment review fields onto batch rows by row_id.
+
+    This lets the assisted-review fast-path see the LLM equivalence signal even when
+    the row's underlying ledger entry was not updated (LLM verdicts are blocked from
+    promoting `claim_equivalence_verdict` by design). Generalises the bridge from the
+    six 2304.09598 rows to any future arxiv paper with auto-alignment evidence.
+    """
+    by_row_id: dict[str, dict[str, Any]] = {}
+    for review in additional_reviews:
+        rid = str(review.get("row_id", "") or "")
+        if not rid:
+            continue
+        if str(review.get("reviewed_equivalence_verdict", "") or "").lower() != "equivalent":
+            continue
+        if str(review.get("reviewed_statement_alignment_class", "") or "").lower() != "exact":
+            continue
+        # Prefer highest-confidence review per row_id.
+        existing = by_row_id.get(rid)
+        if existing is None or float(review.get("reviewed_alignment_confidence", 0.0) or 0.0) > float(
+            existing.get("reviewed_alignment_confidence", 0.0) or 0.0
+        ):
+            by_row_id[rid] = review
+    augmented: list[dict[str, Any]] = []
+    for item in batch_rows:
+        rid = str(item.get("row_id", "") or "")
+        review = by_row_id.get(rid)
+        if review is None:
+            augmented.append(item)
+            continue
+        merged = dict(item)
+        for field in _AUTO_ALIGN_FIELDS:
+            if field in review and field not in merged:
+                merged[field] = review[field]
+        augmented.append(merged)
+    return augmented
+
+
 def run_review_to_gold_bridge(
     *,
     batch_rows: list[dict[str, Any]],
@@ -78,8 +126,9 @@ def run_review_to_gold_bridge(
     # Only count release-eligible reviews as "already reviewed" when deciding whether
     # to generate a new assisted review. Auto-LLM-only rows still get a bridge review.
     release_reviews = [r for r in trusted_input_reviews if _is_release_eligible_review(r)]
+    augmented_batch = _augment_batch_with_auto_alignment(batch_rows, trusted_input_reviews)
     assisted_reviews, assisted_summary = build_assisted_reviews(
-        batch_rows,
+        augmented_batch,
         existing_reviews=release_reviews,
         reviewed_by=reviewed_by,
         reviewed_at=reviewed_at,
@@ -171,6 +220,17 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--reviewed-by", default="hybrid:conservative-assisted-review")
     parser.add_argument("--reviewed-at", default="")
     parser.add_argument("--gold-limit", type=int, default=200)
+    parser.add_argument(
+        "--apply-to-ledger",
+        action="store_true",
+        help="After bridge, propagate reviewed_* fields back into output/verification_ledgers/ so downstream consumers see the LLM signal across reruns.",
+    )
+    parser.add_argument(
+        "--ledger-dir",
+        type=Path,
+        default=Path("output/verification_ledgers"),
+        help="Ledger directory used by --apply-to-ledger.",
+    )
     return parser
 
 
@@ -189,6 +249,13 @@ def main() -> int:
         reviewed_at=args.reviewed_at,
         gold_limit=args.gold_limit,
     )
+    if args.apply_to_ledger:
+        from apply_reviews_to_ledger import apply_reviews_to_ledgers
+        apply_summary = apply_reviews_to_ledgers(
+            reviewed_corpus_path=args.out_reviewed_corpus_jsonl,
+            ledger_dir=args.ledger_dir,
+        )
+        result["apply_to_ledger_summary"] = apply_summary
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return 0
 

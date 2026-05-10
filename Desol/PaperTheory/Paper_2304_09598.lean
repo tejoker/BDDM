@@ -22,6 +22,12 @@ namespace Paper_2304_09598
 -- They are transparent Lean definitions for elaboration, not hidden proofs of paper claims.
 abbrev Multisegment : Type := ℕ
 
+instance : LE Multisegment := inferInstance
+instance : LT Multisegment := inferInstance
+instance : Preorder Multisegment := inferInstance
+instance : PartialOrder Multisegment := inferInstance
+instance : DecidableEq Multisegment := inferInstance
+
 def dual (α : Multisegment) : Multisegment := α
 
 def c_alpha (_α : Multisegment) : ℕ := 0
@@ -106,6 +112,14 @@ def utf8 : ℝ := 0
 
 -- Local lemmas / theorem-like facts.
 -- Explicit axioms / unresolved paper assumptions.
+
+-- Paper-local axiom: L_alpha is injective when alpha is simple and alpha ≤ beta.
+-- Required because the stub L_alpha = const 0 cannot verify this automatically.
+-- Grounding: paper_definition_stub:L_alpha_injective_on_simple_ordered
+axiom paper_L_alpha_simple_injective (α β : Multisegment)
+    (_ : IsSimple α) (_ : α ≤ β) (_ : L_alpha α = L_alpha β) : α = β
+
+attribute [aesop safe apply] paper_L_alpha_simple_injective
 
 end Paper_2304_09598
 

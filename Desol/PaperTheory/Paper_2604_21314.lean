@@ -121,7 +121,10 @@ def ξ' : ℝ := 0
 -- Local lemmas / theorem-like facts.
 -- Explicit axioms / unresolved paper assumptions.
 axiom d_dts : Measure ℝ
+-- Aesop tactic registration for paper-local axioms.
+attribute [aesop safe apply] d_dts
+
 
 end Paper_2604_21314
 
-export Paper_2604_21314 (HSobolev C_T infty VolterraEstimateStatement C a alpha_0 alpha_F defn_8 h0 h1 h2 h3 h4 h5 h6 hH_eps hT_eps hT_max hfL1 hu0 hz1 hz2 int_0 longrightarrow0 mX_i mt0 nabla_H oza3 p_F phi_1 phi_2 s10 s3 theta u0 u_0 utf8 v_0 x_1 x_N y_1 y_N z1 z2 z_1 z_2 Γ_gamma ξ d_dts)
+export Paper_2604_21314 (HSobolev C_T infty VolterraEstimateStatement C a alpha_0 alpha_F defn_8 h0 h1 h2 h3 h4 h5 h6 hH_eps hT_eps hT_max hfL1 hu0 hz1 hz2 int_0 longrightarrow0 mX_i mt0 nabla_H oza3 p_F phi_1 phi_2 s10 s3 theta u0 u_0 utf8 v_0 x_1 x_N y_1 y_N z1 z2 z_1 z_2 Γ_gamma d_dts)

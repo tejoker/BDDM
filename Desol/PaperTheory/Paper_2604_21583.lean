@@ -175,4 +175,4 @@ def Γ_lamt : ℝ := 0
 
 end Paper_2604_21583
 
-export Paper_2604_21583 (C a alpha1 assumption_slot_1_anchor_missing com1 d_0 d_0_P d_P h1 h2 h3 h4 hB9 hB_rel hC_beta hC_m hC_q hC_t hH1 hH2 hK_pos hQ1 hR1 hV_bound hV_nonneg hZ0 h_B9_disappears h_Tr_ h_Tr_Hs2 h_bound1 h_bound2 h_s1_small h_s1_sufficiently_small h_s2_close h_s2_sufficiently_close h_trace_H ha1 halpha1 hbeta_gt_32 hbeta_le_1 hbeta_le_12 hbeta_le_32 hmu0 hs1 hs2 k0 k1 k_1 k_P lemma11 log2 m1 mu0 mu_0 r1 r2 remark_1 remark_22 s1 s2 s_1 s_2 tr_H u1 u2 Γ Γ_0_t Γ_0_t_1 Γ_0t Γ_lam Γ_lam_k Γ_lam_t Γ_lam_t_1 Γ_lambda Γ_lamt)
+export Paper_2604_21583 (C a alpha1 assumption_slot_1_anchor_missing com1 d_0 d_0_P d_P h1 h2 h3 h4 hB9 hB_rel hC_beta hC_m hC_q hC_t hH1 hH2 hK_pos hQ1 hR1 hV_bound hV_nonneg hZ0 h_B9_disappears h_Tr_ h_Tr_Hs2 h_bound1 h_bound2 h_s1_small h_s1_sufficiently_small h_s2_close h_s2_sufficiently_close h_trace_H ha1 halpha1 hbeta_gt_32 hbeta_le_1 hbeta_le_12 hbeta_le_32 hmu0 hs1 hs2 k0 k1 k_1 k_P lemma11 log2 m1 mu0 mu_0 r1 r2 remark_1 remark_22 s1 s2 s_1 s_2 tr_H u1 u2 Γ_0_t Γ_0_t_1 Γ_0t Γ_lam Γ_lam_k Γ_lam_t Γ_lam_t_1 Γ_lambda Γ_lamt)

@@ -2572,6 +2572,14 @@ def main() -> int:
         plan = plan_paper_theory(paper_id=args.paper_id, domain=str(args.library_first_domain or ""), seed_text=seed_text)
         theory_path = write_paper_theory(project_root=project_root, plan=plan)
         theory_build = build_paper_theory(project_root=project_root, module_name=plan.module_name)
+        # Refresh the auto-generated REPL fallback anchor so that a freshly-built
+        # paper-theory module is available to MCTS even when the per-paper output
+        # `.lean` fails to elaborate. Idempotent; only writes if content changed.
+        try:
+            from regenerate_paper_imports_anchor import regenerate as _regen_anchor
+            _regen_anchor(project_root)
+        except Exception:
+            pass
         steps.append({
             "stage": "paper_theory_builder",
             "ok": bool(theory_build.get("ok", False)),

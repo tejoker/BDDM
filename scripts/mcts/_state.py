@@ -599,8 +599,19 @@ def run_state_mcts(
             anchor_candidates: list[str] = []
             if file_path is not None:
                 anchor_candidates.append(str(file_path))
-            anchor_candidates.extend(["Desol/ReplAnchor.lean", "Desol/Basic.lean", "Desol/SDE/Basic.lean"])
+            # PaperImportsAnchor.lean is auto-generated and imports every buildable
+            # Desol/PaperTheory/Paper_*.lean. Use it AFTER the per-paper file_path so
+            # that when the per-paper output `.lean` fails to elaborate (translation
+            # errors), MCTS still anchors to an env with paper-theory types and
+            # typeclass instances available, instead of the Mathlib-only ReplAnchor.
+            anchor_candidates.extend([
+                "Desol/PaperImportsAnchor.lean",
+                "Desol/ReplAnchor.lean",
+                "Desol/Basic.lean",
+                "Desol/SDE/Basic.lean",
+            ])
             bootstrap_err = None
+            chosen_anchor: str | None = None
             for anchor in anchor_candidates:
                 try:
                     env_or_err = server.ensure_mathlib_imported(anchor_file=anchor)
@@ -611,11 +622,49 @@ def run_state_mcts(
                     bootstrap_err = env_or_err.error
                     continue
                 bootstrap_err = None
+                chosen_anchor = anchor
                 break
             if bootstrap_err is not None:
                 if _repl_backend_incompatible(bootstrap_err):
                     return _fallback_to_draft(f"REPL backend incompatible: {bootstrap_err}")
                 return False, [], f"REPL bootstrap failed: {bootstrap_err}"
+
+            # The REPL env after path-load includes definitions/instances but does NOT
+            # carry over `open` directives from the anchor file. Replay them so the
+            # theorem statement can resolve unqualified identifiers (e.g. paper-theory
+            # types like `Multisegment` and their typeclass instances). When the chosen
+            # anchor is PaperImportsAnchor.lean we additionally synthesise `open Paper_*`
+            # lines for every paper-theory module imported there, since the anchor file
+            # itself contains no `open` directives.
+            try:
+                import re as _re_open
+                _open_lines: list[str] = []
+                if file_path is not None:
+                    try:
+                        _file_text = Path(str(file_path)).read_text(encoding="utf-8", errors="replace")
+                        for _line in _file_text.splitlines():
+                            _ms = _re_open.match(r"^\s*open\s+([A-Za-z_][A-Za-z0-9_.\s]*)\s*$", _line)
+                            if _ms:
+                                _open_lines.append(f"open {_ms.group(1).strip()}")
+                    except Exception:
+                        pass
+                if chosen_anchor and chosen_anchor.endswith("PaperImportsAnchor.lean"):
+                    try:
+                        _anchor_text = (project_root / chosen_anchor).read_text(encoding="utf-8", errors="replace")
+                        for _line in _anchor_text.splitlines():
+                            _ms = _re_open.match(r"^\s*import\s+(Desol\.PaperTheory(?:\.Repair)?\.Paper_[A-Za-z0-9_]+)\s*$", _line)
+                            if _ms:
+                                _ns = _ms.group(1).rsplit(".", 1)[-1]
+                                _open_lines.append(f"open {_ns}")
+                    except Exception:
+                        pass
+                for _open_cmd in dict.fromkeys(_open_lines):
+                    try:
+                        server.elaborate(_open_cmd, env=server._env_id)
+                    except Exception:
+                        pass
+            except Exception:
+                pass
 
             ps = server.start_proof(theorem_statement)
             if isinstance(ps, REPLLeanError):
