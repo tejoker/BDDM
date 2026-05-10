@@ -1686,6 +1686,33 @@ def run_pipeline(
     # Translating them here grounds paper-local identifiers so theorems don't see axiom stubs.
     if definition_entries and not disable_paper_theory_refresh:
         print(f"\n[def-pass] Translating {len(definition_entries)} definition(s) → PaperTheory ...")
+        # Build-order fix: the def-pass validates each candidate signature by
+        # writing a probe `.lean` file and running `lake env lean`. The
+        # `imports` value populated by `_refresh_paper_theory()` includes
+        # `import Desol.PaperTheory.Paper_<id>` — but that module's `.olean`
+        # is NOT YET BUILT at this point (it was just written to disk by
+        # `write_paper_theory`; lake hasn't compiled it). The probe file
+        # then fails elaboration with "object file does not exist", flipping
+        # `validated=False` for every def-pass candidate even when the
+        # translation is correct.
+        # Definitions don't depend on the paper-theory module (they ARE
+        # what populates it), so validating them with just Mathlib + Aesop
+        # is sufficient. Strip any `import Desol.PaperTheory.*` lines from
+        # the imports passed to the def-pass `translate_statement` calls.
+        def _strip_paper_theory_imports(s: str) -> str:
+            kept: list[str] = []
+            for line in (s or "").splitlines():
+                if re.match(r"^\s*import\s+Desol\.PaperTheory\.", line):
+                    continue
+                # Also strip the `open Paper_<id>` line that
+                # `paper_theory_import_header` adds alongside the import.
+                # Without removing this, the probe file has `open Paper_X`
+                # but no corresponding import → "unknown namespace Paper_X".
+                if re.match(r"^\s*open\s+Paper_\w+\s*$", line):
+                    continue
+                kept.append(line)
+            return "\n".join(kept)
+        _def_pass_imports = _strip_paper_theory_imports(imports) or _PROOF_IMPORTS
         _def_translated = 0
         for _def_entry in definition_entries[:40]:  # cap to avoid excessive API calls
             if not (_def_entry.statement or "").strip():
@@ -1699,7 +1726,7 @@ def run_pipeline(
                     client=client,
                     model=model,
                     project_root=project_root,
-                    imports=imports,
+                    imports=_def_pass_imports,
                     retrieval_index_path=retrieval_index_path,
                     max_repair_rounds=3,
                     translation_candidates=1,
@@ -1728,6 +1755,28 @@ def run_pipeline(
         if _def_translated:
             print(f"      def-pass: {_def_translated} definition(s) translated → refreshing PaperTheory")
             _refresh_paper_theory()
+
+    # Build the paper-theory module to disk-as-olean BEFORE the theorem loop.
+    # The loop's per-theorem validation imports `Paper_<id>` and would fail
+    # with "object file does not exist" otherwise — same root cause as the
+    # def-pass build-order bug. We invoke `lake build` for the module after
+    # `_refresh_paper_theory` has written the .lean source.
+    if paper_theory_module_name and not disable_paper_theory_refresh:
+        try:
+            _pt_build = build_paper_theory(
+                project_root=project_root,
+                module_name=paper_theory_module_name,
+                timeout_s=240,
+            )
+            if _pt_build.get("ok"):
+                print(f"      paper-theory built: Desol.PaperTheory.{paper_theory_module_name} (olean ready for downstream validation)")
+            else:
+                print(
+                    f"      [warn] paper-theory build failed; theorem-loop validations may "
+                    f"silently fail with 'object file does not exist': {_pt_build.get('output_tail', '')[:200]}"
+                )
+        except Exception as _pt_exc:
+            print(f"      [warn] paper-theory build raised: {_pt_exc}; theorem-loop validations may fail")
 
     if not entries:
         print("      no theorem environments found — nothing to do")
