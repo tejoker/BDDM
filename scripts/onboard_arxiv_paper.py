@@ -106,9 +106,12 @@ def stage_translation(paper_id: str, args: argparse.Namespace) -> dict[str, Any]
     out_lean = ROOT / "output" / f"{paper_id}.lean"
     if args.skip_translation and out_lean.exists():
         return {"stage": "translation", "ok": True, "skipped": True, "lean_file": str(out_lean)}
+    # arxiv_to_lean.py takes the paper id as a positional argument, not --paper-id.
     result = _run([
         sys.executable, str(SCRIPTS / "arxiv_to_lean.py"),
-        "--paper-id", paper_id,
+        paper_id,
+        "--out", str(out_lean),
+        "--translate-only",  # skip the inline prove sweep; we have a dedicated stage_prove later
     ], timeout=1200)
     return {"stage": "translation", **result, "lean_file": str(out_lean), "lean_exists": out_lean.exists()}
 
