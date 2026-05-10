@@ -15,6 +15,7 @@ Error classes covered:
 from __future__ import annotations
 
 from translator._translate import (
+    _annotate_untyped_function_param,
     _apply_schema_fallback,
     _add_missing_function_binders,
     _balance_brackets,
@@ -27,6 +28,8 @@ from translator._translate import (
     _is_schema_scaffold_signature,
     _retry_directive_for_error,
     _relax_fragile_hypotheses,
+    _rewrite_anonymous_constructor_for_non_inductive,
+    _rewrite_invalid_field_projection,
     _schema_self_check_hard_issues,
     _semantic_policy_issues,
 )
@@ -458,3 +461,120 @@ class TestBalanceBrackets:
         sig = "theorem t (x : ℕ : x = x"
         out = _balance_brackets(sig)
         assert out.count("(") == out.count(")")
+
+
+# ---------------------------------------------------------------------------
+# _rewrite_invalid_field_projection — bucket invalid_field_projection
+# ---------------------------------------------------------------------------
+
+
+class TestRewriteInvalidFieldProjection:
+    """Paper-local def accessed via dot notation on an abbrev-typed variable
+    must be rewritten to functional form so it reaches `Paper_X.IsSimple` via
+    the open scope (Lean otherwise resolves to `Nat.IsSimple` and fails)."""
+
+    def test_rewrites_word_dot_field_to_functional_form(self) -> None:
+        sig = "theorem t (α : Multisegment) (h : α.IsSimple) : α.IsSimple := by sorry"
+        err = "error(lean.invalidField): Invalid field `IsSimple`: The environment does not contain `Nat.IsSimple`"
+        out = _rewrite_invalid_field_projection(sig, err)
+        assert "α.IsSimple" not in out
+        assert "IsSimple α" in out
+
+    def test_rewrites_parenthesised_expr_dot_field(self) -> None:
+        sig = "theorem t (M N : Multisegment) (h : (M ∪ N).IsSimple) : True := by trivial"
+        err = "error: Invalid field `IsSimple`: env does not contain `Nat.IsSimple`"
+        out = _rewrite_invalid_field_projection(sig, err)
+        assert "(M ∪ N).IsSimple" not in out
+        assert "IsSimple (M ∪ N)" in out
+
+    def test_no_rewrite_when_error_mentions_no_field(self) -> None:
+        sig = "theorem t (x : ℕ) (h : x.succ = x.succ) : True := by trivial"
+        err = "error: some unrelated message"
+        out = _rewrite_invalid_field_projection(sig, err)
+        assert out == sig
+
+
+# ---------------------------------------------------------------------------
+# _rewrite_anonymous_constructor_for_non_inductive
+# ---------------------------------------------------------------------------
+
+
+class TestRewriteAnonymousConstructorForNonInductive:
+    """`⟨a, b⟩` on a non-inductive type (an abbrev that reduces to a base
+    type) blocks elaboration. Replace with `sorry` so the rest of the
+    signature can be checked."""
+
+    def test_replaces_anonymous_constructor_with_sorry(self) -> None:
+        sig = "theorem t (s : Segment) (h : s = ⟨0, 1⟩) : True := by trivial"
+        err = "error: Invalid `⟨...⟩` notation: The expected type `Segment` is not an inductive type"
+        out = _rewrite_anonymous_constructor_for_non_inductive(sig, err)
+        assert "⟨0, 1⟩" not in out
+        assert "sorry" in out
+
+    def test_no_rewrite_when_error_unrelated(self) -> None:
+        sig = "theorem t (s : MyStruct) (h : s = ⟨0, 1⟩) : True := by trivial"
+        err = "error: some unrelated message"
+        out = _rewrite_anonymous_constructor_for_non_inductive(sig, err)
+        assert out == sig
+
+
+# ---------------------------------------------------------------------------
+# _annotate_untyped_function_param — bucket application_type_mismatch (metavar)
+# ---------------------------------------------------------------------------
+
+
+class TestAnnotateUntypedFunctionParam:
+    """A bare `(mu)` parameter elaborates to a metavariable, and any
+    application `mu x` fails with `Function expected at mu but this term has
+    type ?m.N`. Annotate as `(mu : ℝ → ℝ)` so retry produces a clearer error
+    or succeeds."""
+
+    def test_annotates_bare_parameter(self) -> None:
+        sig = "theorem t (mu) (x : ℝ) : mu x = mu x := by rfl"
+        err = "error: Function expected at\n  mu\nbut this term has type\n  ?m.2"
+        out = _annotate_untyped_function_param(sig, err)
+        assert "(mu : ℝ → ℝ)" in out
+        assert "(mu)" not in out
+
+    def test_annotates_placeholder_parameter(self) -> None:
+        sig = "theorem t (mu : _) (x : ℝ) : mu x = mu x := by rfl"
+        err = "error: Function expected at\n  mu\nbut this term has type\n  ?m.1"
+        out = _annotate_untyped_function_param(sig, err)
+        assert "(mu : ℝ → ℝ)" in out
+
+    def test_no_rewrite_without_metavar_pattern(self) -> None:
+        sig = "theorem t (mu) (x : ℝ) : mu x = mu x := by rfl"
+        err = "error: some unrelated message without metavariable"
+        out = _annotate_untyped_function_param(sig, err)
+        assert out == sig
+
+    def test_no_rewrite_when_parameter_already_typed(self) -> None:
+        sig = "theorem t (mu : ℝ → ℝ) (x : ℝ) : mu x = mu x := by rfl"
+        # Even if Lean reports the error, the regex won't match the typed form.
+        err = "error: Function expected at\n  mu\nbut this term has type\n  ?m.1"
+        out = _annotate_untyped_function_param(sig, err)
+        # The already-typed parameter stays as-is (no `(mu)` or `(mu : _)` to
+        # rewrite). Sanity: typed annotation is preserved.
+        assert "(mu : ℝ → ℝ)" in out
+
+
+# ---------------------------------------------------------------------------
+# _retry_directive_for_error — new directives for buckets attacked this round
+# ---------------------------------------------------------------------------
+
+
+class TestRetryDirectiveNewBuckets:
+    def test_function_expected_metavar_returns_explicit_type_directive(self) -> None:
+        err = "error: Function expected at\n  mu\nbut this term has type\n  ?m.2"
+        directive = _retry_directive_for_error(err)
+        assert "EXPLICIT TYPE ANNOTATION MODE" in directive
+
+    def test_invalid_field_returns_avoid_dot_directive(self) -> None:
+        err = "error: Invalid field `IsSimple`: env"
+        directive = _retry_directive_for_error(err)
+        assert "AVOID DOT NOTATION FOR PAPER-LOCAL DEFS MODE" in directive
+
+    def test_anonymous_constructor_non_inductive_returns_avoid_anon_directive(self) -> None:
+        err = "error: Invalid `⟨...⟩` notation: The expected type `Segment` is not an inductive type"
+        directive = _retry_directive_for_error(err)
+        assert "AVOID ANONYMOUS CONSTRUCTOR MODE" in directive

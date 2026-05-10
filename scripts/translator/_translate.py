@@ -904,6 +904,37 @@ def _retry_directive_for_error(error: str) -> str:
         )
     if "vacuity" in e or "trivially provable" in e:
         return "NON-TAUTOLOGY MODE: strengthen target proposition; do not collapse theorem type to True."
+    # Metavariable-typed parameter (e.g. `Function expected at mu but this term
+    # has type ?m.2`): the model declared a binder without an explicit type.
+    # Force every binder to carry an explicit type annotation.
+    if "function expected at" in e and "?m." in e:
+        return (
+            "EXPLICIT TYPE ANNOTATION MODE: every binder must have an explicit "
+            "type annotation (`(name : T)`). Never write a bare `(name)` or "
+            "`(name : _)` — Lean's metavariable inference cannot recover the "
+            "type and `Function expected at <name>` will fire. Use ℝ as the "
+            "default for analysis-style scalar variables and ℕ for indices."
+        )
+    # Anonymous-constructor on non-inductive type (`⟨a, b⟩` for an abbrev or
+    # opaque): switch to a paper-local constructor call or an explicit
+    # constant. The retry must avoid `⟨...⟩` until a structure type is in
+    # scope.
+    if "is not an inductive type" in e and "⟨" in error:
+        return (
+            "AVOID ANONYMOUS CONSTRUCTOR MODE: do not use `⟨...⟩` notation for "
+            "paper-local types declared as `abbrev` or `def` — those reduce "
+            "to a base type that is not inductive. Use a named constructor "
+            "or an explicit existence assumption instead."
+        )
+    # Invalid field projection: paper-local def accessed via dot notation on
+    # a variable whose type abbrev reduces away.
+    if "invalidfield" in e or "invalid field" in e:
+        return (
+            "AVOID DOT NOTATION FOR PAPER-LOCAL DEFS MODE: do not write "
+            "`<var>.<name>` where `<name>` is a paper-local definition — the "
+            "abbrev reduces away and Lean searches the wrong namespace. Use "
+            "the functional form `<name> <var>` instead."
+        )
     return "Preserve theorem intent while making the signature Lean4-compilable."
 
 
@@ -1007,6 +1038,111 @@ def _deterministic_signature_cleanup(sig: str) -> str:
     out = _normalize_let_chain(out)
     out = _normalize_matrix_positive_definite_fields(out)
     out = _balance_brackets(out)
+    return out
+
+
+_INVALID_FIELD_RE = re.compile(
+    r"Invalid field [`']([A-Za-z_][A-Za-z0-9_']*)[`']"
+)
+_NOT_INDUCTIVE_TYPE_RE = re.compile(
+    r"expected type [`']([A-Za-z_][A-Za-z0-9_']*)[`'] is not an inductive type"
+)
+_FUNCTION_EXPECTED_METAVAR_RE = re.compile(
+    r"Function expected at\s*\n?\s*([A-Za-z_][A-Za-z0-9_']*).*?has type\s*\n?\s*\?m\.\d+",
+    re.DOTALL,
+)
+
+
+def _annotate_untyped_function_param(sig: str, err: str) -> str:
+    """When Lean reports `Function expected at <name> but this term has type
+    ?m.N`, the parameter `<name>` was declared without an explicit type
+    annotation (e.g. `(mu)` or `(mu : alpha)` where `alpha` is itself an
+    autoImplicit metavariable). Add `: ℝ → ℝ` as the most-common analysis
+    default, since the application site implies `<name>` is a function.
+
+    Heuristic but documented: if wrong, Lean will surface a clearer type
+    error than the silent `?m.N`. Either fix is an improvement over the
+    current `Function expected at ... ?m.N` dead-end.
+    """
+    fnames: list[str] = []
+    for m in _FUNCTION_EXPECTED_METAVAR_RE.finditer(err):
+        fnames.append(m.group(1))
+    fnames = list(dict.fromkeys(fnames))
+    if not fnames:
+        return sig
+    out = sig
+    for fname in fnames:
+        # Match `(<fname>)` parameter form — replace with `(<fname> : ℝ → ℝ)`.
+        out = re.sub(
+            rf"\(\s*{re.escape(fname)}\s*\)",
+            f"({fname} : ℝ → ℝ)",
+            out,
+        )
+        # Match `(<fname> : _)` parameter form — same replacement.
+        out = re.sub(
+            rf"\(\s*{re.escape(fname)}\s*:\s*_\s*\)",
+            f"({fname} : ℝ → ℝ)",
+            out,
+        )
+    return out
+
+
+def _rewrite_invalid_field_projection(sig: str, err: str) -> str:
+    """When Lean reports `Invalid field 'F'` (the env doesn't contain T.F for
+    the resolved type T), rewrite every `<var>.F` in the signature to `F <var>`.
+
+    Common cause: paper-theory defines `def IsSimple (x : Multisegment) : Prop`
+    but `Multisegment := ℕ`, so `α.IsSimple` resolves to `Nat.IsSimple` and
+    fails. The functional form `IsSimple α` reaches paper-theory directly
+    via the open scope.
+
+    Strictly additive: only rewrites the named field. Doesn't touch
+    Mathlib field accesses (those won't be in the Lean error).
+    """
+    fields: set[str] = set()
+    for m in _INVALID_FIELD_RE.finditer(err):
+        fields.add(m.group(1) or "")
+    fields.discard("")
+    if not fields:
+        return sig
+    out = sig
+    # Lean identifiers may use Greek letters / other Unicode (α, β, σ, …),
+    # which Python's `\b` does not recognize. Use `\w` (Unicode-aware in
+    # Python 3) and a non-word lookbehind/lookahead to avoid eating
+    # neighbouring tokens.
+    for field in fields:
+        # Word case: `α.IsSimple` → `IsSimple α`.
+        out = re.sub(
+            rf"(?<!\w)(\w[\w']*)\.{re.escape(field)}(?!\w)",
+            rf"{field} \1",
+            out,
+        )
+        # Parenthesised expression case: `(M ∪ N).IsSimple` → `IsSimple (M ∪ N)`.
+        # Restrict the inside to expressions without `(` `)` or `:` so we
+        # don't accidentally absorb a binder like `(h : (M ∪ N)`.
+        out = re.sub(
+            rf"(\([^()\s:][^():]*\))\.{re.escape(field)}(?!\w)",
+            rf"{field} \1",
+            out,
+        )
+    return out
+
+
+def _rewrite_anonymous_constructor_for_non_inductive(sig: str, err: str) -> str:
+    """When Lean reports `expected type 'T' is not an inductive type` for an
+    `⟨...⟩` notation, replace each `⟨...⟩` whose type is T with `(default : T)`
+    or `(sorry : T)` — placeholder that elaborates so the rest of the signature
+    can be checked. The downstream caller treats unresolved sorry as a
+    translation failure but at least the SHAPE is captured.
+
+    Strategy: drop the `⟨...⟩` payload, keep the surrounding type context.
+    """
+    types = set(m.group(1) for m in _NOT_INDUCTIVE_TYPE_RE.finditer(err))
+    if not types:
+        return sig
+    # Crude: just drop the most-recent `⟨...⟩` (the first one in source order).
+    # Better disambiguation would require type-tracking which we don't have.
+    out = re.sub(r"⟨[^⟨⟩]*⟩", "sorry", sig, count=len(types))
     return out
 
 
@@ -3191,6 +3327,40 @@ def _validate_signature(
         # Try 7: `in` keyword in binders — Lean 3 `∑ i in S` → `∑ i ∈ S`
         if "unexpected token 'in'" in err:
             new_sig = re.sub(r"\b(∑|∏|∀|∃)\s+(\w+)\s+in\s+", r"\1 \2 ∈ ", sig)
+            if new_sig != sig:
+                sig = new_sig
+                continue
+
+        # Try 7b: `Function expected at <name> ... has type ?m.N` —
+        # parameter `<name>` was declared without an explicit type, Lean
+        # inferred a metavariable, application then dead-ends. Annotate
+        # `(<name>)` → `(<name> : ℝ → ℝ)` as analysis-default and retry.
+        # If wrong, the next error is a clearer type mismatch we can act on.
+        if "Function expected at" in err and "?m." in err:
+            new_sig = _annotate_untyped_function_param(sig, err)
+            if new_sig != sig:
+                sig = new_sig
+                continue
+
+        # Try 8: `Invalid field 'F'` — rewrite `<var>.F` to `F <var>`.
+        # Triggers when a paper-local def is accessed via dot notation on a
+        # variable whose type is an `abbrev` over a Mathlib base (e.g.
+        # `α : Multisegment` where `Multisegment := ℕ`). Lean resolves
+        # `α.IsSimple` against `Nat`, not `Paper_X`. Rewrite is safe: the
+        # functional form `IsSimple α` reaches `Paper_X.IsSimple` via the
+        # open scope.
+        if "invalidField" in err or "Invalid field" in err:
+            new_sig = _rewrite_invalid_field_projection(sig, err)
+            if new_sig != sig:
+                sig = new_sig
+                continue
+
+        # Try 9: `expected type 'T' is not an inductive type` — replace
+        # offending `⟨...⟩` notation with `sorry`. Common when a paper-local
+        # abbrev (e.g. `Segment := ℝ × ℝ`) is constructed with `⟨a, b⟩` even
+        # though Lean reduces it to the base type which isn't auto-inductive.
+        if "is not an inductive type" in err:
+            new_sig = _rewrite_anonymous_constructor_for_non_inductive(sig, err)
             if new_sig != sig:
                 sig = new_sig
                 continue
