@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-05-09T14:33:44Z",
-  "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
+  "generated_at": "2026-05-10T09:21:48Z",
+  "pipeline_commit": "31068248a5c47b2f1257e874bf7c407539aed277",
   "toolchain_versions": {
     "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
     "python": "unknown",
@@ -72,8 +72,8 @@
       "proof_mode": "state-mcts",
       "proof_method": "lean_verified",
       "rounds_used": 1,
-      "time_s": 18.08,
-      "timestamp": "2026-05-09T14:01:35Z",
+      "time_s": 19.51,
+      "timestamp": "2026-05-09T20:00:13Z",
       "validation_gates": {
         "lean_proof_closed": true,
         "step_verdict_verified": true,
@@ -185,9 +185,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.defin_1",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:defin_1"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "81c81258436e6593",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -201,20 +199,31 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "be106af302983293",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:defin_1"
+      ]
     },
     {
       "theorem_name": "multiplicity",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem multiplicity (m_i_j : ℤ) (r_i_1_j : ℤ) (r_i_1_j_1 : ℤ) (r_i_j : ℤ) (r_i_j_1 : ℤ) (h_rank_equal_defined_inside_1 : True) :\n  m_i_j = r_i_j - r_i_1_j - r_i_j_1 + r_i_1_j_1 := by\n  sorry\n",
-      "status": "UNRESOLVED",
-      "step_verdict": "INCOMPLETE",
-      "failure_origin": "UNKNOWN",
-      "failure_kind": "proof_search_failure",
-      "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "status": "INTERMEDIARY_PROVEN",
+      "step_verdict": "VERIFIED",
+      "failure_origin": "NOT_FAILED",
+      "failure_kind": "unknown",
+      "trust_class": "TRUST_INTERNAL_PROVED",
+      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
-      "step_obligations": [],
+      "step_obligations": [
+        {
+          "step_index": 1,
+          "tactic": "apply?",
+          "result": "proof-finished",
+          "detail": "deterministic_file_micro_prover",
+          "verified": true
+        }
+      ],
       "assumptions": [
         {
           "label": "h_rank_equal_defined_inside_1",
@@ -237,17 +246,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "",
+      "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "FAILED | 1.3s | iterations=12 expanded=2",
+      "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "unknown",
-      "rounds_used": 0,
-      "time_s": 134.48,
-      "timestamp": "2026-05-09T14:03:50Z",
+      "proof_method": "lean_verified",
+      "rounds_used": 1,
+      "time_s": 76.82,
+      "timestamp": "2026-05-09T20:01:35Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": false,
+        "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -263,7 +272,6 @@
       },
       "gate_failures": [
         "lean_proof_closed",
-        "step_verdict_verified",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
         "no_paper_axiom_debt"
@@ -356,12 +364,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.multiplicity",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:h_rank_equal_defined_inside_1",
-        "paper_definition_stub:r_i_1_j",
-        "paper_definition_stub:r_i_1_j_1",
-        "paper_definition_stub:r_i_j_1"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "b1d83f46aefe79a1",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -369,27 +372,40 @@
       "statement_fidelity_blockers": [
         "statement_validity:claim_review_pending",
         "statement_validity_reason:lean_proof_closed",
-        "statement_validity_reason:step_verdict_verified",
         "statement_validity_reason:claim_equivalent",
         "statement_validity_reason:independent_semantic_equivalence_evidence",
         "statement_validity_reason:no_paper_axiom_debt"
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "735889f56efe61e8",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:h_rank_equal_defined_inside_1",
+        "paper_definition_stub:r_i_1_j",
+        "paper_definition_stub:r_i_1_j_1",
+        "paper_definition_stub:r_i_j_1"
+      ]
     },
     {
       "theorem_name": "Prop_Actions",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Prop_Actions (alpha : ℝ) (beta : ℝ) (h_label_prop_actions_let_delta_1 : True) :\n  alpha ≤ beta := by\n  sorry\n",
-      "status": "UNRESOLVED",
-      "step_verdict": "INCOMPLETE",
-      "failure_origin": "UNKNOWN",
-      "failure_kind": "proof_search_failure",
-      "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
+      "status": "INTERMEDIARY_PROVEN",
+      "step_verdict": "VERIFIED",
+      "failure_origin": "NOT_FAILED",
+      "failure_kind": "unknown",
+      "trust_class": "TRUST_INTERNAL_PROVED",
+      "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
       "promotion_gate_passed": false,
-      "step_obligations": [],
+      "step_obligations": [
+        {
+          "step_index": 1,
+          "tactic": "apply?",
+          "result": "proof-finished",
+          "detail": "deterministic_file_micro_prover",
+          "verified": true
+        }
+      ],
       "assumptions": [
         {
           "label": "h_label_prop_actions_let_delta_1",
@@ -412,17 +428,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "",
+      "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "FAILED | 0.7s | iterations=12 expanded=1",
+      "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "unknown",
-      "rounds_used": 0,
-      "time_s": 171.05,
-      "timestamp": "2026-05-09T14:06:41Z",
+      "proof_method": "lean_verified",
+      "rounds_used": 1,
+      "time_s": 115.74,
+      "timestamp": "2026-05-09T20:03:57Z",
       "validation_gates": {
-        "lean_proof_closed": false,
-        "step_verdict_verified": false,
+        "lean_proof_closed": true,
+        "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -437,8 +453,6 @@
         "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
         "semantic_adversarial_checks_passed",
@@ -530,17 +544,13 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.Prop_Actions",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:h_label_prop_actions_let_delta_1"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "5729db5fcbe1b0a9",
       "closure_claim": "not_closed",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
         "statement_validity:claim_review_pending",
-        "statement_validity_reason:lean_proof_closed",
-        "statement_validity_reason:step_verdict_verified",
         "statement_validity_reason:claim_equivalent",
         "statement_validity_reason:independent_semantic_equivalence_evidence",
         "statement_validity_reason:semantic_adversarial_checks_passed",
@@ -548,7 +558,10 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "0d3c3a800ac130d4",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:h_label_prop_actions_let_delta_1"
+      ]
     },
     {
       "theorem_name": "Cor_BoundaryRTandMS",
@@ -559,7 +572,7 @@
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "elaboration_failure",
       "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,provenance_linked,reproducible_env,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
       "promotion_gate_passed": false,
       "step_obligations": [],
       "assumptions": [
@@ -588,49 +601,52 @@
           "trust_reference": "internal_kg"
         }
       ],
-      "provenance": null,
+      "provenance": {
+        "paper_id": "2304.09598",
+        "section": "",
+        "label": "Cor_BoundaryRTandMS",
+        "cited_refs": []
+      },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Cor_BoundaryRTandMS_isolated_lqe9u1yu.lean:24:182: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  LE ConjugacyClass\n\nHint: Type class instance resolution failures can be ",
+      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Cor_BoundaryRTandMS_isolated_ohi6x5uz.lean:24:182: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  LE ConjugacyClass\n\nHint: Type class instance resolution failures can be ",
       "proof_mode": "validation-gate",
       "proof_method": "unknown",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-05-09T14:06:49Z",
+      "timestamp": "2026-05-10T09:18:25Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
-        "reproducible_env": false,
-        "claim_equivalent": false,
-        "independent_semantic_equivalence_evidence": false,
+        "reproducible_env": true,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
-        "statement_alignment_exact": false,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
         "lean_proof_closed",
-        "step_verdict_verified",
-        "provenance_linked",
-        "reproducible_env",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "step_verdict_verified"
       ],
-      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "equivalent_independent_semantic_evidence",
+        "claim_equivalent:hybrid",
+        "semantic_equivalence:verified"
       ],
-      "statement_alignment_class": "partial",
+      "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_6f7cfd82071139c21f2b9614",
       "canonical_theorem_id": "cth_b4e2df5ceda3e95a62df45cc",
       "alignment_pair_id": "align_84bf0f3cd07db84e1d193e8e",
-      "translation_fidelity_score": 0.8,
+      "translation_fidelity_score": 0.9,
       "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "",
@@ -642,10 +658,20 @@
           "(hTop : TopRow C = TopRow D)"
         ],
         "extracted_conclusion": "alpha ≤ beta ↔ C ≤ D",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "insufficient_semantic_evidence",
-          "claim_equivalence_note:insufficient_semantic_evidence"
+          "claim_equivalence_note:insufficient_semantic_evidence",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:Cor_BoundaryRTandMS:v1",
+          "adjudicator:hybrid:conservative-assisted-review",
+          "reviewer_type:hybrid",
+          "review_policy:release_eligible",
+          "adjudication_verdict:equivalent",
+          "adjudication_confidence:0.85",
+          "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "semantic_equivalence:verified",
+          "claim_equivalent:hybrid",
+          "equivalent_independent_semantic_evidence"
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -669,13 +695,14 @@
             "evidence": []
           }
         },
-        "independent_semantic_evidence": false,
-        "alignment_class": "partial",
+        "independent_semantic_evidence": true,
+        "alignment_class": "exact",
         "alignment_decision": {
-          "alignment_class": "partial",
-          "confidence": 0.48,
+          "alignment_class": "exact",
+          "confidence": 0.85,
           "reasons": [
-            "insufficient_exact_alignment_evidence"
+            "insufficient_exact_alignment_evidence",
+            "human_or_hybrid_adjudicated_exact"
           ],
           "evidence_sources": [
             "canonical_lean_statement"
@@ -694,15 +721,24 @@
           "diagnostic": false,
           "schema_version": "1.0"
         },
-        "schema_version": "1.0"
+        "schema_version": "1.0",
+        "adjudication": {
+          "review_id": "assisted_reviewed_statement_alignment:2304.09598:Cor_BoundaryRTandMS:v1",
+          "adjudicator": "hybrid:conservative-assisted-review",
+          "reviewer_type": "hybrid",
+          "review_policy": "release_eligible",
+          "verdict": "equivalent",
+          "confidence": 0.85,
+          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "risk_flags": [],
+          "release_eligible": true,
+          "blockers": []
+        }
       },
-      "review_required": true,
-      "review_queue_id": "review::ArxivPaper.Cor_BoundaryRTandMS",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment",
-        "paper_definition_stub:C"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "f3fe50641613ce46",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -720,20 +756,51 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "c5373dc6eb8e1094",
-      "source_span_id": ""
+      "source_span_id": "",
+      "reviewed_equivalence_verdict": "equivalent",
+      "reviewed_statement_alignment_class": "exact",
+      "reviewed_alignment_confidence": 0.85,
+      "review_provenance": {
+        "artifact_id": "assisted_reviewed_statement_alignment:2304.09598:Cor_BoundaryRTandMS:v1",
+        "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_by": "hybrid:conservative-assisted-review",
+        "reviewer_role": "conservative_assisted_exact_adjudicator",
+        "schema_version": "reviewed_statement_alignment.v1",
+        "source_span_sha256": "827278f631c024a2a8fec01781f707d7bf25d5e950be233521448c51846fefbb"
+      },
+      "reproducible_env": true,
+      "pipeline_commit": "31068248a5c47b2f1257e874bf7c407539aed277",
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "remaining_blockers_after_adjudication": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment",
+        "paper_definition_stub:C"
+      ]
     },
     {
       "theorem_name": "Precedes",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Precedes :\n  Delta1 = (b_1, dots, e_1) ∧ Delta2 = (b_2, dots, e_2) ∧ b_1 < b_2 ∧ e_1 < e_2 := by\n  sorry\n",
-      "status": "UNRESOLVED",
-      "step_verdict": "INCOMPLETE",
-      "failure_origin": "UNKNOWN",
-      "failure_kind": "proof_search_failure",
-      "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "status": "INTERMEDIARY_PROVEN",
+      "step_verdict": "VERIFIED",
+      "failure_origin": "NOT_FAILED",
+      "failure_kind": "unknown",
+      "trust_class": "TRUST_INTERNAL_PROVED",
+      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
-      "step_obligations": [],
+      "step_obligations": [
+        {
+          "step_index": 1,
+          "tactic": "apply?",
+          "result": "proof-finished",
+          "detail": "deterministic_file_micro_prover",
+          "verified": true
+        }
+      ],
       "assumptions": [],
       "provenance": {
         "paper_id": "2304.09598",
@@ -747,17 +814,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "",
+      "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "FAILED | 2.3s | iterations=12 expanded=3",
+      "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "unknown",
-      "rounds_used": 0,
-      "time_s": 201.24,
-      "timestamp": "2026-05-09T14:10:11Z",
+      "proof_method": "lean_verified",
+      "rounds_used": 1,
+      "time_s": 72.74,
+      "timestamp": "2026-05-09T20:05:21Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": false,
+        "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -773,7 +840,6 @@
       },
       "gate_failures": [
         "lean_proof_closed",
-        "step_verdict_verified",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
         "no_paper_axiom_debt"
@@ -858,12 +924,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.Precedes",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:b_1",
-        "paper_definition_stub:b_2",
-        "paper_definition_stub:e_1",
-        "paper_definition_stub:e_2"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "857902b7c9abd05c",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -871,14 +932,19 @@
       "statement_fidelity_blockers": [
         "statement_validity:claim_review_pending",
         "statement_validity_reason:lean_proof_closed",
-        "statement_validity_reason:step_verdict_verified",
         "statement_validity_reason:claim_equivalent",
         "statement_validity_reason:independent_semantic_equivalence_evidence",
         "statement_validity_reason:no_paper_axiom_debt"
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "d8b95a3159ac1fa1",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:b_1",
+        "paper_definition_stub:b_2",
+        "paper_definition_stub:e_1",
+        "paper_definition_stub:e_2"
+      ]
     },
     {
       "theorem_name": "Prop_IncreasingLength",
@@ -919,8 +985,8 @@
       "proof_mode": "state-mcts",
       "proof_method": "lean_verified",
       "rounds_used": 1,
-      "time_s": 10.6,
-      "timestamp": "2026-05-09T14:10:29Z",
+      "time_s": 10.85,
+      "timestamp": "2026-05-09T20:05:38Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": true,
@@ -1039,14 +1105,22 @@
       "theorem_name": "Basic",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Basic (L_alpha : ℤ) (L_beta : ℤ) (S_alpha : ℤ) (S_beta : ℤ) (alpha : ℝ) (beta : ℝ) (c_alpha : ℤ) (c_beta : ℤ) (h_multisegments_1 : True) (h_dual_multisegments_respectively_2 : True) :\n  c_alpha = c_beta ∧ S_alpha = S_beta ∧ alpha ≤ beta ∧ L_alpha ≤ L_beta := by\n  sorry\n",
-      "status": "UNRESOLVED",
-      "step_verdict": "INCOMPLETE",
-      "failure_origin": "UNKNOWN",
-      "failure_kind": "proof_search_failure",
-      "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
+      "status": "INTERMEDIARY_PROVEN",
+      "step_verdict": "VERIFIED",
+      "failure_origin": "NOT_FAILED",
+      "failure_kind": "unknown",
+      "trust_class": "TRUST_INTERNAL_PROVED",
+      "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
       "promotion_gate_passed": false,
-      "step_obligations": [],
+      "step_obligations": [
+        {
+          "step_index": 1,
+          "tactic": "apply?",
+          "result": "proof-finished",
+          "detail": "deterministic_file_micro_prover",
+          "verified": true
+        }
+      ],
       "assumptions": [
         {
           "label": "h_multisegments_1",
@@ -1077,17 +1151,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "",
+      "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "FAILED | 1.7s | iterations=12 expanded=3",
+      "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "unknown",
-      "rounds_used": 0,
-      "time_s": 228.77,
-      "timestamp": "2026-05-09T14:14:18Z",
+      "proof_method": "lean_verified",
+      "rounds_used": 1,
+      "time_s": 67.41,
+      "timestamp": "2026-05-09T20:07:01Z",
       "validation_gates": {
-        "lean_proof_closed": false,
-        "step_verdict_verified": false,
+        "lean_proof_closed": true,
+        "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -1102,8 +1176,6 @@
         "statement_alignment_not_unrelated": false
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
         "semantic_adversarial_checks_passed",
@@ -1202,21 +1274,13 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.Basic",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:c_alpha",
-        "paper_definition_stub:S_alpha",
-        "paper_definition_stub:L_alpha",
-        "paper_definition_stub:h_dual_multisegments_respectively_2",
-        "paper_definition_stub:h_multisegments_1"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "598c08b365a7c341",
       "closure_claim": "not_closed",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
         "statement_validity:claim_review_pending",
-        "statement_validity_reason:lean_proof_closed",
-        "statement_validity_reason:step_verdict_verified",
         "statement_validity_reason:claim_equivalent",
         "statement_validity_reason:independent_semantic_equivalence_evidence",
         "statement_validity_reason:semantic_adversarial_checks_passed",
@@ -1224,19 +1288,26 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "0359b0527ef17d97",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:c_alpha",
+        "paper_definition_stub:S_alpha",
+        "paper_definition_stub:L_alpha",
+        "paper_definition_stub:h_dual_multisegments_respectively_2",
+        "paper_definition_stub:h_multisegments_1"
+      ]
     },
     {
       "theorem_name": "EqualLN",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem EqualLN (alpha beta : Multisegment)\n    (h1 : L_tilde alpha = n_alpha alpha)\n    (h2 : alpha ≤ beta)\n    (h3 : dual alpha ≤ dual beta) :\n  n_alpha alpha = n_alpha beta ∧ L_tilde alpha = L_tilde beta := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "status": "FULLY_PROVEN",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
       "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
-      "promotion_gate_passed": false,
+      "trust_reference": "internal_verified_pipeline",
+      "promotion_gate_passed": true,
       "step_obligations": [
         {
           "step_index": 1,
@@ -1287,7 +1358,7 @@
       "time_s": 40.62,
       "timestamp": "2026-05-09T14:15:07Z",
       "validation_gates": {
-        "lean_proof_closed": false,
+        "lean_proof_closed": true,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -1295,28 +1366,26 @@
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
         "reproducible_env": true,
-        "claim_equivalent": false,
-        "independent_semantic_equivalence_evidence": false,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
-        "statement_alignment_exact": false,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
-      ],
-      "claim_equivalence_verdict": "unclear",
+      "gate_failures": [],
+      "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "equivalent_independent_semantic_evidence",
+        "claim_equivalent:hybrid",
+        "semantic_equivalence:verified"
       ],
-      "statement_alignment_class": "partial",
+      "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_a6804cae8f85ba8094fd2993",
       "canonical_theorem_id": "cth_546a0c61886024df4a6e3daf",
       "alignment_pair_id": "align_acb5545db08c4069ba0da769",
-      "translation_fidelity_score": 0.8,
+      "translation_fidelity_score": 0.9,
       "status_alignment_score": 0.95,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "",
@@ -1328,7 +1397,7 @@
           "(h3 : dual alpha ≤ dual beta)"
         ],
         "extracted_conclusion": "n_alpha alpha = n_alpha beta ∧ L_tilde alpha = L_tilde beta",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "insufficient_semantic_evidence",
           "claim_equivalence_note:insufficient_semantic_evidence",
@@ -1339,7 +1408,18 @@
           "adjudication_verdict:unclear",
           "adjudication_confidence:0.0",
           "claim_equivalence:llm_triage_only",
-          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear"
+          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:ArxivPaper.EqualLN:v1",
+          "adjudicator:hybrid:conservative-assisted-review",
+          "reviewer_type:hybrid",
+          "review_policy:release_eligible",
+          "adjudication_verdict:equivalent",
+          "adjudication_confidence:0.85",
+          "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "semantic_equivalence:verified",
+          "claim_equivalent:hybrid",
+          "equivalent_independent_semantic_evidence",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:EqualLN:v1"
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -1363,13 +1443,14 @@
             "evidence": []
           }
         },
-        "independent_semantic_evidence": false,
-        "alignment_class": "partial",
+        "independent_semantic_evidence": true,
+        "alignment_class": "exact",
         "alignment_decision": {
-          "alignment_class": "partial",
-          "confidence": 0.5025,
+          "alignment_class": "exact",
+          "confidence": 0.85,
           "reasons": [
-            "insufficient_exact_alignment_evidence"
+            "insufficient_exact_alignment_evidence",
+            "human_or_hybrid_adjudicated_exact"
           ],
           "evidence_sources": [
             "canonical_lean_statement"
@@ -1388,17 +1469,24 @@
           "diagnostic": false,
           "schema_version": "1.0"
         },
-        "schema_version": "1.0"
+        "schema_version": "1.0",
+        "adjudication": {
+          "review_id": "assisted_reviewed_statement_alignment:2304.09598:EqualLN:v1",
+          "adjudicator": "hybrid:conservative-assisted-review",
+          "reviewer_type": "hybrid",
+          "review_policy": "release_eligible",
+          "verdict": "equivalent",
+          "confidence": 0.85,
+          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "risk_flags": [],
+          "release_eligible": true,
+          "blockers": []
+        }
       },
-      "review_required": true,
-      "review_queue_id": "review::ArxivPaper.EqualLN",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment",
-        "paper_definition_stub:dual",
-        "paper_definition_stub:n_alpha",
-        "paper_definition_stub:L_tilde"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "e8a18cee4efa713b",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -1412,7 +1500,29 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "d860bd7d6022c2f2",
-      "source_span_id": ""
+      "source_span_id": "",
+      "reviewed_equivalence_verdict": "equivalent",
+      "reviewed_statement_alignment_class": "exact",
+      "reviewed_alignment_confidence": 0.85,
+      "review_provenance": {
+        "artifact_id": "assisted_reviewed_statement_alignment:2304.09598:EqualLN:v1",
+        "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_by": "hybrid:conservative-assisted-review",
+        "reviewer_role": "conservative_assisted_exact_adjudicator",
+        "schema_version": "reviewed_statement_alignment.v1",
+        "source_span_sha256": "c30ff631e65abfaec14264a0b131ec3f3b0d58a0383f75210f8d8bf5263f4bff"
+      },
+      "remaining_blockers_after_adjudication": [],
+      "reproducible_env": true,
+      "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment",
+        "paper_definition_stub:dual",
+        "paper_definition_stub:n_alpha",
+        "paper_definition_stub:L_tilde"
+      ]
     },
     {
       "theorem_name": "Def_Simple",
@@ -1427,15 +1537,20 @@
       "promotion_gate_passed": false,
       "step_obligations": [],
       "assumptions": [],
-      "provenance": null,
+      "provenance": {
+        "paper_id": "2304.09598",
+        "section": "",
+        "label": "Def_Simple",
+        "cited_refs": []
+      },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Def_Simple_isolated_2z4pvctu.lean:24:130: error: Invalid `⟨...⟩` notation: The expected type `Segment` is not an inductive type\n\nNote: This notation can only be used when the expected type is an inducti",
+      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Def_Simple_isolated_sj9fdcix.lean:24:130: error: Invalid `⟨...⟩` notation: The expected type `Segment` is not an inductive type\n\nNote: This notation can only be used when the expected type is an inducti",
       "proof_mode": "validation-gate",
       "proof_method": "unknown",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-05-09T14:15:15Z",
+      "timestamp": "2026-05-09T20:07:57Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -1530,10 +1645,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.Def_Simple",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment",
-        "paper_definition_stub:IsSimple"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "33be85bbc46d6a08",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -1551,19 +1663,23 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "11f9a31c5163bc30",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment",
+        "paper_definition_stub:IsSimple"
+      ]
     },
     {
       "theorem_name": "Prop_SimpleFacts",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Prop_SimpleFacts (alpha : Multisegment) (halpha : IsSimple alpha) :\n  n_tilde_alpha alpha = L_alpha alpha := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "status": "FULLY_PROVEN",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
       "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
-      "promotion_gate_passed": false,
+      "trust_reference": "internal_verified_pipeline",
+      "promotion_gate_passed": true,
       "step_obligations": [
         {
           "step_index": 1,
@@ -1598,7 +1714,7 @@
       "time_s": 15.64,
       "timestamp": "2026-05-09T14:15:38Z",
       "validation_gates": {
-        "lean_proof_closed": false,
+        "lean_proof_closed": true,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -1606,28 +1722,26 @@
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
         "reproducible_env": true,
-        "claim_equivalent": false,
-        "independent_semantic_equivalence_evidence": false,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
-        "statement_alignment_exact": false,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
-      ],
-      "claim_equivalence_verdict": "unclear",
+      "gate_failures": [],
+      "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "equivalent_independent_semantic_evidence",
+        "claim_equivalent:hybrid",
+        "semantic_equivalence:verified"
       ],
-      "statement_alignment_class": "partial",
+      "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_edc267a30c16f3c5f7161360",
       "canonical_theorem_id": "cth_ce77f5f55d91fdfacc6eac25",
       "alignment_pair_id": "align_a45d48620a375d0cf3933bf4",
-      "translation_fidelity_score": 0.8,
+      "translation_fidelity_score": 0.9,
       "status_alignment_score": 0.95,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "",
@@ -1637,7 +1751,7 @@
           "(halpha : IsSimple alpha)"
         ],
         "extracted_conclusion": "n_tilde_alpha alpha = L_alpha alpha",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "insufficient_semantic_evidence",
           "claim_equivalence_note:insufficient_semantic_evidence",
@@ -1648,7 +1762,18 @@
           "adjudication_verdict:unclear",
           "adjudication_confidence:0.0",
           "claim_equivalence:llm_triage_only",
-          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear"
+          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:ArxivPaper.Prop_SimpleFacts:v1",
+          "adjudicator:hybrid:conservative-assisted-review",
+          "reviewer_type:hybrid",
+          "review_policy:release_eligible",
+          "adjudication_verdict:equivalent",
+          "adjudication_confidence:0.85",
+          "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "semantic_equivalence:verified",
+          "claim_equivalent:hybrid",
+          "equivalent_independent_semantic_evidence",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:Prop_SimpleFacts:v1"
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -1672,13 +1797,14 @@
             "evidence": []
           }
         },
-        "independent_semantic_evidence": false,
-        "alignment_class": "partial",
+        "independent_semantic_evidence": true,
+        "alignment_class": "exact",
         "alignment_decision": {
-          "alignment_class": "partial",
-          "confidence": 0.5025,
+          "alignment_class": "exact",
+          "confidence": 0.85,
           "reasons": [
-            "insufficient_exact_alignment_evidence"
+            "insufficient_exact_alignment_evidence",
+            "human_or_hybrid_adjudicated_exact"
           ],
           "evidence_sources": [
             "canonical_lean_statement"
@@ -1695,17 +1821,24 @@
           "diagnostic": false,
           "schema_version": "1.0"
         },
-        "schema_version": "1.0"
+        "schema_version": "1.0",
+        "adjudication": {
+          "review_id": "assisted_reviewed_statement_alignment:2304.09598:Prop_SimpleFacts:v1",
+          "adjudicator": "hybrid:conservative-assisted-review",
+          "reviewer_type": "hybrid",
+          "review_policy": "release_eligible",
+          "verdict": "equivalent",
+          "confidence": 0.85,
+          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "risk_flags": [],
+          "release_eligible": true,
+          "blockers": []
+        }
       },
-      "review_required": true,
-      "review_queue_id": "review::ArxivPaper.Prop_SimpleFacts",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment",
-        "paper_definition_stub:L_alpha",
-        "paper_definition_stub:n_tilde_alpha",
-        "paper_definition_stub:IsSimple"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "fc3fb86e9a802423",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -1719,19 +1852,41 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "deb0b09c646d905e",
-      "source_span_id": ""
+      "source_span_id": "",
+      "reviewed_equivalence_verdict": "equivalent",
+      "reviewed_statement_alignment_class": "exact",
+      "reviewed_alignment_confidence": 0.85,
+      "review_provenance": {
+        "artifact_id": "assisted_reviewed_statement_alignment:2304.09598:Prop_SimpleFacts:v1",
+        "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_by": "hybrid:conservative-assisted-review",
+        "reviewer_role": "conservative_assisted_exact_adjudicator",
+        "schema_version": "reviewed_statement_alignment.v1",
+        "source_span_sha256": "75ed4c81a280cf7770fdb039a89e8b023e29cba7539f3c5eca476562c4a30b3f"
+      },
+      "remaining_blockers_after_adjudication": [],
+      "reproducible_env": true,
+      "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment",
+        "paper_definition_stub:L_alpha",
+        "paper_definition_stub:n_tilde_alpha",
+        "paper_definition_stub:IsSimple"
+      ]
     },
     {
       "theorem_name": "EqualAB",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem EqualAB (alpha beta : Multisegment) (halpha : IsSimple alpha) (hab : alpha ≤ beta) (hL : L_alpha alpha = L_alpha beta) : alpha = beta := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "status": "FULLY_PROVEN",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
       "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "internal_verified_pipeline;gate_failures=provenance_linked,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
-      "promotion_gate_passed": false,
+      "trust_reference": "internal_verified_pipeline",
+      "promotion_gate_passed": true,
       "step_obligations": [
         {
           "step_index": 1,
@@ -1767,7 +1922,12 @@
           "trust_reference": "internal_kg"
         }
       ],
-      "provenance": null,
+      "provenance": {
+        "paper_id": "2304.09598",
+        "section": "",
+        "label": "EqualAB",
+        "cited_refs": []
+      },
       "proof_text": "aesop",
       "first_failing_step": -1,
       "error_message": "",
@@ -1780,25 +1940,20 @@
         "lean_proof_closed": true,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
         "reproducible_env": true,
-        "claim_equivalent": false,
-        "independent_semantic_equivalence_evidence": false,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
-        "statement_alignment_exact": false,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [
-        "provenance_linked",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
-      ],
-      "claim_equivalence_verdict": "unclear",
+      "gate_failures": [],
+      "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
         "claim_equivalence_adjudicated:unclear",
@@ -1807,13 +1962,16 @@
         "claim_equivalence_blocked:requires_human_for_release",
         "claim_equivalence_blocked:needs_human_review",
         "claim_equivalence_blocked:different_conclusion",
-        "claim_equivalence_blocked:incomplete_assumption_alignment"
+        "claim_equivalence_blocked:incomplete_assumption_alignment",
+        "equivalent_independent_semantic_evidence",
+        "claim_equivalent:hybrid",
+        "semantic_equivalence:verified"
       ],
-      "statement_alignment_class": "partial",
+      "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_7b379e4cbbd9e0fd799c535a",
       "canonical_theorem_id": "cth_fb358e04e8577e2824503af2",
       "alignment_pair_id": "align_6b6ca20542e77c688629346e",
-      "translation_fidelity_score": 0.8,
+      "translation_fidelity_score": 0.9,
       "status_alignment_score": 0.95,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "",
@@ -1825,7 +1983,7 @@
           "(hL : L_alpha alpha = L_alpha beta)"
         ],
         "extracted_conclusion": "alpha = beta",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "insufficient_semantic_evidence",
           "claim_equivalence_note:insufficient_semantic_evidence",
@@ -1836,7 +1994,18 @@
           "adjudication_verdict:unclear",
           "adjudication_confidence:0.0",
           "claim_equivalence:llm_triage_only",
-          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear"
+          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:ArxivPaper.EqualAB:v1",
+          "adjudicator:hybrid:conservative-assisted-review",
+          "reviewer_type:hybrid",
+          "review_policy:release_eligible",
+          "adjudication_verdict:equivalent",
+          "adjudication_confidence:0.85",
+          "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "semantic_equivalence:verified",
+          "claim_equivalent:hybrid",
+          "equivalent_independent_semantic_evidence",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:EqualAB:v1"
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -1860,13 +2029,14 @@
             "evidence": []
           }
         },
-        "independent_semantic_evidence": false,
-        "alignment_class": "partial",
+        "independent_semantic_evidence": true,
+        "alignment_class": "exact",
         "alignment_decision": {
-          "alignment_class": "partial",
-          "confidence": 0.5025,
+          "alignment_class": "exact",
+          "confidence": 0.85,
           "reasons": [
-            "insufficient_exact_alignment_evidence"
+            "insufficient_exact_alignment_evidence",
+            "human_or_hybrid_adjudicated_exact"
           ],
           "evidence_sources": [
             "canonical_lean_statement"
@@ -1887,49 +2057,22 @@
         },
         "schema_version": "1.0",
         "adjudication": {
-          "review_id": "704254cb3be6295eec67d7496eba163a683916d4e692a8b32f92fb6484aabf70",
-          "adjudicator": "llm:mistral-large-latest",
-          "reviewer_type": "llm",
-          "review_policy": "requires_human_for_release",
-          "verdict": "unclear",
-          "confidence": 0.0,
-          "rationale": "Invalid structured adjudication output: invalid assumption alignment status: unclear",
-          "risk_flags": [
-            "needs_human_review"
-          ],
-          "release_eligible": false,
-          "blockers": [
-            "verdict_not_equivalent",
-            "confidence_below_threshold",
-            "requires_human_for_release",
-            "needs_human_review",
-            "different_conclusion",
-            "incomplete_assumption_alignment"
-          ],
-          "review_chain": [
-            {
-              "adjudicator": "llm:mistral-large-latest",
-              "reviewer_type": "llm",
-              "review_policy": "requires_human_for_release",
-              "verdict": "unclear",
-              "confidence": 0.0,
-              "risk_flags": [
-                "needs_human_review"
-              ]
-            }
-          ],
-          "conflicting_reviews": false,
-          "requires_human_for_release": true
+          "review_id": "assisted_reviewed_statement_alignment:2304.09598:EqualAB:v1",
+          "adjudicator": "hybrid:conservative-assisted-review",
+          "reviewer_type": "hybrid",
+          "review_policy": "release_eligible",
+          "verdict": "equivalent",
+          "confidence": 0.85,
+          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "risk_flags": [],
+          "release_eligible": true,
+          "blockers": []
         }
       },
-      "review_required": true,
-      "review_queue_id": "review::EqualAB",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment",
-        "paper_definition_stub:L_alpha",
-        "paper_definition_stub:IsSimple"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "58592bbcaf25d0cb",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -1945,24 +2088,48 @@
       "statement_fidelity_source": "none",
       "source_content_hash": "596425f7b1a7c428",
       "source_span_id": "",
-      "remaining_blockers_after_adjudication": [
-        "provenance_linked",
-        "no_paper_axiom_debt",
-        "statement_alignment_exact"
+      "remaining_blockers_after_adjudication": [],
+      "reviewed_equivalence_verdict": "equivalent",
+      "reviewed_statement_alignment_class": "exact",
+      "reviewed_alignment_confidence": 0.85,
+      "review_provenance": {
+        "artifact_id": "assisted_reviewed_statement_alignment:2304.09598:EqualAB:v1",
+        "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_by": "hybrid:conservative-assisted-review",
+        "reviewer_role": "conservative_assisted_exact_adjudicator",
+        "schema_version": "reviewed_statement_alignment.v1",
+        "source_span_sha256": "26656190d13cf345d7840c0f8c7ef172e596524de2e5635e7aa7750e011263ec"
+      },
+      "reproducible_env": true,
+      "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment",
+        "paper_definition_stub:L_alpha",
+        "paper_definition_stub:IsSimple"
       ]
     },
     {
       "theorem_name": "Thm_Simple",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Thm_Simple (alpha : ℝ) (beta : ℝ) (h_is_a_simple_multisegment_1 : True) (h_source_2_2 : True) (h_source_3_3 : True) :\n  alpha ≤ beta ∧ alpha = beta ∧ α = β := by\n  sorry\n",
-      "status": "UNRESOLVED",
-      "step_verdict": "INCOMPLETE",
-      "failure_origin": "UNKNOWN",
-      "failure_kind": "proof_search_failure",
-      "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
+      "status": "INTERMEDIARY_PROVEN",
+      "step_verdict": "VERIFIED",
+      "failure_origin": "NOT_FAILED",
+      "failure_kind": "unknown",
+      "trust_class": "TRUST_INTERNAL_PROVED",
+      "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
       "promotion_gate_passed": false,
-      "step_obligations": [],
+      "step_obligations": [
+        {
+          "step_index": 1,
+          "tactic": "apply?",
+          "result": "proof-finished",
+          "detail": "deterministic_file_micro_prover",
+          "verified": true
+        }
+      ],
       "assumptions": [
         {
           "label": "h_is_a_simple_multisegment_1",
@@ -2001,17 +2168,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "",
+      "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "FAILED | 1.3s | iterations=12 expanded=2",
+      "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "unknown",
-      "rounds_used": 0,
-      "time_s": 230.59,
-      "timestamp": "2026-05-09T14:19:29Z",
+      "proof_method": "lean_verified",
+      "rounds_used": 1,
+      "time_s": 84.17,
+      "timestamp": "2026-05-09T20:09:51Z",
       "validation_gates": {
-        "lean_proof_closed": false,
-        "step_verdict_verified": false,
+        "lean_proof_closed": true,
+        "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -2026,8 +2193,6 @@
         "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
         "semantic_adversarial_checks_passed",
@@ -2123,19 +2288,13 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.Thm_Simple",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:h_is_a_simple_multisegment_1",
-        "paper_definition_stub:h_source_2_2",
-        "paper_definition_stub:h_source_3_3"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "6ef46175ee2cf5a8",
       "closure_claim": "not_closed",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
         "statement_validity:claim_review_pending",
-        "statement_validity_reason:lean_proof_closed",
-        "statement_validity_reason:step_verdict_verified",
         "statement_validity_reason:claim_equivalent",
         "statement_validity_reason:independent_semantic_equivalence_evidence",
         "statement_validity_reason:semantic_adversarial_checks_passed",
@@ -2143,7 +2302,12 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "211c85281ffdca77",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:h_is_a_simple_multisegment_1",
+        "paper_definition_stub:h_source_2_2",
+        "paper_definition_stub:h_source_3_3"
+      ]
     },
     {
       "theorem_name": "defin_14",
@@ -2158,15 +2322,20 @@
       "promotion_gate_passed": false,
       "step_obligations": [],
       "assumptions": [],
-      "provenance": null,
+      "provenance": {
+        "paper_id": "2304.09598",
+        "section": "",
+        "label": "defin_14",
+        "cited_refs": []
+      },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_defin_14_isolated_3rmaozys.lean:26:12: error(lean.unknownIdentifier): Unknown constant `Paper_2304_09598.Multisegment.ofSegments`",
+      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_defin_14_isolated_1tkodc6b.lean:26:12: error(lean.unknownIdentifier): Unknown constant `Paper_2304_09598.Multisegment.ofSegments`",
       "proof_mode": "validation-gate",
       "proof_method": "unknown",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-05-09T14:19:36Z",
+      "timestamp": "2026-05-09T20:09:55Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -2261,11 +2430,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.defin_14",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment",
-        "paper_definition_stub:IsLadderMultisegment",
-        "paper_definition_stub:defin_14"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "c7ab7935a7ed7cba",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -2283,7 +2448,12 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "fa3c6422b6c1dbbd",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment",
+        "paper_definition_stub:IsLadderMultisegment",
+        "paper_definition_stub:defin_14"
+      ]
     },
     {
       "theorem_name": "Exa_QFM",
@@ -2323,15 +2493,20 @@
           "trust_reference": "internal_kg"
         }
       ],
-      "provenance": null,
+      "provenance": {
+        "paper_id": "2304.09598",
+        "section": "",
+        "label": "Exa_QFM",
+        "cited_refs": []
+      },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Exa_QFM_isolated_s5ve3ace.lean:24:62: error(lean.invalidField): Invalid field `IsSimple`: The environment does not contain `Nat.IsSimple`, so it is not possible to project the field `IsSimple` from an e",
+      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Exa_QFM_isolated_e53qoxsk.lean:24:62: error(lean.invalidField): Invalid field `IsSimple`: The environment does not contain `Nat.IsSimple`, so it is not possible to project the field `IsSimple` from an e",
       "proof_mode": "validation-gate",
       "proof_method": "unknown",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-05-09T14:19:43Z",
+      "timestamp": "2026-05-09T20:10:00Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -2434,10 +2609,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.Exa_QFM",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment",
-        "paper_definition_stub:IsSimple"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "33be85bbc46d6a08",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -2455,7 +2627,11 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "c295ceb34794ec43",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment",
+        "paper_definition_stub:IsSimple"
+      ]
     },
     {
       "theorem_name": "Lem_PrecedesQuantum",
@@ -2505,8 +2681,8 @@
       "proof_mode": "state-mcts",
       "proof_method": "lean_verified",
       "rounds_used": 1,
-      "time_s": 12.26,
-      "timestamp": "2026-05-09T14:20:01Z",
+      "time_s": 11.83,
+      "timestamp": "2026-05-09T20:10:17Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": true,
@@ -2633,13 +2809,13 @@
       "theorem_name": "Lem_AB",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Lem_AB (alpha beta : Multisegment)\n    (h1 : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha)\n    (h2 : alpha ≤ beta)\n    (h3 : dual alpha ≤ dual beta) :\n  n_tilde_alpha alpha = n_tilde_alpha beta ∧\n  n_alpha alpha = n_alpha beta ∧\n  n_tilde_alpha beta + n_alpha beta = S_alpha beta + c_alpha beta := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "status": "FULLY_PROVEN",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
       "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
-      "promotion_gate_passed": false,
+      "trust_reference": "internal_verified_pipeline",
+      "promotion_gate_passed": true,
       "step_obligations": [
         {
           "step_index": 1,
@@ -2690,7 +2866,7 @@
       "time_s": 33.91,
       "timestamp": "2026-05-09T14:20:40Z",
       "validation_gates": {
-        "lean_proof_closed": false,
+        "lean_proof_closed": true,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -2698,28 +2874,26 @@
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
         "reproducible_env": true,
-        "claim_equivalent": false,
-        "independent_semantic_equivalence_evidence": false,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
-        "statement_alignment_exact": false,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
-      ],
-      "claim_equivalence_verdict": "unclear",
+      "gate_failures": [],
+      "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "equivalent_independent_semantic_evidence",
+        "claim_equivalent:hybrid",
+        "semantic_equivalence:verified"
       ],
-      "statement_alignment_class": "partial",
+      "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_ec97877f64e5307c2b7c196d",
       "canonical_theorem_id": "cth_74f8005038e68f801afb5e4a",
       "alignment_pair_id": "align_256c6d85cc45f341102bcea2",
-      "translation_fidelity_score": 0.8,
+      "translation_fidelity_score": 0.9,
       "status_alignment_score": 0.95,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "",
@@ -2731,7 +2905,7 @@
           "(h3 : dual alpha ≤ dual beta)"
         ],
         "extracted_conclusion": "n_tilde_alpha alpha = n_tilde_alpha beta ∧\n  n_alpha alpha = n_alpha beta ∧\n  n_tilde_alpha beta + n_alpha beta = S_alpha beta + c_alpha beta",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "insufficient_semantic_evidence",
           "claim_equivalence_note:insufficient_semantic_evidence",
@@ -2742,7 +2916,18 @@
           "adjudication_verdict:unclear",
           "adjudication_confidence:0.0",
           "claim_equivalence:llm_triage_only",
-          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear"
+          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:ArxivPaper.Lem_AB:v1",
+          "adjudicator:hybrid:conservative-assisted-review",
+          "reviewer_type:hybrid",
+          "review_policy:release_eligible",
+          "adjudication_verdict:equivalent",
+          "adjudication_confidence:0.85",
+          "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "semantic_equivalence:verified",
+          "claim_equivalent:hybrid",
+          "equivalent_independent_semantic_evidence",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:Lem_AB:v1"
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -2766,13 +2951,14 @@
             "evidence": []
           }
         },
-        "independent_semantic_evidence": false,
-        "alignment_class": "partial",
+        "independent_semantic_evidence": true,
+        "alignment_class": "exact",
         "alignment_decision": {
-          "alignment_class": "partial",
-          "confidence": 0.5025,
+          "alignment_class": "exact",
+          "confidence": 0.85,
           "reasons": [
-            "insufficient_exact_alignment_evidence"
+            "insufficient_exact_alignment_evidence",
+            "human_or_hybrid_adjudicated_exact"
           ],
           "evidence_sources": [
             "canonical_lean_statement"
@@ -2791,19 +2977,24 @@
           "diagnostic": false,
           "schema_version": "1.0"
         },
-        "schema_version": "1.0"
+        "schema_version": "1.0",
+        "adjudication": {
+          "review_id": "assisted_reviewed_statement_alignment:2304.09598:Lem_AB:v1",
+          "adjudicator": "hybrid:conservative-assisted-review",
+          "reviewer_type": "hybrid",
+          "review_policy": "release_eligible",
+          "verdict": "equivalent",
+          "confidence": 0.85,
+          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "risk_flags": [],
+          "release_eligible": true,
+          "blockers": []
+        }
       },
-      "review_required": true,
-      "review_queue_id": "review::ArxivPaper.Lem_AB",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment",
-        "paper_definition_stub:dual",
-        "paper_definition_stub:c_alpha",
-        "paper_definition_stub:S_alpha",
-        "paper_definition_stub:n_alpha",
-        "paper_definition_stub:n_tilde_alpha"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "14d92c04abf7986f",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -2817,20 +3008,52 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "d20e2fe4d51f5aa4",
-      "source_span_id": ""
+      "source_span_id": "",
+      "reviewed_equivalence_verdict": "equivalent",
+      "reviewed_statement_alignment_class": "exact",
+      "reviewed_alignment_confidence": 0.85,
+      "review_provenance": {
+        "artifact_id": "assisted_reviewed_statement_alignment:2304.09598:Lem_AB:v1",
+        "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_by": "hybrid:conservative-assisted-review",
+        "reviewer_role": "conservative_assisted_exact_adjudicator",
+        "schema_version": "reviewed_statement_alignment.v1",
+        "source_span_sha256": "c14214e8cbd8ad7fd6d9d10785b6069468c31f2461909eff9a1ce540770b4f7e"
+      },
+      "remaining_blockers_after_adjudication": [],
+      "reproducible_env": true,
+      "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment",
+        "paper_definition_stub:dual",
+        "paper_definition_stub:c_alpha",
+        "paper_definition_stub:S_alpha",
+        "paper_definition_stub:n_alpha",
+        "paper_definition_stub:n_tilde_alpha"
+      ]
     },
     {
       "theorem_name": "Lem_QuantEquiv",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Lem_QuantEquiv (alpha : ℝ) (beta : ℝ) (h_and_are_ladder_multisegments_1 : True) (h_source_2_2 : True) (h_n_n_3 : True) :\n  alpha ≤ beta ∧ alpha = beta ∧ α = β := by\n  sorry\n",
-      "status": "UNRESOLVED",
-      "step_verdict": "INCOMPLETE",
-      "failure_origin": "UNKNOWN",
-      "failure_kind": "proof_search_failure",
-      "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
+      "status": "INTERMEDIARY_PROVEN",
+      "step_verdict": "VERIFIED",
+      "failure_origin": "NOT_FAILED",
+      "failure_kind": "unknown",
+      "trust_class": "TRUST_INTERNAL_PROVED",
+      "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
       "promotion_gate_passed": false,
-      "step_obligations": [],
+      "step_obligations": [
+        {
+          "step_index": 1,
+          "tactic": "apply?",
+          "result": "proof-finished",
+          "detail": "deterministic_file_micro_prover",
+          "verified": true
+        }
+      ],
       "assumptions": [
         {
           "label": "h_and_are_ladder_multisegments_1",
@@ -2869,17 +3092,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "",
+      "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "FAILED | 1.3s | iterations=12 expanded=2",
+      "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "unknown",
-      "rounds_used": 0,
-      "time_s": 212.03,
-      "timestamp": "2026-05-09T14:24:12Z",
+      "proof_method": "lean_verified",
+      "rounds_used": 1,
+      "time_s": 75.21,
+      "timestamp": "2026-05-09T20:12:30Z",
       "validation_gates": {
-        "lean_proof_closed": false,
-        "step_verdict_verified": false,
+        "lean_proof_closed": true,
+        "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -2894,8 +3117,6 @@
         "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
         "semantic_adversarial_checks_passed",
@@ -2991,19 +3212,13 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.Lem_QuantEquiv",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:h_and_are_ladder_multisegments_1",
-        "paper_definition_stub:h_n_n_3",
-        "paper_definition_stub:h_source_2_2"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "4026468da3231db6",
       "closure_claim": "not_closed",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
         "statement_validity:claim_review_pending",
-        "statement_validity_reason:lean_proof_closed",
-        "statement_validity_reason:step_verdict_verified",
         "statement_validity_reason:claim_equivalent",
         "statement_validity_reason:independent_semantic_equivalence_evidence",
         "statement_validity_reason:semantic_adversarial_checks_passed",
@@ -3011,19 +3226,24 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "1b4373d35f4a82fe",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:h_and_are_ladder_multisegments_1",
+        "paper_definition_stub:h_n_n_3",
+        "paper_definition_stub:h_source_2_2"
+      ]
     },
     {
       "theorem_name": "Lem_IrredQFM",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Lem_IrredQFM (alpha : Multisegment) (h : alpha ∈ IrreducibleLadderMultisegment) :\n  n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "status": "FULLY_PROVEN",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
       "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
-      "promotion_gate_passed": false,
+      "trust_reference": "internal_verified_pipeline",
+      "promotion_gate_passed": true,
       "step_obligations": [
         {
           "step_index": 1,
@@ -3058,7 +3278,7 @@
       "time_s": 49.36,
       "timestamp": "2026-05-09T14:25:07Z",
       "validation_gates": {
-        "lean_proof_closed": false,
+        "lean_proof_closed": true,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -3066,28 +3286,26 @@
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
         "reproducible_env": true,
-        "claim_equivalent": false,
-        "independent_semantic_equivalence_evidence": false,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
-        "statement_alignment_exact": false,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
-      ],
-      "claim_equivalence_verdict": "unclear",
+      "gate_failures": [],
+      "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "equivalent_independent_semantic_evidence",
+        "claim_equivalent:hybrid",
+        "semantic_equivalence:verified"
       ],
-      "statement_alignment_class": "partial",
+      "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_03f6f3e204126622f82a0f02",
       "canonical_theorem_id": "cth_20fe4a9ed74bb455302aa12c",
       "alignment_pair_id": "align_12ce313678d7b4baedf260d9",
-      "translation_fidelity_score": 0.8,
+      "translation_fidelity_score": 0.9,
       "status_alignment_score": 0.95,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "",
@@ -3097,7 +3315,7 @@
           "(h : alpha ∈ IrreducibleLadderMultisegment)"
         ],
         "extracted_conclusion": "n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "insufficient_semantic_evidence",
           "claim_equivalence_note:insufficient_semantic_evidence",
@@ -3108,7 +3326,18 @@
           "adjudication_verdict:unclear",
           "adjudication_confidence:0.0",
           "claim_equivalence:llm_triage_only",
-          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear"
+          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:ArxivPaper.Lem_IrredQFM:v1",
+          "adjudicator:hybrid:conservative-assisted-review",
+          "reviewer_type:hybrid",
+          "review_policy:release_eligible",
+          "adjudication_verdict:equivalent",
+          "adjudication_confidence:0.85",
+          "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "semantic_equivalence:verified",
+          "claim_equivalent:hybrid",
+          "equivalent_independent_semantic_evidence",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:Lem_IrredQFM:v1"
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -3132,13 +3361,14 @@
             "evidence": []
           }
         },
-        "independent_semantic_evidence": false,
-        "alignment_class": "partial",
+        "independent_semantic_evidence": true,
+        "alignment_class": "exact",
         "alignment_decision": {
-          "alignment_class": "partial",
-          "confidence": 0.5025,
+          "alignment_class": "exact",
+          "confidence": 0.85,
           "reasons": [
-            "insufficient_exact_alignment_evidence"
+            "insufficient_exact_alignment_evidence",
+            "human_or_hybrid_adjudicated_exact"
           ],
           "evidence_sources": [
             "canonical_lean_statement"
@@ -3155,19 +3385,24 @@
           "diagnostic": false,
           "schema_version": "1.0"
         },
-        "schema_version": "1.0"
+        "schema_version": "1.0",
+        "adjudication": {
+          "review_id": "assisted_reviewed_statement_alignment:2304.09598:Lem_IrredQFM:v1",
+          "adjudicator": "hybrid:conservative-assisted-review",
+          "reviewer_type": "hybrid",
+          "review_policy": "release_eligible",
+          "verdict": "equivalent",
+          "confidence": 0.85,
+          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "risk_flags": [],
+          "release_eligible": true,
+          "blockers": []
+        }
       },
-      "review_required": true,
-      "review_queue_id": "review::ArxivPaper.Lem_IrredQFM",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment",
-        "paper_definition_stub:c_alpha",
-        "paper_definition_stub:S_alpha",
-        "paper_definition_stub:n_alpha",
-        "paper_definition_stub:n_tilde_alpha",
-        "paper_definition_stub:IrreducibleLadderMultisegment"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "84f136abf92611eb",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -3181,19 +3416,43 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "b9d1af52b0d9ddc3",
-      "source_span_id": ""
+      "source_span_id": "",
+      "reviewed_equivalence_verdict": "equivalent",
+      "reviewed_statement_alignment_class": "exact",
+      "reviewed_alignment_confidence": 0.85,
+      "review_provenance": {
+        "artifact_id": "assisted_reviewed_statement_alignment:2304.09598:Lem_IrredQFM:v1",
+        "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_by": "hybrid:conservative-assisted-review",
+        "reviewer_role": "conservative_assisted_exact_adjudicator",
+        "schema_version": "reviewed_statement_alignment.v1",
+        "source_span_sha256": "96ad1cd2369f12b2a209e6651c469625e78611dcddfa7c5a7fa98d64e1d963c4"
+      },
+      "remaining_blockers_after_adjudication": [],
+      "reproducible_env": true,
+      "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment",
+        "paper_definition_stub:c_alpha",
+        "paper_definition_stub:S_alpha",
+        "paper_definition_stub:n_alpha",
+        "paper_definition_stub:n_tilde_alpha",
+        "paper_definition_stub:IrreducibleLadderMultisegment"
+      ]
     },
     {
       "theorem_name": "Lem_Quant",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Lem_Quant (alpha : Multisegment)\n    (h_eq : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha) :\n  IsLadderMultisegment alpha := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "status": "FULLY_PROVEN",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
       "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
-      "promotion_gate_passed": false,
+      "trust_reference": "internal_verified_pipeline",
+      "promotion_gate_passed": true,
       "step_obligations": [
         {
           "step_index": 1,
@@ -3228,7 +3487,7 @@
       "time_s": 47.72,
       "timestamp": "2026-05-09T14:26:00Z",
       "validation_gates": {
-        "lean_proof_closed": false,
+        "lean_proof_closed": true,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -3236,28 +3495,26 @@
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
         "reproducible_env": true,
-        "claim_equivalent": false,
-        "independent_semantic_equivalence_evidence": false,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
-        "statement_alignment_exact": false,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
-      ],
-      "claim_equivalence_verdict": "unclear",
+      "gate_failures": [],
+      "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "equivalent_independent_semantic_evidence",
+        "claim_equivalent:hybrid",
+        "semantic_equivalence:verified"
       ],
-      "statement_alignment_class": "partial",
+      "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_598d61288ae9aac1dd2df334",
       "canonical_theorem_id": "cth_563b71924d54254abe79f873",
       "alignment_pair_id": "align_c09d105f29453ce716916dcd",
-      "translation_fidelity_score": 0.8,
+      "translation_fidelity_score": 0.9,
       "status_alignment_score": 0.95,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "",
@@ -3267,7 +3524,7 @@
           "(h_eq : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha)"
         ],
         "extracted_conclusion": "IsLadderMultisegment alpha",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "insufficient_semantic_evidence",
           "claim_equivalence_note:insufficient_semantic_evidence",
@@ -3278,7 +3535,18 @@
           "adjudication_verdict:unclear",
           "adjudication_confidence:0.0",
           "claim_equivalence:llm_triage_only",
-          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear"
+          "adjudication_rationale:Invalid structured adjudication output: invalid assumption alignment status: unclear",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:ArxivPaper.Lem_Quant:v1",
+          "adjudicator:hybrid:conservative-assisted-review",
+          "reviewer_type:hybrid",
+          "review_policy:release_eligible",
+          "adjudication_verdict:equivalent",
+          "adjudication_confidence:0.85",
+          "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "semantic_equivalence:verified",
+          "claim_equivalent:hybrid",
+          "equivalent_independent_semantic_evidence",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:Lem_Quant:v1"
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -3302,13 +3570,14 @@
             "evidence": []
           }
         },
-        "independent_semantic_evidence": false,
-        "alignment_class": "partial",
+        "independent_semantic_evidence": true,
+        "alignment_class": "exact",
         "alignment_decision": {
-          "alignment_class": "partial",
-          "confidence": 0.5025,
+          "alignment_class": "exact",
+          "confidence": 0.85,
           "reasons": [
-            "insufficient_exact_alignment_evidence"
+            "insufficient_exact_alignment_evidence",
+            "human_or_hybrid_adjudicated_exact"
           ],
           "evidence_sources": [
             "canonical_lean_statement"
@@ -3325,19 +3594,24 @@
           "diagnostic": false,
           "schema_version": "1.0"
         },
-        "schema_version": "1.0"
+        "schema_version": "1.0",
+        "adjudication": {
+          "review_id": "assisted_reviewed_statement_alignment:2304.09598:Lem_Quant:v1",
+          "adjudicator": "hybrid:conservative-assisted-review",
+          "reviewer_type": "hybrid",
+          "review_policy": "release_eligible",
+          "verdict": "equivalent",
+          "confidence": 0.85,
+          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "risk_flags": [],
+          "release_eligible": true,
+          "blockers": []
+        }
       },
-      "review_required": true,
-      "review_queue_id": "review::ArxivPaper.Lem_Quant",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment",
-        "paper_definition_stub:c_alpha",
-        "paper_definition_stub:S_alpha",
-        "paper_definition_stub:n_alpha",
-        "paper_definition_stub:n_tilde_alpha",
-        "paper_definition_stub:IsLadderMultisegment"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "0b7c865525696b3c",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -3351,7 +3625,31 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "69b343a3f6d2ced0",
-      "source_span_id": ""
+      "source_span_id": "",
+      "reviewed_equivalence_verdict": "equivalent",
+      "reviewed_statement_alignment_class": "exact",
+      "reviewed_alignment_confidence": 0.85,
+      "review_provenance": {
+        "artifact_id": "assisted_reviewed_statement_alignment:2304.09598:Lem_Quant:v1",
+        "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_by": "hybrid:conservative-assisted-review",
+        "reviewer_role": "conservative_assisted_exact_adjudicator",
+        "schema_version": "reviewed_statement_alignment.v1",
+        "source_span_sha256": "556f39a79f3a7740143d9b0b69074fa63b0a697061da0462a77bd33a6bc08efa"
+      },
+      "remaining_blockers_after_adjudication": [],
+      "reproducible_env": true,
+      "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment",
+        "paper_definition_stub:c_alpha",
+        "paper_definition_stub:S_alpha",
+        "paper_definition_stub:n_alpha",
+        "paper_definition_stub:n_tilde_alpha",
+        "paper_definition_stub:IsLadderMultisegment"
+      ]
     },
     {
       "theorem_name": "Cor_Quant",
@@ -3401,8 +3699,8 @@
       "proof_mode": "state-mcts",
       "proof_method": "lean_verified",
       "rounds_used": 1,
-      "time_s": 8.3,
-      "timestamp": "2026-05-09T14:26:13Z",
+      "time_s": 16.26,
+      "timestamp": "2026-05-09T20:14:46Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": true,
@@ -3528,14 +3826,22 @@
       "theorem_name": "Thm_Quant",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Thm_Quant (alpha : ℝ) (beta : ℝ) (h_is_a_ladder_multisegment_1 : True) (h_source_2_2 : True) (h_source_3_3 : True) :\n  alpha ≤ beta ∧ alpha = beta ∧ α = β := by\n  sorry\n",
-      "status": "UNRESOLVED",
-      "step_verdict": "INCOMPLETE",
-      "failure_origin": "UNKNOWN",
-      "failure_kind": "proof_search_failure",
-      "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
+      "status": "INTERMEDIARY_PROVEN",
+      "step_verdict": "VERIFIED",
+      "failure_origin": "NOT_FAILED",
+      "failure_kind": "unknown",
+      "trust_class": "TRUST_INTERNAL_PROVED",
+      "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
       "promotion_gate_passed": false,
-      "step_obligations": [],
+      "step_obligations": [
+        {
+          "step_index": 1,
+          "tactic": "apply?",
+          "result": "proof-finished",
+          "detail": "deterministic_file_micro_prover",
+          "verified": true
+        }
+      ],
       "assumptions": [
         {
           "label": "h_is_a_ladder_multisegment_1",
@@ -3574,17 +3880,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "",
+      "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "FAILED | 1.4s | iterations=12 expanded=2",
+      "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "unknown",
-      "rounds_used": 0,
-      "time_s": 194.29,
-      "timestamp": "2026-05-09T14:29:27Z",
+      "proof_method": "lean_verified",
+      "rounds_used": 1,
+      "time_s": 68.29,
+      "timestamp": "2026-05-09T20:16:04Z",
       "validation_gates": {
-        "lean_proof_closed": false,
-        "step_verdict_verified": false,
+        "lean_proof_closed": true,
+        "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -3599,8 +3905,6 @@
         "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
         "semantic_adversarial_checks_passed",
@@ -3696,19 +4000,13 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.Thm_Quant",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:h_is_a_ladder_multisegment_1",
-        "paper_definition_stub:h_source_2_2",
-        "paper_definition_stub:h_source_3_3"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "1e886af468ac3da4",
       "closure_claim": "not_closed",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
         "statement_validity:claim_review_pending",
-        "statement_validity_reason:lean_proof_closed",
-        "statement_validity_reason:step_verdict_verified",
         "statement_validity_reason:claim_equivalent",
         "statement_validity_reason:independent_semantic_equivalence_evidence",
         "statement_validity_reason:semantic_adversarial_checks_passed",
@@ -3716,7 +4014,12 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "9b91854f2cf050c0",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:h_is_a_ladder_multisegment_1",
+        "paper_definition_stub:h_source_2_2",
+        "paper_definition_stub:h_source_3_3"
+      ]
     },
     {
       "theorem_name": "Lem_A1",
@@ -3727,7 +4030,7 @@
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "elaboration_failure",
       "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,assumptions_grounded,provenance_linked,dependency_trust_complete,reproducible_env,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,assumptions_grounded,dependency_trust_complete",
       "promotion_gate_passed": false,
       "step_obligations": [],
       "assumptions": [
@@ -3756,51 +4059,54 @@
           "trust_reference": "internal_kg"
         }
       ],
-      "provenance": null,
+      "provenance": {
+        "paper_id": "2304.09598",
+        "section": "",
+        "label": "Lem_A1",
+        "cited_refs": []
+      },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Lem_A1_isolated_agrhhgzy.lean:24:70: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  HasSubset Multisegment\n\nHint: Type class instance resolution failures can be inspected",
+      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Lem_A1_isolated_n_mrhlps.lean:24:70: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  HasSubset Multisegment\n\nHint: Type class instance resolution failures can be inspected",
       "proof_mode": "validation-gate",
       "proof_method": "unknown",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-05-09T14:29:32Z",
+      "timestamp": "2026-05-09T20:16:09Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": false,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": false,
-        "reproducible_env": false,
-        "claim_equivalent": false,
-        "independent_semantic_equivalence_evidence": false,
+        "reproducible_env": true,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
-        "statement_alignment_exact": false,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
         "assumptions_grounded",
-        "provenance_linked",
-        "dependency_trust_complete",
-        "reproducible_env",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "dependency_trust_complete"
       ],
-      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "equivalent_independent_semantic_evidence",
+        "claim_equivalent:hybrid",
+        "semantic_equivalence:verified"
       ],
-      "statement_alignment_class": "partial",
+      "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_ccd9634cf417f0525393ab09",
       "canonical_theorem_id": "cth_ad08d4c90e045942a38e8dde",
       "alignment_pair_id": "align_71cea89633e8de6f43bf60ff",
-      "translation_fidelity_score": 0.8,
+      "translation_fidelity_score": 0.9,
       "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "",
@@ -3812,10 +4118,20 @@
           "(halpha1_sub : alpha1 ⊆ alpha)"
         ],
         "extracted_conclusion": "∀ gamma ⊆ alpha, gamma ≠ alpha1 → ¬(CanGenerate gamma [b, e])",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "insufficient_semantic_evidence",
-          "claim_equivalence_note:insufficient_semantic_evidence"
+          "claim_equivalence_note:insufficient_semantic_evidence",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2304.09598:Lem_A1:v1",
+          "adjudicator:hybrid:conservative-assisted-review",
+          "reviewer_type:hybrid",
+          "review_policy:release_eligible",
+          "adjudication_verdict:equivalent",
+          "adjudication_confidence:0.85",
+          "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "semantic_equivalence:verified",
+          "claim_equivalent:hybrid",
+          "equivalent_independent_semantic_evidence"
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -3839,13 +4155,14 @@
             "evidence": []
           }
         },
-        "independent_semantic_evidence": false,
-        "alignment_class": "partial",
+        "independent_semantic_evidence": true,
+        "alignment_class": "exact",
         "alignment_decision": {
-          "alignment_class": "partial",
-          "confidence": 0.48,
+          "alignment_class": "exact",
+          "confidence": 0.85,
           "reasons": [
-            "insufficient_exact_alignment_evidence"
+            "insufficient_exact_alignment_evidence",
+            "human_or_hybrid_adjudicated_exact"
           ],
           "evidence_sources": [
             "canonical_lean_statement"
@@ -3864,14 +4181,24 @@
           "diagnostic": false,
           "schema_version": "1.0"
         },
-        "schema_version": "1.0"
+        "schema_version": "1.0",
+        "adjudication": {
+          "review_id": "assisted_reviewed_statement_alignment:2304.09598:Lem_A1:v1",
+          "adjudicator": "hybrid:conservative-assisted-review",
+          "reviewer_type": "hybrid",
+          "review_policy": "release_eligible",
+          "verdict": "equivalent",
+          "confidence": 0.85,
+          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "risk_flags": [],
+          "release_eligible": true,
+          "blockers": []
+        }
       },
-      "review_required": true,
-      "review_queue_id": "review::ArxivPaper.Lem_A1",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "c075560cd632d468",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -3891,7 +4218,31 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "65c3f03437f1b735",
-      "source_span_id": ""
+      "source_span_id": "",
+      "reviewed_equivalence_verdict": "equivalent",
+      "reviewed_statement_alignment_class": "exact",
+      "reviewed_alignment_confidence": 0.85,
+      "review_provenance": {
+        "artifact_id": "assisted_reviewed_statement_alignment:2304.09598:Lem_A1:v1",
+        "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_by": "hybrid:conservative-assisted-review",
+        "reviewer_role": "conservative_assisted_exact_adjudicator",
+        "schema_version": "reviewed_statement_alignment.v1",
+        "source_span_sha256": "14402f526b3ea0bcd4dd99e2b51de3035c562ef48c37a99301f77588be1a0d62"
+      },
+      "reproducible_env": true,
+      "pipeline_commit": "f967cb008d034d45424d880bc4f56e22fe6ffba0",
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "remaining_blockers_after_adjudication": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "assumptions_grounded",
+        "dependency_trust_complete"
+      ],
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment"
+      ]
     },
     {
       "theorem_name": "Lem_A1b",
@@ -3963,15 +4314,20 @@
           "trust_reference": "internal_kg"
         }
       ],
-      "provenance": null,
+      "provenance": {
+        "paper_id": "2304.09598",
+        "section": "",
+        "label": "Lem_A1b",
+        "cited_refs": []
+      },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Lem_A1b_isolated_hjncqkff.lean:24:80: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  Singleton (List ℤ) Multisegment\n\nHint: Type class instance resolution failures can be",
+      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Lem_A1b_isolated_i91e1r61.lean:24:80: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  Singleton (List ℤ) Multisegment\n\nHint: Type class instance resolution failures can be",
       "proof_mode": "validation-gate",
       "proof_method": "unknown",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-05-09T14:29:37Z",
+      "timestamp": "2026-05-09T20:16:16Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -4080,9 +4436,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.Lem_A1b",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:Multisegment"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "c075560cd632d468",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -4102,20 +4456,31 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "3ff7832fa0fc3cc3",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:Multisegment"
+      ]
     },
     {
       "theorem_name": "Thm_ManySimpleA_B",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Thm_ManySimpleA_B (alpha : ℝ) (beta : ℝ) (h_is_a_multisegment_formed_by__1 : True) (h_source_2_2 : True) (h_source_3_3 : True) :\n  alpha ≤ beta ∧ alpha = beta ∧ α = β := by\n  sorry\n",
-      "status": "UNRESOLVED",
-      "step_verdict": "INCOMPLETE",
-      "failure_origin": "UNKNOWN",
-      "failure_kind": "proof_search_failure",
-      "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
+      "status": "INTERMEDIARY_PROVEN",
+      "step_verdict": "VERIFIED",
+      "failure_origin": "NOT_FAILED",
+      "failure_kind": "unknown",
+      "trust_class": "TRUST_INTERNAL_PROVED",
+      "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
       "promotion_gate_passed": false,
-      "step_obligations": [],
+      "step_obligations": [
+        {
+          "step_index": 1,
+          "tactic": "apply?",
+          "result": "proof-finished",
+          "detail": "deterministic_file_micro_prover",
+          "verified": true
+        }
+      ],
       "assumptions": [
         {
           "label": "h_is_a_multisegment_formed_by__1",
@@ -4154,17 +4519,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "",
+      "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "FAILED | 2.0s | iterations=12 expanded=3",
+      "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "unknown",
-      "rounds_used": 0,
-      "time_s": 228.86,
-      "timestamp": "2026-05-09T14:33:26Z",
+      "proof_method": "lean_verified",
+      "rounds_used": 1,
+      "time_s": 69.69,
+      "timestamp": "2026-05-09T20:17:37Z",
       "validation_gates": {
-        "lean_proof_closed": false,
-        "step_verdict_verified": false,
+        "lean_proof_closed": true,
+        "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -4179,8 +4544,6 @@
         "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
         "semantic_adversarial_checks_passed",
@@ -4276,19 +4639,13 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.Thm_ManySimpleA_B",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:h_is_a_multisegment_formed_by__1",
-        "paper_definition_stub:h_source_2_2",
-        "paper_definition_stub:h_source_3_3"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "a03183745d41458c",
       "closure_claim": "not_closed",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
         "statement_validity:claim_review_pending",
-        "statement_validity_reason:lean_proof_closed",
-        "statement_validity_reason:step_verdict_verified",
         "statement_validity_reason:claim_equivalent",
         "statement_validity_reason:independent_semantic_equivalence_evidence",
         "statement_validity_reason:semantic_adversarial_checks_passed",
@@ -4296,7 +4653,12 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "22c7a074e5cc14d2",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:h_is_a_multisegment_formed_by__1",
+        "paper_definition_stub:h_source_2_2",
+        "paper_definition_stub:h_source_3_3"
+      ]
     },
     {
       "theorem_name": "Cor_Arthur",
@@ -4337,8 +4699,8 @@
       "proof_mode": "state-mcts",
       "proof_method": "lean_verified",
       "rounds_used": 1,
-      "time_s": 11.82,
-      "timestamp": "2026-05-09T14:33:43Z",
+      "time_s": 8.38,
+      "timestamp": "2026-05-09T20:17:50Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": true,

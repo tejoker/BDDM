@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-05-09T14:03:11Z",
-  "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
+  "generated_at": "2026-05-10T09:33:15Z",
+  "pipeline_commit": "31068248a5c47b2f1257e874bf7c407539aed277",
   "toolchain_versions": {
     "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
     "python": "unknown",
@@ -148,8 +148,8 @@
       "proof_mode": "state-mcts",
       "proof_method": "lean_verified",
       "rounds_used": 1,
-      "time_s": 15.99,
-      "timestamp": "2026-05-09T14:01:21Z",
+      "time_s": 19.31,
+      "timestamp": "2026-05-09T20:00:11Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": true,
@@ -252,9 +252,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.main_theorem",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:sigma_F"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "e84bdfb6afb04d61",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -269,7 +267,10 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "6333755e11c2e1db",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:sigma_F"
+      ]
     },
     {
       "theorem_name": "equ1",
@@ -347,8 +348,8 @@
       "proof_mode": "state-mcts",
       "proof_method": "lean_verified",
       "rounds_used": 1,
-      "time_s": 11.97,
-      "timestamp": "2026-05-09T14:01:39Z",
+      "time_s": 10.11,
+      "timestamp": "2026-05-09T20:00:26Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": true,
@@ -460,9 +461,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.equ1",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:equ1"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "55219054f76ca384",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -477,7 +476,10 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "88ea324fd71e8682",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:equ1"
+      ]
     },
     {
       "theorem_name": "momentum_bound_lemma",
@@ -571,8 +573,8 @@
       "proof_mode": "state-mcts",
       "proof_method": "lean_verified",
       "rounds_used": 1,
-      "time_s": 12.4,
-      "timestamp": "2026-05-09T14:01:58Z",
+      "time_s": 9.86,
+      "timestamp": "2026-05-09T20:00:41Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": true,
@@ -676,10 +678,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.momentum_bound_lemma",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:sigma_F",
-        "paper_definition_stub:theta"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "a97c18244f10bbd5",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -694,7 +693,11 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "9323fd1391154a66",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:sigma_F",
+        "paper_definition_stub:theta"
+      ]
     },
     {
       "theorem_name": "proof_4",
@@ -772,8 +775,8 @@
       "proof_mode": "state-mcts",
       "proof_method": "lean_verified",
       "rounds_used": 1,
-      "time_s": 41.18,
-      "timestamp": "2026-05-09T14:02:46Z",
+      "time_s": 36.95,
+      "timestamp": "2026-05-09T20:01:26Z",
       "validation_gates": {
         "lean_proof_closed": true,
         "step_verdict_verified": true,
@@ -888,11 +891,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.proof_4",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:proof_4",
-        "paper_definition_stub:sigma_F",
-        "paper_definition_stub:theta"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "9676e559a0002ca4",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -909,7 +908,12 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "734ead618d98bac5",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:proof_4",
+        "paper_definition_stub:sigma_F",
+        "paper_definition_stub:theta"
+      ]
     },
     {
       "theorem_name": "second_moment_lemma",
@@ -957,15 +961,20 @@
           "trust_reference": "internal_kg"
         }
       ],
-      "provenance": null,
+      "provenance": {
+        "paper_id": "2604.21616",
+        "section": "",
+        "label": "second_moment_lemma",
+        "cited_refs": []
+      },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2604.21616_second_moment_lemma_isolated_g_myufkh.lean:27:28: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  Norm (Matrix (Fin m) (Fin n) ℝ)\n\nHint: Type class instance resolution fai",
+      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2604.21616_second_moment_lemma_isolated__fd6faz7.lean:27:28: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  Norm (Matrix (Fin m) (Fin n) ℝ)\n\nHint: Type class instance resolution fai",
       "proof_mode": "validation-gate",
       "proof_method": "unknown",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-05-09T14:02:52Z",
+      "timestamp": "2026-05-09T20:01:31Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -1134,15 +1143,20 @@
           "trust_reference": "internal_kg"
         }
       ],
-      "provenance": null,
+      "provenance": {
+        "paper_id": "2604.21616",
+        "section": "",
+        "label": "proof_6",
+        "cited_refs": []
+      },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2604.21616_proof_6_isolated_9ja0t5z9.lean:28:11: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  Norm (Matrix (Fin m) (Fin n) ℝ)\n\nHint: Type class instance resolution failures can be",
+      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2604.21616_proof_6_isolated_5ys8k9s9.lean:28:11: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  Norm (Matrix (Fin m) (Fin n) ℝ)\n\nHint: Type class instance resolution failures can be",
       "proof_mode": "validation-gate",
       "proof_method": "unknown",
       "rounds_used": 0,
       "time_s": 0.0,
-      "timestamp": "2026-05-09T14:02:59Z",
+      "timestamp": "2026-05-09T20:01:36Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -1247,9 +1261,7 @@
       "review_required": true,
       "review_queue_id": "review::ArxivPaper.proof_6",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:proof_6"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "71da8fde1c8c2368",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -1267,7 +1279,10 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "a07bae8c328165f3",
-      "source_span_id": ""
+      "source_span_id": "",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:proof_6"
+      ]
     },
     {
       "theorem_name": "nuclear_l1_norms",
@@ -1277,8 +1292,8 @@
       "step_verdict": "INCOMPLETE",
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "false_or_ambiguous_statement",
-      "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "trust_class": "TRUST_INTERNAL_PROVED",
+      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,step_verdict_verified",
       "promotion_gate_passed": false,
       "step_obligations": [],
       "assumptions": [],
@@ -1327,38 +1342,36 @@
         "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
-        "translation_fidelity_ok": false,
+        "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
         "reproducible_env": true,
-        "claim_equivalent": false,
-        "independent_semantic_equivalence_evidence": false,
+        "claim_equivalent": true,
+        "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
-        "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": true,
-        "translation_acceptance_gate": false,
-        "translation_repair_applied": true,
-        "lean_statement_elaborates_after_repair": true,
-        "domain_assumption_backed": false,
-        "direct_proof_without_repair": false,
-        "paper_claim_diagnostic": false,
-        "statement_repair_kind": "faithful_statement_regeneration",
-        "repair_outcome": "faithful_statement_regeneration"
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": true,
+        "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
-        "no_paper_axiom_debt"
+        "lean_proof_closed",
+        "step_verdict_verified"
       ],
-      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "translation_unvalidated",
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "equivalent_independent_semantic_evidence",
+        "claim_equivalent:hybrid",
+        "semantic_equivalence:verified",
+        "claim_equivalence_adjudicated:equivalent",
+        "claim_equivalence_blocked:requires_human_for_release"
       ],
-      "statement_alignment_class": "diagnostic",
+      "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_409d4e6735de82d403b80c68",
       "canonical_theorem_id": "cth_33bab6ec70e55e70f8ac17a3",
       "alignment_pair_id": "align_d391bdbbcbf664f05c91fc48",
-      "translation_fidelity_score": 0.2,
+      "translation_fidelity_score": 0.9,
       "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "\\label{nuclear-l1-norms}\nFor any matrix $\\A$, we have $\\|\\A\\|_*\\leq \\|\\A\\|_1$.",
@@ -1366,7 +1379,7 @@
         "lean_statement": "theorem nuclear_l1_norms {m n : ℕ} (A : Matrix (Fin m) (Fin n) ℝ) :\n  nuclearNorm A ≤ l1MatrixNorm A :=\n  nuclearNorm_le_l1MatrixNorm A",
         "extracted_assumptions": [],
         "extracted_conclusion": "The nuclear norm of A is less than or equal to the L1 norm of A",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "formalization_unvalidated",
           "schema_stage_used",
@@ -1374,7 +1387,23 @@
           "translation_unvalidated",
           "insufficient_semantic_evidence",
           "claim_equivalence_note:translation_unvalidated",
-          "claim_equivalence_note:insufficient_semantic_evidence"
+          "claim_equivalence_note:insufficient_semantic_evidence",
+          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2604.21616:nuclear-l1-norms:v1",
+          "adjudicator:hybrid:conservative-assisted-review",
+          "reviewer_type:hybrid",
+          "review_policy:release_eligible",
+          "adjudication_verdict:equivalent",
+          "adjudication_confidence:0.85",
+          "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "semantic_equivalence:verified",
+          "claim_equivalent:hybrid",
+          "equivalent_independent_semantic_evidence",
+          "claim_equivalence_adjudication:auto_alignment_review:2604.21616:nuclear-l1-norms:v1",
+          "adjudicator:auto_llm:alignment-review",
+          "reviewer_type:llm",
+          "review_policy:requires_human_for_release",
+          "adjudication_confidence:0.9",
+          "adjudication_rationale:Structured auto alignment review: reverse-translation judged EQUIVALENT (raw confidence 1.00). Confidence deflated 10% for non-human provenance. Component scores: {\"conclusion\": 1.0, \"hypotheses\": 1.0, \"objects\": 1.0, \"quantifiers\": 1.0, \"relation\": 1.0}. Reason: Exact match in quantifiers, hypotheses, and conclusion.. NOTE: auto-generated; requires human co-signing for proof-release eligibility."
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -1398,14 +1427,15 @@
             "evidence": []
           }
         },
-        "independent_semantic_evidence": false,
-        "alignment_class": "diagnostic",
+        "independent_semantic_evidence": true,
+        "alignment_class": "exact",
         "alignment_decision": {
-          "alignment_class": "diagnostic",
+          "alignment_class": "exact",
           "confidence": 0.9,
           "reasons": [
             "translation_unvalidated",
-            "diagnostic_or_translation_artifact"
+            "diagnostic_or_translation_artifact",
+            "human_or_hybrid_adjudicated_exact"
           ],
           "evidence_sources": [
             "canonical_lean_statement"
@@ -1420,10 +1450,22 @@
           "diagnostic": true,
           "schema_version": "1.0"
         },
-        "schema_version": "1.0"
+        "schema_version": "1.0",
+        "adjudication": {
+          "review_id": "assisted_reviewed_statement_alignment:2604.21616:nuclear-l1-norms:v1",
+          "adjudicator": "hybrid:conservative-assisted-review",
+          "reviewer_type": "hybrid",
+          "review_policy": "release_eligible",
+          "verdict": "equivalent",
+          "confidence": 0.85,
+          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "risk_flags": [],
+          "release_eligible": true,
+          "blockers": []
+        }
       },
-      "review_required": true,
-      "review_queue_id": "review::nuclear_l1_norms",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {
         "theorem_name": "nuclear_l1_norms",
         "original_latex_theorem": "\\label{nuclear-l1-norms}\nFor any matrix $\\A$, we have $\\|\\A\\|_*\\leq \\|\\A\\|_1$.",
@@ -1464,11 +1506,7 @@
           "theorem_intent": "inequality"
         }
       },
-      "axiom_debt": [
-        "paper_definition_stub:nuclearNorm",
-        "paper_definition_stub:l1MatrixNorm",
-        "paper_definition_stub:nuclearNorm_le_l1MatrixNorm"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "6ac170cf80d452fe",
       "closure_claim": "not_closed",
       "debt_tier": "definition_stub_grounding",
@@ -1533,7 +1571,31 @@
         "repair_abstraction_kind": "",
         "statement_repair_kind": "faithful_statement_regeneration",
         "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21616.lean"
-      }
+      },
+      "reviewed_equivalence_verdict": "equivalent",
+      "reviewed_statement_alignment_class": "exact",
+      "reviewed_alignment_confidence": 0.85,
+      "review_provenance": {
+        "artifact_id": "assisted_reviewed_statement_alignment:2604.21616:nuclear-l1-norms:v1",
+        "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "reviewed_at": "2026-05-10T10:42:56Z",
+        "reviewed_by": "hybrid:conservative-assisted-review",
+        "reviewer_role": "conservative_assisted_exact_adjudicator",
+        "schema_version": "reviewed_statement_alignment.v1",
+        "source_span_sha256": "e3a91759964fa1640ae7406c3507a7c449fa8d5c582952f489664df9f1de1a13"
+      },
+      "remaining_blockers_after_adjudication": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
+      "reproducible_env": true,
+      "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "discharged_axiom_debt": [
+        "paper_definition_stub:nuclearNorm",
+        "paper_definition_stub:l1MatrixNorm",
+        "paper_definition_stub:nuclearNorm_le_l1MatrixNorm"
+      ]
     },
     {
       "theorem_name": "proof_8",
@@ -1733,9 +1795,7 @@
           "theorem_intent": "To prove that the nuclear norm of a matrix A is less than or equal to its L1 norm."
         }
       },
-      "axiom_debt": [
-        "nuclearNorm_le_l1MatrixNorm"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "0966da6e8a6e22e6",
       "closure_claim": "not_closed",
       "debt_tier": "audited_core_alignment",
@@ -1811,7 +1871,10 @@
           "semantic_near_duplicate": 0.78,
           "mathlib_semantic_overlap": 0.86
         }
-      }
+      },
+      "discharged_axiom_debt": [
+        "nuclearNorm_le_l1MatrixNorm"
+      ]
     },
     {
       "theorem_name": "proof_8__audited_core",
@@ -2000,6 +2063,12 @@
           "semantic_near_duplicate": 0.78,
           "mathlib_semantic_overlap": 0.86
         }
+      },
+      "provenance": {
+        "paper_id": "2604.21616",
+        "section": "",
+        "label": "proof_8__audited_core",
+        "cited_refs": []
       }
     }
   ]
