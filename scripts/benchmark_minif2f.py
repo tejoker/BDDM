@@ -802,8 +802,8 @@ def main() -> int:
     )
     p.add_argument("--k", type=int, default=1, help="Number of independent attempts per problem")
     p.add_argument(
-        "--model", default=os.environ.get("LEANSTRAL_MODEL", "mistral-large-latest"),
-        help="Mistral model name"
+        "--model", default=os.environ.get("LEANSTRAL_MODEL", "labs-leanstral-2603"),
+        help="Mistral model name (defaults to Leanstral; pipeline policy is Leanstral-only)"
     )
     p.add_argument(
         "--retrieval-index",

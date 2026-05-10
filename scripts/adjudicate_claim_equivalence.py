@@ -22,6 +22,22 @@ SYSTEM = (
 )
 
 
+_CONFIDENCE_LABELS: dict[str, float] = {"high": 0.9, "medium": 0.65, "low": 0.3}
+
+
+def _parse_confidence(raw: Any) -> float:
+    """Coerce LLM confidence output (float, int, or string label) to [0,1] float."""
+    if isinstance(raw, (int, float)):
+        return max(0.0, min(1.0, float(raw)))
+    label = str(raw).strip().lower()
+    if label in _CONFIDENCE_LABELS:
+        return _CONFIDENCE_LABELS[label]
+    try:
+        return max(0.0, min(1.0, float(label)))
+    except ValueError:
+        return 0.0
+
+
 def _extract_json(text: str) -> dict[str, Any]:
     try:
         raw = json.loads(text)
@@ -101,7 +117,10 @@ def adjudicate_rows(
         ]
 
     try:
-        from mistralai import Mistral
+        try:
+            from mistralai import Mistral
+        except ImportError:
+            from mistralai.client import Mistral  # type: ignore[no-redef]
         from ponder_loop import _chat_complete
     except Exception:
         return [
@@ -116,14 +135,25 @@ def adjudicate_rows(
     client = Mistral(api_key=api_key)
     out: list[dict[str, Any]] = []
     for row in rows:
-        _, raw = _chat_complete(
-            client=client,
-            model=model,
-            messages=[{"role": "system", "content": SYSTEM}, {"role": "user", "content": _prompt(row)}],
-            temperature=0.0,
-            max_tokens=1200,
-            purpose="claim_equivalence_adjudication",
-        )
+        raw = ""
+        for attempt in range(4):
+            try:
+                _, raw = _chat_complete(
+                    client=client,
+                    model=model,
+                    messages=[{"role": "system", "content": SYSTEM}, {"role": "user", "content": _prompt(row)}],
+                    temperature=0.0,
+                    max_tokens=1200,
+                    purpose="claim_equivalence_adjudication",
+                    api_log_hook=None,
+                )
+                break
+            except Exception as exc:
+                wait = 2 ** (attempt + 2)  # 4, 8, 16, 32s
+                if attempt < 3:
+                    time.sleep(wait)
+                else:
+                    raw = f'{{"verdict":"unclear","confidence":0.0,"rationale":"API error: {exc}"}}'
         parsed = _extract_json(raw)
         candidate = {
             "schema_version": "1.0.0",
@@ -134,11 +164,11 @@ def adjudicate_rows(
             "reviewer_type": "llm",
             "review_policy": "requires_human_for_release",
             "verdict": parsed.get("verdict", "unclear"),
-            "confidence": parsed.get("confidence", 0.0),
+            "confidence": _parse_confidence(parsed.get("confidence", 0.0)),
             "rationale": parsed.get("rationale", ""),
             "assumption_alignment": _fallback_assumption_alignment(row, parsed),
             "conclusion_alignment": parsed.get("conclusion_alignment", {}),
-            "risk_flags": list(dict.fromkeys([*(parsed.get("risk_flags", []) or []), "needs_human_review"])),
+            "risk_flags": list(dict.fromkeys([*[str(f) for f in (parsed.get("risk_flags", []) or [])], "needs_human_review"])),
             "required_ledger_markers": parsed.get("required_ledger_markers", []),
             "created_at_unix": int(time.time()),
         }
@@ -159,7 +189,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Optionally adjudicate claim-equivalence queue rows with an LLM")
     parser.add_argument("--queue", required=True, type=Path)
     parser.add_argument("--out-jsonl", required=True, type=Path)
-    parser.add_argument("--model", default=os.environ.get("MISTRAL_MODEL", "mistral-large-latest"))
+    parser.add_argument("--model", default=os.environ.get("MISTRAL_MODEL", "labs-leanstral-2603"))
     parser.add_argument("--dry-run", action="store_true", help="Write pending/unclear skeleton adjudications without API calls")
     return parser
 

@@ -31,8 +31,8 @@ class ProofSearchConfig:
     mcts_branch_max: int = 6
     ponder_rounds: int = 6
     max_tactic_length: int = 10_000  # P1: Cap tactic strings to prevent DoS
-    value_model: str = "mistral-medium"
-    policy_model: str = "mistral-small"
+    value_model: str = "labs-leanstral-2603"
+    policy_model: str = "labs-leanstral-2603"
     top_k_premises: int = 5
 
 

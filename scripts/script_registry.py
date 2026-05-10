@@ -58,6 +58,11 @@ OFFICIAL_PIPELINE_SCRIPTS = {
 
 
 SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
+    "audit_axioms.py": {
+        "tier": "reporting",
+        "category": "review",
+        "summary": "Per-paper paper-local axiom-budget audit; classifies rows as release_eligible/axiom_backed/intermediary based on axiom_debt + gate_failures.",
+    },
     "ab_world_model_vs_baseline.py": {
         "tier": "research_experiment",
         "category": "bridge",
@@ -113,6 +118,16 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Applies claim-equivalence adjudications to verification ledgers.",
     },
+    "apply_reviews_to_ledger.py": {
+        "tier": "reporting",
+        "category": "review",
+        "summary": "Propagates reviewed_statement_corpus reviews back into output/verification_ledgers/<paper>.json so downstream gates see the LLM signal across reruns.",
+    },
+    "apply_translation_repairs.py": {
+        "tier": "reporting",
+        "category": "repair",
+        "summary": "Re-applies translation repairs (via build_repair_pack) to an existing ledger without re-running the full formalize pipeline.",
+    },
     "apply_statement_fidelity_reviews.py": {
         "tier": "reporting",
         "category": "review",
@@ -127,6 +142,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "tier": "reporting",
         "category": "reporting",
         "summary": "Summarizes paper-local axiom debt and burndown opportunities.",
+    },
+    "backfill_provenance.py": {
+        "tier": "dev_tool",
+        "category": "review",
+        "summary": "Retroactively populates `provenance` (paper_id + label) on legacy ledger entries so the `provenance_linked` promotion gate can pass.",
     },
     "benchmark_bridge_world_model.py": {
         "tier": "research_experiment",
@@ -273,10 +293,25 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "repair",
         "summary": "Repairs statement-equivalence failures experimentally.",
     },
+    "leanstral_cot_judge.py": {
+        "tier": "official_support",
+        "category": "translation",
+        "summary": "Chain-of-Thought Leanstral judge that reasons step-by-step (quantifiers/hypotheses/conclusion/abstraction) before issuing a verdict; accepts adequate-but-weaker translations.",
+    },
     "leanstral_judge.py": {
         "tier": "official_support",
         "category": "translation",
         "summary": "Leanstral-powered claim equivalence judge for the FULLY_PROVEN gate.",
+    },
+    "leanstral_stub_recovery.py": {
+        "tier": "official_support",
+        "category": "translation",
+        "summary": "Re-translates placeholder `theorem foo : False := by sorry` rows by calling Leanstral with explicit recovery hints derived from the BLOCKED reason.",
+    },
+    "mark_ghost_translation_failures.py": {
+        "tier": "dev_tool",
+        "category": "review",
+        "summary": "Marks UNRESOLVED ledger rows whose `output/<paper>.lean` is missing as TRANSLATION_LIMITED — honest accounting for paper-id queue ghosts.",
     },
     "eval_translation_fidelity.py": {
         "tier": "ci_gate",
@@ -297,6 +332,16 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "tier": "reporting",
         "category": "kg",
         "summary": "Exports stable theorem-level corpus rows from paper artifacts.",
+    },
+    "export_corpus_dataset.py": {
+        "tier": "dev_tool",
+        "category": "reporting",
+        "summary": "HF-Datasets-shaped export of the BDDM corpus with provenance + status. Local-only; not a publication step.",
+    },
+    "export_finetune_dataset.py": {
+        "tier": "dev_tool",
+        "category": "reporting",
+        "summary": "Generates SFT (supervised fine-tuning) jsonl from corpus rows: translation, equivalence-judging, and tactic-suggestion examples.",
     },
     "export_curated_corpus.py": {
         "tier": "reporting",
@@ -523,6 +568,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "repair",
         "summary": "Regenerates actionable theorem sets for repair loops.",
     },
+    "regenerate_paper_imports_anchor.py": {
+        "tier": "official_support",
+        "category": "lean_backend",
+        "summary": "Regenerates Desol/PaperImportsAnchor.lean (REPL fallback) so MCTS sees paper-theory namespaces when the per-paper output .lean fails to elaborate.",
+    },
     "release_readiness.py": {
         "tier": "ci_gate",
         "category": "ci",
@@ -542,6 +592,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "tier": "official_support",
         "category": "repair",
         "summary": "Repairs invalid translations during full-paper runs.",
+    },
+    "repair_paper_theory_exports.py": {
+        "tier": "dev_tool",
+        "category": "lean_backend",
+        "summary": "Filters Desol/PaperTheory/Paper_*.lean export lines to drop names not actually defined as top-level decls (idempotent).",
     },
     "repair_extracted_theorem_spans.py": {
         "tier": "reporting",
@@ -673,6 +728,16 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "reporting",
         "summary": "Synchronizes existing generated mirrors from canonical release bundle artifacts.",
     },
+    "onboard_arxiv_paper.py": {
+        "tier": "official_support",
+        "category": "orchestration",
+        "summary": "Single-command end-to-end arxiv-paper onboarding: translate → lint → paper-theory → anchor → prove → CoT review → bridge → audit → publish. Scalable to any paper.",
+    },
+    "onboard_curated_batch.py": {
+        "tier": "dev_tool",
+        "category": "orchestration",
+        "summary": "Batch-onboards a curated paper list (data/curated_easy_corpus.txt) via onboard_arxiv_paper. Used for the closure-rate dilution play.",
+    },
     "tactic_training.py": {
         "tier": "research_experiment",
         "category": "proof_search",
@@ -683,10 +748,25 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "translation",
         "summary": "Writes statement-validity reports and proof-repair-only cohorts.",
     },
+    "translation_linter.py": {
+        "tier": "official_support",
+        "category": "translation",
+        "summary": "Lints paper→Lean translations for recurring bugs (typeclass-in-existential, latex-leak tokens, placeholder targets, false-target fallbacks). Pre-prover hook.",
+    },
+    "translation_autorepair.py": {
+        "tier": "official_support",
+        "category": "translation",
+        "summary": "Auto-repair pass for translator bugs: typeclass-in-existential → top-level binders, LaTeX subscript/superscript braces → Lean-native form. Idempotent.",
+    },
     "theorem_extractor.py": {
         "tier": "official_support",
         "category": "ingestion",
         "summary": "Extracts theorem-like LaTeX environments and aliases.",
+    },
+    "upgrade_existing_paper_theory_stubs.py": {
+        "tier": "dev_tool",
+        "category": "lean_backend",
+        "summary": "Retroactively appends auto-emitted typeclass instances and aesop attributes to existing Desol/PaperTheory/Paper_*.lean stubs (idempotent).",
     },
     "weekly_benchmark_report.py": {
         "tier": "reporting",

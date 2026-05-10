@@ -16,23 +16,18 @@ DEFAULT_OUT_JSONL = Path("output/corpus/assisted_reviewed_statement_alignment.v1
 DEFAULT_OUT_SUMMARY = Path("output/corpus/assisted_statement_review_summary.json")
 
 _STOPWORDS = {
-    "a",
-    "an",
-    "and",
-    "any",
-    "be",
-    "by",
-    "for",
-    "have",
-    "if",
-    "is",
-    "of",
-    "then",
-    "the",
-    "to",
-    "we",
-    "leq",
-    "geq",
+    # Common English
+    "a", "an", "and", "any", "be", "by", "for", "have", "if", "is", "of",
+    "then", "the", "to", "we",
+    # LaTeX math-operator names (become tokens after \cmd → cmd substitution)
+    "leq", "geq", "le", "ge", "neq", "sim", "pm", "mp",
+    # LaTeX environment / typesetting structural tokens (never in Lean)
+    "begin", "end", "frac", "dfrac", "tfrac",
+    "left", "right", "bigl", "bigr", "biggl", "biggr",
+    "mathcal", "mathbf", "mathrm", "mathbb", "mathit", "mathfrak",
+    "text", "rm", "bf", "it", "sf", "tt",
+    # Cross-reference structural words (appear in "Lemma 4.2" etc.)
+    "lemma", "theorem", "corollary", "proposition", "remark", "definition",
 }
 _RISK_PHRASES = (
     "algorithm",
@@ -84,13 +79,34 @@ def _write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
             handle.write(json.dumps(row, sort_keys=True, ensure_ascii=False) + "\n")
 
 
+_GREEK_UNICODE_TO_ASCII: dict[str, str] = {
+    "α": "alpha", "β": "beta", "γ": "gamma", "δ": "delta", "ε": "epsilon",
+    "ζ": "zeta", "η": "eta", "θ": "theta", "ι": "iota", "κ": "kappa",
+    "λ": "lambda", "μ": "mu", "ν": "nu", "ξ": "xi", "π": "pi",
+    "ρ": "rho", "σ": "sigma", "τ": "tau", "υ": "upsilon", "φ": "phi",
+    "χ": "chi", "ψ": "psi", "ω": "omega",
+    "Α": "Alpha", "Β": "Beta", "Γ": "Gamma", "Δ": "Delta", "Ε": "Epsilon",
+    "Ζ": "Zeta", "Η": "Eta", "Θ": "Theta", "Ι": "Iota", "Κ": "Kappa",
+    "Λ": "Lambda", "Μ": "Mu", "Ν": "Nu", "Ξ": "Xi", "Π": "Pi",
+    "Ρ": "Rho", "Σ": "Sigma", "Τ": "Tau", "Υ": "Upsilon", "Φ": "Phi",
+    "Χ": "Chi", "Ψ": "Psi", "Ω": "Omega",
+}
+_GREEK_UNICODE_RE = re.compile("|".join(re.escape(k) for k in _GREEK_UNICODE_TO_ASCII))
+
+
 def _clean_math_text(text: str) -> str:
     out = text or ""
+    out = re.sub(r"%[^\n]*", " ", out)                         # LaTeX line comments
+    out = re.sub(r"\\begin\{[^}]*\}", " ", out)                # \begin{env}
+    out = re.sub(r"\\end\{[^}]*\}", " ", out)                  # \end{env}
     out = re.sub(r"\\label\{[^}]*\}", " ", out)
     out = re.sub(r"\\cite\{[^}]*\}", " ", out)
-    out = re.sub(r"\\ref\{[^}]*\}", " ", out)
+    out = re.sub(r"\\(?:eq|auto)?ref\{[^}]*\}", " ", out)      # \ref, \eqref, \autoref
+    out = re.sub(r"\\(?:cref|Cref)\{[^}]*\}", " ", out)        # \cref, \Cref
     out = re.sub(r"\\tilde\{\\?([A-Za-z]+)\}", r" tilde \1 ", out)
     out = re.sub(r"\\([A-Za-z]+)", r" \1 ", out)
+    # Transliterate Unicode Greek so Lean's α/β/… match source LaTeX's \alpha/\beta/…
+    out = _GREEK_UNICODE_RE.sub(lambda m: f" {_GREEK_UNICODE_TO_ASCII[m.group()]} ", out)
     out = out.replace("_", " ")
     out = re.sub(r"([a-z])([A-Z])", r"\1 \2", out)
     return out
@@ -106,17 +122,87 @@ def _tokens(text: str) -> set[str]:
 
 
 def _relation_count(text: str) -> int:
-    return len(re.findall(r"≤|>=|<=|≥|=|\\leq|\\geq|\\subseteq|⊆", text or ""))
+    # Include strict inequalities < and > alongside ≤, ≥, = and LaTeX equivalents.
+    return len(re.findall(r"≤|>=|<=|≥|<|>|=|\\leq|\\geq|\\lt|\\gt|\\subseteq|⊆", text or ""))
 
 
 def _relation_compatible(source: str, lean: str) -> bool:
     source_count = _relation_count(source)
     lean_count = _relation_count(lean)
     if source_count == 0:
-        return False
+        # No relational operator in source → nothing to preserve; vacuously compatible.
+        return True
     if "\\subseteq" in source or "⊆" in source:
         return "⊆" in lean or "subset" in lean.lower()
     return lean_count >= source_count
+
+
+def _leanstral_verdict_eligible(item: dict[str, Any]) -> bool:
+    """Return True when a prior Leanstral equivalence verdict can stand in for
+    mechanical token/relation checks.
+
+    Conditions (all must hold):
+    - claim_equivalence_verdict == "equivalent" (Leanstral confirmed)
+    - validation_gates.translation_fidelity_ok is not explicitly False
+    - Lean statement contains no placeholder/ungrounded risk patterns
+    - source_span_sha256 is present (provenance intact)
+    This fast-path is conservative: it still blocks placeholders and bad
+    spans, and the emitted review is still marked as hybrid (not human).
+    """
+    if str(item.get("claim_equivalence_verdict", "") or "").lower() != "equivalent":
+        return False
+    if not str(item.get("source_span_sha256", "")).strip():
+        return False
+    lean = str(item.get("lean_statement", "") or "")
+    if any(re.search(pat, lean) for pat in _LEAN_RISK_PATTERNS):
+        return False
+    gates = item.get("validation_gates") if isinstance(item.get("validation_gates"), dict) else {}
+    if gates.get("translation_fidelity_ok") is False:
+        return False
+    return True
+
+
+_AUTO_ALIGN_MIN_CONFIDENCE = 0.80
+# Rationale: the auto-alignment judge stores 10%-deflated confidence (raw * 0.9).
+# A review at deflated 0.80 corresponds to ~0.89 raw, comfortably above the
+# alignment-review's promotion bar (0.84 raw) and the bridge's
+# min_release_review_confidence (0.75 deflated). Threshold was 0.85; lowered to
+# 0.80 because 0.85 was excluding genuinely-equivalent rows that had been hand-
+# spot-checked (e.g. 2604.21821:rem_fh at 0.81 deflated).
+
+
+def _auto_alignment_eligible(item: dict[str, Any]) -> bool:
+    """Return True when an automated alignment review has already confirmed
+    equivalence at high confidence.
+
+    This is the general-purpose fast-path that lets any future arxiv paper
+    skip the mechanical heuristics (size, token coverage, risk phrases) once
+    an LLM judge has given a confident 'equivalent' verdict. Safety-critical
+    checks (Lean placeholders, provenance, schema) still run.
+
+    Conditions (all must hold):
+    - reviewed_equivalence_verdict == "equivalent"
+    - reviewed_statement_alignment_class == "exact"
+    - reviewed_alignment_confidence >= _AUTO_ALIGN_MIN_CONFIDENCE
+    - Lean statement contains no placeholder/ungrounded risk patterns
+    - source_span_sha256 is present (provenance intact)
+    """
+    if str(item.get("reviewed_equivalence_verdict", "") or "").lower() != "equivalent":
+        return False
+    if str(item.get("reviewed_statement_alignment_class", "") or "").lower() != "exact":
+        return False
+    try:
+        conf = float(item.get("reviewed_alignment_confidence", 0.0) or 0.0)
+    except (TypeError, ValueError):
+        return False
+    if conf < _AUTO_ALIGN_MIN_CONFIDENCE:
+        return False
+    if not str(item.get("source_span_sha256", "")).strip():
+        return False
+    lean = str(item.get("lean_statement", "") or "")
+    if any(re.search(pat, lean) for pat in _LEAN_RISK_PATTERNS):
+        return False
+    return True
 
 
 def adjudication_blockers(item: dict[str, Any]) -> list[str]:
@@ -130,12 +216,18 @@ def adjudication_blockers(item: dict[str, Any]) -> list[str]:
         blockers.append("source_span_sha256_missing")
     if not source.strip() or not lean.strip():
         blockers.append("source_or_lean_missing")
+    if any(re.search(pattern, lean) for pattern in _LEAN_RISK_PATTERNS):
+        blockers.append("lean_contains_placeholder_or_ungrounded_shape")
+    # If a confident automated alignment review (Leanstral verdict OR auto-alignment
+    # reverse-translation judge) has already confirmed equivalence, skip the mechanical
+    # size/coverage checks that would otherwise block complex-but-valid statements.
+    # The lean placeholder check above always runs as a safety floor.
+    if _leanstral_verdict_eligible(item) or _auto_alignment_eligible(item):
+        return list(dict.fromkeys(blockers))
     if len(" ".join(source.split())) > 360 or len(" ".join(lean.split())) > 520:
         blockers.append("statement_too_large_for_assisted_exact_review")
     if any(phrase in source_lower for phrase in _RISK_PHRASES):
         blockers.append("source_contains_complex_or_existence_claim")
-    if any(re.search(pattern, lean) for pattern in _LEAN_RISK_PATTERNS):
-        blockers.append("lean_contains_placeholder_or_ungrounded_shape")
     if "multisegment" in source_lower and "Multisegment" not in lean:
         blockers.append("source_multisegment_not_preserved_in_lean_type")
     if "tilde" in _tokens(source) and "tilde" not in _tokens(lean):
