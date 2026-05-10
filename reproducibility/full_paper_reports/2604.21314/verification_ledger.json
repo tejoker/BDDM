@@ -80,7 +80,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -95,7 +95,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -484,7 +483,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21314:alpha_0:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_at": "2026-05-10T15:34:10Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -504,7 +503,9 @@
         "paper_definition_stub:hfL1",
         "paper_definition_stub:hu0",
         "paper_definition_stub:u0"
-      ]
+      ],
+      "reviewer_type": "hybrid",
+      "review_policy": "release_eligible"
     },
     {
       "theorem_name": "Thm_Blowup_O",
@@ -562,7 +563,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -577,7 +578,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -741,7 +741,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -756,7 +756,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -1061,7 +1060,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21314:Thm_Blowup_O3:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_at": "2026-05-10T15:34:10Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -1080,7 +1079,9 @@
         "paper_definition_stub:h1",
         "paper_definition_stub:h2",
         "paper_definition_stub:u0"
-      ]
+      ],
+      "reviewer_type": "hybrid",
+      "review_policy": "release_eligible"
     },
     {
       "theorem_name": "infty",
@@ -1146,7 +1147,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -1161,7 +1162,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "no_paper_axiom_debt"
       ],
       "claim_equivalence_verdict": "equivalent",
@@ -1573,7 +1573,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21314:Beta:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_at": "2026-05-10T15:34:10Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -1588,7 +1588,9 @@
         "paper_definition_stub:hz2",
         "paper_definition_stub:z1",
         "paper_definition_stub:z2"
-      ]
+      ],
+      "reviewer_type": "hybrid",
+      "review_policy": "release_eligible"
     },
     {
       "theorem_name": "defn_8",
@@ -1927,7 +1929,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -1942,7 +1944,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence"
@@ -3022,7 +3023,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -3037,7 +3038,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -3215,7 +3215,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -3230,7 +3230,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -3839,7 +3838,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -3854,7 +3853,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -4277,7 +4275,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -4292,7 +4290,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence"
@@ -4768,7 +4765,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -4783,7 +4780,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -5126,7 +5122,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21314:life:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_at": "2026-05-10T15:34:10Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -5146,7 +5142,9 @@
         "paper_definition_stub:hT_eps",
         "paper_definition_stub:hu0",
         "paper_definition_stub:u0"
-      ]
+      ],
+      "reviewer_type": "hybrid",
+      "review_policy": "release_eligible"
     }
   ]
 }

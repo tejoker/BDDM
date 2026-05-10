@@ -312,6 +312,12 @@ _DIFF_KEY_FIELDS = (
     "reviewed_statement_alignment_class",
     "reviewed_alignment_confidence",
     "statement_alignment_class",
+    # reviewer_type / review_policy are what `_is_release_eligible` consults;
+    # without these in the diff key, writes that ONLY change reviewer_type
+    # (e.g., backfill of release-eligible reviewer_type from
+    # review_provenance.reviewed_by) silently skip write-back to disk.
+    "reviewer_type",
+    "review_policy",
 )
 
 

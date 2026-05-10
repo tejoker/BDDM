@@ -73,32 +73,50 @@ def _minimal_provenance(paper_id: str, theorem_name: str) -> dict:
 
 
 def backfill_ledger(path: Path, *, dry_run: bool = False) -> dict[str, int]:
-    """Backfill provenance on a single ledger file. Returns counts dict."""
+    """Backfill provenance on a single ledger file. Returns counts dict.
+
+    Also refreshes the stale `validation_gates.provenance_linked` flag and
+    drops `provenance_linked` from `gate_failures` when the freshly-written
+    provenance now passes the gate. Without this refresh, rows get a valid
+    provenance dict but their gate cache stays at False from an earlier
+    pre-backfill evaluation."""
     if not path.exists():
-        return {"backfilled": 0, "rows": 0, "already_ok": 0}
+        return {"backfilled": 0, "rows": 0, "already_ok": 0, "gate_refreshed": 0}
     paper_id = path.stem  # e.g., '2304.09598'
     data = json.loads(path.read_text(encoding="utf-8"))
     entries = data if isinstance(data, list) else data.get("entries", [])
     backfilled = 0
     already_ok = 0
+    gate_refreshed = 0
     for entry in entries:
         prov = entry.get("provenance")
         if _provenance_passes_gate(prov):
             already_ok += 1
-            continue
-        theorem_name = str(entry.get("theorem_name", "") or "").strip()
-        if not theorem_name:
-            continue
-        new_prov = _minimal_provenance(paper_id, theorem_name)
-        # Preserve any pre-existing fields the gate didn't care about.
-        if isinstance(prov, dict):
-            for k, v in prov.items():
-                if k not in new_prov or not new_prov[k]:
-                    new_prov[k] = v
-        entry["provenance"] = new_prov
-        backfilled += 1
-    summary = {"backfilled": backfilled, "rows": len(entries), "already_ok": already_ok}
-    if backfilled and not dry_run:
+        else:
+            theorem_name = str(entry.get("theorem_name", "") or "").strip()
+            if not theorem_name:
+                continue
+            new_prov = _minimal_provenance(paper_id, theorem_name)
+            # Preserve any pre-existing fields the gate didn't care about.
+            if isinstance(prov, dict):
+                for k, v in prov.items():
+                    if k not in new_prov or not new_prov[k]:
+                        new_prov[k] = v
+            entry["provenance"] = new_prov
+            backfilled += 1
+        # Whether we backfilled OR the row already had good provenance,
+        # refresh the gate flag if it's stale-False.
+        gates = entry.get("validation_gates")
+        if isinstance(gates, dict) and gates.get("provenance_linked") is False:
+            if _provenance_passes_gate(entry.get("provenance")):
+                gates["provenance_linked"] = True
+                # Also drop from gate_failures.
+                failures = entry.get("gate_failures")
+                if isinstance(failures, list) and "provenance_linked" in failures:
+                    entry["gate_failures"] = [f for f in failures if f != "provenance_linked"]
+                gate_refreshed += 1
+    summary = {"backfilled": backfilled, "rows": len(entries), "already_ok": already_ok, "gate_refreshed": gate_refreshed}
+    if (backfilled or gate_refreshed) and not dry_run:
         path.write_text(
             json.dumps(data if isinstance(data, list) else {**data, "entries": entries}, indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",

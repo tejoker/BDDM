@@ -333,6 +333,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Populates a verification ledger from an already-closed `output/<paper>.lean` file (every theorem has a real proof body, no `sorry`). Bridges hand-formalized files to the BDDM ledger machinery without re-running translation or proof search.",
     },
+    "categorize_elaboration_failures.py": {
+        "tier": "reporting",
+        "category": "review",
+        "summary": "Categorizes UNRESOLVED rows whose Lean statement fails to elaborate into root-cause buckets (typeclass missing, parse error, type mismatch, etc.). Produces the per-paper table that drives translator/paper-theory-builder priorities.",
+    },
     "mark_ghost_translation_failures.py": {
         "tier": "dev_tool",
         "category": "review",

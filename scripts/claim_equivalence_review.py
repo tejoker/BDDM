@@ -703,6 +703,16 @@ def apply_adjudication_to_row(
         evidence = []
     rationale = str(adjudication.get("rationale", "") or "")
     reviewer_type = str(adjudication.get("reviewer_type", "") or _reviewer_type(adjudication))
+    review_policy = str(adjudication.get("review_policy", "") or "")
+    # Propagate reviewer_type + review_policy to the top-level row fields.
+    # These are what `_is_release_eligible` (and downstream gates) consult;
+    # without this, reviewer_type stayed nested inside
+    # semantic_equivalence_artifact.adjudication and the top-level row had
+    # `reviewer_type=""` for every reviewed row → 0 release-eligible rows.
+    if reviewer_type:
+        out["reviewer_type"] = reviewer_type
+    if review_policy:
+        out["review_policy"] = review_policy
     marker = f"claim_equivalent:{reviewer_type}"
     evidence_items = [
         f"claim_equivalence_adjudication:{adjudication.get('review_id', '')}",

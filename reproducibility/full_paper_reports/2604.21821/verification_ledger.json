@@ -96,7 +96,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": false,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": false,
@@ -112,7 +112,6 @@
         "lean_proof_closed",
         "step_verdict_verified",
         "assumptions_grounded",
-        "provenance_linked",
         "dependency_trust_complete",
         "reproducible_env",
         "claim_equivalent",
@@ -276,7 +275,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -291,7 +290,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -706,7 +704,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -721,7 +719,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -1197,7 +1194,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21821:lem_tc:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_at": "2026-05-10T15:34:10Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -1212,7 +1209,9 @@
       ],
       "discharged_axiom_debt": [
         "paper_definition_stub:z_F"
-      ]
+      ],
+      "reviewer_type": "hybrid",
+      "review_policy": "release_eligible"
     },
     {
       "theorem_name": "cor_wpi",
@@ -1262,7 +1261,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -1277,7 +1276,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -1430,7 +1428,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -1445,7 +1443,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -2774,7 +2771,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21821:rem:fh:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T13:41:17Z",
+        "reviewed_at": "2026-05-10T15:34:10Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -2783,7 +2780,9 @@
       "remaining_blockers_after_adjudication": [],
       "reproducible_env": true,
       "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
-      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7"
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "reviewer_type": "hybrid",
+      "review_policy": "release_eligible"
     },
     {
       "theorem_name": "lemma_m",
@@ -2849,7 +2848,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -2864,7 +2863,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
@@ -3021,7 +3019,7 @@
         "lean_proof_closed": false,
         "step_verdict_verified": false,
         "assumptions_grounded": true,
-        "provenance_linked": false,
+        "provenance_linked": true,
         "translation_fidelity_ok": true,
         "status_alignment_ok": true,
         "dependency_trust_complete": true,
@@ -3036,7 +3034,6 @@
       "gate_failures": [
         "lean_proof_closed",
         "step_verdict_verified",
-        "provenance_linked",
         "reproducible_env",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
