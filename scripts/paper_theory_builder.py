@@ -126,6 +126,29 @@ def plan_paper_theory(
     if symbols:
         notes.append(f"declared {len(symbols)} paper-local symbol(s) from inventory")
         notes.append("definition stubs are notation grounding only and are not proof-countable")
+
+    # Per-area starter definitions and lemmas. Pre-emitted at the TOP of the
+    # paper-theory file so the translator can use the area-typical names
+    # (e.g., `analysisSeminorm`, `probAlmostSure`) without introducing fresh
+    # axiom-form symbols. Only fires when the domain pack has populated these;
+    # the default pack has empty starter lists.
+    pack_starter_defs = list(getattr(pack, "starter_definitions", None) or [])
+    pack_starter_lemmas = list(getattr(pack, "starter_lemmas", None) or [])
+    if pack_starter_defs:
+        # Prepend so they shadow any later axiom-form declarations of the
+        # same name. The de-dupe below preserves the first occurrence.
+        definitions = pack_starter_defs + definitions
+        notes.append(
+            f"emitted {len(pack_starter_defs)} area-typical starter def(s) "
+            f"from domain pack '{pack.name}'"
+        )
+    if pack_starter_lemmas:
+        lemmas = pack_starter_lemmas + lemmas
+        notes.append(
+            f"emitted {len(pack_starter_lemmas)} area-typical starter lemma(s) "
+            f"from domain pack '{pack.name}'"
+        )
+
     manifest = symbols_to_manifest(paper_id=paper_id, module_name=module, symbols=symbols)
 
     return PaperTheoryPlan(

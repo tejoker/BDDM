@@ -12,6 +12,16 @@ class DomainPack:
     rewrites: dict[str, str] = field(default_factory=dict)
     # Short deterministic tactics worth trying for this domain.
     micro_tactics: list[str] = field(default_factory=list)
+    # Area-typical prelude definitions emitted at the top of every
+    # paper-theory file in this domain. These cover the most common
+    # paper-local patterns the translator would otherwise emit as
+    # uninterpreted axioms (e.g. probability papers' Filtration, analysis
+    # papers' generic Norm). Each entry is a complete Lean def declaration.
+    starter_definitions: list[str] = field(default_factory=list)
+    # Common per-area lemma scaffolds (proven trivially against the starter
+    # defs). Translator-generated proofs that reference these names can then
+    # discharge directly instead of introducing fresh axioms.
+    starter_lemmas: list[str] = field(default_factory=list)
 
 
 def get_domain_pack(domain: str) -> DomainPack:
