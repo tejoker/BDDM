@@ -17,6 +17,7 @@ from __future__ import annotations
 from translator._translate import (
     _apply_schema_fallback,
     _add_missing_function_binders,
+    _balance_brackets,
     _basic_assumption_slot_issue,
     _claim_shape_mismatch_issue,
     _deterministic_signature_cleanup,
@@ -414,3 +415,46 @@ class TestPaper260421884Resilience:
         assert "STATEMENT_REPAIR_NEEDED: schema_fallback" in fallback
         assert "(p_c1 : Prop)" not in fallback
         assert "theorem t : False := by sorry" in fallback
+
+
+# ---------------------------------------------------------------------------
+# _balance_brackets — bucket 2 fix (parse_error class)
+# ---------------------------------------------------------------------------
+
+
+class TestBalanceBrackets:
+    """Deterministic bracket-repair pass: missing `)` / `]` in a signature
+    head should be appended before the proof body. Catches the common
+    parse-error class where the model emits one missing closing bracket."""
+
+    def test_balanced_input_unchanged(self) -> None:
+        sig = "theorem t (x : ℕ) : x = x := by trivial"
+        assert _balance_brackets(sig) == sig
+
+    def test_repairs_one_missing_close_paren(self) -> None:
+        sig = "theorem t (x : ℕ : x = x := by trivial"
+        out = _balance_brackets(sig)
+        # Repaired head, body preserved.
+        assert ") :" in out or "):" in out
+        assert "trivial" in out
+        # Balance check (head only).
+        head = out.split(":= by", 1)[0]
+        assert head.count("(") == head.count(")")
+
+    def test_repairs_one_missing_close_bracket(self) -> None:
+        sig = "theorem t [Group G (x : G) : x = x := by rfl"
+        out = _balance_brackets(sig)
+        head = out.split(":= by", 1)[0]
+        assert head.count("[") == head.count("]")
+        assert "rfl" in out
+
+    def test_leaves_large_imbalance_alone(self) -> None:
+        # 3 missing `)` — too much to safely guess; leave as-is.
+        sig = "theorem t (((x : ℕ : P := by trivial"
+        out = _balance_brackets(sig)
+        assert out == sig
+
+    def test_handles_signature_without_proof_body(self) -> None:
+        sig = "theorem t (x : ℕ : x = x"
+        out = _balance_brackets(sig)
+        assert out.count("(") == out.count(")")

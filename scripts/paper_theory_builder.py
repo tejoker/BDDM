@@ -166,17 +166,39 @@ def plan_paper_theory(
     )
 
 
-# Underlying types whose Mathlib instances we know carry over to a transparent
-# `abbrev`. Extending this list is safe; entries here just enable auto-emission
-# of the paper-local instance lines. If a paper introduces an `abbrev Foo := T`
-# where `T` is not in this list, no instances are auto-emitted and the stub
-# remains the same as before this change.
-_INSTANCE_BEARING_UNDERLYING_TYPES = (
-    "ℕ", "Nat",
-    "ℤ", "Int",
-    "ℝ", "Real",
-    "ℚ", "Rat",
+# Per-underlying-type allowlist of Mathlib typeclasses that we know elaborate
+# via `inferInstance` for the named base type. Extending this list is safe;
+# entries here just enable auto-emission of the paper-local instance lines.
+# If a paper introduces an `abbrev Foo := T` where `T` is not a key in this
+# map, no instances are auto-emitted and the stub remains the same as before
+# this change.
+#
+# Common-to-all-numeric-bases classes (LE, LT, Preorder, PartialOrder,
+# LinearOrder, DecidableEq, Zero, One, Inhabited, Add, Mul, MeasurableSpace)
+# are shared via _COMMON_NUMERIC_CLASSES below.
+_COMMON_NUMERIC_CLASSES: tuple[str, ...] = (
+    "LE", "LT", "Preorder", "PartialOrder", "LinearOrder",
+    "DecidableEq", "Zero", "One", "Inhabited", "Add", "Mul",
+    "MeasurableSpace",
 )
+_AUTO_INSTANCE_BY_UNDERLYING: dict[str, tuple[str, ...]] = {
+    "ℕ": _COMMON_NUMERIC_CLASSES,
+    "Nat": _COMMON_NUMERIC_CLASSES,
+    "ℤ": _COMMON_NUMERIC_CLASSES + ("Neg", "Sub", "Ring", "CommRing"),
+    "Int": _COMMON_NUMERIC_CLASSES + ("Neg", "Sub", "Ring", "CommRing"),
+    "ℝ": _COMMON_NUMERIC_CLASSES + (
+        "Neg", "Sub", "Div", "Inv", "Field", "Norm",
+        "NormedField", "NormedAddCommGroup", "TopologicalSpace",
+    ),
+    "Real": _COMMON_NUMERIC_CLASSES + (
+        "Neg", "Sub", "Div", "Inv", "Field", "Norm",
+        "NormedField", "NormedAddCommGroup", "TopologicalSpace",
+    ),
+    "ℚ": _COMMON_NUMERIC_CLASSES + ("Neg", "Sub", "Div", "Inv", "Field"),
+    "Rat": _COMMON_NUMERIC_CLASSES + ("Neg", "Sub", "Div", "Inv", "Field"),
+}
+# Legacy aliases preserved so callers/tests that import these still work.
+_INSTANCE_BEARING_UNDERLYING_TYPES = tuple(_AUTO_INSTANCE_BY_UNDERLYING.keys())
 _AUTO_INSTANCE_CLASSES = (
     "LE", "LT", "Preorder", "PartialOrder", "DecidableEq",
 )
@@ -188,20 +210,36 @@ _ABBREV_TYPE_RE = re.compile(
 
 def _underlying_carries_instances(underlying: str) -> bool:
     underlying = underlying.strip().rstrip(".").strip()
-    return any(underlying == t or underlying.startswith(t + " ") for t in _INSTANCE_BEARING_UNDERLYING_TYPES)
+    return any(
+        underlying == t or underlying.startswith(t + " ")
+        for t in _AUTO_INSTANCE_BY_UNDERLYING
+    )
+
+
+def _classes_for_underlying(underlying: str) -> tuple[str, ...]:
+    underlying = underlying.strip().rstrip(".").strip()
+    for base, classes in _AUTO_INSTANCE_BY_UNDERLYING.items():
+        if underlying == base or underlying.startswith(base + " "):
+            return classes
+    return ()
 
 
 def _auto_instance_lines(definitions: list[str]) -> list[str]:
     """Emit `instance : <Class> <Name> := inferInstance` for every type abbrev
     whose underlying type is a known instance-bearing Mathlib type. Generalises
-    the manually-curated 5-instance block in Paper_2304_09598.lean to all papers."""
+    the manually-curated 5-instance block in Paper_2304_09598.lean to all papers.
+
+    Class coverage is per-underlying-type (see `_AUTO_INSTANCE_BY_UNDERLYING`)
+    so we only emit instances Mathlib actually provides — e.g., `Field` for ℝ
+    but not for ℕ."""
     lines: list[str] = []
     for decl in definitions:
         for match in _ABBREV_TYPE_RE.finditer(decl):
             name, underlying = match.group(1), match.group(2)
-            if not _underlying_carries_instances(underlying):
+            classes = _classes_for_underlying(underlying)
+            if not classes:
                 continue
-            for cls in _AUTO_INSTANCE_CLASSES:
+            for cls in classes:
                 lines.append(f"instance : {cls} {name} := inferInstance")
     return lines
 

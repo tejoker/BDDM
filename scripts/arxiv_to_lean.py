@@ -1378,9 +1378,16 @@ def translation_acceptance_gate(
         )
 
     if not bool(getattr(translation, "validated", False)):
+        # Preserve the underlying Lean error from `translation.last_error`
+        # (truncated to keep the ledger entry compact). Without this, the
+        # ledger only saw the marker `lean_elaboration_failed` and the
+        # downstream elaboration-failure categorizer couldn't cluster these
+        # rows into a root-cause bucket.
+        _last_err = str(getattr(translation, "last_error", "") or "").strip()
+        _err_tail = f": {_last_err[-400:]}" if _last_err else ""
         return TranslationAcceptanceGate(
             accepted=False,
-            reason="lean_elaboration_failed",
+            reason=f"lean_elaboration_failed{_err_tail}",
             status=VerificationStatus.FLAWED,
             failure_kind=FailureKind.ELABORATION_FAILURE,
             gate_failures=("translation_acceptance_gate", "translation_fidelity_ok"),

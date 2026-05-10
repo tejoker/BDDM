@@ -11,8 +11,14 @@ def _write_stub(path: Path, body: str) -> None:
 
 
 def test_upgrade_appends_instances_for_known_underlying_type(tmp_path: Path) -> None:
-    """A stub with `abbrev Foo : Type := ℕ` and no instance lines should pick up the
-    five standard instances, inserted before `end Paper_<id>`."""
+    """A stub with `abbrev Foo : Type := ℕ` and no instance lines should pick up
+    every standard instance from `_AUTO_INSTANCE_BY_UNDERLYING[ℕ]`, inserted
+    before `end Paper_<id>`. The exact count grew when the per-underlying
+    allowlist expanded beyond the original five — we now assert the originals
+    are present plus the count is non-trivial, rather than pinning a fragile
+    constant."""
+    from paper_theory_builder import _AUTO_INSTANCE_BY_UNDERLYING
+
     stub = tmp_path / "Paper_0000_00001.lean"
     _write_stub(
         stub,
@@ -25,9 +31,10 @@ def test_upgrade_appends_instances_for_known_underlying_type(tmp_path: Path) -> 
     summary = upgrade_file(stub)
     text = stub.read_text(encoding="utf-8")
 
+    expected_classes = _AUTO_INSTANCE_BY_UNDERLYING["ℕ"]
     assert summary["changed"] is True
-    assert summary["instances_added"] == 5
-    for cls in ("LE", "LT", "Preorder", "PartialOrder", "DecidableEq"):
+    assert summary["instances_added"] == len(expected_classes)
+    for cls in expected_classes:
         assert f"instance : {cls} Foo := inferInstance" in text
 
 
@@ -98,11 +105,15 @@ def test_upgrade_preserves_existing_instances(tmp_path: Path) -> None:
         "end Paper_0000_00005\n",
     )
 
+    from paper_theory_builder import _AUTO_INSTANCE_BY_UNDERLYING
+
     summary = upgrade_file(stub)
     text = stub.read_text(encoding="utf-8")
 
-    # Three remaining (Preorder, PartialOrder, DecidableEq) should be appended.
-    assert summary["instances_added"] == 3
+    # Whatever the full allowlist is, only the classes not already present
+    # should be added; LE and LT must NOT be duplicated.
+    expected_remaining = len(_AUTO_INSTANCE_BY_UNDERLYING["ℕ"]) - 2
+    assert summary["instances_added"] == expected_remaining
     # Existing two are still there exactly once.
     assert text.count("instance : LE Foo := inferInstance") == 1
     assert text.count("instance : LT Foo := inferInstance") == 1

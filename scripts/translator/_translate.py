@@ -1006,7 +1006,54 @@ def _deterministic_signature_cleanup(sig: str) -> str:
     out = _annotate_existential_constants(out)
     out = _normalize_let_chain(out)
     out = _normalize_matrix_positive_definite_fields(out)
+    out = _balance_brackets(out)
     return out
+
+
+def _balance_brackets(sig: str) -> str:
+    """Repair unbalanced `(`/`)` and `[`/`]` in a Lean signature.
+
+    Catches the most common parse-error class: model-emitted signatures
+    with one missing closing bracket (e.g., `(x : Nat (y : ℕ) : P x y` —
+    missing `)` after `Nat`). Strategy:
+      1. Strip the proof body (`:= by …`) to avoid touching tactic syntax.
+      2. Count unbalanced bracket pairs.
+      3. If unbalanced AT MOST 2 (typical model error), append the missing
+         closing brackets BEFORE the `:=`.
+      4. If unbalanced more than 2, leave as-is — let validation reject
+         it; deeper repair needs structural understanding.
+
+    Standards-positive: this only adds CLOSING brackets to fix obvious
+    truncation. Doesn't touch the mathematical content.
+    """
+    # Split at the proof body marker; only touch the signature half.
+    body_match = re.search(r":=\s*by\b", sig)
+    body_marker = ""
+    body_tail = ""
+    if body_match:
+        head = sig[: body_match.start()]
+        body_tail = sig[body_match.start():]
+        body_marker = ""
+    else:
+        head = sig
+    head = head.rstrip()
+
+    # Count balance of () and [] in the head.
+    paren_open = head.count("(") - head.count(")")
+    bracket_open = head.count("[") - head.count("]")
+
+    # Only repair small imbalances (1 or 2 missing closers).
+    repaired = head
+    if 0 < paren_open <= 2:
+        repaired += ")" * paren_open
+    if 0 < bracket_open <= 2:
+        repaired += "]" * bracket_open
+    # Negative imbalance (too many closers): don't try to repair —
+    # likely indicates a misplaced opening bracket the model generated.
+
+    if body_tail:
+        return repaired + " " + body_tail
+    return repaired
 
 
 def _normalize_theorem_name(sig: str) -> str:

@@ -96,6 +96,43 @@ def test_write_paper_theory_emits_standard_instances_for_nat_abbrev(tmp_path: Pa
         )
 
 
+def test_write_paper_theory_emits_extended_instances_for_real_abbrev(tmp_path: Path) -> None:
+    """An `abbrev Foo : Type := ℝ` should auto-emit not only LE/LT but also
+    the analysis-typical classes (Norm, NormedField, Field) so paper-theory
+    elaboration doesn't fail with `synthInstanceFailed: Norm Foo` when a
+    translated statement uses `‖foo‖`."""
+    (tmp_path / "Desol").mkdir()
+    plan = _bare_plan(definitions=["abbrev MyReal : Type := ℝ"], axioms=[])
+    out = write_paper_theory(project_root=tmp_path, plan=plan)
+    text = out.read_text(encoding="utf-8")
+    for cls in ("Zero", "One", "Add", "Mul", "Norm", "Field", "MeasurableSpace"):
+        assert f"instance : {cls} MyReal := inferInstance" in text, (
+            f"missing auto-emitted instance for ℝ-abbrev: {cls}"
+        )
+
+
+def test_write_paper_theory_emits_measurablespace_instance_for_nat_abbrev(tmp_path: Path) -> None:
+    """Counting-measure-style theorems require `MeasurableSpace ℕ`. Auto-emit
+    it for ℕ-abbrevs so paper-theory elaboration covers the typeclass."""
+    (tmp_path / "Desol").mkdir()
+    plan = _bare_plan(definitions=["abbrev PaperIndex : Type := ℕ"], axioms=[])
+    out = write_paper_theory(project_root=tmp_path, plan=plan)
+    text = out.read_text(encoding="utf-8")
+    assert "instance : MeasurableSpace PaperIndex := inferInstance" in text
+
+
+def test_write_paper_theory_does_not_emit_norm_for_nat_abbrev(tmp_path: Path) -> None:
+    """ℕ doesn't carry `Norm`. The per-underlying-type allowlist must filter
+    Norm from a ℕ-abbrev — else `inferInstance` would fail at lake-build time
+    and knock the whole paper-theory module out."""
+    (tmp_path / "Desol").mkdir()
+    plan = _bare_plan(definitions=["abbrev PaperIndex : Type := ℕ"], axioms=[])
+    out = write_paper_theory(project_root=tmp_path, plan=plan)
+    text = out.read_text(encoding="utf-8")
+    assert "instance : Norm PaperIndex" not in text
+    assert "instance : Field PaperIndex" not in text
+
+
 def test_write_paper_theory_skips_instances_for_unknown_underlying(tmp_path: Path) -> None:
     """When the underlying type is not in the known-supported list, no instances
     are emitted (avoids `lake build` failures from `inferInstance` not finding a

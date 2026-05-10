@@ -170,6 +170,29 @@ def test_acceptance_gate_marks_unknown_identifiers_translation_limited() -> None
     assert gate.reason == "unresolved_identifier_or_missing_paper_local_theory"
 
 
+def test_acceptance_gate_preserves_last_error_in_reason_for_elaboration_failure() -> None:
+    """When the translation fails elaboration with a non-classified Lean error
+    that doesn't hit any earlier specific path (e.g. parse error, type
+    mismatch in the body), the gate must preserve the underlying error tail
+    in `reason` so downstream categorization (scripts/categorize_elaboration_failures.py)
+    can bucket the row by Lean-error root cause. Without this, the ledger
+    only saw the marker `lean_elaboration_failed` and all such rows collapsed
+    into a single opaque bucket."""
+    err = "error: unexpected token '['; expected ','"
+    gate = translation_acceptance_gate(
+        entry=_entry(),
+        translation=_tr(
+            "theorem t (x : ℕ) : x = x := by rfl",
+            validated=False,
+            last_error=err,
+        ),
+    )
+    assert gate.accepted is False
+    assert gate.reason.startswith("lean_elaboration_failed:")
+    # Categorizer pattern match: parse_error or fallback "unexpected token".
+    assert "unexpected token" in gate.reason
+
+
 def test_acceptance_gate_allows_valid_statement() -> None:
     gate = translation_acceptance_gate(
         entry=_entry("For all n, n = n."),
