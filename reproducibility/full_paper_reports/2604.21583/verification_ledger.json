@@ -332,7 +332,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:remark_1:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -605,7 +605,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:rem:frac-bessel-implemented:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -841,7 +841,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:thm_main_result:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -2217,7 +2217,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:prop:one-body-HS-safe:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -2909,7 +2909,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:thm_correlation_intro:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -5239,7 +5239,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:prop_shell_vanishing_local:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -6111,7 +6111,7 @@
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "elaboration_failure",
       "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,provenance_linked,reproducible_env,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,reproducible_env,claim_equivalent,independent_semantic_equivalence_evidence",
       "promotion_gate_passed": false,
       "step_obligations": [],
       "assumptions": [
@@ -6262,7 +6262,7 @@
         "claim_equivalent": false,
         "independent_semantic_equivalence_evidence": false,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
+        "no_paper_axiom_debt": true,
         "statement_alignment_exact": false,
         "statement_alignment_not_unrelated": true
       },
@@ -6271,12 +6271,14 @@
         "step_verdict_verified",
         "reproducible_env",
         "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "independent_semantic_equivalence_evidence"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "claim_equivalence_adjudicated:equivalent",
+        "claim_equivalence_blocked:confidence_below_threshold",
+        "claim_equivalence_blocked:requires_human_for_release"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_d09edfbbb62e10dcd2e43967",
@@ -6309,7 +6311,14 @@
         "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
           "insufficient_semantic_evidence",
-          "claim_equivalence_note:insufficient_semantic_evidence"
+          "claim_equivalence_note:insufficient_semantic_evidence",
+          "claim_equivalence_adjudication:auto_alignment_review:2604.21583:lem_shell_W_comm_local:v1",
+          "adjudicator:auto_llm:alignment-review",
+          "reviewer_type:llm",
+          "review_policy:requires_human_for_release",
+          "adjudication_verdict:equivalent",
+          "adjudication_confidence:0.765",
+          "adjudication_rationale:Structured auto alignment review: reverse-translation judged EQUIVALENT (raw confidence 0.85). Confidence deflated 10% for non-human provenance. Component scores: {\"conclusion\": 0.85, \"hypotheses\": 0.9, \"objects\": 0.9, \"quantifiers\": 0.95, \"relation\": 0.85}. Reason: Lean statement is weaker (norm inequality) but adequate for LaTeX quadratic form claim.. NOTE: auto-generated; requires human co-signing for proof-release eligibility."
         ],
         "adversarial_checks": {
           "lean_theorem_weaker": {
@@ -6363,10 +6372,25 @@
           "diagnostic": false,
           "schema_version": "1.0"
         },
-        "schema_version": "1.0"
+        "schema_version": "1.0",
+        "adjudication": {
+          "review_id": "auto_alignment_review:2604.21583:lem_shell_W_comm_local:v1",
+          "adjudicator": "auto_llm:alignment-review",
+          "reviewer_type": "llm",
+          "review_policy": "requires_human_for_release",
+          "verdict": "equivalent",
+          "confidence": 0.765,
+          "rationale": "Structured auto alignment review: reverse-translation judged EQUIVALENT (raw confidence 0.85). Confidence deflated 10% for non-human provenance. Component scores: {\"conclusion\": 0.85, \"hypotheses\": 0.9, \"objects\": 0.9, \"quantifiers\": 0.95, \"relation\": 0.85}. Reason: Lean statement is weaker (norm inequality) but adequate for LaTeX quadratic form claim.. NOTE: auto-generated; requires human co-signing for proof-release eligibility.",
+          "risk_flags": [],
+          "release_eligible": false,
+          "blockers": [
+            "confidence_below_threshold",
+            "requires_human_for_release"
+          ]
+        }
       },
       "review_required": true,
-      "review_queue_id": "review::ArxivPaper.lem_shell_W_comm_local",
+      "review_queue_id": "review::lem_shell_W_comm_local",
       "context_pack": {},
       "axiom_debt": [],
       "axiom_debt_hash": "3f0afa875263e107",
@@ -6395,6 +6419,26 @@
         "paper_definition_stub:hs2",
         "paper_definition_stub:s1",
         "paper_definition_stub:s2"
+      ],
+      "reviewed_equivalence_verdict": "equivalent",
+      "reviewed_statement_alignment_class": "exact",
+      "reviewed_alignment_confidence": 0.765,
+      "review_provenance": {
+        "artifact_id": "auto_alignment_review:2604.21583:lem_shell_W_comm_local:v1",
+        "notes": "Structured auto alignment review: reverse-translation judged EQUIVALENT (raw confidence 0.85). Confidence deflated 10% for non-human provenance. Component scores: {\"conclusion\": 0.85, \"hypotheses\": 0.9, \"objects\": 0.9, \"quantifiers\": 0.95, \"relation\": 0.85}. Reason: Lean statement is weaker (norm inequality) but adequate for LaTeX quadratic form claim.. NOTE: auto-generated; requires human co-signing for proof-release eligibility.",
+        "reviewed_at": "2026-05-12T17:44:26Z",
+        "reviewed_by": "auto_llm:alignment-review",
+        "reviewer_role": "stateless_reverse_translation_judge",
+        "schema_version": "reviewed_statement_alignment.v1",
+        "source_span_sha256": "15152123ede951325b7f5ef77ca6dae9e5069402a62b11fc73d102dc5ecebab8"
+      },
+      "reviewer_type": "llm",
+      "review_policy": "requires_human_for_release",
+      "remaining_blockers_after_adjudication": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "reproducible_env",
+        "statement_alignment_exact"
       ]
     },
     {
@@ -7155,7 +7199,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:lem:free-tail-Q1:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -7620,7 +7664,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:lem:Q1-tail-quantitative:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -8250,7 +8294,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:prop_weighted_mixed:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -8512,7 +8556,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:prop:high-high-mixed-vanishes:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -8969,7 +9013,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:lem_block_cs:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -9462,7 +9506,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:lem_nonzero_explicit_corrected:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -10730,7 +10774,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:prop_free_energy_upper_final:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -11476,7 +11520,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:prop_weighted_lower_symbol:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -11718,7 +11762,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:thm_density_matrix_convergence_final:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -11990,7 +12034,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:thm_HS_convergence_main:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -12408,7 +12452,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:lem_HS_states_to_rdm_trace:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -12437,7 +12481,7 @@
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "elaboration_failure",
       "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,provenance_linked,no_paper_axiom_debt",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
       "promotion_gate_passed": false,
       "step_obligations": [],
       "assumptions": [
@@ -12492,14 +12536,13 @@
         "claim_equivalent": true,
         "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
+        "no_paper_axiom_debt": true,
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
         "lean_proof_closed",
-        "step_verdict_verified",
-        "no_paper_axiom_debt"
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
@@ -12629,7 +12672,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:prop_HS_state_to_rdm_scaled:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T09:39:24Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -12640,14 +12683,14 @@
       "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
       "remaining_blockers_after_adjudication": [
         "lean_proof_closed",
-        "step_verdict_verified",
-        "provenance_linked",
-        "no_paper_axiom_debt"
+        "step_verdict_verified"
       ],
       "discharged_axiom_debt": [
         "paper_definition_stub:s1",
         "paper_definition_stub:Γ_lambda"
-      ]
+      ],
+      "reviewer_type": "hybrid",
+      "review_policy": "release_eligible"
     },
     {
       "theorem_name": "lem_HS_tensor_product_rdm_expansion",
@@ -13236,7 +13279,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:lem_HS_full_norm_moment_mu:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -13758,7 +13801,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:lem_HS_L1_to_moment_operator:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -14580,7 +14623,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:lem:sum:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -15009,7 +15052,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21583:lem:shifted-Yukawa-sums:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",

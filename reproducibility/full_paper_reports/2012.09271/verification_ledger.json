@@ -241,7 +241,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2012.09271:theorem_1:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -266,7 +266,7 @@
       "failure_origin": "FORMALIZATION_ERROR",
       "failure_kind": "elaboration_failure",
       "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,assumptions_grounded,provenance_linked,dependency_trust_complete",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,assumptions_grounded,dependency_trust_complete",
       "promotion_gate_passed": false,
       "step_obligations": [],
       "assumptions": [
@@ -474,7 +474,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2012.09271:corollary_2:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T09:39:24Z",
+        "reviewed_at": "2026-05-12T17:49:55Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -487,9 +487,10 @@
         "lean_proof_closed",
         "step_verdict_verified",
         "assumptions_grounded",
-        "provenance_linked",
         "dependency_trust_complete"
-      ]
+      ],
+      "reviewer_type": "hybrid",
+      "review_policy": "release_eligible"
     }
   ]
 }
