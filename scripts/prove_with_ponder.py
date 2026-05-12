@@ -102,6 +102,11 @@ _SNAPSHOT_CACHE: dict[str, tuple[Path, Path]] = {}
 _DRAFT_SKELETON_CACHE: dict[str, str] = {}
 _SKELETON_MEMORY_PATH = Path("output/proof_memory/goal_skeletons.json")
 
+# Default `tempfile.NamedTemporaryFile` / `tempfile.TemporaryDirectory` path
+# fingerprint — used by stale-cache detectors in this module and mirrored in
+# `prove_arxiv_batch._DEFAULT_TMPFILE_RE`. See `_is_stale_leandojo_cache_error`.
+_DEFAULT_TMPFILE_RE = re.compile(r"/tmp/tmp[a-z0-9_]{6,12}(?:['\"\s/]|$)")
+
 
 _SUSPICIOUS_REPL_MARKERS = (
     "tactic `rfl` failed",
@@ -401,18 +406,93 @@ def _save_persistent_skeleton_cache(project_root: Path) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def _prepare_leandojo_repo(project_root: Path) -> tuple[Any, Path | None]:
-    """Return LeanGitRepo and optional temp dir to clean up."""
-    if not _USE_LEAN_DOJO:
-        return None, None
+def _is_stale_leandojo_cache_error(exc: BaseException) -> bool:
+    """Return True when `exc` looks like a stale-cache lifecycle failure.
 
+    lean_dojo memoises both `url_to_repo` and `_to_commit_hash` with
+    `functools.cache`, and persists traced repos under
+    `~/.cache/lean_dojo/repos/`. When a previous run was interrupted, the
+    cached directory tree can be left partially populated (e.g. the parent
+    `gitpython-repo-<hash>/repo/` exists, but `lean-toolchain` inside it
+    does not). Subsequent `LeanGitRepo.from_path` calls then raise
+    `FileNotFoundError: '...repos/gitpython-repo-.../repo/lean-toolchain'`.
+    The same family of failure also surfaces as
+    `FileNotFoundError: '/tmp/tmpXXXXXXXX'` when the tempdir feeding
+    `_to_commit_hash` has been gc'd before the cached Repo handle.
+    """
+    err = str(exc) if exc is not None else ""
+    if not err:
+        return False
+    if "[Errno 2]" not in err and "No such file or directory" not in err:
+        return False
+    return ("/.cache/lean_dojo/" in err) or bool(_DEFAULT_TMPFILE_RE.search(err))
+
+
+def _clear_leandojo_functools_caches() -> None:
+    """Clear lean_dojo's process-local `functools.cache` memos that may
+    retain references to deleted tempdirs or partially-populated cache
+    entries. Safe to call when lean_dojo is not importable."""
     try:
-        if repo_has_commit(project_root):
-            return LeanGitRepo.from_path(project_root), None
+        from lean_dojo.data_extraction.lean import url_to_repo as _ld_url_to_repo
+        _ld_url_to_repo.cache_clear()  # type: ignore[attr-defined]
+    except Exception:
+        pass
+    try:
+        from lean_dojo.data_extraction.lean import _to_commit_hash as _ld_to_commit_hash
+        _ld_to_commit_hash.cache_clear()  # type: ignore[attr-defined]
     except Exception:
         pass
 
-    try:
+
+def _purge_stale_leandojo_disk_cache_entry(exc: BaseException) -> None:
+    """Remove a partially-populated `~/.cache/lean_dojo/repos/<dirname>/`
+    entry when the FNFE message names it. Without this purge, the next
+    `LeanGitRepo.from_path` call walks back into the same broken cache
+    entry and reproduces the same failure indefinitely.
+    """
+    err = str(exc) if exc is not None else ""
+    if "/.cache/lean_dojo/repos/" not in err:
+        return
+    # Extract the offending path between single quotes if present.
+    m = re.search(r"'([^']*/\.cache/lean_dojo/repos/[^']+)'", err)
+    if not m:
+        return
+    bad_path = Path(m.group(1))
+    # Walk upward to find the cache-entry root (the directory immediately
+    # under .cache/lean_dojo/repos/). That's the level lean_dojo's `Cache.get`
+    # checks for existence, so removing it forces a clean re-trace.
+    for ancestor in bad_path.parents:
+        if ancestor.parent.name == "repos" and ancestor.parent.parent.name == "lean_dojo":
+            try:
+                import shutil as _shutil
+                _shutil.rmtree(ancestor, ignore_errors=True)
+            except Exception:
+                pass
+            return
+
+
+def _prepare_leandojo_repo(project_root: Path) -> tuple[Any, Path | None]:
+    """Return LeanGitRepo and optional temp dir to clean up.
+
+    Wrapped in a stale-cache-recovery retry: if the first attempt raises a
+    FileNotFoundError that matches the lean_dojo cache or default-tempdir
+    fingerprint, we clear the in-process `functools.cache` memos, purge the
+    partially-populated cache-entry directory (if any), and retry once.
+    Without recovery, a single interrupted previous run leaves the cache in
+    a permanently-broken state for every subsequent process.
+    """
+    if not _USE_LEAN_DOJO:
+        return None, None
+
+    def _do_prepare() -> tuple[Any, Path | None]:
+        try:
+            if repo_has_commit(project_root):
+                return LeanGitRepo.from_path(project_root), None
+        except FileNotFoundError:
+            raise
+        except Exception:
+            pass
+
         cache_key = str(project_root.resolve())
         if cache_key in _SNAPSHOT_CACHE:
             cached_tmp_root, cached_repo = _SNAPSHOT_CACHE[cache_key]
@@ -427,7 +507,24 @@ def _prepare_leandojo_repo(project_root: Path) -> tuple[Any, Path | None]:
         # here caused callers to delete the cache immediately, leaving later Dojo opens
         # with stale /tmp/... paths.
         return LeanGitRepo.from_path(snapshot_repo), None
+
+    try:
+        return _do_prepare()
     except Exception as exc:
+        if _is_stale_leandojo_cache_error(exc):
+            logger.warning(
+                "lean_dojo backend cache is stale (%s); clearing and retrying.", exc
+            )
+            _clear_leandojo_functools_caches()
+            _purge_stale_leandojo_disk_cache_entry(exc)
+            _SNAPSHOT_CACHE.clear()
+            try:
+                return _do_prepare()
+            except Exception as exc2:
+                raise RuntimeError(
+                    f"Failed preparing LeanDojo git repository after stale-cache "
+                    f"recovery: {exc2}"
+                ) from exc2
         raise RuntimeError(f"Failed preparing LeanDojo git repository: {exc}") from exc
 
 

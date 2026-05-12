@@ -1064,6 +1064,78 @@ def _is_repl_startup_failure(last_error: str) -> bool:
     )
 
 
+# Default tempfile names like `/tmp/tmpxyqetja3` — 8 chars from
+# `tempfile._RandomNameSequence`'s alphabet (lowercase + digits + underscore)
+# after the literal `tmp` prefix.  We accept 6-12 chars to remain robust
+# across CPython versions that may tweak the suffix length, and allow a
+# trailing quote/whitespace/slash/EOL so we match both bare paths and the
+# quoted form `'/tmp/tmpXXXXXXXX'` produced by `FileNotFoundError.__str__`.
+_DEFAULT_TMPFILE_RE = re.compile(r"/tmp/tmp[a-z0-9_]{6,12}(?:['\"\s/]|$)")
+
+
+def _is_backend_tempdir_failure(last_error: str) -> bool:
+    """Return True when the error is a FileNotFoundError on a default
+    `/tmp/tmpXXX` path.
+
+    lean_dojo's `LeanGitRepo.__post_init__` and `get_traced_repo_path` both use
+    `working_directory()` context managers that create temporary directories
+    via `tempfile.TemporaryDirectory(dir=TMP_DIR)`. The directory is deleted on
+    context-exit, but cached `Repo`/`TracedRepo` references can outlive that
+    cleanup. When a downstream consumer (re-tracing, re-clone, gitpython
+    operation) tries to access the now-deleted path the leak surfaces as
+    `[Errno 2] No such file or directory: '/tmp/tmpXXXXXXXX'`.
+
+    Naively recording that as the row's `error_message` poisons every
+    subsequent theorem in the same paper run with the dead tmp path, masking
+    the real proof-search status. Detecting the pattern lets us:
+      - clear the leaked backend caches (so the next theorem can recover);
+      - rewrite the error message to a stable classifier rather than pinning
+        a fingerprint of one failed run across the entire ledger.
+    """
+    err = (last_error or "")
+    if not err:
+        return False
+    if "[Errno 2]" not in err and "No such file or directory" not in err:
+        return False
+    return bool(_DEFAULT_TMPFILE_RE.search(err))
+
+
+def _reset_backend_caches() -> None:
+    """Clear lean_dojo's process-local caches that may pin a deleted tmpdir.
+
+    lean_dojo memoises `url_to_repo` and `_to_commit_hash` with
+    `functools.cache`. When a temp-dir clone is gc'd before the cached Repo
+    handle is, subsequent cache hits return references to a path that no
+    longer exists. Clearing the caches forces a clean re-clone on the next
+    backend open. Also drops our own `_SNAPSHOT_CACHE` so the snapshot is
+    re-materialised if needed.
+    """
+    try:
+        from lean_dojo.data_extraction.lean import url_to_repo as _ld_url_to_repo
+        _ld_url_to_repo.cache_clear()  # type: ignore[attr-defined]
+    except Exception:
+        pass
+    try:
+        from lean_dojo.data_extraction.lean import _to_commit_hash as _ld_to_commit_hash
+        _ld_to_commit_hash.cache_clear()  # type: ignore[attr-defined]
+    except Exception:
+        pass
+    try:
+        from prove_with_ponder import _SNAPSHOT_CACHE as _pwp_cache
+        _pwp_cache.clear()
+    except Exception:
+        pass
+
+
+def _classify_backend_tempdir_failure(err_str: str) -> str:
+    """Return a stable classifier for a /tmp/tmpXXX FileNotFoundError so the
+    ledger doesn't carry a dead per-run path fingerprint."""
+    return (
+        "backend_tempdir_unavailable: lean_dojo backend lost its working "
+        "tempdir between theorem calls; cache cleared, retry recommended"
+    )
+
+
 def _constrained_regen_hint(decl: str, last_error: str) -> str:
     target = _decl_target(decl)
     hints: list[str] = [
@@ -2208,6 +2280,72 @@ def prove_one(
         err_str = str(e)
         if verbose:
             print(f"    error   in {elapsed:.1f}s: {e}", flush=True)
+
+        # Auto-recover when lean_dojo's backend lost its working tempdir
+        # between theorem calls.  Without this, the FileNotFoundError leaks
+        # the dead /tmp/tmpXXX path into the ledger, poisoning every
+        # subsequent theorem in the paper with the same stale fingerprint
+        # (the source of the 32 UNRESOLVED rows fingerprinted with
+        # `/tmp/tmpxyqetja3` / `/tmp/tmp75hm2zpk`).  Clear lean_dojo's
+        # functools.cache memos so the next attempt re-clones cleanly, retry
+        # once via REPLDojo, and normalise err_str to a stable classifier so
+        # the ledger doesn't carry a dead per-run path.
+        if _is_backend_tempdir_failure(err_str):
+            _reset_backend_caches()
+            if fallback_to_full_draft:
+                if verbose:
+                    print(
+                        "    fallback: backend tempdir lost — clearing lean_dojo "
+                        "caches and retrying via REPLDojo",
+                        flush=True,
+                    )
+                try:
+                    with _force_repldojo_backend():
+                        _bt_ok, _bt_recs, _bt_summary = _run_full_draft_fallback(
+                            informal_hint=(
+                                "Backend tempdir was unavailable; using REPL-based proof search."
+                            )
+                        )
+                    if _bt_ok:
+                        elapsed2 = time.time() - start
+                        from pipeline_status import build_ledger_entry as _bt_ble, upsert_ledger_entry as _bt_ule
+                        _bt_le = _bt_ble(
+                            theorem_name=thm.full_name,
+                            lean_file=str(thm.lean_file),
+                            lean_statement=thm.declaration,
+                            proved=True,
+                            step_records=_bt_recs,
+                            error_message="",
+                            proof_mode="repldojo-fallback",
+                            time_s=elapsed2,
+                            project_root=project_root,
+                            ledger_root=(project_root / "output" / "verification_ledgers"),
+                            had_exception=False,
+                        )
+                        if paper_id:
+                            _bt_ule(paper_id, _bt_le)
+                            _sync_base_alias_entry(_bt_le)
+                        return ProofResult(
+                            theorem_name=thm.full_name,
+                            lean_file=str(thm.lean_file),
+                            proved=True,
+                            proof_text="\n".join(str(r.get("tactic", "")) for r in _bt_recs),
+                            rounds_used=len(_bt_recs),
+                            time_s=elapsed2,
+                            status=_bt_le.status.value,
+                        )
+                    err_str = (
+                        f"{_classify_backend_tempdir_failure(err_str)}; "
+                        f"repldojo_fallback_failed: {_bt_summary}"
+                    )
+                except Exception as _bt_exc:
+                    err_str = (
+                        f"{_classify_backend_tempdir_failure(err_str)}; "
+                        f"repldojo_fallback_exception: {_bt_exc}"
+                    )
+            else:
+                err_str = _classify_backend_tempdir_failure(err_str)
+            elapsed = time.time() - start
 
         # Auto-retry with REPLDojo when LeanDojo's ExtractData.lean crashes due to
         # toolchain incompatibility.  This is transparent and paper-agnostic.

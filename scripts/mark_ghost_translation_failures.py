@@ -47,27 +47,54 @@ def is_ghost_row(entry: dict[str, Any]) -> bool:
     return False
 
 
+def _entry_lean_file_exists(entry: dict[str, Any], project_root: Path | None = None) -> bool:
+    """Return True if the row's recorded `lean_file` is on disk.
+
+    Probes and one-off pipeline runs write to non-canonical paths (e.g.
+    `output/pipeline_probe/<id>_realbatch2.lean`). The canonical-path check
+    alone misses these artefacts and falsely classifies the row as a ghost
+    translation. Honour the row's own `lean_file` field first so we don't
+    rewrite the status of rows whose translation artefact still exists.
+    """
+    lean_file_raw = str(entry.get("lean_file", "") or "").strip()
+    if not lean_file_raw:
+        return False
+    p = Path(lean_file_raw)
+    if not p.is_absolute() and project_root is not None:
+        p = (project_root / p)
+    return p.exists()
+
+
 def mark_ledger_file(
     ledger_path: Path,
     paper_id: str,
     lean_dir: Path,
     *,
     write: bool = False,
+    project_root: Path | None = None,
 ) -> dict[str, int]:
     """Mark ghosts in a single ledger file. Idempotent."""
     if not ledger_path.exists():
         return {"rows": 0, "marked": 0, "lean_file_missing": False}
 
     lean_file = lean_dir / f"{paper_id}.lean"
-    lean_file_missing = not lean_file.exists()
+    canonical_missing = not lean_file.exists()
 
     data = json.loads(ledger_path.read_text(encoding="utf-8"))
     entries = data if isinstance(data, list) else data.get("entries", [])
     marked = 0
     for entry in entries:
-        if not lean_file_missing:
-            # Don't auto-flag papers whose .lean still exists; the row may be
-            # legitimately UNRESOLVED for proof-search reasons, not translation.
+        # A row is only a ghost when BOTH the canonical .lean is missing AND
+        # the entry's own `lean_file` artefact is missing. Honouring the
+        # entry-recorded path prevents probes/alternate-output runs from
+        # being mis-flagged when their .lean still exists on disk under a
+        # non-canonical name.
+        entry_artefact_present = _entry_lean_file_exists(entry, project_root=project_root)
+        if not canonical_missing:
+            # Don't auto-flag papers whose canonical .lean still exists.
+            continue
+        if entry_artefact_present:
+            # Row's own translation artefact is still on disk — not a ghost.
             continue
         if not is_ghost_row(entry):
             continue
@@ -86,7 +113,7 @@ def mark_ledger_file(
             json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",
         )
-    return {"rows": len(entries), "marked": marked, "lean_file_missing": lean_file_missing}
+    return {"rows": len(entries), "marked": marked, "lean_file_missing": canonical_missing}
 
 
 def main() -> int:
@@ -94,6 +121,12 @@ def main() -> int:
     parser.add_argument("--ledger-dir", type=Path, default=DEFAULT_LEDGER_DIR)
     parser.add_argument("--lean-dir", type=Path, default=DEFAULT_LEAN_DIR)
     parser.add_argument("--write", action="store_true", help="Apply changes; default is dry-run")
+    parser.add_argument(
+        "--project-root",
+        type=Path,
+        default=Path("."),
+        help="Resolve relative entry.lean_file paths against this root (default: cwd)",
+    )
     args = parser.parse_args()
 
     summary: dict[str, Any] = {
@@ -107,7 +140,13 @@ def main() -> int:
         # Skip non-canonical variants (smoke / actionable / repair etc.)
         if any(s in name for s in ("_smoke", "_actionable", "_fdcheck", "_patchcheck", "_rflguard", "_repair", "_reliable", "ab_repair", "_fast")):
             continue
-        result = mark_ledger_file(ledger_path, name, args.lean_dir, write=args.write)
+        result = mark_ledger_file(
+            ledger_path,
+            name,
+            args.lean_dir,
+            write=args.write,
+            project_root=args.project_root,
+        )
         if result["marked"] > 0 or result["lean_file_missing"]:
             summary["papers"][name] = result
             total_marked += result["marked"]
