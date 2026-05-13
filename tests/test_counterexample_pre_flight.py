@@ -67,9 +67,33 @@ class _MockClient:
         self.chat = _MockChatAPI(content)
 
 
-def _probe_json(verdict: str, witness: dict[str, Any] | None = None,
-                reasoning: str = "ok") -> str:
-    return json.dumps({"verdict": verdict, "witness": witness, "reasoning": reasoning})
+def _probe_json(
+    verdict: str,
+    witness: dict[str, Any] | None = None,
+    reasoning: str = "ok",
+    blocking_hypothesis: str | None = None,
+) -> str:
+    """Build a mocked Leanstral probe response.
+
+    Notes
+    -----
+    The current probe schema is v1.1: it requires a `blocking_hypothesis`
+    field on `no_counterexample` verdicts so we can audit WHICH hypothesis
+    rules out a falsifier. When verdict is `no_counterexample` and the
+    caller didn't supply a blocking hypothesis, default to a plausible
+    one so the Stage-B enforcement doesn't flip the verdict in tests
+    that mean to test the `no_counterexample` codepath. Tests that
+    INTEND to exercise Stage-B enforcement should pass
+    `blocking_hypothesis=None` explicitly.
+    """
+    if verdict == "no_counterexample" and blocking_hypothesis is None:
+        blocking_hypothesis = "<default-for-test>"
+    return json.dumps({
+        "verdict": verdict,
+        "witness": witness,
+        "reasoning": reasoning,
+        "blocking_hypothesis": blocking_hypothesis,
+    })
 
 
 # ---------------------------------------------------------------------------
@@ -447,6 +471,157 @@ def test_parse_probe_response_handles_prose_around_json() -> None:
 def test_parse_probe_response_returns_empty_on_no_json() -> None:
     assert _parse_probe_response("no json here") == {}
     assert _parse_probe_response("") == {}
+
+
+# ---------------------------------------------------------------------------
+# Stage-B enforcement (prompt v1.1): no_counterexample WITHOUT a named
+# blocking hypothesis must be auto-promoted to counterexample_found.
+# This is the recall-raising lever — the previous prompt under-flagged
+# the 2604.21884 false-as-stated rows because the model could vote
+# `safe` without justification.
+# ---------------------------------------------------------------------------
+
+
+def test_stage_b_enforcement_flips_unjustified_safe_verdict() -> None:
+    """When Leanstral votes `no_counterexample` but names NO blocking
+    hypothesis, the probe must flip the verdict to `counterexample_found`.
+    """
+    lean = (
+        "theorem thm_operator_main (alpha : ℝ) (halpha : 0 < alpha) : "
+        "∃ C : ℝ, ∀ w : ℝ → ℝ, ‖w‖ ≤ C := by sorry"
+    )
+    # Model votes no_counterexample but blocking_hypothesis is null/empty.
+    client = _MockClient(json.dumps({
+        "verdict": "no_counterexample",
+        "witness": None,
+        "reasoning": "all free variables are constrained",
+        "blocking_hypothesis": None,
+    }))
+    result = probe_counterexample(
+        theorem_name="thm_operator_main",
+        lean_statement=lean,
+        client=client,
+        model="labs-leanstral-2603",
+    )
+    assert result.verdict == "counterexample_found"
+    assert "promoted by Stage-B enforcement" in result.reasoning
+
+
+def test_stage_b_enforcement_keeps_safe_verdict_when_hypothesis_named() -> None:
+    """When Leanstral names a blocking hypothesis, `no_counterexample` stands."""
+    lean = (
+        "theorem t (alpha : ℝ) (halpha : 0 < alpha) : alpha + 1 > 0 := by sorry"
+    )
+    client = _MockClient(json.dumps({
+        "verdict": "no_counterexample",
+        "witness": None,
+        "reasoning": "halpha rules out alpha ≤ -1",
+        "blocking_hypothesis": "halpha",
+    }))
+    result = probe_counterexample(
+        theorem_name="t",
+        lean_statement=lean,
+        client=client,
+        model="labs-leanstral-2603",
+    )
+    assert result.verdict == "no_counterexample"
+    assert "promoted" not in result.reasoning
+
+
+def test_stage_b_enforcement_treats_empty_string_as_null_blocker() -> None:
+    """`blocking_hypothesis: ""` is null-like — must still trigger promotion."""
+    lean = (
+        "theorem t (alpha : ℝ) : ∃ C : ℝ, alpha ≤ C := by sorry"
+    )
+    client = _MockClient(json.dumps({
+        "verdict": "no_counterexample",
+        "witness": None,
+        "reasoning": "looks fine",
+        "blocking_hypothesis": "",
+    }))
+    result = probe_counterexample(
+        theorem_name="t",
+        lean_statement=lean,
+        client=client,
+        model="labs-leanstral-2603",
+    )
+    assert result.verdict == "counterexample_found"
+
+
+def test_stage_b_enforcement_treats_string_none_as_null_blocker() -> None:
+    """Leanstral sometimes emits literal `"None"`/`"null"` strings — those
+    must also trigger Stage-B promotion."""
+    lean = (
+        "theorem t (alpha : ℝ) : ∃ C : ℝ, alpha ≤ C := by sorry"
+    )
+    for sentinel in ("None", "null", "N/A"):
+        client = _MockClient(json.dumps({
+            "verdict": "no_counterexample",
+            "witness": None,
+            "reasoning": "looks fine",
+            "blocking_hypothesis": sentinel,
+        }))
+        result = probe_counterexample(
+            theorem_name="t",
+            lean_statement=lean,
+            client=client,
+            model="labs-leanstral-2603",
+        )
+        assert result.verdict == "counterexample_found", (
+            f"Expected promotion for sentinel={sentinel!r}, got "
+            f"verdict={result.verdict!r}"
+        )
+
+
+def test_probe_prompt_includes_two_stage_protocol_instructions() -> None:
+    """Pin the prompt-shape contract: the system prompt MUST mention the
+    two-stage protocol AND the user message MUST instruct the model to
+    name the blocking hypothesis. This guards against accidental prompt
+    regressions that silently drop the recall-raising design.
+    """
+    lean = "theorem t (alpha : ℝ) : ∃ C : ℝ, alpha ≤ C := by sorry"
+    client = _MockClient(_probe_json("counterexample_found",
+                                       witness={"alpha": "-1"}))
+    probe_counterexample(
+        theorem_name="t",
+        lean_statement=lean,
+        client=client,
+        model="labs-leanstral-2603",
+    )
+    call = client.chat.calls[0]
+    system_msg = call["messages"][0]["content"]
+    user_msg = call["messages"][1]["content"]
+    # System prompt covenants:
+    assert "STAGE A" in system_msg or "Stage A" in system_msg
+    assert "STAGE B" in system_msg or "Stage B" in system_msg
+    assert "blocking_hypothesis" in system_msg
+    # User-message covenants:
+    assert "blocking hypothesis" in user_msg.lower()
+
+
+def test_counterexample_found_witness_may_be_null() -> None:
+    """For a parametric-family counterexample, the model may return a
+    null `witness` and still vote `counterexample_found`. The verdict
+    must stand (we do NOT require a concrete witness to flag)."""
+    lean = (
+        "theorem thm_unbounded (alpha : ℝ) (halpha : 0 < alpha) : "
+        "∃ C : ℝ, ∀ w : ℝ → ℝ, ‖w‖ ≤ C := by sorry"
+    )
+    client = _MockClient(json.dumps({
+        "verdict": "counterexample_found",
+        "witness": None,
+        "reasoning": "parametric family w_n = const_n with const_n → ∞ violates any C",
+        "blocking_hypothesis": None,
+    }))
+    result = probe_counterexample(
+        theorem_name="thm_unbounded",
+        lean_statement=lean,
+        client=client,
+        model="labs-leanstral-2603",
+    )
+    assert result.verdict == "counterexample_found"
+    assert result.witness is None
+    assert "parametric family" in result.reasoning
 
 
 # ---------------------------------------------------------------------------

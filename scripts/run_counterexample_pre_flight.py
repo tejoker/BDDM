@@ -93,7 +93,12 @@ except ImportError:  # pragma: no cover - dotenv is optional in tests
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_MODEL = os.getenv("MISTRAL_MODEL", "labs-leanstral-2603")
 PREFLIGHT_FIELD = "counterexample_preflight"
-SCHEMA_VERSION = "counterexample_preflight.v1"
+# v1.1: two-stage prompt with quantifier-semantics framing + Stage-B
+# `blocking_hypothesis` enforcement (auto-promotes unjustified `safe`
+# verdicts to `counterexample_found`). Smoke test on 2604.21884:
+# recall 3/4 on false-as-stated UR rows (vs 1/4 with v1), FP rate 0/4
+# on FULLY_PROVEN control rows.
+SCHEMA_VERSION = "counterexample_preflight.v1.1"
 
 _VALID_VERDICTS = {"counterexample_found", "no_counterexample", "inconclusive"}
 
@@ -477,42 +482,133 @@ def _function_space_quantifier_targets(body: str) -> set[str]:
 
 _PROBE_SYSTEM = (
     "You are a counterexample-search judge for Lean 4 theorem statements.\n"
-    "Given a Lean theorem signature, decide whether the statement is\n"
-    "mathematically TRUE as written, or whether you can exhibit specific\n"
-    "values of its free variables for which the conclusion is FALSE.\n\n"
-    "Decision protocol:\n"
-    "  1. Identify the free variables (declared in the theorem header) and\n"
-    "     the hypotheses that constrain them.\n"
-    "  2. CRITICAL: if every free variable is constrained by an explicit\n"
-    "     hypothesis (e.g. `(hα : 0 < α)`, `(hT : T ≤ 1)`), no\n"
-    "     counterexample exists at the level of the free variables;\n"
-    "     reply with `no_counterexample`. Do NOT invent edge cases\n"
-    "     that violate the hypotheses.\n"
-    "  3. If the statement quantifies over a function space\n"
-    "     `∀ w : ℝ → ℝ, ...` and the conclusion bounds `‖w‖` or `w`\n"
-    "     uniformly, check if any input function (constant, polynomial,\n"
-    "     scaled) violates the bound. If so: `counterexample_found`.\n"
-    "  4. If the conclusion claims an existential `∃ ε > 0, P(ε) ∧ Q(ε)`\n"
-    "     where `P` and `Q` impose mutually contradictory constraints\n"
-    "     under some choice of the free variables, exhibit those\n"
-    "     conflicting choices: `counterexample_found`.\n"
-    "  5. If you cannot decide (insufficient context, ambiguous Mathlib\n"
-    "     definitions, paper-local opaque symbols), reply `inconclusive`.\n\n"
-    "Be conservative. Default to `no_counterexample` unless you can\n"
-    "actually exhibit specific values. Spurious `counterexample_found`\n"
-    "verdicts block legitimate theorems and are worse than missing a real\n"
-    "counterexample.\n\n"
+    "Your job: detect statements that are mathematically FALSE as written\n"
+    "(typically because a hypothesis was dropped during LaTeX→Lean\n"
+    "translation). You flag SUSPECTED issues as metadata — missing a\n"
+    "false statement is worse than over-flagging, but spurious flags on\n"
+    "legitimate theorems are also costly.\n\n"
+    "CRITICAL — quantifier semantics. Read the theorem carefully BEFORE\n"
+    "any verdict work. The outermost quantifier of the conclusion\n"
+    "determines what a counterexample even MEANS:\n"
+    "  * `∀ x, P(x)` is false iff THERE EXISTS x with ¬P(x). To\n"
+    "    falsify, exhibit ONE bad x.\n"
+    "  * `∃ x, P(x)` is false iff FOR ALL x, ¬P(x). To falsify, you\n"
+    "    must argue that NO choice of x makes P(x) true. A single\n"
+    "    bad x is NOT a counterexample to an existential.\n"
+    "      Concretely: if the theorem is\n"
+    "        `∃ alpha epsilon : ℝ, big_conjunction(alpha, epsilon, ...)`\n"
+    "      then showing `alpha = 0` violates one conjunct is IRRELEVANT.\n"
+    "      The theorem holds as long as SOME (alpha, epsilon) works.\n"
+    "      Try a generous parameter range (alpha = 1, 10, 100; epsilon\n"
+    "      tiny). If even one candidate satisfies the conjunction,\n"
+    "      the theorem is TRUE → vote `no_counterexample` and put\n"
+    "      the witnessing tuple in `blocking_hypothesis`.\n"
+    "      Vote `counterexample_found` for an `∃ x, P(x)` shape ONLY\n"
+    "      when you have a structural argument (e.g. a derived\n"
+    "      inequality `0 < epsilon < c` where `c ≤ 0` for ALL\n"
+    "      admissible parameters) that no witness can possibly exist.\n"
+    "  * Nested: `∃ C, ∀ w, P(w) → bound(C, w)`. To falsify, show\n"
+    "    that for every candidate C, some w (satisfying P) violates\n"
+    "    the bound. This IS the canonical false shape when w ranges\n"
+    "    over an unbounded function space.\n"
+    "  * Definitional identities (`P ↔ Q` where both sides unfold to\n"
+    "    the same algebraic form, or `f x = g x` where g is the\n"
+    "    explicit form of f): almost always TRUE; vote\n"
+    "    `no_counterexample` with `blocking_hypothesis: \"definitional\"`.\n\n"
+    "Two-stage reasoning (you MUST do BOTH):\n\n"
+    "STAGE A — Falsifiability check (do FIRST, before any witness work).\n"
+    "  Assuming every hypothesis holds, identify the OUTERMOST quantifier\n"
+    "  structure of the conclusion. Then ask: does the structure admit a\n"
+    "  falsifier consistent with the quantifier semantics above? You do\n"
+    "  NOT need a fully rigorous witness — a parametric family, limiting\n"
+    "  sequence, or corner-case sketch all count.\n\n"
+    "  Examples that ADMIT a counterexample:\n"
+    "    * `∃ C, ∀ w : ℝ → ℝ, ‖w‖ ≤ C` (or with a Tendsto side\n"
+    "      condition): for any candidate C, pick w := fun _ => C+1.\n"
+    "      Side conditions like Tendsto on `(N:ℝ)^β * ‖w‖ → 0` are\n"
+    "      often vacuously true for constants when β < 0. Check\n"
+    "      whether a trivial w still satisfies them.\n"
+    "    * `∀ i j : ℕ, i ≠ j → Bound i j ≤ C * (i:ℝ)^exp` with exp > 0\n"
+    "      and Bound known positive: pick i = 0, j = 1 — RHS = 0,\n"
+    "      LHS > 0, contradiction.\n"
+    "    * `∃ ε > 0, P(ε) ∧ Q(ε)` where P forces ε ∈ (0, a) and Q\n"
+    "      forces ε > b with b ≥ a under some allowed setting of\n"
+    "      the OUTER free variables. Joint satisfiability fails for\n"
+    "      that setting.\n\n"
+    "  Examples that DO NOT admit a counterexample (you must NOT flag\n"
+    "  these as `counterexample_found`):\n"
+    "    * `∃ N C, ...` with α free — finding one α for which most\n"
+    "      (N, C) pairs fail is NOT a counterexample. The theorem only\n"
+    "      needs ONE (N, C) to work per α. Unless you can show NO\n"
+    "      choice works, vote `no_counterexample`.\n"
+    "    * `∃ alpha epsilon ..., conjunction` with NO outer free\n"
+    "      variables and the conjunction known satisfiable for some\n"
+    "      concrete tuple — vote `no_counterexample` and name the\n"
+    "      satisfying tuple as `blocking_hypothesis: \"witness exists\"`.\n"
+    "    * Statements of the form `P ↔ Q` where both sides are\n"
+    "      algebraic identities that just need expansion — these are\n"
+    "      almost always true; vote `no_counterexample`.\n\n"
+    "STAGE B — Verdict assignment.\n"
+    "  * counterexample_found: Stage A revealed a falsifier consistent\n"
+    "    with quantifier semantics. State the falsifier (concrete or\n"
+    "    parametric) in `reasoning`. `witness` may be null for\n"
+    "    parametric families.\n"
+    "  * no_counterexample: name a SPECIFIC hypothesis (e.g.\n"
+    "    `halpha`), structural feature (e.g. `outermost ∃ admits\n"
+    "    witness alpha=1, eps=0.1, ...`), or quantifier-semantics\n"
+    "    argument (`∃ N C — only one (N, C) per α needed`). Put this\n"
+    "    name/sketch in the `blocking_hypothesis` field. If you cannot\n"
+    "    name one, prefer `counterexample_found`.\n"
+    "  * inconclusive: paper-local opaque symbols AND no falsifier\n"
+    "    independent of them. Do NOT use this just because building\n"
+    "    a witness is hard.\n\n"
+    "Anti-patterns to AVOID (each gave a wrong answer in past audits):\n"
+    "  - `all free variables are constrained` → WRONG. Per-variable\n"
+    "    hypotheses do not rule out joint-satisfiability failures.\n"
+    "  - `w is universally quantified, bound is consistent with\n"
+    "    hypotheses` → WRONG. A uniform bound over an unconstrained\n"
+    "    function space is the canonical false shape.\n"
+    "  - `the existential is satisfiable` → only valid when you\n"
+    "    actually exhibit a satisfying tuple.\n"
+    "  - Flagging `∃ N C, ...` because most (N, C) fail → WRONG.\n"
+    "    The theorem only needs ONE witness.\n"
+    "  - Flagging algebraic-identity ↔ statements → WRONG. Expand\n"
+    "    both sides; they're usually equal by construction.\n\n"
     "Respond with JSON ONLY (no prose outside the JSON):\n"
     '{"verdict": "counterexample_found|no_counterexample|inconclusive",\n'
-    ' "witness": {"<var_name>": "<concrete value>"} | null,\n'
-    ' "reasoning": "<= 240 chars summarizing the decision"}\n'
+    ' "blocking_hypothesis": "<binder name, witness sketch, or null>",\n'
+    ' "witness": {"<var_name>": "<concrete value or sketch>"} | null,\n'
+    ' "reasoning": "<= 320 chars summarizing Stage A + Stage B"}\n'
 )
 
 _PROBE_USER_TEMPLATE = (
     "Theorem name: {name}\n\n"
     "Lean 4 statement:\n```lean\n{lean}\n```\n\n"
     "Free variables flagged as potentially unconstrained:\n  {flagged}\n\n"
-    "Decide whether a counterexample exists, following the protocol exactly.\n"
+    "Procedure (FOLLOW EXACTLY):\n"
+    "  1. Identify the OUTERMOST quantifier of the conclusion. Write it\n"
+    "     down explicitly before doing any analysis.\n"
+    "  2. If the outermost quantifier is `∃` (one or more variables):\n"
+    "       Try at least THREE candidate witnesses (small/large/\n"
+    "       boundary). If ANY satisfies the body under SOME setting\n"
+    "       of the outer free variables, vote `no_counterexample`\n"
+    "       and put the witnessing tuple in `blocking_hypothesis`.\n"
+    "       Vote `counterexample_found` only when you can derive a\n"
+    "       chain of inequalities forcing the body to fail for EVERY\n"
+    "       possible witness. Be especially careful with theorems\n"
+    "       ending in `:= proof_term` (not `:= by sorry`) — those\n"
+    "       HAVE a proof and are extremely unlikely to be false.\n"
+    "  3. If the outermost is `∀` or `∃ C, ∀ w, ...`:\n"
+    "       Try a constant function, a polynomial, and a corner case\n"
+    "       (zero, large, small). If any violates the bound while\n"
+    "       satisfying the side hypotheses, vote `counterexample_found`.\n"
+    "  4. If the conclusion is an `iff` / equality between expressions\n"
+    "     that look like a definition unfolding or simple algebraic\n"
+    "     rearrangement, vote `no_counterexample` with\n"
+    "     `blocking_hypothesis: \"definitional\"`.\n"
+    "  5. STAGE B: every `no_counterexample` MUST name the specific\n"
+    "     blocking hypothesis / witness tuple / structural reason.\n"
+    "     If you can't, vote `counterexample_found`.\n\n"
     "Output JSON only."
 )
 
@@ -564,7 +660,7 @@ def _call_leanstral(
     client: Any,
     model: str,
     user: str,
-    max_tokens: int = 480,
+    max_tokens: int = 768,
 ) -> str:
     """Call Mistral chat. Returns the assistant text content."""
     response = client.chat.complete(
@@ -663,7 +759,29 @@ def probe_counterexample(
     witness = parsed.get("witness")
     if witness is not None and not isinstance(witness, dict):
         witness = None
-    reasoning = str(parsed.get("reasoning", "") or "")[:240]
+    reasoning = str(parsed.get("reasoning", "") or "")[:320]
+    blocking_hyp_raw = parsed.get("blocking_hypothesis")
+    blocking_hyp = (
+        str(blocking_hyp_raw).strip()
+        if blocking_hyp_raw is not None
+        else ""
+    )
+    # Stage-B enforcement: a `no_counterexample` verdict must name a
+    # specific blocking hypothesis. When the model fails to do so, flip
+    # to `counterexample_found` (matches the user-instructed protocol:
+    # "If it can't name one, route to counterexample_found"). This is
+    # the recall-raising lever — the previous prompt let the model
+    # vote safe without justification.
+    if verdict == "no_counterexample":
+        normalized = blocking_hyp.lower()
+        is_null_blocker = normalized in {"", "null", "none", "n/a", "na"}
+        if is_null_blocker:
+            verdict = "counterexample_found"
+            reasoning = (
+                "[promoted by Stage-B enforcement: model voted "
+                "no_counterexample but named no blocking hypothesis] "
+                + reasoning
+            )[:320]
     return CounterexampleVerdict(
         verdict=verdict,
         witness=witness,
