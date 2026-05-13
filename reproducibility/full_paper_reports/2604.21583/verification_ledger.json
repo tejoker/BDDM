@@ -347,7 +347,8 @@
         "paper_definition_stub:remark_1"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "We expect that the method developed here can be extended to the inhomogeneous setting with an additional one-body potential $V$, in the spirit of \\cite{LewNamRou-21, CKRTG26}. In such a situation, the main high-frequency analysis should remain essentially the same, while the low-frequency comparison would have to be adapted to the presence of $V$. In particular, one should then be able to replace the Yukawa potential by the Coulomb potential. We do not pursue this extension here."
     },
     {
       "theorem_name": "rem_frac_bessel_implemented",
@@ -622,7 +623,8 @@
         "paper_definition_stub:hbeta_le_32"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Fractional Bessel kernels --- implemented range]\n\t\\label{rem:frac-bessel-implemented}\n\t{#1{\n\t\t\tFor $\\beta\\le \\frac32$, genuinely new arguments seem necessary already for the shell contribution in Section~\\ref{sec:shell-vanishing-rewritten}, and also for the tail contribution in Section~\\ref{sec:tail-vanishing-checked}. More precisely, the restriction $\\beta>\\frac32$ already appears in the weighted shell summability estimate in Section~\\ref{sec:shell-vanishing-rewritten}, and reappears in Section~\\ref{sec:tail-vanishing-checked} in both the weighted mixed-channel estimate and the control of the high--high off-diagonal block.\n\t\t\tFor $\\beta\\le 1$ the present Schur estimate for the high--high block is no longer sufficient, while for $\\beta\\le \\frac12$ the commutator summations from Sections~\\ref{sec:high0}--\\ref{sec:shell-vanishing-rewritten} already fail.}}"
     },
     {
       "theorem_name": "thm_main_result",
@@ -858,7 +860,8 @@
         "paper_definition_stub:Γ_lam_k"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Main result]\n\t\\label{thm:main-result}\n\t{#1{As $\\lambda\\downarrow0$, the following hold for the fixed fractional-Bessel interaction with $\\frac32<\\beta\\le2$.}}\n\t\\begin{enumerate}\n\t\t\\item The relative free energy converges:\n\t\t\\[\n\t\t-\\log\\frac{Z_\\lambda^{\\mathrm{re}}}{Z_0}\n\t\t\\longrightarrow\n\t\t-\\log z_{\\mathrm{cl}}.\n\t\t\\]\n\t\t\\item For every fixed $k\\ge1$,\n\t\t\\[\n\t\tk!\\lambda^k\\Gamma_\\lambda^{(k)}\n\t\t\\longrightarrow\n\t\t\\int |u^{\\otimes k}\\rangle\\langle u^{\\otimes k}|\\,\\,\\mathrm d\\nu(u)\n\t\t\\qquad\\text{in }\\mathfrak S^2(\\mathfrak{H}^{\\otimes_s k}).\n\t\t\\]\n\t\\end{enumerate}\n\t%\tIn particular, for every $n\\ge1$ and every $\\phi\\in L^2(\\mathbb T^2)$ with finite Fourier support,\n\t%\t\\[\n\t%\tn!\\lambda^n\\big\\langle \\phi^{\\otimes n},\\Gamma_\\lambda^{(n)}\\phi^{\\otimes n}\\big\\rangle\n\t%\t\\longrightarrow\n\t%\t\\int |\\langle \\phi,u\\rangle|^{2n}\\,\\,\\mathrm d\\nu(u).\n\t%\t\\]"
     },
     {
       "theorem_name": "lem_relent_signedA",
@@ -1078,7 +1081,8 @@
         "paper_definition_stub:h1",
         "paper_definition_stub:h2",
         "paper_definition_stub:h3"
-      ]
+      ],
+      "source_latex": "\\label{lem:relent-signedA}\n\tLet $h>0$ be self-adjoint on the one-body space and let $A=A^\\ast$ satisfy\n\t\\begin{equation}\n\t\t\\label{eq:A-upper-bound}\n\t\tA \\le c\\,h \\qquad\\text{for some }c\\in(0,1).\n\t\\end{equation}\n\tFor $\\lambda>0$ define the quasi-free Gibbs states\n\t\\[\n\t\\Gamma_s := Z_s^{-1}\\exp\\!\\big(-\\lambda\\, \\mathrm d\\Gamma(h-sA)\\big),\\qquad s\\in[0,1],\n\t\\]\n\twith one-body density matrices\n\t\\[\n\t\\gamma_s := (e^{\\lambda(h-sA)}-1)^{-1}.\n\t\\]\n\tThen $\\Gamma_s$ is well-defined for all $s\\in[0,1]$ and the relative entropy satisfies\n\t\\begin{equation}\n\t\t\\label{eq:relent-bound}\n\t\t\\mathcal{H}(\\Gamma_1,\\Gamma_0)\n\t\t\\;\\le\\;\n\t\tC(c)\\,\\mathrm{Tr}\\!\\big(h^{-1}Ah^{-1}A\\big).\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_shell_perturbed_free",
@@ -1285,7 +1289,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:h1",
         "paper_definition_stub:h2"
-      ]
+      ],
+      "source_latex": "\\label{lem:shell-perturbed-free}\n\tLet $f=f^*$ be a bounded one-body operator with\n\t\\[\n\t\\|f\\|\\le 1,\n\t\\qquad\n\ta_f:=\\bigl\\|h^{-1/2}fh^{-1/2}\\bigr\\|_{\\mathrm{HS}}\\le c_0,\n\t\\]\n\tfor some sufficiently small universal constant $c_0>0$.  Define\n\t\\[\n\th_t:=h-\\frac t2 f,\n\t\\qquad\n\t\\Gamma_{0,t}\n\t:=\n\t\\frac{e^{-\\lambda \\mathrm d\\Gamma(h_t)}}{\\mathrm{Tr}(e^{-\\lambda \\mathrm d\\Gamma(h_t)})},\n\t\\qquad |t|\\le 1,\n\t\\]\n\tand denote by $\\gamma_{0,t}$ the one-body density matrix of $\\Gamma_{0,t}$.\n\tThen uniformly for $|t|\\le 1$,\n\t\\begin{align}\n\t\t\\lambda^2\n\t\t\\mathrm{Tr}\\!\\Big(\n\t\t(\\mathcal N-N_0)^2\\Gamma_{0,t}\n\t\t\\Big)\n\t\t&\\le C,\n\t\t\\label{eq:shell-free-N2-local}\n\t\t\\\\\n\t\t\\mathrm{Tr}\\!\\big(W^{\\rm re}\\Gamma_{0,t}\\big)\n\t\t&\\le C.\n\t\t\\label{eq:shell-free-W-local}\n\t\\end{align}"
     },
     {
       "theorem_name": "lem_exch2d",
@@ -1474,7 +1479,8 @@
         "paper_definition_stub:tr_H",
         "paper_definition_stub:Γ_0_t",
         "paper_definition_stub:Γ_lam_t"
-      ]
+      ],
+      "source_latex": "\\label{lem:exch2d}\\label{lem:yukawa-lemma11-safe}\nThen uniformly for \\(|t|\\le1\\),\n\\begin{equation}\\label{eq:yukawa-free-energy-upper}\n\t-\\log\\frac{\\mathrm{Tr}(e^{-\\mathbb{H}_\\lambda^{\\mathrm{re}}+tB})}{\\mathrm{Tr}(e^{-\\lambda \\mathrm d\\Gamma(h)+tB})}\\le C.\n\\end{equation}\nConsequently,\n\\begin{equation}\\label{eq:yukawa-free-energy-functional}\n\t\\mathcal{H}(\\Gamma_{\\lambda,t},\\Gamma_{0,t})\n\t+\\mathrm{Tr}\\!\\big(W^{\\mathrm{re}}\\Gamma_{\\lambda,t}\\big)\n\t\\le C.\n\\end{equation}"
     },
     {
       "theorem_name": "rem_missing_lower_bound_lemma11",
@@ -1670,7 +1676,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "\\label{rem:missing-lower-bound-lemma11}\n\tAt this stage,  the lower bound\n\t\\[\n\t0\\le -\\log\\frac{Z_\\lambda^{\\mathrm{re}}}{Z_0}\n\t\\]\n\tdoes \\emph{not} follow directly from positivity of the interaction, because with the present\n\trenormalization one keeps the \\(k\\neq0\\) part in genuine quartic form in order to avoid the divergent\n\tself-energy term \\(\\big(\\sum_k \\rmk{\\widehat v_\\beta}(k)\\big)\\mathcal N\\). Equivalently, in the sector-wise realization one has\n\t\\[\n\t\\mathbb{H}_\\lambda^{\\mathrm{re}}\n\t=\n\t\\lambda \\mathrm d\\Gamma(h)+\\rmk{W_{\\beta}^{(2)}}+c_\\lambda \\mathcal N+C_\\lambda,\n\t\\]\n\tand for small \\(\\lambda\\) the coefficient \\(c_\\lambda\\) is negative. Thus \\(W^{\\mathrm{re}}\\) is not manifestly\n\tnonnegative. Later, the required lower bound is recovered through the comparison with the finite-dimensional classical problem and the vanishing of the high-frequency remainders; see  Theorem~\\ref{thm:lower-bound-classical-final}."
     },
     {
       "theorem_name": "prop_number_moments_log",
@@ -1898,7 +1905,8 @@
         "paper_definition_stub:hC_q",
         "paper_definition_stub:Γ_0t",
         "paper_definition_stub:Γ_lamt"
-      ]
+      ],
+      "source_latex": "[Logarithmic moments of the number operator for the perturbed Gibbs states]\n\t\\label{prop:number-moments-log}\\label{prop:number-moments-log-safe}\n\tLet $B$,\n\t$\\Gamma_{\\lambda,t}$ and $\\Gamma_{0,t}$ be as in Lemma \\ref{lem:yukawa-lemma11-safe}. Then for every fixed $q>0$\n\tthere exists $C_q>0$ such that, for all sufficiently small $\\lambda\\in(0,1/2)$,\n\t\\[\n\t\\sup_{|t|\\le1}\\lambda^q\\mathrm{Tr}(\\mathcal N^q\\Gamma_{\\lambda,t})\n\t\\le C_q(1+|\\log\\lambda|)^q.\n\t\\]\n\tIn particular,\n\t\\[\n\t\\sup_{|t|\\le1}\\lambda\\mathrm{Tr}(\\mathcal N\\Gamma_{\\lambda,t})\n\t\\le C(1+|\\log\\lambda|).\n\t\\]"
     },
     {
       "theorem_name": "prop_one_body_HS_safe",
@@ -2236,7 +2244,8 @@
         "paper_definition_stub:Γ_lam_t_1"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Weighted Hilbert--Schmidt estimate with logarithmic loss for the perturbed Gibbs states]\n\t\\label{prop:one-body-HS-safe}\n\t\tLet $B$,\n\t$\\Gamma_{\\lambda,t}$ and $\\Gamma_{0,t}$ be as in Lemma \\ref{lem:yukawa-lemma11-safe}. Then there exists $C>0$ such that,\n\tfor all sufficiently small $\\lambda\\in(0,1/2)$,\n\t\\begin{equation}\\label{eq:relative-entropy-log2}\n\t\t\\sup_{|t|\\le1}\\mathcal{H}(\\Gamma_{\\lambda,t},\\Gamma_{0,t})\n\t\t\\le C(1+|\\log\\lambda|^2).\n\t\\end{equation}\n\tConsequently,\n\t\\begin{equation}\\label{eq:one-body-HS-safe}\n\t\t\\sup_{|t|\\le1}\n\t\t\\lambda\\,\n\t\t\\bigl\\|\n\t\t\\sqrt h\\,(\\Gamma_{\\lambda,t}^{(1)}-\\Gamma_{0,t}^{(1)})\\,\\sqrt h\n\t\t\\bigr\\|_{\\mathrm{HS}}\n\t\t\\le C(1+|\\log\\lambda|^2).\n\t\\end{equation}\n\tIn particular,\n\t\\begin{equation}\\label{eq:number-difference-global-safe}\n\t\t\\sup_{|t|\\le1}\n\t\t\\lambda\\,\n\t\t\\left|\n\t\t\\mathrm{Tr}\\big[(\\Gamma_{\\lambda,t}^{(1)}-\\Gamma_{0,t}^{(1)})\\big]\n\t\t\\right|\n\t\t\\le\n\t\tC(1+|\\log\\lambda|^2).\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_first_kinetic_log2",
@@ -2461,7 +2470,8 @@
         "paper_definition_stub:C",
         "paper_definition_stub:hC_t",
         "paper_definition_stub:Γ_lam"
-      ]
+      ],
+      "source_latex": "[First kinetic moment under logarithmic relative entropy]\n\n\t\\label{lem:first-kinetic-log2}\n\tFor every fixed $t\\in(0,1)$ there exists $C_t>0$ such that\n\t\\[\n\t\\lambda^2\\mathrm{Tr}\\!\\big(\\mathrm d\\Gamma(h)\\Gamma_\\lambda\\big)\n\t\\le\n\t\\frac{C_t}{t}\n\t+\n\t\\frac{C}{t}\\,\\lambda(1+|\\log\\lambda|^2).\n\t\\]\n\tIn particular,\n\t\\[\n\t\\lambda^2\\mathrm{Tr}\\!\\big(\\mathrm d\\Gamma(h)\\Gamma_\\lambda\\big)\\le C.\n\t\\]"
     },
     {
       "theorem_name": "lem_holder",
@@ -2679,7 +2689,8 @@
         "paper_definition_stub:h1",
         "paper_definition_stub:h2",
         "paper_definition_stub:h3"
-      ]
+      ],
+      "source_latex": "\\label{lem:holder}\n\tLet\n\t\\(\n\t\\theta\\in(0,1).\n\t\\)\n\tThen\n\t\\begin{align}\n\t\t\\mathrm{Tr}\\!\\bigl[\\mathrm d\\Gamma(h)^\\theta \\mathcal N^{2-\\theta}\\Gamma_\\lambda\\bigr]\n\t\t&\\le\n\t\t\\mathrm{Tr}\\!\\bigl[\\mathrm d\\Gamma(h)\\Gamma_\\lambda\\bigr]^\\theta\\,\n\t\t\\mathrm{Tr}\\!\\Bigl[\\mathcal N^{\\frac{2-\\theta}{1-\\theta}}\\Gamma_\\lambda\\Bigr]^{1-\\theta}.\n\t\t\\label{eq:main-estimate}\n\t\\end{align}\nMoreover, write $L_\\lambda:=1+|\\log\\lambda|$ and $\\mathbb{H}_s:=\\mathrm d\\Gamma(h^s)$ for $s\\in(0,1)$. Then for $s_1,s_2\\in(0,1)$ with $\\theta=s_1+s_2\\in(0,1)$\n\\begin{equation}\n\t\t\t\\label{eq:shell-energy-number-moment-local}\n\t\t\t\\lambda^4\n\t\t\t\\mathrm{Tr}\\!\\Big(\n\t\t\t\\mathbb{H}_{s_1}\\mathbb{H}_{s_2}\\Gamma_\\lambda\n\t\t\t\\Big)\n\t\t\t\\le\n\t\t\tC\\lambda^{2-\\theta}L_\\lambda^2.\n\t\t\\end{equation}\n\t%\tConsequently,\n\t%\t\\begin{align}\n\t\t%\t\t\\lambda^4\\Lambda^2\n\t\t%\t\t\\Bigl(\n\t\t%\t\t\\mathrm{Tr}\\!\\bigl[\\mathrm d\\Gamma(h)^\\theta \\mathcal N^{2-\\theta}\\Gamma_\\lambda\\bigr]+1\n\t\t%\t\t\\Bigr)\n\t\t%\t\t\\le\n\t\t%\t\t\\lambda^4\\Lambda^2\n\t\t%\t\t\\Biggl(\n\t\t%\t\t\\mathrm{Tr}\\!\\bigl[\\mathrm d\\Gamma(h)\\Gamma_\\lambda\\bigr]^\\theta\\,\n\t\t%\t\t\\mathrm{Tr}\\!\\Bigl[\\mathcal N^{\\frac{2-\\theta}{1-\\theta}}\\Gamma_\\lambda\\Bigr]^{1-\\theta}\n\t\t%\t\t+1\n\t\t%\t\t\\Biggr).\n\t\t%\t\t\\label{eq:lambda-Lambda-bound}\n\t\t%\t\\end{align}"
     },
     {
       "theorem_name": "thm_correlation_intro",
@@ -2926,7 +2937,8 @@
         "paper_definition_stub:a"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Second order correlation inequality] \\label{thm:correlation-intro} Let $A$ be a self-adjoint operator on a separable Hilbert space such that $\\mathrm{Tr} [e^{-sA} ] <+\\infty$ holds for all $s> 0$. Let $B$ be a symmetric operator such that $B$ is $A$-relatively bounded with a relative bound strictly smaller than $1$. We also assume that the perturbed Gibbs states\n\t\\begin{equation}\\label{eq:Gibbs-t-intro}\n\t\tG_t = \\frac{\\exp(-A+tB)}{\\mathrm{Tr} [ \\exp(-A+tB) ]} , \\quad t\\in [-1,1]\n\t\\end{equation}\n\tsatisfy\n\t\\begin{equation}\\label{eq:CRI-condition-intro}\n\t\t\\sup_{t\\in [-1,1]}|\\mathrm{Tr}(B G_t )| \\le a.\n\t\\end{equation}\n\tThen we have\n\t\\begin{equation}\\label{eq:StahlA2-intro}\n\t\t\\mathrm{Tr}[ B^2 G_0 ] \\leq a e^{a} + \\frac{1}{4} \\mathrm{Tr}[ [B, [A, B]] G_0].\n\t\\end{equation}"
     },
     {
       "theorem_name": "prop_second_cutoff_decomp",
@@ -3119,7 +3131,8 @@
         "status_alignment_ok",
         "statement_alignment_exact",
         "statement_alignment_not_unrelated"
-      ]
+      ],
+      "source_latex": "[Second cutoff decomposition of $HF_{\\neq 0}$]\n\t\\label{prop:second-cutoff-decomp}\n\tFor every state $\\Gamma$ on $\\mathfrak F(H)$, one has\n\t\\[\n\t\\mathcal E_{\\rm tail}(\\Gamma)\n\t=\n\t\\frac{\\lambda^2}{2}\n\t\\mathrm{Tr}_{H^{\\otimes_s 2}}\n\t\\!\\Big[\n\t\\bigl(\n\tR_1 V R_1 + R_1 V \\Pi_1 + \\Pi_1 V R_1\n\t\\bigr)\\Gamma^{(2)}\n\t\\Big]\n\t-\n\t\\frac{\\lambda^2}{2(2\\pi)^2}\n\t\\mathrm{Tr}_{H^{\\otimes_s 2}}(R_1\\Gamma^{(2)}).\n\t\\]\n\tIn particular, since $V\\ge 0$,\n\t\\[\n\t\\mathcal E_{\\rm tail}(\\Gamma)\n\t\\ge\n\t\\frac{\\lambda^2}{2}\n\t\\mathrm{Tr}_{H^{\\otimes_s 2}}\n\t\\!\\Big[\n\t\\bigl(\n\tR_1 V \\Pi_1 + \\Pi_1 V R_1\n\t\\bigr)\\Gamma^{(2)}\n\t\\Big]\n\t-\n\t\\frac{\\lambda^2}{2(2\\pi)^2}\n\t\\mathrm{Tr}_{H^{\\otimes_s 2}}(R_1\\Gamma^{(2)}).\n\t\\]"
     },
     {
       "theorem_name": "rem_surviving_channels",
@@ -3373,7 +3386,8 @@
         "paper_definition_stub:hQ1",
         "paper_definition_stub:hR1",
         "paper_definition_stub:hV_nonneg"
-      ]
+      ],
+      "source_latex": "[Surviving channels after the second cutoff]\n\t\\label{rem:surviving-channels}\n\tAfter discarding the positive contribution $R_1VR_1$, the only channels which remain in the lower\n\tbound are\n\t\\[\n\t(P,P_1),\\quad (P_1,P),\\quad (P_1,P_1),\n\t\\]\n\tcoming from the shell term, and\n\t\\[\n\t(P,Q_1),\\quad (P_1,Q_1),\\quad (Q_1,P),\\quad (Q_1,P_1),\n\t\\]\n\tcoming from the mixed tail term. In other words, the second cutoff isolates two qualitatively different\n\tmechanisms: shell interactions, where both legs remain below $\\Lambda_1$, and mixed tail channels,\n\twhere exactly one leg lies in $Q_1H$ after the positive $Q_1Q_1$ contribution has been discarded.\n\tThe pure $Q_1Q_1$ channel is entirely contained in $R_1VR_1$ and therefore needs no further\n\testimate."
     },
     {
       "theorem_name": "cor_HF0_vanishes",
@@ -3568,7 +3582,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "[Quantitative vanishing of the zero-mode remainder]\n\t\\label{cor:HF0-vanishes}\n\tLet\n\t\\(\n\t\\Lambda=\\lambda^{-\\alpha},\n\t0<\\alpha<\\frac34.\n\t\\)\n\tThen\n\t\\begin{equation}\\label{eq:HF0-vanishes-rate}\n\t\t|HF_0(\\Gamma_\\lambda)|\n\t\t\\le\n\t\tC(1+|\\log\\lambda|^2)(\\lambda^{\\alpha/2}+\\lambda^{3/4-\\alpha}).\n\t\\end{equation}\n\tIn particular,\n\t\\begin{equation}\\label{eq:HF0-vanishes}\n\t\tHF_0(\\Gamma_\\lambda)\\longrightarrow 0\n\t\t\\qquad (\\lambda\\downarrow0).\n\t\\end{equation}"
     },
     {
       "theorem_name": "prop_high_frequency_fluctuations",
@@ -3735,7 +3750,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:C"
-      ]
+      ],
+      "source_latex": "[High-frequency number fluctuations]\n\t\\label{prop:high-frequency-fluctuations}\n\tLet $\\Lambda=\\lambda^{-\\alpha}$ for $\\alpha\\in(0,3/4)$.\n\tThen\n\t\\begin{equation}\\label{eq:high-frequency-fluctuation-bound}\n\t\t\\lambda^2\n\t\t\\mathrm{Tr}_{\\mathfrak F(H)}\n\t\t\\Big[\n\t\t(\\mathcal N_Q-N_{0,Q})^2\\,\\Gamma_\\lambda\n\t\t\\Big]\n\t\t\\le\n\t\tC\n\t\t(1+|\\log\\lambda|^2)(\\Lambda^{-1}\n\t\t+\n\t\t\\lambda^{\\frac32}\\Lambda^2)\n\t\t.\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_NQ_double_commutator_direct",
@@ -3964,7 +3980,8 @@
         "paper_definition_stub:h2",
         "paper_definition_stub:h3",
         "paper_definition_stub:h4"
-      ]
+      ],
+      "source_latex": "[Double commutator structure for $\\mathcal N_Q$]\n\t\\label{lem:NQ-double-commutator-direct}\n\t%\tTo avoid confusion with the cutoff parameter, write\n\t%\t\\[\n\t%\t\\mathcal N:=\\mathrm d\\Gamma(1),\n\t%\t\\qquad\n\t%\t\\mathcal N_Q:=\\mathrm d\\Gamma(Q),\n\t%\t\\qquad\n\t%\tT:=\\mathrm d\\Gamma(-\\Delta)=\\sum_{p\\in\\mathbb Z^2}|p|^2 a_p^\\ast a_p .\n\t%\t\\]\n\t%\tLet\n\t%\t\\[\n\t%\tW_{\\neq0}^{\\mathrm{re}}\n\t%\t=\n\t%\t\\frac{\\lambda^2}{2(2\\pi)^2}\n\t%\t\\sum_{k\\neq0}\\rmk{\\widehat v_\\beta}(k)\\sum_{p,q\\in\\mathbb Z^2}\n\t%\ta_{p+k}^\\ast a_{q-k}^\\ast a_q a_p ,\n\t%\t\\]\n\t%\twith Yukawa symbol\n\t%\t\\[\n\t%\t\\rmk{\\widehat v_\\beta}(k)=\\frac{1}{1+|k|^2},\\qquad k\\in\\mathbb Z^2.\n\t%\t\\]\n\tThe following hold.\n\t\n\t\\medskip\n\t\n\t\\noindent\\textnormal{(i) Exact formula.}\n\tFor\n\t\\[\n\t\\mathcal N_Q=\\mathrm d\\Gamma(Q),\n\t\\qquad\n\tM_{p,q,k}:=a_{p+k}^\\ast a_{q-k}^\\ast a_q a_p,\n\t\\]\n\tdefine\n\t\\[\n\t\\Delta_{p,q,k}:=Q_{p+k}+Q_{q-k}-Q_q-Q_p,\n\t\\qquad\n\tQ_r:=\\mathbf 1_{\\{h(r)>\\Lambda^2\\}}\\in\\{0,1\\}.\n\t\\]\n\tThen, as a quadratic form on finite-particle vectors,\n\t\\begin{equation}\\label{eq:exact-double-commutator-DQ}\n\t\t[\\mathcal N_Q,[W^{\\mathrm{re}},\\mathcal N_Q]]\n\t\t=\n\t\t-\\frac{\\lambda^2}{2(2\\pi)^2}\n\t\t\\sum_{k\\neq0}#1{\\widehat v_\\beta}(k)\\sum_{p,q\\in\\mathbb Z^2}\n\t\t\\Delta_{p,q,k}^2\\, M_{p,q,k}.\n\t\\end{equation}\n\t\n\t\\medskip\n\t\n\t\\noindent\\textnormal{(ii) Blockwise values of $\\Delta_{p,q,k}$.}\n\tWith the $A/B$-block decomposition introduced earlier, one has\n\t\\[\n\t\\Delta_{p,q,k}=0\n\t\\quad\\text{for}\\quad\n\tA1,\\ A4,\\ A7,\\ B2,\\ B4,\\ B9,\n\t\\]\n\tand\n\t\\[\n\t|\\Delta_{p,q,k}|=1\n\t\\quad\\text{for}\\quad\n\tA2,\\ A3,\\ A5,\\ A6,\\ B3,\\ B6,\\ B7,\\ B8,\n\t\\]\n\twhile\n\t\\[\n\t|\\Delta_{p,q,k}|=2\n\t\\quad\\text{for}\\quad\n\tB1,\\ B5.\n\t\\]\n\tHence only the ten blocks\n\t\\[\n\tA2,\\ A3,\\ A5,\\ A6,\\ B1,\\ B3,\\ B5,\\ B6,\\ B7,\\ B8\n\t\\]\n\tsurvive in \\eqref{eq:exact-double-commutator-DQ}.\n\t\n\t%\t\\medskip\n\t%\t\n\t%\t\\noindent\\textnormal{(iii)}\n\t%\tset\n\t%\t\\[\n\t%\th(p)=|p|^2+1,\\qquad \\mathbb{H}_s:=\\mathrm d\\Gamma(h^s)=\\sum_{p\\in\\mathbb Z^2}h(p)^s a_p^\\ast a_p .\n\t%\t\\]\n\t%\tAssume $s>\\frac12$. Then there exists $C_s>0$ such that, as a quadratic form on $\\mathfrak F_{\\rm fin}$,\n\t%\t\\begin{equation}\\label{eq:NQ-double-commutator-Hs}\n\t\t%\t\t\\pm\\,[\\mathcal N_Q,[W_{\\neq0}^{\\rm re},\\mathcal N_Q]]\n\t\t%\t\t\\ \\le\\\n\t\t%\t\tC_s\\,\\lambda^2\\,(\\mathbb{H}_s+\\mathcal N+1)^2.\n\t\t%\t\\end{equation}\n\t%\tIn particular, taking $s=1$ gives\n\t%\t\\[\n\t%\t(\\mathbb{H}_1+\\mathcal N+1)^2 \\lesssim (T+\\mathcal N+1)^2,\n\t%\t\\qquad \\mathbb{H}_1=\\mathrm d\\Gamma(h)=T+m\\mathcal N,\n\t%\t\\]"
     },
     {
       "theorem_name": "rem_B9_disappears",
@@ -4253,7 +4270,8 @@
         "paper_definition_stub:h_s2_sufficiently_close",
         "paper_definition_stub:s1",
         "paper_definition_stub:s2"
-      ]
+      ],
+      "source_latex": "\\label{rem:B9-disappears}\n\tThe block decomposition is already useful at the level of \\eqref{eq:exact-double-commutator-DQ}. In particular, the purely high--high block\n\t\\[\n\tB9=(Q\\to Q,\\,Q\\to Q)\n\t\\]\n\tdisappears because $\\Delta_{p,q,k}=0$ there. This is crucial for the later Hilbert--Schmidt bounds: $B9$ carries no $P$-projector, hence no low-frequency input and no geometric restriction on $k$, so it would be the hardest channel to estimate directly. Every surviving block still contains at least one cutoff crossing, and therefore at least one $P$-leg from which the later bounds extract the truncated kernels $S_k^{(P)}$ and in the following we can take $s_1+s_2<1$."
     },
     {
       "theorem_name": "lem_aH_S",
@@ -4471,7 +4489,8 @@
         "paper_definition_stub:h1",
         "paper_definition_stub:h2",
         "paper_definition_stub:h3"
-      ]
+      ],
+      "source_latex": "[Asymmetric quartic Hilbert--Schmidt bound]\\label{lem:aH-S}\n\tLet \\(s_1,s_2\\ge 0\\). For a quartic kernel\n\t\\[\n\t\\gamma=\\gamma_{r_1,r_2,u_1,u_2},\n\t\\]\n\tdefine\n\t\\[\n\tQ_\\gamma\n\t:=\n\t\\sum_{r_1,r_2,u_1,u_2\\in\\mathbb Z^2}\n\t\\gamma_{r_1,r_2,u_1,u_2}\\,\n\ta_{r_1}^\\ast a_{r_2}^\\ast a_{u_1}a_{u_2}.\n\t\\]\n\tDefine the asymmetrically rescaled kernel\n\t\\[\n\t\\widetilde\\gamma^{(s_1,s_2)}_{r_1,r_2,u_1,u_2}\n\t:=\n\th(r_1)^{-s_1/2}h(r_2)^{-s_2/2}\n\t\\gamma_{r_1,r_2,u_1,u_2}\n\th(u_1)^{-s_2/2}h(u_2)^{-s_1/2}.\n\t\\]\n\tIf \\(\\widetilde\\gamma^{(s_1,s_2)}\\in \\ell^2((\\mathbb Z^2)^4)\\), then for every\n\t\\(\\psi\\in\\mathfrak F_{\\mathrm{fin}}\\),\n\t\\[\n\t\\bigl|\\langle \\psi,Q_\\gamma\\psi\\rangle\\bigr|\n\t\\le\n\t\\|\\widetilde\\gamma^{(s_1,s_2)}\\|_{\\ell^2}\\,\n\t\\langle \\psi,(\\mathbb{H}_{s_1}\\mathbb{H}_{s_2}-\\mathbb{H}_{s_1+s_2})\\psi\\rangle\n\t\\le\n\t\\|\\widetilde\\gamma^{(s_1,s_2)}\\|_{\\ell^2}\\,\n\t\\langle \\psi,\\mathbb{H}_{s_1}\\mathbb{H}_{s_2}\\psi\\rangle.\n\t\\]\n\tHere $\\mathfrak F_{\\mathrm{fin}}$ denotes finite-particle subspace of the bosonic Fock space.\n%\tIn particular, if \\(Q_\\gamma\\) is self-adjoint, then as a quadratic form,\n%\t\\[\n%\t\\pm Q_\\gamma\n%\t\\le\n%\t\\|\\widetilde\\gamma^{(s_1,s_2)}\\|_{\\ell^2}\\,\n%\t(\\mathbb{H}_{s_1}+1)(\\mathbb{H}_{s_2}+1).\n%\t\\]"
     },
     {
       "theorem_name": "lem_com1",
@@ -4667,7 +4686,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "[Blockwise Hilbert--Schmidt bounds]\\label{lem:com1}\n\tAssume \\(0<s_1<1\\) and \\(\\frac12<s_2<1\\). Then\n\t\\begin{align}\n\t\t\\pm (\\mathcal C_{23}+\\mathcal C_{56}+\\mathcal C_{15})\n\t\t&\\le\n\t\tC_{s_1,s_2}\\lambda^2 \\Lambda^{2-s_1-s_2}\n\t\t\\mathbb{H}_{s_1}\\mathbb{H}_{s_2},\n\t\t\\label{eq:blockwise-HS-two-cutoff}\n\t\t\\\\\n\t\t\\pm (\\mathcal C_{36}+ \\mathcal C_{78})\n\t\t&\\le\n\t\tC_{s_1,s_2}\\lambda^2 \\Lambda^{1-s_1}\n\t\t\\mathbb{H}_{s_1}\\mathbb{H}_{s_2},\n\t\t\\label{eq:blockwise-HS-36}\n%\t\t\\\\\n%\t\t\\pm \\mathcal C_{78}\n%\t\t&\\le\n%\t\tC_{s_1,s_2}\\lambda^2 \\Lambda^{1-s_1}\n%\t\t(\\mathbb{H}_{s_1}+1)(\\mathbb{H}_{s_2}+1).\n%\t\t\\label{eq:blockwise-HS-78}\n\t\\end{align}\n\tIn particular, as a quadratic form on \\(\\mathfrak F_{\\mathrm{fin}}\\),\n\t\\[\n\t\\pm [\\mathcal N_Q,[W^{\\mathrm{re}}_{\\neq0},\\mathcal N_Q]]\n\t\\le\n\tC_{s_1,s_2}\\lambda^2\n\t\\Lambda^{2-s_1-s_2}\n\t\\mathbb{H}_{s_1}\\mathbb{H}_{s_2}.\n\t\\]"
     },
     {
       "theorem_name": "remark_22",
@@ -4848,7 +4868,8 @@
         "translation_fidelity_ok",
         "status_alignment_ok",
         "statement_alignment_exact"
-      ]
+      ],
+      "source_latex": "%\tThe key improvement over the original proof of Lemma~5.6(iii) is the following.\n%\tFor the direct \\(\\mathcal N_Q\\)-commutator, after writing the kernel in the variables\n%\t\\((r_1,r_2,u_1,u_2)\\), the different \\(k\\)-slices are orthogonal in\n%\t\\(\\ell^2((\\mathbb Z^2)^4)\\) because of the exact delta constraints\n%\t\\[\n%\tr_1=u_2+k,\\qquad r_2=u_1-k.\n%\t\\]\n%\tThus one keeps a full factor \\(|\\rmk{\\widehat v_\\beta}(k)|^2\\).\n%\tFor the one-cutoff blocks this means that one only needs the growth estimate\n%\t\\[\n%\tS_k(s)\\lesssim \\langle k\\rangle^{(2-4s)_+},\n%\t\\]\n%\twhich closes for every \\(s>0\\) on the unrestricted leg.\n%"
     },
     {
       "theorem_name": "rem_HF0_main_input",
@@ -5025,7 +5046,8 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "1ab4513959722e82",
-      "source_span_id": ""
+      "source_span_id": "",
+      "source_latex": "%\t\\label{rem:HF0-main-input}\n%\tThis is the only genuinely new input in the $k=0$ channel. Once\n%\t\\eqref{eq:high-frequency-fluctuation-bound} is available, the control of $HF_0(\\Gamma_\\lambda)$ is\n%\timmediate. A natural route is to localize the relative entropy to $\\mathfrak F(QH)$ and study the\n%\tperturbed partition functions associated with $\\mathbb{H}_\\lambda^{\\mathrm{re}} + t \\lambda \\mathcal N_Q$.\n%"
     },
     {
       "theorem_name": "prop_shell_vanishing_local",
@@ -5257,7 +5279,8 @@
         "paper_definition_stub:Γ_lam"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Vanishing of the shell contribution]\n\t\\label{prop:shell-vanishing-local}\n\t{#1{Fix $\\frac32<\\beta\\le2$ and choose $\\eta\\in(2-\\beta,\\beta-1)$ and \\(\\frac34-\\alpha_1-\\frac\\alpha2(2-\\beta)>0\\). Then}}\n\t\\begin{equation}\n\t\t\\label{eq:shell-vanishing-rate-local}\n\t\t|\\mathcal E_{\\rm shell}(\\Gamma_\\lambda)|\n\t\t\\le\n\t\t{#1{C_\\beta(1+|\\log\\lambda|)^{5/2}\\Lambda^{(2-\\beta)/2}\\bigl(\\Lambda^{-\\eta/2}+\\lambda^{3/4}\\Lambda_1\\bigr)\n\t\t+\n\t\tC_\\beta\\lambda (1+|\\log\\lambda|^2)\\Lambda_1^{2-\\beta}\\longrightarrow0.}}\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_shell_decomposition_local",
@@ -5453,7 +5476,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "[Quadratic decomposition of the shell part]\n\t\\label{lem:shell-decomposition-local}\n\tThere exists a one-body remainder $R_{\\rm shell}^{(1)}(\\Gamma)$ such that\n\t\\begin{equation}\n\t\t\\label{eq:shell-decomposition-local}\n\t\t\\mathcal E_{\\rm shell}(\\Gamma)\n\t\t=\n\t\t\\frac{\\lambda^2}{4}\n\t\t\\sum_{\\ell\\neq 0}#1{\\widehat v_\\beta}(\\ell)\\,\n\t\t\\mathrm{Tr}\\Big[\\Big(\n\t\tA_\\ell B_{-\\ell}+B_\\ell A_{-\\ell}+B_\\ell B_{-\\ell}\n\t\t\\Big)\\Gamma\\Big]\n\t\t+\n\t\tR_{\\rm shell}^{(1)}(\\Gamma),\n\t\\end{equation}\n\twhere $A_\\ell$ and $B_\\ell$ are defined in \\eqref{eq:def-shell-A-B}.  Moreover,\n\t\\begin{equation}\n\t\t\\label{eq:shell-remainder-local}\n\t\t{\\color{red}|R_{\\rm shell}^{(1)}(\\Gamma_\\lambda)|\n\t\t\\le\n\t\tC_\\beta\\lambda L_\\lambda(1+\\log\\Lambda_1)\\Lambda_1^{2-\\beta}.}\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_shell_polarization_local",
@@ -5648,7 +5672,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "[Polarization of the shell channels]\n\t\\label{lem:shell-polarization-local}\n\tFor $(A,B)\\in \\mathcal C_{\\rm shell}$ and $\\ell\\in\\mathbb Z^2$, define\n\t\\[\n\tg_\\ell^{A,B}:=Ae_\\ell B,\n\t\\]\n\tand\n\t\\[\n\tf_{\\ell,+}^{A,B}:=g_\\ell^{A,B}+(g_\\ell^{A,B})^*,\n\t\\qquad\n\tf_{\\ell,-}^{A,B}:=i(g_\\ell^{A,B}-(g_\\ell^{A,B})^*).\n\t\\]\n\tThen\n\t\\begin{equation}\n\t\t\\label{eq:shell-polarization-local}\n\t\t(\\rho_\\ell^{A,B})^*\\rho_\\ell^{A,B}\n\t\t+\n\t\t(\\rho_{-\\ell}^{B,A})^*\\rho_{-\\ell}^{B,A}\n\t\t=\n\t\t\\frac12\n\t\t\\Big(\n\t\t\\mathrm d\\Gamma(f_{\\ell,+}^{A,B})^2+\\mathrm d\\Gamma(f_{\\ell,-}^{A,B})^2\n\t\t\\Big).\n\t\\end{equation}\n\tIn particular,\n\t\\begin{equation}\n\t\t\\label{eq:shell-polarization-ineq-local}\n\t\t(\\rho_\\ell^{A,B})^*\\rho_\\ell^{A,B}\n\t\t\\le\n\t\t\\frac12\n\t\t\\Big(\n\t\t\\mathrm d\\Gamma(f_{\\ell,+}^{A,B})^2+\\mathrm d\\Gamma(f_{\\ell,-}^{A,B})^2\n\t\t\\Big).\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_shell_HS_local",
@@ -5866,7 +5891,8 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "1711bf056338df7b",
-      "source_span_id": ""
+      "source_span_id": "",
+      "source_latex": "[Hilbert--Schmidt bounds for the shell observables]\n\t\\label{lem:shell-HS-local}\n\tFix $\\eta\\in(0,1)$. Then for every $(A,B)\\in\\mathcal C_{\\rm shell}$ and every\n\t$\\ell\\in\\mathbb Z^2$,\n\t\\begin{equation}\n\t\t\\label{eq:shell-HS-local}\n\t\t\\bigl\\|\n\t\th^{-1/2}f_{\\ell,\\pm}^{A,B}h^{-1/2}\n\t\t\\bigr\\|_{\\mathrm{HS}}\n\t\t\\le\n\t\tC_\\eta\\,\n\t\t\\langle\\ell\\rangle^{-1+\\eta+\\kappa}\\Lambda^{-\\eta}\\,\\mathbf 1_{\\{|\\ell|\\lesssim \\Lambda_1\\}},\n\t\\end{equation}\n\tfor $\\kappa>0$."
     },
     {
       "theorem_name": "lem_shell_h_comm_local",
@@ -6100,7 +6126,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:C"
-      ]
+      ],
+      "source_latex": "[Double commutators with $h$]\n\t\\label{lem:shell-h-comm-local}\n\tFor every $(A,B)\\in\\mathcal C_{\\rm shell}$ and every $\\ell\\neq0$,\n\t\\begin{equation}\n\t\t\\label{eq:shell-h-comm-local}\n\t\t\\bigl\\|\n\t\t[f_{\\ell,\\pm}^{A,B},[f_{\\ell,\\pm}^{A,B},h]]\n\t\t\\bigr\\|\n\t\t\\le\n\t\tC\\Lambda_1^2\\,\\mathbf 1_{\\{|\\ell|\\lesssim \\Lambda_1\\}}.\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_shell_W_comm_local",
@@ -6439,7 +6466,8 @@
         "step_verdict_verified",
         "reproducible_env",
         "statement_alignment_exact"
-      ]
+      ],
+      "source_latex": "[Double commutator with $W_{\\neq0}^{\\rm re}$ for the shell modes]\n\t\\label{lem:shell-W-comm-local}\n\tFix\n\t\\(\n\t0<s_1\\le s_2<1,\n\ts_2>\\frac12,\n\ts_1+s_2<1.\n\t\\)\n\tThen for every $(A,B)\\in\\mathcal C_{\\rm shell}$ and every $\\ell\\neq0$,\n\t\\begin{equation}\n\t\t\\label{eq:shell-W-comm-local}\n\t\t\\pm\n\t\t[\\mathrm d\\Gamma(f_{\\ell,\\pm}^{A,B}),\n\t\t[\\mathrm d\\Gamma(f_{\\ell,\\pm}^{A,B}),W_{\\neq0}^{\\rm re}]]\n\t\t\\le\n\t\tC\\lambda^2\\Lambda_1^{2-s_1-s_2}\\langle\\ell\\rangle^{-s_1}\n\t\t\\mathbb{H}_{s_1}\\mathbb{H}_{s_2}\\,\\mathbf 1_{\\{|\\ell|\\lesssim \\Lambda_1\\}}\n\t\\end{equation}\n\tas quadratic forms on $\\mathfrak F_{\\rm fin}$."
     },
     {
       "theorem_name": "prop_shell_mode_local",
@@ -6616,7 +6644,8 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "dec0aa073022bfbb",
-      "source_span_id": ""
+      "source_span_id": "",
+      "source_latex": "[Mode-by-mode shell bound]\n\t\\label{prop:shell-mode-local}\n\n\tIt holds that for every $(A,B)\\in\\mathcal C_{\\rm shell}$, every $\\ell\\neq0$, and every\n\t{\\color{red}$0<s_1\\le s_2<1$ with $s_2>\\frac12$ and $s_1+s_2<1$,}\n\t\\begin{equation}\n\t\t\\label{eq:shell-mode-local}\n\t\t\\lambda^2\n\t\t\\mathrm{Tr}\\!\\Big(\n\t\t(\\rho_\\ell^{A,B})^*\\rho_\\ell^{A,B}\\Gamma_\\lambda\n\t\t\\Big)\n\t\t\\le\n\t\tC\\mathbf 1_{\\{|\\ell|\\lesssim \\Lambda_1\\}}\\Big(\n\t\t\\langle\\ell\\rangle^{-1+\\eta+\\kappa}\\Lambda^{-\\eta}L_\\lambda^2\n\t\t+\n\t\t\\lambda^2\\Lambda_1^2L_\\lambda^2\n\t\t+\n\t\t{\\color{red}\\lambda^{2-s_1-s_2}\\Lambda_1^{2-s_1-s_2}\\langle\\ell\\rangle^{-s_1}L_\\lambda^2}\n\t\t\\Big).\n\t\\end{equation}\n{\\color{red}Here $\\eta\\in(2-\\beta,\\beta-1-\\kappa)$ is fixed and $\\kappa>0$.}"
     },
     {
       "theorem_name": "cor_shell_summability_local",
@@ -6940,7 +6969,8 @@
         "paper_definition_stub:Γ_lam"
       ],
       "reviewer_type": "llm",
-      "review_policy": "requires_human_for_release"
+      "review_policy": "requires_human_for_release",
+      "source_latex": "[Weighted shell summability]\n\t\\label{cor:shell-summability-local}\n\t{\\color{red}Let $\\eta\\in(2-\\beta,\\beta-1)$. Choose $0<s_1\\le s_2<1$ with $s_2>\\frac12$ and $s_1+s_2<1$, and assume in addition that $s_1$ is sufficiently small while $s_2$ is sufficiently close to $\\frac12$.}\n\tThen for every $(A,B)\\in\\mathcal C_{\\rm shell}$,\n\t\\begin{equation}\n\t\t\\label{eq:shell-summability-local}\n\t\t\\sum_{\\ell\\neq 0}#1{\\widehat v_\\beta}(\\ell)\\,\n\t\t\\lambda^2\n\t\t\\mathrm{Tr}\\!\\Big(\n\t\t(\\rho_\\ell^{A,B})^*\\rho_\\ell^{A,B}\\Gamma_\\lambda\n\t\t\\Big)\n\t\t\\le\n\t\tC(\\Lambda^{-\\eta}L_\\lambda^2\n\t\t+\n\t\t\\lambda^{3/2}\\Lambda_1^2L_\\lambda^2)\n\t\t\\longrightarrow 0.\n\t\\end{equation}\n\tConsequently,\n\t\\begin{equation}\n\t\t\\label{eq:B-shell-summability-local}\n\t\t\\sum_{\\ell\\neq 0}#1{\\widehat v_\\beta}(\\ell)\\,\n\t\t\\lambda^2\n\t\t\\mathrm{Tr}(B_\\ell^*B_\\ell\\Gamma_\\lambda)\n\t\t+\n\t\t\\sum_{\\ell\\neq 0}#1{\\widehat v_\\beta}(\\ell)\\,\n\t\t\\lambda^2\n\t\t\\mathrm{Tr}(B_\\ell B_\\ell^*\\Gamma_\\lambda)\n\t\t\\le\n\t\tC(\\Lambda^{-\\eta}L_\\lambda^2\n\t\t+\n\t\t\\lambda^{3/2}\\Lambda_1^2L_\\lambda^2)\n\t\t\\longrightarrow 0.\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_free_tail_Q1",
@@ -7215,7 +7245,8 @@
         "paper_definition_stub:halpha1"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Free high-frequency tail]\n\t\\label{lem:free-tail-Q1}\n\tThere exist constants $c,C>0$ such that\n\t\\[\n\t\\lambda N_{0,Q_1}\n\t\\le\n\tC\\log\\frac{1}{1-e^{-c\\lambda\\Lambda_1^2}}\\leq C e^{-c\\lambda^{1-2\\alpha_1}}, \\qquad\\alpha_1>1/2.\n\t\\]\n\tIn particular,\n\tfor all sufficiently small $\\lambda$, and therefore for every $m\\ge 0$,\n\t\\[\n\t(1+|\\log\\lambda|)^m\\,\\lambda N_{0,Q_1}\\longrightarrow 0.\n\t\\]"
     },
     {
       "theorem_name": "lem_Q1_number_fluctuation",
@@ -7392,7 +7423,8 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "d9a681947ef6725e",
-      "source_span_id": ""
+      "source_span_id": "",
+      "source_latex": "[High-frequency number fluctuation at the second cutoff]\n\t\\label{lem:Q1-number-fluctuation}\n\tIt holds that\n\t\\[\n\t\\lambda^2\n\t\\mathrm{Tr}_{\\mathfrak F(H)}\\!\\Big[\n\t(\\mathcal N_{Q_1}-N_{0,Q_1})^2\\Gamma_\\lambda\n\t\\Big]\n\t\\le\n\tC\\Big[\n\t(1+|\\log\\lambda|^2)\\Lambda_1^{-1}\n\t+\n\t\\lambda^{3/2}\\Lambda_1^2(1+|\\log\\lambda|^2)\n\t\\Big].\n\t\\]"
     },
     {
       "theorem_name": "lem_Q1_tail_quantitative",
@@ -7684,7 +7716,8 @@
         "paper_definition_stub:halpha1"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Quantitative bound on the explicit $R_1$-correction]\n\t\\label{lem:Q1-tail-quantitative}\n\t\\label{lem:R1-correction}\n\tIt holds that,\n\t\\[\n\t\\lambda^2\\mathrm{Tr}_{H^{\\otimes_s2}}\\!\\big(Q_1^{\\otimes2}\\Gamma_\\lambda^{(2)}\\big)\n\t\\le \\lambda^2\\mathrm{Tr}_{\\mathfrak F(H)}(\\mathcal N_{Q_1}^2\\Gamma_\\lambda) \\leq\n\tC\n\t\\lambda^{3/2-2\\alpha_1}(1+|\\log\\lambda|^2),\n\t\\]\n\t\\begin{equation}\n\t\t\\label{eq:R1-correction-rate-special}\n\t\t\\frac{\\lambda^2}{2(2\\pi)^2}\n\t\t\\mathrm{Tr}_{H^{\\otimes_s2}}(R_1\\Gamma_\\lambda^{(2)})\n\t\t\\le\n\t\tC\n\t\t\\lambda^{3/4-\\alpha_1}(1+|\\log\\lambda|^2).\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_exact_mixed_decomp",
@@ -7880,7 +7913,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "[Exact decomposition of the mixed off-diagonal part]\n\t\\label{lem:exact-mixed-decomp}\n\tFor the full Bessel operator\n\t\\[\n\tV=\\sum_{k\\in\\mathbb Z^2}\\rmk{\\widehat v_\\beta}(k)(e_k\\otimes e_{-k}),\n\t\\]\n\tone has\n\t\\begin{equation}\n\t\t\\frac{\\lambda^2}{2}\\mathbb W(\\Pi_1VR_1+R_1V\\Pi_1)\n\t\t=\n\t\t\\frac{\\lambda^2}{4}\n\t\t\\sum_{k\\in\\mathbb Z^2}#1{\\widehat v_\\beta}(k)\n\t\t\\Big(A_kB_{-k}+A_{-k}B_k+B_kB_{-k}+C_kA_{-k}+C_{-k}A_k+C_kC_{-k}\\Big).\n\t\t\\label{eq:exact-mixed-decomp}\n\t\\end{equation}\n Since $SQ_1=Q_1S=0$, no one-body correction term appears."
     },
     {
       "theorem_name": "lem_cross_terms_controlled",
@@ -8061,7 +8095,8 @@
         "status_alignment_ok",
         "statement_alignment_exact",
         "statement_alignment_not_unrelated"
-      ]
+      ],
+      "source_latex": "[Control of the shell--mixed cross terms]\n\t\\label{lem:cross-terms-controlled}\n\t{#1{It holds that}}\n\t\\begin{align}\n\t\t&\\sum_{k\\in\\mathbb Z^2}#1{\\widehat v_\\beta}(k)\\lambda^2\n\t\t\\Big|\\mathrm{Tr}(A_kB_{-k}\\Gamma_\\lambda)\\Big|\n\t\t+\n\t\t\\sum_{k\\in\\mathbb Z^2}#1{\\widehat v_\\beta}(k)\\lambda^2\n\t\t\\Big|\\mathrm{Tr}(A_{-k}B_k\\Gamma_\\lambda)\\Big|\n\t\t\\notag\n\t\t\\\\\n\t\t&\\qquad+\n\t\t\\sum_{k\\in\\mathbb Z^2}#1{\\widehat v_\\beta}(k)\\lambda^2\n\t\t\\Big|\\mathrm{Tr}(C_kA_{-k}\\Gamma_\\lambda)\\Big|\n\t\t+\n\t\t\\sum_{k\\in\\mathbb Z^2}#1{\\widehat v_\\beta}(k)\\lambda^2\n\t\t\\Big|\\mathrm{Tr}(C_{-k}A_k\\Gamma_\\lambda)\\Big|\\notag\n\t\t\\\\ &\\leq {#1{C_\\beta\\,\\mathfrak r^{\\rm tail}_{\\beta,\\lambda}.}}\n\t\t\\label{eq:cross-terms-vanish}\n\t\\end{align}"
     },
     {
       "theorem_name": "prop_weighted_mixed",
@@ -8314,7 +8349,8 @@
         "paper_definition_stub:Γ_lam"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Weighted mixed-channel estimate]\n\t\\label{prop:weighted-mixed}\n\tLet $L\\in\\{P,P_1,S\\}$ and define\n\t\\[\n\t\\rho_\\ell^{L,Q_1}:=\\mathrm d\\Gamma(Le_\\ell Q_1),\n\t\\qquad \\ell\\in\\mathbb Z^2.\n\t\\]\n\tThen\n\t\\begin{equation}\n\t\t\\sum_{\\ell\\in\\mathbb Z^2}#1{\\widehat v_\\beta}(\\ell)\\,\n\t\t\\lambda^2\\mathrm{Tr}_{\\mathfrak F}\n\t\t\\Bigl((\\rho_\\ell^{L,Q_1})^*\\rho_\\ell^{L,Q_1}\\Gamma_\\lambda\\Bigr)\\leq {#1{C_\\beta (1+|\\log \\lambda|^3)\\lambda^{3/4-\\alpha_1(3-\\beta)}}} .\n\t\t\\label{eq:weighted-mixed-vanishes}\n\t\\end{equation}"
     },
     {
       "theorem_name": "prop_high_high_mixed_vanishes",
@@ -8571,7 +8607,8 @@
         "paper_definition_stub:ha1"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Vanishing of the high--high mixed pair]\n\t\\label{prop:high-high-mixed-vanishes}\n\tIt holds that\n\t\\[\n\t|\\mathcal T_{\\rm hh}|\\leq {C_\\beta(1+|\\log \\lambda|^3)\\lambda^{3/4-\\alpha_1(3-\\beta)}}.\n\t\\]"
     },
     {
       "theorem_name": "lem_Thh_two_body",
@@ -8754,7 +8791,8 @@
         "status_alignment_ok",
         "statement_alignment_exact",
         "statement_alignment_not_unrelated"
-      ]
+      ],
+      "source_latex": "[The high--high mixed pair as a two-body off-diagonal block]\n\t\\label{lem:Thh-two-body}\n\tDefine the two-body operator\n\t\\[\n\t\\mathbb T_{\\rm hh}\n\t:=\n\t\\sum_{k\\in\\mathbb Z^2}\\rmk{\\widehat v_\\beta}(k)\n\t\\bigl(Se_kQ_1\\otimes Se_{-k}Q_1\\bigr)\n\t\\]\n\ton $H^{\\otimes 2}$. Then\n\t\\[\n\t\\mathbb T_{\\rm hh}=(S\\otimes S)\\mathbb T_{\\rm hh}(Q_1\\otimes Q_1),\n\t\\qquad\n\t\\mathbb T_{\\rm hh}^*=(Q_1\\otimes Q_1)\\mathbb T_{\\rm hh}^*(S\\otimes S).\n\t\\]\n\tMoreover,\n\t\\begin{equation}\n\t\t\\mathcal T_{\\rm hh}\n\t\t=\n\t\t\\frac{\\lambda^2}{2}\\mathrm{Tr}_{H^{\\otimes 2}}\n\t\t\\Bigl((\\mathbb T_{\\rm hh}+\\mathbb T_{\\rm hh}^*)\\Gamma_\\lambda^{(2)}\\Bigr).\n\t\t\\label{eq:Thh-two-body}\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_block_cs",
@@ -9030,7 +9068,8 @@
         "no_paper_axiom_debt"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Block Cauchy--Schwarz for positive trace-class operators]\n\t\\label{lem:block-cs}\n\tLet $\\Gamma\\ge 0$ be trace-class on a Hilbert space $\\mathfrak H$, let $\\Pi_1,\\Pi_2$ be orthogonal projections, and let $T=\\Pi_1T\\Pi_2$ be bounded. Then\n\t\\[\n\t\\big|\\mathrm{Tr}_{\\mathfrak H}(T\\Gamma)\\big|\n\t\\le \\|T\\|_{\\mathrm{op}}\n\t\\Big(\\mathrm{Tr}_{\\mathfrak H}(\\Pi_1\\Gamma)\\Big)^{1/2}\n\t\\Big(\\mathrm{Tr}_{\\mathfrak H}(\\Pi_2\\Gamma)\\Big)^{1/2}.\n\t\\]"
     },
     {
       "theorem_name": "thm_quant_deF",
@@ -9228,7 +9267,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "[Quantitative quantum de Finetti]\\label{thm:quant deF}\n\t\tFor all $k\\in\\mathbb N$, we have\n\t\t\\begin{equation}\\label{Peq:Chiribella}\n\t\t\t\\int_{P\\mathfrak{H}}|u^{\\otimes k}\\rangle\\langle u^{\\otimes k}|\\,\\,\\mathrm d^\\lambda_{P,\\Gamma}(u)\n\t\t\t=\n\t\t\tk!\\lambda^k\\Gamma_P^{(k)}\n\t\t\t+\n\t\t\tk!\\lambda^k\\sum_{\\ell=0}^{k-1}\\binom{k}{\\ell}\\,\n\t\t\t\\Gamma_P^{(\\ell)}\\otimes_s \\mathbf 1_{(P\\mathfrak{H})^{\\otimes_s (k-\\ell)}}.\n\t\t\\end{equation}\n\t\tThus, with $d=\\mathrm{Tr}[P]$,\n\t\t\\begin{equation}\\label{eq:quantitative}\n\t\t\t\\mathrm{Tr}\\left| k!\\lambda^k\\Gamma_P^{(k)}-\\int_{P\\mathfrak{H}}|u^{\\otimes k}\\rangle\\langle u^{\\otimes k}|\\,\\,\\mathrm d^\\lambda_{P,\\Gamma}(u) \\right|\n\t\t\t\\le \\lambda^k \\sum_{\\ell=0}^{k-1}\\binom{k}{\\ell}^2 \\frac{(k-\\ell+d-1)!}{(d-1)!}\\mathrm{Tr}\\left[ \\mathcal N^{\\ell}\\Gamma_P\\right].\n\t\t\\end{equation}"
     },
     {
       "theorem_name": "lem_nonzero_explicit_corrected",
@@ -9526,7 +9566,8 @@
         "paper_definition_stub:k_P"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Explicit $k\\neq0$ de Finetti expansion against $V_{\\neq0,P}$]\n\t\\label{lem:nonzero-explicit-corrected}\n\tLet $\\mu^{\\lambda}_{P,\\Gamma}$ be the lower symbol on $PH$ at scale $\\lambda$. Then\n\t\\begin{equation}\n\t\t\\Big|\\lambda^2\\,\\mathrm{Tr}_{\\mathfrak F(PH)}\\bigl(\\mathbb W(V_{\\neq 0,P})\\Gamma_P\\bigr)\n\t\t-\n\t\t\\frac1{2}\\sum_{k\\neq 0}#1{\\widehat v_\\beta}(k)\n\t\t\\int_{PH}|\\langle u,e_{k,P}u\\rangle|^2\\,\\,\\mathrm d^{\\lambda}_{P,\\Gamma}(u)\\Big|\\le {#1{C_\\beta\\lambda^2\\Lambda^{4-\\beta}(1+\\log\\Lambda)}}\n\t\t.\n\t\t\\label{eq:213}\n\t\\end{equation}"
     },
     {
       "theorem_name": "prop_localized_interaction_vs_DP",
@@ -9705,7 +9746,8 @@
         "status_alignment_ok",
         "statement_alignment_exact",
         "statement_alignment_not_unrelated"
-      ]
+      ],
+      "source_latex": "[Finite-dimensional interaction comparison]\n\t\\label{prop:localized-interaction-vs-DP}\n\tFor every state $\\Gamma$ on $\\mathfrak F(H)$,\n\t\\begin{equation}\\label{eq:localized-interaction-vs-DP}\n\t\t\\mathrm{Tr}_{\\mathfrak F(PH)}\\!\\big[W_P^{\\mathrm{re}}\\Gamma_P\\big]\n\t\t=\n\t\t\\int_{PH} D_P(u)\\,\\,\\mathrm d^\\lambda_{P,\\Gamma}(u)\n\t\t+\n\t\t\\mathcal E_{P,\\lambda}(\\Gamma),\n\t\\end{equation}\n\twhere\n\t\\begin{align}\n\t\t|\\mathcal E_{P,\\lambda}(\\Gamma)|\n\t\t&\\le\n\t\t{#1{C_\\beta\\lambda^2 \\Lambda^{4-\\beta}(1+\\log\\Lambda)}}\n\t\t+\n\t\tC\\lambda \\Lambda^2\n\t\t\\left(\n\t\t\\log\\Lambda+\\int_{PH}\\|u\\|^2\\,\\,\\mathrm d^\\lambda_{P,\\Gamma}(u)\n\t\t\\right).\n\t\t\\label{eq:localized-interaction-vs-DP-error}\n\t\\end{align}"
     },
     {
       "theorem_name": "lem_pointwise_comparison",
@@ -9911,7 +9953,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:h1",
         "paper_definition_stub:h2"
-      ]
+      ],
+      "source_latex": "[Pointwise comparison of the free lower symbol and the Gaussian free field]\n\t\\label{lem:pointwise-comparison}\n\tLet $\\mu^\\lambda_{P,0}$ denote the lower symbol of the free localized Gibbs state $(\\Gamma_0)_P$,\n\tand let $\\mu_{0,P}$ denote the Gaussian measure on $PH$ with covariance $h^{-1}P$. If\n\t$\\lambda \\Lambda^2\\le 1$, then\n\t\\begin{equation}\\label{eq:mu-pointwise-two-sided}\n\t\te^{-C\\lambda \\Lambda^4(1+\\|u\\|^2)}\\,\\,\\mathrm d_{0,P}(u)\n\t\t\\le\n\t\t\\,\\mathrm d^\\lambda_{P,0}(u)\n\t\t\\le\n\t\te^{C\\lambda \\Lambda^4(1+\\|u\\|^2)}\\,\\,\\mathrm d_{0,P}(u).\n\t\\end{equation}\n\tConsequently, for every probability measure $\\nu$ on $PH$,\n\t\\begin{equation}\\label{eq:entropy-comparison}\n\t\t\\mathcal{H}_{\\mathrm{cl}}(\\nu,\\mu^\\lambda_{P,0})\n\t\t\\ge\n\t\t\\mathcal{H}_{\\mathrm{cl}}(\\nu,\\mu_{0,P})\n\t\t-\n\t\tC\\lambda \\Lambda^4\n\t\t\\int_{PH}(1+\\|u\\|^2)\\,\\,\\mathrm d(u).\n\t\\end{equation}"
     },
     {
       "theorem_name": "cor_husimi_second_moment",
@@ -10095,7 +10138,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:C"
-      ]
+      ],
+      "source_latex": "[Second moment of the Husimi field]\n\t\\label{cor:husimi-second-moment}\n\tLet\n\t\\(\n\t\\mu^\\lambda_{P,\\lambda}:=\\mu^\\lambda_{P,\\Gamma_\\lambda}\n\t\\)\n\tbe the lower symbol of the localized interacting Gibbs state. Then\n\t\\begin{equation}\\label{eq:husimi-second-moment-log}\n\t\t\\int_{PH}\\|u\\|^2\\,\\,\\mathrm d^\\lambda_{P,\\lambda}(u)\n\t\t\\le C(1+|\\log\\lambda|).\n\t\\end{equation}"
     },
     {
       "theorem_name": "prop_free_energy_lower_modulo_HF",
@@ -10302,7 +10346,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:h1",
         "paper_definition_stub:h2"
-      ]
+      ],
+      "source_latex": "[Free-energy lower bound modulo high-frequency remainders]\n\t\\label{prop:free-energy-lower-modulo-HF}\n\tLet $\\Gamma_\\lambda$ be the interacting Gibbs state. Then\n\t\\begin{align}\n\t\t-\\log \\frac{Z_\\lambda^{\\mathrm{re}}}{Z_0}\n\t\\ge\n\t\t\\mathcal{H}_{\\mathrm{cl}}(\\mu^\\lambda_{P,\\lambda},\\mu_{0,P})\n\t\t+\n\t\t\\int_{PH} D_P(u)\\,\\,\\mathrm d^\\lambda_{P,\\lambda}(u)\n\t\t+\n\t\tHF_{\\neq0}(\\Gamma_\\lambda)\n\t\t+\n\t\tHF_0(\\Gamma_\\lambda)\n\t\t-\n\t\tR_{\\lambda,\\Lambda},\n\t\t\\label{eq:free-energy-lower-modulo-HF}\n\t\\end{align}\n\twhere $\\mu^\\lambda_{P,\\lambda}:=\\mu^\\lambda_{P,\\Gamma_\\lambda}$ and\n\t\\begin{align}\n\t\tR_{\\lambda,\\Lambda}\n\t\t&\\le\n\tC\\lambda \\Lambda^4|\\log\\lambda|.\n\t\t\\label{eq:R-lambda-Lambda}\n\t\\end{align}\n%\n%\tHence\n%\t\\begin{equation}\\label{eq:free-energy-lower-classical}\n%\t\t-\\log \\frac{Z_\\lambda^{\\mathrm{re}}}{Z_0}\n%\t\t\\ge\n%\t\t-\\log \\int_{PH} e^{-D_P(u)}\\,\\,\\mathrm d\\mu_{0,P}(u)\n%\t\t+\n%\t\tHF_{\\neq0}(\\Gamma_\\lambda)\n%\t\t+\n%\t\tHF_0(\\Gamma_\\lambda)\n%\t\t-\n%\t\to(1).\n%\t\\end{equation}"
     },
     {
       "theorem_name": "thm_lower_bound_classical_final",
@@ -10553,7 +10598,8 @@
         "paper_definition_stub:halpha1"
       ],
       "reviewer_type": "llm",
-      "review_policy": "requires_human_for_release"
+      "review_policy": "requires_human_for_release",
+      "source_latex": "[Free-energy lower bound by the classical partition function]\n\t\\label{thm:lower-bound-classical-final}\n{#1{Fix $\\frac32<\\beta\\le2$, choose $\\eta\\in(2-\\beta,\\beta-1)$, then choose $\\alpha\\in(0,1/4)$ sufficiently small and $\\alpha_1>\\frac12$ sufficiently close to $\\frac12$ so that $\\mathfrak r^{\\rm tail}_{\\beta,\\lambda}\\to0$. Under this choice one has}}\n\t\\begin{equation}\\label{eq:lower-bound-classical-final}\n\t\t-\\log \\frac{Z_\\lambda^{\\mathrm{re}}}{Z_0}\n\t\t\\ge\n\t\t-\\log \\int_{PH} e^{-D_P(u)}\\,\\,\\mathrm d_{0,P}(u)\n\t\t-{#1{C_\\beta\\Big(\\mathfrak r^{\\rm tail}_{\\beta,\\lambda}+(\\lambda^{\\frac\\alpha4}+\\lambda^{\\frac{\\alpha(\\eta-2+\\beta)}{2}})(1+|\\log\\lambda|^3)\\Big).}}\n\t\\end{equation}"
     },
     {
       "theorem_name": "prop_free_energy_upper_final",
@@ -10792,7 +10838,8 @@
         "paper_definition_stub:Γ_lam"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Free-energy upper bound via the trial state $\\widetilde\\Gamma_\\lambda$]\n\t\\label{prop:free-energy-upper-final}\t{\\color{red}Fix $\\frac32<\\beta\\le2$.} It holds that\n\t\\begin{equation}\\label{eq:upper-bound-classical-final}\n\t\t-\\log\\frac{Z^{\\rm re}_\\lambda}{Z_0}\n\t\t\\le\n\t\t-\\log \\int_{PH} e^{-D_P(u)}\\,\\,\\mathrm d_{0,P}(u)+{\\color{red}C_\\beta(1+|\\log\\lambda|)^2(\\lambda^{\\alpha\\beta}+\\lambda^{1-4\\alpha})}\n\t\t.\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_class",
@@ -10999,7 +11046,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:h1",
         "paper_definition_stub:h2"
-      ]
+      ],
+      "source_latex": "\\label{lem:class}It holds that\n\t\\begin{equation}\n\t\t\\label{eq:HS-DP-to-D-L1}\n\t\tD_P(P\\cdot)\\longrightarrow D\n\t\t\\qquad\\text{in }L^1(\\mu_0).\n\t\\end{equation}\n\tand the following hold for every fixed $k\\ge1$.\n\tOne has\n\t\\begin{equation}\n\t\t\\label{eq:HS-DP-D-positive}\n\t\tD_P(u)\\ge0\\quad\\text{for all }u\\in PH,\n\t\t\\qquad\n\t\tD(u)\\ge0\\quad\\text{for }\\mu_0\\text{-a.e. }u.\n\t\\end{equation}\n\tConsequently,\n\t\\begin{equation}\n\t\t\\label{eq:HS-gP-to-g-L1}\n\t\tg_P:=z_P^{-1}e^{-D_P(P\\cdot)}\n\t\t\\longrightarrow\n\t\tg:=z_{\\rm cl}^{-1}e^{-D}\n\t\t\\qquad\\text{in }L^1(\\mu_0),\n\t\\end{equation}\n\tand\n\t\\begin{equation}\n\t\t\\label{eq:HS-nu-dominated-by-mu0}\n\t\t\\,\\mathrm d(u)=g(u)\\,\\,\\mathrm d_0(u)\\le z_{\\rm cl}^{-1}\\,\\,\\mathrm d_0(u).\n\t\\end{equation}"
     },
     {
       "theorem_name": "thm_free_energy_convergence_final",
@@ -11280,7 +11328,8 @@
         "paper_definition_stub:hZ0",
         "paper_definition_stub:hmu0",
         "paper_definition_stub:mu0"
-      ]
+      ],
+      "source_latex": "[Convergence of the relative free energy]\n\t\\label{thm:free-energy-convergence-final}\n\tIt holds that\n\t\\begin{equation}\\label{eq:free-energy-convergence-final}\n\t\t-\\log \\frac{Z_\\lambda^{\\mathrm{re}}}{Z_0}\n\t\t\\longrightarrow\n\t\t-\\log z_{\\mathrm{cl}}\n\t\t\\qquad (\\lambda\\downarrow0),\n\t\\end{equation}\n\twhere\n\t\\[\n\tz_{\\mathrm{cl}}:=\\int e^{-D(u)}\\,\\,\\mathrm d\\mu_0(u)\n\t\\]\n\t{\\color{red}is the partition function of the limiting fractional-Bessel Gibbs measure.}"
     },
     {
       "theorem_name": "prop_weighted_lower_symbol",
@@ -11534,7 +11583,8 @@
         "step_verdict_verified"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Weighted convergence of the lower symbol]\n\t\\label{prop:weighted-lower-symbol}\nFor the parameter as in Section \\ref{sec:free-energy-density}\tit holds that\n\t\\begin{equation}\n\t\t\\label{eq:l1-verified-weighted}\n\t\t\\|\\mu^\\lambda_{P,\\lambda}-\\nu_P\\|_{L^1(PH)}^2 \\le\n\t\t{\\color{red}C_\\beta\\Bigl((1+|\\log\\lambda|)^3(\\lambda^{\\frac\\alpha4}+\\lambda^{\\frac{\\alpha(\\eta-2+\\beta)}{2}})+\\mathfrak r^{\\rm tail}_{\\beta,\\lambda}\\Bigr).}\n\t\\end{equation}\n\tConsequently, for every $\\phi\\in L^2(\\mathbb T^2)$ with finitely supported Fourier transform and every\n\t$n\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:weighted-l1-lower-symbol}\n\t\t\\int_{PH} |\\langle \\phi,u\\rangle|^{2n}\n\t\t\\,|\\,\\mathrm d^\\lambda_{P,\\lambda}-\\,\\mathrm d_P|(u)\n\t\t\\le\n\t\t{\\color{red}C_{\\phi,n}\\,(1+|\\log\\lambda|)^n\\Bigl((1+|\\log\\lambda|)^3(\\lambda^{\\frac\\alpha4}+\\lambda^{\\frac{\\alpha(\\eta-2+\\beta)}{2}})+\\mathfrak r^{\\rm tail}_{\\beta,\\lambda}\\Bigr)^{1/4}.}\n\t\\end{equation}\n\tIn particular, the left side of \\eqref{eq:weighted-l1-lower-symbol} tends to $0$."
     },
     {
       "theorem_name": "thm_density_matrix_convergence_final",
@@ -11780,7 +11830,8 @@
         "paper_definition_stub:mu_0"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Scalar moment convergence against finite Fourier test functions]\n\t\\label{thm:density-matrix-convergence-final}\n\tLet\n\t\\[\n\t\\,\\mathrm d\\nu(u):=z_{\\mathrm{cl}}^{-1}e^{-D(u)}\\,\\,\\mathrm d\\mu_0(u)\n\t\\]\n\t{\\color{red}be the limiting fractional-Bessel Gibbs measure.} Then, for every $n\\ge1$ and every\n\t$\\phi\\in L^2(\\mathbb T^2)$ with finite Fourier support,\n\t\\begin{equation}\\label{eq:density-matrix-convergence-final}\n\t\tn!\\lambda^n\n\t\t\\big\\langle \\phi^{\\otimes n},\\Gamma_\\lambda^{(n)}\\phi^{\\otimes n}\\big\\rangle\n\t\t\\longrightarrow\n\t\t\\int |\\langle \\phi,u\\rangle|^{2n}\\,\\,\\mathrm d(u)\n\t\t\\qquad (\\lambda\\downarrow0).\n\t\\end{equation}"
     },
     {
       "theorem_name": "thm_HS_convergence_main",
@@ -12054,7 +12105,8 @@
         "paper_definition_stub:Γ_lam"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "\\label{thm:HS-convergence-main} Let\n\t\\[\n\t\\,\\mathrm d\\nu(u)=z_{\\rm cl}^{-1}e^{-D(u)}\\,\\,\\mathrm d\\mu_0(u)\n\t\\]\n\t{\\color{red}be the limiting fractional-Bessel Gibbs measure.}\n\t% and let\n\t%\t\\[\n\t%\t\\gamma_\\nu^{(k)}\\in\\mathfrak S^2(\\mathfrak{H}^{\\otimes_s k})\n\t%\t\\]\n\t%\tdenote its $k$-point correlation operator, defined in Proposition~\\ref{prop:HS-classical-cutoff-limit}.\n\tIt holds that \tfor every fixed $k\\ge1$\n\t\\begin{equation}\n\t\t\\label{eq:HS-convergence-main}\n\t\tk!\\lambda^k\\Gamma_\\lambda^{(k)}\n\t\t\\longrightarrow\n\t\t\\int |u^{\\otimes k}\\rangle\\langle u^{\\otimes k}|\\,\\,\\mathrm d(u)\n\t\t\\qquad\\text{in }\\mathfrak S^2(\\mathfrak{H}^{\\otimes_s k})\n\t\t\\qquad (\\lambda\\downarrow0).\n\t\\end{equation}"
     },
     {
       "theorem_name": "prop_HS_classical_cutoff_limit",
@@ -12250,7 +12302,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "\\label{prop:HS-classical-cutoff-limit}\n\tFor every fixed $k \\ge 1$, the following hold.\n\t\n\t\\begin{enumerate}\n\t\t\\item The $k$-point correlation operator\n\t\t\\begin{equation}\n\t\t\t\\gamma^{(k)}_\\nu := \\int |u^{\\otimes k}\\rangle \\langle u^{\\otimes k}|\\, d\\nu(u)\n\t\t\\end{equation}\n\t\textends uniquely to a positive operator in $\\mathfrak S^2(H^{\\otimes_s k})$ and satisfies\n\t\t\\begin{equation}\n\t\t\t0 \\le \\gamma^{(k)}_\\nu \\le z_{\\mathrm{cl}}^{-1}\\gamma^{(k)}_{\\mu_0}\n\t\t\t= z_{\\mathrm{cl}}^{-1} k! (h^{-1})^{\\otimes_s k}.\n\t\t\\end{equation}\n\t\tSimilarly,\n\t\t\\begin{equation}\n\t\t\t0 \\le \\gamma^{(k)}_{\\nu_P} \\le c_0^{-1} k! (h^{-1})^{\\otimes_s k},\n\t\t\t\\qquad c_0 := \\inf_{\\lambda \\ll 1} z_P > 0.\n\t\t\\end{equation}\n\t\t\n\t\t\\item The classical cutoffs converge in Hilbert--Schmidt norm:\n\t\t\\begin{equation}\n\t\t\t\\|\\gamma^{(k)}_{\\nu_P} - \\gamma^{(k)}_\\nu\\|_{\\mathfrak S^2(H^{\\otimes_s k})} \\longrightarrow 0\n\t\t\t\\qquad (\\lambda \\downarrow 0).\n\t\t\\end{equation}\n\t\\end{enumerate}"
     },
     {
       "theorem_name": "lem_HS_states_to_rdm_trace",
@@ -12470,7 +12523,8 @@
         "paper_definition_stub:Γ'"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[A trace-class estimate for reduced density matrices]\n\t\\label{lem:HS-states-to-rdm-trace}\n\tLet $q,q'>1$ be conjugate exponents, and let $\\Gamma,\\Gamma'$ be two states on bosonic Fock space commuting with the number operator. Then for every $k\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:HS-states-to-rdm-trace}\n\t\t\\|\\Gamma^{(k)}-\\Gamma'^{(k)}\\|_{\\mathfrak S^1}\n\t\t\\le\n\t\t\\|\\Gamma-\\Gamma'\\|_{\\mathfrak S^1}^{1/q'}\n\t\t\\Bigl(\\mathrm{Tr}[\\mathcal N^{qk}(\\Gamma+\\Gamma')]\\Bigr)^{1/q}.\n\t\\end{equation}"
     },
     {
       "theorem_name": "prop_HS_state_to_rdm_scaled",
@@ -12690,7 +12744,8 @@
         "paper_definition_stub:Γ_lambda"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "\\label{prop:HS-state-to-rdm-scaled}\n\tFor every fixed $k\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:HS-state-to-rdm-scaled-trace}\n\t\t\\|\\lambda^k(\\Gamma_\\lambda^{(k)}-\\widehat\\Gamma_\\lambda^{(k)})\\|_{\\mathfrak S^1}\n\t\t\\le\n\t\tC_k(1+|\\log\\lambda|)^k\\varepsilon_\\lambda^{1/4}.\n\t\\end{equation}\n\tConsequently,\n\t\\begin{equation}\n\t\t\\label{eq:HS-state-to-rdm-scaled-HS}\n\t\t\\|\\lambda^k(\\Gamma_\\lambda^{(k)}-\\widehat\\Gamma_\\lambda^{(k)})\\|_{\\mathfrak S^2}\n\t\t\\le\n\t\tC_k(1+|\\log\\lambda|)^k\\varepsilon_\\lambda^{1/4}.\n\t\\end{equation}\n\tIn particular, since\n\t\\begin{equation}\n\t\t\\label{eq:HS-r-k-def}\n\t\tr_{\\lambda,k}:=(1+|\\log\\lambda|)^k\\varepsilon_\\lambda^{1/4}\\to0.\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_HS_tensor_product_rdm_expansion",
@@ -12872,7 +12927,8 @@
         "status_alignment_ok",
         "statement_alignment_exact",
         "statement_alignment_not_unrelated"
-      ]
+      ],
+      "source_latex": "\\label{lem:HS-tensor-product-rdm-expansion}\n\tLet $\\Gamma_P$ be a state on $\\mathfrak{F}(PH)$ and $\\Gamma_Q$ a state on $\\mathfrak{F}(QH)$. Define\n\t\\[\n\t\\Gamma:=U^*(\\Gamma_P\\otimes\\Gamma_Q)U.\n\t\\]\n\tThen for every $k\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:HS-tensor-product-rdm-expansion}\n\t\t\\Gamma^{(k)}\n\t\t=\n\t\t\\sum_{\\ell=0}^k\n\t\t\\binom{k}{\\ell}\n\t\t\\Gamma_P^{(\\ell)}\\otimes_s \\Gamma_Q^{(k-\\ell)}.\n\t\\end{equation}"
     },
     {
       "theorem_name": "prop_HS_deFinetti_remainder_vanish",
@@ -13068,7 +13124,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "\\label{prop:HS-deFinetti-remainder-vanish}\n\tFor every fixed $k\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:HS-deFinetti-remainder-trace}\n\t\t\\|k!\\lambda^k\\Gamma_{\\lambda,P}^{(k)}-M_{\\lambda,P}^{(k)}\\|_{\\mathfrak S^1}\n\t\t\\le\n\t\tC_k\\sum_{\\ell=0}^{k-1}(\\lambda K)^{k-\\ell}(1+|\\log\\lambda|)^\\ell.\n\t\\end{equation}\n\tHence also\n\t\\begin{equation}\n\t\t\\label{eq:HS-deFinetti-remainder-HS}\n\t\t\\|k!\\lambda^k\\Gamma_{\\lambda,P}^{(k)}-M_{\\lambda,P}^{(k)}\\|_{\\mathfrak S^2}\n\t\t\\le\n\t\tC_k\\sum_{\\ell=0}^{k-1}(\\lambda K)^{k-\\ell}(1+|\\log\\lambda|)^\\ell.\n\t\\end{equation}\n\tIn particular, the right-hand side tends to $0$."
     },
     {
       "theorem_name": "lem_HS_full_norm_moment_mu",
@@ -13296,7 +13353,8 @@
         "paper_definition_stub:hC_m"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "\\label{lem:HS-full-norm-moment-mu}\n\tFor every fixed integer $m\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:HS-full-norm-moment-mu}\n\t\t\\int_{PH}\\|u\\|^{2m}\\,\\,\\mathrm d^\\lambda_{P,\\lambda}(u)\n\t\t\\le\n\t\tC_m(1+|\\log\\lambda|)^m.\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_HS_full_norm_moment_nuP",
@@ -13578,7 +13636,8 @@
       ],
       "discharged_axiom_debt": [
         "paper_definition_stub:hK_pos"
-      ]
+      ],
+      "source_latex": "\\label{lem:HS-full-norm-moment-nuP}\n\tFor every fixed integer $m\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:HS-full-norm-moment-nuP}\n\t\t\\int_{PH}\\|u\\|^{2m}\\,\\,\\mathrm d_P(u)\n\t\t\\le\n\t\tC_m(1+|\\log\\lambda|)^m.\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_HS_L1_to_moment_operator",
@@ -13817,7 +13876,8 @@
         "dependency_trust_complete"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "\\label{lem:HS-L1-to-moment-operator}\n\tLet $\\mu$ and $\\eta$ be two probability measures on a finite-dimensional complex Hilbert space $E$. For every $k\\ge1$, define\n\t\\[\n\tM_\\mu^{(k)}:=\\int_E |u^{\\otimes k}\\rangle\\langle u^{\\otimes k}|\\,\\,\\mathrm d\\mu(u),\n\t\\qquad\n\tM_\\eta^{(k)}:=\\int_E |u^{\\otimes k}\\rangle\\langle u^{\\otimes k}|\\,\\,\\mathrm d\\eta(u).\n\t\\]\n\tThen\n\t\\begin{equation}\n\t\t\\label{eq:HS-L1-to-moment-operator}\n\t\t\\|M_\\mu^{(k)}-M_\\eta^{(k)}\\|_{\\mathfrak S^2}\n\t\t\\le\n\t\t\\Bigl(\n\t\t\\int_E\\|u\\|^{4k}\\,\\,\\mathrm d(u)+\\int_E\\|u\\|^{4k}\\,\\,\\mathrm d(u)\n\t\t\\Bigr)^{1/2}\n\t\t\\|\\mu-\\eta\\|_{L^1(E)}^{1/2}.\n\t\\end{equation}"
     },
     {
       "theorem_name": "prop_HS_low_frequency_to_fd_classical",
@@ -14003,7 +14063,8 @@
         "status_alignment_ok",
         "statement_alignment_exact",
         "statement_alignment_not_unrelated"
-      ]
+      ],
+      "source_latex": "\\label{prop:HS-low-frequency-to-fd-classical}\n\tFor every fixed $k\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:HS-M-lambdaP-to-gamma-nuP}\n\t\t\\|M_{\\lambda,P}^{(k)}-\\gamma_{\\nu_P}^{(k)}\\|_{\\mathfrak S^2}\n\t\t\\le C_k r_{\\lambda,k}.\n\t\\end{equation}\n\tConsequently,\n\t\\begin{equation}\n\t\t\\label{eq:HS-low-frequency-to-fd-classical-main}\n\t\t\\|k!\\lambda^k\\Gamma_{\\lambda,P}^{(k)}-\\gamma_{\\nu_P}^{(k)}\\|_{\\mathfrak S^2}\n\t\t\\le C_k\\Bigl(r_{\\lambda,k}+\\sum_{\\ell=0}^{k-1}(\\lambda K)^{k-\\ell}(1+|\\log\\lambda|)^\\ell\\Bigr).\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_periodic_yukawa_positive",
@@ -14155,7 +14216,8 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "7131faa638019f7b",
-      "source_span_id": ""
+      "source_span_id": "",
+      "source_latex": "[Positive lower bound away from the diagonal]\n\t\\label{lem:periodic-yukawa-positive}\n\t{#1{Let}}\n\t\\[\n\t{\\rmk{v_\\beta}=(1-\\Delta)^{-\\beta/2}}\n\t\\qquad\\text{on }\\mathbb T^2=[0,2\\pi]^2,\n\t\\qquad {\\frac32<\\beta\\le2.}\n\t\\]\n\tThen $\\rmk{v_\\beta}(x)>0$ for every $x\\in\\mathbb T^2\\setminus\\{0\\}$, and there exists a constant $\\rmk{v_{\\beta,*}}>0$ such that\n\t\\[\n\t\\rmk{v_\\beta}(x)\\ge \\rmk{v_{\\beta,*}}\n\t\\qquad\\text{for all }x\\in\\mathbb T^2\\setminus\\{0\\}.\n\t\\]"
     },
     {
       "theorem_name": "prop_def_Gibbs",
@@ -14351,7 +14413,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "[Existence of the grand-canonical Gibbs state]\\label{prop:def-Gibbs}\n\tFor every fixed $\\lambda>0$, the formal Hamiltonian\n\t\\[\n\t\\mathbb{H}_\\lambda^{\\mathrm{re}}\n\t=\n\t\\lambda \\mathrm d\\Gamma(h)+W^{\\mathrm{re}}\n\t\\]\ndefined in \\eqref{eq:Hre}\tadmits a natural realization as a self-adjoint operator on bosonic Fock space,\n\twhich is bounded from below. Moreover,\n\t\\[\n\tZ_\\lambda^{\\mathrm{re}}\n\t:=\n\t\\mathrm{Tr}_{\\mathfrak F}\\big(e^{-\\mathbb{H}_\\lambda^{\\mathrm{re}}}\\big)<\\infty.\n\t\\]\n\tHence the grand-canonical Gibbs state\n\t\\[\n\t\\Gamma_\\lambda^{\\mathrm{re}}\n\t:=\n\t\\frac{e^{-\\mathbb{H}_\\lambda^{\\mathrm{re}}}}{Z_\\lambda^{\\mathrm{re}}}\n\t\\]\n\tis well defined."
     },
     {
       "theorem_name": "lem_sum",
@@ -14638,7 +14701,8 @@
         "paper_definition_stub:k1"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "\\label{lem:sum}\n\t(i) (\\cite[Lemma 3.10]{ZZ15}) Let $0<l,m<d$ and $l+m-d>0$. Then\n\t\\begin{equation}\\label{eq:sum-general}\n\t\t\\sum_{k_1\\in \\mathbb{Z}^d}\\frac{1}{\\langle k_1\\rangle^{l}\\langle k-k_1\\rangle^{m}}\n\t\t\\lesssim \\frac{1}{\\langle k\\rangle ^{l+m-d}}.\n\t\\end{equation}\n\n\t(ii) In dimension $d=2$,\n\t\\begin{equation}\\label{eq:sum-log}\n\t\t\\sum_{p\\in\\mathbb Z^2}\\frac1{(|p+k|^2+1)(|p|^2+1)}\n\t\t\\lesssim \\frac{\\log(2+|k|)}{1+|k|^2}.\n\t\\end{equation}"
     },
     {
       "theorem_name": "lem_convolution_kernels",
@@ -14847,7 +14911,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:h1",
         "paper_definition_stub:h2"
-      ]
+      ],
+      "source_latex": "[Convolution kernels]\\label{lem:convolution-kernels}\n\tFor \\(s>0\\), define\n\t\\[\n\tS_k(s):=\\sum_{u\\in\\mathbb Z^2} h(u+k)^{-s}h(u)^{-s}.\n\t\\]\n\tFor $L\\ge1$, let\n\t\\[\n\t\\chi_u^{(L)}:=\\mathbf 1_{\\{h(u)\\le L^2\\}},\n\t\\qquad\n\tS_k^{(L)}(s):=\\sum_{u\\in\\mathbb Z^2} \\chi_u^{(L)}\\,h(u+k)^{-s}h(u)^{-s}.\n\t\\]\n\tThen the following hold.\n\t\\begin{align}\n\t\tS_k^{(L)}(s)&\\le C_sL^{2-2s}\\langle k\\rangle^{-2s},\n\t\t&&0<s<1,\\quad L\\ge1,\n\t\t\\label{eq:SkL-bound}\n\t\t\\\\\n\t\tS_k(s)&\\le C_s,\n\t\t&&s>\\frac12.\n\t\t\\label{eq:Sk-bound}\n\t\\end{align}\n\tIn particular,\n\t\\begin{align}\n\t\tS_k^{(P)}(s)&\\le C_s\\Lambda^{2-2s}\\langle k\\rangle^{-2s},\n\t\t&&0<s<1,\n\t\t\\label{eq:SkP-bound}\n\t\t\\\\\n\t\tS_k^{(S)}(s)&\\le C_s\\Lambda_1^{2-2s}\\langle k\\rangle^{-2s},\n\t\t&&0<s<1.\n\t\t\\label{eq:SkS-bound}\n\t\\end{align}"
     },
     {
       "theorem_name": "lem_shifted_Yukawa_sums",
@@ -15064,7 +15129,8 @@
       "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
       "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "[Shifted fractional-Bessel $k$-sums]\\label{lem:shifted-Yukawa-sums}\n\tLet $\\frac32<\\beta\\le2$, $0<s<1$, and $0<s_1\\le s_2<1$. Then\n\t\\begin{align}\n\t\t\\sum_{k\\neq 0} |#1{\\widehat v_\\beta}(k)|^2 \\langle k+\\ell\\rangle^{-2s}\n\t\t&\\le C_{\\beta,s}\\,\\langle \\ell\\rangle^{-2s}, \\label{eq:shifted-v-sum-1}\\\\\n\t\t\\sum_{k\\neq 0} |#1{\\widehat v_\\beta}(k)|^2\n\t\t\\langle k+\\ell\\rangle^{-2s_1}\\langle \\ell-k\\rangle^{-2s_2}\n\t\t&\\le C_{\\beta,s_1,s_2}\\,\\langle \\ell\\rangle^{-2s_1}. \\label{eq:shifted-v-sum-2}\n\t\\end{align}"
     },
     {
       "theorem_name": "cor_husimi_fourth_moment",
@@ -15239,7 +15305,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:C"
-      ]
+      ],
+      "source_latex": "[Fourth moment of the Husimi field]\n%\t\\label{cor:husimi-fourth-moment}\n%\tLet\n%\t\\[\n%\t\\mu^\\lambda_{P,\\lambda}:=\\mu^\\lambda_{P,\\Gamma_\\lambda}\n%\t\\]\n%\tbe the lower symbol of the localized interacting Gibbs state. Then\n%\t\\begin{equation}\\label{eq:husimi-fourth-moment-log}\n%\t\t\\int_{PH}\\|u\\|^4\\,\\,\\mathrm d\\mu^\\lambda_{P,\\lambda}(u)\n%\t\t\\le C(1+|\\log\\lambda|^2).\n%\t\\end{equation}\n%"
     },
     {
       "theorem_name": "ArxivPaper.lem_com1_2",
@@ -15395,7 +15462,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "\\label{lem:com1}\n%\tLet\n%\t\\[\n%\t0<s_1<1,\n%\t\\qquad\n%\t\\frac12<s_2<1,\n%\t\\qquad\n%\t\\theta:=s_1+s_2<1.\n%\t\\]\n%\tThen, as a quadratic form on \\(\\mathfrak F_{\\mathrm{fin}}\\),\n%\t\\[\n%\t\\pm [\\mathcal N_Q,[W^{\\mathrm{re}}_{\\neq0},\\mathcal N_Q]]\n%\t\\le\n%\tC_{s_1,s_2}\\lambda^2\n%\t\\Bigl(\n%\t\\Lambda^{2-\\theta}\n%\t+\n%\t\\Lambda^{1-s_1}\n%\t\\Bigr)\n%\t(\\mathbb{H}_{s_1}+1)(\\mathbb{H}_{s_2}+1).\n%\t\\]\n%\tSince \\(s_2<1\\), one has \\(\\Lambda^{1-s_1}\\le \\Lambda^{2-\\theta}\\). Therefore\n%\t\\[\n%\t\\pm [\\mathcal N_Q,[W^{\\mathrm{re}}_{\\neq0},\\mathcal N_Q]]\n%\t\\le\n%\tC_{s_1,s_2}\\lambda^2\n%\t\\Lambda^{2-\\theta}\n%\t(\\mathbb{H}_{s_1}+1)(\\mathbb{H}_{s_2}+1).\n%\t\\]\n%\tIn particular, below we may choose\n%\t\\[\n%\ts_1=\\varepsilon,\n%\t\\qquad\n%\ts_2=\\frac12+\\varepsilon,\n%\t\\qquad\n%\t\\theta=\\frac12+2\\varepsilon,\n%\t\\]\n%\twith any fixed \\(0<\\varepsilon<\\frac14\\).\n%"
     },
     {
       "theorem_name": "ArxivPaper.remark_22ℓ2",
@@ -15712,7 +15780,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:h1",
         "paper_definition_stub:h2"
-      ]
+      ],
+      "source_latex": "[Truncated convolution bounds at the shell scale]\n%\t\\label{lem:convolution-kernels}\n%\tLet\n%\t\\[\n%\tS_m^{(S)}(s)\n%\t:=\n%\t\\sum_{u\\in\\mathbb Z^2}S_u\\,h(u+m)^{-s}h(u)^{-s},\n%\t\\qquad\n%\tS_m(s)\n%\t:=\n%\t\\sum_{u\\in\\mathbb Z^2}h(u+m)^{-s}h(u)^{-s}.\n%\t\\]\n%\tThen, for every $0<s<1$,\n%\t\\begin{equation}\n%\t\t\\label{eq:shell-truncated-conv-local}\n%\t\tS_m^{(S)}(s)\\le C_s\\,\\Lambda_1^{2-2s}\\langle m\\rangle^{-2s}.\n%\t\\end{equation}\n%\tIf $s>\\frac12$, then\n%\t\\begin{equation}\n%\t\t\\label{eq:shell-full-conv-local}\n%\t\tS_m(s)\\le C_s\n%\t\t\\qquad\\text{uniformly in }m\\in\\mathbb Z^2.\n%\t\\end{equation}\n%"
     },
     {
       "theorem_name": "lem_com1_2",
@@ -15868,7 +15937,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
-      ]
+      ],
+      "source_latex": "\\label{lem:com1}\n%\tLet\n%\t\\[\n%\t0<s_1<1,\n%\t\\qquad\n%\t\\frac12<s_2<1,\n%\t\\qquad\n%\t\\theta:=s_1+s_2<1.\n%\t\\]\n%\tThen, as a quadratic form on \\(\\mathfrak F_{\\mathrm{fin}}\\),\n%\t\\[\n%\t\\pm [\\mathcal N_Q,[W^{\\mathrm{re}}_{\\neq0},\\mathcal N_Q]]\n%\t\\le\n%\tC_{s_1,s_2}\\lambda^2\n%\t\\Bigl(\n%\t\\Lambda^{2-\\theta}\n%\t+\n%\t\\Lambda^{1-s_1}\n%\t\\Bigr)\n%\t(\\mathbb{H}_{s_1}+1)(\\mathbb{H}_{s_2}+1).\n%\t\\]\n%\tSince \\(s_2<1\\), one has \\(\\Lambda^{1-s_1}\\le \\Lambda^{2-\\theta}\\). Therefore\n%\t\\[\n%\t\\pm [\\mathcal N_Q,[W^{\\mathrm{re}}_{\\neq0},\\mathcal N_Q]]\n%\t\\le\n%\tC_{s_1,s_2}\\lambda^2\n%\t\\Lambda^{2-\\theta}\n%\t(\\mathbb{H}_{s_1}+1)(\\mathbb{H}_{s_2}+1).\n%\t\\]\n%\tIn particular, below we may choose\n%\t\\[\n%\ts_1=\\varepsilon,\n%\t\\qquad\n%\ts_2=\\frac12+\\varepsilon,\n%\t\\qquad\n%\t\\theta=\\frac12+2\\varepsilon,\n%\t\\]\n%\twith any fixed \\(0<\\varepsilon<\\frac14\\).\n%"
     },
     {
       "theorem_name": "remark_22ℓ2",
@@ -16185,7 +16255,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:h1",
         "paper_definition_stub:h2"
-      ]
+      ],
+      "source_latex": "[Truncated convolution bounds at the shell scale]\n%\t\\label{lem:convolution-kernels}\n%\tLet\n%\t\\[\n%\tS_m^{(S)}(s)\n%\t:=\n%\t\\sum_{u\\in\\mathbb Z^2}S_u\\,h(u+m)^{-s}h(u)^{-s},\n%\t\\qquad\n%\tS_m(s)\n%\t:=\n%\t\\sum_{u\\in\\mathbb Z^2}h(u+m)^{-s}h(u)^{-s}.\n%\t\\]\n%\tThen, for every $0<s<1$,\n%\t\\begin{equation}\n%\t\t\\label{eq:shell-truncated-conv-local}\n%\t\tS_m^{(S)}(s)\\le C_s\\,\\Lambda_1^{2-2s}\\langle m\\rangle^{-2s}.\n%\t\\end{equation}\n%\tIf $s>\\frac12$, then\n%\t\\begin{equation}\n%\t\t\\label{eq:shell-full-conv-local}\n%\t\tS_m(s)\\le C_s\n%\t\t\\qquad\\text{uniformly in }m\\in\\mathbb Z^2.\n%\t\\end{equation}\n%"
     }
   ]
 }

@@ -148,6 +148,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Retroactively populates `provenance` (paper_id + label) on legacy ledger entries so the `provenance_linked` promotion gate can pass.",
     },
+    "backfill_source_latex.py": {
+        "tier": "dev_tool",
+        "category": "review",
+        "summary": "Retroactively copies `statement` from per-paper extracted_theorems.json into empty `source_latex` ledger fields so `run_statement_repair_worker` can generate honest repair candidates.",
+    },
     "benchmark_bridge_world_model.py": {
         "tier": "research_experiment",
         "category": "bridge",

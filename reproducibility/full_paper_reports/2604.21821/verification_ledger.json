@@ -225,7 +225,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:a"
-      ]
+      ],
+      "source_latex": "[Lion's theorem]\\label{th:lions} Let $V$ and $H$ be  Hilbert spaces satisfying:\n\\begin{equation}\nV \\subset H \\subset V^* \\text{ (the dual of } V)\n\\end{equation}\n\\noindent with the injection from $V$ to $H$ is dense and continuous.\n\\noindent Assuming a bilinear form $a(\\cdot,\\cdot): V \\times V \\to \\mathbb{R}$ satisfies\n\\begin{equation}\n\\begin{cases}\n|a(v,w)| \\leq M \\|v\\|_V \\|w\\|_V \\\\\n|a(v,v)| \\geq c \\|v\\|_V^2 - c_1 \\|v\\|_H^2\n\\end{cases}\n\\label{eq25}\n\\end{equation}\n\\noindent then for $u_0 \\in H$ and $F(t) \\in L^2(0,T;V^*)$, the initial value problem\n\\begin{equation}\n\\begin{cases}\n\\left \\langle #1  \\right \\rangle{u_t,v}_H + a(u(t),v) = \\left \\langle #1  \\right \\rangle{ F(t), v }_{H} \\\\\nu(0) = u_0\n\\end{cases}\n\\end{equation}\n\\noindent admits a unique solution u, satisfying:\n\\begin{equation}\nu \\in L^2(0,T;V) \\cap C(0,T;H), \\quad \\frac{du}{dt} \\in L^2(0,T;H).\n\\end{equation}"
     },
     {
       "theorem_name": "theorem_2",
@@ -392,7 +393,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:theorem_2",
         "paper_definition_stub:z_F"
-      ]
+      ],
+      "source_latex": "The space \\( H^1_{D,f}(0,z_F) \\) is a Hilbert space with respect to the norm\n\\[\n\\|v\\|_{D,f}^1 = \\left( \\int_0^{z_F} f(z) v^2(z) \\, dz + \\int_0^{z_F} D(z) (v'(z))^2 \\, dz \\right)^{\\frac{1}{2}}\n\\]"
     },
     {
       "theorem_name": "theorem_3",
@@ -671,7 +673,8 @@
       },
       "discharged_axiom_debt": [
         "paper_definition_stub:theorem_3"
-      ]
+      ],
+      "source_latex": "The set of test functions is a closed subspace of $H^1_{D,f}$, \n     $$\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq H^1_{D,f}. $$\n     i.e. a Hilbert Space with respect to the $H^1_{D,f}$ norm."
     },
     {
       "theorem_name": "rem",
@@ -817,7 +820,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:z_F"
-      ]
+      ],
+      "source_latex": "\\label{rem}\n    Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F)$ such that $$u(z) = \\int_0^z g(x)dx$$ a.e. on $(0,z_F)$. The converse is also true."
     },
     {
       "theorem_name": "th_WPICa",
@@ -1011,7 +1015,8 @@
         "paper_definition_stub:C",
         "paper_definition_stub:th_WPICa",
         "paper_definition_stub:z_F"
-      ]
+      ],
+      "source_latex": "[Weighted Poincare Inequality]\\label{th:WPICa}\n  Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$. Then,  \n  \\begin{equation}\\label{eq:WPI}\n  \\|u\\|_v = \\left(\\int_0^{z_F} u^2(z)\\;v(z)dz\\right)^{\\frac{1}{2}} \\leq C \\left(\\int_0^{z_F} (u'(z))^2\\;w(z)dz\\right)^{\\frac{1}{2}} = C \\|u'\\|_w\n  \\end{equation}\n  holds for every $u(z) \\in C_a(0,z_F)$ if and only if\n  \\begin{eqnarray} \\label{condition:WPI}\n      B = \\sup_{z\\in(0,z_F)} \\left({ \\int_z^{z_F} v(x)dx}\\right)^{\\frac{1}{2}}\\left( \\int_0^z \\dfrac{1}{w(x)}dx \\right)^{\\frac{1}{2}} < \\infty,\n\\end{eqnarray}\nMoreover, the best constant $C$ in \\eqref{eq:WPI} satisfies $B \\leq C \\leq 2B$"
     },
     {
       "theorem_name": "lem_tc",
@@ -1211,7 +1216,8 @@
         "paper_definition_stub:z_F"
       ],
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "\\label{lem:tc}\n    $\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq C_a(0,z_F) $"
     },
     {
       "theorem_name": "cor_wpi",
@@ -1378,7 +1384,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:C",
         "paper_definition_stub:z_F"
-      ]
+      ],
+      "source_latex": "[Weighted Poincare Inequality over $\\mathcal{T}$]\\label{cor:wpi}\n  Let $u \\in \\mathcal{T} \\subset C_a(0,z_F)$. Then, \n  if \n  \\begin{eqnarray}  \\label{cond:WI}\nB_0=\\displaystyle\\sup_{z\\in(0,z_F)} \\left((z_F-z)\\int_0^z \\dfrac{1}{D(x)}dx \\right)^{\\frac{1}{2}} <\\infty,    \n  \\end{eqnarray}  the below inequalities hold\n  \\begin{eqnarray}\n  &&\\left \\| #1 \\right \\|_{2}{u}^2 = \\int_0^{z_F} u^2(z)dz \\leq C_p^2 \\int_0^{z_F} (u'(z))^2\\;D(z)dz = C_p^2 \\|u'\\|_D^2 \\label{eq:wp11}\\\\\n  &&\\left \\| #1 \\right \\|_f{u}^2 \\leq \\|f\\|_{\\infty} \\left \\| #1 \\right \\|_{2}{u}^2 \\leq  \\|f\\|_{\\infty} C_p^2 \\|u'\\|_D^2\\label{eq:wp12}\n  \\end{eqnarray}\nfor $C_p<2B_0$."
     },
     {
       "theorem_name": "eq_zf",
@@ -1545,7 +1552,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:C",
         "paper_definition_stub:z_F"
-      ]
+      ],
+      "source_latex": "Assume that the condition \\eqref{cond:WI} is satisfied. \nThen the  following inequality \n\\begin{eqnarray}\n   \\sqrt{f(z)} |v(z)| \\leq  C_0 \\|v\\|_{D, f}, \\qquad z\\in [0, z_F],\\label{eq:zf}\n\\end{eqnarray}\nholds for all $ v \\in \\mathcal T$, where $C_0$ is  some positive constant that only depends on $f, \\,D$ and $z_F$."
     },
     {
       "theorem_name": "th_4g",
@@ -1723,7 +1731,8 @@
         "paper_definition_stub:C",
         "paper_definition_stub:th_4g",
         "paper_definition_stub:z_F"
-      ]
+      ],
+      "source_latex": "\\label{th:4g} Under assumptions  \\eqref{A10}, \\eqref{A20}, \\eqref{A2pp0}, \\eqref{eq:rhoatm}, \n  \\eqref{A2p2}, and \\eqref{cond:WI}, then the bilinear form $$ \\mathcal{A}(v,w)=\\langle D v_z, w_z \\rangle -\\langle  (\\mathcal{M} D+f\\mathcal{F})v, w_z \\rangle + \\mathcal{G} \\langle v,w \\rangle + \\mathcal{F} f(z_F) v(z_F,t) w(z_F)$$ \nsatisfies:\n\\begin{enumerate}\n    \\item $|\\mathcal{A}(v,w)|\\leq C\\left \\| v \\right \\|_{D,f}.\\left \\| w \\right \\|_{D,f}$,\\; $\\forall v\\in H^1_{D,f}$\n    \\item $\\mathcal{A}(v,v)\\geq C_1\\left \\| v \\right \\|_{D,f}^2-C_2\\left \\| v \\right \\|_f^2 $,\\; $\\forall v\\in \\mathcal{T}$\n    \\item {$\\displaystyle \\left(\\int_0^T | \\left \\langle \\rho^ {\\text{atm}}(t))',v  \\right \\rangle_{2}+\\mathcal{A}(\\rho^ {\\text{atm}}(t),v)|^2 dt\\right)^{\\frac{1}{2}} \\leq C_3 \n    \\left \\| v \\right \\|_{D,f}$, \\; $\\forall v\\in H^1_{D,f}$.}\n\\end{enumerate}\nfor $0<C,\\,C_1,\\,C_2,\\,C_3<\\infty$."
     },
     {
       "theorem_name": "lemm_M",
@@ -1872,7 +1881,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:lemm_M"
-      ]
+      ],
+      "source_latex": "\\label{lemm:M}\nThe triadiagonal mass matrix $M$ is a symmetric positive definite\nmatrix."
     },
     {
       "theorem_name": "lemm_Mf",
@@ -2040,7 +2050,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:h_f_z_0_1",
         "paper_definition_stub:lemm_Mf"
-      ]
+      ],
+      "source_latex": "\\label{lemm:Mf}Given that $f(z) \\geq 0$, then the tridiagonal weighted mass matrix $M_f$ is symmetric positive definite. Moreover, \nthe approximated matrix $M_f$ is positive definite."
     },
     {
       "theorem_name": "lemma_2_8",
@@ -2230,7 +2241,8 @@
         "paper_definition_stub:h_f_z_is_positive_3",
         "paper_definition_stub:h_f_z_is_strictly_decreasing_2",
         "paper_definition_stub:lemma_2_8"
-      ]
+      ],
+      "source_latex": "\\label{lemma:2.8}\nAssuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the\ntridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite."
     },
     {
       "theorem_name": "lemm_SD",
@@ -2397,7 +2409,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:lemm_SD"
-      ]
+      ],
+      "source_latex": "\\label{lemm:SD}\nGiven that $D(z) \\geq 0$, then the tridiagonal diffusion matrix $S(D)$ is symmetric. Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}."
     },
     {
       "theorem_name": "lemma_14",
@@ -2561,7 +2574,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:lemma_14"
-      ]
+      ],
+      "source_latex": "Assuming $D(z)$ is a strictly decreasing positive function, then the\ntridiagonal matrix $A(D)$ is positive definite."
     },
     {
       "theorem_name": "rem_fh",
@@ -2782,7 +2796,8 @@
       "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
       "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
       "reviewer_type": "hybrid",
-      "review_policy": "release_eligible"
+      "review_policy": "release_eligible",
+      "source_latex": "\\label{rem:fh}\n    For a fixed small $h>0$ , let $$ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z),$$ then\n    \\begin{itemize}\n    \\item $ \\underline{f}_{h} > 0$ since $[0,1-h]\\subset [0,1)$ and $f(z)>0$ over $[0,1)$ by \\eqref{A10}.\n        \\item $ \\underline{f}_{h} \\geq f_{min} >0$,\\;\\; if $f(z_F)>0$\n\\end{itemize}"
     },
     {
       "theorem_name": "lemma_m",
@@ -2969,7 +2984,8 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:C",
         "paper_definition_stub:z_F"
-      ]
+      ],
+      "source_latex": "\\label{lemma:m}\nAssume that $f(z)\\geq 0$ satisfies \\eqref{A10} and that $\\Delta t  < \\dfrac{h}{6\\mathcal{F}}\\dfrac{z_F}{T_e}$, then  $$y^tM_fy - \\dfrac{T_e}{z_F}\\Delta t  y^tK_fy \\;>\\; \\dfrac{\\underline{f}_{h} }{24} \\left \\| y \\right \\|_{h}^2 \\;\\geq\\; \\dfrac{\\underline{f}_{h} }{24} \\left \\| y \\right \\|_M^2  $$\nfor $y\\neq 0$ and \n $ \\underline{f}_{h} > 0$."
     },
     {
       "theorem_name": "lemma_g",
@@ -3135,7 +3151,8 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:C"
-      ]
+      ],
+      "source_latex": "\\label{lemma:g}\nAssume that $D(z)\\geq 0$ \\eqref{A20} is a Lipschitz continuous function \\eqref{A2pp0},  then  there exists an $h_0<1$ ($n_0>1$), and there exist a constant $K_G$,  such that for $h<h_0$ ($n>n_0$)    one has\n$$v^TGv\\ge -|K_G|. \\left \\| v \\right \\|_M^2.$$\nwhere $K_G =   \\dfrac{1}{2\\,c_D\\,I(D)}-\\dfrac{\\mathcal{M}}{2}L_\\delta$, with $0<c_D<2$ independent of $h$, $\\displaystyle I(D) = z_F \\int_0^1\\dfrac{1}{D(z)}dz < \\infty$, and $L_\\delta$ the Lipschitz continuity constant such that $\n    |D(z)-D(y)|\\le L_\\delta |z-y|,\\quad\\forall z,\\,y\\in[0,1-\\delta].$"
     },
     {
       "theorem_name": "theorem_18",
@@ -3331,7 +3348,8 @@
         "paper_definition_stub:C",
         "paper_definition_stub:theorem_18",
         "paper_definition_stub:z_F"
-      ]
+      ],
+      "source_latex": "Assume that $D(z)\\geq 0$ \\eqref{A20} is a Lipschitz continuous function \\eqref{A2pp0} and that $f(z)\\geq 0$ satisfies \\eqref{A10}. Let $h$ be chosen to be sufficiently small ($h<h_0$), then the matrix of the discrete system $$V = M_f+T_e\\,\\Delta t\\, C $$ is invertible  if \\vspace{-2mm}\n$$0 < \\Delta t <\\dfrac{z_F}{6T_e} min\\left\\{\\dfrac{h}{\\mathcal{F}}, \\dfrac{  \\underline{f}_{h}}{4\\left|z_F\\mathcal{G} - |K_G|\\,\\right|  }\\right\\}$$ where\n $ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z) >0$."
     }
   ]
 }
