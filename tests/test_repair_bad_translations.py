@@ -578,3 +578,101 @@ def test_write_retry_lean_file_keeps_only_validated_candidates(tmp_path: Path) -
     assert "theorem bad : True" not in text
     assert "theorem unchanged : True" not in text
     assert '"good"' in queue.read_text(encoding="utf-8")
+
+
+def test_write_symbol_theory_dedupes_abbrev_from_base(tmp_path: Path) -> None:
+    """The repair-module generator must NOT redeclare a name that already
+    exists in the imported base paper-theory. Pre-fix bug: the dedup regex
+    matched only `axiom|constant|def|theorem|lemma` — `abbrev` was missed,
+    so `abbrev Multisegment` got re-emitted in `Paper_X_Repair` even though
+    `Paper_X` already declared it. With both namespaces opened via
+    `PaperImportsAnchor`, any reference to `Multisegment` then failed with
+    `Ambiguous term`. Surfaced by the LLM-statement-repair smoke run
+    (Round II-4 / commit e6065ab)."""
+    from repair_bad_translations import write_symbol_theory, SymbolDecl
+
+    project = tmp_path / "proj"
+    project.mkdir()
+    base_dir = project / "Desol" / "PaperTheory"
+    base_dir.mkdir(parents=True)
+    # Write a base theory file containing `abbrev Multisegment : Type := ℕ`
+    # and `noncomputable def TestNorm`. Both shapes the previous regex
+    # missed.
+    (base_dir / "Paper_9999_99999.lean").write_text(
+        "namespace Paper_9999_99999\n\n"
+        "abbrev Multisegment : Type := ℕ\n\n"
+        "noncomputable def TestNorm : ℝ := 0\n\n"
+        "def OtherSymbol : Prop := True\n\n"
+        "end Paper_9999_99999\n",
+        encoding="utf-8",
+    )
+    symbols = [
+        SymbolDecl(
+            latex="Multisegment",
+            lean="Multisegment",
+            kind="paper_local",
+            declaration="abbrev Multisegment : Type := ℕ",
+            reason="paper_multisegment_carrier",
+        ),
+        SymbolDecl(
+            latex="TestNorm",
+            lean="TestNorm",
+            kind="paper_local",
+            declaration="noncomputable def TestNorm : ℝ := 0",
+            reason="paper_norm_carrier",
+        ),
+        SymbolDecl(
+            latex="OtherSymbol",
+            lean="OtherSymbol",
+            kind="paper_local",
+            declaration="def OtherSymbol : Prop := True",
+            reason="other",
+        ),
+        SymbolDecl(
+            latex="NewSymbol",
+            lean="NewSymbol",
+            kind="paper_local",
+            declaration="def NewSymbol : Prop := True",
+            reason="repair_new",
+        ),
+    ]
+    out = write_symbol_theory(project_root=project, paper_id="9999.99999", symbols=symbols)
+    text = out.read_text(encoding="utf-8")
+    # Only `NewSymbol` should be re-emitted; the three already in the base
+    # must be filtered out.
+    assert "def NewSymbol" in text
+    assert "abbrev Multisegment" not in text
+    assert "TestNorm" not in text
+    assert "OtherSymbol" not in text
+
+
+def test_write_symbol_theory_dedupes_when_base_uses_only_def(tmp_path: Path) -> None:
+    """Sanity guard against the pre-fix regex behaviour. A base that uses
+    only `def` declarations must still produce dedup correctly."""
+    from repair_bad_translations import write_symbol_theory, SymbolDecl
+
+    project = tmp_path / "proj"
+    project.mkdir()
+    base_dir = project / "Desol" / "PaperTheory"
+    base_dir.mkdir(parents=True)
+    (base_dir / "Paper_9998_99998.lean").write_text(
+        "namespace Paper_9998_99998\n\n"
+        "def Foo : Prop := True\n\n"
+        "end Paper_9998_99998\n",
+        encoding="utf-8",
+    )
+    symbols = [
+        SymbolDecl(
+            latex="Foo", lean="Foo", kind="paper_local",
+            declaration="def Foo : Prop := True", reason="dup",
+        ),
+        SymbolDecl(
+            latex="Bar", lean="Bar", kind="paper_local",
+            declaration="def Bar : Prop := True", reason="new",
+        ),
+    ]
+    out = write_symbol_theory(project_root=project, paper_id="9998.99998", symbols=symbols)
+    text = out.read_text(encoding="utf-8")
+    assert "def Bar" in text
+    # Foo is in base, must NOT be re-emitted.
+    assert "def Foo" not in text

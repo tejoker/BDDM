@@ -325,3 +325,60 @@ def test_extract_paper_theory_hint_filters_to_signature_lines(tmp_path: Path) ->
 
 def test_extract_paper_theory_hint_returns_empty_for_missing_file(tmp_path: Path) -> None:
     assert lsr.extract_paper_theory_hint(tmp_path / "missing.lean") == ""
+
+
+def test_generate_applies_deterministic_cleanup_lambda_token() -> None:
+    """LLM output containing `(λ : ℝ)` (`λ` used as a parameter name) must
+    be repaired by the translator's deterministic cleanup pass before the
+    trivialization gate runs. Without this, the Round II-4 smoke run hit
+    `unexpected token 'λ'` on `cor_husimi_fourth_moment` and rejected the
+    candidate as invalid Lean."""
+    from llm_statement_repair import generate_llm_repair_candidate
+
+    class _MockClient:
+        def __init__(self, response_json: str) -> None:
+            self.response_json = response_json
+
+        class _Msg:
+            def __init__(self, content: str) -> None:
+                self.content = content
+
+        class _Choice:
+            def __init__(self, msg: "_MockClient._Msg") -> None:
+                self.message = msg
+
+        class _Response:
+            def __init__(self, choices: list) -> None:
+                self.choices = choices
+
+        @property
+        def chat(self) -> "_MockClient":
+            return self
+
+        def complete(self, model=None, messages=None, temperature=None, max_tokens=None):
+            return _MockClient._Response([
+                _MockClient._Choice(_MockClient._Msg(self.response_json))
+            ])
+
+    response_json = json.dumps({
+        "verdict": "SIGNATURE",
+        "lean_signature": "theorem t (λ : ℝ) (h : 0 < λ) : 0 < λ := by sorry",
+        "reasoning": "uses lambda as parameter",
+        "confidence": 0.85,
+    })
+    result = generate_llm_repair_candidate(
+        source_latex="If $\\lambda > 0$ then $\\lambda > 0$.",
+        paper_id="0000.99999",
+        theorem_name="t",
+        paper_theory_hint="",
+        client=_MockClient(response_json),
+        model="labs-leanstral-2603",
+    )
+    assert result is not None
+    # The `λ` parameter name should be rewritten by `_deterministic_signature_cleanup`
+    # to `lam`, allowing the signature to survive the cleanup pass.
+    decl = result.get("repaired_decl", "") or result.get("candidate_decl_before_rejection", "")
+    assert decl, f"expected a repaired_decl, got: {result}"
+    # After the cleanup, the bare `(λ : ℝ)` form must be normalized.
+    assert "(λ :" not in decl
+    # Trivialization gate should not reject a real 0 < lam < lam claim.

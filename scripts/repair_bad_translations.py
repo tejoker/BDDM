@@ -299,13 +299,28 @@ def write_symbol_theory(*, project_root: Path, paper_id: str, symbols: list[Symb
     base_status = _base_theory_import_status(project_root, base_path)
     import_base = bool(base_status.get("ok"))
     base_text = base_path.read_text(encoding="utf-8") if base_path.exists() else ""
+    # Dedup names whenever the base file EXISTS — regardless of whether it
+    # currently builds. The dedup is pure source-parsing; if the base
+    # source declares `Multisegment`, the Repair module must not redeclare
+    # it even if the base happens to be temporarily unbuildable (the
+    # olean-self-heal from commit 0c05413 will fix the build later, but
+    # by then the duplicate is already on disk).
     base_names = {
         m.group(1)
         for m in re.finditer(
-            r"(?m)^\s*(?:axiom|constant|def|theorem|lemma)\s+([A-Za-z_ξΨΓΘΩαβγδℓ][A-Za-z0-9_ξΨΓΘΩαβγδℓ']*)\b",
+            # The leading `noncomputable\s+` is optional so we match
+            # `noncomputable def Foo`. The keyword list adds `abbrev` —
+            # without it, `abbrev Multisegment : Type := ℕ` in the base
+            # module was silently NOT recognised as a base name, and the
+            # repair module then re-emitted its own `abbrev Multisegment`,
+            # producing `Ambiguous term Multisegment` whenever both the
+            # base and Repair modules were opened (which is the default
+            # via `PaperImportsAnchor`). Caught by LLM-statement-repair
+            # smoke run (Round II-4 / commit e6065ab).
+            r"(?m)^\s*(?:noncomputable\s+)?(?:axiom|constant|def|theorem|lemma|abbrev)\s+([A-Za-z_ξΨΓΘΩαβγδℓ][A-Za-z0-9_ξΨΓΘΩαβγδℓ']*)\b",
             base_text,
         )
-    } if import_base else set()
+    }
     repair_symbols = [sym for sym in symbols if sym.lean not in base_names]
     declarations = [sym.declaration for sym in repair_symbols]
     def note_for(sym: SymbolDecl) -> str:

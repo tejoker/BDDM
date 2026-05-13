@@ -47,6 +47,13 @@ except Exception:  # pragma: no cover - fallback for unusual import topologies
             return True
         return False
 
+try:
+    from translator._translate import _deterministic_signature_cleanup  # type: ignore[import-not-found]
+except Exception:  # pragma: no cover - fallback when translator package is shaped differently
+    def _deterministic_signature_cleanup(sig: str) -> str:  # type: ignore[misc]
+        # No-op fallback; the LLM output goes through unmodified.
+        return sig or ""
+
 
 DEFAULT_MODEL = os.getenv("MISTRAL_MODEL", "labs-leanstral-2603")
 DEFAULT_MAX_TOKENS = 768
@@ -360,6 +367,14 @@ def generate_llm_repair_candidate(
             "raw": raw[:500],
         }
     decl = _rewrite_theorem_name(decl, theorem_name)
+    # Apply the translator's deterministic post-cleanup so LLM-repair output
+    # passes through the same `λ → lam`, `_balance_brackets`,
+    # `_normalize_matrix_positive_definite_fields`, etc., rewrites the main
+    # translator path applies. Without this, LLM-repair smoke runs hit
+    # Unicode-token issues (Round II-4 smoke caught `λ` in
+    # `cor_husimi_fourth_moment`) the translator already knows how to
+    # repair. Strictly additive normalization.
+    decl = _deterministic_signature_cleanup(decl)
 
     rejected: list[str] = []
     if _is_placeholder_decl(decl):
