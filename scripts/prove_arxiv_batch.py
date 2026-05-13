@@ -2888,6 +2888,97 @@ def _run_deterministic_micro_prover(
     return False, "", last_err
 
 
+def _run_isolated_file_check(
+    *,
+    project_root: Path,
+    source_file: Path,
+    theorem_decl: str,
+    timeout_s: int = 45,
+) -> tuple[bool, str]:
+    """Standalone elaboration probe: build an isolated `.lean` file with the
+    source-file prelude + `theorem_decl` (rewritten to `:= by sorry`) and run
+    `lake env lean`. Returns (ok, error_tail).
+
+    This is the same isolated-elaboration path used by the proof-search
+    validation gate (`_verify_script_via_file_check` fallback branch), exposed
+    as a thin reusable helper. It does NOT depend on the original source file
+    containing the theorem — it only borrows the prelude (imports + `open`
+    directives + namespace prologue) so the candidate sees the same elaboration
+    environment a fresh proof attempt would see.
+
+    Falls back to a minimal `import Mathlib` prelude when the source file is
+    missing or the prelude scrape yields nothing.
+    """
+    decl_clean = (theorem_decl or "").strip()
+    if not decl_clean:
+        return False, "isolated_check_empty_decl"
+    # Strip any existing proof body and force `:= by sorry` so we exercise
+    # ONLY statement-level elaboration, not the candidate's (often empty)
+    # proof.
+    decl_clean = re.sub(r":=\s*by[\s\S]*$", "", decl_clean).rstrip()
+    decl_clean = re.sub(r":=[\s\S]*$", "", decl_clean).rstrip()
+    isolated_decl = f"{decl_clean} := by\n  sorry"
+
+    prelude_lines: list[str] = []
+    src = source_file if source_file.is_absolute() else (project_root / source_file)
+    try:
+        if src.exists():
+            text = src.read_text(encoding="utf-8")
+            decl_start = re.compile(
+                r"^\s*(?:noncomputable\s+)?(?:private\s+)?(?:theorem|lemma|def)\s+[A-Za-z_][A-Za-z0-9_']*\b"
+            )
+            for ln in text.splitlines():
+                if decl_start.match(ln):
+                    break
+                prelude_lines.append(ln)
+    except Exception:
+        prelude_lines = []
+    if not prelude_lines:
+        prelude_lines = ["import Mathlib", "", "namespace ArxivPaper"]
+    if not any("autoImplicit" in ln for ln in prelude_lines):
+        prelude_lines.append("set_option autoImplicit true")
+    isolated_src = "\n".join(prelude_lines).rstrip() + "\n\n" + isolated_decl + "\n"
+
+    tmp_path: Path | None = None
+    iso_dir = src.parent if src.exists() else (project_root / "output")
+    iso_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            prefix="repair_candidate_isolated_",
+            suffix=".lean",
+            dir=str(iso_dir),
+            delete=False,
+        ) as tmp:
+            tmp_path = Path(tmp.name)
+            tmp.write(isolated_src)
+        proc = subprocess.run(
+            ["lake", "env", "lean", str(tmp_path)],
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            timeout=max(20, int(timeout_s)),
+        )
+        out = ((proc.stdout or "") + "\n" + (proc.stderr or "")).strip()
+        if proc.returncode == 0:
+            return True, ""
+        low = out.lower()
+        if ("error:" not in low) and ("warning: declaration uses `sorry`" in low):
+            return True, ""
+        return False, f"file_check_fail:{out[-300:]}"
+    except subprocess.TimeoutExpired:
+        return False, f"file_check_timeout:{timeout_s}s"
+    except Exception as exc:
+        return False, f"file_check_exception:{exc}"
+    finally:
+        if tmp_path is not None:
+            try:
+                tmp_path.unlink()
+            except Exception:
+                pass
+
+
 def _verify_script_via_file_check(
     *,
     project_root: Path,

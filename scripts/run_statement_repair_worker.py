@@ -51,6 +51,83 @@ BLOCKING_VALIDITY = {"translation_limited", "bad_translation_artifact"}
 WRITE_CAPABLE_ROUTES = {"statement_regeneration", "source_span_repair", "source_translation_recovery"}
 DEFAULT_LLM_REPAIR_MODEL = "labs-leanstral-2603"
 
+# Cache for the elaboration gate keyed by
+# (paper_id, theorem_name, sha256(candidate_decl)) -> {"ok": bool, "error": str}.
+# Identical candidates (e.g. re-validated on retry) are not re-elaborated. The
+# cache lives for the worker process lifetime; tests reset it via the public
+# `_reset_elaboration_gate_cache` helper below.
+_ELABORATION_GATE_CACHE: dict[tuple[str, str, str], dict[str, Any]] = {}
+
+
+def _signature_hash(decl: str) -> str:
+    import hashlib
+
+    return hashlib.sha256((decl or "").strip().encode("utf-8", errors="replace")).hexdigest()[:16]
+
+
+def _reset_elaboration_gate_cache() -> None:
+    """Test hook: clear the elaboration-gate cache between cases."""
+    _ELABORATION_GATE_CACHE.clear()
+
+
+def _run_elaboration_gate(
+    *,
+    project_root: Path,
+    paper_id: str,
+    theorem_name: str,
+    candidate_decl: str,
+    source_file_hint: str = "",
+    timeout_s: int = 45,
+) -> dict[str, Any]:
+    """Elaboration-validity gate for repair candidates. Re-uses the isolated
+    `lake env lean` probe from `prove_arxiv_batch._run_isolated_file_check`
+    (the same gate the proof-search loop applies before entering MCTS). Results
+    are cached by (paper_id, theorem_name, signature_hash) to avoid re-shelling
+    the same candidate on retry.
+
+    Returns `{"ok": bool, "error": str, "cache_hit": bool, "signature_hash": str}`.
+
+    The gate is STRICT: a candidate that does not elaborate is rejected,
+    regardless of semantic-equivalence verdicts (CoT-judge "reviewed_exact"
+    etc.). The semantic check remains a precondition, not a substitute.
+    """
+    decl = (candidate_decl or "").strip()
+    if not decl:
+        return {"ok": False, "error": "elaboration_gate_empty_decl", "cache_hit": False, "signature_hash": ""}
+    sig = _signature_hash(decl)
+    key = (str(paper_id or ""), str(theorem_name or ""), sig)
+    cached = _ELABORATION_GATE_CACHE.get(key)
+    if cached is not None:
+        return {**cached, "cache_hit": True, "signature_hash": sig}
+
+    source_file = Path(source_file_hint) if source_file_hint else (project_root / "output" / f"{paper_id}.lean")
+    try:
+        from prove_arxiv_batch import _run_isolated_file_check  # type: ignore[import-not-found]
+    except Exception as exc:
+        # If the helper can't be imported, fall open with a diagnostic so we
+        # don't silently block all repair candidates in environments where the
+        # prover dependency tree isn't available (e.g. unit-test runs without
+        # lake). Callers can still inspect the diagnostic.
+        result = {"ok": None, "error": f"elaboration_gate_import_failed:{type(exc).__name__}:{exc}"[:200]}
+        _ELABORATION_GATE_CACHE[key] = result
+        return {**result, "cache_hit": False, "signature_hash": sig}
+
+    try:
+        ok, detail = _run_isolated_file_check(
+            project_root=project_root,
+            source_file=source_file,
+            theorem_decl=decl,
+            timeout_s=timeout_s,
+        )
+    except Exception as exc:
+        result = {"ok": False, "error": f"elaboration_gate_exception:{type(exc).__name__}:{exc}"[:200]}
+        _ELABORATION_GATE_CACHE[key] = result
+        return {**result, "cache_hit": False, "signature_hash": sig}
+
+    result = {"ok": bool(ok), "error": (detail or "")[-600:]}
+    _ELABORATION_GATE_CACHE[key] = result
+    return {**result, "cache_hit": False, "signature_hash": sig}
+
 
 def _read_json(path: Path) -> Any:
     try:
@@ -659,8 +736,18 @@ def _overlay_llm_repair_candidates(
     theory_path = project_root / "Desol" / "PaperTheory" / f"Paper_{safe_id}.lean"
     paper_theory_hint = extract_paper_theory_hint(theory_path) if theory_path.exists() else ""
 
+    artifacts = action.get("artifacts") if isinstance(action.get("artifacts"), dict) else {}
+    lean_file_hint = str(artifacts.get("lean_file", "") or "")
+
     out_candidates: list[dict[str, Any]] = []
-    llm_counters = {"attempted": 0, "accepted": 0, "rejected": 0, "skipped_no_source": 0, "validated_ok": 0}
+    llm_counters = {
+        "attempted": 0,
+        "accepted": 0,
+        "rejected": 0,
+        "skipped_no_source": 0,
+        "validated_ok": 0,
+        "elaboration_gate_rejected": 0,
+    }
     for raw in candidates:
         candidate = dict(raw) if isinstance(raw, dict) else {}
         theorem_name = str(candidate.get("theorem_name", "") or "")
@@ -720,6 +807,43 @@ def _overlay_llm_repair_candidates(
             out_candidates.append(candidate)
             continue
 
+        # Elaboration-validity gate (Round-III regression fix).
+        #
+        # The repair worker historically accepted any candidate that passed the
+        # semantic CoT judge + the `validate_repair_candidate` paper-theory
+        # probe. But the paper-theory probe runs against `Paper_<id>_Repair`,
+        # which auto-synthesizes missing symbols — masking failures the actual
+        # proof-search gate (`_run_isolated_file_check` against the canonical
+        # paper prelude) will then re-raise as `validation_gate_elaboration_failed`.
+        #
+        # Run the SAME isolated probe the prover uses, so a repair candidate
+        # that won't elaborate downstream is rejected here before we mutate the
+        # ledger. The semantic check stays as a precondition; this is additive.
+        elaboration_gate: dict[str, Any] = {"ok": None, "error": "elaboration_gate_skipped"}
+        if validate_candidates:
+            elaboration_gate = _run_elaboration_gate(
+                project_root=project_root,
+                paper_id=paper_id,
+                theorem_name=theorem_name,
+                candidate_decl=new_decl,
+                source_file_hint=lean_file_hint,
+            )
+        if validate_candidates and elaboration_gate.get("ok") is False:
+            candidate["llm_repair"] = {
+                "ok": False,
+                "result": llm_result,
+                "lean_validation_for_llm_candidate": validation,
+                "elaboration_gate": elaboration_gate,
+                "reason": "llm_candidate_failed_elaboration_gate",
+                "elaboration_gate_failed": (elaboration_gate.get("error") or "")[-300:],
+            }
+            llm_counters["rejected"] += 1
+            llm_counters["elaboration_gate_rejected"] = (
+                llm_counters.get("elaboration_gate_rejected", 0) + 1
+            )
+            out_candidates.append(candidate)
+            continue
+
         # Promote LLM candidate.
         candidate["rule_based_candidate_before_llm"] = {
             "repaired_decl": candidate.get("repaired_decl"),
@@ -746,10 +870,12 @@ def _overlay_llm_repair_candidates(
             "protocol": "llm_statement_repair_v1",
             "source_backed": True,
         }
+        candidate["elaboration_gate"] = elaboration_gate
         candidate["llm_repair"] = {
             "ok": True,
             "result": llm_result,
             "lean_validation_for_llm_candidate": validation,
+            "elaboration_gate": elaboration_gate,
         }
         llm_counters["accepted"] += 1
         out_candidates.append(candidate)
