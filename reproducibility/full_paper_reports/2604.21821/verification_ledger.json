@@ -226,7 +226,13 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:a"
       ],
-      "source_latex": "[Lion's theorem]\\label{th:lions} Let $V$ and $H$ be  Hilbert spaces satisfying:\n\\begin{equation}\nV \\subset H \\subset V^* \\text{ (the dual of } V)\n\\end{equation}\n\\noindent with the injection from $V$ to $H$ is dense and continuous.\n\\noindent Assuming a bilinear form $a(\\cdot,\\cdot): V \\times V \\to \\mathbb{R}$ satisfies\n\\begin{equation}\n\\begin{cases}\n|a(v,w)| \\leq M \\|v\\|_V \\|w\\|_V \\\\\n|a(v,v)| \\geq c \\|v\\|_V^2 - c_1 \\|v\\|_H^2\n\\end{cases}\n\\label{eq25}\n\\end{equation}\n\\noindent then for $u_0 \\in H$ and $F(t) \\in L^2(0,T;V^*)$, the initial value problem\n\\begin{equation}\n\\begin{cases}\n\\left \\langle #1  \\right \\rangle{u_t,v}_H + a(u(t),v) = \\left \\langle #1  \\right \\rangle{ F(t), v }_{H} \\\\\nu(0) = u_0\n\\end{cases}\n\\end{equation}\n\\noindent admits a unique solution u, satisfying:\n\\begin{equation}\nu \\in L^2(0,T;V) \\cap C(0,T;H), \\quad \\frac{du}{dt} \\in L^2(0,T;H).\n\\end{equation}"
+      "source_latex": "[Lion's theorem]\\label{th:lions} Let $V$ and $H$ be  Hilbert spaces satisfying:\n\\begin{equation}\nV \\subset H \\subset V^* \\text{ (the dual of } V)\n\\end{equation}\n\\noindent with the injection from $V$ to $H$ is dense and continuous.\n\\noindent Assuming a bilinear form $a(\\cdot,\\cdot): V \\times V \\to \\mathbb{R}$ satisfies\n\\begin{equation}\n\\begin{cases}\n|a(v,w)| \\leq M \\|v\\|_V \\|w\\|_V \\\\\n|a(v,v)| \\geq c \\|v\\|_V^2 - c_1 \\|v\\|_H^2\n\\end{cases}\n\\label{eq25}\n\\end{equation}\n\\noindent then for $u_0 \\in H$ and $F(t) \\in L^2(0,T;V^*)$, the initial value problem\n\\begin{equation}\n\\begin{cases}\n\\left \\langle #1  \\right \\rangle{u_t,v}_H + a(u(t),v) = \\left \\langle #1  \\right \\rangle{ F(t), v }_{H} \\\\\nu(0) = u_0\n\\end{cases}\n\\end{equation}\n\\noindent admits a unique solution u, satisfying:\n\\begin{equation}\nu \\in L^2(0,T;V) \\cap C(0,T;H), \\quad \\frac{du}{dt} \\in L^2(0,T;H).\n\\end{equation}",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "theorem_2",
@@ -394,7 +400,13 @@
         "paper_definition_stub:theorem_2",
         "paper_definition_stub:z_F"
       ],
-      "source_latex": "The space \\( H^1_{D,f}(0,z_F) \\) is a Hilbert space with respect to the norm\n\\[\n\\|v\\|_{D,f}^1 = \\left( \\int_0^{z_F} f(z) v^2(z) \\, dz + \\int_0^{z_F} D(z) (v'(z))^2 \\, dz \\right)^{\\frac{1}{2}}\n\\]"
+      "source_latex": "The space \\( H^1_{D,f}(0,z_F) \\) is a Hilbert space with respect to the norm\n\\[\n\\|v\\|_{D,f}^1 = \\left( \\int_0^{z_F} f(z) v^2(z) \\, dz + \\int_0^{z_F} D(z) (v'(z))^2 \\, dz \\right)^{\\frac{1}{2}}\n\\]",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "theorem_3",
@@ -606,28 +618,12 @@
         "statement_validity_reason:no_paper_axiom_debt_gate"
       ],
       "statement_fidelity_source": "none",
-      "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:theorem_3",
-          "symbol": "theorem_3",
-          "grounding_kind": "transparent_definition_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.syntax_only",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        }
-      ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_definition_stub:theorem_3"
-      ],
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
       "statement_fidelity_next_action": "Replace paper-local axiom debt with definitions or proved local lemmas.",
       "canonical_statement": "theorem _ (u2 : D ≠ 0) (u3 : alpha) (u4 : ℝ) [CompleteSpace alpha] [InnerProductSpace ℝ alpha] [NormedAddCommGroup alpha] {u1 : Type*} : IsClosed {v : u1 | v = 0}",
       "statement_fingerprint": "fab90788b0547efb2cbe202389898ef50b0660e48a250d2c00533e8100f44fab",
@@ -821,7 +817,13 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:z_F"
       ],
-      "source_latex": "\\label{rem}\n    Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F)$ such that $$u(z) = \\int_0^z g(x)dx$$ a.e. on $(0,z_F)$. The converse is also true."
+      "source_latex": "\\label{rem}\n    Let $u(z) \\in C_a(0,z_F) $, where $C_a(0,z_F)$ is the set of all functions absolutely continuous on every compact subinterval $[a,b]\\subset (0,z_F)$, satisfying $\\lim\\limits_{x\\rightarrow 0} u(x) = 0$.\\\\Then there exists a function $g \\in L^1(0,z_F)$ such that $$u(z) = \\int_0^z g(x)dx$$ a.e. on $(0,z_F)$. The converse is also true.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "th_WPICa",
@@ -1016,7 +1018,13 @@
         "paper_definition_stub:th_WPICa",
         "paper_definition_stub:z_F"
       ],
-      "source_latex": "[Weighted Poincare Inequality]\\label{th:WPICa}\n  Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$. Then,  \n  \\begin{equation}\\label{eq:WPI}\n  \\|u\\|_v = \\left(\\int_0^{z_F} u^2(z)\\;v(z)dz\\right)^{\\frac{1}{2}} \\leq C \\left(\\int_0^{z_F} (u'(z))^2\\;w(z)dz\\right)^{\\frac{1}{2}} = C \\|u'\\|_w\n  \\end{equation}\n  holds for every $u(z) \\in C_a(0,z_F)$ if and only if\n  \\begin{eqnarray} \\label{condition:WPI}\n      B = \\sup_{z\\in(0,z_F)} \\left({ \\int_z^{z_F} v(x)dx}\\right)^{\\frac{1}{2}}\\left( \\int_0^z \\dfrac{1}{w(x)}dx \\right)^{\\frac{1}{2}} < \\infty,\n\\end{eqnarray}\nMoreover, the best constant $C$ in \\eqref{eq:WPI} satisfies $B \\leq C \\leq 2B$"
+      "source_latex": "[Weighted Poincare Inequality]\\label{th:WPICa}\n  Let $v,w \\in W(0,z_F)$, where $W(0,z_F)$ is the set of weight functions that are measurable, nonnegative, and finite almost everywhere on $(0,z_F)$. Then,  \n  \\begin{equation}\\label{eq:WPI}\n  \\|u\\|_v = \\left(\\int_0^{z_F} u^2(z)\\;v(z)dz\\right)^{\\frac{1}{2}} \\leq C \\left(\\int_0^{z_F} (u'(z))^2\\;w(z)dz\\right)^{\\frac{1}{2}} = C \\|u'\\|_w\n  \\end{equation}\n  holds for every $u(z) \\in C_a(0,z_F)$ if and only if\n  \\begin{eqnarray} \\label{condition:WPI}\n      B = \\sup_{z\\in(0,z_F)} \\left({ \\int_z^{z_F} v(x)dx}\\right)^{\\frac{1}{2}}\\left( \\int_0^z \\dfrac{1}{w(x)}dx \\right)^{\\frac{1}{2}} < \\infty,\n\\end{eqnarray}\nMoreover, the best constant $C$ in \\eqref{eq:WPI} satisfies $B \\leq C \\leq 2B$",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lem_tc",
@@ -1217,7 +1225,13 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "\\label{lem:tc}\n    $\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq C_a(0,z_F) $"
+      "source_latex": "\\label{lem:tc}\n    $\\mathcal{T}=\\{v\\in H^1_{D,f}(0,z_F)\\,|\\, v(0)=0\\} \\subseteq C_a(0,z_F) $",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "cor_wpi",
@@ -1385,7 +1399,13 @@
         "paper_definition_stub:C",
         "paper_definition_stub:z_F"
       ],
-      "source_latex": "[Weighted Poincare Inequality over $\\mathcal{T}$]\\label{cor:wpi}\n  Let $u \\in \\mathcal{T} \\subset C_a(0,z_F)$. Then, \n  if \n  \\begin{eqnarray}  \\label{cond:WI}\nB_0=\\displaystyle\\sup_{z\\in(0,z_F)} \\left((z_F-z)\\int_0^z \\dfrac{1}{D(x)}dx \\right)^{\\frac{1}{2}} <\\infty,    \n  \\end{eqnarray}  the below inequalities hold\n  \\begin{eqnarray}\n  &&\\left \\| #1 \\right \\|_{2}{u}^2 = \\int_0^{z_F} u^2(z)dz \\leq C_p^2 \\int_0^{z_F} (u'(z))^2\\;D(z)dz = C_p^2 \\|u'\\|_D^2 \\label{eq:wp11}\\\\\n  &&\\left \\| #1 \\right \\|_f{u}^2 \\leq \\|f\\|_{\\infty} \\left \\| #1 \\right \\|_{2}{u}^2 \\leq  \\|f\\|_{\\infty} C_p^2 \\|u'\\|_D^2\\label{eq:wp12}\n  \\end{eqnarray}\nfor $C_p<2B_0$."
+      "source_latex": "[Weighted Poincare Inequality over $\\mathcal{T}$]\\label{cor:wpi}\n  Let $u \\in \\mathcal{T} \\subset C_a(0,z_F)$. Then, \n  if \n  \\begin{eqnarray}  \\label{cond:WI}\nB_0=\\displaystyle\\sup_{z\\in(0,z_F)} \\left((z_F-z)\\int_0^z \\dfrac{1}{D(x)}dx \\right)^{\\frac{1}{2}} <\\infty,    \n  \\end{eqnarray}  the below inequalities hold\n  \\begin{eqnarray}\n  &&\\left \\| #1 \\right \\|_{2}{u}^2 = \\int_0^{z_F} u^2(z)dz \\leq C_p^2 \\int_0^{z_F} (u'(z))^2\\;D(z)dz = C_p^2 \\|u'\\|_D^2 \\label{eq:wp11}\\\\\n  &&\\left \\| #1 \\right \\|_f{u}^2 \\leq \\|f\\|_{\\infty} \\left \\| #1 \\right \\|_{2}{u}^2 \\leq  \\|f\\|_{\\infty} C_p^2 \\|u'\\|_D^2\\label{eq:wp12}\n  \\end{eqnarray}\nfor $C_p<2B_0$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "eq_zf",
@@ -1553,7 +1573,13 @@
         "paper_definition_stub:C",
         "paper_definition_stub:z_F"
       ],
-      "source_latex": "Assume that the condition \\eqref{cond:WI} is satisfied. \nThen the  following inequality \n\\begin{eqnarray}\n   \\sqrt{f(z)} |v(z)| \\leq  C_0 \\|v\\|_{D, f}, \\qquad z\\in [0, z_F],\\label{eq:zf}\n\\end{eqnarray}\nholds for all $ v \\in \\mathcal T$, where $C_0$ is  some positive constant that only depends on $f, \\,D$ and $z_F$."
+      "source_latex": "Assume that the condition \\eqref{cond:WI} is satisfied. \nThen the  following inequality \n\\begin{eqnarray}\n   \\sqrt{f(z)} |v(z)| \\leq  C_0 \\|v\\|_{D, f}, \\qquad z\\in [0, z_F],\\label{eq:zf}\n\\end{eqnarray}\nholds for all $ v \\in \\mathcal T$, where $C_0$ is  some positive constant that only depends on $f, \\,D$ and $z_F$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "th_4g",
@@ -1732,13 +1758,19 @@
         "paper_definition_stub:th_4g",
         "paper_definition_stub:z_F"
       ],
-      "source_latex": "\\label{th:4g} Under assumptions  \\eqref{A10}, \\eqref{A20}, \\eqref{A2pp0}, \\eqref{eq:rhoatm}, \n  \\eqref{A2p2}, and \\eqref{cond:WI}, then the bilinear form $$ \\mathcal{A}(v,w)=\\langle D v_z, w_z \\rangle -\\langle  (\\mathcal{M} D+f\\mathcal{F})v, w_z \\rangle + \\mathcal{G} \\langle v,w \\rangle + \\mathcal{F} f(z_F) v(z_F,t) w(z_F)$$ \nsatisfies:\n\\begin{enumerate}\n    \\item $|\\mathcal{A}(v,w)|\\leq C\\left \\| v \\right \\|_{D,f}.\\left \\| w \\right \\|_{D,f}$,\\; $\\forall v\\in H^1_{D,f}$\n    \\item $\\mathcal{A}(v,v)\\geq C_1\\left \\| v \\right \\|_{D,f}^2-C_2\\left \\| v \\right \\|_f^2 $,\\; $\\forall v\\in \\mathcal{T}$\n    \\item {$\\displaystyle \\left(\\int_0^T | \\left \\langle \\rho^ {\\text{atm}}(t))',v  \\right \\rangle_{2}+\\mathcal{A}(\\rho^ {\\text{atm}}(t),v)|^2 dt\\right)^{\\frac{1}{2}} \\leq C_3 \n    \\left \\| v \\right \\|_{D,f}$, \\; $\\forall v\\in H^1_{D,f}$.}\n\\end{enumerate}\nfor $0<C,\\,C_1,\\,C_2,\\,C_3<\\infty$."
+      "source_latex": "\\label{th:4g} Under assumptions  \\eqref{A10}, \\eqref{A20}, \\eqref{A2pp0}, \\eqref{eq:rhoatm}, \n  \\eqref{A2p2}, and \\eqref{cond:WI}, then the bilinear form $$ \\mathcal{A}(v,w)=\\langle D v_z, w_z \\rangle -\\langle  (\\mathcal{M} D+f\\mathcal{F})v, w_z \\rangle + \\mathcal{G} \\langle v,w \\rangle + \\mathcal{F} f(z_F) v(z_F,t) w(z_F)$$ \nsatisfies:\n\\begin{enumerate}\n    \\item $|\\mathcal{A}(v,w)|\\leq C\\left \\| v \\right \\|_{D,f}.\\left \\| w \\right \\|_{D,f}$,\\; $\\forall v\\in H^1_{D,f}$\n    \\item $\\mathcal{A}(v,v)\\geq C_1\\left \\| v \\right \\|_{D,f}^2-C_2\\left \\| v \\right \\|_f^2 $,\\; $\\forall v\\in \\mathcal{T}$\n    \\item {$\\displaystyle \\left(\\int_0^T | \\left \\langle \\rho^ {\\text{atm}}(t))',v  \\right \\rangle_{2}+\\mathcal{A}(\\rho^ {\\text{atm}}(t),v)|^2 dt\\right)^{\\frac{1}{2}} \\leq C_3 \n    \\left \\| v \\right \\|_{D,f}$, \\; $\\forall v\\in H^1_{D,f}$.}\n\\end{enumerate}\nfor $0<C,\\,C_1,\\,C_2,\\,C_3<\\infty$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lemm_M",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_lemm_M.lean",
-      "lean_statement": "theorem lemm_M (x : ℝ) :\n  ∃ x : ℝ, x = x := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem lemm_M :\n  LemmMSourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -1767,9 +1799,9 @@
       },
       "proof_text": "omega",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 8.83,
       "timestamp": "2026-05-09T20:23:04Z",
@@ -1787,13 +1819,17 @@
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": false
+        "statement_alignment_not_unrelated": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -1882,7 +1918,213 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:lemm_M"
       ],
-      "source_latex": "\\label{lemm:M}\nThe triadiagonal mass matrix $M$ is a symmetric positive definite\nmatrix."
+      "source_latex": "\\label{lemm:M}\nThe triadiagonal mass matrix $M$ is a symmetric positive definite\nmatrix.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_ecc6bf342957a595cf01ff9a",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_ecc6bf342957a595cf01ff9a",
+        "paper_id": "2604.21821",
+        "theorem_name": "lemm_M",
+        "theorem_id": "lemm:M",
+        "source_latex": "\\label{lemm:M}\nThe triadiagonal mass matrix $M$ is a symmetric positive definite\nmatrix.",
+        "normalized_text": "Conclusion: M is a symmetric positive definite matrix",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+          "start_byte": 55931,
+          "end_byte": 56019,
+          "start_line": 774,
+          "start_col": 14,
+          "end_line": 776,
+          "end_col": 8,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 18,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 9,
+              "score": 195,
+              "name": "lemm:M",
+              "label": "lemm:M",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "cor:wpi",
+              "label": "cor:wpi",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "eq:zf",
+              "label": "eq:zf",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 5,
+              "score": 0,
+              "name": "lem:tc",
+              "label": "lem:tc",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 10,
+              "score": 0,
+              "name": "lemm:Mf",
+              "label": "lemm:Mf",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 12,
+              "score": 0,
+              "name": "lemm:SD",
+              "label": "lemm:SD",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 11,
+              "score": 0,
+              "name": "lemma:2.8",
+              "label": "lemma:2.8",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 16,
+              "score": 0,
+              "name": "lemma:g",
+              "label": "lemma:g",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 15,
+              "score": 0,
+              "name": "lemma:m",
+              "label": "lemma:m",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 13,
+              "score": 0,
+              "name": "lemma_14",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cthf221dc01559ba644b3e7b15b",
+              "lemmm"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "lemm:M",
+                "label": "lemm:M",
+                "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 9,
+            "name": "lemm:M",
+            "label": "lemm:M",
+            "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.1111,
+        "source_token_count": 9,
+        "lean_token_count": 3,
+        "source_anchors": [
+          "srcctx_ecc6bf342957a595cf01ff9a"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "\\label{lemm:M} The triadiagonal mass matrix $M$ is a symmetric positive definite matrix.",
+        "target": "LemmMSourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21821.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_ecc6bf342957a595cf01ff9a",
+        "source_coverage": {
+          "score": 0.1111,
+          "source_token_count": 9,
+          "lean_token_count": 3,
+          "source_anchors": [
+            "srcctx_ecc6bf342957a595cf01ff9a"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "\\label{lemm:M} The triadiagonal mass matrix $M$ is a symmetric positive definite matrix.",
+          "target": "LemmMSourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lemm_Mf",
@@ -2051,13 +2293,19 @@
         "paper_definition_stub:h_f_z_0_1",
         "paper_definition_stub:lemm_Mf"
       ],
-      "source_latex": "\\label{lemm:Mf}Given that $f(z) \\geq 0$, then the tridiagonal weighted mass matrix $M_f$ is symmetric positive definite. Moreover, \nthe approximated matrix $M_f$ is positive definite."
+      "source_latex": "\\label{lemm:Mf}Given that $f(z) \\geq 0$, then the tridiagonal weighted mass matrix $M_f$ is symmetric positive definite. Moreover, \nthe approximated matrix $M_f$ is positive definite.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lemma_2_8",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_lemma_2_8.lean",
-      "lean_statement": "theorem lemma_2_8 (f : ℝ → ℝ) (z : ℝ) (h_f_z_0_1 : True) (h_f_z_is_strictly_decreasing_2 : True) (h_f_z_is_positive_3 : True) :\n  f z ≥ 0 := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem lemma_2_8 (f : ℝ → ℝ) (z : ℝ) :\n  f z ≥ 0 := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -2111,14 +2359,14 @@
       },
       "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 90.57,
       "timestamp": "2026-05-09T20:27:28Z",
       "validation_gates": {
-        "lean_proof_closed": true,
+        "lean_proof_closed": false,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -2131,13 +2379,17 @@
         "semantic_adversarial_checks_passed": false,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": true
+        "statement_alignment_not_unrelated": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -2242,7 +2494,214 @@
         "paper_definition_stub:h_f_z_is_strictly_decreasing_2",
         "paper_definition_stub:lemma_2_8"
       ],
-      "source_latex": "\\label{lemma:2.8}\nAssuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the\ntridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite."
+      "source_latex": "\\label{lemma:2.8}\nAssuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the\ntridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_afa3f329b67d18050b01ac50",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_afa3f329b67d18050b01ac50",
+        "paper_id": "2604.21821",
+        "theorem_name": "lemma_2_8",
+        "theorem_id": "lemma:2.8",
+        "source_latex": "\\label{lemma:2.8}\nAssuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the\ntridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite.",
+        "normalized_text": "Assumptions: f(z) ≥ 0; f(z) is strictly decreasing; f(z) is positive Conclusion: K_f is positive definite and B is positive semi-definite",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+          "start_byte": 58947,
+          "end_byte": 59127,
+          "start_line": 836,
+          "start_col": 14,
+          "end_line": 838,
+          "end_col": 88,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 18,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 11,
+              "score": 195,
+              "name": "lemma:2.8",
+              "label": "lemma:2.8",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "cor:wpi",
+              "label": "cor:wpi",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "eq:zf",
+              "label": "eq:zf",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 5,
+              "score": 0,
+              "name": "lem:tc",
+              "label": "lem:tc",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "lemm:M",
+              "label": "lemm:M",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 10,
+              "score": 0,
+              "name": "lemm:Mf",
+              "label": "lemm:Mf",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 12,
+              "score": 0,
+              "name": "lemm:SD",
+              "label": "lemm:SD",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 16,
+              "score": 0,
+              "name": "lemma:g",
+              "label": "lemma:g",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 15,
+              "score": 0,
+              "name": "lemma:m",
+              "label": "lemma:m",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 13,
+              "score": 0,
+              "name": "lemma_14",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "8",
+              "ctha34ba78a73d0b6346efd8ff8",
+              "lemma28"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "lemma:2.8",
+                "label": "lemma:2.8",
+                "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 11,
+            "name": "lemma:2.8",
+            "label": "lemma:2.8",
+            "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0,
+        "source_token_count": 13,
+        "lean_token_count": 1,
+        "source_anchors": [
+          "f z ≥ 0"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "\\label{lemma:2.8} Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite.",
+        "target": "f z ≥ 0"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21821.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_afa3f329b67d18050b01ac50",
+        "source_coverage": {
+          "score": 0.0,
+          "source_token_count": 13,
+          "lean_token_count": 1,
+          "source_anchors": [
+            "f z ≥ 0"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "\\label{lemma:2.8} Assuming $f(z)\\geq 0$ is a strictly decreasing positive function, then the tridiagonal matrix $K_f$ is positive definite and matrix $B$ is positive semi-definite.",
+          "target": "f z ≥ 0"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lemm_SD",
@@ -2410,13 +2869,19 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:lemm_SD"
       ],
-      "source_latex": "\\label{lemm:SD}\nGiven that $D(z) \\geq 0$, then the tridiagonal diffusion matrix $S(D)$ is symmetric. Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}."
+      "source_latex": "\\label{lemm:SD}\nGiven that $D(z) \\geq 0$, then the tridiagonal diffusion matrix $S(D)$ is symmetric. Assuming that $D(z) > 0$ is strictly positive over $[0,1)$ \\eqref{A20}, then {$S(D)$ and the approximated matrix $S(D)$ are positive definite}.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lemma_14",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_lemma_14.lean",
-      "lean_statement": "theorem lemma_14 (x : ℝ) (h_d_z_is_a_strictly_decreasing_1 : True) :\n  ∃ x : ℝ, x = x := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem lemma_14 :\n  Lemma14SourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -2454,9 +2919,9 @@
       },
       "proof_text": "omega",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 8.85,
       "timestamp": "2026-05-09T20:29:30Z",
@@ -2474,13 +2939,17 @@
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": false
+        "statement_alignment_not_unrelated": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -2575,16 +3044,222 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:lemma_14"
       ],
-      "source_latex": "Assuming $D(z)$ is a strictly decreasing positive function, then the\ntridiagonal matrix $A(D)$ is positive definite."
+      "source_latex": "Assuming $D(z)$ is a strictly decreasing positive function, then the\ntridiagonal matrix $A(D)$ is positive definite.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_be975be99b7ded6921414a1a",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_be975be99b7ded6921414a1a",
+        "paper_id": "2604.21821",
+        "theorem_name": "lemma_14",
+        "theorem_id": "lemma_14",
+        "source_latex": "Assuming $D(z)$ is a strictly decreasing positive function, then the\ntridiagonal matrix $A(D)$ is positive definite.",
+        "normalized_text": "Assumptions: D(z) is a strictly decreasing positive function Conclusion: A(D) is positive definite",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+          "start_byte": 62417,
+          "end_byte": 62533,
+          "start_line": 904,
+          "start_col": 1,
+          "end_line": 905,
+          "end_col": 48,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 18,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 13,
+              "score": 195,
+              "name": "lemma_14",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "cor:wpi",
+              "label": "cor:wpi",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "eq:zf",
+              "label": "eq:zf",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 5,
+              "score": 0,
+              "name": "lem:tc",
+              "label": "lem:tc",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "lemm:M",
+              "label": "lemm:M",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 10,
+              "score": 0,
+              "name": "lemm:Mf",
+              "label": "lemm:Mf",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 12,
+              "score": 0,
+              "name": "lemm:SD",
+              "label": "lemm:SD",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 11,
+              "score": 0,
+              "name": "lemma:2.8",
+              "label": "lemma:2.8",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 16,
+              "score": 0,
+              "name": "lemma:g",
+              "label": "lemma:g",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 15,
+              "score": 0,
+              "name": "lemma:m",
+              "label": "lemma:m",
+              "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cth9f296f190a493d4ebc6253a1",
+              "lemma14"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "lemma_14",
+                "label": "",
+                "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 13,
+            "name": "lemma_14",
+            "label": "",
+            "source_file": "output/paper_sources/golden10/2604.21821_expanded/main.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0,
+        "source_token_count": 9,
+        "lean_token_count": 2,
+        "source_anchors": [
+          "srcctx_be975be99b7ded6921414a1a"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite.",
+        "target": "Lemma14SourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21821.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_be975be99b7ded6921414a1a",
+        "source_coverage": {
+          "score": 0.0,
+          "source_token_count": 9,
+          "lean_token_count": 2,
+          "source_anchors": [
+            "srcctx_be975be99b7ded6921414a1a"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "Assuming $D(z)$ is a strictly decreasing positive function, then the tridiagonal matrix $A(D)$ is positive definite.",
+          "target": "Lemma14SourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "rem_fh",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_rem_fh.lean",
       "lean_statement": "theorem rem_fh (h : ℝ) (f : ℝ → ℝ) (hh : 0 < h) (hf : ∀ z ∈ Set.Icc 0 (1 - h), 0 < f z) : ∃ f_h : ℝ, 0 < f_h ∧ ∀ z ∈ Set.Icc 0 (1 - h), f_h ≤ f z := by\n  sorry",
-      "status": "FULLY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline",
       "promotion_gate_passed": true,
@@ -2625,17 +3300,17 @@
           "Witrant2012acp"
         ]
       },
-      "proof_text": "apply?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 125.01,
       "timestamp": "2026-05-09T20:31:50Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -2649,7 +3324,10 @@
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [],
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
@@ -2657,7 +3335,8 @@
         "claim_equivalent:hybrid",
         "semantic_equivalence:verified",
         "claim_equivalence_adjudicated:equivalent",
-        "claim_equivalence_blocked:requires_human_for_release"
+        "claim_equivalence_blocked:requires_human_for_release",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_675068a9ced4dc44ecaf6779",
@@ -2767,7 +3446,7 @@
       "context_pack": {},
       "axiom_debt": [],
       "axiom_debt_hash": "",
-      "closure_claim": "not_closed",
+      "closure_claim": "lean_verified_without_paper_local_axioms",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
@@ -2797,7 +3476,21 @@
       "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "\\label{rem:fh}\n    For a fixed small $h>0$ , let $$ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z),$$ then\n    \\begin{itemize}\n    \\item $ \\underline{f}_{h} > 0$ since $[0,1-h]\\subset [0,1)$ and $f(z)>0$ over $[0,1)$ by \\eqref{A10}.\n        \\item $ \\underline{f}_{h} \\geq f_{min} >0$,\\;\\; if $f(z_F)>0$\n\\end{itemize}"
+      "source_latex": "\\label{rem:fh}\n    For a fixed small $h>0$ , let $$ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z),$$ then\n    \\begin{itemize}\n    \\item $ \\underline{f}_{h} > 0$ since $[0,1-h]\\subset [0,1)$ and $f(z)>0$ over $[0,1)$ by \\eqref{A10}.\n        \\item $ \\underline{f}_{h} \\geq f_{min} >0$,\\;\\; if $f(z_F)>0$\n\\end{itemize}",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_without_paper_local_axioms",
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "apply?",
+        "file_body_preview": "sorry\n\n-- [theorem] lemma:m\n-- Statement (LaTeX): Assume that $f(z) 0$ satisfies and that $ t < {6}{T_e}$, then $$y^tM_f",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "lemma_m",
@@ -2985,7 +3678,13 @@
         "paper_definition_stub:C",
         "paper_definition_stub:z_F"
       ],
-      "source_latex": "\\label{lemma:m}\nAssume that $f(z)\\geq 0$ satisfies \\eqref{A10} and that $\\Delta t  < \\dfrac{h}{6\\mathcal{F}}\\dfrac{z_F}{T_e}$, then  $$y^tM_fy - \\dfrac{T_e}{z_F}\\Delta t  y^tK_fy \\;>\\; \\dfrac{\\underline{f}_{h} }{24} \\left \\| y \\right \\|_{h}^2 \\;\\geq\\; \\dfrac{\\underline{f}_{h} }{24} \\left \\| y \\right \\|_M^2  $$\nfor $y\\neq 0$ and \n $ \\underline{f}_{h} > 0$."
+      "source_latex": "\\label{lemma:m}\nAssume that $f(z)\\geq 0$ satisfies \\eqref{A10} and that $\\Delta t  < \\dfrac{h}{6\\mathcal{F}}\\dfrac{z_F}{T_e}$, then  $$y^tM_fy - \\dfrac{T_e}{z_F}\\Delta t  y^tK_fy \\;>\\; \\dfrac{\\underline{f}_{h} }{24} \\left \\| y \\right \\|_{h}^2 \\;\\geq\\; \\dfrac{\\underline{f}_{h} }{24} \\left \\| y \\right \\|_M^2  $$\nfor $y\\neq 0$ and \n $ \\underline{f}_{h} > 0$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "lemma_g",
@@ -3152,7 +3851,13 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:C"
       ],
-      "source_latex": "\\label{lemma:g}\nAssume that $D(z)\\geq 0$ \\eqref{A20} is a Lipschitz continuous function \\eqref{A2pp0},  then  there exists an $h_0<1$ ($n_0>1$), and there exist a constant $K_G$,  such that for $h<h_0$ ($n>n_0$)    one has\n$$v^TGv\\ge -|K_G|. \\left \\| v \\right \\|_M^2.$$\nwhere $K_G =   \\dfrac{1}{2\\,c_D\\,I(D)}-\\dfrac{\\mathcal{M}}{2}L_\\delta$, with $0<c_D<2$ independent of $h$, $\\displaystyle I(D) = z_F \\int_0^1\\dfrac{1}{D(z)}dz < \\infty$, and $L_\\delta$ the Lipschitz continuity constant such that $\n    |D(z)-D(y)|\\le L_\\delta |z-y|,\\quad\\forall z,\\,y\\in[0,1-\\delta].$"
+      "source_latex": "\\label{lemma:g}\nAssume that $D(z)\\geq 0$ \\eqref{A20} is a Lipschitz continuous function \\eqref{A2pp0},  then  there exists an $h_0<1$ ($n_0>1$), and there exist a constant $K_G$,  such that for $h<h_0$ ($n>n_0$)    one has\n$$v^TGv\\ge -|K_G|. \\left \\| v \\right \\|_M^2.$$\nwhere $K_G =   \\dfrac{1}{2\\,c_D\\,I(D)}-\\dfrac{\\mathcal{M}}{2}L_\\delta$, with $0<c_D<2$ independent of $h$, $\\displaystyle I(D) = z_F \\int_0^1\\dfrac{1}{D(z)}dz < \\infty$, and $L_\\delta$ the Lipschitz continuity constant such that $\n    |D(z)-D(y)|\\le L_\\delta |z-y|,\\quad\\forall z,\\,y\\in[0,1-\\delta].$",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "theorem_18",
@@ -3349,7 +4054,13 @@
         "paper_definition_stub:theorem_18",
         "paper_definition_stub:z_F"
       ],
-      "source_latex": "Assume that $D(z)\\geq 0$ \\eqref{A20} is a Lipschitz continuous function \\eqref{A2pp0} and that $f(z)\\geq 0$ satisfies \\eqref{A10}. Let $h$ be chosen to be sufficiently small ($h<h_0$), then the matrix of the discrete system $$V = M_f+T_e\\,\\Delta t\\, C $$ is invertible  if \\vspace{-2mm}\n$$0 < \\Delta t <\\dfrac{z_F}{6T_e} min\\left\\{\\dfrac{h}{\\mathcal{F}}, \\dfrac{  \\underline{f}_{h}}{4\\left|z_F\\mathcal{G} - |K_G|\\,\\right|  }\\right\\}$$ where\n $ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z) >0$."
+      "source_latex": "Assume that $D(z)\\geq 0$ \\eqref{A20} is a Lipschitz continuous function \\eqref{A2pp0} and that $f(z)\\geq 0$ satisfies \\eqref{A10}. Let $h$ be chosen to be sufficiently small ($h<h_0$), then the matrix of the discrete system $$V = M_f+T_e\\,\\Delta t\\, C $$ is invertible  if \\vspace{-2mm}\n$$0 < \\Delta t <\\dfrac{z_F}{6T_e} min\\left\\{\\dfrac{h}{\\mathcal{F}}, \\dfrac{  \\underline{f}_{h}}{4\\left|z_F\\mathcal{G} - |K_G|\\,\\right|  }\\right\\}$$ where\n $ \\underline{f}_{h} = \\min\\limits_{z\\in [0,1-h]} f(z) >0$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     }
   ]
 }

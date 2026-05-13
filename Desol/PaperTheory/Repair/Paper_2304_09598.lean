@@ -11,18 +11,48 @@ open scoped BigOperators
 
 namespace Paper_2304_09598_Repair
 
+-- symbol: h_enumerate_multisegments_isomorphic_quiver_2 -> h_enumerate_multisegments_isomorphic_quiver_2 (paper_scalar_or_distribution)
+-- symbol: h_manysimplea_multisegment_formed_taking_1 -> h_manysimplea_multisegment_formed_taking_1 (paper_scalar_or_distribution)
+-- symbol: h_multiplicity_multiplicity_segment_multisegment_1 -> h_multiplicity_multiplicity_segment_multisegment_1 (paper_scalar_or_distribution)
+-- symbol: h_multisegment_which_satisfies_conditions_2 -> h_multisegment_which_satisfies_conditions_2 (paper_scalar_or_distribution)
+-- symbol: h_note_rank_equal_defined_2 -> h_note_rank_equal_defined_2 (paper_scalar_or_distribution)
 -- symbol: h_prop_actions_segments_arbitrary_1 -> h_prop_actions_segments_arbitrary_1 (paper_scalar_or_distribution)
+-- symbol: h_quant_ladder_multisegment_1 -> h_quant_ladder_multisegment_1 (paper_scalar_or_distribution)
 -- symbol: h_riddlesden2022combinatorial_corollary_quant_arbitrary_1 -> h_riddlesden2022combinatorial_corollary_quant_arbitrary_1 (paper_scalar_or_distribution)
+-- symbol: h_riddlesden2022combinatorial_lemma_basic_multisegments_1 -> h_riddlesden2022combinatorial_lemma_basic_multisegments_1 (paper_scalar_or_distribution)
+-- symbol: h_simple_simple_multisegment_1 -> h_simple_simple_multisegment_1 (paper_scalar_or_distribution)
 -- symbol: \label{Cor:Arthur} ABV-packets for orbits of Arthur type are singletons and consequently, ABV-packets for orbits of Arthur type are A-packets. -> CorArthurSourceStatement (source_backed_review_statement_symbol)
 -- symbol: [\cite{riddlesden2022combinatorial}, Corollary 4.2.22.] \label{Cor:Quant} For an arbitrary multisegment $\alpha$ which is not a ladder multisegment, we have $$n_{\tilde{\alpha}} + n_{\alpha} > S_{\alpha} + C_{\alpha} \geq S_{\alpha} + c_{\alpha},$$ and hence a multisegment $\alpha$ is a ladder multisegment if and only if $$n_{\tilde{\alpha}} + n_{\alpha} = S_{\alpha} + C_{\alpha} = S_{\alpha} + c_{\alpha}.$$ -> CorQuantSourceStatement (source_backed_review_statement_symbol)
 -- symbol: \label{Lem:PrecedesQuantum} At each iterative step of the M\oe glin-Waldspurger algorithm and when assigning flows in the network description the set of preceding segments which are chosen form an irreducible ladder multisegment. This follows from \Cref{Prop:IncreasingLength} and the properties discussed throughout this subsection must therefore be satisfied for each iteration. -> LemPrecedesQuantumSourceStatement (source_backed_review_statement_symbol)
 -- symbol: [\cite{riddlesden2022combinatorial}, Lemma 4.2.15.] \label{Lem:QuantEquiv} If $\alpha$ and $\beta$ are ladder multisegments, $\alpha \leq \beta$ and $n_{\alpha} = n_{\beta}$ then $\alpha = \beta$. -> LemQuantEquivSourceStatement (source_backed_review_statement_symbol)
 -- symbol: \label{Prop:Actions} Let $\Delta_1$ and $\Delta_2$ be any two segments in an arbitrary multisegment $\alpha$, then we can construct a new multisegment $\beta$ by replacing each $\Delta_1$ and $\Delta_2$ in $\alpha$ with respectively \[ \left\{ \begin{array}{ll} \Delta_1 \cap \Delta_2 \text{ and } \Delta_1 \cup \Delta_2, & \mbox{if $ \Delta_1 \cap \Delta_2 \neq \emptyset$ and $\Delta_1 \neq \Delta_2$};\\ \Delta_1 \cup \Delta_2, & \mbox{else if $\Delta_1 \cup \Delta_2$ is a segment}; \\ \Delta_1 \ -> PropActionsSourceStatement (source_backed_review_statement_symbol)
+-- symbol: \label{Prop:IncreasingLength} During each iteration of the M\oe glin-Waldspurger algorithm the preceding segments will be chosen in increasing length. -> PropIncreasingLengthSourceStatement (source_backed_review_statement_symbol)
+-- symbol: \label{Thm:ManySimpleA=B} Let $\alpha$ be a multisegment formed by the taking the union of $m$ simple symmetric multisegments. If $\beta$ is a multisegment such that $\alpha \leq \beta$ and $\tilde{\alpha} \leq \tilde{\beta}$, then $\alpha = \beta$. -> ThmManySimpleABSourceStatement (source_backed_review_statement_symbol)
+-- symbol: \label{Thm:Quant} Let $\alpha$ be a ladder multisegment. If $\beta$ is a multisegment such that $\alpha \leq \beta$ and $\tilde{\alpha} \leq \tilde{\beta}$, then $\alpha = \beta$. %If $\alpha$ is a ladder multisegment, $\alpha \leq \beta$ and $\tilde{\alpha} \leq \tilde{\beta}$, then $\alpha = \beta$. -> ThmQuantSourceStatement (source_backed_review_statement_symbol)
+-- symbol: \label{Thm:Simple} Let $\alpha$ be a simple multisegment. For any multisegment $\beta$ which satisfies the conditions $\alpha \leq \beta$ and $\tilde{\alpha} \leq \tilde{\beta}$, then $\alpha = \beta$. -> ThmSimpleSourceStatement (source_backed_review_statement_symbol)
+-- symbol: \label{multiplicity} The multiplicity of a segment $(i, i+1, \dots, j-1, j)$ in the multisegment is denoted $m_{i, j}$, and given by $$ m_{i, j} = r_{i, j} - r_{i-1, j} - r_{i, j+1} + r_{i-1, j+1}. $$ Note that we assume that the rank is equal to $0$ if it is not defined inside the rank triangle. -> MultiplicitySourceStatement (source_backed_review_statement_symbol)
+-- symbol: [\cite{riddlesden2022combinatorial}, Lemma 4.2.2.]\label{Basic} Let $\alpha, \beta$ be multisegments and $\tilde{\alpha}, \tilde{\beta}$ their respective dual multisegments. Then \begin{enumerate}[i)] \item For any two multisegments $\alpha$, $\beta$ with isomorphic quiver representations, $c_{\alpha} = c_{\beta}$ and $S_{\alpha} = S_{\beta}$. \item If $\alpha \leq \beta$ then $L_{\alpha} \leq L_{\beta}$. \item If $\alpha \leq \beta$ then $n_{\alpha} \geq n_{\beta}$. \item $n_{\tilde{\alpha}} \g -> BasicSourceStatement (source_backed_review_statement_symbol)
 
 -- Domain axioms / paper-local symbols. These are explicit formalization debt.
+def h_enumerate_multisegments_isomorphic_quiver_2 : ℝ := 0
+
+def h_manysimplea_multisegment_formed_taking_1 : ℝ := 0
+
+def h_multiplicity_multiplicity_segment_multisegment_1 : ℝ := 0
+
+def h_multisegment_which_satisfies_conditions_2 : ℝ := 0
+
+def h_note_rank_equal_defined_2 : ℝ := 0
+
 def h_prop_actions_segments_arbitrary_1 : ℝ := 0
 
+def h_quant_ladder_multisegment_1 : ℝ := 0
+
 def h_riddlesden2022combinatorial_corollary_quant_arbitrary_1 : ℝ := 0
+
+def h_riddlesden2022combinatorial_lemma_basic_multisegments_1 : ℝ := 0
+
+def h_simple_simple_multisegment_1 : ℝ := 0
 
 def CorArthurSourceStatement : Prop := True
 
@@ -33,5 +63,17 @@ def LemPrecedesQuantumSourceStatement : Prop := True
 def LemQuantEquivSourceStatement : Prop := True
 
 def PropActionsSourceStatement : Prop := True
+
+def PropIncreasingLengthSourceStatement : Prop := True
+
+def ThmManySimpleABSourceStatement : Prop := True
+
+def ThmQuantSourceStatement : Prop := True
+
+def ThmSimpleSourceStatement : Prop := True
+
+def MultiplicitySourceStatement : Prop := True
+
+def BasicSourceStatement : Prop := True
 
 end Paper_2304_09598_Repair

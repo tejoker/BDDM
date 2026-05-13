@@ -12,16 +12,16 @@ open scoped BigOperators
 namespace Paper_2604_21884_Repair
 
 -- symbol: h_lowering_full_spde_threshold_1 -> h_lowering_full_spde_threshold_1 (paper_scalar_or_distribution)
--- symbol: [Primitive route]\label{rem:primitive-route} The deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because -> RemPrimitiveRouteSourceStatement (source_backed_review_statement_symbol)
 -- symbol: [Conditional convergence of the cutoff equations]\label{cor:conditional-cutoff} If the cutoff enhanced data converge in the norms required by Theorem \ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term. -> CorConditionalCutoffSourceStatement (source_backed_review_statement_symbol)
+-- symbol: [Primitive route]\label{rem:primitive-route} The deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because -> RemPrimitiveRouteSourceStatement (source_backed_review_statement_symbol)
 -- symbol: [Conditional deterministic closure]\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \ref{thm:baseline-lift}, Proposition \ref{prop:cubic-quartic-baseline}, Theorem \ref{thm:operator-main}, and Proposition \ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm \begin{equation}\label{eq:source-hyp-i -> ThmConditionalClosureIntroSourceStatement (source_backed_review_statement_symbol)
 
 -- Domain axioms / paper-local symbols. These are explicit formalization debt.
 def h_lowering_full_spde_threshold_1 : ℝ := 0
 
-def RemPrimitiveRouteSourceStatement : Prop := True
-
 def CorConditionalCutoffSourceStatement : Prop := True
+
+def RemPrimitiveRouteSourceStatement : Prop := True
 
 def ThmConditionalClosureIntroSourceStatement : Prop := True
 

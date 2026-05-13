@@ -209,7 +209,13 @@
         "paper_definition_stub:hu0",
         "paper_definition_stub:u0"
       ],
-      "source_latex": "\\label{Thm Glo2}\n\t%Let $\\gamma\\geq 0$ and $\\alpha\\in (-1,0).$ Assume that $u_0\\in L^\\infty(\\mathbbm{H}^N),$ $f\\in L^\\infty(\\mathbbm{H}^N)\\cap L^1(\\mathbbm{H}^N)$  with $u_0\\geq 0$ and $\\int_{\\mathbbm{H}^N}f>0.$ Then for any $p\\in \\big(1,\\frac{Q-2\\alpha}{Q-2-2\\alpha}\\big),$ all non-trivial weak solutions to \\eqref{eq 0.1} blow up in finite time.\n\t%"
+      "source_latex": "\\label{Thm Glo2}\n\t%Let $\\gamma\\geq 0$ and $\\alpha\\in (-1,0).$ Assume that $u_0\\in L^\\infty(\\mathbbm{H}^N),$ $f\\in L^\\infty(\\mathbbm{H}^N)\\cap L^1(\\mathbbm{H}^N)$  with $u_0\\geq 0$ and $\\int_{\\mathbbm{H}^N}f>0.$ Then for any $p\\in \\big(1,\\frac{Q-2\\alpha}{Q-2-2\\alpha}\\big),$ all non-trivial weak solutions to \\eqref{eq 0.1} blow up in finite time.\n\t%",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "alpha_0",
@@ -507,7 +513,29 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "\\label{alpha>0}\n\t%\t\tLet $\\gamma\\geq 0$ and $\\alpha\\in (0,\\infty).$ Assume $f\\in L^\\infty(\\mathbbm{H}^N)\\cap L^1(\\mathbbm{H}^N)$ with $\\int_{\\mathbbm{H}^N} f>0$ and $u_0\\in  L^\\infty(\\mathbbm{H}^N).$ Then, for any exponent $p>1,$ problem \\eqref{eq 0.1} does not admit a global-in-time weak solution.\n\t%"
+      "source_latex": "\\label{alpha>0}\n\t%\t\tLet $\\gamma\\geq 0$ and $\\alpha\\in (0,\\infty).$ Assume $f\\in L^\\infty(\\mathbbm{H}^N)\\cap L^1(\\mathbbm{H}^N)$ with $\\int_{\\mathbbm{H}^N} f>0$ and $u_0\\in  L^\\infty(\\mathbbm{H}^N).$ Then, for any exponent $p>1,$ problem \\eqref{eq 0.1} does not admit a global-in-time weak solution.\n\t%",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:d_dts",
+          "symbol": "d_dts",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:d_dts"
+      ]
     },
     {
       "theorem_name": "Thm_Blowup_O",
@@ -686,7 +714,29 @@
         "paper_definition_stub:u0",
         "paper_definition_stub:ξ'"
       ],
-      "source_latex": "\\label{Thm Blowup O} Let $\\mathbb{H}^N$ be the Heisenberg group with homogeneous dimension $Q:=2N+2,$ and \n\tlet $\\gamma\\in [0,1)$ and $\\alpha\\in (-1,0).$ We assume that  \n\t\\begin{align}\n\t\t \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}u_0(\\xi)d\\xi<\\infty,\\,0< \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty.\n\t\\end{align} \n\tThen, for any $1<p<\\frac{Q+2\\gamma-\\mu(\\lambda)-2\\alpha}{Q-2-\\mu(\\lambda)-2\\alpha}$,  problem \\eqref{eq 0.1} does not admit a global-in-time weak solution."
+      "source_latex": "\\label{Thm Blowup O} Let $\\mathbb{H}^N$ be the Heisenberg group with homogeneous dimension $Q:=2N+2,$ and \n\tlet $\\gamma\\in [0,1)$ and $\\alpha\\in (-1,0).$ We assume that  \n\t\\begin{align}\n\t\t \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}u_0(\\xi)d\\xi<\\infty,\\,0< \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty.\n\t\\end{align} \n\tThen, for any $1<p<\\frac{Q+2\\gamma-\\mu(\\lambda)-2\\alpha}{Q-2-\\mu(\\lambda)-2\\alpha}$,  problem \\eqref{eq 0.1} does not admit a global-in-time weak solution.",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:ξ",
+          "symbol": "ξ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:ξ"
+      ]
     },
     {
       "theorem_name": "Thm_Blowup_O2",
@@ -863,7 +913,29 @@
         "paper_definition_stub:h0",
         "paper_definition_stub:u0"
       ],
-      "source_latex": "\\label{Thm Blowup O2} Let $\\mathbb{H}^N$ be the Heisenberg group with homogeneous dimension $Q:=2N+2,$ and\n\tlet $\\gamma\\in [0,1)$ and  $\\alpha\\in (0,\\infty).$ We assume that \t\\begin{align}\n\t\t\\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}u_0(\\xi)d\\xi<\\infty,\\,0< \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty.\n\t\\end{align}   \n\tThen, for any $p>1,$ problem \\eqref{eq 0.1} does not admit a global-in-time weak solution."
+      "source_latex": "\\label{Thm Blowup O2} Let $\\mathbb{H}^N$ be the Heisenberg group with homogeneous dimension $Q:=2N+2,$ and\n\tlet $\\gamma\\in [0,1)$ and  $\\alpha\\in (0,\\infty).$ We assume that \t\\begin{align}\n\t\t\\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}u_0(\\xi)d\\xi<\\infty,\\,0< \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty.\n\t\\end{align}   \n\tThen, for any $p>1,$ problem \\eqref{eq 0.1} does not admit a global-in-time weak solution.",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:ξ",
+          "symbol": "ξ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:ξ"
+      ]
     },
     {
       "theorem_name": "Thm_Blowup_O3",
@@ -1086,7 +1158,29 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "\\label{Thm Blowup O3} Let $\\mathbb{H}^N$ be the Heisenberg group with homogeneous dimension $Q:=2N+2,$ and\n\tlet $\\gamma\\in (0,1)$ and  $\\alpha\\in [0,\\infty).$ We assume that \t\\begin{align}\n\t\t\\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}u_0(\\xi)d\\xi<\\infty,\\,0< \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty.\n\t\\end{align}  \n\tThen, for any $p>1,$ problem \\eqref{eq 0.1} does not admit a global-in-time weak solution."
+      "source_latex": "\\label{Thm Blowup O3} Let $\\mathbb{H}^N$ be the Heisenberg group with homogeneous dimension $Q:=2N+2,$ and\n\tlet $\\gamma\\in (0,1)$ and  $\\alpha\\in [0,\\infty).$ We assume that \t\\begin{align}\n\t\t\\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}u_0(\\xi)d\\xi<\\infty,\\,0< \\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty.\n\t\\end{align}  \n\tThen, for any $p>1,$ problem \\eqref{eq 0.1} does not admit a global-in-time weak solution.",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:ξ",
+          "symbol": "ξ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:ξ"
+      ]
     },
     {
       "theorem_name": "infty",
@@ -1313,16 +1407,22 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "\\cite{Gre}\n\tThe heat semigroup associated with $-\\Delta_{H}$ satisfies the following estimate:\n\t\\begin{align}\\label{infty}\n\t\t\\|e^{t\\Delta_{H}}g\\|_{L^\\infty(\\mathbbm{H}^N)}\\leq \\|g\\|_{L^\\infty(\\mathbbm{H}^N)},\n\t\\end{align}\n\tfor any $g\\in L^\\infty(\\mathbbm{H}^N)$ and $t>0.$"
+      "source_latex": "\\cite{Gre}\n\tThe heat semigroup associated with $-\\Delta_{H}$ satisfies the following estimate:\n\t\\begin{align}\\label{infty}\n\t\t\\|e^{t\\Delta_{H}}g\\|_{L^\\infty(\\mathbbm{H}^N)}\\leq \\|g\\|_{L^\\infty(\\mathbbm{H}^N)},\n\t\\end{align}\n\tfor any $g\\in L^\\infty(\\mathbbm{H}^N)$ and $t>0.$",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Beta",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
       "lean_statement": "theorem Beta {z1 z2 : ℂ} (hz1 : 0 < z1.re) (hz2 : 0 < z2.re) :\n  ∃ B : ℂ, B = ∫ t in Set.Ioo (0 : ℝ) 1, (t : ℂ) ^ (z1 - 1) * ((1 - t) : ℂ) ^ (z2 - 1) := by sorry",
-      "status": "FULLY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline",
       "promotion_gate_passed": true,
@@ -1415,17 +1515,17 @@
           "non-markov"
         ]
       },
-      "proof_text": "omega",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 14.55,
       "timestamp": "2026-05-09T20:00:40Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -1439,7 +1539,10 @@
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [],
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
@@ -1447,7 +1550,8 @@
         "claim_equivalence_blocked:requires_human_for_release",
         "equivalent_independent_semantic_evidence",
         "claim_equivalent:hybrid",
-        "semantic_equivalence:verified"
+        "semantic_equivalence:verified",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_8b8d993ce5f29dcc0a0f555f",
@@ -1558,7 +1662,7 @@
       "context_pack": {},
       "axiom_debt": [],
       "axiom_debt_hash": "50510f429b5ab5a6",
-      "closure_claim": "not_closed",
+      "closure_claim": "lean_verified_without_paper_local_axioms",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
@@ -1596,13 +1700,27 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "[Beta function]\n\tThe Beta function $B(z_1,z_2)$ is a function of two complex variables $z_1,\\,z_2,$ defined as\n\t\\begin{align}\\label{Beta}\n\t\tB(z_1,z_2)=\\int_0^1t^{z_1-1}(1-t)^{z_2-1}dt,\\,\\, \\mathcal{R}e(z_i)>0,\\,i=1,2.\n\t\\end{align}\n\tThis integral is also known as the Eulerian integral of the first kind."
+      "source_latex": "[Beta function]\n\tThe Beta function $B(z_1,z_2)$ is a function of two complex variables $z_1,\\,z_2,$ defined as\n\t\\begin{align}\\label{Beta}\n\t\tB(z_1,z_2)=\\int_0^1t^{z_1-1}(1-t)^{z_2-1}dt,\\,\\, \\mathcal{R}e(z_i)>0,\\,i=1,2.\n\t\\end{align}\n\tThis integral is also known as the Eulerian integral of the first kind.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_without_paper_local_axioms",
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "omega",
+        "file_body_preview": "sorry\n\n-- [theorem] defn_8\n-- Statement (LaTeX): [Riemann-Liouville fractional integral ] For a given integrable functio",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "defn_8",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem defn_8 (h1 : Prop) : (let Claim : Prop := h1; Claim) := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem defn_8 :\n  Defn8SourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -1692,9 +1810,9 @@
       },
       "proof_text": "aesop",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 9.62,
       "timestamp": "2026-05-09T20:00:55Z",
@@ -1712,14 +1830,17 @@
         "semantic_adversarial_checks_passed": false,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": false
+        "statement_alignment_not_unrelated": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -1830,7 +1951,225 @@
         "paper_definition_stub:defn_8",
         "paper_definition_stub:h1"
       ],
-      "source_latex": "[Riemann-Liouville fractional integral \\cite{Kilbas}] For a given integrable function $u(t),$ $t\\in (0,T),$ the left and right Riemann–Liouville fractional integrals of order $\\gamma\\in (0,1)$ are defined as \n\t\\begin{align}\n\t\tI_{0+}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_0^t(t-\\tau)^{\\gamma-1}u(\\tau)d\\tau,\n\t\\end{align}\n\tand\n\t\\begin{align}\n\t\tI_{T-}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_t^T(\\tau-t)^{\\gamma-1}u(\\tau)d\\tau,\n\t\\end{align}\n\trespectively. Moreover, $I_{T-}^\\gamma u, I_{0+}^\\gamma u\\longrightarrow u$ a.e. as $\\gamma\\longrightarrow 0,$ see \\cite{Kilbas}. In view of it, we use the convention that $I_{T-}^0 u(t), I_{0+}^0 u(t)=u(t), t\\in (0,T).$"
+      "source_latex": "[Riemann-Liouville fractional integral \\cite{Kilbas}] For a given integrable function $u(t),$ $t\\in (0,T),$ the left and right Riemann–Liouville fractional integrals of order $\\gamma\\in (0,1)$ are defined as \n\t\\begin{align}\n\t\tI_{0+}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_0^t(t-\\tau)^{\\gamma-1}u(\\tau)d\\tau,\n\t\\end{align}\n\tand\n\t\\begin{align}\n\t\tI_{T-}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_t^T(\\tau-t)^{\\gamma-1}u(\\tau)d\\tau,\n\t\\end{align}\n\trespectively. Moreover, $I_{T-}^\\gamma u, I_{0+}^\\gamma u\\longrightarrow u$ a.e. as $\\gamma\\longrightarrow 0,$ see \\cite{Kilbas}. In view of it, we use the convention that $I_{T-}^0 u(t), I_{0+}^0 u(t)=u(t), t\\in (0,T).$",
+      "proved": false,
+      "source_context_pack_id": "srcctx_2d3fbce40c343699766d50d4",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_2d3fbce40c343699766d50d4",
+        "paper_id": "2604.21314",
+        "theorem_name": "defn_8",
+        "theorem_id": "defn_8",
+        "source_latex": "[Riemann-Liouville fractional integral \\cite{Kilbas}] For a given integrable function $u(t),$ $t\\in (0,T),$ the left and right Riemann–Liouville fractional integrals of order $\\gamma\\in (0,1)$ are defined as \n\t\\begin{align}\n\t\tI_{0+}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_0^t(t-\\tau)^{\\gamma-1}u(\\tau)d\\tau,\n\t\\end{align}\n\tand\n\t\\begin{align}\n\t\tI_{T-}^\\gamma u(t)=\\frac{1}{\\Gamma(\\gamma)}\\int_t^T(\\tau-t)^{\\gamma-1}u(\\tau)d\\tau,\n\t\\end{align}\n\trespectively. Moreover, $I_{T-}^\\gamma u, I_{0+}^\\gamma u\\longrightarrow u$ a.e. as $\\gamma\\longrightarrow 0,$ see \\cite{Kilbas}. In view of it, we use the convention that $I_{T-}^0 u(t), I_{0+}^0 u(t)=u(t), t\\in (0,T).$",
+        "normalized_text": "[Riemann-Liouville fractional integral ] For a given integrable function u(t), tin (0,T), the left and right Riemann–Liouville fractional integrals of order gammain (0,1) are defined as I_ 0+ ^gamma u(t)=frac 1 Gamma(gamma) int_0^t(t-tau)^ gamma-1 u(tau)dtau, and I_ T- ^gamma u(t)=frac 1 Gamma(gamma) int_t^T(tau-t)^ gamma-1 u(tau)dtau, respectively. Moreover, I_ T- ^gamma u, I_ 0+ ^gamma ulongrightarrow u a.e. as gammalongrightarrow 0, see . In view of it, we use the convention that I_ T- ^0 u(t), I_ 0+ ^0 u(t)=u(t), tin (0,T).",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+          "start_byte": 25816,
+          "end_byte": 26481,
+          "start_line": 377,
+          "start_col": 13,
+          "end_line": 385,
+          "end_col": 222,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 24,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 7,
+              "score": 195,
+              "name": "defn_8",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Beta",
+              "label": "Beta",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Hardy",
+              "label": "Hardy",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 18,
+              "score": 0,
+              "name": "Local",
+              "label": "Local",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 15,
+              "score": 0,
+              "name": "Mild",
+              "label": "Mild",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 2,
+              "score": 0,
+              "name": "Thm Blowup O",
+              "label": "Thm Blowup O",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Thm Blowup O2",
+              "label": "Thm Blowup O2",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 4,
+              "score": 0,
+              "name": "Thm Blowup O3",
+              "label": "Thm Blowup O3",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 12,
+              "score": 0,
+              "name": "Thm Blowup O4",
+              "label": "Thm Blowup O4",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 13,
+              "score": 0,
+              "name": "Thm Blowup O5",
+              "label": "Thm Blowup O5",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cthc0987d7e80446e84d7e00d1e",
+              "defn8"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "defn_8",
+                "label": "",
+                "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 7,
+            "name": "defn_8",
+            "label": "",
+            "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0,
+        "source_token_count": 35,
+        "lean_token_count": 3,
+        "source_anchors": [
+          "srcctx_2d3fbce40c343699766d50d4"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 0.0,
+        "items": [
+          {
+            "assumption": "[Riemann-Liouville fractional integral \\cite{Kilbas}] For a given integrable function $u(t),$ $t\\in (0,T),$ the left and right Riemann–Liouville fractional integrals of order $\\gamma\\in (0,1)$ are defined as \\begin{align",
+            "coverage": 0.0,
+            "covered": false
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "Moreover, $I_{T-}^\\gamma u, I_{0+}^\\gamma u\\longrightarrow u$ a.e. as $\\gamma\\longrightarrow 0,$ see \\cite{Kilbas}. In view of it, we use the convention that $I_{T-}^0 u(t), I_{0+}^0 u(t)=u(t), t\\in (0,T).$",
+        "target": "Defn8SourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21314.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_2d3fbce40c343699766d50d4",
+        "source_coverage": {
+          "score": 0.0,
+          "source_token_count": 35,
+          "lean_token_count": 3,
+          "source_anchors": [
+            "srcctx_2d3fbce40c343699766d50d4"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 0.0,
+          "items": [
+            {
+              "assumption": "[Riemann-Liouville fractional integral \\cite{Kilbas}] For a given integrable function $u(t),$ $t\\in (0,T),$ the left and right Riemann–Liouville fractional integrals of order $\\gamma\\in (0,1)$ are defined as \\begin{align",
+              "coverage": 0.0,
+              "covered": false
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "Moreover, $I_{T-}^\\gamma u, I_{0+}^\\gamma u\\longrightarrow u$ a.e. as $\\gamma\\longrightarrow 0,$ see \\cite{Kilbas}. In view of it, we use the convention that $I_{T-}^0 u(t), I_{0+}^0 u(t)=u(t), t\\in (0,T).$",
+          "target": "Defn8SourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "thm_9",
@@ -2061,7 +2400,13 @@
       "statement_fidelity_source": "none",
       "source_content_hash": "b94befeb2d00cf23",
       "source_span_id": "",
-      "source_latex": "[Picone's identity]\n%\tLet $p>1$ and $\\Omega\\subseteq\\mathbbm{H}^N.$ If $u,v\\in HW^{1,p}(\\Omega)$ with $u\\geq 0,$ and $-\\Delta_{H}$ is a bounded Radon measure. Also, $v|_{\\partial\\Omega}=0,$ $v\\geq 0$ (v$\\not\\equiv 0$). Then, the following estimate holds:\n%\t\\begin{align}\n\t%\t\t\\int_{\\Omega}|\\nabla_{H}u|^2\\geq \\int_{\\Omega}\\frac{u^2}{v}(-\\Delta_{H}v).\n\t%\t\\end{align} \n%"
+      "source_latex": "[Picone's identity]\n%\tLet $p>1$ and $\\Omega\\subseteq\\mathbbm{H}^N.$ If $u,v\\in HW^{1,p}(\\Omega)$ with $u\\geq 0,$ and $-\\Delta_{H}$ is a bounded Radon measure. Also, $v|_{\\partial\\Omega}=0,$ $v\\geq 0$ (v$\\not\\equiv 0$). Then, the following estimate holds:\n%\t\\begin{align}\n\t%\t\t\\int_{\\Omega}|\\nabla_{H}u|^2\\geq \\int_{\\Omega}\\frac{u^2}{v}(-\\Delta_{H}v).\n\t%\t\\end{align} \n%",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Hardy",
@@ -2309,7 +2654,29 @@
       "statement_fidelity_source": "none",
       "source_content_hash": "12182a8a30302f10",
       "source_span_id": "",
-      "source_latex": "[Lemma 2.2 \\cite{Dou}]\\label{Hardy} Let $f\\in C_c^\\infty(\\mathbbm{H}^N)\\setminus\\{0\\}.$ Then\n\t\\begin{align}\n\t\t\\int_{\\mathbbm{H}^N}\\frac{(f(\\xi))^2}{\\|\\xi\\|_H^{2}}\\psi(\\xi)d\\xi\\leq \\left(\\frac{2}{Q-2}\\right)^2\\int_{\\mathbbm{H}^N}|\\nabla_{H}f(\\xi)|^2d\\xi,\n\t\\end{align}\n\twhere $\\psi=|\\nabla_{H}\\|\\cdot\\|_{H}|^2.$ Moreover, the constant $\\left(\\frac{2}{Q-2}\\right)^2$ appearing in the inequality is sharp."
+      "source_latex": "[Lemma 2.2 \\cite{Dou}]\\label{Hardy} Let $f\\in C_c^\\infty(\\mathbbm{H}^N)\\setminus\\{0\\}.$ Then\n\t\\begin{align}\n\t\t\\int_{\\mathbbm{H}^N}\\frac{(f(\\xi))^2}{\\|\\xi\\|_H^{2}}\\psi(\\xi)d\\xi\\leq \\left(\\frac{2}{Q-2}\\right)^2\\int_{\\mathbbm{H}^N}|\\nabla_{H}f(\\xi)|^2d\\xi,\n\t\\end{align}\n\twhere $\\psi=|\\nabla_{H}\\|\\cdot\\|_{H}|^2.$ Moreover, the constant $\\left(\\frac{2}{Q-2}\\right)^2$ appearing in the inequality is sharp.",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:ξ",
+          "symbol": "ξ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:ξ"
+      ]
     },
     {
       "theorem_name": "Thm_Folst",
@@ -2520,7 +2887,13 @@
       "statement_fidelity_source": "none",
       "source_content_hash": "cc02cd97ccba8a39",
       "source_span_id": "",
-      "source_latex": "[Folland-Stein-Sobolev inequality \\cite{FollSte}]\\label{Thm Folst}\n\tLet $1<p<\\infty.$ Then, there exists a constant $C=C(p,Q)$ such that \n\t\\begin{align}\n\t\t\\left(\\int_{\\mathbbm{H}^N}|\\phi|^{\\frac{pQ}{Q-p}}d\\xi\\right)^{\\frac{Q-p}{pQ}} \\leq C(p,Q)\\left(\\int_{\\mathbbm{H}^N}|\\nabla_H\\phi|^p\\right)^{\\frac{1}{p}}\n\t\\end{align}\t\n\tfor all $\\phi\\in C_c^\\infty(\\mathbbm{H}^N).$"
+      "source_latex": "[Folland-Stein-Sobolev inequality \\cite{FollSte}]\\label{Thm Folst}\n\tLet $1<p<\\infty.$ Then, there exists a constant $C=C(p,Q)$ such that \n\t\\begin{align}\n\t\t\\left(\\int_{\\mathbbm{H}^N}|\\phi|^{\\frac{pQ}{Q-p}}d\\xi\\right)^{\\frac{Q-p}{pQ}} \\leq C(p,Q)\\left(\\int_{\\mathbbm{H}^N}|\\nabla_H\\phi|^p\\right)^{\\frac{1}{p}}\n\t\\end{align}\t\n\tfor all $\\phi\\in C_c^\\infty(\\mathbbm{H}^N).$",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Weak",
@@ -2753,7 +3126,13 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
       ],
-      "source_latex": "[Weak solution]\\label{Weak} Let $v(0)\\in L^1_{\\text{loc}}(\\mathbbm{H}^N, \\|\\xi\\|^{-2\\mu(\\lambda)}d\\xi),f\\in L^1_{\\text{loc}}(\\mathbbm{H}^N, \\|\\xi\\|^{-\\mu(\\lambda)}d\\xi).$ Then $v\\in L^p_{\\text{loc}}((0,T),L^p_{\\text{loc}}(\\mathbbm{H}^N,\\|\\xi\\|_H^{-{(p+1)\\mu(\\lambda)}}d\\xi))\\cap L^1_{\\text{loc}}((0,T),L^1_{\\text{loc}}(\\mathbbm{H}^N,\\|\\xi\\|_H^{-2\\mu(\\lambda)}d\\xi)) $ is called a local-in-time weak solution to \\eqref{eq equi} (and equivalently, to \\eqref{eq 0.1}) if \n\t\\begin{align}\n\t\t-\\int_0^T\\int_{\\mathbbm{H}^N}\tv(\\|\\xi\\|_{H}^{-{2\\mu(\\lambda)}}\\partial_t\\phi-L_{H}\\phi)d\\xi dt &=\\frac{1}{\\Gamma(\\gamma)}\\int_0^T\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{{-(p+1)\\mu(\\lambda)}}|v|^pI^\\gamma_{T^-}\\phi d\\xi dt\\\\\n\t\t&\\qquad +\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{{-2\\mu(\\lambda)}}v(0,\\xi)\\phi(0,\\xi)d\\xi\\\\\n\t\t&\\qquad+\\int_0^T\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{{-\\mu(\\lambda)}}t^\\alpha f\\phi d\\xi dt\n\t\\end{align}\n\tholds for any non-negative test function $\\phi \\in C_c^1([0,T), C_c^2(\\mathbbm{H}^N).$ Moreover, $v$ is called global-in-time weak solution if $T=\\infty.$"
+      "source_latex": "[Weak solution]\\label{Weak} Let $v(0)\\in L^1_{\\text{loc}}(\\mathbbm{H}^N, \\|\\xi\\|^{-2\\mu(\\lambda)}d\\xi),f\\in L^1_{\\text{loc}}(\\mathbbm{H}^N, \\|\\xi\\|^{-\\mu(\\lambda)}d\\xi).$ Then $v\\in L^p_{\\text{loc}}((0,T),L^p_{\\text{loc}}(\\mathbbm{H}^N,\\|\\xi\\|_H^{-{(p+1)\\mu(\\lambda)}}d\\xi))\\cap L^1_{\\text{loc}}((0,T),L^1_{\\text{loc}}(\\mathbbm{H}^N,\\|\\xi\\|_H^{-2\\mu(\\lambda)}d\\xi)) $ is called a local-in-time weak solution to \\eqref{eq equi} (and equivalently, to \\eqref{eq 0.1}) if \n\t\\begin{align}\n\t\t-\\int_0^T\\int_{\\mathbbm{H}^N}\tv(\\|\\xi\\|_{H}^{-{2\\mu(\\lambda)}}\\partial_t\\phi-L_{H}\\phi)d\\xi dt &=\\frac{1}{\\Gamma(\\gamma)}\\int_0^T\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{{-(p+1)\\mu(\\lambda)}}|v|^pI^\\gamma_{T^-}\\phi d\\xi dt\\\\\n\t\t&\\qquad +\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{{-2\\mu(\\lambda)}}v(0,\\xi)\\phi(0,\\xi)d\\xi\\\\\n\t\t&\\qquad+\\int_0^T\\int_{\\mathbbm{H}^N}\\|\\xi\\|_{H}^{{-\\mu(\\lambda)}}t^\\alpha f\\phi d\\xi dt\n\t\\end{align}\n\tholds for any non-negative test function $\\phi \\in C_c^1([0,T), C_c^2(\\mathbbm{H}^N).$ Moreover, $v$ is called global-in-time weak solution if $T=\\infty.$",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Thm_Blowup_O4",
@@ -2961,7 +3340,13 @@
       "statement_fidelity_source": "none",
       "source_content_hash": "601a38c3abddf60f",
       "source_span_id": "",
-      "source_latex": "\\label{Thm Blowup O4}\n\tLet $\\gamma=0,$  $\\alpha\\in (-1,\\infty),$ and let  $0\\leq u_0,f\\in L^\\infty(\\mathbbm{H}^N).$ Then, for any $p>\n\t\\frac{\\mu(\\lambda)+2}{\\mu(\\lambda)},$ problem \\eqref{eq 0.1} does not admit a local-in-time solution."
+      "source_latex": "\\label{Thm Blowup O4}\n\tLet $\\gamma=0,$  $\\alpha\\in (-1,\\infty),$ and let  $0\\leq u_0,f\\in L^\\infty(\\mathbbm{H}^N).$ Then, for any $p>\n\t\\frac{\\mu(\\lambda)+2}{\\mu(\\lambda)},$ problem \\eqref{eq 0.1} does not admit a local-in-time solution.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Thm_Blowup_O5",
@@ -3162,7 +3547,13 @@
         "paper_definition_stub:hu0",
         "paper_definition_stub:u0"
       ],
-      "source_latex": "\\label{Thm Blowup O5}\n\tLet $\\gamma>0,$ $\\alpha\\in (-1,\\infty),$ and let  $0\\leq u_0,f\\in L^\\infty(\\mathbbm{H}^N).$ Assume that \\ref{H1} holds. Then, for any $p>\n\t\\frac{\\mu(\\lambda)+2}{\\mu(\\lambda)},$ problem \\eqref{eq 0.1} does not admit a local-in-time weak solution."
+      "source_latex": "\\label{Thm Blowup O5}\n\tLet $\\gamma>0,$ $\\alpha\\in (-1,\\infty),$ and let  $0\\leq u_0,f\\in L^\\infty(\\mathbbm{H}^N).$ Assume that \\ref{H1} holds. Then, for any $p>\n\t\\frac{\\mu(\\lambda)+2}{\\mu(\\lambda)},$ problem \\eqref{eq 0.1} does not admit a local-in-time weak solution.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "rem_15",
@@ -3353,7 +3744,13 @@
         "paper_definition_stub:hu0",
         "paper_definition_stub:u0"
       ],
-      "source_latex": "Condition \\ref{H1} is a mild temporal monotonicity assumption over short intervals. It ensures that the memory term remains comparable to its instantaneous value.\n\tIt generalizes the standard monotonicity condition $u_t\\ge 0$ over some interval (as used by Li et al. \\cite{Li}), corresponding to the case $\\theta=1$. Hence, \\ref{H1} can be viewed as a variant of this classical assumption."
+      "source_latex": "Condition \\ref{H1} is a mild temporal monotonicity assumption over short intervals. It ensures that the memory term remains comparable to its instantaneous value.\n\tIt generalizes the standard monotonicity condition $u_t\\ge 0$ over some interval (as used by Li et al. \\cite{Li}), corresponding to the case $\\theta=1$. Hence, \\ref{H1} can be viewed as a variant of this classical assumption.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Mild",
@@ -3563,13 +3960,19 @@
       "statement_fidelity_source": "none",
       "source_content_hash": "29f1ed9f28001109",
       "source_span_id": "",
-      "source_latex": "[Mild solution]\\label{Mild}\n\tA function $u\\in C([0,T],L^\\infty(\\mathbbm{H}^N))$ is called a local-in-time mild solution to \\eqref{eq without} if\n\t\\begin{align}\\label{eq Mild}\n\t\tu(t)=e^{t\\Delta_{H}}u_0+\\int_0^te^{(t-\\tau)\\Delta_{H}}\\left(\\frac{1}{\\Gamma (\\gamma)}\\int_0^\\tau(\\tau-s)^{-\\gamma}|u(s)|^{p}ds+\\tau^\\alpha f\\right)d\\tau\n\t\\end{align}\n\tholds for any $t\\in (0,T].$"
+      "source_latex": "[Mild solution]\\label{Mild}\n\tA function $u\\in C([0,T],L^\\infty(\\mathbbm{H}^N))$ is called a local-in-time mild solution to \\eqref{eq without} if\n\t\\begin{align}\\label{eq Mild}\n\t\tu(t)=e^{t\\Delta_{H}}u_0+\\int_0^te^{(t-\\tau)\\Delta_{H}}\\left(\\frac{1}{\\Gamma (\\gamma)}\\int_0^\\tau(\\tau-s)^{-\\gamma}|u(s)|^{p}ds+\\tau^\\alpha f\\right)d\\tau\n\t\\end{align}\n\tholds for any $t\\in (0,T].$",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Weak2",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem Weak2 (h1 : Prop) : (let Claim : Prop := h1; Claim) := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem Weak2 :\n  Weak2SourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -3659,9 +4062,9 @@
       },
       "proof_text": "aesop",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol,fallback_after_lean_validation_failure",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 14.41,
       "timestamp": "2026-05-09T20:03:15Z",
@@ -3679,14 +4082,17 @@
         "semantic_adversarial_checks_passed": false,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": false
+        "statement_alignment_not_unrelated": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -3796,7 +4202,226 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:h1"
       ],
-      "source_latex": "[Weak solution]\\label{Weak2}\n\tLet $u_0,f\\in L^1_{\\text{loc}}(\\mathbbm{H}^N).$ Then $u\\in L^p_{\\text{loc}}((0,T),L^p_{\\text{loc}}(\\mathbbm{H}^N))$ is called a local-in-time weak solution to \\eqref{eq without} if \n\t\\begin{align}\n\t\t-\\int_0^T\\int_{\\mathbbm{H}^N}u(\\partial_t\\phi+\\Delta_{H}\\phi)d\\xi dt =\\int_0^T\\int_{\\mathbbm{H}^N}|u|^pI_{T^-}^\\gamma\\phi d\\xi dt +\\int_{\\mathbbm{H}^N}u_0\\phi(0,\\cdot)d\\xi +\\int_0^T\\int_{\\mathbbm{H}^N} \\tau^\\alpha f\\phi d\\xi d\\tau,\n\t\\end{align}\n\tholds for any non-negative test function $\\phi\\in C_c^1([0,T),C_c^2(\\mathbbm{H}^N)).$ \n\tMoreover, $u$ is called a global-in-time weak solution if $T=+\\infty.$"
+      "source_latex": "[Weak solution]\\label{Weak2}\n\tLet $u_0,f\\in L^1_{\\text{loc}}(\\mathbbm{H}^N).$ Then $u\\in L^p_{\\text{loc}}((0,T),L^p_{\\text{loc}}(\\mathbbm{H}^N))$ is called a local-in-time weak solution to \\eqref{eq without} if \n\t\\begin{align}\n\t\t-\\int_0^T\\int_{\\mathbbm{H}^N}u(\\partial_t\\phi+\\Delta_{H}\\phi)d\\xi dt =\\int_0^T\\int_{\\mathbbm{H}^N}|u|^pI_{T^-}^\\gamma\\phi d\\xi dt +\\int_{\\mathbbm{H}^N}u_0\\phi(0,\\cdot)d\\xi +\\int_0^T\\int_{\\mathbbm{H}^N} \\tau^\\alpha f\\phi d\\xi d\\tau,\n\t\\end{align}\n\tholds for any non-negative test function $\\phi\\in C_c^1([0,T),C_c^2(\\mathbbm{H}^N)).$ \n\tMoreover, $u$ is called a global-in-time weak solution if $T=+\\infty.$",
+      "proved": false,
+      "source_context_pack_id": "srcctx_5505bc82162911a8b00dcb8e",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_5505bc82162911a8b00dcb8e",
+        "paper_id": "2604.21314",
+        "theorem_name": "Weak2",
+        "theorem_id": "Weak2",
+        "source_latex": "[Weak solution]\\label{Weak2}\n\tLet $u_0,f\\in L^1_{\\text{loc}}(\\mathbbm{H}^N).$ Then $u\\in L^p_{\\text{loc}}((0,T),L^p_{\\text{loc}}(\\mathbbm{H}^N))$ is called a local-in-time weak solution to \\eqref{eq without} if \n\t\\begin{align}\n\t\t-\\int_0^T\\int_{\\mathbbm{H}^N}u(\\partial_t\\phi+\\Delta_{H}\\phi)d\\xi dt =\\int_0^T\\int_{\\mathbbm{H}^N}|u|^pI_{T^-}^\\gamma\\phi d\\xi dt +\\int_{\\mathbbm{H}^N}u_0\\phi(0,\\cdot)d\\xi +\\int_0^T\\int_{\\mathbbm{H}^N} \\tau^\\alpha f\\phi d\\xi d\\tau,\n\t\\end{align}\n\tholds for any non-negative test function $\\phi\\in C_c^1([0,T),C_c^2(\\mathbbm{H}^N)).$ \n\tMoreover, $u$ is called a global-in-time weak solution if $T=+\\infty.$",
+        "normalized_text": "[Weak solution] Let u_0,fin L^1_ text loc (mathbbm H^N). Then uin L^p_ text loc ((0,T),L^p_ text loc (mathbbm H^N)) is called a local-in-time weak solution to if -int_0^Tint_ mathbbm H^N u(partial_tphi+Delta_ H phi)dxi dt =int_0^Tint_ mathbbm H^N |u|^pI_ T^- ^gammaphi dxi dt +int_ mathbbm H^N u_0phi(0,cdot)dxi +int_0^Tint_ mathbbm H^N tau^alpha fphi dxi dtau, holds for any non-negative test function phiin C_c^1([0,T),C_c^2(mathbbm H^N)). Moreover, u is called a global-in-time weak solution if T=+infty.",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+          "start_byte": 38176,
+          "end_byte": 38809,
+          "start_line": 562,
+          "start_col": 13,
+          "end_line": 568,
+          "end_col": 72,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 24,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 16,
+              "score": 195,
+              "name": "Weak2",
+              "label": "Weak2",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Beta",
+              "label": "Beta",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Hardy",
+              "label": "Hardy",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 18,
+              "score": 0,
+              "name": "Local",
+              "label": "Local",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 15,
+              "score": 0,
+              "name": "Mild",
+              "label": "Mild",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 2,
+              "score": 0,
+              "name": "Thm Blowup O",
+              "label": "Thm Blowup O",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Thm Blowup O2",
+              "label": "Thm Blowup O2",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 4,
+              "score": 0,
+              "name": "Thm Blowup O3",
+              "label": "Thm Blowup O3",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 12,
+              "score": 0,
+              "name": "Thm Blowup O4",
+              "label": "Thm Blowup O4",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 13,
+              "score": 0,
+              "name": "Thm Blowup O5",
+              "label": "Thm Blowup O5",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cthc0987d7e80446e84d7e00d1e",
+              "weak2"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "Weak2",
+                "label": "Weak2",
+                "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 16,
+            "name": "Weak2",
+            "label": "Weak2",
+            "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0238,
+        "source_token_count": 42,
+        "lean_token_count": 2,
+        "source_anchors": [
+          "srcctx_5505bc82162911a8b00dcb8e"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 0.0,
+        "items": [
+          {
+            "assumption": "[Weak solution]\\label{Weak2} Let $u_0,f\\in L^1_{\\text{loc}}(\\mathbbm{H}^N).$ Then $u\\in L^p_{\\text{loc}}((0,T),L^p_{\\text{loc}}(\\mathbbm{H}^N))$ is called a local-in-time weak solution to \\eqref{eq without} if \\begin{ali",
+            "coverage": 0.0238,
+            "covered": false
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "T=+\\infty.; -\\int_0^T\\int_{\\mathbbm{H}^N}u(\\partial_t\\phi+\\Delta_{H}\\phi)d\\xi dt =\\int_0^T\\int_{\\mathbbm{H}^N}|u|^pI_{T^-}^\\gamma\\phi d\\xi dt +\\int_{\\mathbbm{H}^N}u_0\\phi(0,\\cdot)d\\xi +\\int_0^T\\int_{\\mathbbm{H}^N} \\tau^\\alpha f\\phi d\\xi d\\tau,",
+        "target": "Weak2SourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol",
+          "fallback_after_lean_validation_failure"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21314.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_5505bc82162911a8b00dcb8e",
+        "source_coverage": {
+          "score": 0.0238,
+          "source_token_count": 42,
+          "lean_token_count": 2,
+          "source_anchors": [
+            "srcctx_5505bc82162911a8b00dcb8e"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 0.0,
+          "items": [
+            {
+              "assumption": "[Weak solution]\\label{Weak2} Let $u_0,f\\in L^1_{\\text{loc}}(\\mathbbm{H}^N).$ Then $u\\in L^p_{\\text{loc}}((0,T),L^p_{\\text{loc}}(\\mathbbm{H}^N))$ is called a local-in-time weak solution to \\eqref{eq without} if \\begin{ali",
+              "coverage": 0.0238,
+              "covered": false
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "T=+\\infty.; -\\int_0^T\\int_{\\mathbbm{H}^N}u(\\partial_t\\phi+\\Delta_{H}\\phi)d\\xi dt =\\int_0^T\\int_{\\mathbbm{H}^N}|u|^pI_{T^-}^\\gamma\\phi d\\xi dt +\\int_{\\mathbbm{H}^N}u_0\\phi(0,\\cdot)d\\xi +\\int_0^T\\int_{\\mathbbm{H}^N} \\tau^\\alpha f\\phi d\\xi d\\tau,",
+          "target": "Weak2SourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "mild_to_weak",
@@ -3974,7 +4599,13 @@
         "paper_definition_stub:hu0",
         "paper_definition_stub:u0"
       ],
-      "source_latex": "\\label{mild to weak}\n\tLet $u_0\\in L^\\infty(\\mathbbm{H}^N).$ Let $u$ be a mild solution to \\eqref{eq without} in $\\mathbbm{H}^N\\times [0,T),$ for $T>0.$ Then $u$ is also a weak solution to \\eqref{eq without} in $\\mathbbm{H}^N\\times [0,T).$"
+      "source_latex": "\\label{mild to weak}\n\tLet $u_0\\in L^\\infty(\\mathbbm{H}^N).$ Let $u$ be a mild solution to \\eqref{eq without} in $\\mathbbm{H}^N\\times [0,T),$ for $T>0.$ Then $u$ is also a weak solution to \\eqref{eq without} in $\\mathbbm{H}^N\\times [0,T).$",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Local",
@@ -4260,7 +4891,13 @@
         "paper_definition_stub:h5",
         "paper_definition_stub:h6"
       ],
-      "source_latex": "\\label{Local}\n\tLet $\\gamma>0,$ $\\alpha\\in(-1,\\infty)\\setminus\\{0\\},$ $p>1$ and $u_0,f\\in L^\\infty(\\mathbbm{H}^N),$ with $u_0\\geq 0.$ Then, the following holds:\n\t\\begin{enumerate}\n\t\t\\item [(i)] There exists a fixed $T>0,$ and a unique mild solution $u\\in C([0,T],L^\\infty(\\mathbbm{H}^N))$ to \\eqref{eq without}. \n\t\t\\item [(ii)] The solution can be uniquely extended to a maximum interval $[0,T_{\\text{max}}).$ Moreover, if $T_{\\text{max}}$ is finite, then $\\|u(t)\\|_{L^\\infty(\\mathbbm{H}^N)}\\longrightarrow\\infty$ as $t\\longrightarrow T_{\\text{max}}.$\n\t\t\\item [(iii)] Let $u_0,$ $f\\in L^\\infty(\\mathbbm{H}^N)\\cap L^q(\\mathbbm{H}^N)$ for $q\\in [1,\\infty].$ Then\n\t\t\\begin{align}\n\t\t\tu\\in C([0,T_{\\text{max}}),L^\\infty(\\mathbbm{H}^N))\\cap C([0,T_{\\text{max}}),L^q(\\mathbbm{H}^N)).\n\t\t\\end{align}\n\t\\end{enumerate}"
+      "source_latex": "\\label{Local}\n\tLet $\\gamma>0,$ $\\alpha\\in(-1,\\infty)\\setminus\\{0\\},$ $p>1$ and $u_0,f\\in L^\\infty(\\mathbbm{H}^N),$ with $u_0\\geq 0.$ Then, the following holds:\n\t\\begin{enumerate}\n\t\t\\item [(i)] There exists a fixed $T>0,$ and a unique mild solution $u\\in C([0,T],L^\\infty(\\mathbbm{H}^N))$ to \\eqref{eq without}. \n\t\t\\item [(ii)] The solution can be uniquely extended to a maximum interval $[0,T_{\\text{max}}).$ Moreover, if $T_{\\text{max}}$ is finite, then $\\|u(t)\\|_{L^\\infty(\\mathbbm{H}^N)}\\longrightarrow\\infty$ as $t\\longrightarrow T_{\\text{max}}.$\n\t\t\\item [(iii)] Let $u_0,$ $f\\in L^\\infty(\\mathbbm{H}^N)\\cap L^q(\\mathbbm{H}^N)$ for $q\\in [1,\\infty].$ Then\n\t\t\\begin{align}\n\t\t\tu\\in C([0,T_{\\text{max}}),L^\\infty(\\mathbbm{H}^N))\\cap C([0,T_{\\text{max}}),L^q(\\mathbbm{H}^N)).\n\t\t\\end{align}\n\t\\end{enumerate}",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "rem_20",
@@ -4419,13 +5056,19 @@
       "statement_fidelity_source": "none",
       "source_content_hash": "34f42adcb9b7e17d",
       "source_span_id": "",
-      "source_latex": "When $\\gamma=0,$ problem \\eqref{eq without} is well-studied by the second and third-named authors in \\cite{Oza Sur 2}. In fact, in this regime, we have the existence of a global-in-time solution to \\eqref{eq without}."
+      "source_latex": "When $\\gamma=0,$ problem \\eqref{eq without} is well-studied by the second and third-named authors in \\cite{Oza Sur 2}. In fact, in this regime, we have the existence of a global-in-time solution to \\eqref{eq without}.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_formalized_translation_limited",
+      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "rem_21",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem rem_21 (h1 : Prop) (h2 : Prop) : (let Claim : Prop := h1 ∧ h2; Claim) := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem rem_21 :\n  Rem21SourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -4523,9 +5166,9 @@
       },
       "proof_text": "aesop",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 11.76,
       "timestamp": "2026-05-09T20:04:03Z",
@@ -4543,14 +5186,17 @@
         "semantic_adversarial_checks_passed": false,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": true
+        "statement_alignment_not_unrelated": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -4663,7 +5309,235 @@
         "paper_definition_stub:h1",
         "paper_definition_stub:h2"
       ],
-      "source_latex": "%\t\tIt is easy to observe using Theorem \\ref{Local} that the following equation has a local-in-time solution:\n\t%\t\t\\begin{align}\n\t\t%\t\t\t\t\\begin{cases}\n\t\t\t%\t\t\t\t\\partial_tu_\\varepsilon-\\Delta_{\\mathbbm{H}^N}u_\\varepsilon=\\lambda \\frac{\\psi u_\\varepsilon}{\\|\\cdot\\|^{2}_{\\mathbbm{H}^N}+\\varepsilon}+\\frac{1}{\\Gamma(\\gamma)}\\int_0^t(t-\\tau)^{\\gamma-1}|u_\\varepsilon(\\tau)|^{p}d\\tau+t^\\alpha f &\\text{in } \\,\\mathbbm{H}^N\\times (0,T),\\\\\n\t\t\t%\t\t\t\tu_\\varepsilon(0,\\cdot)=u_0(\\cdot) &\\text{in } \\,\\mathbbm{H}^N,\n\t\t\t%\t\t\t\\end{cases}\t\n\t\t%\t\t\\end{align}\n\t%\t\tfor $\\alpha\\in (-1,\\infty)$ and $\\gamma\\in [0,1).$ Moreover, since $\\mathcal{H}_\\varepsilon:=\\frac{1}{\\|\\cdot\\|^{2}_{\\mathbbm{H}^N}+\\varepsilon}$ is a bounded operator. Let us assume that $\\mathcal{H}_\\varepsilon\\leq c.$ Hence, we have that the infinitesimal generator of $\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon$ (denoted by $e^{t(\\Delta_{\\mathbbm{H}^N}+\\mathcal{H}_\\varepsilon)}$) satisfies the following pointwise estimate:\n\t%\t\t\\begin{align}\n\t\t%\t\te^t{(\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon)}&\\leq e^{-tc}e^{t\\Delta_{\\mathbbm{H}^N}}\\\\\n\t\t%\t\t&\\leq Ce^{t\\Delta_{\\mathbbm{H}^N}},\n\t\t%\t\t\\end{align}\n\t%\t\tfor some positive constant $C.$\n\t%"
+      "source_latex": "%\t\tIt is easy to observe using Theorem \\ref{Local} that the following equation has a local-in-time solution:\n\t%\t\t\\begin{align}\n\t\t%\t\t\t\t\\begin{cases}\n\t\t\t%\t\t\t\t\\partial_tu_\\varepsilon-\\Delta_{\\mathbbm{H}^N}u_\\varepsilon=\\lambda \\frac{\\psi u_\\varepsilon}{\\|\\cdot\\|^{2}_{\\mathbbm{H}^N}+\\varepsilon}+\\frac{1}{\\Gamma(\\gamma)}\\int_0^t(t-\\tau)^{\\gamma-1}|u_\\varepsilon(\\tau)|^{p}d\\tau+t^\\alpha f &\\text{in } \\,\\mathbbm{H}^N\\times (0,T),\\\\\n\t\t\t%\t\t\t\tu_\\varepsilon(0,\\cdot)=u_0(\\cdot) &\\text{in } \\,\\mathbbm{H}^N,\n\t\t\t%\t\t\t\\end{cases}\t\n\t\t%\t\t\\end{align}\n\t%\t\tfor $\\alpha\\in (-1,\\infty)$ and $\\gamma\\in [0,1).$ Moreover, since $\\mathcal{H}_\\varepsilon:=\\frac{1}{\\|\\cdot\\|^{2}_{\\mathbbm{H}^N}+\\varepsilon}$ is a bounded operator. Let us assume that $\\mathcal{H}_\\varepsilon\\leq c.$ Hence, we have that the infinitesimal generator of $\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon$ (denoted by $e^{t(\\Delta_{\\mathbbm{H}^N}+\\mathcal{H}_\\varepsilon)}$) satisfies the following pointwise estimate:\n\t%\t\t\\begin{align}\n\t\t%\t\te^t{(\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon)}&\\leq e^{-tc}e^{t\\Delta_{\\mathbbm{H}^N}}\\\\\n\t\t%\t\t&\\leq Ce^{t\\Delta_{\\mathbbm{H}^N}},\n\t\t%\t\t\\end{align}\n\t%\t\tfor some positive constant $C.$\n\t%",
+      "proved": false,
+      "source_context_pack_id": "srcctx_d4e5fd2921442e43e6ecb098",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_d4e5fd2921442e43e6ecb098",
+        "paper_id": "2604.21314",
+        "theorem_name": "rem_21",
+        "theorem_id": "rem_21",
+        "source_latex": "%\t\tIt is easy to observe using Theorem \\ref{Local} that the following equation has a local-in-time solution:\n\t%\t\t\\begin{align}\n\t\t%\t\t\t\t\\begin{cases}\n\t\t\t%\t\t\t\t\\partial_tu_\\varepsilon-\\Delta_{\\mathbbm{H}^N}u_\\varepsilon=\\lambda \\frac{\\psi u_\\varepsilon}{\\|\\cdot\\|^{2}_{\\mathbbm{H}^N}+\\varepsilon}+\\frac{1}{\\Gamma(\\gamma)}\\int_0^t(t-\\tau)^{\\gamma-1}|u_\\varepsilon(\\tau)|^{p}d\\tau+t^\\alpha f &\\text{in } \\,\\mathbbm{H}^N\\times (0,T),\\\\\n\t\t\t%\t\t\t\tu_\\varepsilon(0,\\cdot)=u_0(\\cdot) &\\text{in } \\,\\mathbbm{H}^N,\n\t\t\t%\t\t\t\\end{cases}\t\n\t\t%\t\t\\end{align}\n\t%\t\tfor $\\alpha\\in (-1,\\infty)$ and $\\gamma\\in [0,1).$ Moreover, since $\\mathcal{H}_\\varepsilon:=\\frac{1}{\\|\\cdot\\|^{2}_{\\mathbbm{H}^N}+\\varepsilon}$ is a bounded operator. Let us assume that $\\mathcal{H}_\\varepsilon\\leq c.$ Hence, we have that the infinitesimal generator of $\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon$ (denoted by $e^{t(\\Delta_{\\mathbbm{H}^N}+\\mathcal{H}_\\varepsilon)}$) satisfies the following pointwise estimate:\n\t%\t\t\\begin{align}\n\t\t%\t\te^t{(\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon)}&\\leq e^{-tc}e^{t\\Delta_{\\mathbbm{H}^N}}\\\\\n\t\t%\t\t&\\leq Ce^{t\\Delta_{\\mathbbm{H}^N}},\n\t\t%\t\t\\end{align}\n\t%\t\tfor some positive constant $C.$\n\t%",
+        "normalized_text": "% It is easy to observe using Theorem \\ref{Local} that the following equation has a local-in-time solution: % \\begin{align} % \\begin{cases} % \\partial_tu_\\varepsilon-\\Delta_{\\mathbbm{H}^N}u_\\varepsilon=\\lambda \\frac{\\psi u_\\varepsilon}{\\|\\cdot\\|^{2}_{\\mathbbm{H}^N}+\\varepsilon}+\\frac{1}{\\Gamma(\\gamma)}\\int_0^t(t-\\tau)^{\\gamma-1}|u_\\varepsilon(\\tau)|^{p}d\\tau+t^\\alpha f &\\text{in } \\,\\mathbbm{H}^N\\times (0,T),\\\\ % u_\\varepsilon(0,\\cdot)=u_0(\\cdot) &\\text{in } \\,\\mathbbm{H}^N, % \\end{cases} % \\end{align} % for $\\alpha\\in (-1,\\infty)$ and $\\gamma\\in [0,1).$ Moreover, since $\\mathcal{H}_\\varepsilon:=\\frac{1}{\\|\\cdot\\|^{2}_{\\mathbbm{H}^N}+\\varepsilon}$ is a bounded operator. Let us assume that $\\mathcal{H}_\\varepsilon\\leq c.$ Hence, we have that the infinitesimal generator of $\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon$ (denoted by $e^{t(\\Delta_{\\mathbbm{H}^N}+\\mathcal{H}_\\varepsilon)}$) satisfies the following pointwise estimate: % \\begin{align} % e^t{(\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon)}&\\leq e^{-tc}e^{t\\Delta_{\\mathbbm{H}^N}}\\\\ % &\\leq Ce^{t\\Delta_{\\mathbbm{H}^N}}, % \\end{align} % for some positive constant $C.$ %",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+          "start_byte": 55460,
+          "end_byte": 56650,
+          "start_line": 824,
+          "start_col": 2,
+          "end_line": 837,
+          "end_col": 3,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 24,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 20,
+              "score": 195,
+              "name": "rem_21",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Beta",
+              "label": "Beta",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Hardy",
+              "label": "Hardy",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 18,
+              "score": 0,
+              "name": "Local",
+              "label": "Local",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 15,
+              "score": 0,
+              "name": "Mild",
+              "label": "Mild",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 2,
+              "score": 0,
+              "name": "Thm Blowup O",
+              "label": "Thm Blowup O",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Thm Blowup O2",
+              "label": "Thm Blowup O2",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 4,
+              "score": 0,
+              "name": "Thm Blowup O3",
+              "label": "Thm Blowup O3",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 12,
+              "score": 0,
+              "name": "Thm Blowup O4",
+              "label": "Thm Blowup O4",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            },
+            {
+              "index": 13,
+              "score": 0,
+              "name": "Thm Blowup O5",
+              "label": "Thm Blowup O5",
+              "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cth3c340634e6916c8e786d1f23",
+              "rem21"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "rem_21",
+                "label": "",
+                "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 20,
+            "name": "rem_21",
+            "label": "",
+            "source_file": "output/paper_sources/golden10/2604.21314_expanded/main.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0,
+        "source_token_count": 57,
+        "lean_token_count": 2,
+        "source_anchors": [
+          "srcctx_d4e5fd2921442e43e6ecb098"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 0.0,
+        "items": [
+          {
+            "assumption": "% It is easy to observe using Theorem \\ref{Local} that the following equation has a local-in-time solution: % \\begin{align} % \\begin{cases} % \\partial_tu_\\varepsilon-\\Delta_{\\mathbbm{H}^N}u_\\varepsilon=\\lambda \\frac{\\psi",
+            "coverage": 0.0,
+            "covered": false
+          },
+          {
+            "assumption": "Let us assume that $\\mathcal{H}_\\varepsilon\\leq c.$ Hence, we have that the infinitesimal generator of $\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon$ (denoted by $e^{t(\\Delta_{\\mathbbm{H}^N}+\\mathcal{H}_\\varepsilon)}$)",
+            "coverage": 0.0,
+            "covered": false
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "% It is easy to observe using Theorem \\ref{Local} that the following equation has a local-in-time solution: % \\begin{align} % \\begin{cases} % \\partial_tu_\\varepsilon-\\Delta_{\\mathbbm{H}^N}u_\\varepsilon=\\lambda \\frac{\\psi u_\\varepsilon}{\\|\\c",
+        "target": "Rem21SourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21314.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_d4e5fd2921442e43e6ecb098",
+        "source_coverage": {
+          "score": 0.0,
+          "source_token_count": 57,
+          "lean_token_count": 2,
+          "source_anchors": [
+            "srcctx_d4e5fd2921442e43e6ecb098"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 0.0,
+          "items": [
+            {
+              "assumption": "% It is easy to observe using Theorem \\ref{Local} that the following equation has a local-in-time solution: % \\begin{align} % \\begin{cases} % \\partial_tu_\\varepsilon-\\Delta_{\\mathbbm{H}^N}u_\\varepsilon=\\lambda \\frac{\\psi",
+              "coverage": 0.0,
+              "covered": false
+            },
+            {
+              "assumption": "Let us assume that $\\mathcal{H}_\\varepsilon\\leq c.$ Hence, we have that the infinitesimal generator of $\\Delta_{\\mathbbm{H}^N}-\\mathcal{H}_\\varepsilon$ (denoted by $e^{t(\\Delta_{\\mathbbm{H}^N}+\\mathcal{H}_\\varepsilon)}$)",
+              "coverage": 0.0,
+              "covered": false
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "% It is easy to observe using Theorem \\ref{Local} that the following equation has a local-in-time solution: % \\begin{align} % \\begin{cases} % \\partial_tu_\\varepsilon-\\Delta_{\\mathbbm{H}^N}u_\\varepsilon=\\lambda \\frac{\\psi u_\\varepsilon}{\\|\\c",
+          "target": "Rem21SourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "thm_22",
@@ -4921,7 +5795,13 @@
         "paper_definition_stub:u_0",
         "paper_definition_stub:Γ_gamma"
       ],
-      "source_latex": "%\tLet $1<p<\\frac{\\mu(\\lambda)+2}{\\mu(\\lambda)},$\t\n\t%"
+      "source_latex": "%\tLet $1<p<\\frac{\\mu(\\lambda)+2}{\\mu(\\lambda)},$\t\n\t%",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "life",
@@ -5166,7 +6046,29 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "\\label{life}\n\tLet $\\gamma\\in [0,1),$ $\\alpha\\in (-1,0),$ and $p\\in \\bigg(1,\\frac{Q+2\\gamma-\\mu(\\lambda)-2\\alpha}{Q-2-\\mu(\\lambda)-2\\alpha}\\bigg).$ Assume that $u_0\\in L^\\infty(\\mathbbm{H}^N)$ with $u_0\\geq 0,$ $0<\\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty$ and \n\t\\begin{align}\\label{fxi}\n\t\tf(\\xi)\\geq \\varepsilon\\|\\xi\\|_{H}^{-2\\beta}, \\text{ for }\\|\\xi\\|_{H}\\geq 1, \\beta\\in \\left(\\frac{Q}{2}-\\frac{\\mu(\\lambda)}{2},\\frac{\\gamma+p}{p-1}+\\alpha\\right) \\text{ and }\\varepsilon>0. \n\t\\end{align} \n\tThen for any local-in-time solution $u_\\varepsilon$ to \\eqref{eq 0.1}, the following estimate on $T_\\varepsilon$ is valid: \n\t\\begin{align}\n\t\tT_\\varepsilon\\leq C\\varepsilon^{\\big({\\beta-\\frac{\\gamma+p}{p-1}-\\alpha}\\big)^{-1}}, \n\t\\end{align}\n\tfor some constant $C>0$ independent of $T_\\varepsilon.$"
+      "source_latex": "\\label{life}\n\tLet $\\gamma\\in [0,1),$ $\\alpha\\in (-1,0),$ and $p\\in \\bigg(1,\\frac{Q+2\\gamma-\\mu(\\lambda)-2\\alpha}{Q-2-\\mu(\\lambda)-2\\alpha}\\bigg).$ Assume that $u_0\\in L^\\infty(\\mathbbm{H}^N)$ with $u_0\\geq 0,$ $0<\\int_{\\mathbbm{H}^N}\\|\\xi\\|_H^{-\\mu(\\lambda)}f(\\xi)d\\xi<\\infty$ and \n\t\\begin{align}\\label{fxi}\n\t\tf(\\xi)\\geq \\varepsilon\\|\\xi\\|_{H}^{-2\\beta}, \\text{ for }\\|\\xi\\|_{H}\\geq 1, \\beta\\in \\left(\\frac{Q}{2}-\\frac{\\mu(\\lambda)}{2},\\frac{\\gamma+p}{p-1}+\\alpha\\right) \\text{ and }\\varepsilon>0. \n\t\\end{align} \n\tThen for any local-in-time solution $u_\\varepsilon$ to \\eqref{eq 0.1}, the following estimate on $T_\\varepsilon$ is valid: \n\t\\begin{align}\n\t\tT_\\varepsilon\\leq C\\varepsilon^{\\big({\\beta-\\frac{\\gamma+p}{p-1}-\\alpha}\\big)^{-1}}, \n\t\\end{align}\n\tfor some constant $C>0$ independent of $T_\\varepsilon.$",
+      "debt_tier": "local_paper_theory",
+      "proof_value": "paper_local_debt",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_symbol:ξ",
+          "symbol": "ξ",
+          "grounding_kind": "paper_symbol_obligation",
+          "grounding_source": "paper_symbol_reference",
+          "grounding_trust": "unproved_paper_symbol",
+          "paper_agnostic_rule_id": "paper_symbol.requires_definition_or_verified_replacement",
+          "proof_countable": false,
+          "hidden_assumption": true,
+          "requires_verified_replacement": true
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_symbol:ξ"
+      ]
     }
   ]
 }

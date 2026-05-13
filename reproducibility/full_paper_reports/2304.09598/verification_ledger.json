@@ -203,7 +203,13 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:defin_1"
       ],
-      "source_latex": "Let us define a \\emph{segment} to be a non-empty set of consecutive integers $$ \\Delta = (b, b+1, \\dots, e-1, e).$$\nThen a \\emph{multisegment} will be a collection of segments $$ \\alpha = \\{ \\Delta_1, \\Delta_2, \\dots, \\Delta_r \\},$$ where each segment is indexed by $i$, for $1 \\leq i \\leq r$, to differentiate between possible duplicates of segments."
+      "source_latex": "Let us define a \\emph{segment} to be a non-empty set of consecutive integers $$ \\Delta = (b, b+1, \\dots, e-1, e).$$\nThen a \\emph{multisegment} will be a collection of segments $$ \\alpha = \\{ \\Delta_1, \\Delta_2, \\dots, \\Delta_r \\},$$ where each segment is indexed by $i$, for $1 \\leq i \\leq r$, to differentiate between possible duplicates of segments.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "multiplicity",
@@ -386,7 +392,13 @@
         "paper_definition_stub:r_i_1_j_1",
         "paper_definition_stub:r_i_j_1"
       ],
-      "source_latex": "\\label{multiplicity}\nThe multiplicity of a segment $(i, i+1, \\dots, j-1, j)$ in the multisegment is denoted $m_{i, j}$, and given by $$ m_{i, j} = r_{i, j} - r_{i-1, j} - r_{i, j+1} + r_{i-1, j+1}. $$ Note that we assume that the rank is equal to $0$ if it is not defined inside the rank triangle."
+      "source_latex": "\\label{multiplicity}\nThe multiplicity of a segment $(i, i+1, \\dots, j-1, j)$ in the multisegment is denoted $m_{i, j}$, and given by $$ m_{i, j} = r_{i, j} - r_{i-1, j} - r_{i, j+1} + r_{i-1, j+1}. $$ Note that we assume that the rank is equal to $0$ if it is not defined inside the rank triangle.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Prop_Actions",
@@ -564,7 +576,13 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:h_label_prop_actions_let_delta_1"
       ],
-      "source_latex": "\\label{Prop:Actions}\nLet $\\Delta_1$ and $\\Delta_2$ be any two segments in an arbitrary multisegment $\\alpha$, then we can construct a new multisegment $\\beta$ by replacing each $\\Delta_1$ and $\\Delta_2$ in $\\alpha$ with respectively\n\\[ \\left\\{ \\begin{array}{ll}\n        \\Delta_1 \\cap \\Delta_2 \\text{ and } \\Delta_1 \\cup \\Delta_2, & \\mbox{if $ \\Delta_1 \\cap \\Delta_2 \\neq \\emptyset$ and $\\Delta_1 \\neq \\Delta_2$};\\\\\n        \\Delta_1 \\cup \\Delta_2, & \\mbox{else if $\\Delta_1 \\cup \\Delta_2$ is a segment}; \\\\ \\Delta_1 \\text{ and } \\Delta_2, & \\mbox{otherwise}. \\\\ \\end{array} \\right.  \\] then we have that $ \\alpha \\leq \\beta$."
+      "source_latex": "\\label{Prop:Actions}\nLet $\\Delta_1$ and $\\Delta_2$ be any two segments in an arbitrary multisegment $\\alpha$, then we can construct a new multisegment $\\beta$ by replacing each $\\Delta_1$ and $\\Delta_2$ in $\\alpha$ with respectively\n\\[ \\left\\{ \\begin{array}{ll}\n        \\Delta_1 \\cap \\Delta_2 \\text{ and } \\Delta_1 \\cup \\Delta_2, & \\mbox{if $ \\Delta_1 \\cap \\Delta_2 \\neq \\emptyset$ and $\\Delta_1 \\neq \\Delta_2$};\\\\\n        \\Delta_1 \\cup \\Delta_2, & \\mbox{else if $\\Delta_1 \\cup \\Delta_2$ is a segment}; \\\\ \\Delta_1 \\text{ and } \\Delta_2, & \\mbox{otherwise}. \\\\ \\end{array} \\right.  \\] then we have that $ \\alpha \\leq \\beta$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Cor_BoundaryRTandMS",
@@ -785,7 +803,13 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "[\\cite{riddlesden2022combinatorial}, Corollary 2.5.7.] \\label{Cor:BoundaryRTandMS}\nSuppose that $\\alpha$ and $\\beta$ are multisegments with respective corresponding conjugacy classes denoted by $C$ and $D$ (with identical top rows). Then there exists a partial ordering between the two multisegments if and only if there exists a partial ordering on their corresponding conjugacy classes, that is, $$ \\alpha \\leq \\beta \\,\\,\\, \\text{   if and only if   } \\,\\,\\, C \\leq D .$$"
+      "source_latex": "[\\cite{riddlesden2022combinatorial}, Corollary 2.5.7.] \\label{Cor:BoundaryRTandMS}\nSuppose that $\\alpha$ and $\\beta$ are multisegments with respective corresponding conjugacy classes denoted by $C$ and $D$ (with identical top rows). Then there exists a partial ordering between the two multisegments if and only if there exists a partial ordering on their corresponding conjugacy classes, that is, $$ \\alpha \\leq \\beta \\,\\,\\, \\text{   if and only if   } \\,\\,\\, C \\leq D .$$",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Precedes",
@@ -951,13 +975,19 @@
         "paper_definition_stub:e_1",
         "paper_definition_stub:e_2"
       ],
-      "source_latex": "[\\cite{Moeglin}] \\label{Precedes}\nGiven any two segments $\\Delta_1 = (b_1, \\dots, e_1)$ and $\\Delta_2 = (b_2, \\dots, e_2)$, then we say that $\\Delta_1$ \\emph{precedes} $\\Delta_2$ if $b_1 < b_2$, $e_1 < e_2$, and $b_2 \\leq e_1 +1$."
+      "source_latex": "[\\cite{Moeglin}] \\label{Precedes}\nGiven any two segments $\\Delta_1 = (b_1, \\dots, e_1)$ and $\\Delta_2 = (b_2, \\dots, e_2)$, then we say that $\\Delta_1$ \\emph{precedes} $\\Delta_2$ if $b_1 < b_2$, $e_1 < e_2$, and $b_2 \\leq e_1 +1$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Prop_IncreasingLength",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
-      "lean_statement": "theorem Prop_IncreasingLength (x : ℝ) :\n  ∃ x : ℝ, x = x := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem Prop_IncreasingLength :\n  PropIncreasingLengthSourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -988,9 +1018,9 @@
       },
       "proof_text": "omega",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 10.85,
       "timestamp": "2026-05-09T20:05:38Z",
@@ -1008,12 +1038,17 @@
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": true,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": false
+        "statement_alignment_not_unrelated": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -1107,13 +1142,219 @@
       "statement_fidelity_source": "none",
       "source_content_hash": "bcfd3d4e86ae57a6",
       "source_span_id": "",
-      "source_latex": "\\label{Prop:IncreasingLength}\nDuring each iteration of the M\\oe glin-Waldspurger algorithm the preceding segments will be chosen in increasing length."
+      "source_latex": "\\label{Prop:IncreasingLength}\nDuring each iteration of the M\\oe glin-Waldspurger algorithm the preceding segments will be chosen in increasing length.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_b61af5ba12ff91cbcd8be24f",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_b61af5ba12ff91cbcd8be24f",
+        "paper_id": "2304.09598",
+        "theorem_name": "Prop_IncreasingLength",
+        "theorem_id": "Prop:IncreasingLength",
+        "source_latex": "\\label{Prop:IncreasingLength}\nDuring each iteration of the M\\oe glin-Waldspurger algorithm the preceding segments will be chosen in increasing length.",
+        "normalized_text": "During each iteration of the Moe glin-Waldspurger algorithm the preceding segments will be chosen in increasing length.",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+          "start_byte": 14843,
+          "end_byte": 14993,
+          "start_line": 226,
+          "start_col": 14,
+          "end_line": 227,
+          "end_col": 121,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 26,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 5,
+              "score": 195,
+              "name": "Prop:IncreasingLength",
+              "label": "Prop:IncreasingLength",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Basic",
+              "label": "Basic",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 25,
+              "score": 0,
+              "name": "Cor:Arthur",
+              "label": "Cor:Arthur",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Cor:BoundaryRTandMS",
+              "label": "Cor:BoundaryRTandMS",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 20,
+              "score": 0,
+              "name": "Cor:Quant",
+              "label": "Cor:Quant",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 8,
+              "score": 0,
+              "name": "Def:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 11,
+              "score": 0,
+              "name": "EqualAB",
+              "label": "EqualAB",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "EqualLN",
+              "label": "EqualLN",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 14,
+              "score": 0,
+              "name": "Exa:QFM",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Exa:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cthf221dc01559ba644b3e7b15b",
+              "propincreasinglength"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "Prop:IncreasingLength",
+                "label": "Prop:IncreasingLength",
+                "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 5,
+            "name": "Prop:IncreasingLength",
+            "label": "Prop:IncreasingLength",
+            "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0556,
+        "source_token_count": 18,
+        "lean_token_count": 3,
+        "source_anchors": [
+          "srcctx_b61af5ba12ff91cbcd8be24f"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "\\label{Prop:IncreasingLength} During each iteration of the M\\oe glin-Waldspurger algorithm the preceding segments will be chosen in increasing length.",
+        "target": "PropIncreasingLengthSourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2304_09598.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_b61af5ba12ff91cbcd8be24f",
+        "source_coverage": {
+          "score": 0.0556,
+          "source_token_count": 18,
+          "lean_token_count": 3,
+          "source_anchors": [
+            "srcctx_b61af5ba12ff91cbcd8be24f"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "\\label{Prop:IncreasingLength} During each iteration of the M\\oe glin-Waldspurger algorithm the preceding segments will be chosen in increasing length.",
+          "target": "PropIncreasingLengthSourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Basic",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
-      "lean_statement": "theorem Basic (L_alpha : ℤ) (L_beta : ℤ) (S_alpha : ℤ) (S_beta : ℤ) (alpha : ℝ) (beta : ℝ) (c_alpha : ℤ) (c_beta : ℤ) (h_multisegments_1 : True) (h_dual_multisegments_respectively_2 : True) :\n  c_alpha = c_beta ∧ S_alpha = S_beta ∧ alpha ≤ beta ∧ L_alpha ≤ L_beta := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem Basic (alpha beta : Multisegment) (h : alpha ≤ beta) : c_alpha alpha = c_alpha beta ∧ S_alpha alpha = S_alpha beta ∧ L_alpha alpha ≤ L_alpha beta ∧ n_alpha alpha ≥ n_alpha beta ∧ n_tilde_alpha (dual alpha) ≥ L_alpha alpha ∧ n_alpha alpha ≥ L_tilde alpha ∧ C ≥ c_alpha alpha := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -1161,14 +1402,14 @@
       },
       "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body,llm_statement_repair_v1",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 67.41,
       "timestamp": "2026-05-09T20:07:01Z",
       "validation_gates": {
-        "lean_proof_closed": true,
+        "lean_proof_closed": false,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -1181,13 +1422,17 @@
         "semantic_adversarial_checks_passed": false,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": false
+        "statement_alignment_not_unrelated": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_outcome": "statement_repaired_and_elaborates"
       },
       "gate_failures": [
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -1304,16 +1549,251 @@
         "paper_definition_stub:h_dual_multisegments_respectively_2",
         "paper_definition_stub:h_multisegments_1"
       ],
-      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma 4.2.2.]\\label{Basic}\nLet $\\alpha, \\beta$ be multisegments and $\\tilde{\\alpha}, \\tilde{\\beta}$ their respective dual multisegments. Then \n\\begin{enumerate}[i)]\n\\item For any two multisegments $\\alpha$, $\\beta$ with isomorphic quiver representations, $c_{\\alpha} = c_{\\beta}$ and $S_{\\alpha} = S_{\\beta}$.\n\\item If $\\alpha \\leq \\beta$ then $L_{\\alpha} \\leq L_{\\beta}$.\n\\item If $\\alpha \\leq \\beta$ then $n_{\\alpha} \\geq n_{\\beta}$.\n\\item $n_{\\tilde{\\alpha}} \\geq L_{\\alpha}$ and $n_{\\alpha} \\geq L_{\\tilde{\\alpha}}$.\n\\item $C_{\\alpha} \\geq c_{\\alpha}$.\n\\end{enumerate}"
+      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma 4.2.2.]\\label{Basic}\nLet $\\alpha, \\beta$ be multisegments and $\\tilde{\\alpha}, \\tilde{\\beta}$ their respective dual multisegments. Then \n\\begin{enumerate}[i)]\n\\item For any two multisegments $\\alpha$, $\\beta$ with isomorphic quiver representations, $c_{\\alpha} = c_{\\beta}$ and $S_{\\alpha} = S_{\\beta}$.\n\\item If $\\alpha \\leq \\beta$ then $L_{\\alpha} \\leq L_{\\beta}$.\n\\item If $\\alpha \\leq \\beta$ then $n_{\\alpha} \\geq n_{\\beta}$.\n\\item $n_{\\tilde{\\alpha}} \\geq L_{\\alpha}$ and $n_{\\alpha} \\geq L_{\\tilde{\\alpha}}$.\n\\item $C_{\\alpha} \\geq c_{\\alpha}$.\n\\end{enumerate}",
+      "proved": false,
+      "source_context_pack_id": "srcctx_33cf14e5238a5b8d675954d7",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_33cf14e5238a5b8d675954d7",
+        "paper_id": "2304.09598",
+        "theorem_name": "Basic",
+        "theorem_id": "Basic",
+        "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma 4.2.2.]\\label{Basic}\nLet $\\alpha, \\beta$ be multisegments and $\\tilde{\\alpha}, \\tilde{\\beta}$ their respective dual multisegments. Then \n\\begin{enumerate}[i)]\n\\item For any two multisegments $\\alpha$, $\\beta$ with isomorphic quiver representations, $c_{\\alpha} = c_{\\beta}$ and $S_{\\alpha} = S_{\\beta}$.\n\\item If $\\alpha \\leq \\beta$ then $L_{\\alpha} \\leq L_{\\beta}$.\n\\item If $\\alpha \\leq \\beta$ then $n_{\\alpha} \\geq n_{\\beta}$.\n\\item $n_{\\tilde{\\alpha}} \\geq L_{\\alpha}$ and $n_{\\alpha} \\geq L_{\\tilde{\\alpha}}$.\n\\item $C_{\\alpha} \\geq c_{\\alpha}$.\n\\end{enumerate}",
+        "normalized_text": "Assumptions: α, β are multisegments; α̃, β̃ are dual multisegments of α, β respectively Conclusion: For any two multisegments α, β with isomorphic quiver representations, c_α = c_β and S_α = S_β. If α ≤ β then L_α ≤ L_β. If α ≤ β then n_α ≥ n_β. n_α̃ ≥ L_α and n_α ≥ L_α̃. C_α ≥ c_α.",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+          "start_byte": 20058,
+          "end_byte": 20667,
+          "start_line": 281,
+          "start_col": 14,
+          "end_line": 289,
+          "end_col": 16,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 26,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 6,
+              "score": 195,
+              "name": "Basic",
+              "label": "Basic",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 25,
+              "score": 0,
+              "name": "Cor:Arthur",
+              "label": "Cor:Arthur",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Cor:BoundaryRTandMS",
+              "label": "Cor:BoundaryRTandMS",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 20,
+              "score": 0,
+              "name": "Cor:Quant",
+              "label": "Cor:Quant",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 8,
+              "score": 0,
+              "name": "Def:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 11,
+              "score": 0,
+              "name": "EqualAB",
+              "label": "EqualAB",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "EqualLN",
+              "label": "EqualLN",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 14,
+              "score": 0,
+              "name": "Exa:QFM",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Exa:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 22,
+              "score": 0,
+              "name": "Lem:A1",
+              "label": "Lem:A1",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "basic",
+              "cth515614ccc8a880a3abea24f7"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "Basic",
+                "label": "Basic",
+                "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 6,
+            "name": "Basic",
+            "label": "Basic",
+            "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "llm_statement_repair_v1",
+      "source_coverage": {
+        "score": 0.2857,
+        "source_token_count": 28,
+        "lean_token_count": 17,
+        "source_anchors": [
+          "c_alpha = c_beta",
+          "S_alpha = S_beta",
+          "alpha ≤ beta",
+          "L_alpha ≤ L_beta"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": [
+          {
+            "assumption": "[\\cite{riddlesden2022combinatorial}, Lemma 4.2.2.]\\label{Basic} Let $\\alpha, \\beta$ be multisegments and $\\tilde{\\alpha}, \\tilde{\\beta}$ their respective dual multisegments.",
+            "coverage": 0.4167,
+            "covered": true
+          },
+          {
+            "assumption": "Then \\begin{enumerate}[i)] \\item For any two multisegments $\\alpha$, $\\beta$ with isomorphic quiver representations, $c_{\\alpha} = c_{\\beta}$ and $S_{\\alpha} = S_{\\beta}$.",
+            "coverage": 0.4615,
+            "covered": true
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.1667,
+        "claim": "\\item If $\\alpha \\leq \\beta$ then $L_{\\alpha} \\leq L_{\\beta}$. \\item If $\\alpha \\leq \\beta$ then $n_{\\alpha} \\geq n_{\\beta}$. \\item $n_{\\tilde{\\alpha}} \\geq L_{\\alpha}$ and $n_{\\alpha} \\geq L_{\\tilde{\\alpha}}$. \\item $C_{\\alpha} \\geq c_{\\alpha}$. \\end{enumerat",
+        "target": "c_alpha = c_beta ∧ S_alpha = S_beta ∧ alpha ≤ beta ∧ L_alpha ≤ L_beta"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body",
+          "llm_statement_repair_v1"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2304_09598.lean",
+        "regeneration_protocol": "llm_statement_repair_v1",
+        "source_context_pack_id": "srcctx_33cf14e5238a5b8d675954d7",
+        "source_coverage": {
+          "score": 0.2857,
+          "source_token_count": 28,
+          "lean_token_count": 17,
+          "source_anchors": [
+            "c_alpha = c_beta",
+            "S_alpha = S_beta",
+            "alpha ≤ beta",
+            "L_alpha ≤ L_beta"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": [
+            {
+              "assumption": "[\\cite{riddlesden2022combinatorial}, Lemma 4.2.2.]\\label{Basic} Let $\\alpha, \\beta$ be multisegments and $\\tilde{\\alpha}, \\tilde{\\beta}$ their respective dual multisegments.",
+              "coverage": 0.4167,
+              "covered": true
+            },
+            {
+              "assumption": "Then \\begin{enumerate}[i)] \\item For any two multisegments $\\alpha$, $\\beta$ with isomorphic quiver representations, $c_{\\alpha} = c_{\\beta}$ and $S_{\\alpha} = S_{\\beta}$.",
+              "coverage": 0.4615,
+              "covered": true
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.1667,
+          "claim": "\\item If $\\alpha \\leq \\beta$ then $L_{\\alpha} \\leq L_{\\beta}$. \\item If $\\alpha \\leq \\beta$ then $n_{\\alpha} \\geq n_{\\beta}$. \\item $n_{\\tilde{\\alpha}} \\geq L_{\\alpha}$ and $n_{\\alpha} \\geq L_{\\tilde{\\alpha}}$. \\item $C_{\\alpha} \\geq c_{\\alpha}$. \\end{enumerat",
+          "target": "c_alpha = c_beta ∧ S_alpha = S_beta ∧ alpha ≤ beta ∧ L_alpha ≤ L_beta"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "EqualLN",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem EqualLN (alpha beta : Multisegment)\n    (h1 : L_tilde alpha = n_alpha alpha)\n    (h2 : alpha ≤ beta)\n    (h3 : dual alpha ≤ dual beta) :\n  n_alpha alpha = n_alpha beta ∧ L_tilde alpha = L_tilde beta := by\n  sorry\n",
-      "status": "FULLY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline",
       "promotion_gate_passed": true,
@@ -1358,17 +1838,17 @@
         "label": "EqualLN",
         "cited_refs": []
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 40.62,
       "timestamp": "2026-05-09T14:15:07Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -1382,13 +1862,17 @@
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [],
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
         "equivalent_independent_semantic_evidence",
         "claim_equivalent:hybrid",
-        "semantic_equivalence:verified"
+        "semantic_equivalence:verified",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_a6804cae8f85ba8094fd2993",
@@ -1497,7 +1981,7 @@
       "context_pack": {},
       "axiom_debt": [],
       "axiom_debt_hash": "e8a18cee4efa713b",
-      "closure_claim": "not_closed",
+      "closure_claim": "lean_verified_without_paper_local_axioms",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
@@ -1534,7 +2018,21 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.3.] \\label{EqualLN}\nIf $L_{\\tilde{\\alpha}} = n_{\\alpha}$, $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $n_{\\alpha} = n_{\\beta} = L_{\\tilde{\\alpha}}  = L_{\\tilde{\\beta}}$."
+      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.3.] \\label{EqualLN}\nIf $L_{\\tilde{\\alpha}} = n_{\\alpha}$, $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $n_{\\alpha} = n_{\\beta} = L_{\\tilde{\\alpha}}  = L_{\\tilde{\\beta}}$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_without_paper_local_axioms",
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] Def:Simple\n-- Statement (LaTeX): A multisegment $$ is if it has the form: $$",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Def_Simple",
@@ -1679,16 +2177,22 @@
         "paper_definition_stub:Multisegment",
         "paper_definition_stub:IsSimple"
       ],
-      "source_latex": "\\label{Def:Simple}\nA multisegment $\\alpha$ is \\emph{simple} if it has the form: $$ \\alpha = \\{ [b,\\dots, e], [b+1,\\dots, e+1], \\dots , [b+n-1,\\dots, e+n-1] \\}.  $$"
+      "source_latex": "\\label{Def:Simple}\nA multisegment $\\alpha$ is \\emph{simple} if it has the form: $$ \\alpha = \\{ [b,\\dots, e], [b+1,\\dots, e+1], \\dots , [b+n-1,\\dots, e+n-1] \\}.  $$",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Prop_SimpleFacts",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Prop_SimpleFacts (alpha : Multisegment) (halpha : IsSimple alpha) :\n  n_tilde_alpha alpha = L_alpha alpha := by\n  sorry\n",
-      "status": "FULLY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline",
       "promotion_gate_passed": true,
@@ -1717,17 +2221,17 @@
         "label": "Prop_SimpleFacts",
         "cited_refs": []
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 15.64,
       "timestamp": "2026-05-09T14:15:38Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -1741,13 +2245,17 @@
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [],
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
         "equivalent_independent_semantic_evidence",
         "claim_equivalent:hybrid",
-        "semantic_equivalence:verified"
+        "semantic_equivalence:verified",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_edc267a30c16f3c5f7161360",
@@ -1852,7 +2360,7 @@
       "context_pack": {},
       "axiom_debt": [],
       "axiom_debt_hash": "fc3fb86e9a802423",
-      "closure_claim": "not_closed",
+      "closure_claim": "lean_verified_without_paper_local_axioms",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
@@ -1889,7 +2397,21 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "[\\cite{riddlesden2022combinatorial}, Proposition  4.2.7.] \\label{Prop:SimpleFacts}\nIf $\\alpha$ is a simple multisegment then $n_{\\tilde{\\alpha}}=L_{\\alpha}$."
+      "source_latex": "[\\cite{riddlesden2022combinatorial}, Proposition  4.2.7.] \\label{Prop:SimpleFacts}\nIf $\\alpha$ is a simple multisegment then $n_{\\tilde{\\alpha}}=L_{\\alpha}$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_without_paper_local_axioms",
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] EqualAB",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "EqualAB",
@@ -2089,7 +2611,7 @@
       "context_pack": {},
       "axiom_debt": [],
       "axiom_debt_hash": "58592bbcaf25d0cb",
-      "closure_claim": "not_closed",
+      "closure_claim": "lean_verified_without_paper_local_axioms",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
@@ -2126,13 +2648,19 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.8.]\\label{EqualAB}\nIf $\\alpha$ is simple, $\\alpha \\leq \\beta$ and $L_{\\alpha} = L_{\\beta}$, then $\\alpha = \\beta$."
+      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.8.]\\label{EqualAB}\nIf $\\alpha$ is simple, $\\alpha \\leq \\beta$ and $L_{\\alpha} = L_{\\beta}$, then $\\alpha = \\beta$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_without_paper_local_axioms",
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Thm_Simple",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
-      "lean_statement": "theorem Thm_Simple (alpha : ℝ) (beta : ℝ) (h_is_a_simple_multisegment_1 : True) (h_source_2_2 : True) (h_source_3_3 : True) :\n  alpha ≤ beta ∧ alpha = beta ∧ α = β := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem Thm_Simple {alpha beta : Multisegment} (halpha : IsSimple alpha) (hbeta : alpha ≤ beta) (hbeta' : dual alpha ≤ dual beta) : alpha = beta := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -2188,14 +2716,14 @@
       },
       "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body,llm_statement_repair_v1",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 84.17,
       "timestamp": "2026-05-09T20:09:51Z",
       "validation_gates": {
-        "lean_proof_closed": true,
+        "lean_proof_closed": false,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -2208,13 +2736,17 @@
         "semantic_adversarial_checks_passed": false,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": true
+        "statement_alignment_not_unrelated": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_outcome": "statement_repaired_and_elaborates"
       },
       "gate_failures": [
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -2326,7 +2858,240 @@
         "paper_definition_stub:h_source_2_2",
         "paper_definition_stub:h_source_3_3"
       ],
-      "source_latex": "\\label{Thm:Simple}\nLet $\\alpha$ be a simple multisegment. For any multisegment $\\beta$ which satisfies the conditions $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$."
+      "source_latex": "\\label{Thm:Simple}\nLet $\\alpha$ be a simple multisegment. For any multisegment $\\beta$ which satisfies the conditions $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_3f6be45ce76ff4624831dbe8",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_3f6be45ce76ff4624831dbe8",
+        "paper_id": "2304.09598",
+        "theorem_name": "Thm_Simple",
+        "theorem_id": "Thm:Simple",
+        "source_latex": "\\label{Thm:Simple}\nLet $\\alpha$ be a simple multisegment. For any multisegment $\\beta$ which satisfies the conditions $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+        "normalized_text": "Let alpha be a simple multisegment. For any multisegment beta which satisfies the conditions alpha leq beta and tilde alpha leq tilde beta , then alpha = beta .",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+          "start_byte": 27540,
+          "end_byte": 27741,
+          "start_line": 416,
+          "start_col": 12,
+          "end_line": 417,
+          "end_col": 183,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 26,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 12,
+              "score": 195,
+              "name": "Thm:Simple",
+              "label": "Thm:Simple",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Basic",
+              "label": "Basic",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 25,
+              "score": 0,
+              "name": "Cor:Arthur",
+              "label": "Cor:Arthur",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Cor:BoundaryRTandMS",
+              "label": "Cor:BoundaryRTandMS",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 20,
+              "score": 0,
+              "name": "Cor:Quant",
+              "label": "Cor:Quant",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 8,
+              "score": 0,
+              "name": "Def:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 11,
+              "score": 0,
+              "name": "EqualAB",
+              "label": "EqualAB",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "EqualLN",
+              "label": "EqualLN",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 14,
+              "score": 0,
+              "name": "Exa:QFM",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Exa:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cthff9aaed4732fe1bb0255598f",
+              "thmsimple"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "Thm:Simple",
+                "label": "Thm:Simple",
+                "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 12,
+            "name": "Thm:Simple",
+            "label": "Thm:Simple",
+            "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "llm_statement_repair_v1",
+      "source_coverage": {
+        "score": 0.5385,
+        "source_token_count": 13,
+        "lean_token_count": 13,
+        "source_anchors": [
+          "alpha ≤ beta",
+          "tildealpha ≤ tildebeta",
+          "alpha = beta"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": [
+          {
+            "assumption": "\\label{Thm:Simple} Let $\\alpha$ be a simple multisegment.",
+            "coverage": 0.5,
+            "covered": true
+          },
+          {
+            "assumption": "For any multisegment $\\beta$ which satisfies the conditions $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+            "coverage": 0.6667,
+            "covered": true
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 1.0,
+        "claim": "\\alpha = \\beta",
+        "target": "alpha ≤ beta ∧ tildealpha ≤ tildebeta ∧ alpha = beta"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body",
+          "llm_statement_repair_v1"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2304_09598.lean",
+        "regeneration_protocol": "llm_statement_repair_v1",
+        "source_context_pack_id": "srcctx_3f6be45ce76ff4624831dbe8",
+        "source_coverage": {
+          "score": 0.5385,
+          "source_token_count": 13,
+          "lean_token_count": 13,
+          "source_anchors": [
+            "alpha ≤ beta",
+            "tildealpha ≤ tildebeta",
+            "alpha = beta"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": [
+            {
+              "assumption": "\\label{Thm:Simple} Let $\\alpha$ be a simple multisegment.",
+              "coverage": 0.5,
+              "covered": true
+            },
+            {
+              "assumption": "For any multisegment $\\beta$ which satisfies the conditions $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+              "coverage": 0.6667,
+              "covered": true
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 1.0,
+          "claim": "\\alpha = \\beta",
+          "target": "alpha ≤ beta ∧ tildealpha ≤ tildebeta ∧ alpha = beta"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "defin_14",
@@ -2472,7 +3237,13 @@
         "paper_definition_stub:IsLadderMultisegment",
         "paper_definition_stub:defin_14"
       ],
-      "source_latex": "We say that a multisegment $\\alpha$ is a \\emph{ladder multisegment} if it has the form: $$\\alpha = \\{ \\Delta_1, \\dots , \\Delta_{n_{\\alpha}} \\},$$ where if we write $\\Delta_i = [b_i, e_i]$ then for each $i<j$ we must have $b_i < b_j$ and $e_i < e_j$."
+      "source_latex": "We say that a multisegment $\\alpha$ is a \\emph{ladder multisegment} if it has the form: $$\\alpha = \\{ \\Delta_1, \\dots , \\Delta_{n_{\\alpha}} \\},$$ where if we write $\\Delta_i = [b_i, e_i]$ then for each $i<j$ we must have $b_i < b_j$ and $e_i < e_j$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Exa_QFM",
@@ -2650,13 +3421,19 @@
         "paper_definition_stub:Multisegment",
         "paper_definition_stub:IsSimple"
       ],
-      "source_latex": "\\label{Exa:QFM}\nThis example is a \\emph{ladder multisegment} for which there exists a complete ordering of the segments based around their base and end values. \\\\\n\\begin{figure}[H]\n \\hspace*{3cm}\n\\begin{tikzpicture}[node distance={15mm}, thick, main/.style = {draw=none}, transform canvas={scale=1}] \n\\node[] (1) {$1$}; \n\\node[main] (2) [right of=1] {\\phantom{$1$}}; \n\\node[main] (3) [below of=2]{$2$}; \n\\node[main] (4) [right of=3] {\\phantom{$1$}}; \n\\node[main] (5) [below of=4]{$3$}; \n\\node[main] (6) [right of=5] {$4$}; \n\\node[main] (7) [right of=6]{$5$}; \n\\node[main] (8) [below of=6] {$4$};\n\\node[main] (9) [below of=7]{$5$};  \n\\node[main] (10) [right of=9]{$6$};  \n\\node[main] (11) [below of=10]{$6$};  \n\\node[main] (12) [right of=11]{$7$};  \n\\draw[->,black] (12) -- (10) node[midway,above right] {1}; \n\\draw[->,black] (10) -- (7) node[midway,above right] {1}; \n\\draw[->,black] (11) -- (9) node[midway,above right] {2}; \n\\draw[->,black] (9) -- (6) node[midway,above right] {2}; \n\\draw[->,black] (8) -- (5) node[midway,above right] {3}; \n\\draw[->,black] (5) -- (3) node[midway,above right] {3}; \n\\draw[->,black] (3) -- (1) node[midway,above right] {3}; \n\\end{tikzpicture}\n\\vspace{6.0cm}\n\\caption{The M\\oe glin-Waldspurger algorithm on a ladder multisegment.}\\label{Fig:MWLadder}\n\\end{figure}\nThe dual of $\\{(1), (2), (3,4,5), (4,5,6), (6,7) \\}$ is $\\{(1,2,3,4), (4,5,6), (5,6,7) \\}$."
+      "source_latex": "\\label{Exa:QFM}\nThis example is a \\emph{ladder multisegment} for which there exists a complete ordering of the segments based around their base and end values. \\\\\n\\begin{figure}[H]\n \\hspace*{3cm}\n\\begin{tikzpicture}[node distance={15mm}, thick, main/.style = {draw=none}, transform canvas={scale=1}] \n\\node[] (1) {$1$}; \n\\node[main] (2) [right of=1] {\\phantom{$1$}}; \n\\node[main] (3) [below of=2]{$2$}; \n\\node[main] (4) [right of=3] {\\phantom{$1$}}; \n\\node[main] (5) [below of=4]{$3$}; \n\\node[main] (6) [right of=5] {$4$}; \n\\node[main] (7) [right of=6]{$5$}; \n\\node[main] (8) [below of=6] {$4$};\n\\node[main] (9) [below of=7]{$5$};  \n\\node[main] (10) [right of=9]{$6$};  \n\\node[main] (11) [below of=10]{$6$};  \n\\node[main] (12) [right of=11]{$7$};  \n\\draw[->,black] (12) -- (10) node[midway,above right] {1}; \n\\draw[->,black] (10) -- (7) node[midway,above right] {1}; \n\\draw[->,black] (11) -- (9) node[midway,above right] {2}; \n\\draw[->,black] (9) -- (6) node[midway,above right] {2}; \n\\draw[->,black] (8) -- (5) node[midway,above right] {3}; \n\\draw[->,black] (5) -- (3) node[midway,above right] {3}; \n\\draw[->,black] (3) -- (1) node[midway,above right] {3}; \n\\end{tikzpicture}\n\\vspace{6.0cm}\n\\caption{The M\\oe glin-Waldspurger algorithm on a ladder multisegment.}\\label{Fig:MWLadder}\n\\end{figure}\nThe dual of $\\{(1), (2), (3,4,5), (4,5,6), (6,7) \\}$ is $\\{(1,2,3,4), (4,5,6), (5,6,7) \\}$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Lem_PrecedesQuantum",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
-      "lean_statement": "theorem Lem_PrecedesQuantum (x : ℝ) (h_properties_discussed_throughout_subsection_1 : True) :\n  ∃ x : ℝ, x = x := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem Lem_PrecedesQuantum (alpha : Multisegment) : IsLadderMultisegment alpha → IrreducibleLadderMultisegment alpha := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -2696,9 +3473,9 @@
       },
       "proof_text": "omega",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol,llm_statement_repair_v1",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 11.83,
       "timestamp": "2026-05-09T20:10:17Z",
@@ -2716,12 +3493,17 @@
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": true,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": false
+        "statement_alignment_not_unrelated": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_outcome": "statement_repaired_and_elaborates"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -2823,16 +3605,235 @@
       "statement_fidelity_source": "none",
       "source_content_hash": "bb361b4cc4078916",
       "source_span_id": "",
-      "source_latex": "\\label{Lem:PrecedesQuantum}\nAt each iterative step of the M\\oe glin-Waldspurger algorithm and when assigning flows in the network description the set of preceding segments which are chosen form an irreducible ladder multisegment. This follows from \\Cref{Prop:IncreasingLength} and the properties discussed throughout this subsection must therefore be satisfied for each iteration."
+      "source_latex": "\\label{Lem:PrecedesQuantum}\nAt each iterative step of the M\\oe glin-Waldspurger algorithm and when assigning flows in the network description the set of preceding segments which are chosen form an irreducible ladder multisegment. This follows from \\Cref{Prop:IncreasingLength} and the properties discussed throughout this subsection must therefore be satisfied for each iteration.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_9879144943724398f18c7846",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_9879144943724398f18c7846",
+        "paper_id": "2304.09598",
+        "theorem_name": "Lem_PrecedesQuantum",
+        "theorem_id": "Lem:PrecedesQuantum",
+        "source_latex": "\\label{Lem:PrecedesQuantum}\nAt each iterative step of the M\\oe glin-Waldspurger algorithm and when assigning flows in the network description the set of preceding segments which are chosen form an irreducible ladder multisegment. This follows from \\Cref{Prop:IncreasingLength} and the properties discussed throughout this subsection must therefore be satisfied for each iteration.",
+        "normalized_text": "Quantifiers: each Assumptions: properties discussed throughout this subsection Conclusion: the set of preceding segments which are chosen form an irreducible ladder multisegment",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+          "start_byte": 30212,
+          "end_byte": 30592,
+          "start_line": 463,
+          "start_col": 15,
+          "end_line": 464,
+          "end_col": 353,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 26,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 15,
+              "score": 195,
+              "name": "Lem:PrecedesQuantum",
+              "label": "Lem:PrecedesQuantum",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Basic",
+              "label": "Basic",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 25,
+              "score": 0,
+              "name": "Cor:Arthur",
+              "label": "Cor:Arthur",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Cor:BoundaryRTandMS",
+              "label": "Cor:BoundaryRTandMS",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 20,
+              "score": 0,
+              "name": "Cor:Quant",
+              "label": "Cor:Quant",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 8,
+              "score": 0,
+              "name": "Def:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 11,
+              "score": 0,
+              "name": "EqualAB",
+              "label": "EqualAB",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "EqualLN",
+              "label": "EqualLN",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 14,
+              "score": 0,
+              "name": "Exa:QFM",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Exa:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cth9f296f190a493d4ebc6253a1",
+              "lemprecedesquantum"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "Lem:PrecedesQuantum",
+                "label": "Lem:PrecedesQuantum",
+                "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 15,
+            "name": "Lem:PrecedesQuantum",
+            "label": "Lem:PrecedesQuantum",
+            "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "llm_statement_repair_v1",
+      "source_coverage": {
+        "score": 0.0244,
+        "source_token_count": 41,
+        "lean_token_count": 3,
+        "source_anchors": [
+          "srcctx_9879144943724398f18c7846"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 0.0,
+        "items": [
+          {
+            "assumption": "This follows from \\Cref{Prop:IncreasingLength} and the properties discussed throughout this subsection must therefore be satisfied for each iteration.",
+            "coverage": 0.0,
+            "covered": false
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "\\label{Lem:PrecedesQuantum} At each iterative step of the M\\oe glin-Waldspurger algorithm and when assigning flows in the network description the set of preceding segments which are chosen form an irreducible ladder multisegment.",
+        "target": "LemPrecedesQuantumSourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol",
+          "llm_statement_repair_v1"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2304_09598.lean",
+        "regeneration_protocol": "llm_statement_repair_v1",
+        "source_context_pack_id": "srcctx_9879144943724398f18c7846",
+        "source_coverage": {
+          "score": 0.0244,
+          "source_token_count": 41,
+          "lean_token_count": 3,
+          "source_anchors": [
+            "srcctx_9879144943724398f18c7846"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 0.0,
+          "items": [
+            {
+              "assumption": "This follows from \\Cref{Prop:IncreasingLength} and the properties discussed throughout this subsection must therefore be satisfied for each iteration.",
+              "coverage": 0.0,
+              "covered": false
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "\\label{Lem:PrecedesQuantum} At each iterative step of the M\\oe glin-Waldspurger algorithm and when assigning flows in the network description the set of preceding segments which are chosen form an irreducible ladder multisegment.",
+          "target": "LemPrecedesQuantumSourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Lem_AB",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Lem_AB (alpha beta : Multisegment)\n    (h1 : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha)\n    (h2 : alpha ≤ beta)\n    (h3 : dual alpha ≤ dual beta) :\n  n_tilde_alpha alpha = n_tilde_alpha beta ∧\n  n_alpha alpha = n_alpha beta ∧\n  n_tilde_alpha beta + n_alpha beta = S_alpha beta + c_alpha beta := by\n  sorry\n",
-      "status": "FULLY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline",
       "promotion_gate_passed": true,
@@ -2877,17 +3878,17 @@
         "label": "Lem_AB",
         "cited_refs": []
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 33.91,
       "timestamp": "2026-05-09T14:20:40Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -2901,13 +3902,17 @@
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [],
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
         "equivalent_independent_semantic_evidence",
         "claim_equivalent:hybrid",
-        "semantic_equivalence:verified"
+        "semantic_equivalence:verified",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_ec97877f64e5307c2b7c196d",
@@ -3016,7 +4021,7 @@
       "context_pack": {},
       "axiom_debt": [],
       "axiom_debt_hash": "14d92c04abf7986f",
-      "closure_claim": "not_closed",
+      "closure_claim": "lean_verified_without_paper_local_axioms",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
@@ -3055,13 +4060,27 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.14.]\\label{Lem:AB}\nIf $n_{\\tilde{\\alpha}} + n_{\\alpha} = S_{\\alpha} + C_{\\alpha}$, $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$ then $n_{\\tilde{\\alpha}} = n_{\\tilde{\\beta}}$, $n_{\\alpha} = n_{\\beta}$ and $n_{\\tilde{\\beta}} + n_{\\beta} = S_{\\beta} + C_{\\beta}$."
+      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.14.]\\label{Lem:AB}\nIf $n_{\\tilde{\\alpha}} + n_{\\alpha} = S_{\\alpha} + C_{\\alpha}$, $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$ then $n_{\\tilde{\\alpha}} = n_{\\tilde{\\beta}}$, $n_{\\alpha} = n_{\\beta}$ and $n_{\\tilde{\\beta}} + n_{\\beta} = S_{\\beta} + C_{\\beta}$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_without_paper_local_axioms",
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] Lem:QuantEquiv",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Lem_QuantEquiv",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
-      "lean_statement": "theorem Lem_QuantEquiv (alpha : ℝ) (beta : ℝ) (h_and_are_ladder_multisegments_1 : True) (h_source_2_2 : True) (h_n_n_3 : True) :\n  alpha ≤ beta ∧ alpha = beta ∧ α = β := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem Lem_QuantEquiv {alpha beta : Multisegment} (halpha : IsLadderMultisegment alpha) (hbeta : IsLadderMultisegment beta) (hle : alpha ≤ beta) (heq : n_alpha alpha = n_alpha beta) : alpha = beta := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -3117,14 +4136,14 @@
       },
       "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body,llm_statement_repair_v1",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 75.21,
       "timestamp": "2026-05-09T20:12:30Z",
       "validation_gates": {
-        "lean_proof_closed": true,
+        "lean_proof_closed": false,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -3137,13 +4156,17 @@
         "semantic_adversarial_checks_passed": false,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": true
+        "statement_alignment_not_unrelated": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_outcome": "statement_repaired_and_elaborates"
       },
       "gate_failures": [
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -3255,16 +4278,227 @@
         "paper_definition_stub:h_n_n_3",
         "paper_definition_stub:h_source_2_2"
       ],
-      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.15.] \\label{Lem:QuantEquiv}\nIf $\\alpha$ and $\\beta$ are ladder multisegments, $\\alpha \\leq \\beta$ and $n_{\\alpha} = n_{\\beta}$ then $\\alpha = \\beta$."
+      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.15.] \\label{Lem:QuantEquiv}\nIf $\\alpha$ and $\\beta$ are ladder multisegments, $\\alpha \\leq \\beta$ and $n_{\\alpha} = n_{\\beta}$ then $\\alpha = \\beta$.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_9c850a76f6288286bb97e5dc",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_9c850a76f6288286bb97e5dc",
+        "paper_id": "2304.09598",
+        "theorem_name": "Lem_QuantEquiv",
+        "theorem_id": "Lem:QuantEquiv",
+        "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.15.] \\label{Lem:QuantEquiv}\nIf $\\alpha$ and $\\beta$ are ladder multisegments, $\\alpha \\leq \\beta$ and $n_{\\alpha} = n_{\\beta}$ then $\\alpha = \\beta$.",
+        "normalized_text": "[ , Lemma 4.2.15.] If alpha and beta are ladder multisegments, alpha leq beta and n_ alpha = n_ beta then alpha = beta .",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+          "start_byte": 31701,
+          "end_byte": 31898,
+          "start_line": 473,
+          "start_col": 14,
+          "end_line": 474,
+          "end_col": 122,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 26,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 17,
+              "score": 195,
+              "name": "Lem:QuantEquiv",
+              "label": "Lem:QuantEquiv",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Basic",
+              "label": "Basic",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 25,
+              "score": 0,
+              "name": "Cor:Arthur",
+              "label": "Cor:Arthur",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Cor:BoundaryRTandMS",
+              "label": "Cor:BoundaryRTandMS",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 20,
+              "score": 0,
+              "name": "Cor:Quant",
+              "label": "Cor:Quant",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 8,
+              "score": 0,
+              "name": "Def:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 11,
+              "score": 0,
+              "name": "EqualAB",
+              "label": "EqualAB",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "EqualLN",
+              "label": "EqualLN",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 14,
+              "score": 0,
+              "name": "Exa:QFM",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Exa:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cthff9aaed4732fe1bb0255598f",
+              "lemquantequiv"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "Lem:QuantEquiv",
+                "label": "Lem:QuantEquiv",
+                "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 17,
+            "name": "Lem:QuantEquiv",
+            "label": "Lem:QuantEquiv",
+            "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "llm_statement_repair_v1",
+      "source_coverage": {
+        "score": 0.2308,
+        "source_token_count": 13,
+        "lean_token_count": 6,
+        "source_anchors": [
+          "alpha ≤ beta",
+          "n_alpha = n_beta",
+          "alpha = beta"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.1538,
+        "claim": "[\\cite{riddlesden2022combinatorial}, Lemma 4.2.15.] \\label{Lem:QuantEquiv} If $\\alpha$ and $\\beta$ are ladder multisegments, $\\alpha \\leq \\beta$ and $n_{\\alpha} = n_{\\beta}$ then $\\alpha = \\beta$.",
+        "target": "alpha ≤ beta ∧ n_alpha = n_beta ∧ alpha = beta"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body",
+          "llm_statement_repair_v1"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2304_09598.lean",
+        "regeneration_protocol": "llm_statement_repair_v1",
+        "source_context_pack_id": "srcctx_9c850a76f6288286bb97e5dc",
+        "source_coverage": {
+          "score": 0.2308,
+          "source_token_count": 13,
+          "lean_token_count": 6,
+          "source_anchors": [
+            "alpha ≤ beta",
+            "n_alpha = n_beta",
+            "alpha = beta"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.1538,
+          "claim": "[\\cite{riddlesden2022combinatorial}, Lemma 4.2.15.] \\label{Lem:QuantEquiv} If $\\alpha$ and $\\beta$ are ladder multisegments, $\\alpha \\leq \\beta$ and $n_{\\alpha} = n_{\\beta}$ then $\\alpha = \\beta$.",
+          "target": "alpha ≤ beta ∧ n_alpha = n_beta ∧ alpha = beta"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Lem_IrredQFM",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Lem_IrredQFM (alpha : Multisegment) (h : alpha ∈ IrreducibleLadderMultisegment) :\n  n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha := by\n  sorry\n",
-      "status": "FULLY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline",
       "promotion_gate_passed": true,
@@ -3293,17 +4527,17 @@
         "label": "Lem_IrredQFM",
         "cited_refs": []
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 49.36,
       "timestamp": "2026-05-09T14:25:07Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -3317,13 +4551,17 @@
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [],
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
         "equivalent_independent_semantic_evidence",
         "claim_equivalent:hybrid",
-        "semantic_equivalence:verified"
+        "semantic_equivalence:verified",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_03f6f3e204126622f82a0f02",
@@ -3428,7 +4666,7 @@
       "context_pack": {},
       "axiom_debt": [],
       "axiom_debt_hash": "84f136abf92611eb",
-      "closure_claim": "not_closed",
+      "closure_claim": "lean_verified_without_paper_local_axioms",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
@@ -3467,16 +4705,30 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.19.] \\label{Lem:IrredQFM}\nIf $\\alpha$ is an irreducible ladder multisegment then $$n_{\\tilde{\\alpha}} + n_{\\alpha} = S_{\\alpha} + c_{\\alpha}.$$"
+      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.19.] \\label{Lem:IrredQFM}\nIf $\\alpha$ is an irreducible ladder multisegment then $$n_{\\tilde{\\alpha}} + n_{\\alpha} = S_{\\alpha} + c_{\\alpha}.$$",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_without_paper_local_axioms",
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] Lem:Quant",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Lem_Quant",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Lem_Quant (alpha : Multisegment)\n    (h_eq : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha) :\n  IsLadderMultisegment alpha := by\n  sorry\n",
-      "status": "FULLY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline",
       "promotion_gate_passed": true,
@@ -3505,17 +4757,17 @@
         "label": "Lem_Quant",
         "cited_refs": []
       },
-      "proof_text": "tauto",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 47.72,
       "timestamp": "2026-05-09T14:26:00Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -3529,13 +4781,17 @@
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [],
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
         "equivalent_independent_semantic_evidence",
         "claim_equivalent:hybrid",
-        "semantic_equivalence:verified"
+        "semantic_equivalence:verified",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_598d61288ae9aac1dd2df334",
@@ -3640,7 +4896,7 @@
       "context_pack": {},
       "axiom_debt": [],
       "axiom_debt_hash": "0b7c865525696b3c",
-      "closure_claim": "not_closed",
+      "closure_claim": "lean_verified_without_paper_local_axioms",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
@@ -3679,13 +4935,27 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.21.] \\label{Lem:Quant}\nIf $\\alpha$ is any multisegment and $$n_{\\tilde{\\alpha}} + n_{\\alpha} = S_{\\alpha} + c_{\\alpha},$$ then $\\alpha$ is a ladder multisegment."
+      "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.21.] \\label{Lem:Quant}\nIf $\\alpha$ is any multisegment and $$n_{\\tilde{\\alpha}} + n_{\\alpha} = S_{\\alpha} + c_{\\alpha},$$ then $\\alpha$ is a ladder multisegment.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_without_paper_local_axioms",
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "tauto",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] Cor:Quant\n-- Statement (LaTeX): [, Corollary 4.2.22.] For an arbitrary",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Cor_Quant",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
-      "lean_statement": "theorem Cor_Quant (x : ℝ) (h_is_not_a_ladder_multisegment_1 : True) :\n  (∃ x : ℝ, x = x) ↔ (∃ x : ℝ, x = x) := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem Cor_Quant :\n  CorQuantSourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -3725,9 +4995,9 @@
       },
       "proof_text": "omega",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol,fallback_after_lean_validation_failure",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 16.26,
       "timestamp": "2026-05-09T20:14:46Z",
@@ -3745,13 +5015,17 @@
         "semantic_adversarial_checks_passed": false,
         "no_paper_axiom_debt": true,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": false
+        "statement_alignment_not_unrelated": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "semantic_adversarial_checks_passed"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -3851,13 +5125,232 @@
       "statement_fidelity_source": "none",
       "source_content_hash": "9cb736faf51f7b1f",
       "source_span_id": "",
-      "source_latex": "[\\cite{riddlesden2022combinatorial}, Corollary 4.2.22.] \\label{Cor:Quant}\nFor an arbitrary multisegment $\\alpha$ which is not a ladder multisegment, we have $$n_{\\tilde{\\alpha}} + n_{\\alpha} > S_{\\alpha} + C_{\\alpha} \\geq S_{\\alpha} + c_{\\alpha},$$ and hence a multisegment $\\alpha$ is a ladder multisegment if and only if $$n_{\\tilde{\\alpha}} + n_{\\alpha} = S_{\\alpha} + C_{\\alpha} = S_{\\alpha} + c_{\\alpha}.$$"
+      "source_latex": "[\\cite{riddlesden2022combinatorial}, Corollary 4.2.22.] \\label{Cor:Quant}\nFor an arbitrary multisegment $\\alpha$ which is not a ladder multisegment, we have $$n_{\\tilde{\\alpha}} + n_{\\alpha} > S_{\\alpha} + C_{\\alpha} \\geq S_{\\alpha} + c_{\\alpha},$$ and hence a multisegment $\\alpha$ is a ladder multisegment if and only if $$n_{\\tilde{\\alpha}} + n_{\\alpha} = S_{\\alpha} + C_{\\alpha} = S_{\\alpha} + c_{\\alpha}.$$",
+      "proved": false,
+      "source_context_pack_id": "srcctx_79966daac62d4b8a9336a57c",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_79966daac62d4b8a9336a57c",
+        "paper_id": "2304.09598",
+        "theorem_name": "Cor_Quant",
+        "theorem_id": "Cor:Quant",
+        "source_latex": "[\\cite{riddlesden2022combinatorial}, Corollary 4.2.22.] \\label{Cor:Quant}\nFor an arbitrary multisegment $\\alpha$ which is not a ladder multisegment, we have $$n_{\\tilde{\\alpha}} + n_{\\alpha} > S_{\\alpha} + C_{\\alpha} \\geq S_{\\alpha} + c_{\\alpha},$$ and hence a multisegment $\\alpha$ is a ladder multisegment if and only if $$n_{\\tilde{\\alpha}} + n_{\\alpha} = S_{\\alpha} + C_{\\alpha} = S_{\\alpha} + c_{\\alpha}.$$",
+        "normalized_text": "[ , Corollary 4.2.22.] For an arbitrary multisegment alpha which is not a ladder multisegment, we have n_ tilde alpha + n_ alpha > S_ alpha + C_ alpha geq S_ alpha + c_ alpha , and hence a multisegment alpha is a ladder multisegment if and only if n_ tilde alpha + n_ alpha = S_ alpha + C_ alpha = S_ alpha + c_ alpha .",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+          "start_byte": 32383,
+          "end_byte": 32794,
+          "start_line": 485,
+          "start_col": 18,
+          "end_line": 486,
+          "end_col": 338,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 26,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 20,
+              "score": 195,
+              "name": "Cor:Quant",
+              "label": "Cor:Quant",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Basic",
+              "label": "Basic",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 25,
+              "score": 0,
+              "name": "Cor:Arthur",
+              "label": "Cor:Arthur",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Cor:BoundaryRTandMS",
+              "label": "Cor:BoundaryRTandMS",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 8,
+              "score": 0,
+              "name": "Def:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 11,
+              "score": 0,
+              "name": "EqualAB",
+              "label": "EqualAB",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "EqualLN",
+              "label": "EqualLN",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 14,
+              "score": 0,
+              "name": "Exa:QFM",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Exa:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 22,
+              "score": 0,
+              "name": "Lem:A1",
+              "label": "Lem:A1",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "corquant",
+              "cthcb21e83b9be0a778cadb6e41"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "Cor:Quant",
+                "label": "Cor:Quant",
+                "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 20,
+            "name": "Cor:Quant",
+            "label": "Cor:Quant",
+            "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0435,
+        "source_token_count": 23,
+        "lean_token_count": 3,
+        "source_anchors": [
+          "srcctx_79966daac62d4b8a9336a57c"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 0.0,
+        "items": [
+          {
+            "assumption": "[\\cite{riddlesden2022combinatorial}, Corollary 4.2.22.] \\label{Cor:Quant} For an arbitrary multisegment $\\alpha$ which is not a ladder multisegment, we have $$n_{\\tilde{\\alpha}} + n_{\\alpha} > S_{\\alpha} + C_{\\alpha} \\ge",
+            "coverage": 0.0435,
+            "covered": false
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "n_{\\tilde{\\alpha}} + n_{\\alpha} = S_{\\alpha} + C_{\\alpha} = S_{\\alpha} + c_{\\alpha}.",
+        "target": "CorQuantSourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol",
+          "fallback_after_lean_validation_failure"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2304_09598.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_79966daac62d4b8a9336a57c",
+        "source_coverage": {
+          "score": 0.0435,
+          "source_token_count": 23,
+          "lean_token_count": 3,
+          "source_anchors": [
+            "srcctx_79966daac62d4b8a9336a57c"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 0.0,
+          "items": [
+            {
+              "assumption": "[\\cite{riddlesden2022combinatorial}, Corollary 4.2.22.] \\label{Cor:Quant} For an arbitrary multisegment $\\alpha$ which is not a ladder multisegment, we have $$n_{\\tilde{\\alpha}} + n_{\\alpha} > S_{\\alpha} + C_{\\alpha} \\ge",
+              "coverage": 0.0435,
+              "covered": false
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "n_{\\tilde{\\alpha}} + n_{\\alpha} = S_{\\alpha} + C_{\\alpha} = S_{\\alpha} + c_{\\alpha}.",
+          "target": "CorQuantSourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Thm_Quant",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
-      "lean_statement": "theorem Thm_Quant (alpha : ℝ) (beta : ℝ) (h_is_a_ladder_multisegment_1 : True) (h_source_2_2 : True) (h_source_3_3 : True) :\n  alpha ≤ beta ∧ alpha = beta ∧ α = β := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem Thm_Quant {alpha beta : Multisegment} (halpha : IsLadderMultisegment alpha) (hbeta : IsLadderMultisegment beta) (h_le : alpha ≤ beta) (h_dual_le : dual alpha ≤ dual beta) : alpha = beta := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -3913,14 +5406,14 @@
       },
       "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body,llm_statement_repair_v1",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 68.29,
       "timestamp": "2026-05-09T20:16:04Z",
       "validation_gates": {
-        "lean_proof_closed": true,
+        "lean_proof_closed": false,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -3933,13 +5426,17 @@
         "semantic_adversarial_checks_passed": false,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": true
+        "statement_alignment_not_unrelated": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_outcome": "statement_repaired_and_elaborates"
       },
       "gate_failures": [
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -4051,7 +5548,230 @@
         "paper_definition_stub:h_source_2_2",
         "paper_definition_stub:h_source_3_3"
       ],
-      "source_latex": "\\label{Thm:Quant}\nLet $\\alpha$ be a ladder multisegment. If $\\beta$ is a multisegment such that $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$. \n%If $\\alpha$ is a ladder multisegment, $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$."
+      "source_latex": "\\label{Thm:Quant}\nLet $\\alpha$ be a ladder multisegment. If $\\beta$ is a multisegment such that $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$. \n%If $\\alpha$ is a ladder multisegment, $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_0770f2e1e0ecabb3d59459af",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_0770f2e1e0ecabb3d59459af",
+        "paper_id": "2304.09598",
+        "theorem_name": "Thm_Quant",
+        "theorem_id": "Thm:Quant",
+        "source_latex": "\\label{Thm:Quant}\nLet $\\alpha$ be a ladder multisegment. If $\\beta$ is a multisegment such that $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$. \n%If $\\alpha$ is a ladder multisegment, $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+        "normalized_text": "Let alpha be a ladder multisegment. If beta is a multisegment such that alpha leq beta and tilde alpha leq tilde beta , then alpha = beta .",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+          "start_byte": 32824,
+          "end_byte": 33127,
+          "start_line": 489,
+          "start_col": 12,
+          "end_line": 491,
+          "end_col": 123,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 26,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 21,
+              "score": 195,
+              "name": "Thm:Quant",
+              "label": "Thm:Quant",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Basic",
+              "label": "Basic",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 25,
+              "score": 0,
+              "name": "Cor:Arthur",
+              "label": "Cor:Arthur",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Cor:BoundaryRTandMS",
+              "label": "Cor:BoundaryRTandMS",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 20,
+              "score": 0,
+              "name": "Cor:Quant",
+              "label": "Cor:Quant",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 8,
+              "score": 0,
+              "name": "Def:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 11,
+              "score": 0,
+              "name": "EqualAB",
+              "label": "EqualAB",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "EqualLN",
+              "label": "EqualLN",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 14,
+              "score": 0,
+              "name": "Exa:QFM",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Exa:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cthff9aaed4732fe1bb0255598f",
+              "thmquant"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "Thm:Quant",
+                "label": "Thm:Quant",
+                "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 21,
+            "name": "Thm:Quant",
+            "label": "Thm:Quant",
+            "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "llm_statement_repair_v1",
+      "source_coverage": {
+        "score": 0.4167,
+        "source_token_count": 12,
+        "lean_token_count": 10,
+        "source_anchors": [
+          "alpha ≤ beta",
+          "tildealpha ≤ tildebeta",
+          "alpha = beta"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": [
+          {
+            "assumption": "\\label{Thm:Quant} Let $\\alpha$ be a ladder multisegment.",
+            "coverage": 0.5714,
+            "covered": true
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.25,
+        "claim": "If $\\beta$ is a multisegment such that $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$. %If $\\alpha$ is a ladder multisegment, $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+        "target": "alpha ≤ beta ∧ tildealpha ≤ tildebeta ∧ alpha = beta"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body",
+          "llm_statement_repair_v1"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2304_09598.lean",
+        "regeneration_protocol": "llm_statement_repair_v1",
+        "source_context_pack_id": "srcctx_0770f2e1e0ecabb3d59459af",
+        "source_coverage": {
+          "score": 0.4167,
+          "source_token_count": 12,
+          "lean_token_count": 10,
+          "source_anchors": [
+            "alpha ≤ beta",
+            "tildealpha ≤ tildebeta",
+            "alpha = beta"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": [
+            {
+              "assumption": "\\label{Thm:Quant} Let $\\alpha$ be a ladder multisegment.",
+              "coverage": 0.5714,
+              "covered": true
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.25,
+          "claim": "If $\\beta$ is a multisegment such that $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$. %If $\\alpha$ is a ladder multisegment, $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+          "target": "alpha ≤ beta ∧ tildealpha ≤ tildebeta ∧ alpha = beta"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Lem_A1",
@@ -4277,7 +5997,13 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "\\label{Lem:A1}\nLet $\\alpha$ be an arbitrary multisegment containing a sub-multisegment $\\alpha_1$ of the form $$ \\abovedisplayskip=5pt \\belowdisplayskip=5pt \\alpha_1 = \\left\\{ [-e,b], [-e+1, b+1], \\dots, [-b-1, e-1], [-b, e] \\right\\}.$$ If $\\alpha_1$ contains both of the shortest segments containing the minimum and maximum values, $-e$ and $e$, of the multisegment $\\alpha$ then it will not be possible to generate $[b,e]$ or a segment containing $b, \\dots, e$ from any sub-multisegment other than $\\alpha_1$."
+      "source_latex": "\\label{Lem:A1}\nLet $\\alpha$ be an arbitrary multisegment containing a sub-multisegment $\\alpha_1$ of the form $$ \\abovedisplayskip=5pt \\belowdisplayskip=5pt \\alpha_1 = \\left\\{ [-e,b], [-e+1, b+1], \\dots, [-b-1, e-1], [-b, e] \\right\\}.$$ If $\\alpha_1$ contains both of the shortest segments containing the minimum and maximum values, $-e$ and $e$, of the multisegment $\\alpha$ then it will not be possible to generate $[b,e]$ or a segment containing $b, \\dots, e$ from any sub-multisegment other than $\\alpha_1$.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Lem_A1b",
@@ -4494,13 +6220,19 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:Multisegment"
       ],
-      "source_latex": "\\label{Lem:A1b}\nLet $\\alpha$ be an arbitrary multisegment containing a sub-multisegment $\\alpha_1$ of the form $$ \\alpha_1 = \\left\\{ [-e,b], [-e+1, b+1], \\dots, [-b-1, e-1], [-b, e] \\right\\} = \\left\\{ \\Delta^b, \\Delta^{b+1}, \\dots, \\Delta^{e-1}, \\Delta^e \\right\\}.$$ If $\\alpha_1$ contains both of the shortest segments containing the minimum and maximum values, $-e$ and $e$, of the multisegment $\\alpha$ then removing copies of $\\alpha_1$ will induce an endoscopic decomposition, that is, $$ \\alpha = \\alpha_1 \\sqcup (\\alpha - \\alpha_1) \\,\\,\\,\\, \\text{and} \\,\\,\\,\\,  \\tilde{\\alpha} = \\widetilde{\\alpha_1} \\sqcup \\widetilde{(\\alpha - \\alpha_1)}.$$"
+      "source_latex": "\\label{Lem:A1b}\nLet $\\alpha$ be an arbitrary multisegment containing a sub-multisegment $\\alpha_1$ of the form $$ \\alpha_1 = \\left\\{ [-e,b], [-e+1, b+1], \\dots, [-b-1, e-1], [-b, e] \\right\\} = \\left\\{ \\Delta^b, \\Delta^{b+1}, \\dots, \\Delta^{e-1}, \\Delta^e \\right\\}.$$ If $\\alpha_1$ contains both of the shortest segments containing the minimum and maximum values, $-e$ and $e$, of the multisegment $\\alpha$ then removing copies of $\\alpha_1$ will induce an endoscopic decomposition, that is, $$ \\alpha = \\alpha_1 \\sqcup (\\alpha - \\alpha_1) \\,\\,\\,\\, \\text{and} \\,\\,\\,\\,  \\tilde{\\alpha} = \\widetilde{\\alpha_1} \\sqcup \\widetilde{(\\alpha - \\alpha_1)}.$$",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Thm_ManySimpleA_B",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
-      "lean_statement": "theorem Thm_ManySimpleA_B (alpha : ℝ) (beta : ℝ) (h_is_a_multisegment_formed_by__1 : True) (h_source_2_2 : True) (h_source_3_3 : True) :\n  alpha ≤ beta ∧ alpha = beta ∧ α = β := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem Thm_ManySimpleA_B (alpha beta : Multisegment) (halpha : IsSimple alpha) (hbeta : IsSimple beta) (halphabeta : alpha ≤ beta) (halphabeta_tilde : dual alpha ≤ dual beta) : alpha = beta := by sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -4556,14 +6288,14 @@
       },
       "proof_text": "apply?",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_grounded_statement_body,llm_statement_repair_v1",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 69.69,
       "timestamp": "2026-05-09T20:17:37Z",
       "validation_gates": {
-        "lean_proof_closed": true,
+        "lean_proof_closed": false,
         "step_verdict_verified": true,
         "assumptions_grounded": true,
         "provenance_linked": true,
@@ -4576,13 +6308,17 @@
         "semantic_adversarial_checks_passed": false,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": true
+        "statement_alignment_not_unrelated": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_outcome": "statement_repaired_and_elaborates"
       },
       "gate_failures": [
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -4694,13 +6430,236 @@
         "paper_definition_stub:h_source_2_2",
         "paper_definition_stub:h_source_3_3"
       ],
-      "source_latex": "\\label{Thm:ManySimpleA=B}\nLet $\\alpha$ be a multisegment formed by the taking the union of $m$ simple symmetric multisegments. If $\\beta$ is a multisegment such that $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$."
+      "source_latex": "\\label{Thm:ManySimpleA=B}\nLet $\\alpha$ be a multisegment formed by the taking the union of $m$ simple symmetric multisegments. If $\\beta$ is a multisegment such that $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_5c9164a70bd4300cee1f3577",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_5c9164a70bd4300cee1f3577",
+        "paper_id": "2304.09598",
+        "theorem_name": "Thm_ManySimpleA_B",
+        "theorem_id": "Thm:ManySimpleA=B",
+        "source_latex": "\\label{Thm:ManySimpleA=B}\nLet $\\alpha$ be a multisegment formed by the taking the union of $m$ simple symmetric multisegments. If $\\beta$ is a multisegment such that $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+        "normalized_text": "Let alpha be a multisegment formed by the taking the union of m simple symmetric multisegments. If beta is a multisegment such that alpha leq beta and tilde alpha leq tilde beta , then alpha = beta .",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+          "start_byte": 44641,
+          "end_byte": 44890,
+          "start_line": 578,
+          "start_col": 13,
+          "end_line": 579,
+          "end_col": 224,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 26,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 24,
+              "score": 195,
+              "name": "Thm:ManySimpleA=B",
+              "label": "Thm:ManySimpleA=B",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Basic",
+              "label": "Basic",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 25,
+              "score": 0,
+              "name": "Cor:Arthur",
+              "label": "Cor:Arthur",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Cor:BoundaryRTandMS",
+              "label": "Cor:BoundaryRTandMS",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 20,
+              "score": 0,
+              "name": "Cor:Quant",
+              "label": "Cor:Quant",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 8,
+              "score": 0,
+              "name": "Def:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 11,
+              "score": 0,
+              "name": "EqualAB",
+              "label": "EqualAB",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "EqualLN",
+              "label": "EqualLN",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 14,
+              "score": 0,
+              "name": "Exa:QFM",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Exa:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cthff9aaed4732fe1bb0255598f",
+              "thmmanysimpleab"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "Thm:ManySimpleA=B",
+                "label": "Thm:ManySimpleA=B",
+                "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 24,
+            "name": "Thm:ManySimpleA=B",
+            "label": "Thm:ManySimpleA=B",
+            "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "llm_statement_repair_v1",
+      "source_coverage": {
+        "score": 0.3333,
+        "source_token_count": 18,
+        "lean_token_count": 11,
+        "source_anchors": [
+          "alpha ≤ beta",
+          "tildealpha ≤ tildebeta",
+          "alpha = beta"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": [
+          {
+            "assumption": "\\label{Thm:ManySimpleA=B} Let $\\alpha$ be a multisegment formed by the taking the union of $m$ simple symmetric multisegments.",
+            "coverage": 0.3846,
+            "covered": true
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.2857,
+        "claim": "If $\\beta$ is a multisegment such that $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+        "target": "alpha ≤ beta ∧ tildealpha ≤ tildebeta ∧ alpha = beta"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_grounded_statement_body",
+          "llm_statement_repair_v1"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "llm_statement_repair",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2304_09598.lean",
+        "regeneration_protocol": "llm_statement_repair_v1",
+        "source_context_pack_id": "srcctx_5c9164a70bd4300cee1f3577",
+        "source_coverage": {
+          "score": 0.3333,
+          "source_token_count": 18,
+          "lean_token_count": 11,
+          "source_anchors": [
+            "alpha ≤ beta",
+            "tildealpha ≤ tildebeta",
+            "alpha = beta"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": [
+            {
+              "assumption": "\\label{Thm:ManySimpleA=B} Let $\\alpha$ be a multisegment formed by the taking the union of $m$ simple symmetric multisegments.",
+              "coverage": 0.3846,
+              "covered": true
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.2857,
+          "claim": "If $\\beta$ is a multisegment such that $\\alpha \\leq \\beta$ and $\\tilde{\\alpha} \\leq \\tilde{\\beta}$, then $\\alpha = \\beta$.",
+          "target": "alpha ≤ beta ∧ tildealpha ≤ tildebeta ∧ alpha = beta"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "Cor_Arthur",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
-      "lean_statement": "theorem Cor_Arthur (x : ℝ) :\n  ∃ x : ℝ, x = x := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem Cor_Arthur :\n  CorArthurSourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -4731,9 +6690,9 @@
       },
       "proof_text": "omega",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 8.38,
       "timestamp": "2026-05-09T20:17:50Z",
@@ -4751,12 +6710,17 @@
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": true,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": false
+        "statement_alignment_not_unrelated": false,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "lean_proof_closed",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -4850,7 +6814,225 @@
       "statement_fidelity_source": "none",
       "source_content_hash": "85ddd83fdc0592c2",
       "source_span_id": "",
-      "source_latex": "\\label{Cor:Arthur}\nABV-packets for orbits of Arthur type are singletons and consequently, ABV-packets for orbits of Arthur type are A-packets."
+      "source_latex": "\\label{Cor:Arthur}\nABV-packets for orbits of Arthur type are singletons and consequently, ABV-packets for orbits of Arthur type are A-packets.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_9abe6e2c3837771dd40bc717",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_9abe6e2c3837771dd40bc717",
+        "paper_id": "2304.09598",
+        "theorem_name": "Cor_Arthur",
+        "theorem_id": "Cor:Arthur",
+        "source_latex": "\\label{Cor:Arthur}\nABV-packets for orbits of Arthur type are singletons and consequently, ABV-packets for orbits of Arthur type are A-packets.",
+        "normalized_text": "ABV-packets for orbits of Arthur type are singletons and consequently, ABV-packets for orbits of Arthur type are A-packets.",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+          "start_byte": 49656,
+          "end_byte": 49798,
+          "start_line": 597,
+          "start_col": 18,
+          "end_line": 598,
+          "end_col": 124,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 26,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 25,
+              "score": 195,
+              "name": "Cor:Arthur",
+              "label": "Cor:Arthur",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 6,
+              "score": 0,
+              "name": "Basic",
+              "label": "Basic",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "Cor:BoundaryRTandMS",
+              "label": "Cor:BoundaryRTandMS",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 20,
+              "score": 0,
+              "name": "Cor:Quant",
+              "label": "Cor:Quant",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 8,
+              "score": 0,
+              "name": "Def:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 11,
+              "score": 0,
+              "name": "EqualAB",
+              "label": "EqualAB",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 7,
+              "score": 0,
+              "name": "EqualLN",
+              "label": "EqualLN",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 14,
+              "score": 0,
+              "name": "Exa:QFM",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 9,
+              "score": 0,
+              "name": "Exa:Simple",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            },
+            {
+              "index": 22,
+              "score": 0,
+              "name": "Lem:A1",
+              "label": "Lem:A1",
+              "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "corarthur",
+              "cthf221dc01559ba644b3e7b15b"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "Cor:Arthur",
+                "label": "Cor:Arthur",
+                "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 25,
+            "name": "Cor:Arthur",
+            "label": "Cor:Arthur",
+            "source_file": "output/paper_sources/golden10/2304.09598_expanded/CombinatorialApproach-arXiv.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0909,
+        "source_token_count": 11,
+        "lean_token_count": 3,
+        "source_anchors": [
+          "srcctx_9abe6e2c3837771dd40bc717"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": [
+          {
+            "assumption": "\\label{Cor:Arthur} ABV-packets for orbits of Arthur type are singletons and consequently, ABV-packets for orbits of Arthur type are A-packets.",
+            "coverage": 0.0909,
+            "covered": true
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "\\label{Cor:Arthur} ABV-packets for orbits of Arthur type are singletons and consequently, ABV-packets for orbits of Arthur type are A-packets.",
+        "target": "CorArthurSourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2304_09598.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_9abe6e2c3837771dd40bc717",
+        "source_coverage": {
+          "score": 0.0909,
+          "source_token_count": 11,
+          "lean_token_count": 3,
+          "source_anchors": [
+            "srcctx_9abe6e2c3837771dd40bc717"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": [
+            {
+              "assumption": "\\label{Cor:Arthur} ABV-packets for orbits of Arthur type are singletons and consequently, ABV-packets for orbits of Arthur type are A-packets.",
+              "coverage": 0.0909,
+              "covered": true
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "\\label{Cor:Arthur} ABV-packets for orbits of Arthur type are singletons and consequently, ABV-packets for orbits of Arthur type are A-packets.",
+          "target": "CorArthurSourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     }
   ]
 }

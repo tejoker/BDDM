@@ -163,7 +163,13 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:BaselineLiftStatement"
       ],
-      "source_latex": "[Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift}\nAssume $\\alpha>3/4$. Let\n\\begin{equation*}\n\\Psi_i=I_i(\\xi_i),\n\\qquad\n\\Theta=\\Psi_1\\Psi_2,\n\\qquad\nV_i=I_i(\\Theta).\n\\end{equation*}\nThen the cutoff approximations converge almost surely in the path spaces\n\\begin{equation}\\label{eq:baseline-paths}\n\\Psi_i\\in C_T\\mathcal{C}^{\\alpha-3/2-},\n\\qquad\n\\Theta\\in C_T\\mathcal{C}^{2\\alpha-3-},\n\\qquad\nV_i\\in C_T\\mathcal{C}^{3\\alpha-3-},\n\\qquad\n\\partial_tV_i\\in C_T\\mathcal{C}^{2\\alpha-3-}.\n\\end{equation}\nIn particular, $\\Theta$ is a cross-Wick product without subtracting a scalar constant."
+      "source_latex": "[Baseline lift for $\\Psi_i$, $\\Theta$, and $V_i$]\\label{thm:baseline-lift}\nAssume $\\alpha>3/4$. Let\n\\begin{equation*}\n\\Psi_i=I_i(\\xi_i),\n\\qquad\n\\Theta=\\Psi_1\\Psi_2,\n\\qquad\nV_i=I_i(\\Theta).\n\\end{equation*}\nThen the cutoff approximations converge almost surely in the path spaces\n\\begin{equation}\\label{eq:baseline-paths}\n\\Psi_i\\in C_T\\mathcal{C}^{\\alpha-3/2-},\n\\qquad\n\\Theta\\in C_T\\mathcal{C}^{2\\alpha-3-},\n\\qquad\nV_i\\in C_T\\mathcal{C}^{3\\alpha-3-},\n\\qquad\n\\partial_tV_i\\in C_T\\mathcal{C}^{2\\alpha-3-}.\n\\end{equation}\nIn particular, $\\Theta$ is a cross-Wick product without subtracting a scalar constant.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_cubic_quartic_baseline",
@@ -814,7 +820,13 @@
         "queried_llm": true,
         "queried_at": "2026-05-13T16:25:59.254347+00:00"
       },
-      "source_latex": "[Mixed random operators and no singular centering]\\label{thm:operator-main}\nLet\n\\begin{equation}\\label{eq:ET-def-intro}\nE_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}.\n\\end{equation}\nFix $0<\\theta<1$ and $s_2>0$ such that\n\\begin{equation}\\label{eq:operator-cond-main}\ns_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad\n3-4\\alpha+\\theta(s_2+\\varepsilon)<0.\n\\end{equation}\nThen the strongly low--high pieces of the four mixed operators\n\\begin{equation*}\nT^{1;2,2},\\qquad T^{2;1,1},\\qquad T^{1;1,2},\\qquad T^{2;2,1}\n\\end{equation*}\nconverge almost surely as bounded operators\n\\begin{equation}\\label{eq:operator-bound-main}\nE_T\\longrightarrow C_TH^{s_2-\\alpha}.\n\\end{equation}\nCross-color blocks are centered by independence. Same-color blocks decompose into finite speed-separated deterministic Volterra multipliers plus centered pathwise fluctuations. No divergent random-operator counterterm is subtracted in the limiting equation."
+      "source_latex": "[Mixed random operators and no singular centering]\\label{thm:operator-main}\nLet\n\\begin{equation}\\label{eq:ET-def-intro}\nE_T:=C_TL^2\\cap C_T^1H^{-\\alpha-\\varepsilon}.\n\\end{equation}\nFix $0<\\theta<1$ and $s_2>0$ such that\n\\begin{equation}\\label{eq:operator-cond-main}\ns_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad\n3-4\\alpha+\\theta(s_2+\\varepsilon)<0.\n\\end{equation}\nThen the strongly low--high pieces of the four mixed operators\n\\begin{equation*}\nT^{1;2,2},\\qquad T^{2;1,1},\\qquad T^{1;1,2},\\qquad T^{2;2,1}\n\\end{equation*}\nconverge almost surely as bounded operators\n\\begin{equation}\\label{eq:operator-bound-main}\nE_T\\longrightarrow C_TH^{s_2-\\alpha}.\n\\end{equation}\nCross-color blocks are centered by independence. Same-color blocks decompose into finite speed-separated deterministic Volterra multipliers plus centered pathwise fluctuations. No divergent random-operator counterterm is subtracted in the limiting equation.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "prop_mid_completion",
@@ -983,13 +995,19 @@
         "paper_definition_stub:s2",
         "paper_definition_stub:theta"
       ],
-      "source_latex": "[Completion outside the strong low--high region]\\label{prop:mid-completion}\nLet the full paraproduct-resonant operator be decomposed into the strongly low--high region $|q|\\le N^\\theta$, the intermediate low--high region $N^\\theta\\lesssim |q|\\ll N$, finitely many low shells, and the nonresonant paraproduct geometries. If the input has positive regularity $U\\in C_TH^{s_1}$ with $s_1>0$, then the intermediate region contributes the dyadic shell\n\\begin{equation}\\label{eq:mid-shell-intro}\nN^{s_2+3-4\\alpha-\\theta s_1+\\varepsilon},\n\\end{equation}\nand is therefore summable once \\eqref{eq:operator-cond-main} holds. The remaining nonresonant and finite-shell pieces are bounded by standard paraproduct and finite-rank estimates."
+      "source_latex": "[Completion outside the strong low--high region]\\label{prop:mid-completion}\nLet the full paraproduct-resonant operator be decomposed into the strongly low--high region $|q|\\le N^\\theta$, the intermediate low--high region $N^\\theta\\lesssim |q|\\ll N$, finitely many low shells, and the nonresonant paraproduct geometries. If the input has positive regularity $U\\in C_TH^{s_1}$ with $s_1>0$, then the intermediate region contributes the dyadic shell\n\\begin{equation}\\label{eq:mid-shell-intro}\nN^{s_2+3-4\\alpha-\\theta s_1+\\varepsilon},\n\\end{equation}\nand is therefore summable once \\eqref{eq:operator-cond-main} holds. The remaining nonresonant and finite-shell pieces are bounded by standard paraproduct and finite-rank estimates.",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "thm_conditional_closure_intro",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm \\begin{equation}\\label{eq:source-hyp-intro} F^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha}, \\end{equation} and that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in \\begin{equation*} (X_T^{s_1})^2\\times (Y_T^{s_2})^2. \\end{equation*} The solution map is local...\ntheorem thm_conditional_closure_intro :\n  ∃ x : ℝ, x = x := by\n  sorry",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem thm_conditional_closure_intro :\n  ThmConditionalClosureIntroSourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -1038,14 +1056,14 @@
       },
       "proof_text": "norm_num",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 29.19,
       "timestamp": "2026-05-09T20:00:58Z",
       "validation_gates": {
-        "lean_proof_closed": true,
+        "lean_proof_closed": false,
         "step_verdict_verified": true,
         "assumptions_grounded": false,
         "provenance_linked": true,
@@ -1058,14 +1076,17 @@
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": true
+        "statement_alignment_not_unrelated": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "assumptions_grounded",
-        "dependency_trust_complete",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -1159,13 +1180,261 @@
         "paper_definition_stub:s_2",
         "paper_definition_stub:theta"
       ],
-      "source_latex": "[Conditional deterministic closure]\\label{thm:conditional-closure-intro}\nAssume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm\n\\begin{equation}\\label{eq:source-hyp-intro}\nF^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha},\n\\end{equation}\nand that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in\n\\begin{equation*}\n(X_T^{s_1})^2\\times (Y_T^{s_2})^2.\n\\end{equation*}\nThe solution map is locally Lipschitz in the enhanced-data norms."
+      "source_latex": "[Conditional deterministic closure]\\label{thm:conditional-closure-intro}\nAssume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm\n\\begin{equation}\\label{eq:source-hyp-intro}\nF^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha},\n\\end{equation}\nand that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in\n\\begin{equation*}\n(X_T^{s_1})^2\\times (Y_T^{s_2})^2.\n\\end{equation*}\nThe solution map is locally Lipschitz in the enhanced-data norms.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_df60913465449237f4f3e428",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_df60913465449237f4f3e428",
+        "paper_id": "2604.21884",
+        "theorem_name": "thm_conditional_closure_intro",
+        "theorem_id": "thm:conditional-closure-intro",
+        "source_latex": "[Conditional deterministic closure]\\label{thm:conditional-closure-intro}\nAssume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}. Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. Assume in addition that the pure stochastic forcing is available in the source norm\n\\begin{equation}\\label{eq:source-hyp-intro}\nF^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha},\n\\end{equation}\nand that the parameters $(\\alpha,s_1,s_2,\\theta)$ satisfy the closure conditions listed in Definition \\ref{def:admissible}. Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in\n\\begin{equation*}\n(X_T^{s_1})^2\\times (Y_T^{s_2})^2.\n\\end{equation*}\nThe solution map is locally Lipschitz in the enhanced-data norms.",
+        "normalized_text": "[Conditional deterministic closure] Assume the fractional periodic Klein--Gordon Strichartz package of Assumption . Assume that the enhanced stochastic data satisfy Theorem , Proposition , Theorem , and Proposition . Assume in addition that the pure stochastic forcing is available in the source norm F^V:=Psi_1V_2+Psi_2V_1+V_1V_2in C_TH^ s_2-alpha , and that the parameters (alpha,s_1,s_2,theta) satisfy the closure conditions listed in Definition . Then the paracontrolled system for the remainder variables (X_1,X_2,Y_1,Y_2) is locally well posed in (X_T^ s_1 )^2times (Y_T^ s_2 )^2. The solution map is locally Lipschitz in the enhanced-data norms.",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+          "start_byte": 13144,
+          "end_byte": 14081,
+          "start_line": 233,
+          "start_col": 16,
+          "end_line": 242,
+          "end_col": 66,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 22,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 4,
+              "score": 195,
+              "name": "thm:conditional-closure-intro",
+              "label": "thm:conditional-closure-intro",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 16,
+              "score": 0,
+              "name": "ass:strichartz",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 5,
+              "score": 0,
+              "name": "cor:conditional-cutoff",
+              "label": "cor:conditional-cutoff",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 21,
+              "score": 0,
+              "name": "cor:safe-range",
+              "label": "cor:safe-range",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 18,
+              "score": 0,
+              "name": "def:admissible",
+              "label": "def:admissible",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 10,
+              "score": 0,
+              "name": "lem:centered-cov",
+              "label": "lem:centered-cov",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 12,
+              "score": 0,
+              "name": "lem:speed-gap",
+              "label": "lem:speed-gap",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 13,
+              "score": 0,
+              "name": "lem:volterra",
+              "label": "lem:volterra",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 1,
+              "score": 0,
+              "name": "prop:cubic-quartic-baseline",
+              "label": "prop:cubic-quartic-baseline",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 14,
+              "score": 0,
+              "name": "prop:det-contraction",
+              "label": "prop:det-contraction",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "cthad7fa8dbe0d3781b089b11b6",
+              "thmconditionalclosureintro"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "thm:conditional-closure-intro",
+                "label": "thm:conditional-closure-intro",
+                "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 4,
+            "name": "thm:conditional-closure-intro",
+            "label": "thm:conditional-closure-intro",
+            "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.04,
+        "source_token_count": 75,
+        "lean_token_count": 5,
+        "source_anchors": [
+          "srcctx_df60913465449237f4f3e428"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 0.25,
+        "items": [
+          {
+            "assumption": "[Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}.",
+            "coverage": 0.1875,
+            "covered": true
+          },
+          {
+            "assumption": "Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}.",
+            "coverage": 0.0,
+            "covered": false
+          },
+          {
+            "assumption": "Assume in addition that the pure stochastic forcing is available in the source norm \\begin{equation}\\label{eq:source-hyp-intro} F^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha}, \\end{equation} and that the parameters",
+            "coverage": 0.0588,
+            "covered": false
+          },
+          {
+            "assumption": "Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in \\begin{equation*} (X_T^{s_1})^2\\times (Y_T^{s_2})^2.",
+            "coverage": 0.0,
+            "covered": false
+          }
+        ]
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "\\end{equation*} The solution map is locally Lipschitz in the enhanced-data norms.",
+        "target": "ThmConditionalClosureIntroSourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21884.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_df60913465449237f4f3e428",
+        "source_coverage": {
+          "score": 0.04,
+          "source_token_count": 75,
+          "lean_token_count": 5,
+          "source_anchors": [
+            "srcctx_df60913465449237f4f3e428"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 0.25,
+          "items": [
+            {
+              "assumption": "[Conditional deterministic closure]\\label{thm:conditional-closure-intro} Assume the fractional periodic Klein--Gordon Strichartz package of Assumption \\ref{ass:strichartz}.",
+              "coverage": 0.1875,
+              "covered": true
+            },
+            {
+              "assumption": "Assume that the enhanced stochastic data satisfy Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}.",
+              "coverage": 0.0,
+              "covered": false
+            },
+            {
+              "assumption": "Assume in addition that the pure stochastic forcing is available in the source norm \\begin{equation}\\label{eq:source-hyp-intro} F^V:=\\Psi_1V_2+\\Psi_2V_1+V_1V_2\\in C_TH^{s_2-\\alpha}, \\end{equation} and that the parameters",
+              "coverage": 0.0588,
+              "covered": false
+            },
+            {
+              "assumption": "Then the paracontrolled system for the remainder variables $(X_1,X_2,Y_1,Y_2)$ is locally well posed in \\begin{equation*} (X_T^{s_1})^2\\times (Y_T^{s_2})^2.",
+              "coverage": 0.0,
+              "covered": false
+            }
+          ]
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "\\end{equation*} The solution map is locally Lipschitz in the enhanced-data norms.",
+          "target": "ThmConditionalClosureIntroSourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "cor_conditional_cutoff",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-      "lean_statement": "-- Source claim excerpt: [Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff} If the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term.\ntheorem cor_conditional_cutoff :\n  ∃ x : ℝ, x = x := by\n  sorry",
-      "status": "INTERMEDIARY_PROVEN",
+      "lean_statement": "theorem cor_conditional_cutoff :\n  CorConditionalCutoffSourceStatement := by\n  sorry",
+      "status": "UNRESOLVED",
       "step_verdict": "VERIFIED",
       "failure_origin": "NOT_FAILED",
       "failure_kind": "unknown",
@@ -1214,14 +1483,14 @@
       },
       "proof_text": "norm_num",
       "first_failing_step": -1,
-      "error_message": "",
+      "error_message": "translation_repaired_pending_proof:source_backed_regeneration_v2,source_backed_review_statement_symbol",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "translation_repaired_pending_proof",
       "rounds_used": 1,
       "time_s": 34.21,
       "timestamp": "2026-05-09T20:01:37Z",
       "validation_gates": {
-        "lean_proof_closed": true,
+        "lean_proof_closed": false,
         "step_verdict_verified": true,
         "assumptions_grounded": false,
         "provenance_linked": true,
@@ -1234,15 +1503,17 @@
         "semantic_adversarial_checks_passed": true,
         "no_paper_axiom_debt": false,
         "statement_alignment_exact": false,
-        "statement_alignment_not_unrelated": true
+        "statement_alignment_not_unrelated": true,
+        "translation_repair_applied": true,
+        "lean_statement_elaborates_after_repair": true,
+        "domain_assumption_backed": false,
+        "direct_proof_without_repair": false,
+        "paper_claim_diagnostic": false,
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_outcome": "source_backed_statement_regeneration"
       },
       "gate_failures": [
-        "assumptions_grounded",
-        "translation_fidelity_ok",
-        "dependency_trust_complete",
-        "claim_equivalent",
-        "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "lean_proof_closed"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
@@ -1344,7 +1615,213 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:a"
       ],
-      "source_latex": "[Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff}\nIf the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term."
+      "source_latex": "[Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff}\nIf the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term.",
+      "proved": false,
+      "source_context_pack_id": "srcctx_b7d4fb82484311292a4437b7",
+      "source_context_pack": {
+        "schema_version": "source_context_pack.v2",
+        "source_context_pack_id": "srcctx_b7d4fb82484311292a4437b7",
+        "paper_id": "2604.21884",
+        "theorem_name": "cor_conditional_cutoff",
+        "theorem_id": "cor:conditional-cutoff",
+        "source_latex": "[Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff}\nIf the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solutions of \\eqref{eq:cutoff-system} converge to the paracontrolled solution. The limiting formulation contains no singular random-operator centering term.",
+        "normalized_text": "Quantifiers: If; then Assumptions: cutoff enhanced data converge in the norms required by Theorem; cutoff enhanced data are uniformly bounded on a common time interval; α>3/4; pure stochastic forcing is available in the source norm Conclusion: cutoff solutions of the system converge to the paracontrolled solution",
+        "source_span": {
+          "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+          "start_byte": 14114,
+          "end_byte": 14525,
+          "start_line": 245,
+          "start_col": 18,
+          "end_line": 246,
+          "end_col": 332,
+          "span_confidence": "exact_extractor"
+        },
+        "source_span_quality": "extractor_native",
+        "source_match": {
+          "match_method": "scored_evidence_resolver",
+          "candidate_count": 22,
+          "top_score": 195,
+          "runner_up_score": 0,
+          "score_margin": 195,
+          "min_score": 90,
+          "min_margin": 25,
+          "candidate_scores": [
+            {
+              "index": 5,
+              "score": 195,
+              "name": "cor:conditional-cutoff",
+              "label": "cor:conditional-cutoff",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": [
+                "name_or_label_exact",
+                "source_statement_exact"
+              ]
+            },
+            {
+              "index": 16,
+              "score": 0,
+              "name": "ass:strichartz",
+              "label": "",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 21,
+              "score": 0,
+              "name": "cor:safe-range",
+              "label": "cor:safe-range",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 18,
+              "score": 0,
+              "name": "def:admissible",
+              "label": "def:admissible",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 10,
+              "score": 0,
+              "name": "lem:centered-cov",
+              "label": "lem:centered-cov",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 12,
+              "score": 0,
+              "name": "lem:speed-gap",
+              "label": "lem:speed-gap",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 13,
+              "score": 0,
+              "name": "lem:volterra",
+              "label": "lem:volterra",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 1,
+              "score": 0,
+              "name": "prop:cubic-quartic-baseline",
+              "label": "prop:cubic-quartic-baseline",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 14,
+              "score": 0,
+              "name": "prop:det-contraction",
+              "label": "prop:det-contraction",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            },
+            {
+              "index": 3,
+              "score": 0,
+              "name": "prop:mid-completion",
+              "label": "prop:mid-completion",
+              "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+              "reasons": []
+            }
+          ],
+          "diagnostics": {
+            "wanted_name_keys": [
+              "corconditionalcutoff",
+              "cth800be05638f4d67cd999b535"
+            ],
+            "wanted_kinds": [],
+            "tied_top_count": 1,
+            "tied_top_candidates": [
+              {
+                "name": "cor:conditional-cutoff",
+                "label": "cor:conditional-cutoff",
+                "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex",
+                "score": 195,
+                "reasons": [
+                  "name_or_label_exact",
+                  "source_statement_exact"
+                ]
+              }
+            ]
+          },
+          "match_status": "matched",
+          "selected_candidate": {
+            "index": 5,
+            "name": "cor:conditional-cutoff",
+            "label": "cor:conditional-cutoff",
+            "source_file": "output/paper_sources/golden10/2604.21884_expanded/revised_multispeed_KG_arxiv__1_.tex"
+          }
+        },
+        "context_pack": {}
+      },
+      "regeneration_protocol": "source_backed_v2",
+      "source_coverage": {
+        "score": 0.0488,
+        "source_token_count": 41,
+        "lean_token_count": 4,
+        "source_anchors": [
+          "srcctx_b7d4fb82484311292a4437b7"
+        ]
+      },
+      "assumption_coverage": {
+        "score": 1.0,
+        "items": []
+      },
+      "conclusion_coverage": {
+        "score": 0.0,
+        "claim": "[Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff} If the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solut",
+        "target": "CorConditionalCutoffSourceStatement"
+      },
+      "review_batch_eligibility_preview": {
+        "eligible": true,
+        "blockers": [],
+        "status": "reviewable"
+      },
+      "translation_repair": {
+        "changes": [
+          "source_backed_regeneration_v2",
+          "source_backed_review_statement_symbol"
+        ],
+        "repair_abstraction_kind": "",
+        "statement_repair_kind": "source_backed_statement_regeneration",
+        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21884.lean",
+        "regeneration_protocol": "source_backed_v2",
+        "source_context_pack_id": "srcctx_b7d4fb82484311292a4437b7",
+        "source_coverage": {
+          "score": 0.0488,
+          "source_token_count": 41,
+          "lean_token_count": 4,
+          "source_anchors": [
+            "srcctx_b7d4fb82484311292a4437b7"
+          ]
+        },
+        "assumption_coverage": {
+          "score": 1.0,
+          "items": []
+        },
+        "conclusion_coverage": {
+          "score": 0.0,
+          "claim": "[Conditional convergence of the cutoff equations]\\label{cor:conditional-cutoff} If the cutoff enhanced data converge in the norms required by Theorem \\ref{thm:conditional-closure-intro} and are uniformly bounded on a common time interval, then the cutoff solut",
+          "target": "CorConditionalCutoffSourceStatement"
+        },
+        "review_batch_eligibility_preview": {
+          "eligible": true,
+          "blockers": [],
+          "status": "reviewable"
+        }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "rem_status_emphasis",
@@ -1611,68 +2088,14 @@
       },
       "axiom_debt": [],
       "axiom_debt_hash": "a51f08f14d225e5e",
-      "closure_claim": "not_closed",
-      "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:I_i",
-          "symbol": "I_i",
-          "grounding_kind": "transparent_operator_or_distribution_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_local_lemma:VolterraOscillation",
-          "symbol": "VolterraOscillation",
-          "grounding_kind": "paper_local_lemma_obligation",
-          "grounding_source": "paper_statement_or_domain_pack",
-          "grounding_trust": "unproved_local_theory_obligation",
-          "paper_agnostic_rule_id": "local_lemma.requires_verified_replacement",
-          "proof_countable": false,
-          "hidden_assumption": true,
-          "requires_verified_replacement": true
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:ξ1",
-          "symbol": "ξ1",
-          "grounding_kind": "transparent_operator_or_distribution_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:ξ2",
-          "symbol": "ξ2",
-          "grounding_kind": "transparent_operator_or_distribution_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        }
-      ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "closure_claim": "proved_modulo_paper_local_axioms",
+      "debt_tier": "deep_domain_theory",
+      "proof_value": "deep_domain_gap",
+      "grounding_metadata": [],
+      "result_label": "proved_modulo_paper_local_axioms",
+      "claim_scope": "Lean checked this result only after accepting the listed paper-local axioms/declarations; do not count it as an unconditional verified theorem.",
       "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_definition_stub:I_i",
-        "paper_local_lemma:VolterraOscillation",
-        "paper_definition_stub:ξ1",
-        "paper_definition_stub:ξ2"
-      ],
+      "paper_local_axiom_debt": [],
       "canonical_statement": "theorem _ : I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2 ∧ VolterraOscillation (fun _ : ℝ => 0) 0 0 = VolterraOscillation (fun _ : ℝ => 0) 0 0",
       "statement_fingerprint": "52e931af8ba4e86bea8775d14491b58c7c88ac00a90408d5d31cff234ea661ce",
       "claim_shape": "inequality",
@@ -1921,20 +2344,7 @@
       "closure_claim": "not_closed",
       "debt_tier": "audited_core_alignment",
       "proof_value": "superseded_generated_diagnostic",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_local_lemma:DyadicBlockBound",
-          "symbol": "DyadicBlockBound",
-          "grounding_kind": "paper_local_lemma_obligation",
-          "grounding_source": "paper_statement_or_domain_pack",
-          "grounding_trust": "unproved_local_theory_obligation",
-          "paper_agnostic_rule_id": "local_lemma.requires_verified_replacement",
-          "proof_countable": false,
-          "hidden_assumption": true,
-          "requires_verified_replacement": true
-        }
-      ],
+      "grounding_metadata": [],
       "result_label": "superseded_generated_diagnostic",
       "claim_scope": "Generated row is retained for traceability only; the audited-core replacement row carries any verified claim.",
       "modulo_paper_local_axioms": false,
@@ -2183,7 +2593,13 @@
         "paper_definition_stub:ξ1",
         "paper_definition_stub:ξ2"
       ],
-      "source_latex": "[Why $V_i$ is not inserted into the $L^2$ input slot]\nA basic consistency check is that the random operators act on $U_1$ and $U_2$, not on $V_1$ and $V_2$. In the fractional range $\\alpha<1$, the first Picard objects $V_i$ have negative baseline regularity $3\\alpha-3-$ and should be treated as part of the enhanced stochastic data, not as $L^2$ inputs of the random-operator theorem."
+      "source_latex": "[Why $V_i$ is not inserted into the $L^2$ input slot]\nA basic consistency check is that the random operators act on $U_1$ and $U_2$, not on $V_1$ and $V_2$. In the fractional range $\\alpha<1$, the first Picard objects $V_i$ have negative baseline regularity $3\\alpha-3-$ and should be treated as part of the enhanced stochastic data, not as $L^2$ inputs of the random-operator theorem.",
+      "debt_tier": "deep_domain_theory",
+      "proof_value": "deep_domain_gap",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "remark_10",
@@ -2706,16 +3122,22 @@
         "paper_definition_stub:omega",
         "paper_local_lemma:DyadicBlockBound"
       ],
-      "source_latex": "[Centered covariance bound]\\label{lem:centered-cov}\nOn the strong low--high support, for all $0\\le s\\le t\\le T$,\n\\begin{equation}\\label{eq:centered-cov}\n\\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}.\n\\end{equation}\nMoreover, for every $0<\\eta\\le 1/2$,\n\\begin{equation}\\label{eq:centered-inc}\n\\mathbb{E}|B_N^{i;j,k}(n,q;t,s)-B_N^{i;j,k}(n,q;t',s)|^2\n\\lesssim_T |t-t'|^{2\\eta}N^{3-6\\alpha+2\\eta\\alpha}.\n\\end{equation}"
+      "source_latex": "[Centered covariance bound]\\label{lem:centered-cov}\nOn the strong low--high support, for all $0\\le s\\le t\\le T$,\n\\begin{equation}\\label{eq:centered-cov}\n\\mathbb{E}|B_N^{i;j,k}(n,q;t,s)|^2\\lesssim_T N^{3-6\\alpha}.\n\\end{equation}\nMoreover, for every $0<\\eta\\le 1/2$,\n\\begin{equation}\\label{eq:centered-inc}\n\\mathbb{E}|B_N^{i;j,k}(n,q;t,s)-B_N^{i;j,k}(n,q;t',s)|^2\n\\lesssim_T |t-t'|^{2\\eta}N^{3-6\\alpha+2\\eta\\alpha}.\n\\end{equation}",
+      "debt_tier": "deep_domain_theory",
+      "proof_value": "deep_domain_gap",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "thm_pathwise_fluct",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
       "lean_statement": "theorem thm_pathwise_fluct (alpha s2 theta kappa : ℝ)\n    (ha : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0)\n    (hkappa : 0 < kappa) :\n  ∃ C_omega : ℝ, 0 < C_omega ∧ ∀ N : ℕ, 0 < N →\n    DyadicBlockBound N 0 alpha ≤ C_omega * (N : ℝ) ^ ((6 - 8 * alpha + 2 * s2 + 3 * theta) / 2 + kappa) := by sorry",
-      "status": "FULLY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline",
       "promotion_gate_passed": true,
@@ -2767,17 +3189,17 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "omega",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 12.12,
       "timestamp": "2026-05-09T20:08:37Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -2791,7 +3213,10 @@
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [],
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
@@ -2799,7 +3224,8 @@
         "claim_equivalent:hybrid",
         "semantic_equivalence:verified",
         "claim_equivalence_adjudicated:equivalent",
-        "claim_equivalence_blocked:requires_human_for_release"
+        "claim_equivalence_blocked:requires_human_for_release",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_a2fba5dc04eaf25556ba8073",
@@ -2908,7 +3334,7 @@
       "context_pack": {},
       "axiom_debt": [],
       "axiom_debt_hash": "ed76c6dc080f8a37",
-      "closure_claim": "not_closed",
+      "closure_claim": "lean_verified_without_paper_local_axioms",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
@@ -2942,7 +3368,21 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "[Pathwise centered fluctuations]\\label{thm:pathwise-fluct}\nAssume\n\\begin{equation}\\label{eq:a-neg}\na:=6-8\\alpha+2s_2+3\\theta<0.\n\\end{equation}\nThen the centered dyadic fluctuation series\n\\begin{equation}\\label{eq:fluct-series}\nB^{i;j,k}:=\\sum_{N\\text{ dyadic}}B_N^{i;j,k}\n\\end{equation}\nconverges almost surely in\n\\begin{equation}\\label{eq:fluct-op-space}\n\\mathcal L\\bigl(E_T,C_TH^{s_2-\\alpha}\\bigr).\n\\end{equation}\nMore precisely, for every sufficiently small $\\kappa>0$ there is an almost surely finite random constant $C_\\omega$ such that\n\\begin{equation}\\label{eq:fluct-dyadic-bound}\n\\|B_N^{i;j,k}\\|_{E_T\\to C_TH^{s_2-\\alpha}}\n\\le C_\\omega N^{a/2+\\kappa}\n\\end{equation}\nfor all dyadic $N$."
+      "source_latex": "[Pathwise centered fluctuations]\\label{thm:pathwise-fluct}\nAssume\n\\begin{equation}\\label{eq:a-neg}\na:=6-8\\alpha+2s_2+3\\theta<0.\n\\end{equation}\nThen the centered dyadic fluctuation series\n\\begin{equation}\\label{eq:fluct-series}\nB^{i;j,k}:=\\sum_{N\\text{ dyadic}}B_N^{i;j,k}\n\\end{equation}\nconverges almost surely in\n\\begin{equation}\\label{eq:fluct-op-space}\n\\mathcal L\\bigl(E_T,C_TH^{s_2-\\alpha}\\bigr).\n\\end{equation}\nMore precisely, for every sufficiently small $\\kappa>0$ there is an almost surely finite random constant $C_\\omega$ such that\n\\begin{equation}\\label{eq:fluct-dyadic-bound}\n\\|B_N^{i;j,k}\\|_{E_T\\to C_TH^{s_2-\\alpha}}\n\\le C_\\omega N^{a/2+\\kappa}\n\\end{equation}\nfor all dyadic $N$.",
+      "debt_tier": "deep_domain_theory",
+      "proof_value": "deep_domain_gap",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_without_paper_local_axioms",
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "omega",
+        "file_body_preview": "sorry\n\n-- [theorem] rem:extra-denominator\n-- Statement (LaTeX): [Where the extra denominator enters] Before using oscill",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "lem_speed_gap",
@@ -3429,28 +3869,12 @@
       "axiom_debt": [],
       "axiom_debt_hash": "5e295cb99a07e286",
       "closure_claim": "not_closed",
-      "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:a",
-          "symbol": "a",
-          "grounding_kind": "transparent_scalar_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        }
-      ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_definition_stub:a"
-      ],
+      "debt_tier": "deep_domain_theory",
+      "proof_value": "deep_domain_gap",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
       "canonical_statement": "theorem _ (h_Φ : |Φ| >= N ^ alpha) (u1 : ℝ) (u2 : ℝ → ℝ) (u3 : ℝ) (u4 : ℝ) (u5 : ContDiff ℝ 1 a) (u6 : N > 0) (u7 : T >= 0) (Φ : ℝ) : ∀ t ∈ Set.Icc 0 u1, norm (∫ s in Set.Icc 0 t, u2 s * Complex.exp (Complex.I * (t - s) * Φ)) <= u3 ^ (-u4) * (⨆ s ∈ Set.Icc 0 u1, |u2 s| + ⨆ s ∈ Set.Icc 0 u1, |deriv u2 s|)",
       "statement_fingerprint": "0a5bbc9249946719df523e6ae60a93a3d2905d938afd19dfcf2cefbe0e2b17c5",
       "claim_shape": "inequality",
@@ -3801,68 +4225,7 @@
       "closure_claim": "not_closed",
       "debt_tier": "audited_core_alignment",
       "proof_value": "superseded_generated_diagnostic",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:D_N",
-          "symbol": "D_N",
-          "grounding_kind": "transparent_definition_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.syntax_only",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:C",
-          "symbol": "C",
-          "grounding_kind": "transparent_scalar_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:s1",
-          "symbol": "s1",
-          "grounding_kind": "transparent_scalar_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:s2",
-          "symbol": "s2",
-          "grounding_kind": "transparent_scalar_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:theta",
-          "symbol": "theta",
-          "grounding_kind": "transparent_scalar_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        }
-      ],
+      "grounding_metadata": [],
       "result_label": "superseded_generated_diagnostic",
       "claim_scope": "Generated row is retained for traceability only; the audited-core replacement row carries any verified claim.",
       "modulo_paper_local_axioms": false,
@@ -4137,7 +4500,29 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:C_T"
       ],
-      "source_latex": "[No singular centering for mixed random operators]\\label{thm:no-singular-centering}\nAssume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator\n\\begin{equation*}\nE_T\\to C_TH^{s_2-\\alpha}.\n\\end{equation*}\nCross-color blocks are automatically centered by independence. Same-color blocks decompose as\n\\begin{equation*}\nT^{i;j,j}=\\mathcal D^{i;j}+\\mathcal B^{i;j,j},\n\\end{equation*}\nwhere $\\mathcal D^{i;j}$ is a finite speed-separated deterministic Volterra multiplier and $\\mathcal B^{i;j,j}$ is a centered pathwise random operator. No divergent random-operator counterterm is subtracted."
+      "source_latex": "[No singular centering for mixed random operators]\\label{thm:no-singular-centering}\nAssume \\eqref{eq:operator-cond-main}. Then each strongly low--high mixed random operator has a cutoff limit as a pathwise bounded operator\n\\begin{equation*}\nE_T\\to C_TH^{s_2-\\alpha}.\n\\end{equation*}\nCross-color blocks are automatically centered by independence. Same-color blocks decompose as\n\\begin{equation*}\nT^{i;j,j}=\\mathcal D^{i;j}+\\mathcal B^{i;j,j},\n\\end{equation*}\nwhere $\\mathcal D^{i;j}$ is a finite speed-separated deterministic Volterra multiplier and $\\mathcal B^{i;j,j}$ is a centered pathwise random operator. No divergent random-operator counterterm is subtracted.",
+      "debt_tier": "definition_stub_grounding",
+      "proof_value": "definition_grounding",
+      "grounding_metadata": [
+        {
+          "schema_version": "1.0.0",
+          "debt_item": "paper_definition_stub:MixedOperator",
+          "symbol": "MixedOperator",
+          "grounding_kind": "transparent_operator_or_distribution_stub",
+          "grounding_source": "paper_symbol_inventory",
+          "grounding_trust": "syntax_only_not_semantic_proof",
+          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
+          "proof_countable": false,
+          "hidden_assumption": false,
+          "requires_verified_replacement": false
+        }
+      ],
+      "result_label": "not_verified_with_paper_local_axiom_debt",
+      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
+      "modulo_paper_local_axioms": true,
+      "paper_local_axiom_debt": [
+        "paper_definition_stub:MixedOperator"
+      ]
     },
     {
       "theorem_name": "ass_strichartz",
@@ -4420,67 +4805,12 @@
       "axiom_debt": [],
       "axiom_debt_hash": "1456e1eb514a3f16",
       "closure_claim": "not_closed",
-      "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:C_T",
-          "symbol": "C_T",
-          "grounding_kind": "transparent_operator_or_distribution_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:C",
-          "symbol": "C",
-          "grounding_kind": "transparent_scalar_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:s1",
-          "symbol": "s1",
-          "grounding_kind": "transparent_scalar_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:s2",
-          "symbol": "s2",
-          "grounding_kind": "transparent_scalar_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        }
-      ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_definition_stub:C_T",
-        "paper_definition_stub:C",
-        "paper_definition_stub:s1",
-        "paper_definition_stub:s2"
-      ],
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
       "canonical_statement": "theorem _ (u1 : ℝ) (u10 : 0 < s2) (u11 : Fin 2) (u2 : ℝ) (u3 : ℝ) (u4 : ℝ) (u5 : ℝ) (u6 : 0 < T ∧ T <= 1) (u7 : 0 < alpha) (u8 : 0 < delta) (u9 : 0 < s1) : ∀ (X Y : ℝ → ℝ), (∀ t, X t ∈ C_T H^{u1}) → (∀ t, d_dtt X t ∈ C_T H^{u1 - u2}) → (∀ t, X t ∈ L_T^8 W^{u1 - u2/4, 8/3}) → (∀ t, Y t ∈ C_T H^{u3}) → (∀ t, d_dtt Y t ∈ C_T H^{u3 - u2}) → (∀ t, Y t ∈ L_T^4 W^{u3 - u2/2, 4}) → u4^u5 * (∥X∥_{X_T^{u1}} * ∥Y∥_{Y_T^{u3}}) <= C",
       "statement_fingerprint": "a46391d847a5fc2b2a74974113a684f3587311217a3ec94de9bfb263812fbe21",
       "claim_shape": "inequality",
@@ -4797,18 +5127,6 @@
       "grounding_metadata": [
         {
           "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:HSobolev",
-          "symbol": "HSobolev",
-          "grounding_kind": "mathlib_close_definition_stub",
-          "grounding_source": "paper_symbol_inventory.mathlib_close_match",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.mathlib_close_match",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
           "debt_item": "paper_definition_stub:remark_18",
           "symbol": "remark_18",
           "grounding_kind": "transparent_definition_stub",
@@ -4824,7 +5142,6 @@
       "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
       "modulo_paper_local_axioms": true,
       "paper_local_axiom_debt": [
-        "paper_definition_stub:HSobolev",
         "paper_definition_stub:remark_18"
       ],
       "canonical_statement": "theorem _ : ∀ alpha : ℝ, alpha = 1 → HSobolev alpha = HSobolev alpha",
@@ -4869,10 +5186,10 @@
       "theorem_name": "def_admissible",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
       "lean_statement": "theorem def_admissible :\n  ∃ alpha epsilon : ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 ≤ s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V := by\n  sorry\n",
-      "status": "FULLY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline",
       "promotion_gate_passed": true,
@@ -4907,17 +5224,17 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "apply?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 97.1,
       "timestamp": "2026-05-09T20:14:47Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -4931,13 +5248,17 @@
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
-      "gate_failures": [],
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
         "equivalent_independent_semantic_evidence",
         "claim_equivalent:hybrid",
-        "semantic_equivalence:verified"
+        "semantic_equivalence:verified",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_2abb6f0b304916f23cda15df",
@@ -5033,7 +5354,7 @@
       "context_pack": {},
       "axiom_debt": [],
       "axiom_debt_hash": "89334b456dcd423e",
-      "closure_claim": "not_closed",
+      "closure_claim": "lean_verified_without_paper_local_axioms",
       "proof_eligible": false,
       "statement_fidelity_verdict": "blocked",
       "statement_fidelity_blockers": [
@@ -5068,7 +5389,21 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "[Admissible deterministic parameters]\\label{def:admissible}\nWe call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$,\n\\begin{align}\n&0<s_1<s_2,\n\\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\\n&s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad 3-4\\alpha+\\theta(s_2+\\varepsilon)<0, \\label{eq:adm-2}\\\\\n&s_1<2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-3}\\\\\n&s_2>\\frac32-\\alpha+\\varepsilon,\n\\qquad s_2<s_1+2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-4}\\\\\n&s_2\\le s_1+\\frac\\alpha4, \\label{eq:adm-5}\\\\\n&\\rho_V+s_1>0,\n\\qquad s_2-\\alpha<\\rho_V. \\label{eq:adm-6}\n\\end{align}"
+      "source_latex": "[Admissible deterministic parameters]\\label{def:admissible}\nWe call $(\\alpha,s_1,s_2,\\theta)$ admissible for the conservative source formulation if, for sufficiently small $\\varepsilon>0$,\n\\begin{align}\n&0<s_1<s_2,\n\\qquad 0<\\theta<1, \\label{eq:adm-1}\\\\\n&s_2<4\\alpha-3-\\frac32\\theta-\\varepsilon,\n\\qquad 3-4\\alpha+\\theta(s_2+\\varepsilon)<0, \\label{eq:adm-2}\\\\\n&s_1<2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-3}\\\\\n&s_2>\\frac32-\\alpha+\\varepsilon,\n\\qquad s_2<s_1+2\\alpha-\\frac32-\\varepsilon, \\label{eq:adm-4}\\\\\n&s_2\\le s_1+\\frac\\alpha4, \\label{eq:adm-5}\\\\\n&\\rho_V+s_1>0,\n\\qquad s_2-\\alpha<\\rho_V. \\label{eq:adm-6}\n\\end{align}",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_without_paper_local_axioms",
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "apply?",
+        "file_body_preview": "sorry\n\n\n\n\n\n-- [theorem] remark_20 (param-roles existential — promoted from ledger lean_statement,\n-- proven via linarith",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "remark_20",
@@ -5351,42 +5686,6 @@
           "grounding_source": "paper_symbol_inventory",
           "grounding_trust": "syntax_only_not_semantic_proof",
           "paper_agnostic_rule_id": "definition_stub.syntax_only",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:s1",
-          "symbol": "s1",
-          "grounding_kind": "transparent_scalar_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:s2",
-          "symbol": "s2",
-          "grounding_kind": "transparent_scalar_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        },
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:theta",
-          "symbol": "theta",
-          "grounding_kind": "transparent_scalar_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.scalar_parameter",
           "proof_countable": false,
           "hidden_assumption": false,
           "requires_verified_replacement": false
@@ -5698,28 +5997,12 @@
       "axiom_debt": [],
       "axiom_debt_hash": "8a80c21316c78887",
       "closure_claim": "not_closed",
-      "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:I_i",
-          "symbol": "I_i",
-          "grounding_kind": "transparent_operator_or_distribution_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.transparent_operator_or_distribution",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        }
-      ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
-        "paper_definition_stub:I_i"
-      ],
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false,
       "canonical_statement": "theorem _ : ∃ F : ℝ → ℝ, I_i (F 0) = I_i (F 0)",
       "statement_fingerprint": "df0a8cc054569cf6f2f8828e49713b5bb1a6da0613cd3ac5311a56e1b7dc05c5",
       "claim_shape": "equality",
@@ -7085,7 +7368,14 @@
         "section": "",
         "label": "AutoPaper_2604_21884.alpha_above_three_quarters__audited_core",
         "cited_refs": []
-      }
+      },
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "lean_verified_without_paper_local_axioms",
+      "claim_scope": "Lake-verified Lean proof with no paper-local axiom debt recorded.",
+      "modulo_paper_local_axioms": false,
+      "closure_claim": "lean_verified_without_paper_local_axioms"
     },
     {
       "theorem_name": "ArxivPaper.prop_cubic_resonance_improved",
@@ -7223,7 +7513,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "f8ce5d1b463f6e6f",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.rem_sharpness",
@@ -7379,7 +7675,13 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h_gives_heuristic_lower_bound_1"
-      ]
+      ],
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.lem_coeff_chaos_criterion",
@@ -7517,7 +7819,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "b3bb97980b736c64",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.rem_first_picard_smoothing_input",
@@ -7655,7 +7963,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "eaf99ee6f50d1505",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.lem_kernel_cov_bounds",
@@ -7793,7 +8107,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "446567880ee1f35c",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.lem_weighted_output_count",
@@ -7931,7 +8251,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "08a88fbb6ef99e3f",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.prop_HS_moment_increment",
@@ -8069,7 +8395,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "eb326a8245258670",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.lem_Hilbert_hypercontractivity",
@@ -8207,7 +8539,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "9b611286671b60ef",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.prop_time_sup_HS",
@@ -8345,7 +8683,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "ae4a7db0e43e2675",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.rem_extra_denominator",
@@ -8483,7 +8827,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "a299ff2f6d2d6e86",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.lem_volterra_ET",
@@ -8621,7 +8971,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "57406786acd9fdfc",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.lem_output_comparable_comp",
@@ -8759,7 +9115,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "b2d07fbaee75bd21",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.lem_low_output_comp",
@@ -8897,7 +9259,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "293c2f096d091b17",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.lem_strichartz_transfer",
@@ -9053,7 +9421,13 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:h_source_1_1"
-      ]
+      ],
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.prop_strichartz",
@@ -9191,7 +9565,13 @@
       ],
       "statement_fidelity_source": "none",
       "source_content_hash": "e581950378ff44d3",
-      "source_span_id": ""
+      "source_span_id": "",
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     },
     {
       "theorem_name": "ArxivPaper.remark_30",
@@ -9333,7 +9713,13 @@
       "source_span_id": "",
       "discharged_axiom_debt": [
         "paper_definition_stub:remark_30"
-      ]
+      ],
+      "debt_tier": "none",
+      "proof_value": "none",
+      "grounding_metadata": [],
+      "result_label": "not_verified",
+      "claim_scope": "No verified closure claim is made for this result.",
+      "modulo_paper_local_axioms": false
     }
   ]
 }
