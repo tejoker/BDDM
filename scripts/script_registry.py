@@ -348,6 +348,16 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Categorizes UNRESOLVED rows whose Lean statement fails to elaborate into root-cause buckets (typeclass missing, parse error, type mismatch, etc.). Produces the per-paper table that drives translator/paper-theory-builder priorities.",
     },
+    "audit_fully_proven_integrity.py": {
+        "tier": "ci_gate",
+        "category": "review",
+        "summary": "Re-validates every FULLY_PROVEN row by checking the actual `output/<paper>.lean` body against the ledger's stored `proof_text`. Demotes rows whose file body is `sorry` despite the ledger claiming `lean_proof_closed=True` (the circular-bypass defect surfaced in 2026-05). Standards-positive: a row whose .lean is sorry is not proven.",
+    },
+    "run_counterexample_pre_flight.py": {
+        "tier": "dev_tool",
+        "category": "review",
+        "summary": "Counterexample-search probe over UNRESOLVED rows: asks Leanstral whether the as-stated theorem admits a counterexample (e.g. dropped binding hypothesis). Writes informational `counterexample_preflight` metadata; does not mutate status. Recall 75% / FP 0% on the 4-row 2604.21884 calibration.",
+    },
     "mark_ghost_translation_failures.py": {
         "tier": "dev_tool",
         "category": "review",
