@@ -623,6 +623,22 @@ def _required_definitions_from_text(text: str) -> list[str]:
     return defs
 
 
+def _latex_has_signal(latex_statement: str) -> bool:
+    """Cheap signal-or-not check on the LaTeX source. Returns True if there's
+    any character of mathematical content after stripping LaTeX comments and
+    whitespace; returns False when the source is effectively empty (e.g. the
+    whole statement is `% Let 1 < p < ...`, which Lean comments out).
+
+    Used by `build_typed_statement_translation` to refuse a typed-IR emission
+    when neither LaTeX nor schema carries any claim — without this guard the
+    translator emits a vacuous `∃ x : ℝ, x = x` and the row silently
+    contaminates the ledger."""
+    s = re.sub(r"%[^\n]*", "", latex_statement or "")
+    s = re.sub(r"\\[A-Za-z]+\b", "", s)  # strip macro names
+    s = re.sub(r"[\s{}$]+", "", s)
+    return len(s) >= 8
+
+
 def build_typed_statement_translation(
     *,
     latex_statement: str,
@@ -634,6 +650,19 @@ def build_typed_statement_translation(
     conclusion, shape, anchors = _typed_ir_conclusion(schema, latex_statement)
     if not conclusion.strip():
         return None
+    # Schema-coverage refusal: when `_typed_ir_conclusion` fell back to the
+    # `∃ x : ℝ, x = x`-style placeholder (anchors empty) AND the schema has
+    # no concrete claim AND the LaTeX source is effectively empty, refuse
+    # the typed-IR emission. Falling through to `_apply_schema_fallback`
+    # gives the row a named `False := by sorry` stub that the repair loop
+    # can pick up by name; that's strictly more honest than silently
+    # admitting a vacuous claim. Surfaced by bucket-fix-measurement v2
+    # (4/12 supposedly-validated rows had been emitted via this path).
+    if not anchors:
+        schema_claim = str((schema or {}).get("claim", "") or "").strip()
+        trivial_claims = {"", "true", "⊢ true", "⊤", "trivial", "sorry"}
+        if schema_claim.lower() in trivial_claims and not _latex_has_signal(latex_statement):
+            return None
     hypotheses = _source_hypotheses_from_schema(schema)
     variables = _collect_typed_variables(conclusion, hypotheses)
     req_text = "\n".join([latex_statement or "", conclusion, json.dumps(schema or {}, ensure_ascii=False)])
@@ -1687,6 +1716,33 @@ def _is_trivialized_signature(sig: str) -> bool:
     if "nonempty (unit)" in target or "nonempty unit" in target:
         return True
     if "sorry_placeholder" in target or "schema_claim_hint" in target:
+        return True
+    # `_typed_ir_conclusion` fallbacks emitted when no LaTeX clauses are
+    # extracted. These look like real theorems but carry zero mathematical
+    # content. Surfaced by the bucket-fix-measurement v2 round (4/12 of the
+    # supposedly-validated rows were emitted as one of these forms).
+    # Fallback `∃ x : ℝ, x = x` shape — any var name, but the same var on
+    # both sides of the equality. Backreference makes the check tight.
+    m = re.fullmatch(
+        r"∃\s+([a-zA-Z_]\w*)\s*:\s*ℝ\s*,\s*([a-zA-Z_]\w*)\s*=\s*([a-zA-Z_]\w*)",
+        target,
+    )
+    if m and m.group(1) == m.group(2) == m.group(3):
+        return True
+    # Fallback `∃ x : ℝ, 0 ≤ x` and `∃ C : ℝ, 0 ≤ C` (same shape).
+    if re.fullmatch(r"∃\s+[a-zA-Z_]\w*\s*:\s*ℝ\s*,\s*\(?\s*0\s*≤\s*[a-zA-Z_]\w*\s*\)?", target):
+        return True
+    # Single-var inequality with no quantifier, no hypotheses, no math
+    # content: `T > 0`, `t > 0`, `n ≥ 0` etc. These slip past the
+    # `∃`/`∀` patterns above and look like ordinary propositions.
+    sig_no_body = re.sub(r":=.*$", "", sig, flags=re.DOTALL).strip()
+    # A "real" binder is `(name : T)` where T is not `Prop` — allow
+    # ASCII, Unicode (ℝ, ℕ, ℤ), or any non-space/non-`)` character.
+    has_real_binders = bool(re.search(
+        r"\(\s*[a-zA-Z_]\w*\s*:\s*(?!Prop\b)\S",
+        sig_no_body,
+    ))
+    if not has_real_binders and re.fullmatch(r"[a-zA-Z_]\w*\s*(?:>|<|≥|≤|=)\s*\d+", target):
         return True
     return False
 
