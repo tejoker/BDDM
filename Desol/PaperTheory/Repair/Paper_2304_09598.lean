@@ -11,7 +11,6 @@ open scoped BigOperators
 
 namespace Paper_2304_09598_Repair
 
--- symbol: multisegment -> Multisegment (paper_multisegment_carrier)
 -- symbol: h_prop_actions_segments_arbitrary_1 -> h_prop_actions_segments_arbitrary_1 (paper_scalar_or_distribution)
 -- symbol: h_riddlesden2022combinatorial_corollary_quant_arbitrary_1 -> h_riddlesden2022combinatorial_corollary_quant_arbitrary_1 (paper_scalar_or_distribution)
 -- symbol: \label{Cor:Arthur} ABV-packets for orbits of Arthur type are singletons and consequently, ABV-packets for orbits of Arthur type are A-packets. -> CorArthurSourceStatement (source_backed_review_statement_symbol)
@@ -21,12 +20,6 @@ namespace Paper_2304_09598_Repair
 -- symbol: \label{Prop:Actions} Let $\Delta_1$ and $\Delta_2$ be any two segments in an arbitrary multisegment $\alpha$, then we can construct a new multisegment $\beta$ by replacing each $\Delta_1$ and $\Delta_2$ in $\alpha$ with respectively \[ \left\{ \begin{array}{ll} \Delta_1 \cap \Delta_2 \text{ and } \Delta_1 \cup \Delta_2, & \mbox{if $ \Delta_1 \cap \Delta_2 \neq \emptyset$ and $\Delta_1 \neq \Delta_2$};\\ \Delta_1 \cup \Delta_2, & \mbox{else if $\Delta_1 \cup \Delta_2$ is a segment}; \\ \Delta_1 \ -> PropActionsSourceStatement (source_backed_review_statement_symbol)
 
 -- Domain axioms / paper-local symbols. These are explicit formalization debt.
--- Note: `abbrev Multisegment : Type := ℕ` is declared in the base
--- `Paper_2304_09598` module and inherited via the `import` above. Do not
--- redeclare it here — both namespaces are opened via `PaperImportsAnchor`,
--- and a duplicate produces `Ambiguous term Multisegment` at every use site
--- (caught by the LLM-statement-repair smoke run, Round II-4 / e6065ab).
-
 def h_prop_actions_segments_arbitrary_1 : ℝ := 0
 
 def h_riddlesden2022combinatorial_corollary_quant_arbitrary_1 : ℝ := 0

@@ -1502,11 +1502,13 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--skip-validate", action="store_true")
     parser.add_argument(
         "--use-llm-repair",
-        action="store_true",
+        action=argparse.BooleanOptionalAction,
+        default=True,
         help=(
             "Generate statement repair candidates via Leanstral (HIGHER priority "
-            "than the rule-based path). Default OFF until calibrated. Requires "
-            "MISTRAL_API_KEY in the environment."
+            "than the rule-based path). Default ON as of Round-III smoke validation "
+            "(4/5 Lean-validated on 2304.09598 sample). Pass --no-use-llm-repair to "
+            "skip Mistral calls (rule-based path only). Requires MISTRAL_API_KEY."
         ),
     )
     parser.add_argument(
