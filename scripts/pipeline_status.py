@@ -1446,6 +1446,106 @@ def _ledger_status_rank(entry: dict[str, Any]) -> int:
     return _STATUS_RANK.get(str(entry.get("status", "") or ""), -1)
 
 
+# Review-evidence fields that are owned by `apply_reviews_to_ledger.py` /
+# the CoT bridge / claim-equivalence adjudication. The proof-search write
+# path (build_ledger_entry → upsert_ledger_entry) MUST NOT clobber these
+# when it rebuilds the row from scratch on each prove attempt.
+#
+# Failure mode (silent state corruption, observed in Round-III closure):
+#   1) apply_reviews_to_ledger.py sets reviewed_equivalence_verdict='equivalent'
+#      with hybrid reviewer_type on row R.
+#   2) A subsequent prove_arxiv_batch.py run fails validation_gate (e.g.
+#      elaboration error) and writes back a freshly-built ledger entry.
+#   3) The freshly-built dict has no reviewed_* fields, so the overwrite
+#      drops them — the LLM-confirmed equivalence evidence is destroyed.
+#
+# Fix policy: standards-positive. We never delete evidence honestly collected;
+# we only let the new entry win on its own fields (status, error, proof_text,
+# step_obligations, etc.). The review fields below are orthogonal to proof
+# search and must survive every prove-loop write-back.
+_REVIEW_EVIDENCE_TOP_LEVEL_FIELDS: tuple[str, ...] = (
+    "reviewed_equivalence_verdict",
+    "reviewed_statement_alignment_class",
+    "reviewed_alignment_confidence",
+    "reviewed_by",
+    "reviewed_at",
+    "review_provenance",
+    "reviewer_type",
+    "review_policy",
+)
+
+# Validation-gates sub-fields that are flipped by the review round-trip
+# (apply_adjudication_to_row in claim_equivalence_review.py). They sit
+# inside `validation_gates: dict`. Preserve them ONLY when the new entry
+# has not set them itself (proof search may legitimately reset other gates).
+_REVIEW_GATE_FIELDS: tuple[str, ...] = (
+    "claim_equivalent",
+    "independent_semantic_equivalence_evidence",
+    "statement_alignment_exact",
+    "statement_alignment_not_unrelated",
+)
+
+
+def _preserve_review_evidence(
+    old_entry: dict[str, Any] | None,
+    new_entry: dict[str, Any],
+) -> dict[str, Any]:
+    """Copy review-evidence fields from `old_entry` to `new_entry` when the
+    new entry does not already carry them.
+
+    This is purely additive: it never overwrites a value the new entry has
+    set, never invents fields the old entry did not have, and never touches
+    proof-search outputs (status, error, proof_text, step_records, etc.).
+
+    Returns `new_entry` (mutated in place) for ergonomic chaining. Safe to
+    call with `old_entry=None` (no-op).
+
+    Also preserves `claim_equivalence_verdict` IF the old value was the
+    affirmative 'equivalent' and the new entry has no equally-strong verdict
+    set. We do not preserve the verdict in the other direction (e.g. a fresh
+    'unclear' from re-translation should be allowed to replace a stale
+    'unclear' / 'not_equivalent' on the old row).
+    """
+    if not isinstance(old_entry, dict) or not isinstance(new_entry, dict):
+        return new_entry
+
+    # Top-level review fields: preserve when missing or empty on the new entry.
+    for field in _REVIEW_EVIDENCE_TOP_LEVEL_FIELDS:
+        if field in old_entry and old_entry[field] not in (None, "", [], {}):
+            if new_entry.get(field) in (None, "", [], {}):
+                new_entry[field] = old_entry[field]
+
+    # claim_equivalence_verdict: only preserve the affirmative 'equivalent'
+    # carry-over. Don't preserve weaker verdicts (allow re-translation to
+    # overwrite stale unclear/not_equivalent).
+    old_verdict = str(old_entry.get("claim_equivalence_verdict", "") or "").strip().lower()
+    new_verdict = str(new_entry.get("claim_equivalence_verdict", "") or "").strip().lower()
+    if old_verdict == "equivalent" and new_verdict != "equivalent":
+        new_entry["claim_equivalence_verdict"] = old_entry["claim_equivalence_verdict"]
+
+    # validation_gates: preserve review-derived gate flips when the new
+    # entry's gates dict does not have them set to True. We never demote
+    # a True gate to False; we only carry over True flips established by
+    # review evidence.
+    old_gates = old_entry.get("validation_gates")
+    if isinstance(old_gates, dict):
+        new_gates = new_entry.get("validation_gates")
+        if not isinstance(new_gates, dict):
+            new_gates = {}
+        gates_changed = False
+        for gate in _REVIEW_GATE_FIELDS:
+            if bool(old_gates.get(gate)) and not bool(new_gates.get(gate)):
+                new_gates[gate] = True
+                gates_changed = True
+        # Only attach gates back if it was missing AND we copied something;
+        # otherwise leave the new entry untouched (don't fabricate an empty
+        # validation_gates dict on rows that never had one).
+        if gates_changed and "validation_gates" not in new_entry:
+            new_entry["validation_gates"] = new_gates
+
+    return new_entry
+
+
 def upsert_ledger_entry(
     paper_id: str,
     entry: TheoremLedgerEntry,
@@ -1481,6 +1581,13 @@ def upsert_ledger_entry(
                 merged = dict(entry_dict)
                 if existing_name:
                     merged["theorem_name"] = existing_name
+                # Preserve review-evidence fields that the prove-loop entry
+                # builder does not know about (reviewed_*, review_provenance,
+                # reviewer_type, review_policy, equivalent claim verdict, and
+                # the review-derived validation_gates). Without this, every
+                # validation-gate failure or re-prove silently destroys the
+                # CoT-bridge / hybrid review evidence on the row.
+                merged = _preserve_review_evidence(existing, merged)
                 entries[i] = merged
             # When the new entry is strictly worse than the existing one, we
             # keep the existing one untouched and skip the append (the row is

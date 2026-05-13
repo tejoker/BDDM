@@ -1255,7 +1255,7 @@ def prove_one(
         if not thm.name or thm.name == thm.full_name:
             return
         try:
-            from pipeline_status import _STATUS_RANK
+            from pipeline_status import _STATUS_RANK, _preserve_review_evidence
             entry_dict = entry_obj.to_dict()  # type: ignore[attr-defined]
             entry_dict["theorem_name"] = thm.name
             new_rank = _STATUS_RANK.get(str(entry_dict.get("status", "") or ""), -1)
@@ -1265,7 +1265,12 @@ def prove_one(
                 if isinstance(row, dict) and str(row.get("theorem_name", "")).strip() == thm.name:
                     existing_rank = _STATUS_RANK.get(str(row.get("status", "") or ""), -1)
                     if new_rank >= existing_rank:
-                        rows[i] = entry_dict
+                        # Preserve review-evidence (reviewed_*, review_provenance,
+                        # reviewer_type, review_policy, equivalent verdict, review
+                        # validation_gates) that the prove-loop entry builder does
+                        # not know about. Otherwise a base-alias sync silently
+                        # wipes the CoT-bridge / hybrid review evidence.
+                        rows[i] = _preserve_review_evidence(row, dict(entry_dict))
                     replaced = True
                     break
             if not replaced:
