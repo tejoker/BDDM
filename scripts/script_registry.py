@@ -313,6 +313,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "translation",
         "summary": "Re-translates placeholder `theorem foo : False := by sorry` rows by calling Leanstral with explicit recovery hints derived from the BLOCKED reason.",
     },
+    "llm_statement_repair.py": {
+        "tier": "research_experiment",
+        "category": "repair",
+        "summary": "Leanstral-driven statement repair candidate generator (replaces the rule-based path in run_statement_repair_worker when --use-llm-repair is set; default OFF until calibrated).",
+    },
     "rewrite_lean_from_ledger.py": {
         "tier": "dev_tool",
         "category": "translation",

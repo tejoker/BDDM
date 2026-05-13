@@ -49,6 +49,7 @@ DEFAULT_REPAIR_QUEUE_OUT = Path("output/corpus/statement_repair_queue.jsonl")
 DEFAULT_REPAIR_QUEUE_SUMMARY = Path("output/corpus/statement_repair_queue_summary.json")
 BLOCKING_VALIDITY = {"translation_limited", "bad_translation_artifact"}
 WRITE_CAPABLE_ROUTES = {"statement_regeneration", "source_span_repair", "source_translation_recovery"}
+DEFAULT_LLM_REPAIR_MODEL = "labs-leanstral-2603"
 
 
 def _read_json(path: Path) -> Any:
@@ -590,6 +591,9 @@ def _build_source_backed_payload_for_action(
     project_root: Path,
     repair_output_root: Path,
     validate_candidates: bool,
+    use_llm_repair: bool = False,
+    llm_repair_client: Any = None,
+    llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
 ) -> dict[str, Any]:
     from repair_bad_translations import build_source_backed_repair_payload
 
@@ -603,8 +607,162 @@ def _build_source_backed_payload_for_action(
         out_dir=out_dir,
         validate_candidates=validate_candidates,
     )
+    if use_llm_repair:
+        payload = _overlay_llm_repair_candidates(
+            payload,
+            action=action,
+            project_root=project_root,
+            client=llm_repair_client,
+            model=llm_repair_model,
+            validate_candidates=validate_candidates,
+        )
     payload = _repair_payload_for_action(payload, action)
     return _attach_review_batch_previews(payload, action)
+
+
+def _overlay_llm_repair_candidates(
+    payload: dict[str, Any],
+    *,
+    action: dict[str, Any],
+    project_root: Path,
+    client: Any,
+    model: str,
+    validate_candidates: bool,
+) -> dict[str, Any]:
+    """Replace each candidate's `repaired_decl` with an LLM-generated signature
+    when (a) the source_latex is non-empty and (b) the LLM output passes the
+    trivialization / placeholder gate. The legacy rule-based candidate is
+    preserved under `rule_based_candidate_before_llm` for diagnostics.
+
+    LLM repair is HIGHER priority than the rule-based path: when both succeed,
+    the LLM output wins. When the LLM fails (refusal, rejection, transport
+    error) the rule-based candidate is kept unmodified.
+    """
+    if client is None:
+        return payload
+    try:
+        from llm_statement_repair import (  # type: ignore[import-not-found]
+            extract_paper_theory_hint,
+            generate_llm_repair_candidate,
+        )
+        from repair_bad_translations import validate_repair_candidate  # type: ignore[import-not-found]
+    except Exception:
+        return payload
+
+    paper_id = str(action.get("paper_id", ""))
+    contexts = _context_by_theorem(action)
+    candidates = payload.get("repair_candidates", [])
+    if not isinstance(candidates, list):
+        return payload
+
+    safe_id = paper_id.replace(".", "_")
+    theory_path = project_root / "Desol" / "PaperTheory" / f"Paper_{safe_id}.lean"
+    paper_theory_hint = extract_paper_theory_hint(theory_path) if theory_path.exists() else ""
+
+    out_candidates: list[dict[str, Any]] = []
+    llm_counters = {"attempted": 0, "accepted": 0, "rejected": 0, "skipped_no_source": 0, "validated_ok": 0}
+    for raw in candidates:
+        candidate = dict(raw) if isinstance(raw, dict) else {}
+        theorem_name = str(candidate.get("theorem_name", "") or "")
+        context = contexts.get(_base_name(theorem_name), {})
+        source_latex = str(context.get("source_latex", "") or candidate.get("source_statement_excerpt", "") or "")
+        if not source_latex.strip():
+            llm_counters["skipped_no_source"] += 1
+            out_candidates.append(candidate)
+            continue
+        llm_counters["attempted"] += 1
+        try:
+            llm_result = generate_llm_repair_candidate(
+                source_latex=source_latex,
+                paper_id=paper_id,
+                theorem_name=theorem_name,
+                paper_theory_hint=paper_theory_hint,
+                client=client,
+                model=model,
+            )
+        except Exception as exc:
+            candidate["llm_repair"] = {
+                "ok": False,
+                "error": f"{type(exc).__name__}:{exc}"[:200],
+            }
+            out_candidates.append(candidate)
+            continue
+
+        if not llm_result or not llm_result.get("repaired_decl"):
+            candidate["llm_repair"] = {
+                "ok": False,
+                "result": llm_result or {"error": "empty_or_none"},
+            }
+            llm_counters["rejected"] += 1
+            out_candidates.append(candidate)
+            continue
+
+        new_decl = str(llm_result.get("repaired_decl") or "")
+        validation: dict[str, Any] = {"ok": None, "error": "validation_skipped"}
+        if validate_candidates:
+            try:
+                validation = validate_repair_candidate(
+                    project_root=project_root,
+                    paper_id=paper_id,
+                    decl=new_decl,
+                )
+            except Exception as exc:
+                validation = {"ok": False, "error": f"validation_exception:{type(exc).__name__}:{exc}"[:200]}
+
+        if validate_candidates and not (validation or {}).get("ok"):
+            candidate["llm_repair"] = {
+                "ok": False,
+                "result": llm_result,
+                "lean_validation_for_llm_candidate": validation,
+                "reason": "llm_candidate_failed_lean_validation",
+            }
+            llm_counters["rejected"] += 1
+            out_candidates.append(candidate)
+            continue
+
+        # Promote LLM candidate.
+        candidate["rule_based_candidate_before_llm"] = {
+            "repaired_decl": candidate.get("repaired_decl"),
+            "changes": candidate.get("changes"),
+            "structured_translation": candidate.get("structured_translation"),
+            "lean_validation": candidate.get("lean_validation"),
+            "repair_quality": candidate.get("repair_quality"),
+        }
+        candidate["repaired_decl"] = new_decl
+        candidate["statement_repair_kind"] = "llm_statement_repair"
+        candidate["regeneration_protocol"] = "llm_statement_repair_v1"
+        new_changes = list(candidate.get("changes") or [])
+        if "llm_statement_repair_v1" not in new_changes:
+            new_changes.append("llm_statement_repair_v1")
+        candidate["changes"] = new_changes
+        if validate_candidates:
+            candidate["lean_validation"] = validation
+            llm_counters["validated_ok"] += 1
+        else:
+            candidate["lean_validation"] = {"ok": None, "error": "validation_skipped"}
+        candidate["repair_quality"] = {
+            "ok": True,
+            "blockers": [],
+            "protocol": "llm_statement_repair_v1",
+            "source_backed": True,
+        }
+        candidate["llm_repair"] = {
+            "ok": True,
+            "result": llm_result,
+            "lean_validation_for_llm_candidate": validation,
+        }
+        llm_counters["accepted"] += 1
+        out_candidates.append(candidate)
+
+    out = dict(payload)
+    out["repair_candidates"] = out_candidates
+    out["candidate_counts"] = _candidate_counts(out_candidates)
+    out["llm_repair_overlay"] = {
+        "protocol": "llm_statement_repair_v1",
+        "model": model,
+        **llm_counters,
+    }
+    return out
 
 
 def _apply_source_backed_payload(
@@ -616,6 +774,9 @@ def _apply_source_backed_payload(
     validate_candidates: bool,
     no_change_status: str,
     written_status: str,
+    use_llm_repair: bool = False,
+    llm_repair_client: Any = None,
+    llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
 ) -> dict[str, Any]:
     artifacts = action.get("artifacts") if isinstance(action.get("artifacts"), dict) else {}
     ledger = str(artifacts.get("ledger", "") or "")
@@ -630,6 +791,9 @@ def _apply_source_backed_payload(
         project_root=project_root,
         repair_output_root=repair_output_root,
         validate_candidates=validate_candidates,
+        use_llm_repair=use_llm_repair,
+        llm_repair_client=llm_repair_client,
+        llm_repair_model=llm_repair_model,
     )
     candidates = repair_payload.get("repair_candidates", [])
     if not isinstance(candidates, list):
@@ -707,6 +871,9 @@ def _execute_statement_regeneration(
     write: bool,
     repair_output_root: Path,
     validate_candidates: bool,
+    use_llm_repair: bool = False,
+    llm_repair_client: Any = None,
+    llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
 ) -> dict[str, Any]:
     artifacts = action.get("artifacts") if isinstance(action.get("artifacts"), dict) else {}
     report = str(artifacts.get("report", "") or "")
@@ -723,6 +890,9 @@ def _execute_statement_regeneration(
             validate_candidates=validate_candidates,
             no_change_status="source_backed_regeneration_no_ledger_change",
             written_status="written_source_backed_regeneration",
+            use_llm_repair=use_llm_repair,
+            llm_repair_client=llm_repair_client,
+            llm_repair_model=llm_repair_model,
         )
     if not write:
         return _non_mutating_action(action, "dry_run_write_required")
@@ -808,6 +978,9 @@ def _execute_source_translation_recovery(
     write: bool,
     repair_output_root: Path,
     validate_candidates: bool,
+    use_llm_repair: bool = False,
+    llm_repair_client: Any = None,
+    llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
 ) -> dict[str, Any]:
     if not write and not action.get("source_contexts"):
         return _non_mutating_action(
@@ -828,6 +1001,9 @@ def _execute_source_translation_recovery(
         validate_candidates=validate_candidates,
         no_change_status="source_retranslation_no_ledger_change",
         written_status="written_source_retranslation_candidate",
+        use_llm_repair=use_llm_repair,
+        llm_repair_client=llm_repair_client,
+        llm_repair_model=llm_repair_model,
     )
     if not write:
         result["translation_recovery_policy"] = {
@@ -847,6 +1023,9 @@ def execute_worker_actions(
     max_write_groups: int,
     repair_output_root: Path,
     validate_candidates: bool,
+    use_llm_repair: bool = False,
+    llm_repair_client: Any = None,
+    llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
 ) -> list[dict[str, Any]]:
     executed: list[dict[str, Any]] = []
     write_groups = 0
@@ -862,6 +1041,9 @@ def execute_worker_actions(
                 write=write,
                 repair_output_root=repair_output_root,
                 validate_candidates=validate_candidates,
+                use_llm_repair=use_llm_repair,
+                llm_repair_client=llm_repair_client,
+                llm_repair_model=llm_repair_model,
             )
         elif route == "source_span_repair":
             result = _execute_source_span_repair(action, project_root=project_root, write=write)
@@ -874,6 +1056,9 @@ def execute_worker_actions(
                 write=write,
                 repair_output_root=repair_output_root,
                 validate_candidates=validate_candidates,
+                use_llm_repair=use_llm_repair,
+                llm_repair_client=llm_repair_client,
+                llm_repair_model=llm_repair_model,
             )
         else:
             result = _non_mutating_action(action, "queued_manual_repair")
@@ -1113,6 +1298,9 @@ def run_worker(
     ledger_paths: list[Path] | None = None,
     report_roots: list[Path] | None = None,
     evidence_roots: list[Path] | None = None,
+    use_llm_repair: bool = False,
+    llm_repair_client: Any = None,
+    llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     actions, _ = build_worker_actions(rows, limit=limit)
     selected_rows = _selected_rows(rows, limit=limit)
@@ -1124,6 +1312,9 @@ def run_worker(
         max_write_groups=max_write_groups,
         repair_output_root=repair_output_root or project_root / "output" / "statement_repair_worker",
         validate_candidates=validate_candidates,
+        use_llm_repair=use_llm_repair,
+        llm_repair_client=llm_repair_client,
+        llm_repair_model=llm_repair_model,
     )
     summary = _summarize_actions(executed, rows=selected_rows, write=write)
     summary["validate_candidates"] = validate_candidates
@@ -1239,8 +1430,36 @@ def _filter_queue_rows(
     return out
 
 
+def _build_llm_repair_client(args: argparse.Namespace) -> Any:
+    """Instantiate a Mistral client when --use-llm-repair is set."""
+    if not bool(getattr(args, "use_llm_repair", False)):
+        return None
+    try:
+        from mistralai import Mistral  # type: ignore[import-not-found]
+    except ImportError:
+        try:
+            from mistralai.client import Mistral  # type: ignore[no-redef,import-not-found]
+        except ImportError as exc:
+            raise RuntimeError(
+                "mistralai package is not installed; cannot run --use-llm-repair"
+            ) from exc
+    import os
+
+    try:
+        from dotenv import load_dotenv  # type: ignore[import-not-found]
+
+        load_dotenv()
+    except Exception:
+        pass
+    api_key = os.getenv("MISTRAL_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError("MISTRAL_API_KEY is not set; cannot run --use-llm-repair")
+    return Mistral(api_key=api_key)
+
+
 def export_worker_run(args: argparse.Namespace) -> dict[str, Any]:
     rows, source_rows = _load_or_build_queue(args)
+    llm_client = _build_llm_repair_client(args)
     actions, summary = run_worker(
         rows,
         project_root=args.project_root,
@@ -1249,6 +1468,9 @@ def export_worker_run(args: argparse.Namespace) -> dict[str, Any]:
         max_write_groups=args.max_write_groups,
         repair_output_root=args.repair_output_root,
         validate_candidates=not args.skip_validate,
+        use_llm_repair=bool(getattr(args, "use_llm_repair", False)),
+        llm_repair_client=llm_client,
+        llm_repair_model=str(getattr(args, "llm_repair_model", DEFAULT_LLM_REPAIR_MODEL) or DEFAULT_LLM_REPAIR_MODEL),
     )
     result = {
         **summary,
@@ -1278,6 +1500,20 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--repair-kind", default="", help="Optional kind filter for bounded repair runs")
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--skip-validate", action="store_true")
+    parser.add_argument(
+        "--use-llm-repair",
+        action="store_true",
+        help=(
+            "Generate statement repair candidates via Leanstral (HIGHER priority "
+            "than the rule-based path). Default OFF until calibrated. Requires "
+            "MISTRAL_API_KEY in the environment."
+        ),
+    )
+    parser.add_argument(
+        "--llm-repair-model",
+        default=DEFAULT_LLM_REPAIR_MODEL,
+        help="Mistral model ID for --use-llm-repair (default: %(default)s)",
+    )
     return parser
 
 
