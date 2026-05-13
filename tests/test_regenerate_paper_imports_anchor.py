@@ -79,3 +79,68 @@ def test_regenerate_includes_repair_variants(tmp_path: Path) -> None:
     out = regenerate(tmp_path)
     text = out.read_text(encoding="utf-8")
     assert "import Desol.PaperTheory.Repair.Paper_2304_77777" in text
+
+
+def test_regenerate_self_heals_missing_olean(tmp_path: Path) -> None:
+    """A source-without-olean should be self-healed via a mocked lake build.
+
+    Regression guard for the 2402.09876 self-reinforcing exclusion: the
+    paper-theory module's source existed and elaborated cleanly, but the
+    initial `lake build` timed out, leaving no .olean. The historical
+    regenerator then permanently excluded the module from the anchor on
+    every subsequent run, because `_module_buildable` keyed off olean
+    presence with no opportunistic build attempt.
+    """
+    _make_paper_theory_module(tmp_path, "Paper_2402_09876", with_olean=False)
+
+    olean_target = (
+        tmp_path / ".lake" / "build" / "lib" / "lean" / "Desol" / "PaperTheory" / "Paper_2402_09876.olean"
+    )
+
+    class _FakeProc:
+        returncode = 0
+        stdout = ""
+        stderr = ""
+
+    def _fake_run(cmd, **kwargs):
+        # Simulate a successful `lake build` by materializing the olean.
+        olean_target.parent.mkdir(parents=True, exist_ok=True)
+        olean_target.write_text("", encoding="utf-8")
+        import os, time
+        src = tmp_path / "Desol" / "PaperTheory" / "Paper_2402_09876.lean"
+        future = src.stat().st_mtime + 5
+        os.utime(olean_target, (future, future))
+        return _FakeProc()
+
+    out = regenerate(tmp_path, build_runner=_fake_run)
+    text = out.read_text(encoding="utf-8")
+    assert "import Desol.PaperTheory.Paper_2402_09876" in text
+
+
+def test_regenerate_self_heal_disabled_preserves_legacy_behavior(tmp_path: Path) -> None:
+    """When self-heal is off, a source-without-olean stays excluded."""
+    _make_paper_theory_module(tmp_path, "Paper_2402_09876", with_olean=False)
+
+    def _fake_run(cmd, **kwargs):  # pragma: no cover - must never be called
+        raise AssertionError("self-heal should be disabled")
+
+    out = regenerate(tmp_path, self_heal_missing_oleans=False, build_runner=_fake_run)
+    text = out.read_text(encoding="utf-8")
+    assert "import Desol.PaperTheory.Paper_2402_09876" not in text
+
+
+def test_regenerate_self_heal_skips_when_build_fails(tmp_path: Path) -> None:
+    """When the self-heal build returns non-zero, the module stays excluded."""
+    _make_paper_theory_module(tmp_path, "Paper_2402_09876", with_olean=False)
+
+    class _FailProc:
+        returncode = 1
+        stdout = ""
+        stderr = "lean elaboration failed"
+
+    def _fake_run(cmd, **kwargs):
+        return _FailProc()
+
+    out = regenerate(tmp_path, build_runner=_fake_run)
+    text = out.read_text(encoding="utf-8")
+    assert "import Desol.PaperTheory.Paper_2402_09876" not in text

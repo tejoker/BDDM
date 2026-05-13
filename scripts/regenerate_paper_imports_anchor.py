@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import subprocess
 from pathlib import Path
 
 ANCHOR_PATH = Path("Desol/PaperImportsAnchor.lean")
@@ -53,7 +54,44 @@ def _module_buildable(project_root: Path, module: str, source_path: Path) -> boo
         return False
 
 
-def regenerate(project_root: Path, *, only_buildable: bool = True) -> Path:
+def _try_build_missing_olean(
+    project_root: Path,
+    module: str,
+    *,
+    timeout_s: int = 240,
+    runner=subprocess.run,
+) -> bool:
+    """Opportunistically run `lake build <module>` when its olean is missing.
+
+    The historical regenerator silently dropped a paper-theory module from the
+    anchor whenever its olean was absent — but the only thing producing oleans
+    is `lake build`, which previously had a 60s timeout in
+    paper_theory_builder.build_paper_theory. A single timeout was enough to
+    permanently exclude the module from MCTS's REPL fallback, because the
+    anchor never re-tries the build. We now attempt the build here as a
+    self-heal step before deciding to exclude. The `runner` parameter is
+    injected to make tests hermetic (no real lake invocation).
+    """
+    try:
+        proc = runner(
+            ["lake", "build", module],
+            cwd=str(project_root),
+            capture_output=True,
+            text=True,
+            timeout=timeout_s,
+        )
+    except Exception:
+        return False
+    return getattr(proc, "returncode", 1) == 0
+
+
+def regenerate(
+    project_root: Path,
+    *,
+    only_buildable: bool = True,
+    self_heal_missing_oleans: bool = True,
+    build_runner=subprocess.run,
+) -> Path:
     out_path = project_root / ANCHOR_PATH
     modules = _module_paths(project_root)
     if only_buildable:
@@ -62,6 +100,13 @@ def regenerate(project_root: Path, *, only_buildable: bool = True) -> Path:
             src = project_root / Path(*mod.split(".")).with_suffix(".lean")
             if _module_buildable(project_root, mod, src):
                 kept.append(mod)
+                continue
+            # Self-heal: if the source exists but the olean is missing or stale,
+            # try a one-shot `lake build` before giving up.
+            if self_heal_missing_oleans and src.exists():
+                if _try_build_missing_olean(project_root, mod, runner=build_runner):
+                    if _module_buildable(project_root, mod, src):
+                        kept.append(mod)
         modules = kept
     lines = [HEADER, "import Mathlib\n"]
     for mod in modules:

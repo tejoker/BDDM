@@ -432,7 +432,17 @@ def paper_theory_import_header(imports: str, *, module_name: str) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
-def build_paper_theory(*, project_root: Path, module_name: str, timeout_s: int = 60) -> dict[str, object]:
+def build_paper_theory(*, project_root: Path, module_name: str, timeout_s: int = 240) -> dict[str, object]:
+    """Compile the paper-theory module via `lake build`.
+
+    The default timeout is 240s (raised from 60s in 2026-05): a cold-cache
+    initial Mathlib transitive compile for a freshly-added paper-theory module
+    routinely exceeds 60s, and a phantom timeout used to mark `ok=False`,
+    leaving the .olean unbuilt. The downstream anchor regenerator then excluded
+    the module permanently because it filters on olean presence — a
+    self-reinforcing exclusion that caused 2402.09876 to be unimportable in
+    every per-paper `.lean` even though the module itself elaborates cleanly.
+    """
     module = f"Desol.PaperTheory.{module_name}"
     try:
         proc = subprocess.run(
