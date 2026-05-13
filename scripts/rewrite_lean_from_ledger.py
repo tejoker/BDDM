@@ -41,6 +41,93 @@ _TRIVIAL_RE = re.compile(
     flags=re.MULTILINE,
 )
 
+# Matches any `theorem foo` or `lemma foo` declaration in the .lean file.
+# Used to detect which theorems already exist so we don't append duplicates.
+_DECL_NAME_RE = re.compile(
+    r"^(?:theorem|lemma)\s+(?P<name>[A-Za-z_][A-Za-z0-9_'.]*)\b",
+    flags=re.MULTILINE,
+)
+
+# `end ArxivPaper` (or other namespace closer) — we inject before this.
+_END_NAMESPACE_RE = re.compile(r"^end\s+[A-Za-z_][A-Za-z0-9_'.]*\s*$", flags=re.MULTILINE)
+
+
+# Lightweight subset of arxiv_to_lean.translation_acceptance_gate checks.
+# The full gate requires TheoremEntry/TranslationResult objects we don't have
+# at rewriter time, but the cheap shape checks below catch the same bad-Lean
+# patterns the gate rejects: placeholders, raw LaTeX leaks, fake declarations,
+# atom targets, and copy-into-hypothesis claims.
+def _lightweight_acceptance_gate(sig: str) -> str:
+    """Return empty string if `sig` passes shape checks, else a reason code.
+
+    Imports the actual gates from `arxiv_to_lean` so this rewriter's accept/reject
+    decision matches the translator's. Falls back to local checks if the import
+    fails (e.g. test isolation)."""
+    if not sig or not sig.strip():
+        return "empty_signature"
+    try:  # Prefer the canonical checks for parity with the translator gate.
+        from arxiv_to_lean import (
+            _claim_atom_issue,
+            _fake_placeholder_issue,
+            _hypothesis_copies_target_issue,
+            _is_placeholder_sig,
+            _raw_latex_leak_reason,
+            _relaxed_prop_identity_issue,
+        )
+    except Exception:  # pragma: no cover — defensive fallback only.
+        if "PaperClaim" in sig or "RegeneratedStatement" in sig:
+            return "claim_atom_target"
+        if re.search(r"\\(?:left|right|frac|sum|int|ell|xi|omega|theta|alpha|beta|gamma|begin|end)\b", sig):
+            return "raw_latex_command"
+        if re.search(r"\$[^$]*\$", sig):
+            return "dollar_math_delimiter"
+        return ""
+    if _is_placeholder_sig(sig):
+        return "placeholder_or_schema_signature"
+    fake = _fake_placeholder_issue(sig)
+    if fake:
+        return fake
+    atom = _claim_atom_issue(sig)
+    if atom:
+        return atom
+    leak = _raw_latex_leak_reason(sig)
+    if leak:
+        return f"raw_latex_leak:{leak}"
+    copied = _hypothesis_copies_target_issue(sig)
+    if copied:
+        return copied
+    relaxed = _relaxed_prop_identity_issue(sig)
+    if relaxed:
+        return relaxed
+    return ""
+
+
+def _collect_existing_decl_names(text: str) -> set[str]:
+    """All `theorem foo` / `lemma foo` names already present in the .lean text."""
+    return {match.group("name") for match in _DECL_NAME_RE.finditer(text)}
+
+
+def _find_injection_point(text: str) -> int:
+    """Index where new theorems should be injected — just before the final
+    `end <Namespace>` line, or at EOF if no namespace closer is present."""
+    last_end = None
+    for match in _END_NAMESPACE_RE.finditer(text):
+        last_end = match
+    if last_end is None:
+        # Append at EOF (ensure trailing newline).
+        return len(text)
+    return last_end.start()
+
+
+def _format_appended_theorem(name: str, signature: str) -> str:
+    """Render a missing-theorem injection block. Strips any stored proof body
+    and emits `:= by sorry` so proof search picks the goal up fresh."""
+    body = _strip_proof_body(signature).rstrip()
+    return (
+        f"-- [theorem] {name}  injected by rewrite_lean_from_ledger\n"
+        f"{body} := by sorry\n\n"
+    )
+
 
 def _is_trivial_signature(lean_statement: str) -> bool:
     """A signature is trivial if it contains no parameters/hypotheses and the
@@ -79,6 +166,7 @@ def rewrite_paper(
     *,
     project_root: Path,
     write: bool = False,
+    append_missing: bool = True,
 ) -> dict[str, Any]:
     lean_path = project_root / "output" / f"{paper_id}.lean"
     ledger_path = project_root / "output" / "verification_ledgers" / f"{paper_id}.json"
@@ -107,13 +195,15 @@ def rewrite_paper(
         by_name.setdefault(name, ls)
 
     summary: dict[str, Any] = {
-        "schema_version": "rewrite_lean_from_ledger.v1",
+        "schema_version": "rewrite_lean_from_ledger.v2",
         "paper_id": paper_id,
         "lean_file": str(lean_path.relative_to(project_root)),
         "placeholders_found": 0,
         "rewritten": 0,
+        "appended_missing": 0,
         "skipped_no_ledger_signature": 0,
         "skipped_trivial_signature": 0,
+        "skipped_gate_rejected": 0,
         "results": [],
         "dry_run": not write,
     }
@@ -127,6 +217,15 @@ def rewrite_paper(
         if not new_sig:
             summary["skipped_no_ledger_signature"] += 1
             summary["results"].append({"name": name, "action": "skipped_no_ledger_signature"})
+            continue
+        gate_reason = _lightweight_acceptance_gate(new_sig)
+        if gate_reason:
+            summary["skipped_gate_rejected"] += 1
+            summary["results"].append({
+                "name": name,
+                "action": "skipped_gate_rejected",
+                "gate_reason": gate_reason,
+            })
             continue
         body = _strip_proof_body(new_sig)
         replacement = body + " := by sorry"
@@ -154,6 +253,15 @@ def rewrite_paper(
             summary["skipped_no_ledger_signature"] += 1
             summary["results"].append({"name": name, "action": "skipped_no_ledger_signature"})
             continue
+        gate_reason = _lightweight_acceptance_gate(new_sig)
+        if gate_reason:
+            summary["skipped_gate_rejected"] += 1
+            summary["results"].append({
+                "name": name,
+                "action": "skipped_gate_rejected",
+                "gate_reason": gate_reason,
+            })
+            continue
         body = _strip_proof_body(new_sig)
         replacement = body + " := by sorry"
         final_parts.append(intermediate[cursor : match.start()])
@@ -168,7 +276,60 @@ def rewrite_paper(
     final_parts.append(intermediate[cursor:])
 
     new_text = "".join(final_parts)
-    if write and summary["rewritten"] > 0 and new_text != text:
+
+    # Append-missing pass: theorems present in the ledger but absent from the
+    # .lean file are injected before the final `end <Namespace>` line. This is
+    # the path that fixes the statement-repair-worker drift bug — the worker
+    # writes upgraded `lean_statement` rows to the ledger but never touches the
+    # .lean file, so any *new* theorem name (e.g. `prop_det_contraction`) stays
+    # invisible to downstream proof search.
+    if append_missing:
+        existing_names = _collect_existing_decl_names(new_text)
+        injection_idx = _find_injection_point(new_text)
+        injections: list[str] = []
+        # Iterate in ledger order so emitted theorems mirror the ledger sequence.
+        seen_in_appends: set[str] = set()
+        for entry in entries:
+            full_name = str(entry.get("theorem_name", "") or "").strip()
+            if not full_name:
+                continue
+            bare = full_name.rsplit(".", 1)[-1]
+            if bare in existing_names or bare in seen_in_appends:
+                continue
+            stored = by_name.get(bare) or by_name.get(full_name)
+            if not stored:
+                # Either trivial or not declaration-shaped; nothing to inject.
+                continue
+            gate_reason = _lightweight_acceptance_gate(stored)
+            if gate_reason:
+                summary["skipped_gate_rejected"] += 1
+                summary["results"].append({
+                    "name": bare,
+                    "action": "skipped_append_gate_rejected",
+                    "gate_reason": gate_reason,
+                })
+                continue
+            injections.append(_format_appended_theorem(bare, stored))
+            seen_in_appends.add(bare)
+            summary["appended_missing"] += 1
+            summary["results"].append({
+                "name": bare,
+                "action": "appended_missing",
+                "stored_signature_chars": len(stored),
+            })
+        if injections:
+            block = "".join(injections)
+            head = new_text[:injection_idx]
+            tail = new_text[injection_idx:]
+            # Ensure clean newline separation around the injected block.
+            if head and not head.endswith("\n"):
+                head = head + "\n"
+            if not head.endswith("\n\n"):
+                head = head + "\n"
+            new_text = head + block + tail
+
+    mutated = (summary["rewritten"] + summary["appended_missing"]) > 0
+    if write and mutated and new_text != text:
         backup = lean_path.with_suffix(".lean.bak.ledger_rewrite")
         backup.write_text(text, encoding="utf-8")
         lean_path.write_text(new_text, encoding="utf-8")
@@ -181,9 +342,25 @@ def main() -> int:
     parser.add_argument("paper_id", help="arxiv id, e.g. 2604.21616")
     parser.add_argument("--project-root", type=Path, default=Path(__file__).resolve().parent.parent)
     parser.add_argument("--write", action="store_true", help="Apply rewrites; default is dry-run")
+    parser.add_argument(
+        "--append-missing",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Inject theorems present in the ledger but absent from the .lean file "
+            "(before the final `end <Namespace>` line). Default ON — needed to "
+            "propagate statement-repair-worker upgrades that add brand-new "
+            "theorems. Pass --no-append-missing for placeholder-rewrites only."
+        ),
+    )
     args = parser.parse_args()
 
-    summary = rewrite_paper(args.paper_id, project_root=args.project_root, write=args.write)
+    summary = rewrite_paper(
+        args.paper_id,
+        project_root=args.project_root,
+        write=args.write,
+        append_missing=bool(args.append_missing),
+    )
     print(json.dumps(summary, indent=2, ensure_ascii=False))
     return 0
 

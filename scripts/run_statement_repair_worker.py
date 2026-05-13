@@ -1026,9 +1026,13 @@ def execute_worker_actions(
     use_llm_repair: bool = False,
     llm_repair_client: Any = None,
     llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
+    rewrite_lean_files: bool = True,
 ) -> list[dict[str, Any]]:
     executed: list[dict[str, Any]] = []
     write_groups = 0
+    # Track which papers had ledger mutations so we rewrite each .lean file
+    # exactly once (multiple actions per paper share a single rewrite).
+    rewritten_paper_ids: set[str] = set()
     for action in actions:
         route = str(action.get("repair_route", ""))
         if write and action.get("write_capable") and write_groups >= max_write_groups:
@@ -1064,8 +1068,43 @@ def execute_worker_actions(
             result = _non_mutating_action(action, "queued_manual_repair")
         if write and bool(result.get("mutated")):
             write_groups += 1
+            paper_id = str(result.get("paper_id", "") or action.get("paper_id", "") or "").strip()
+            if rewrite_lean_files and paper_id and paper_id not in rewritten_paper_ids:
+                rewrite_summary = _rewrite_lean_file_for_paper(paper_id, project_root=project_root)
+                if rewrite_summary is not None:
+                    result = {**result, "lean_file_rewrite": rewrite_summary}
+                    rewritten_paper_ids.add(paper_id)
         executed.append(result)
     return executed
+
+
+def _rewrite_lean_file_for_paper(paper_id: str, *, project_root: Path) -> dict[str, Any] | None:
+    """Regenerate `output/<paper_id>.lean` from the (just-mutated) ledger.
+
+    Ledger upgrades from the repair worker can both (a) replace an existing
+    placeholder theorem with a richer signature and (b) introduce brand-new
+    theorem names that the original translator never emitted. Without this
+    pass, the per-paper .lean file is stale w.r.t. the ledger and downstream
+    proof search reads outdated content.
+
+    Errors are non-fatal — the ledger write already succeeded, so a rewrite
+    failure must not roll back the action. We surface the error in the
+    returned summary instead.
+    """
+    try:
+        from rewrite_lean_from_ledger import rewrite_paper
+    except ImportError as exc:
+        return {"ok": False, "paper_id": paper_id, "error": f"import_failed:{exc}"}
+    try:
+        summary = rewrite_paper(
+            paper_id,
+            project_root=project_root,
+            write=True,
+            append_missing=True,
+        )
+    except Exception as exc:  # pragma: no cover — defensive shield around the rewrite.
+        return {"ok": False, "paper_id": paper_id, "error": f"{type(exc).__name__}:{exc}"}
+    return {"ok": True, **summary}
 
 
 def _action_write_paths(action: dict[str, Any], project_root: Path) -> list[Path]:
@@ -1075,6 +1114,13 @@ def _action_write_paths(action: dict[str, Any], project_root: Path) -> list[Path
         raw = str(artifacts.get(key, "") or "")
         if raw:
             paths.append(_resolve_path(project_root, raw))
+    # Include the per-paper `output/<paper>.lean` file so rollback can also
+    # restore the lean-file rewrite triggered after a ledger mutation. We
+    # snapshot it unconditionally for write-capable actions (the path may not
+    # exist for some papers — `_snapshot_write_artifacts` handles that).
+    paper_id = str(action.get("paper_id", "") or "").strip()
+    if paper_id:
+        paths.append(project_root / "output" / f"{paper_id}.lean")
     return paths
 
 
@@ -1301,6 +1347,7 @@ def run_worker(
     use_llm_repair: bool = False,
     llm_repair_client: Any = None,
     llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
+    rewrite_lean_files: bool = True,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     actions, _ = build_worker_actions(rows, limit=limit)
     selected_rows = _selected_rows(rows, limit=limit)
@@ -1315,6 +1362,7 @@ def run_worker(
         use_llm_repair=use_llm_repair,
         llm_repair_client=llm_repair_client,
         llm_repair_model=llm_repair_model,
+        rewrite_lean_files=rewrite_lean_files,
     )
     summary = _summarize_actions(executed, rows=selected_rows, write=write)
     summary["validate_candidates"] = validate_candidates
@@ -1471,6 +1519,7 @@ def export_worker_run(args: argparse.Namespace) -> dict[str, Any]:
         use_llm_repair=bool(getattr(args, "use_llm_repair", False)),
         llm_repair_client=llm_client,
         llm_repair_model=str(getattr(args, "llm_repair_model", DEFAULT_LLM_REPAIR_MODEL) or DEFAULT_LLM_REPAIR_MODEL),
+        rewrite_lean_files=bool(getattr(args, "rewrite_lean_files", True)),
     )
     result = {
         **summary,
@@ -1515,6 +1564,18 @@ def _build_parser() -> argparse.ArgumentParser:
         "--llm-repair-model",
         default=DEFAULT_LLM_REPAIR_MODEL,
         help="Mistral model ID for --use-llm-repair (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--rewrite-lean-files",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "After each per-paper ledger mutation, regenerate `output/<paper>.lean` "
+            "from the (now-updated) ledger via rewrite_lean_from_ledger. Default ON "
+            "so brand-new theorems introduced by statement-repair upgrades become "
+            "visible to downstream proof search. Pass --no-rewrite-lean-files for "
+            "diagnostic runs that need to inspect the ledger update in isolation."
+        ),
     )
     return parser
 
