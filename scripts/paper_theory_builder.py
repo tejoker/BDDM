@@ -244,6 +244,30 @@ def _auto_instance_lines(definitions: list[str]) -> list[str]:
     return lines
 
 
+# Domain-pack fallback instances. These are NOT `inferInstance` calls —
+# Mathlib doesn't provide them for these function types; we emit literal
+# placeholder definitions so paper-theorems that quantify `‖w‖` over a plain
+# function type at least ELABORATE. The bound itself remains a real proof
+# obligation; the ledger correctly tracks that downstream. Pattern came out of
+# the 2604.21884 closure POC, where `thm_operator_main` and `ass_strichartz`
+# both failed the acceptance gate purely on `Norm (ℝ → ℝ)` synthesis.
+_DOMAIN_FALLBACK_INSTANCES: dict[str, tuple[str, ...]] = {
+    "analysis": (
+        "noncomputable instance : Norm (ℝ → ℝ) := ⟨fun f => ⨆ t : ℝ, |f t|⟩",
+        "noncomputable instance : Norm (ℝ → ℝ → ℝ) := ⟨fun f => ⨆ t : ℝ, ⨆ s : ℝ, |f t s|⟩",
+    ),
+    "probability": (
+        "noncomputable instance : Norm (ℝ → ℝ) := ⟨fun f => ⨆ t : ℝ, |f t|⟩",
+    ),
+}
+
+
+def _domain_fallback_instance_lines(domain: str) -> list[str]:
+    """Emit domain-specific placeholder instances for function types not covered
+    by Mathlib's default instance database. See `_DOMAIN_FALLBACK_INSTANCES`."""
+    return list(_DOMAIN_FALLBACK_INSTANCES.get((domain or "").strip(), ()))
+
+
 def _aesop_attribute_lines(axioms: list[str]) -> list[str]:
     """Tag every paper-local axiom with `attribute [aesop safe apply]` so that
     when proof search runs `aesop`, the axiom is in the apply set. Without this,
@@ -274,6 +298,8 @@ def write_paper_theory(*, project_root: Path, plan: PaperTheoryPlan) -> Path:
         notes_block = "\n".join(f"-- note: {n}" for n in plan.notes) + "\n\n"
 
     auto_instance_lines = _auto_instance_lines(plan.definitions)
+    domain_fallback_lines = _domain_fallback_instance_lines(plan.domain)
+    auto_instance_lines = auto_instance_lines + domain_fallback_lines
     auto_instance_block = ("\n".join(auto_instance_lines) + "\n\n") if auto_instance_lines else ""
     definitions_block = "\n\n".join(plan.definitions) + ("\n\n" if plan.definitions else "")
     lemmas_block = "\n\n".join(plan.lemmas) + ("\n\n" if plan.lemmas else "")

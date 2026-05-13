@@ -745,6 +745,36 @@ def _normalize_repaired_decl_for_theorem(*, repaired_signature: str, theorem_nam
     return f"{s} := by\n  sorry"
 
 
+def _normalize_substituted_statement_body(stmt: str) -> str:
+    """Ensure `:= by sorry` is present so `_decl_target` can find the target.
+
+    Many ledger statements were written without a body; without this
+    normaliser the target-check returns an empty string and the
+    substitution path skips them.
+
+    Also strips a trailing proof term (`:= trivial`, `:= rfl`, etc.) so we
+    don't produce `… := trivial := by sorry` (double `:=`, invalid Lean)
+    when the upstream ledger entry already carried a one-liner proof. The
+    POC investigation on 2604.21884 caught this bug for `thm_baseline_lift`
+    and `prop_mid_completion`.
+    """
+    s = (stmt or "").strip()
+    if not s:
+        return ""
+    if ":= by" in s:
+        return s
+    if s.endswith(":="):
+        return s + " by sorry"
+    # If `:=` is present without `by`, the ledger statement carries a
+    # complete proof term (`:= trivial`, `:= rfl`, `:= ⟨…⟩`). Strip the
+    # rightmost proof term back to the statement head before appending a
+    # tactic-block placeholder, so the substitution stays well-formed.
+    if ":=" in s:
+        head, _ = s.rsplit(":=", 1)
+        return head.rstrip() + " := by sorry"
+    return s + " := by sorry"
+
+
 def _decl_target(decl: str) -> str:
     d = (decl or "").strip()
     if not d:
@@ -1254,18 +1284,7 @@ def prove_one(
     # Without this, those gates reject the False-target row and we never get
     # to the per-row substitution path that lived inside the isolated-file
     # branch. This generalises Cluster A to every prove invocation.
-    def _normalise_for_target_check(stmt: str) -> str:
-        """Ensure `:= by sorry` is present so `_decl_target` can find the target.
-        Many ledger statements were written without a body; without this normaliser
-        the target-check returns an empty string and we skip the substitution."""
-        s = (stmt or "").strip()
-        if not s:
-            return ""
-        if ":= by" in s:
-            return s
-        if s.endswith(":="):
-            return s + " by sorry"
-        return s + " := by sorry"
+    _normalise_for_target_check = _normalize_substituted_statement_body
 
     if paper_id and _decl_target(thm.declaration or "").strip() == "False":
         _sub_stmt = ""

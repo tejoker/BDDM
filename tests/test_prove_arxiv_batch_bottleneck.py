@@ -17,6 +17,7 @@ from prove_arxiv_batch import (
     _load_ledger_entry_for_theorem,
     _micro_prover_scripts_for_decl,
     _nontrivial_drop_reasons,
+    _normalize_substituted_statement_body,
     _provability_sanity_issue,
     _review_queue_target_names,
     _sanitize_generated_lean_file,
@@ -431,3 +432,51 @@ def test_gold_queue_stmt_substitution_replaces_false_target() -> None:
         "gold queue lean_statement must not have 'False' as target"
     )
     assert "n_alpha" in gq_stmt, "gold queue EqualLN statement should mention n_alpha"
+
+
+# ---------------------------------------------------------------------------
+# _normalize_substituted_statement_body — POC follow-up B fix
+# ---------------------------------------------------------------------------
+
+
+def test_normalize_substituted_statement_body_appends_by_sorry() -> None:
+    """A statement without any `:=` gets `:= by sorry` appended so `_decl_target`
+    can locate the target proposition."""
+    out = _normalize_substituted_statement_body("theorem t : True")
+    assert out == "theorem t : True := by sorry"
+
+
+def test_normalize_substituted_statement_body_passes_through_by_sorry() -> None:
+    """If `:= by` is already present, the statement is returned unchanged."""
+    sig = "theorem t (x : ℕ) : x = x := by trivial"
+    assert _normalize_substituted_statement_body(sig) == sig
+
+
+def test_normalize_substituted_statement_body_appends_after_bare_colon_eq() -> None:
+    """A statement ending in `:=` (no body) gets ` by sorry` appended (single space)."""
+    out = _normalize_substituted_statement_body("theorem t : True :=")
+    assert out == "theorem t : True := by sorry"
+
+
+def test_normalize_substituted_statement_body_strips_trivial_proof_term() -> None:
+    """When the ledger statement carries a complete proof term like
+    `:= trivial`, the normaliser must strip back to the statement head before
+    appending `:= by sorry`. Without this, the substitution path produced
+    `… := trivial := by sorry` (double `:=`, invalid Lean) — the bug that
+    knocked `thm_baseline_lift` / `prop_mid_completion` out of the gate."""
+    sig = "theorem thm_baseline_lift : BaselineLiftStatement := trivial"
+    out = _normalize_substituted_statement_body(sig)
+    assert out == "theorem thm_baseline_lift : BaselineLiftStatement := by sorry"
+    assert ":= trivial := by sorry" not in out
+
+
+def test_normalize_substituted_statement_body_strips_rfl_proof_term() -> None:
+    """Same as the trivial case but for `:= rfl`."""
+    sig = "theorem t (n : ℕ) : n = n := rfl"
+    out = _normalize_substituted_statement_body(sig)
+    assert out == "theorem t (n : ℕ) : n = n := by sorry"
+
+
+def test_normalize_substituted_statement_body_empty_returns_empty() -> None:
+    assert _normalize_substituted_statement_body("") == ""
+    assert _normalize_substituted_statement_body("   ") == ""

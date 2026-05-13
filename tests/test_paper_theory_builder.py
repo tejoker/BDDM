@@ -121,6 +121,56 @@ def test_write_paper_theory_emits_measurablespace_instance_for_nat_abbrev(tmp_pa
     assert "instance : MeasurableSpace PaperIndex := inferInstance" in text
 
 
+def test_write_paper_theory_emits_function_norm_for_analysis_domain(tmp_path: Path) -> None:
+    """Analysis-domain papers (e.g. PDE / Sobolev results) routinely quantify
+    `‖w‖` for `w : ℝ → ℝ` even though Mathlib provides no canonical norm for
+    that function type. Auto-emit a placeholder `Norm (ℝ → ℝ)` so the
+    statement at least elaborates; the bound itself is a real proof
+    obligation tracked downstream. POC came from 2604.21884."""
+    (tmp_path / "Desol").mkdir()
+    from paper_theory_builder import PaperTheoryPlan
+    plan = PaperTheoryPlan(
+        paper_id="0000.99998",
+        domain="analysis",
+        module_name="Paper_0000_99998",
+        imports=["Mathlib"],
+        open_scopes=[],
+        definitions=[],
+        lemmas=[],
+        axioms=[],
+        symbols=[],
+        manifest={"schema_version": "1.1.0", "grounding_policy": {"proof_countable": False}},
+        notes=[],
+    )
+    out = write_paper_theory(project_root=tmp_path, plan=plan)
+    text = out.read_text(encoding="utf-8")
+    assert "noncomputable instance : Norm (ℝ → ℝ)" in text
+
+
+def test_write_paper_theory_no_function_norm_for_generic_domain(tmp_path: Path) -> None:
+    """The fallback Norm instances are gated to analysis/probability domains.
+    A generic-domain paper-theory must NOT carry the placeholder norm — it
+    would shadow a legitimate Mathlib instance later if one is added."""
+    (tmp_path / "Desol").mkdir()
+    from paper_theory_builder import PaperTheoryPlan
+    plan = PaperTheoryPlan(
+        paper_id="0000.99997",
+        domain="",  # default / generic pack
+        module_name="Paper_0000_99997",
+        imports=["Mathlib"],
+        open_scopes=[],
+        definitions=[],
+        lemmas=[],
+        axioms=[],
+        symbols=[],
+        manifest={"schema_version": "1.1.0", "grounding_policy": {"proof_countable": False}},
+        notes=[],
+    )
+    out = write_paper_theory(project_root=tmp_path, plan=plan)
+    text = out.read_text(encoding="utf-8")
+    assert "Norm (ℝ → ℝ)" not in text
+
+
 def test_write_paper_theory_does_not_emit_norm_for_nat_abbrev(tmp_path: Path) -> None:
     """ℕ doesn't carry `Norm`. The per-underlying-type allowlist must filter
     Norm from a ℕ-abbrev — else `inferInstance` would fail at lake-build time
