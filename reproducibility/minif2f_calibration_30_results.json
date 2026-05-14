@@ -1,0 +1,420 @@
+{
+  "schema_version": "minif2f_calibration.v1",
+  "timestamp": "2026-05-14T13:50:13.919609+00:00",
+  "model": "labs-leanstral-2603",
+  "n_problems_in_sample": 30,
+  "n_attempted": 30,
+  "n_solved": 12,
+  "closure_rate": 0.4,
+  "elapsed_seconds": 257.4,
+  "api_calls": 30,
+  "tokens_in": 13846,
+  "tokens_out": 10671,
+  "estimated_spend_usd_at_mistral_large_rates": 0.0917,
+  "per_category": {
+    "aime": {
+      "attempted": 1,
+      "solved": 0,
+      "closure_rate": 0.0
+    },
+    "algebra": {
+      "attempted": 1,
+      "solved": 0,
+      "closure_rate": 0.0
+    },
+    "amc12": {
+      "attempted": 1,
+      "solved": 0,
+      "closure_rate": 0.0
+    },
+    "amc12a": {
+      "attempted": 1,
+      "solved": 0,
+      "closure_rate": 0.0
+    },
+    "amc12b": {
+      "attempted": 2,
+      "solved": 1,
+      "closure_rate": 0.5
+    },
+    "imo": {
+      "attempted": 5,
+      "solved": 1,
+      "closure_rate": 0.2
+    },
+    "induction": {
+      "attempted": 1,
+      "solved": 1,
+      "closure_rate": 1.0
+    },
+    "mathd_algebra": {
+      "attempted": 10,
+      "solved": 7,
+      "closure_rate": 0.7
+    },
+    "mathd_numbertheory": {
+      "attempted": 6,
+      "solved": 2,
+      "closure_rate": 0.3333
+    },
+    "numbertheory": {
+      "attempted": 2,
+      "solved": 0,
+      "closure_rate": 0.0
+    }
+  },
+  "per_problem": [
+    {
+      "id": "mathd_algebra_478",
+      "category": "mathd_algebra",
+      "theorem_name": "mathd_algebra_478",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 5.6,
+      "lake_elapsed_s": 5.9,
+      "proof_body": "rcases h₀ with ⟨hb, hh, hv⟩\nsubst h₂ h₃\nnorm_num at h₁\nlinarith",
+      "error_tail": "",
+      "confidence": 1.0
+    },
+    {
+      "id": "numbertheory_4x3m7y3neq2003",
+      "category": "numbertheory",
+      "theorem_name": "numbertheory_4x3m7y3neq2003",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 2.5,
+      "lake_elapsed_s": 6.1,
+      "proof_body": "",
+      "error_tail": "--stdout--\nype\n  7 * y ^ 3 % 7 = 7 % 7 * (y ^ 3 % 7) % 7\nbut is expected to have type\n  7 * y ^ 3 % 7 = 0\noutput/minif2f_calibration_bench/Bench_1.lean:16:2: error: omega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.",
+      "confidence": 0.95
+    },
+    {
+      "id": "aime_1983_p1",
+      "category": "aime",
+      "theorem_name": "aime_1983_p1",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 15.4,
+      "lake_elapsed_s": 3.7,
+      "proof_body": "",
+      "error_tail": "--stdout--\nt/minif2f_calibration_bench/Bench_2.lean:5:84: error: unsolved goals\nx y z w : ℕ\nht : 1 < x ∧ 1 < y ∧ 1 < z\nhw : 0 ≤ w\nh0 : Real.log ↑w / Real.log ↑x = 24\nh1 : Real.log ↑w / Real.log ↑y = 40\nh2 : Real.log ↑w / Real.log (↑x * ↑y * ↑z) = 12\n⊢ Real.log ↑w / Real.log ↑z = 60\noutput/minif2f_calibration_bench/Bench_2.lean:6:2: error: invalid 'import' command, it must be used in the beginning of the file",
+      "confidence": 0.95
+    },
+    {
+      "id": "amc12_2001_p5",
+      "category": "amc12",
+      "theorem_name": "amc12_2001_p5",
+      "solved": false,
+      "phase": "generator_empty",
+      "gen_elapsed_s": 10.0,
+      "lake_elapsed_s": 0.0,
+      "error_tail": ""
+    },
+    {
+      "id": "mathd_algebra_141",
+      "category": "mathd_algebra",
+      "theorem_name": "mathd_algebra_141",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 2.0,
+      "lake_elapsed_s": 3.6,
+      "proof_body": "have h₃ : a + b = 27 := by linarith\nhave h₄ : (a + b)^2 = 729 := by rw [h₃]; norm_num\nhave h₅ : a^2 + b^2 = (a + b)^2 - 2 * (a * b) := by ring\nrw [h₅, h₄, h₁]\nnorm_num",
+      "error_tail": "",
+      "confidence": 1.0
+    },
+    {
+      "id": "mathd_numbertheory_3",
+      "category": "mathd_numbertheory",
+      "theorem_name": "mathd_numbertheory_3",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 1.0,
+      "lake_elapsed_s": 3.6,
+      "proof_body": "",
+      "error_tail": "--stdout--\noutput/minif2f_calibration_bench/Bench_5.lean:4:6: error: unexpected token 'in'; expected ','",
+      "confidence": 1.0
+    },
+    {
+      "id": "imo_1969_p2",
+      "category": "imo",
+      "theorem_name": "imo_1969_p2",
+      "solved": false,
+      "phase": "generator_empty",
+      "gen_elapsed_s": 19.8,
+      "lake_elapsed_s": 0.0,
+      "error_tail": ""
+    },
+    {
+      "id": "mathd_algebra_44",
+      "category": "mathd_algebra",
+      "theorem_name": "mathd_algebra_44",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 1.3,
+      "lake_elapsed_s": 3.9,
+      "proof_body": "have h₂ : s = 1 := by\n  linarith\nhave h₃ : t = 4 := by\n  linarith\nexact ⟨h₂, h₃⟩",
+      "error_tail": "",
+      "confidence": 1.0
+    },
+    {
+      "id": "mathd_algebra_209",
+      "category": "mathd_algebra",
+      "theorem_name": "mathd_algebra_209",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 2.9,
+      "lake_elapsed_s": 3.5,
+      "proof_body": "",
+      "error_tail": "--stdout--\nan occurrence of the pattern\n  σ.invFun 2\nin the target expression\n  σ.invFun (σ.toFun 2) = 2\n\nσ : ℝ ≃ ℝ\nh₀ : σ.invFun 2 = 10\nh₁ : σ.invFun 10 = 1\nh₂ : σ.invFun 1 = 2\nh3 : σ.toFun 10 = 1\nh5 : σ.toFun 1 = 2\nh8 : σ.invFun (σ.toFun 2) = 2\n⊢ σ.toFun 2 = 10\noutput/minif2f_calibration_bench/Bench_8.lean:22:2: error: Type mismatch\n  h5\nhas type\n  σ.toFun 1 = 2\nbut is expected to have type\n  σ.toFun 1 = 1",
+      "confidence": 0.0
+    },
+    {
+      "id": "mathd_numbertheory_1124",
+      "category": "mathd_numbertheory",
+      "theorem_name": "mathd_numbertheory_1124",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 1.2,
+      "lake_elapsed_s": 3.7,
+      "proof_body": "have h₂ : n ≤ 9 := h₀\ninterval_cases n <;> norm_num at h₁ <;> omega",
+      "error_tail": "",
+      "confidence": 1.0
+    },
+    {
+      "id": "imo_1983_p6",
+      "category": "imo",
+      "theorem_name": "imo_1983_p6",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 1.9,
+      "lake_elapsed_s": 4.7,
+      "proof_body": "nlinarith [sq_nonneg (a - b), sq_nonneg (b - c), sq_nonneg (c - a),\n  mul_pos h₀.1 h₀.2.1, mul_pos h₀.2.1 h₀.2.2, mul_pos h₀.1 h₀.2.2,\n  mul_pos (sub_pos.mpr h₁) (sub_pos.mpr h₂), mul_pos (sub_pos.mpr h₂) (sub_pos.mpr h₃),\n  mul_pos (sub_pos.mpr h₃) (sub_pos.mpr h₁)]",
+      "error_tail": "",
+      "confidence": 0.95
+    },
+    {
+      "id": "mathd_numbertheory_237",
+      "category": "mathd_numbertheory",
+      "theorem_name": "mathd_numbertheory_237",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 1.0,
+      "lake_elapsed_s": 3.6,
+      "proof_body": "",
+      "error_tail": "--stdout--\noutput/minif2f_calibration_bench/Bench_11.lean:4:6: error: unexpected token 'in'; expected ','",
+      "confidence": 1.0
+    },
+    {
+      "id": "mathd_algebra_33",
+      "category": "mathd_algebra",
+      "theorem_name": "mathd_algebra_33",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 1.5,
+      "lake_elapsed_s": 3.9,
+      "proof_body": "have h₃ : y = (2 * x) / 5 := by\n  field_simp at h₁ ⊢\n  linarith\nhave h₄ : z = (7 * y) / 10 := by\n  field_simp at h₂ ⊢\n  linarith\nrw [h₄, h₃]\nfield_simp\nring",
+      "error_tail": "",
+      "confidence": 0.99
+    },
+    {
+      "id": "amc12b_2021_p3",
+      "category": "amc12b",
+      "theorem_name": "amc12b_2021_p3",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 1.0,
+      "lake_elapsed_s": 3.9,
+      "proof_body": "",
+      "error_tail": "--stdout--\noutput/minif2f_calibration_bench/Bench_13.lean:9:2: error: linarith failed to find a contradiction\ncase h1.h\nx : ℝ\nh₀ : 106 + (2 + (1 + (3 + x)⁻¹)⁻¹)⁻¹ * 106 = 144\na✝ : x < 3 / 4\n⊢ False\nfailed",
+      "confidence": 0.95
+    },
+    {
+      "id": "mathd_numbertheory_299",
+      "category": "mathd_numbertheory",
+      "theorem_name": "mathd_numbertheory_299",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 0.9,
+      "lake_elapsed_s": 3.7,
+      "proof_body": "norm_num",
+      "error_tail": "",
+      "confidence": 1.0
+    },
+    {
+      "id": "amc12b_2020_p2",
+      "category": "amc12b",
+      "theorem_name": "amc12b_2020_p2",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 0.7,
+      "lake_elapsed_s": 3.6,
+      "proof_body": "norm_num",
+      "error_tail": "",
+      "confidence": 1.0
+    },
+    {
+      "id": "algebra_sqineq_unitcircatbpabsamblt1",
+      "category": "algebra",
+      "theorem_name": "algebra_sqineq_unitcircatbpabsamblt1",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 1.9,
+      "lake_elapsed_s": 4.0,
+      "proof_body": "",
+      "error_tail": "--stdout--\n/minif2f_calibration_bench/Bench_16.lean:14:6: error: linarith failed to find a contradiction\ncase right.h\na b : ℝ\nh₀ : a ^ 2 + b ^ 2 = 1\nh1 : a * b ≤ 1 / 2\na✝ : 1 < a - b\n⊢ False\nfailed\noutput/minif2f_calibration_bench/Bench_16.lean:15:2: error: linarith failed to find a contradiction\ncase h\na b : ℝ\nh₀ : a ^ 2 + b ^ 2 = 1\nh1 : a * b ≤ 1 / 2\nh2 : |a - b| ≤ 1\na✝ : 1 < a * b + |a - b|\n⊢ False\nfailed",
+      "confidence": 0.9
+    },
+    {
+      "id": "imo_1977_p6",
+      "category": "imo",
+      "theorem_name": "imo_1977_p6",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 5.2,
+      "lake_elapsed_s": 3.6,
+      "proof_body": "",
+      "error_tail": "--stdout--\nn + 1)))\n c := ↑(f (n + 2 + 1))\n d := ↑(f (f (n + 2)))\n e := ↑(f (n + 1))\noutput/minif2f_calibration_bench/Bench_17.lean:49:8: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  e ≥ 2\n  d ≥ 0\n  c ≥ 0\n  c - d ≥ 1\n  b ≥ 0\n  a ≥ 0\n  a - b ≥ 1\nwhere\n a := ↑(f (n + 1 + 1))\n b := ↑(f (f (n + 1)))\n c := ↑(f (n + 2 + 1))\n d := ↑(f (f (n + 2)))\n e := ↑(f (n + 2))",
+      "confidence": 0.7
+    },
+    {
+      "id": "mathd_algebra_419",
+      "category": "mathd_algebra",
+      "theorem_name": "mathd_algebra_419",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 0.7,
+      "lake_elapsed_s": 3.6,
+      "proof_body": "rw [h₀, h₁]\nnorm_num",
+      "error_tail": "",
+      "confidence": 1.0
+    },
+    {
+      "id": "amc12a_2020_p10",
+      "category": "amc12a",
+      "theorem_name": "amc12a_2020_p10",
+      "solved": false,
+      "phase": "generator_empty",
+      "gen_elapsed_s": 19.9,
+      "lake_elapsed_s": 0.0,
+      "error_tail": ""
+    },
+    {
+      "id": "imo_1960_p2",
+      "category": "imo",
+      "theorem_name": "imo_1960_p2",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 7.3,
+      "lake_elapsed_s": 7.3,
+      "proof_body": "",
+      "error_tail": "--stdout--\n √(1 + 2 * x) ≠ 0\nh7 : 0 ≤ 1 + 2 * x\nh8 : √(1 + 2 * x) ≥ 0\nh9 : 1 - √(1 + 2 * x) ≠ 0\nh10 : 4 * x ^ 2 / (1 - √(1 + 2 * x)) ^ 2 < 2 * x + 9\nh11 : (1 - √(1 + 2 * x)) ^ 2 > 0\nh12 : 4 * x ^ 2 < (2 * x + 9) * (1 - √(1 + 2 * x)) ^ 2\nh13 : √(1 + 2 * x) ≥ 0\nh14 : x ≥ -1 / 2\nh : 45 / 8 ≤ x\nh16 : 1 - √(1 + 2 * x) ≤ 0\nh17 : (1 - √(1 + 2 * x)) ^ 2 ≥ 0\nh18 : 4 * x ^ 2 / (1 - √(1 + 2 * x)) ^ 2 ≥ 0\n⊢ False\nfailed",
+      "confidence": 0.9
+    },
+    {
+      "id": "mathd_numbertheory_427",
+      "category": "mathd_numbertheory",
+      "theorem_name": "mathd_numbertheory_427",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 1.1,
+      "lake_elapsed_s": 3.7,
+      "proof_body": "",
+      "error_tail": "--stdout--\noutput/minif2f_calibration_bench/Bench_21.lean:5:16: error: unexpected token 'in'; expected ','",
+      "confidence": 0.99
+    },
+    {
+      "id": "numbertheory_x5neqy2p4",
+      "category": "numbertheory",
+      "theorem_name": "numbertheory_x5neqy2p4",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 4.0,
+      "lake_elapsed_s": 8.6,
+      "proof_body": "",
+      "error_tail": "--stdout--\nnter.unusedSimpArgs false`\noutput/minif2f_calibration_bench/Bench_22.lean:10:202: warning: This simp argument is unused:\n  Int.emod_emod\n\nHint: Omit it from the simp argument list.\n  simp [h2,\n  ̲  ̲ ̲ ̲h3, pow_succ, Int.add_emod, I̵n̵t̵.̵m̵u̵l̵_̵e̵m̵o̵d̵,̵ ̵I̵n̵t̵.̵e̵m̵o̵d̵_̵e̵m̵o̵d̵]̵I̲n̲t̲.̲m̲u̲l̲_̲e̲m̲o̲d̲]̲ at h1\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`",
+      "confidence": 0.95
+    },
+    {
+      "id": "mathd_algebra_398",
+      "category": "mathd_algebra",
+      "theorem_name": "mathd_algebra_398",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 2.3,
+      "lake_elapsed_s": 4.0,
+      "proof_body": "have h₃ : b = (20 / 9) * c := by\n  field_simp at h₁\n  linarith\nhave h₄ : a = (4 / 7) * b := by\n  field_simp at h₂\n  linarith\nrw [h₄, h₃]\nring",
+      "error_tail": "",
+      "confidence": 1.0
+    },
+    {
+      "id": "imo_1963_p5",
+      "category": "imo",
+      "theorem_name": "imo_1963_p5",
+      "solved": false,
+      "phase": "generator_empty",
+      "gen_elapsed_s": 19.8,
+      "lake_elapsed_s": 0.0,
+      "error_tail": ""
+    },
+    {
+      "id": "mathd_numbertheory_430",
+      "category": "mathd_numbertheory",
+      "theorem_name": "mathd_numbertheory_430",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 1.1,
+      "lake_elapsed_s": 3.5,
+      "proof_body": "",
+      "error_tail": "--stdout--\noutput/minif2f_calibration_bench/Bench_25.lean:16:4: error: omega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.",
+      "confidence": 0.99
+    },
+    {
+      "id": "mathd_algebra_459",
+      "category": "mathd_algebra",
+      "theorem_name": "mathd_algebra_459",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 1.7,
+      "lake_elapsed_s": 3.9,
+      "proof_body": "",
+      "error_tail": "--stdout--\n : b < a\n⊢ False\nfailed\noutput/minif2f_calibration_bench/Bench_26.lean:13:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  d\nin the target expression\n  8 * b + 10 * b + 6 * (2 * b) = 24\n\na b c d : ℚ\nh₀ : 3 * a = b + c + d\nh₁ : 4 * b = a + c + d\nh₂ : 2 * c = a + b + d\nh₃ : 8 * b + 10 * b + 6 * (2 * b) = 24\nh₄ : a = b\nh₅ : c = 2 * b\nh₆ : d = 3 * b\n⊢ ↑d.den + d.num = 28",
+      "confidence": 0.99
+    },
+    {
+      "id": "induction_12dvd4expnp1p20",
+      "category": "induction",
+      "theorem_name": "induction_12dvd4expnp1p20",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 1.1,
+      "lake_elapsed_s": 3.7,
+      "proof_body": "induction n with\n| zero => norm_num\n| succ n ih =>\n  simp [Nat.pow_succ, Nat.mul_add] at ih ⊢\n  omega",
+      "error_tail": "",
+      "confidence": 0.95
+    },
+    {
+      "id": "mathd_algebra_320",
+      "category": "mathd_algebra",
+      "theorem_name": "mathd_algebra_320",
+      "solved": false,
+      "phase": "lake_rejected",
+      "gen_elapsed_s": 5.1,
+      "lake_elapsed_s": 6.7,
+      "proof_body": "",
+      "error_tail": "--stdout--\n\nbut is expected to have type\n  (0 : ℝ) ≤ ?m.399\noutput/minif2f_calibration_bench/Bench_28.lean:36:2: error: linarith failed to find a contradiction\ncase h2.h\nx : ℝ\na b c : ℕ\nh₀ : 0 < a ∧ 0 < b ∧ 0 < c ∧ 0 ≤ x\nh₁ : 2 * x ^ 2 = 4 * x + 9\nh₂ : x = (↑a + √↑b) / ↑2\nh₃ : c = 2\nh₄ : 2 * x ^ 2 - 4 * x - 9 = 0\nh₅ : x = (4 + √100) / 4\nh₇₁ : a = 4\nh₇₂ : b = 100\nh₇₃ : c = 2\na✝ : 26 < a + b + c\n⊢ False\nfailed",
+      "confidence": 0.95
+    },
+    {
+      "id": "mathd_algebra_137",
+      "category": "mathd_algebra",
+      "theorem_name": "mathd_algebra_137",
+      "solved": true,
+      "phase": "verified",
+      "gen_elapsed_s": 2.8,
+      "lake_elapsed_s": 4.6,
+      "proof_body": "have h₁ : (x : ℝ) + (4 : ℝ) / (100 : ℝ) * (x : ℝ) = 598 := by exact_mod_cast h₀\nhave h₂ : (x : ℝ) * (1 + (4 : ℝ) / (100 : ℝ)) = 598 := by linarith\nhave h₃ : (x : ℝ) * (104 : ℝ) / (100 : ℝ) = 598 := by field_simp at h₂ ⊢; linarith\nhave h₄ : (x : ℝ) = 598 * (100 : ℝ) / (104 : ℝ) := by field_simp at h₃ ⊢; linarith\nhave h₅ : (x : ℝ) = 575 := by norm_num at h₄ ⊢; linarith\nexact_mod_cast h₅",
+      "error_tail": "",
+      "confidence": 0.99
+    }
+  ]
+}

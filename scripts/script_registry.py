@@ -208,6 +208,16 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "benchmark",
         "summary": "Runs miniF2F proof-search calibration benchmarks.",
     },
+    "benchmark_minif2f_calibration.py": {
+        "tier": "benchmark",
+        "category": "benchmark",
+        "summary": (
+            "External-calibration miniF2F harness using the Leanstral whole-"
+            "proof generator (one-shot, lake env lean validated). Anchors "
+            "the pipeline's headline FP closure number against the miniF2F "
+            "test split."
+        ),
+    },
     "bridge_proofs.py": {
         "tier": "internal_support",
         "category": "bridge",
