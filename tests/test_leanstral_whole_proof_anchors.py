@@ -364,16 +364,18 @@ def test_build_user_prompt_no_anchor_block_without_error() -> None:
 
 
 def test_build_user_prompt_no_anchor_block_when_error_unmatched() -> None:
-    """Error tail mentions no `unknown identifier` and no `synthInstanceFailed`
-    → no anchor block (even when a name_index is supplied)."""
+    """Error tail mentions no `unknown identifier`, no `synthInstanceFailed`,
+    and no recognized B1/B2/B3 failure-mode pattern → no anchor block (even
+    when a name_index is supplied)."""
     idx = _mock_name_index()
+    # Use a generic error string that matches none of A1/A3/B1/B2/B3.
     user = gen.build_user_prompt(
         paper_id="p1",
         theorem_name="target",
         lean_statement="theorem target (n : ℕ) : n ≤ n + 1 := by sorry",
         paper_theory_hint="",
         paper_local_file=NEIGHBOUR_SRC,
-        error_tail="error: type mismatch at `Nat.le_succ`",
+        error_tail="error: lean run aborted by signal",
         name_index=idx,
         audited_core_hint="",
         latex_proof_hints=[],

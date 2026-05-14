@@ -603,6 +603,357 @@ def build_premise_block(hits: list[PremiseHit], *, max_lines: int = 10) -> str:
     return "\n".join(lines)
 
 
+# --- Failure-mode anchors (cluster B: real lake-error tails) --------------
+#
+# The A1/A3 wiring above covers `unknown identifier 'X'` and
+# `synthInstanceFailed: <Class>` when X is a Mathlib name. The 5-row anchor
+# smoke (commit ccb203c, output/leanstral_anchors_smoke_final.json) showed
+# that the dominant non-Mathlib failure modes are:
+#
+#   B1. Hallucinated bound-variable names — the proof references `h4`/`h5`
+#       but the theorem's binders are `(h1 h2 h3 : Prop)`. The LLM invents
+#       suffixed/extended binder names that don't exist in the signature.
+#   B2. Typeclass-instance gaps — `MeasurableSpace alpha` for a free
+#       `alpha : Type*` declared in the theorem signature without enough
+#       instance binders.
+#   B3. Tactic-strategy errors — `Tactic introN failed`, type mismatch,
+#       wrong unification arity.
+#
+# These extractors parse BOTH the error tail AND the theorem signature so
+# the retry prompt can quote the *actual* binder names / type variables
+# back to the model. All output is standards-positive: we never suggest
+# `sorry`/`admit`/`apply?`/`axiom`/`native_decide`.
+
+
+# --- B1: hallucinated bound-variable names --------------------------------
+
+
+# Match binder groups in a theorem signature. We accept multiple consecutive
+# names in one group, e.g. `(h1 h2 h3 : Prop)` → names h1, h2, h3 with the
+# same type. Captures both `( ... )` (explicit) and `{ ... }` (implicit) and
+# `[ ... ]` (instance) styles.
+_BINDER_GROUP_RE = re.compile(
+    r"[\(\{\[](?P<names>[A-Za-z_][\w']*(?:\s+[A-Za-z_][\w']*)*)\s*:\s*(?P<ty>[^()\{\}\[\]]+?)[\)\}\]]"
+)
+
+# Match a single anonymous-style hypothesis name: h1, h2, _1, _2, single
+# letter a-z. We use this both to recognize bound-variable patterns in
+# `unknown identifier 'X'` AND to decide which identifiers are likely
+# binders worth quoting.
+_BOUND_VAR_PATTERN = re.compile(r"^(?:h\d+|_\d+|[a-z])$")
+
+
+def extract_signature_binders(lean_statement: str) -> list[tuple[str, str]]:
+    """Extract (name, type) pairs from binder groups in a Lean theorem
+    signature. Handles multi-name groups (`(h1 h2 h3 : Prop)` → 3 pairs)
+    and the three binder styles `(...)`, `{...}`, `[...]`.
+
+    Returns [] when no binders are found. Order is preserved; duplicates
+    can occur if the signature reuses a name (we don't dedupe here)."""
+    if not lean_statement:
+        return []
+    out: list[tuple[str, str]] = []
+    # We only want the signature head, not the body. Cut at the first `:=`
+    # or `\n  ` (start of tactic block) to avoid picking up binders inside
+    # the proof.
+    head = lean_statement
+    for marker in (":=", "\nby "):
+        idx = head.find(marker)
+        if idx >= 0:
+            head = head[:idx]
+    for m in _BINDER_GROUP_RE.finditer(head):
+        ty = re.sub(r"\s+", " ", m.group("ty")).strip()
+        names = m.group("names").split()
+        for nm in names:
+            if nm and nm not in ("_",):
+                out.append((nm, ty))
+    return out
+
+
+def detect_bound_variable_hallucination(
+    *, error_tail: str, lean_statement: str
+) -> Optional[dict[str, Any]]:
+    """Detect the B1 pattern: `unknown identifier 'X'` where X matches a
+    bound-variable shape (`h<digits>`, `_<digits>`, single lowercase letter)
+    AND X is NOT among the theorem's declared binders.
+
+    Returns a dict {hallucinated: [...], declared: [(name, ty)], ...} when
+    the pattern matches, else None. The dict is fed straight into
+    `build_bound_variable_anchor_block`.
+    """
+    names = _extract_unknown_identifier_names(error_tail or "")
+    if not names:
+        return None
+    binders = extract_signature_binders(lean_statement or "")
+    declared = {nm for (nm, _ty) in binders}
+    hallucinated: list[str] = []
+    seen: set[str] = set()
+    for nm in names:
+        if nm in seen:
+            continue
+        seen.add(nm)
+        if _BOUND_VAR_PATTERN.match(nm) and nm not in declared:
+            hallucinated.append(nm)
+    if not hallucinated:
+        return None
+    return {
+        "hallucinated": hallucinated,
+        "declared": list(binders),
+    }
+
+
+def build_bound_variable_anchor_block(info: Optional[dict[str, Any]]) -> str:
+    """Render the B1 anchor. Empty string when info is None / empty."""
+    if not info or not info.get("hallucinated"):
+        return ""
+    bad = list(info["hallucinated"])
+    declared = list(info.get("declared", []))
+    lines: list[str] = ["BOUND-VARIABLE ANCHORS:"]
+    quoted_bad = ", ".join(f"`{n}`" for n in bad)
+    if declared:
+        lines.append(
+            f"Your previous attempt referenced {quoted_bad}. The theorem actually binds:"
+        )
+        for nm, ty in declared:
+            lines.append(f"  - {nm} : {ty}")
+        lines.append(
+            "Use ONLY these binder names. Do NOT invent variants like "
+            + ", ".join(f"`{n}`" for n in bad)
+            + "."
+        )
+    else:
+        lines.append(
+            f"Your previous attempt referenced {quoted_bad}, but the theorem "
+            "declares no matching binders. Inspect the signature; do not "
+            "introduce names that are not bound."
+        )
+    return "\n".join(lines)
+
+
+# --- B2: typeclass-instance gap on a free type variable -------------------
+
+
+# Match a free `Type*` / `Sort*` / `Type u` binder in a theorem signature.
+# We capture the binder name so the anchor can quote it back.
+_TYPE_VAR_BINDER_RE = re.compile(
+    r"[\(\{][^()\{\}]*?\b(?P<name>[A-Za-z_][\w']*)\s*:\s*(?:Type|Sort)\s*(?:\*|u_?\d*)?[\)\}]"
+)
+
+# Curated common Mathlib instances per class. Keyed on the class basename.
+# The values are (provider_name, module). When a class is not in this map
+# we just emit the generic letI hint without specific suggestions.
+_CLASS_INSTANCE_HINTS: dict[str, list[tuple[str, str]]] = {
+    "MeasurableSpace": [
+        ("MeasurableSpace.borel", "Mathlib.MeasureTheory.MeasurableSpace.Constructions"),
+        ("MeasurableSpace.top", "Mathlib.MeasureTheory.MeasurableSpace.Defs"),
+    ],
+    "TopologicalSpace": [
+        ("instTopologicalSpaceReal", "Mathlib.Topology.Instances.Real"),
+        ("TopologicalSpace.generateFrom", "Mathlib.Topology.Basic"),
+    ],
+    "MetricSpace": [
+        ("PseudoMetricSpace.toMetricSpace", "Mathlib.Topology.MetricSpace.Basic"),
+    ],
+    "NormedSpace": [
+        ("NormedSpace.id", "Mathlib.Analysis.NormedSpace.Basic"),
+    ],
+    "Inhabited": [
+        ("instInhabitedNat", "Mathlib.Init.Data.Nat.Basic"),
+    ],
+}
+
+
+def extract_signature_type_vars(lean_statement: str) -> list[str]:
+    """Return the names of free `Type*`/`Sort*` binders in the signature."""
+    if not lean_statement:
+        return []
+    head = lean_statement
+    for marker in (":=", "\nby "):
+        idx = head.find(marker)
+        if idx >= 0:
+            head = head[:idx]
+    seen: set[str] = set()
+    out: list[str] = []
+    for m in _TYPE_VAR_BINDER_RE.finditer(head):
+        nm = m.group("name")
+        if nm and nm not in seen:
+            seen.add(nm)
+            out.append(nm)
+    return out
+
+
+def detect_typeclass_gap(
+    *, error_tail: str, lean_statement: str
+) -> Optional[dict[str, Any]]:
+    """Detect the B2 pattern: a `synthInstanceFailed` / `failed to synthesize
+    instance of type class` whose target type contains a free type variable
+    declared in the signature without an instance binder for that class.
+
+    Returns dict with {class_name, type_var, instance_hints} on match, else
+    None. We only fire when BOTH the class AND a matching free type variable
+    are present in the error tail.
+    """
+    if not (error_tail or "").strip():
+        return None
+    # Pull the class name and the surrounding context (the line with the
+    # class, plus optional next line for `MeasurableSpace alpha` style).
+    class_name = ""
+    payload = ""
+    m = re.search(
+        r"(?:synthInstanceFailed|failed to synthesize(?:\s+instance(?:\s+of\s+type\s+class)?)?)"
+        r"\s*[:]?\s*\n?\s*`?([A-Z][\w.']*)([^\n]*)",
+        error_tail,
+    )
+    if not m:
+        return None
+    class_name = m.group(1)
+    payload = (m.group(2) or "").strip()
+    type_vars = extract_signature_type_vars(lean_statement or "")
+    # The payload usually contains the type-var token (e.g.
+    # `MeasurableSpace alpha`). Match against the signature's free vars.
+    target_var: Optional[str] = None
+    for tv in type_vars:
+        if re.search(r"\b" + re.escape(tv) + r"\b", payload):
+            target_var = tv
+            break
+    if target_var is None and type_vars:
+        # Fall back to the first declared type-var. This still gives the
+        # model a name to bind against; the hint says "or another type-var
+        # in scope".
+        target_var = type_vars[0]
+    if target_var is None:
+        return None
+    hints = _CLASS_INSTANCE_HINTS.get(class_name, [])
+    return {
+        "class_name": class_name,
+        "type_var": target_var,
+        "all_type_vars": list(type_vars),
+        "instance_hints": hints,
+    }
+
+
+def build_typeclass_gap_anchor_block(info: Optional[dict[str, Any]]) -> str:
+    """Render the B2 anchor. Empty string when info is None / empty."""
+    if not info or not info.get("class_name") or not info.get("type_var"):
+        return ""
+    cls = info["class_name"]
+    var = info["type_var"]
+    hints = info.get("instance_hints") or []
+    lines: list[str] = [
+        f"TYPECLASS GAP for `{cls} {var}`:",
+        f"`{var}` is declared as `Type*` (or similar) without a `{cls}` "
+        "instance binder.",
+        f"To fix the proof, either add the instance binder to the theorem "
+        f"signature (e.g. `[{cls} {var}]`) OR discharge it inline via an "
+        f"explicit `letI : {cls} {var} := ...` line before the tactic that "
+        "triggered the failure.",
+    ]
+    if hints:
+        lines.append(f"Common Mathlib instances for `{cls}`:")
+        for nm, module in hints:
+            lines.append(f"  - {nm}  ({module})")
+    lines.append(
+        "Do NOT invent a new instance; pick one of the listed providers or "
+        "an analogous Mathlib instance for the concrete type."
+    )
+    return "\n".join(lines)
+
+
+# --- B3: tactic-strategy errors -------------------------------------------
+
+
+# Detect well-known tactic failure shapes in the error tail. We keep the
+# pattern set short — each one maps to a concrete prompt hint.
+_TACTIC_INTRON_RE = re.compile(r"[Tt]actic\s+(?:'?introN'?|`introN`)\s+failed", re.IGNORECASE)
+_TYPE_MISMATCH_RE = re.compile(
+    r"(?:type mismatch|expected to have type)\s*\n?\s*(?P<expected>[^\n]*)",
+    re.IGNORECASE,
+)
+_APPLICATION_FAILED_RE = re.compile(r"application type mismatch|function expected", re.IGNORECASE)
+_UNIFICATION_FAILED_RE = re.compile(r"unification failed|tactic 'rfl' failed", re.IGNORECASE)
+
+
+def detect_tactic_strategy_error(*, error_tail: str) -> Optional[dict[str, Any]]:
+    """Detect B3 patterns. Returns a dict {kind, extras} naming the family of
+    failure, else None.
+
+    Kinds:
+      - introN_failed: too many `intro`s for the goal arity.
+      - type_mismatch: expected/got types disagree.
+      - application_failed: function expected a different number of args.
+      - unification_failed: rfl / unification cannot close the goal.
+    """
+    tail = error_tail or ""
+    if not tail.strip():
+        return None
+    if _TACTIC_INTRON_RE.search(tail):
+        return {"kind": "introN_failed", "extras": {}}
+    # `application type mismatch` must be checked BEFORE the bare
+    # `type mismatch` pattern so we route it to the application-failure
+    # bucket instead of the generic type-mismatch hint.
+    if _APPLICATION_FAILED_RE.search(tail):
+        return {"kind": "application_failed", "extras": {}}
+    m_tm = _TYPE_MISMATCH_RE.search(tail)
+    if m_tm:
+        return {
+            "kind": "type_mismatch",
+            "extras": {"expected": (m_tm.group("expected") or "").strip()[:200]},
+        }
+    if _UNIFICATION_FAILED_RE.search(tail):
+        return {"kind": "unification_failed", "extras": {}}
+    return None
+
+
+def build_tactic_strategy_anchor_block(info: Optional[dict[str, Any]]) -> str:
+    """Render the B3 anchor. Empty string when info is None / empty."""
+    if not info or not info.get("kind"):
+        return ""
+    kind = info["kind"]
+    extras = info.get("extras") or {}
+    lines: list[str] = ["TACTIC-STRATEGY ANCHOR:"]
+    if kind == "introN_failed":
+        lines.append(
+            "Lean reported `Tactic introN failed` — the goal accepts fewer "
+            "intros than you tried. Use `intro h` (single intro, no count) "
+            "followed by inspection, or `obtain ⟨...⟩ := h` for "
+            "destructuring an existential / conjunction. Do NOT chain "
+            "multiple `intro`s blindly."
+        )
+    elif kind == "type_mismatch":
+        expected = str(extras.get("expected", "") or "").strip()
+        if expected:
+            lines.append(
+                f"Lean reported a type mismatch (expected: {expected!r}). "
+                "Insert `show <expected-type>` before the offending tactic "
+                "to assert the goal shape, or `change <expected-type>` to "
+                "rewrite up to definitional equality."
+            )
+        else:
+            lines.append(
+                "Lean reported a type mismatch. Insert `show <type>` to "
+                "assert the expected goal form, or use `change` to rewrite "
+                "up to definitional equality."
+            )
+    elif kind == "application_failed":
+        lines.append(
+            "Lean reported an application failure (wrong arity / function "
+            "expected). Use `apply <lemma>` followed by the explicit "
+            "arguments, or `refine <lemma> ?_ ?_` to leave the unsolved "
+            "subgoals for the next tactic. Do NOT call the lemma directly "
+            "with the wrong number of arguments."
+        )
+    elif kind == "unification_failed":
+        lines.append(
+            "Lean reported unification failure (often `rfl` against a goal "
+            "that needs rewriting). Replace `rfl` with `simp` / `ring` / "
+            "`norm_num` / explicit `rw [lemma]` to first normalize, then "
+            "close with `rfl`."
+        )
+    else:
+        return ""
+    return "\n".join(lines)
+
+
 # --- Convenience: full anchor section -------------------------------------
 
 
@@ -615,10 +966,18 @@ def build_anchor_section(
     paper_id: str = "",
     anchor_top_k: int = 5,
     premise_top_k: int = 10,
+    lean_statement: str = "",
 ) -> str:
     """Convenience wrapper used by the generator. Returns "" when nothing to
     inject. The output is appended to the user prompt (above the retry
-    block)."""
+    block).
+
+    `lean_statement` (optional) is the full theorem signature. When supplied
+    alongside an `error_tail`, the failure-mode anchors (B1 bound-variable,
+    B2 typeclass-gap, B3 tactic-strategy) are appended after the Mathlib
+    name / premise blocks. Passing "" preserves the pre-cluster-B output
+    shape for the existing hermetic tests.
+    """
     parts: list[str] = []
 
     if error_tail:
@@ -637,6 +996,24 @@ def build_anchor_section(
         block = build_premise_block(hits, max_lines=premise_top_k)
         if block:
             parts.append(block)
+
+    if error_tail:
+        bv_info = detect_bound_variable_hallucination(
+            error_tail=error_tail, lean_statement=lean_statement or goal_text,
+        )
+        bv_block = build_bound_variable_anchor_block(bv_info)
+        if bv_block:
+            parts.append(bv_block)
+        tc_info = detect_typeclass_gap(
+            error_tail=error_tail, lean_statement=lean_statement or goal_text,
+        )
+        tc_block = build_typeclass_gap_anchor_block(tc_info)
+        if tc_block:
+            parts.append(tc_block)
+        ts_info = detect_tactic_strategy_error(error_tail=error_tail)
+        ts_block = build_tactic_strategy_anchor_block(ts_info)
+        if ts_block:
+            parts.append(ts_block)
 
     return "\n\n".join(parts)
 

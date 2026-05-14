@@ -470,29 +470,31 @@ def build_user_prompt(
                 block = block[:MAX_LATEX_PROOF_HINT_CHARS] + "\n  ... (truncated) ..."
             latex_section = _LATEX_PROOF_SECTION_TEMPLATE.format(latex_proof_block=block)
 
-    # Mathlib-anchor section (A1/A3): unknown-identifier + synthInstance
-    # candidates from the alignment index, plus premise-retrieval candidates
-    # from the on-disk token-overlap index. Empty when neither index is
-    # available or neither pattern fires.
+    # Mathlib-anchor section (A1/A3) + failure-mode anchors (B1/B2/B3):
+    # unknown-identifier + synthInstance candidates from the alignment
+    # index, premise-retrieval candidates from the on-disk token-overlap
+    # index, plus signature-aware bound-variable / typeclass-gap /
+    # tactic-strategy hints when the retry has an error tail. Empty when
+    # no Mathlib indices are available AND no failure-mode pattern fires.
     anchor_section = ""
-    if name_index or premise_index is not None:
-        try:
-            from leanstral_proof_anchors import build_anchor_section  # type: ignore[import-not-found]
-            body = build_anchor_section(
-                error_tail=error_tail or "",
-                goal_text=stmt,
-                name_index=name_index or {},
-                premise_index=premise_index,
-                paper_id=paper_id or "",
-                anchor_top_k=anchor_top_k,
-                premise_top_k=premise_top_k,
-            )
-            if body:
-                if len(body) > MAX_ANCHOR_SECTION_CHARS:
-                    body = body[:MAX_ANCHOR_SECTION_CHARS] + "\n  ... (truncated) ..."
-                anchor_section = _ANCHOR_SECTION_TEMPLATE.format(anchor_body=body)
-        except Exception:
-            anchor_section = ""
+    try:
+        from leanstral_proof_anchors import build_anchor_section  # type: ignore[import-not-found]
+        body = build_anchor_section(
+            error_tail=error_tail or "",
+            goal_text=stmt,
+            name_index=name_index or {},
+            premise_index=premise_index,
+            paper_id=paper_id or "",
+            anchor_top_k=anchor_top_k,
+            premise_top_k=premise_top_k,
+            lean_statement=stmt,
+        )
+        if body:
+            if len(body) > MAX_ANCHOR_SECTION_CHARS:
+                body = body[:MAX_ANCHOR_SECTION_CHARS] + "\n  ... (truncated) ..."
+            anchor_section = _ANCHOR_SECTION_TEMPLATE.format(anchor_body=body)
+    except Exception:
+        anchor_section = ""
 
     return _USER_TEMPLATE.format(
         paper_id=paper_id or "",

@@ -181,7 +181,7 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
     "leanstral_proof_anchors.py": {
         "tier": "research_experiment",
         "category": "proof_search",
-        "summary": "Mathlib-anchor injection helpers for leanstral_whole_proof_generator: extracts unknown-identifier / synthInstanceFailed names from lake error tails and resolves them through the 220k-entry mathlib_name_index; builds a token-overlap premise index over Mathlib signatures (cached at data/mathlib_premise_index.json) for goal-similar lemma candidates.",
+        "summary": "Mathlib-anchor injection helpers for leanstral_whole_proof_generator: extracts unknown-identifier / synthInstanceFailed names from lake error tails and resolves them through the 220k-entry mathlib_name_index; builds a token-overlap premise index over Mathlib signatures (cached at data/mathlib_premise_index.json) for goal-similar lemma candidates. Cluster-B failure-mode anchors: B1 bound-variable hallucination (parses theorem binders, flags hallucinated `h<n>`-shaped identifiers), B2 typeclass-instance gap (detects free `Type*` binders missing instance binders, suggests `letI` + curated Mathlib providers), B3 tactic-strategy errors (`Tactic introN failed`, type mismatch, application/unification failures).",
     },
     "sweep_lemma_factor_v2.py": {
         "tier": "research_experiment",
