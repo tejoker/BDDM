@@ -49,6 +49,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 import lemma_factor_v2 as lfv2  # noqa: E402
+import leanstral_repl_proof_generator as repl_gen  # noqa: E402
 import leanstral_whole_proof_generator as gen  # noqa: E402
 import sweep_canonical_patch_and_validate as patcher  # noqa: E402
 import sweep_leanstral_whole_proof as wp_sweep  # noqa: E402
@@ -409,6 +410,7 @@ def _sweep_paper(
     per_lake_timeout: int,
     dry_run: bool,
     bucket_counts: Counter[str],
+    use_repl_prover: bool = False,
 ) -> dict[str, Any]:
     led_path = PROJECT_ROOT / "output" / "verification_ledgers" / f"{paper_id}.json"
     lean_file = PROJECT_ROOT / "output" / f"{paper_id}.lean"
@@ -509,23 +511,87 @@ def _sweep_paper(
 
         # --- First pass: whole-proof on parent --------------------------
         target_name = short if wp_sweep._flex_theorem_sorry_re(short).search(file_text) else name
-        cand = None
-        try:
-            cand = gen.generate_proof_candidate(
-                paper_id=paper_id,
-                theorem_name=short or name,
-                lean_statement=lean_stmt,
-                paper_theory_hint=paper_theory_hint,
-                paper_local_file=file_text,
-                error_tail="",
-                client=client,
-                model=model,
-            )
-        except Exception as exc:
-            per_row["stages"].append({"stage": "first_pass_transport_error", "err": str(exc)[:200]})
-            bucket_counts["transport_errors"] += 1
-
         first_pass_validated = False
+
+        # --- REPL-prover first pass (opt-in) ----------------------------
+        # When `--use-repl-prover` is set, try the REPL-driven tactic-by-
+        # tactic prover BEFORE the whole-proof generator. The REPL prover
+        # validates each tactic against the real on-disk file via lake;
+        # we still re-validate the assembled body once at the end to guard
+        # against any in-REPL drift relative to the on-disk file.
+        if use_repl_prover and client is not None:
+            try:
+                repl_result = repl_gen.prove_via_repl(
+                    paper_id=paper_id,
+                    theorem_name=short or name,
+                    lean_statement=lean_stmt,
+                    paper_theory_hint=paper_theory_hint,
+                    paper_local_file=str(lean_file),
+                    client=client,
+                    model=model,
+                    repl_timeout_s=per_lake_timeout,
+                )
+            except Exception as exc:
+                per_row["stages"].append({
+                    "stage": "repl_prover_transport_error",
+                    "err": str(exc)[:200],
+                })
+                bucket_counts["transport_errors"] += 1
+                repl_result = None
+            if repl_result is not None:
+                body = repl_result["proof_body"]
+                if wp_sweep._patch_proof_flex(lean_file, target_name, body):
+                    ok, err_tail = _lake_validate_aware(
+                        lean_file, target_name,
+                        baseline_errors=baseline_errors,
+                        timeout_s=per_lake_timeout,
+                    )
+                    if ok:
+                        first_pass_validated = True
+                        report["first_pass_validated"] += 1
+                        wp_sweep._apply_accept_to_entry(
+                            entry,
+                            proof_body=body,
+                            reasoning=f"repl_prover:{repl_result.get('rounds', 0)}rounds",
+                            confidence=0.9,
+                            round_idx=1,
+                        )
+                        per_row["stages"].append({
+                            "stage": "repl_prover_validated",
+                            "body_preview": body[:80],
+                            "rounds": repl_result.get("rounds", 0),
+                        })
+                    else:
+                        wp_sweep._revert_proof_flex(lean_file, target_name)
+                        per_row["stages"].append({
+                            "stage": "repl_prover_lake_error",
+                            "err_tail": (err_tail or "")[-160:],
+                        })
+                        bucket_counts["lake_errors"] += 1
+                    file_text = lean_file.read_text(encoding="utf-8")
+                else:
+                    per_row["stages"].append({"stage": "repl_prover_patch_failed"})
+            else:
+                per_row["stages"].append({"stage": "repl_prover_returned_none"})
+
+        # Whole-proof first pass runs only if REPL prover didn't already win.
+        cand = None
+        if not first_pass_validated:
+            try:
+                cand = gen.generate_proof_candidate(
+                    paper_id=paper_id,
+                    theorem_name=short or name,
+                    lean_statement=lean_stmt,
+                    paper_theory_hint=paper_theory_hint,
+                    paper_local_file=file_text,
+                    error_tail="",
+                    client=client,
+                    model=model,
+                )
+            except Exception as exc:
+                per_row["stages"].append({"stage": "first_pass_transport_error", "err": str(exc)[:200]})
+                bucket_counts["transport_errors"] += 1
+
         if cand is not None:
             body = cand["proof_body"]
             if wp_sweep._patch_proof_flex(lean_file, target_name, body):
@@ -814,6 +880,16 @@ def main() -> int:
     parser.add_argument("--per-lake-timeout", type=int, default=60)
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--use-repl-prover",
+        action="store_true",
+        default=False,
+        help=(
+            "Enable the REPL-driven step-by-step prover as a parent first-pass "
+            "BEFORE the whole-proof generator (default OFF). Aux lemmas always "
+            "use the whole-proof generator regardless."
+        ),
+    )
     parser.add_argument("--summary", default="output/lemma_factor_v2_sweep_summary.json")
     args = parser.parse_args()
 
@@ -840,6 +916,7 @@ def main() -> int:
             per_lake_timeout=args.per_lake_timeout,
             dry_run=args.dry_run,
             bucket_counts=bucket_counts,
+            use_repl_prover=args.use_repl_prover,
         )
         reports.append(r)
         # Persist partial summary after each paper so a mid-sweep crash
