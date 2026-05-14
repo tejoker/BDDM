@@ -12,10 +12,10 @@
       "theorem_name": "main_theorem",
       "lean_file": "/home/projectx/BDDM/output/2604.21616.lean",
       "lean_statement": "theorem main_theorem (K : ℕ) (L sigma_F sigma_op gamma beta eps eta : ℝ)\n    (hK : 0 < K) (hL : 0 < L) (hsigma_F : 0 ≤ sigma_F) (hsigma_op : 0 ≤ sigma_op)\n    (hgamma : 0 < gamma ∧ gamma ≤ 1) (hbeta : 0 ≤ beta ∧ beta < 1)\n    (heps : 0 < eps) (heta : 0 < eta)\n    (f : ℝ → ℝ) (f_star X_1 : ℝ) (hf_star : f_star ≤ f X_1)\n    (hf_lip : ∀ x y : ℝ, |f x - f y| ≤ L * |x - y|) :\n  ∃ C : ℝ, 0 ≤ C ∧ C ≤ (L * (f X_1 - f_star) + sigma_F ^ 2 + sigma_op ^ 2) / (K : ℝ) := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -142,17 +142,17 @@
           "splus-2025-nips"
         ]
       },
-      "proof_text": "omega",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 19.31,
       "timestamp": "2026-05-09T20:00:11Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": false,
@@ -171,11 +171,13 @@
         "translation_fidelity_ok",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_7b4ca07c1965580dee0d61ea",
@@ -271,16 +273,24 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:sigma_F"
       ],
-      "source_latex": "\\label{main-theorem}\nSuppose that Assumptions 1-3 hold. Let $\\hat\\sigma_F^2=\\max\\left\\{\\sigma_F^2,\\frac{L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\gamma^2}\\right\\}$ with any $\\gamma\\in(0,1]$, $1-\\theta=\\sqrt{\\frac{L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\hat\\sigma_F^2}}$, $0\\leq\\beta<1$, $\\varepsilon=\\sigma_{op}^2$, and $\\eta=\\sqrt{\\frac{\\varepsilon\\left(f(\\mathbf{X}_1)-f^*\\right)}{4LK\\hat\\sigma_F^2}}$. Then for Algorithm \\ref{gsoap}, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{rate1}\n\\frac{1}{K}\\sum_{k=1}^K\\mathbb{E}\\left[\\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right\\|_1\\right]\\leq 10\\sqrt{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\sigma_{op}^2}}+4\\sqrt{mn}\\sqrt[4]{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K}},\n\\end{aligned}\n\\end{eqnarray} \nand\n\\begin{eqnarray}\n\\begin{aligned}\\label{rate2}\n\\frac{1}{K}\\sum_{k=1}^K\\mathbb{E}\\left[\\left\\|\\nabla f(\\mathbf{X}_k)\\right\\|_*\\right]\\leq 10\\sqrt{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\sigma_{op}^2}}+4\\sqrt{mn}\\sqrt[4]{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K}}.\n\\end{aligned}\n\\end{eqnarray}"
+      "source_latex": "\\label{main-theorem}\nSuppose that Assumptions 1-3 hold. Let $\\hat\\sigma_F^2=\\max\\left\\{\\sigma_F^2,\\frac{L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\gamma^2}\\right\\}$ with any $\\gamma\\in(0,1]$, $1-\\theta=\\sqrt{\\frac{L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\hat\\sigma_F^2}}$, $0\\leq\\beta<1$, $\\varepsilon=\\sigma_{op}^2$, and $\\eta=\\sqrt{\\frac{\\varepsilon\\left(f(\\mathbf{X}_1)-f^*\\right)}{4LK\\hat\\sigma_F^2}}$. Then for Algorithm \\ref{gsoap}, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{rate1}\n\\frac{1}{K}\\sum_{k=1}^K\\mathbb{E}\\left[\\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right\\|_1\\right]\\leq 10\\sqrt{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\sigma_{op}^2}}+4\\sqrt{mn}\\sqrt[4]{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K}},\n\\end{aligned}\n\\end{eqnarray} \nand\n\\begin{eqnarray}\n\\begin{aligned}\\label{rate2}\n\\frac{1}{K}\\sum_{k=1}^K\\mathbb{E}\\left[\\left\\|\\nabla f(\\mathbf{X}_k)\\right\\|_*\\right]\\leq 10\\sqrt{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\sigma_{op}^2}}+4\\sqrt{mn}\\sqrt[4]{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K}}.\n\\end{aligned}\n\\end{eqnarray}",
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "omega",
+        "file_body_preview": "sorry\n\n-- [theorem] equ1\n-- Statement (LaTeX): As the gradient is $L$-Lipschitz, we have &f(_{k+1})-f(_k)\\\\ &\\< f(_k),_{",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "equ1",
       "lean_file": "/home/projectx/BDDM/output/2604.21616.lean",
       "lean_statement": "theorem equ1 (K m n : ℕ) (beta : ℝ) (hbeta : 0 ≤ beta ∧ beta < 1)\n    (V : ℕ → Matrix (Fin m) (Fin n) ℝ)\n    (G : ℕ → Matrix (Fin m) (Fin n) ℝ) (hV0 : V 0 = 0) :\n  ∀ k : ℕ, k < K →\n    V (k + 1) = beta • V k + (1 - beta) • G k := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -343,17 +353,17 @@
           "splus-2025-nips"
         ]
       },
-      "proof_text": "omega",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 10.11,
       "timestamp": "2026-05-09T20:00:26Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": false,
@@ -372,11 +382,13 @@
         "translation_fidelity_ok",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_e2543a1d71576d35f2210d2a",
@@ -481,16 +493,24 @@
       "discharged_axiom_debt": [
         "paper_definition_stub:equ1"
       ],
-      "source_latex": "As the gradient is $L$-Lipschitz, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ1}\n&f(\\mathbf{X}_{k+1})-f(\\mathbf{X}_k)\\\\\n\\leq&\\<\\nabla f(\\mathbf{X}_k),\\mathbf{X}_{k+1}-\\mathbf{X}_k\\>+\\frac{L}{2}\\|\\mathbf{X}_{k+1}-\\mathbf{X}_k\\|_F^2\\\\\n=&-\\eta\\<\\nabla f(\\mathbf{X}_k),\\mathbf{P}_{k-1}\\frac{\\mathbf{M}_k'}{\\sqrt{\\mathbf{V}_k+\\varepsilon}}\\mathbf{Q}_{k-1}^T\\>+\\frac{L\\eta^2}{2}\\left\\|\\mathbf{P}_{k-1}\\frac{\\mathbf{M}_k'}{\\sqrt{\\mathbf{V}_k+\\varepsilon}}\\mathbf{Q}_{k-1}^T\\right\\|_F^2\\\\\n=&-\\eta\\<\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1},\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt{\\mathbf{V}_k+\\varepsilon}}\\>+\\frac{L\\eta^2}{2}\\left\\|\\mathbf{P}_{k-1}\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt{\\mathbf{V}_k+\\varepsilon}}\\mathbf{Q}_{k-1}^T\\right\\|_F^2\\\\\n\\overset{a}=&-\\eta\\<\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}},\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\>+\\frac{L\\eta^2}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\\\\n\\leq&-\\eta\\<\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}},\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\>+\\frac{L\\eta^2}{2\\sqrt{\\varepsilon}}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\\\\n=&-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\\\\n&+\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}-\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2+\\frac{L\\eta^2}{2\\sqrt{\\varepsilon}}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\\\\n\\overset{b}\\leq&-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2-\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2+\\frac{\\eta}{2\\sqrt{\\varepsilon}}\\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}-\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}\\right\\|_F^2\\\\\n\\overset{c}=&-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2-\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2+\\frac{\\eta}{2\\sqrt{\\varepsilon}}\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2,\n\\end{aligned}\n\\end{eqnarray}\nwhere we use the fact that $\\|\\cdot\\|_F$ is a unitarily invariant norm such that $\\|\\mathbf{P}\\mathbf{A}\\mathbf{Q}^T\\|_F=\\|\\mathbf{A}\\|_F$ for orthogonal matrices $\\mathbf{P}$ and $\\mathbf{Q}$ in $\\overset{a}=$ and $\\overset{c}=$, and let $\\eta\\leq\\frac{\\sqrt{\\varepsilon}}{2L}$ in $\\overset{b}\\leq$. Taking expectation on both sides of (\\ref{equ1}) with respect to $\\zeta_k$ conditioned on $\\mathcal{F}_{k-1}$, multiplying both sides of (\\ref{GM-dif-equ}) by $\\frac{\\eta}{2\\sqrt{\\varepsilon}(1-\\theta)}$, and adding to (\\ref{equ1}), we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ3}\n&\\mathbb{E}_k\\left[f(\\mathbf{X}_{k+1})-f^*+\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2+\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]\\\\\n\\leq&f(\\mathbf{X}_k)-f^*-\\frac{\\eta}{2}\\mathbb{E}_k\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]\\\\\n& +\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2+ \\frac{L^2\\eta^3}{2\\varepsilon(1-\\theta)^2}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + \\frac{\\eta(1-\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}}\\\\\n\\leq&f(\\mathbf{X}_k)-f^*-\\frac{\\eta}{2}\\mathbb{E}_k\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]\\\\\n& +\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2+ \\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + \\frac{\\eta(1-\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}},\n\\end{aligned}\n\\end{eqnarray}\nwhere we let $\\eta^2\\leq\\frac{\\varepsilon(1-\\theta)^2}{2L^2} $ in the last inequality. Define \n\\begin{eqnarray}\n\\begin{aligned}\\label{wide-v-def}\n\\widetilde \\mathbf{V}_k=\\beta\\mathbf{V}_{k-1}+(1-\\beta)\\left(\\left(\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right)^2+\\sigma_{op}^2\\right).\n\\end{aligned}\n\\end{eqnarray}\nSince $\\mathbf{P}_{k-1}$ and $\\mathbf{Q}_{k-1}$ are not random variables given $\\mathcal{F}_{k-1}$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ2}\n&\\mathbb{E}_k\\left[\\left|\\mathbf{P}_{k-1,:,i}^T\\mathbf{G}_k\\mathbf{Q}_{k-1,:,j}\\right|^2\\big| \\mathcal{F}_{k-1}\\right]\\\\\n\\overset{d}=&\\mathbb{E}_k\\left[\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\left|\\mathbf{P}_{k-1,:,i}^T\\left(\\nabla f(\\mathbf{X}_k)-\\mathbf{G}_k\\right)\\mathbf{Q}_{k-1,:,j}\\right|^2\\Big|\\mathcal{F}_{k-1}\\right]\\\\\n\\overset{e}\\leq&\\mathbb{E}_k\\left[\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{G}_k\\right\\|_{op}^2\\Big|\\mathcal{F}_{k-1}\\right]\\\\\n=&\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{G}_k\\right\\|_{op}^2\\Big|\\mathcal{F}_{k-1}\\right]\\\\\n\\overset{f}\\leq&\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\sigma_{op}^2, \n\\end{aligned}\n\\end{eqnarray}\nwhere we use Assumption 2 in $\\overset{d}=$, $\\<\\mathbf{x},\\mathbf{y}\\>\\leq\\|\\mathbf{x}\\|\\|\\mathbf{y}\\|$, $\\|\\mathbf{A}\\mathbf{x}\\|\\leq\\|\\mathbf{A}\\|_{op}\\|\\mathbf{x}\\|$, $\\|\\mathbf{P}_{k-1,:,i}\\|=1$, and $\\|\\mathbf{Q}_{k-1,:,j}\\|=1$ in $\\overset{e}\\leq$, and Assumption 3 in $\\overset{f}\\leq$. From the concavity of $\\sqrt{x}$ and $-\\frac{1}{\\sqrt{x}}$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\mathbb{E}_k\\left[\\sqrt{\\mathbf{V}_{k,i,j}+\\varepsilon}\\big| \\mathcal{F}_{k-1}\\right]\\leq& \\sqrt{\\mathbb{E}_k\\left[\\mathbf{V}_{k,i,j}\\big| \\mathcal{F}_{k-1}\\right]+\\varepsilon}\\\\\n=&\\sqrt{\\beta\\mathbf{V}_{k-1,i,j}+(1-\\beta)\\mathbb{E}_k\\left[\\left|\\mathbf{P}_{k-1,:,i}^T\\mathbf{G}_k\\mathbf{Q}_{k-1,:,j}\\right|^2\\big| \\mathcal{F}_{k-1}\\right]+\\varepsilon}\\\\\n\\leq&\\sqrt{\\beta\\mathbf{V}_{k-1,i,j}+(1-\\beta)\\left(\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\sigma_{op}^2\\right)+\\varepsilon}\\\\\n=&\\sqrt{\\widetilde \\mathbf{V}_{k,i,j}+\\varepsilon}\n\\end{aligned}\n\\end{eqnarray}\nand\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\mathbb{E}_k\\left[-\\frac{\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2}{\\sqrt{\\mathbf{V}_{k,i,j}+\\varepsilon}}\\big| \\mathcal{F}_{k-1}\\right]\\leq -\\frac{\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2}{\\sqrt{\\mathbb{E}_k\\left[\\mathbf{V}_{k,i,j}\\big| \\mathcal{F}_{k-1}\\right]+\\varepsilon}}= -\\frac{\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2}{\\sqrt{\\widetilde \\mathbf{V}_{k,i,j}+\\varepsilon}}.\n\\end{aligned}\n\\end{eqnarray}\nPlugging into (\\ref{equ1}) and (\\ref{equ3}), we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ4}\n&\\mathbb{E}_k\\left[f(\\mathbf{X}_{k+1})\\big| \\mathcal{F}_{k-1}\\right]-f(\\mathbf{X}_k)\\\\\n\\leq&-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2-\\frac{\\eta}{4}\\mathbb{E}_k\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]+\\frac{\\eta}{2\\sqrt{\\varepsilon}}\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]\n\\end{aligned}\n\\end{eqnarray}\nand\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ5}\n&\\mathbb{E}_k\\left[f(\\mathbf{X}_{k+1})-f^*+\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2+\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]\\\\\n\\leq&f(\\mathbf{X}_k)-f^*-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\\\\n& +\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2+ \\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + \\frac{\\eta(1-\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}}.\n\\end{aligned}\n\\end{eqnarray}\nTaking expectation with respect to $\\mathcal{F}_{k-1}$ and summing (\\ref{equ4}) with $k=1$ and (\\ref{equ5}) over $k=2,3,\\cdots,K$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ6}\n&\\mathbb{E}_{\\mathcal{F}_K}\\left[f(\\mathbf{X}_{K+1})-f^*+\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\nabla f(\\mathbf{X}_K)-\\mathbf{M}_K\\right\\|_F^2+\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{K-1}^T\\mathbf{M}_K\\mathbf{Q}_{K-1}}{\\sqrt[4]{\\mathbf{V}_K+\\varepsilon}}\\right\\|_F^2\\right]\\\\\n\\leq&f(\\mathbf{X}_1)-f^*-\\frac{\\eta}{2}\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right]\\\\\n& +\\left(\\frac{\\eta}{2\\sqrt{\\varepsilon}}+\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\right)\\mathbb{E}_{\\mathcal{F}_1}\\left[\\left\\|\\mathbf{M}_1-\\nabla f(\\mathbf{X}_1)\\right\\|_F^2\\right]+ \\frac{(K-1)\\eta(1-\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}}\\\\\n=&f(\\mathbf{X}_1)\\hspace*{-0.05cm}-\\hspace*{-0.05cm}f^*\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\frac{\\eta}{2}\\hspace*{-0.05cm}\\sum_{k=1}^K\\hspace*{-0.05cm}\\mathbb{E}_{\\mathcal{F}_{k-1}}\\hspace*{-0.15cm}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right] \\hspace*{-0.1cm}+\\hspace*{-0.05cm}\\frac{\\eta}{2\\sqrt{\\varepsilon}(1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta)}\\mathbb{E}_{\\mathcal{F}_1}\\hspace*{-0.15cm}\\left[\\left\\|\\mathbf{M}_1\\hspace*{-0.1cm}-\\hspace*{-0.1cm}\\nabla f(\\mathbf{X}_1)\\right\\|_F^2\\right]\\hspace*{-0.05cm}+\\hspace*{-0.05cm} \\frac{(\\hspace*{-0.05cm}K\\hspace*{-0.05cm}-\\hspace*{-0.05cm}1)\\eta(1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}}.\\hspace*{-0.65cm}\n\\end{aligned}\n\\end{eqnarray}\nAs the gradient is $L$-Lipschitz, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&f^*\\leq f\\left(\\mathbf{X}-\\frac{1}{L}\\nabla f(\\mathbf{X})\\right)\\leq f(\\mathbf{X})-\\frac{1}{L}\\<\\nabla f(\\mathbf{X}),\\nabla f(\\mathbf{X})\\>+\\frac{L}{2}\\left\\|\\frac{1}{L}\\nabla f(\\mathbf{X})\\right\\|_F^2=f(\\mathbf{X})-\\frac{1}{2L}\\left\\|\\nabla f(\\mathbf{X})\\right\\|_F^2.\n\\end{aligned}\n\\end{eqnarray}\nUsing the recursion of $\\mathbf{M}_1$ and $\\mathbf{M}_0=\\0$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\mathbb{E}_{\\mathcal{F}_1}\\left[\\left\\|\\nabla f(\\mathbf{X}_1)-\\mathbf{M}_1\\right\\|_F^2\\right]=&\\mathbb{E}_{\\mathcal{F}_1}\\left[\\left\\|\\theta\\nabla f(\\mathbf{X}_1)+(1-\\theta)\\left(\\nabla f(\\mathbf{X}_1)-\\mathbf{G}_1\\right)\\right\\|_F^2\\right]\\\\\n=&\\theta^2\\left\\|\\nabla f(\\mathbf{X}_1)\\right\\|_F^2+(1-\\theta)^2\\mathbb{E}_{\\mathcal{F}_1}\\left[\\left\\|\\nabla f(\\mathbf{X}_1)-\\mathbf{G}_1\\right\\|_F^2\\right]\\\\\n\\leq& 2L\\left(f(\\mathbf{X}_1)-f^*\\right) + (1-\\theta)^2\\sigma_F^2.\n\\end{aligned}\n\\end{eqnarray}\nPlugging into (\\ref{equ6}), we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&\\mathbb{E}_{\\mathcal{F}_K}\\left[f(\\mathbf{X}_{K+1})-f^*+\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\nabla f(\\mathbf{X}_K)-\\mathbf{M}_K\\right\\|_F^2+\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{K-1}^T\\mathbf{M}_K\\mathbf{Q}_{K-1}}{\\sqrt[4]{\\mathbf{V}_K+\\varepsilon}}\\right\\|_F^2\\right]\\\\\n\\leq&f(\\mathbf{X}_1)-f^*-\\frac{\\eta}{2}\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right] +\\frac{L\\eta}{\\sqrt{\\varepsilon}(1-\\theta)}\\left(f(\\mathbf{X}_1)-f^*\\right)+ \\frac{K\\eta(1-\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}}\\\\\n\\leq&f(\\mathbf{X}_1)-f^*-\\frac{\\eta}{2}\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right] +\\frac{L\\eta}{\\sqrt{\\varepsilon}(1-\\theta)}\\left(f(\\mathbf{X}_1)-f^*\\right)+ \\frac{K\\eta(1-\\theta)\\hat\\sigma_F^2}{2\\sqrt{\\varepsilon}},\n\\end{aligned}\n\\end{eqnarray}\nwhere we denote $\\hat\\sigma_F^2=\\max\\left\\{\\sigma_F^2,\\frac{L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\gamma^2}\\right\\}$ with any $\\gamma\\in(0,1]$. So we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right]\\leq&\\frac{2}{\\eta}\\left(f(\\mathbf{X}_1)-f^*\\right) +\\frac{2L}{\\sqrt{\\varepsilon}(1-\\theta)}\\left(f(\\mathbf{X}_1)-f^*\\right)+ \\frac{K(1-\\theta)\\hat\\sigma_F^2}{\\sqrt{\\varepsilon}}\\\\\n=&7\\sqrt{\\frac{K\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{\\varepsilon}}\n\\end{aligned}\n\\end{eqnarray}\nby letting $1-\\theta=\\sqrt{\\frac{L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\hat\\sigma_F^2}}$ and $\\eta=\\sqrt{\\frac{\\varepsilon\\left(f(\\mathbf{X}_1)-f^*\\right)}{4LK\\hat\\sigma_F^2}}$, which also satisfies $\\eta\\leq\\frac{\\sqrt{\\varepsilon}}{2L}$ and $\\eta^2\\leq\\frac{\\varepsilon(1-\\theta)^2}{4L^2}\\leq\\frac{\\varepsilon(1-\\theta)^2}{2L^2}$. Using Holder's inequality and Lemma \\ref{second-moment-lemma}, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&\\left(\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right\\|_1\\right]\\right)^2=\\left(\\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|\\right]\\right)^2\\\\\n\\leq&\\left(\\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\frac{\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{k,i,j}+\\varepsilon}}\\right]\\right)\\left(\\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\sqrt{\\widetilde\\mathbf{V}_{k,i,j}+\\varepsilon}\\right]\\right)\\\\\n\\leq&\\left(\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_t)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right]\\right)\\left(Kmn\\sqrt{\\sigma_{op}^2+\\varepsilon}+2\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right]\\right)\\\\\n\\leq&\\left(7\\sqrt{\\frac{K\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{\\varepsilon}}\\right)\\left(Kmn\\sqrt{\\sigma_{op}^2+\\varepsilon}+14\\sqrt{\\frac{K\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{\\varepsilon}}\\right)\n\\end{aligned}\n\\end{eqnarray}\nand\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\frac{1}{K}\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right\\|_1\\right]\n\\leq&10\\sqrt{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\varepsilon}}+\\sqrt{7mn}\\sqrt[4]{\\left(\\sigma_{op}^2+\\varepsilon\\right)\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\varepsilon}}\\\\\n=&10\\sqrt{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\sigma_{op}^2}}+4\\sqrt{mn}\\sqrt[4]{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K}}\n\\end{aligned}\n\\end{eqnarray}\nby letting $\\varepsilon=\\sigma_{op}^2$. From Lemma \\ref{nuclear-l1-norms}, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right\\|_1\\geq \\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right\\|_*=\\left\\|\\nabla f(\\mathbf{X}_k)\\right\\|_*,\n\\end{aligned}\n\\end{eqnarray}\nwhere we use the fact that nuclear norm is the unitarily invariant norm in the last equation."
+      "source_latex": "As the gradient is $L$-Lipschitz, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ1}\n&f(\\mathbf{X}_{k+1})-f(\\mathbf{X}_k)\\\\\n\\leq&\\<\\nabla f(\\mathbf{X}_k),\\mathbf{X}_{k+1}-\\mathbf{X}_k\\>+\\frac{L}{2}\\|\\mathbf{X}_{k+1}-\\mathbf{X}_k\\|_F^2\\\\\n=&-\\eta\\<\\nabla f(\\mathbf{X}_k),\\mathbf{P}_{k-1}\\frac{\\mathbf{M}_k'}{\\sqrt{\\mathbf{V}_k+\\varepsilon}}\\mathbf{Q}_{k-1}^T\\>+\\frac{L\\eta^2}{2}\\left\\|\\mathbf{P}_{k-1}\\frac{\\mathbf{M}_k'}{\\sqrt{\\mathbf{V}_k+\\varepsilon}}\\mathbf{Q}_{k-1}^T\\right\\|_F^2\\\\\n=&-\\eta\\<\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1},\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt{\\mathbf{V}_k+\\varepsilon}}\\>+\\frac{L\\eta^2}{2}\\left\\|\\mathbf{P}_{k-1}\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt{\\mathbf{V}_k+\\varepsilon}}\\mathbf{Q}_{k-1}^T\\right\\|_F^2\\\\\n\\overset{a}=&-\\eta\\<\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}},\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\>+\\frac{L\\eta^2}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\\\\n\\leq&-\\eta\\<\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}},\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\>+\\frac{L\\eta^2}{2\\sqrt{\\varepsilon}}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\\\\n=&-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\\\\n&+\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}-\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2+\\frac{L\\eta^2}{2\\sqrt{\\varepsilon}}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\\\\n\\overset{b}\\leq&-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2-\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2+\\frac{\\eta}{2\\sqrt{\\varepsilon}}\\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}-\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}\\right\\|_F^2\\\\\n\\overset{c}=&-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2-\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2+\\frac{\\eta}{2\\sqrt{\\varepsilon}}\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2,\n\\end{aligned}\n\\end{eqnarray}\nwhere we use the fact that $\\|\\cdot\\|_F$ is a unitarily invariant norm such that $\\|\\mathbf{P}\\mathbf{A}\\mathbf{Q}^T\\|_F=\\|\\mathbf{A}\\|_F$ for orthogonal matrices $\\mathbf{P}$ and $\\mathbf{Q}$ in $\\overset{a}=$ and $\\overset{c}=$, and let $\\eta\\leq\\frac{\\sqrt{\\varepsilon}}{2L}$ in $\\overset{b}\\leq$. Taking expectation on both sides of (\\ref{equ1}) with respect to $\\zeta_k$ conditioned on $\\mathcal{F}_{k-1}$, multiplying both sides of (\\ref{GM-dif-equ}) by $\\frac{\\eta}{2\\sqrt{\\varepsilon}(1-\\theta)}$, and adding to (\\ref{equ1}), we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ3}\n&\\mathbb{E}_k\\left[f(\\mathbf{X}_{k+1})-f^*+\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2+\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]\\\\\n\\leq&f(\\mathbf{X}_k)-f^*-\\frac{\\eta}{2}\\mathbb{E}_k\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]\\\\\n& +\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2+ \\frac{L^2\\eta^3}{2\\varepsilon(1-\\theta)^2}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + \\frac{\\eta(1-\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}}\\\\\n\\leq&f(\\mathbf{X}_k)-f^*-\\frac{\\eta}{2}\\mathbb{E}_k\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]\\\\\n& +\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2+ \\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + \\frac{\\eta(1-\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}},\n\\end{aligned}\n\\end{eqnarray}\nwhere we let $\\eta^2\\leq\\frac{\\varepsilon(1-\\theta)^2}{2L^2} $ in the last inequality. Define \n\\begin{eqnarray}\n\\begin{aligned}\\label{wide-v-def}\n\\widetilde \\mathbf{V}_k=\\beta\\mathbf{V}_{k-1}+(1-\\beta)\\left(\\left(\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right)^2+\\sigma_{op}^2\\right).\n\\end{aligned}\n\\end{eqnarray}\nSince $\\mathbf{P}_{k-1}$ and $\\mathbf{Q}_{k-1}$ are not random variables given $\\mathcal{F}_{k-1}$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ2}\n&\\mathbb{E}_k\\left[\\left|\\mathbf{P}_{k-1,:,i}^T\\mathbf{G}_k\\mathbf{Q}_{k-1,:,j}\\right|^2\\big| \\mathcal{F}_{k-1}\\right]\\\\\n\\overset{d}=&\\mathbb{E}_k\\left[\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\left|\\mathbf{P}_{k-1,:,i}^T\\left(\\nabla f(\\mathbf{X}_k)-\\mathbf{G}_k\\right)\\mathbf{Q}_{k-1,:,j}\\right|^2\\Big|\\mathcal{F}_{k-1}\\right]\\\\\n\\overset{e}\\leq&\\mathbb{E}_k\\left[\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{G}_k\\right\\|_{op}^2\\Big|\\mathcal{F}_{k-1}\\right]\\\\\n=&\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{G}_k\\right\\|_{op}^2\\Big|\\mathcal{F}_{k-1}\\right]\\\\\n\\overset{f}\\leq&\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\sigma_{op}^2, \n\\end{aligned}\n\\end{eqnarray}\nwhere we use Assumption 2 in $\\overset{d}=$, $\\<\\mathbf{x},\\mathbf{y}\\>\\leq\\|\\mathbf{x}\\|\\|\\mathbf{y}\\|$, $\\|\\mathbf{A}\\mathbf{x}\\|\\leq\\|\\mathbf{A}\\|_{op}\\|\\mathbf{x}\\|$, $\\|\\mathbf{P}_{k-1,:,i}\\|=1$, and $\\|\\mathbf{Q}_{k-1,:,j}\\|=1$ in $\\overset{e}\\leq$, and Assumption 3 in $\\overset{f}\\leq$. From the concavity of $\\sqrt{x}$ and $-\\frac{1}{\\sqrt{x}}$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\mathbb{E}_k\\left[\\sqrt{\\mathbf{V}_{k,i,j}+\\varepsilon}\\big| \\mathcal{F}_{k-1}\\right]\\leq& \\sqrt{\\mathbb{E}_k\\left[\\mathbf{V}_{k,i,j}\\big| \\mathcal{F}_{k-1}\\right]+\\varepsilon}\\\\\n=&\\sqrt{\\beta\\mathbf{V}_{k-1,i,j}+(1-\\beta)\\mathbb{E}_k\\left[\\left|\\mathbf{P}_{k-1,:,i}^T\\mathbf{G}_k\\mathbf{Q}_{k-1,:,j}\\right|^2\\big| \\mathcal{F}_{k-1}\\right]+\\varepsilon}\\\\\n\\leq&\\sqrt{\\beta\\mathbf{V}_{k-1,i,j}+(1-\\beta)\\left(\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2+\\sigma_{op}^2\\right)+\\varepsilon}\\\\\n=&\\sqrt{\\widetilde \\mathbf{V}_{k,i,j}+\\varepsilon}\n\\end{aligned}\n\\end{eqnarray}\nand\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\mathbb{E}_k\\left[-\\frac{\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2}{\\sqrt{\\mathbf{V}_{k,i,j}+\\varepsilon}}\\big| \\mathcal{F}_{k-1}\\right]\\leq -\\frac{\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2}{\\sqrt{\\mathbb{E}_k\\left[\\mathbf{V}_{k,i,j}\\big| \\mathcal{F}_{k-1}\\right]+\\varepsilon}}= -\\frac{\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2}{\\sqrt{\\widetilde \\mathbf{V}_{k,i,j}+\\varepsilon}}.\n\\end{aligned}\n\\end{eqnarray}\nPlugging into (\\ref{equ1}) and (\\ref{equ3}), we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ4}\n&\\mathbb{E}_k\\left[f(\\mathbf{X}_{k+1})\\big| \\mathcal{F}_{k-1}\\right]-f(\\mathbf{X}_k)\\\\\n\\leq&-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2-\\frac{\\eta}{4}\\mathbb{E}_k\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]+\\frac{\\eta}{2\\sqrt{\\varepsilon}}\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]\n\\end{aligned}\n\\end{eqnarray}\nand\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ5}\n&\\mathbb{E}_k\\left[f(\\mathbf{X}_{k+1})-f^*+\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2+\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\mathbf{M}_k\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\big| \\mathcal{F}_{k-1}\\right]\\\\\n\\leq&f(\\mathbf{X}_k)-f^*-\\frac{\\eta}{2}\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\\\\n& +\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2+ \\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + \\frac{\\eta(1-\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}}.\n\\end{aligned}\n\\end{eqnarray}\nTaking expectation with respect to $\\mathcal{F}_{k-1}$ and summing (\\ref{equ4}) with $k=1$ and (\\ref{equ5}) over $k=2,3,\\cdots,K$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{equ6}\n&\\mathbb{E}_{\\mathcal{F}_K}\\left[f(\\mathbf{X}_{K+1})-f^*+\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\nabla f(\\mathbf{X}_K)-\\mathbf{M}_K\\right\\|_F^2+\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{K-1}^T\\mathbf{M}_K\\mathbf{Q}_{K-1}}{\\sqrt[4]{\\mathbf{V}_K+\\varepsilon}}\\right\\|_F^2\\right]\\\\\n\\leq&f(\\mathbf{X}_1)-f^*-\\frac{\\eta}{2}\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right]\\\\\n& +\\left(\\frac{\\eta}{2\\sqrt{\\varepsilon}}+\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\right)\\mathbb{E}_{\\mathcal{F}_1}\\left[\\left\\|\\mathbf{M}_1-\\nabla f(\\mathbf{X}_1)\\right\\|_F^2\\right]+ \\frac{(K-1)\\eta(1-\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}}\\\\\n=&f(\\mathbf{X}_1)\\hspace*{-0.05cm}-\\hspace*{-0.05cm}f^*\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\frac{\\eta}{2}\\hspace*{-0.05cm}\\sum_{k=1}^K\\hspace*{-0.05cm}\\mathbb{E}_{\\mathcal{F}_{k-1}}\\hspace*{-0.15cm}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right] \\hspace*{-0.1cm}+\\hspace*{-0.05cm}\\frac{\\eta}{2\\sqrt{\\varepsilon}(1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta)}\\mathbb{E}_{\\mathcal{F}_1}\\hspace*{-0.15cm}\\left[\\left\\|\\mathbf{M}_1\\hspace*{-0.1cm}-\\hspace*{-0.1cm}\\nabla f(\\mathbf{X}_1)\\right\\|_F^2\\right]\\hspace*{-0.05cm}+\\hspace*{-0.05cm} \\frac{(\\hspace*{-0.05cm}K\\hspace*{-0.05cm}-\\hspace*{-0.05cm}1)\\eta(1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}}.\\hspace*{-0.65cm}\n\\end{aligned}\n\\end{eqnarray}\nAs the gradient is $L$-Lipschitz, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&f^*\\leq f\\left(\\mathbf{X}-\\frac{1}{L}\\nabla f(\\mathbf{X})\\right)\\leq f(\\mathbf{X})-\\frac{1}{L}\\<\\nabla f(\\mathbf{X}),\\nabla f(\\mathbf{X})\\>+\\frac{L}{2}\\left\\|\\frac{1}{L}\\nabla f(\\mathbf{X})\\right\\|_F^2=f(\\mathbf{X})-\\frac{1}{2L}\\left\\|\\nabla f(\\mathbf{X})\\right\\|_F^2.\n\\end{aligned}\n\\end{eqnarray}\nUsing the recursion of $\\mathbf{M}_1$ and $\\mathbf{M}_0=\\0$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\mathbb{E}_{\\mathcal{F}_1}\\left[\\left\\|\\nabla f(\\mathbf{X}_1)-\\mathbf{M}_1\\right\\|_F^2\\right]=&\\mathbb{E}_{\\mathcal{F}_1}\\left[\\left\\|\\theta\\nabla f(\\mathbf{X}_1)+(1-\\theta)\\left(\\nabla f(\\mathbf{X}_1)-\\mathbf{G}_1\\right)\\right\\|_F^2\\right]\\\\\n=&\\theta^2\\left\\|\\nabla f(\\mathbf{X}_1)\\right\\|_F^2+(1-\\theta)^2\\mathbb{E}_{\\mathcal{F}_1}\\left[\\left\\|\\nabla f(\\mathbf{X}_1)-\\mathbf{G}_1\\right\\|_F^2\\right]\\\\\n\\leq& 2L\\left(f(\\mathbf{X}_1)-f^*\\right) + (1-\\theta)^2\\sigma_F^2.\n\\end{aligned}\n\\end{eqnarray}\nPlugging into (\\ref{equ6}), we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&\\mathbb{E}_{\\mathcal{F}_K}\\left[f(\\mathbf{X}_{K+1})-f^*+\\frac{\\eta\\theta}{2\\sqrt{\\varepsilon}(1-\\theta)}\\left\\|\\nabla f(\\mathbf{X}_K)-\\mathbf{M}_K\\right\\|_F^2+\\frac{\\eta}{4}\\left\\|\\frac{\\mathbf{P}_{K-1}^T\\mathbf{M}_K\\mathbf{Q}_{K-1}}{\\sqrt[4]{\\mathbf{V}_K+\\varepsilon}}\\right\\|_F^2\\right]\\\\\n\\leq&f(\\mathbf{X}_1)-f^*-\\frac{\\eta}{2}\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right] +\\frac{L\\eta}{\\sqrt{\\varepsilon}(1-\\theta)}\\left(f(\\mathbf{X}_1)-f^*\\right)+ \\frac{K\\eta(1-\\theta)\\sigma_F^2}{2\\sqrt{\\varepsilon}}\\\\\n\\leq&f(\\mathbf{X}_1)-f^*-\\frac{\\eta}{2}\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right] +\\frac{L\\eta}{\\sqrt{\\varepsilon}(1-\\theta)}\\left(f(\\mathbf{X}_1)-f^*\\right)+ \\frac{K\\eta(1-\\theta)\\hat\\sigma_F^2}{2\\sqrt{\\varepsilon}},\n\\end{aligned}\n\\end{eqnarray}\nwhere we denote $\\hat\\sigma_F^2=\\max\\left\\{\\sigma_F^2,\\frac{L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\gamma^2}\\right\\}$ with any $\\gamma\\in(0,1]$. So we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right]\\leq&\\frac{2}{\\eta}\\left(f(\\mathbf{X}_1)-f^*\\right) +\\frac{2L}{\\sqrt{\\varepsilon}(1-\\theta)}\\left(f(\\mathbf{X}_1)-f^*\\right)+ \\frac{K(1-\\theta)\\hat\\sigma_F^2}{\\sqrt{\\varepsilon}}\\\\\n=&7\\sqrt{\\frac{K\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{\\varepsilon}}\n\\end{aligned}\n\\end{eqnarray}\nby letting $1-\\theta=\\sqrt{\\frac{L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\hat\\sigma_F^2}}$ and $\\eta=\\sqrt{\\frac{\\varepsilon\\left(f(\\mathbf{X}_1)-f^*\\right)}{4LK\\hat\\sigma_F^2}}$, which also satisfies $\\eta\\leq\\frac{\\sqrt{\\varepsilon}}{2L}$ and $\\eta^2\\leq\\frac{\\varepsilon(1-\\theta)^2}{4L^2}\\leq\\frac{\\varepsilon(1-\\theta)^2}{2L^2}$. Using Holder's inequality and Lemma \\ref{second-moment-lemma}, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&\\left(\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right\\|_1\\right]\\right)^2=\\left(\\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|\\right]\\right)^2\\\\\n\\leq&\\left(\\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\frac{\\left|\\mathbf{P}_{k-1,:,i}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\mathbf{V}_{k,i,j}+\\varepsilon}}\\right]\\right)\\left(\\sum_{k=1}^K\\sum_{i=1}^m\\sum_{j=1}^n\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\sqrt{\\widetilde\\mathbf{V}_{k,i,j}+\\varepsilon}\\right]\\right)\\\\\n\\leq&\\left(\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_t)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right]\\right)\\left(Kmn\\sqrt{\\sigma_{op}^2+\\varepsilon}+2\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\frac{\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}}{\\sqrt[4]{\\widetilde\\mathbf{V}_k+\\varepsilon}}\\right\\|_F^2\\right]\\right)\\\\\n\\leq&\\left(7\\sqrt{\\frac{K\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{\\varepsilon}}\\right)\\left(Kmn\\sqrt{\\sigma_{op}^2+\\varepsilon}+14\\sqrt{\\frac{K\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{\\varepsilon}}\\right)\n\\end{aligned}\n\\end{eqnarray}\nand\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\frac{1}{K}\\sum_{k=1}^K\\mathbb{E}_{\\mathcal{F}_{k-1}}\\left[\\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right\\|_1\\right]\n\\leq&10\\sqrt{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\varepsilon}}+\\sqrt{7mn}\\sqrt[4]{\\left(\\sigma_{op}^2+\\varepsilon\\right)\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\varepsilon}}\\\\\n=&10\\sqrt{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K\\sigma_{op}^2}}+4\\sqrt{mn}\\sqrt[4]{\\frac{\\hat\\sigma_F^2L\\left(f(\\mathbf{X}_1)-f^*\\right)}{K}}\n\\end{aligned}\n\\end{eqnarray}\nby letting $\\varepsilon=\\sigma_{op}^2$. From Lemma \\ref{nuclear-l1-norms}, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right\\|_1\\geq \\left\\|\\mathbf{P}_{k-1}^T\\nabla f(\\mathbf{X}_k)\\mathbf{Q}_{k-1}\\right\\|_*=\\left\\|\\nabla f(\\mathbf{X}_k)\\right\\|_*,\n\\end{aligned}\n\\end{eqnarray}\nwhere we use the fact that nuclear norm is the unitarily invariant norm in the last equation.",
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "omega",
+        "file_body_preview": "sorry\n\n-- [theorem] momentum-bound-lemma\n-- Statement (LaTeX): Suppose that Assumptions 1-3 hold. Then for Algorithm , w",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "momentum_bound_lemma",
       "lean_file": "/home/projectx/BDDM/output/2604.21616.lean",
       "lean_statement": "theorem momentum_bound_lemma (theta L eta sigma_F : ℝ)\n    (htheta : 0 < theta ∧ theta < 1) (hL : 0 < L) (heta : 0 < eta) (hsigma : 0 ≤ sigma_F)\n    (gradf M_k M_k1 : ℝ) :\n  ∃ C : ℝ, 0 < C ∧\n    |gradf - M_k| ^ 2 ≤ theta * |M_k1 - gradf| ^ 2 + C * eta ^ 2 * |M_k1| ^ 2 +\n    (1 - theta) ^ 2 * sigma_F ^ 2 := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -569,17 +589,17 @@
           "splus-2025-nips"
         ]
       },
-      "proof_text": "omega",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 9.86,
       "timestamp": "2026-05-09T20:00:41Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": false,
@@ -598,11 +618,13 @@
         "translation_fidelity_ok",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_bd2ea8a1819736e1e255e357",
@@ -700,16 +722,24 @@
         "paper_definition_stub:sigma_F",
         "paper_definition_stub:theta"
       ],
-      "source_latex": "\\label{momentum-bound-lemma}\nSuppose that Assumptions 1-3 hold. Then for Algorithm \\ref{gsoap}, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{GM-dif-equ}\n&\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n\\leq&\\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{(1-\\theta)\\sqrt{\\varepsilon}}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2.\n\\end{aligned}\n\\end{eqnarray}"
+      "source_latex": "\\label{momentum-bound-lemma}\nSuppose that Assumptions 1-3 hold. Then for Algorithm \\ref{gsoap}, we have\n\\begin{eqnarray}\n\\begin{aligned}\\label{GM-dif-equ}\n&\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n\\leq&\\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{(1-\\theta)\\sqrt{\\varepsilon}}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2.\n\\end{aligned}\n\\end{eqnarray}",
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "omega",
+        "file_body_preview": "sorry\n\n-- [theorem] proof_4\n-- Statement (LaTeX): Denoting $_k=_k- f(_k)$, we have $_k[_k|_{k-1}]=0$ and $_k[\\|_k\\|_F^2|",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "proof_4",
       "lean_file": "/home/projectx/BDDM/output/2604.21616.lean",
       "lean_statement": "-- Source claim excerpt: Denoting $\\Gamma_k=\\mathbf{G}_k-\\nabla f(\\mathbf{X}_k)$, we have $\\mathbb{E}_k\\left[\\Gamma_k\\big|\\mathcal{F}_{k-1}\\right]=0$ and $\\mathbb{E}_k\\left[\\left\\|\\Gamma_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\leq\\sigma_F^2$. From the update of $\\mathbf{M}_k$, we have \\begin{eqnarray} \\begin{aligned}\\notag \\mathbf{M}_k-\\nabla f(\\mathbf{X}_k)=& \\theta \\mathbf{M}_{k-1} + (1-\\theta)\\mathbf{G}_k - \\nabla f(\\mathbf{X}_k)\\\\ =& \\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) + (1-\\theta)\\left(\\nabla f(\\mathbf{X}_k)+\\Gamma_k\\right) - \\nabla f(\\mathbf{X}_k) + \\theta\\nabla f(\\mathbf{X}_{k-1})\\\\ =& \\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) + (1-\\theta)\\Gamma_k - \\theta\\left(\\nabla f(\\mathbf{X}_k)-\\nabla f(\\mathbf{X}_{k-1})\\right) \\end{aligned} \\end{eqnarray} and \\begin{eqnarray} \\begin{aligned}\\notag &\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\r...\ntheorem proof_4 :\n  ∃ C : ℝ, 0 ≤ C := by\n  sorry",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=assumptions_grounded,translation_fidelity_ok,dependency_trust_complete,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -772,17 +802,17 @@
           "splus-2025-nips"
         ]
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 36.95,
       "timestamp": "2026-05-09T20:01:26Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": false,
         "provenance_linked": true,
         "translation_fidelity_ok": false,
@@ -802,11 +832,14 @@
         "dependency_trust_complete",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "lean_proof_closed",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_4868811d33dc7d77fa23647f",
@@ -917,7 +950,15 @@
         "paper_definition_stub:sigma_F",
         "paper_definition_stub:theta"
       ],
-      "source_latex": "Denoting $\\Gamma_k=\\mathbf{G}_k-\\nabla f(\\mathbf{X}_k)$, we have $\\mathbb{E}_k\\left[\\Gamma_k\\big|\\mathcal{F}_{k-1}\\right]=0$ and $\\mathbb{E}_k\\left[\\left\\|\\Gamma_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\leq\\sigma_F^2$. From the update of $\\mathbf{M}_k$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\mathbf{M}_k-\\nabla f(\\mathbf{X}_k)=& \\theta \\mathbf{M}_{k-1} + (1-\\theta)\\mathbf{G}_k - \\nabla f(\\mathbf{X}_k)\\\\\n=& \\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) + (1-\\theta)\\left(\\nabla f(\\mathbf{X}_k)+\\Gamma_k\\right) - \\nabla f(\\mathbf{X}_k) + \\theta\\nabla f(\\mathbf{X}_{k-1})\\\\\n=& \\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) + (1-\\theta)\\Gamma_k - \\theta\\left(\\nabla f(\\mathbf{X}_k)-\\nabla f(\\mathbf{X}_{k-1})\\right)\n\\end{aligned}\n\\end{eqnarray}\nand\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n=&\\left\\|\\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) - \\theta\\left(\\nabla f(\\mathbf{X}_k)-\\nabla f(\\mathbf{X}_{k-1})\\right)\\right\\|_F^2 + (1-\\theta)^2\\mathbb{E}_k\\left[\\left\\|\\Gamma_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n\\leq& \\theta^2\\hspace*{-0.05cm}\\left(\\hspace*{-0.05cm}1\\hspace*{-0.05cm}+\\hspace*{-0.05cm}\\frac{1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta}{\\theta}\\right)\\hspace*{-0.05cm}\\left\\|\\mathbf{M}_{k-1}\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 \\hspace*{-0.05cm}+\\hspace*{-0.05cm} \\theta^2\\hspace*{-0.05cm}\\left(\\hspace*{-0.05cm}1\\hspace*{-0.05cm}+\\hspace*{-0.05cm}\\frac{\\theta}{1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta}\\right)\\hspace*{-0.05cm}\\left\\|\\nabla f(\\mathbf{X}_k)\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 \\hspace*{-0.05cm}+\\hspace*{-0.05cm} (1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta)^2\\mathbb{E}_k\\hspace*{-0.05cm}\\left[\\left\\|\\Gamma_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n\\leq& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{1}{1-\\theta}\\left\\|\\nabla f(\\mathbf{X}_k)-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n\\leq& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2}{1-\\theta}\\left\\|\\mathbf{X}_k-\\mathbf{X}_{k-1}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n=& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{1-\\theta}\\left\\|\\mathbf{P}_{k-2}\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt{\\mathbf{V}_{k-1}+\\varepsilon}}\\mathbf{Q}_{k-2}^T\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n=& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{1-\\theta}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n\\leq& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{(1-\\theta)\\sqrt{\\varepsilon}}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2.\n\\end{aligned}\n\\end{eqnarray}"
+      "source_latex": "Denoting $\\Gamma_k=\\mathbf{G}_k-\\nabla f(\\mathbf{X}_k)$, we have $\\mathbb{E}_k\\left[\\Gamma_k\\big|\\mathcal{F}_{k-1}\\right]=0$ and $\\mathbb{E}_k\\left[\\left\\|\\Gamma_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\leq\\sigma_F^2$. From the update of $\\mathbf{M}_k$, we have\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n\\mathbf{M}_k-\\nabla f(\\mathbf{X}_k)=& \\theta \\mathbf{M}_{k-1} + (1-\\theta)\\mathbf{G}_k - \\nabla f(\\mathbf{X}_k)\\\\\n=& \\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) + (1-\\theta)\\left(\\nabla f(\\mathbf{X}_k)+\\Gamma_k\\right) - \\nabla f(\\mathbf{X}_k) + \\theta\\nabla f(\\mathbf{X}_{k-1})\\\\\n=& \\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) + (1-\\theta)\\Gamma_k - \\theta\\left(\\nabla f(\\mathbf{X}_k)-\\nabla f(\\mathbf{X}_{k-1})\\right)\n\\end{aligned}\n\\end{eqnarray}\nand\n\\begin{eqnarray}\n\\begin{aligned}\\notag\n&\\mathbb{E}_k\\left[\\left\\|\\nabla f(\\mathbf{X}_k)-\\mathbf{M}_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n=&\\left\\|\\theta \\left(\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right) - \\theta\\left(\\nabla f(\\mathbf{X}_k)-\\nabla f(\\mathbf{X}_{k-1})\\right)\\right\\|_F^2 + (1-\\theta)^2\\mathbb{E}_k\\left[\\left\\|\\Gamma_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n\\leq& \\theta^2\\hspace*{-0.05cm}\\left(\\hspace*{-0.05cm}1\\hspace*{-0.05cm}+\\hspace*{-0.05cm}\\frac{1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta}{\\theta}\\right)\\hspace*{-0.05cm}\\left\\|\\mathbf{M}_{k-1}\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 \\hspace*{-0.05cm}+\\hspace*{-0.05cm} \\theta^2\\hspace*{-0.05cm}\\left(\\hspace*{-0.05cm}1\\hspace*{-0.05cm}+\\hspace*{-0.05cm}\\frac{\\theta}{1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta}\\right)\\hspace*{-0.05cm}\\left\\|\\nabla f(\\mathbf{X}_k)\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 \\hspace*{-0.05cm}+\\hspace*{-0.05cm} (1\\hspace*{-0.05cm}-\\hspace*{-0.05cm}\\theta)^2\\mathbb{E}_k\\hspace*{-0.05cm}\\left[\\left\\|\\Gamma_k\\right\\|_F^2\\big|\\mathcal{F}_{k-1}\\right]\\\\\n\\leq& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{1}{1-\\theta}\\left\\|\\nabla f(\\mathbf{X}_k)-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n\\leq& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2}{1-\\theta}\\left\\|\\mathbf{X}_k-\\mathbf{X}_{k-1}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n=& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{1-\\theta}\\left\\|\\mathbf{P}_{k-2}\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt{\\mathbf{V}_{k-1}+\\varepsilon}}\\mathbf{Q}_{k-2}^T\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n=& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{1-\\theta}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2\\\\\n\\leq& \\theta\\left\\|\\mathbf{M}_{k-1}-\\nabla f(\\mathbf{X}_{k-1})\\right\\|_F^2 + \\frac{L^2\\eta^2}{(1-\\theta)\\sqrt{\\varepsilon}}\\left\\|\\frac{\\mathbf{P}_{k-2}^T\\mathbf{M}_{k-1}\\mathbf{Q}_{k-2}}{\\sqrt[4]{\\mathbf{V}_{k-1}+\\varepsilon}}\\right\\|_F^2 + (1-\\theta)^2\\sigma_F^2.\n\\end{aligned}\n\\end{eqnarray}",
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n-- [theorem] second-moment-lemma\n-- Statement (LaTeX): Suppose that Assumptions 2-3 hold. Let $0< 1$ and $_0=\\0$.",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "second_moment_lemma",
@@ -1292,10 +1333,10 @@
       "theorem_name": "nuclear_l1_norms",
       "lean_file": "/home/projectx/BDDM/output/2604.21616.lean",
       "lean_statement": "theorem nuclear_l1_norms {m n : ℕ} (A : Matrix (Fin m) (Fin n) ℝ) :\n  nuclearNorm A ≤ l1MatrixNorm A :=\n  nuclearNorm_le_l1MatrixNorm A",
-      "status": "AXIOM_BACKED",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "false_or_ambiguous_statement",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,step_verdict_verified",
       "promotion_gate_passed": false,
@@ -1333,11 +1374,11 @@
           "splus-2025-nips"
         ]
       },
-      "proof_text": "nuclearNorm_le_l1MatrixNorm A",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "translation_repaired_pending_proof:regenerate_explicit_structured_statement,source_grounded_statement_body",
       "proof_mode": "full-draft",
-      "proof_method": "domain_axiom",
+      "proof_method": "unattempted",
       "rounds_used": 0,
       "time_s": 0.0,
       "timestamp": "2026-04-27T09:47:42Z",
@@ -1369,7 +1410,8 @@
         "claim_equivalent:hybrid",
         "semantic_equivalence:verified",
         "claim_equivalence_adjudicated:equivalent",
-        "claim_equivalence_blocked:requires_human_for_release"
+        "claim_equivalence_blocked:requires_human_for_release",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_409d4e6735de82d403b80c68",
@@ -1602,7 +1644,14 @@
       ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "\\label{nuclear-l1-norms}\nFor any matrix $\\mathbf{A}$, we have $\\|\\mathbf{A}\\|_*\\leq \\|\\mathbf{A}\\|_1$."
+      "source_latex": "\\label{nuclear-l1-norms}\nFor any matrix $\\mathbf{A}$, we have $\\|\\mathbf{A}\\|_*\\leq \\|\\mathbf{A}\\|_1$.",
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "nuclearNorm_le_l1MatrixNorm A",
+        "file_body_preview": "sorry\n\n-- [theorem] proof_8\n-- Statement (LaTeX): Let $_i$ denote the $i$-th standard basis vector. \\|\\|_*=\\|_{i,j}_{ij}",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "proof_8",

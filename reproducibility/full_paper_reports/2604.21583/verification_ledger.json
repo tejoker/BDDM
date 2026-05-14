@@ -7107,10 +7107,10 @@
       "theorem_name": "rem_HF0_main_input",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_rem_HF0_main_input.lean",
       "lean_statement": "theorem rem_HF0_main_input : False := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence",
       "promotion_gate_passed": false,
@@ -7161,17 +7161,17 @@
           "ZZ15"
         ]
       },
-      "proof_text": "apply?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 56.35,
       "timestamp": "2026-05-09T20:39:35Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -7187,11 +7187,14 @@
       },
       "gate_failures": [
         "claim_equivalent",
-        "independent_semantic_equivalence_evidence"
+        "independent_semantic_equivalence_evidence",
+        "lean_proof_closed",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "diagnostic",
       "paper_statement_id": "pstmt_4d38fe0b40d6f004c5e63a82",
@@ -7285,7 +7288,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "apply?",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] prop:shell-vanishing-local",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "prop_shell_vanishing_local",
@@ -8594,10 +8605,10 @@
       "theorem_name": "lem_shell_h_comm_local",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_lem_shell_h_comm_local.lean",
       "lean_statement": "theorem lem_shell_h_comm_local {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha]\n    {h : alpha → ℝ} {C Λ1 : ℝ} {A B : alpha → alpha} (hAB : Prop) (hℓ : ℓ ≠ 0) :\n    ∀ x : alpha, ‖(A (B x) - B (A x)) - (A (B x) - B (A x))‖ ≤ C * Λ1 ^ 2 * (1 : ℝ) := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -8689,17 +8700,17 @@
           "ZZ15"
         ]
       },
-      "proof_text": "apply?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 88.57,
       "timestamp": "2026-05-09T20:44:32Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -8716,11 +8727,14 @@
       "gate_failures": [
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "lean_proof_closed",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_698a5c969360d74ae4e60585",
@@ -8829,7 +8843,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "apply?",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] lem:shell-W-comm-local\n-- Statement (LaTeX): [Double commutator with $W_{0}^{ re",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "lem_shell_W_comm_local",
@@ -9181,10 +9203,10 @@
       "theorem_name": "prop_shell_mode_local",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_prop_shell_mode_local.lean",
       "lean_statement": "theorem prop_shell_mode_local : False := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence",
       "promotion_gate_passed": false,
@@ -9235,17 +9257,17 @@
           "ZZ15"
         ]
       },
-      "proof_text": "apply?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 64.68,
       "timestamp": "2026-05-09T20:45:54Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -9261,11 +9283,14 @@
       },
       "gate_failures": [
         "claim_equivalent",
-        "independent_semantic_equivalence_evidence"
+        "independent_semantic_equivalence_evidence",
+        "lean_proof_closed",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "diagnostic",
       "paper_statement_id": "pstmt_22ac635f0a00a953f797df43",
@@ -9359,7 +9384,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "apply?",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] cor:shell-summability-local\n-- Statement (LaTeX): [Weighted shell summability] {",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "cor_shell_summability_local",
@@ -9990,10 +10023,10 @@
       "theorem_name": "lem_Q1_number_fluctuation",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_lem_Q1_number_fluctuation.lean",
       "lean_statement": "theorem lem_Q1_number_fluctuation : False := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence",
       "promotion_gate_passed": false,
@@ -10044,17 +10077,17 @@
           "ZZ15"
         ]
       },
-      "proof_text": "apply?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 59.41,
       "timestamp": "2026-05-09T20:48:40Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -10070,11 +10103,14 @@
       },
       "gate_failures": [
         "claim_equivalent",
-        "independent_semantic_equivalence_evidence"
+        "independent_semantic_equivalence_evidence",
+        "lean_proof_closed",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "diagnostic",
       "paper_statement_id": "pstmt_1fa8f1b42d84fe00d1886c84",
@@ -10168,7 +10204,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "apply?",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] lem:Q1-tail-quantitative\n-- Statement (LaTeX): [Quantitative bound on the explic",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "lem_Q1_tail_quantitative",
@@ -15456,10 +15500,10 @@
       "theorem_name": "thm_free_energy_convergence_final",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_thm_free_energy_convergence_final.lean",
       "lean_statement": "theorem thm_free_energy_convergence_final {alpha : Type*} [MeasurableSpace alpha] {mu0 : Measure alpha}\n    {Z : ℝ → ℝ} {z_cl : ℝ} {D : alpha → ℝ} (hZ : ∀ lam, Z lam > 0) (hz_cl : z_cl > 0)\n    (hD : Measurable D) (hmu0 : mu0 (Set.univ) = 1)\n    (h_conv : Filter.Tendsto (fun lam => Z lam) (nhdsWithin (0 : ℝ) (Set.Ioi 0)) (nhds z_cl))\n    (hZ0 : Z 0 = z_cl) :\n    Filter.Tendsto (fun lam => -Real.log (Z lam / Z 0)) (nhdsWithin (0 : ℝ) (Set.Ioi 0)) (nhds (-Real.log z_cl)) := by\n  sorry\n",
-      "status": "AXIOM_BACKED",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -15551,17 +15595,17 @@
           "ZZ15"
         ]
       },
-      "proof_text": "apply?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 104.28,
       "timestamp": "2026-05-09T21:02:35Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -15576,14 +15620,17 @@
         "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "lean_proof_closed",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
         "equivalent_independent_semantic_evidence",
         "claim_equivalent:hybrid",
-        "semantic_equivalence:verified"
+        "semantic_equivalence:verified",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_27e2ca0963be2e972d16038f",
@@ -15739,7 +15786,15 @@
       "result_label": "proved_modulo_paper_local_axioms",
       "claim_scope": "Lean checked this result only after accepting the listed paper-local axioms/declarations; do not count it as an unconditional verified theorem.",
       "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": []
+      "paper_local_axiom_debt": [],
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "apply?",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] prop:weighted-lower-symbol\n-- Statement (LaTeX): [Weighted convergence of the lo",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "prop_weighted_lower_symbol",
@@ -17629,10 +17684,10 @@
       "theorem_name": "prop_HS_deFinetti_remainder_vanish",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_prop_HS_deFinetti_remainder_vanish.lean",
       "lean_statement": "theorem prop_HS_deFinetti_remainder_vanish (h1 : Prop) : (let Claim : Prop := h1; Claim) := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -17692,17 +17747,17 @@
           "ZZ15"
         ]
       },
-      "proof_text": "apply?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 72.89,
       "timestamp": "2026-05-09T21:06:13Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -17719,11 +17774,14 @@
       "gate_failures": [
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "lean_proof_closed",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_1c3333b154608ddc7100ccd0",
@@ -17826,7 +17884,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "apply?",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] lem:HS-full-norm-moment-mu\n-- Statement (LaTeX): For every fixed integer $m1$, _",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "lem_HS_full_norm_moment_mu",
@@ -21862,10 +21928,10 @@
       "theorem_name": "remark_22ℓ2",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_remark_22ℓ2.lean",
       "lean_statement": "theorem remark_22ℓ2 (k : ℤ × ℤ) (vbeta : ℤ × ℤ → ℝ) :\n    ∀ (r1 r2 u1 u2 : ℤ × ℤ), r1 = u2 + k → r2 = u1 - k →\n    (r1, r2, u1, u2) ∈ (Set.univ : Set ((ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ))) →\n    ∃ C : ℝ, C = |vbeta k| ^ 2 ∧\n    ∀ (f g : (ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ) → ℝ),\n    (∀ x, f x = 0 ∨ g x = 0) →\n    ∑' x, f x * g x = 0 := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -21885,17 +21951,17 @@
         "label": "remark_22ℓ2",
         "cited_refs": []
       },
-      "proof_text": "exact?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 72.16,
       "timestamp": "2026-05-09T20:38:24Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -21913,11 +21979,13 @@
         "lean_proof_closed",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_71d48229336aa952c2fa2ccc",
@@ -22012,7 +22080,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "exact?",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] rem:HF0-main-input\n-- Statement (LaTeX): % % This is the only genuinely new inpu",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "lem_convolution_kernels_2",

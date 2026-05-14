@@ -176,16 +176,52 @@ def _demote_entry(entry: dict[str, Any], *, captured: str, file_preview: str) ->
     entry["claim_equivalence_notes"] = list(dict.fromkeys(notes))
 
 
+_PROOF_CLAIMING_STATUSES: tuple[str, ...] = (
+    "FULLY_PROVEN",
+    "AXIOM_BACKED",
+    "INTERMEDIARY_PROVEN",
+)
+
+
+def _claims_lean_proof_closed(entry: dict[str, Any]) -> bool:
+    """A row claims its proof is closed if the validation_gates flag is True
+    OR the status is one of the proof-claiming tiers (FP/AB/IP) regardless of
+    the gate flag's stored value (the flag is the bypass we're trying to
+    catch — never trust it alone)."""
+    gates = entry.get("validation_gates", {})
+    if isinstance(gates, dict) and gates.get("lean_proof_closed") is True:
+        return True
+    status = str(entry.get("status", "") or "")
+    return status in _PROOF_CLAIMING_STATUSES
+
+
 def audit_ledger_entries(
     entries: list[dict[str, Any]],
     *,
     paper_id: str,
     lean_src: str,
+    statuses: tuple[str, ...] = ("FULLY_PROVEN",),
 ) -> AuditResult:
-    """Walk one ledger's entries; demote false FP rows in place. Returns AuditResult."""
+    """Walk one ledger's entries; demote rows that claim proof closure but
+    whose actual .lean file body is `sorry`. Returns AuditResult.
+
+    `statuses` controls which status tiers are audited. Default is just
+    FULLY_PROVEN (backward-compatible). Pass `_PROOF_CLAIMING_STATUSES`
+    (i.e., ('FULLY_PROVEN', 'AXIOM_BACKED', 'INTERMEDIARY_PROVEN')) to also
+    catch bypass-IPs and bypass-ABs — the same circular gate bypass that
+    inflated FP can inflate AB/IP. The AuditResult's `fp_*` fields are
+    misnamed in expanded mode (they count all audited rows, not just FP).
+    """
+    audit_set = set(statuses)
     result = AuditResult(paper_id=paper_id)
     for entry in entries:
-        if str(entry.get("status", "") or "") != "FULLY_PROVEN":
+        st = str(entry.get("status", "") or "")
+        if st not in audit_set:
+            continue
+        # In expanded-status mode we only audit rows that actually claim
+        # proof closure; non-claiming IP rows (e.g. status downgrade after
+        # a review-evidence-only promotion) are skipped.
+        if st != "FULLY_PROVEN" and not _claims_lean_proof_closed(entry):
             continue
         result.fp_pre += 1
         if _is_audited_core_row(entry):
@@ -234,18 +270,23 @@ def audit_ledger_file(
     *,
     paper_id: str,
     write: bool = False,
+    statuses: tuple[str, ...] = ("FULLY_PROVEN",),
 ) -> AuditResult:
     """Audit one ledger file against one Lean source file.
 
     Returns an AuditResult. Writes back to `ledger_path` only when
-    `write=True` AND at least one demotion occurred.
+    `write=True` AND at least one demotion occurred. `statuses` defaults to
+    just FULLY_PROVEN; pass the broader tuple to also audit AB/IP rows
+    whose stored `lean_proof_closed=True` flag came from the circular bypass.
     """
     if not ledger_path.exists() or not lean_path.exists():
         return AuditResult(paper_id=paper_id)
     data = json.loads(ledger_path.read_text(encoding="utf-8"))
     entries = data if isinstance(data, list) else data.get("entries", [])
     lean_src = lean_path.read_text(encoding="utf-8")
-    result = audit_ledger_entries(entries, paper_id=paper_id, lean_src=lean_src)
+    result = audit_ledger_entries(
+        entries, paper_id=paper_id, lean_src=lean_src, statuses=statuses,
+    )
     if write and result.demoted > 0:
         payload = data if isinstance(data, list) else {**data, "entries": entries}
         ledger_path.write_text(
@@ -262,12 +303,14 @@ def audit_paper(
     lean_dir: Path,
     repro_dir: Path,
     write: bool = False,
+    statuses: tuple[str, ...] = ("FULLY_PROVEN",),
 ) -> dict[str, Any]:
     """Audit both ephemeral and canonical ledgers for one paper.
 
     Both ledgers are audited against the SAME `output/<paper>.lean` file, so
     the demotion verdict is consistent across them. Returns a summary dict
-    suitable for JSON output.
+    suitable for JSON output. `statuses` defaults to just FULLY_PROVEN; pass
+    `_PROOF_CLAIMING_STATUSES` to also catch bypass-IPs and bypass-ABs.
     """
     lean_path = lean_dir / f"{paper_id}.lean"
     ephem = ledger_dir / f"{paper_id}.json"
@@ -280,7 +323,9 @@ def audit_paper(
         if not path.exists():
             out[label] = {"missing": True}
             continue
-        r = audit_ledger_file(path, lean_path, paper_id=paper_id, write=write)
+        r = audit_ledger_file(
+            path, lean_path, paper_id=paper_id, write=write, statuses=statuses,
+        )
         out[label] = {
             "path": str(path),
             "fp_pre": r.fp_pre,
@@ -328,7 +373,20 @@ def main() -> int:
         help="Specific paper IDs to audit (default: every canonical ledger)",
     )
     parser.add_argument("--write", action="store_true", help="Apply demotions; default is dry-run")
+    parser.add_argument(
+        "--include-ip-ab",
+        action="store_true",
+        help=(
+            "Also audit AXIOM_BACKED and INTERMEDIARY_PROVEN rows (the same "
+            "circular bypass that inflated FP can inflate AB/IP). Default OFF "
+            "for backward compat; turning ON gives a fuller integrity sweep."
+        ),
+    )
     args = parser.parse_args()
+
+    statuses: tuple[str, ...] = (
+        _PROOF_CLAIMING_STATUSES if args.include_ip_ab else ("FULLY_PROVEN",)
+    )
 
     paper_ids = args.papers if args.papers else _papers_from_ledger_dir(args.ledger_dir)
     summary: dict[str, Any] = {
@@ -337,6 +395,7 @@ def main() -> int:
         "lean_dir": str(args.lean_dir),
         "ledger_dir": str(args.ledger_dir),
         "repro_dir": str(args.repro_dir),
+        "audited_statuses": list(statuses),
         "papers": {},
     }
     totals = {"fp_pre": 0, "fp_post": 0, "demoted": 0, "audited_core_skipped": 0, "term_mode_skipped": 0, "validated_clean": 0}
@@ -347,6 +406,7 @@ def main() -> int:
             lean_dir=args.lean_dir,
             repro_dir=args.repro_dir,
             write=args.write,
+            statuses=statuses,
         )
         summary["papers"][pid] = result
         # Totals are computed from the canonical ledger when present, else

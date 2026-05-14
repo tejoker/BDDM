@@ -2412,10 +2412,10 @@
       "theorem_name": "Hardy",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
       "lean_statement": "theorem Hardy\n  {N : ℕ}\n  {f : ℝ × ℝ × ℝ → ℝ}\n  (hf : ContDiff ℝ ⊤ f)\n  (hf_support : f ≠ 0)\n  (Q : ℝ)\n  (hQ : Q > 2)\n  (psi : ℝ × ℝ × ℝ → ℝ)\n  (hpsi : psi = fun ξ => ‖(fderiv ℝ f ξ)‖ ^ 2) :\n  ∫ ξ : ℝ × ℝ × ℝ, (f ξ) ^ 2 / ‖ξ‖ ^ 2 * psi ξ ≤ (2 / (Q - 2)) ^ 2 * ∫ ξ : ℝ × ℝ × ℝ, ‖(fderiv ℝ f ξ)‖ ^ 2 := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -2516,17 +2516,17 @@
           "non-markov"
         ]
       },
-      "proof_text": "omega",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 12.83,
       "timestamp": "2026-05-09T20:01:18Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": false,
@@ -2545,11 +2545,13 @@
         "translation_fidelity_ok",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_4411f98000fbbe661a49165d",
@@ -2676,16 +2678,24 @@
       "modulo_paper_local_axioms": true,
       "paper_local_axiom_debt": [
         "paper_symbol:ξ"
-      ]
+      ],
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "omega",
+        "file_body_preview": "sorry\n\n-- [theorem] Thm Folst\n-- Statement (LaTeX): [Folland-Stein-Sobolev inequality ] Let $1<p<.$ Then, there exists a",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Thm_Folst",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
       "lean_statement": "theorem Thm_Folst : False := by sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed",
       "promotion_gate_passed": false,
@@ -2761,17 +2771,17 @@
           "non-markov"
         ]
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 12.18,
       "timestamp": "2026-05-09T20:01:35Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": false,
@@ -2790,11 +2800,13 @@
         "translation_fidelity_ok",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "semantic_adversarial_checks_passed"
+        "semantic_adversarial_checks_passed",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "diagnostic",
       "paper_statement_id": "pstmt_3a552ef9d94467e0d7b1d256",
@@ -2893,16 +2905,24 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n-- [theorem] Weak\n-- Statement (LaTeX): [Weak solution] Let $v(0) L^1_{}(^N, \\|\\|^{-2()}d),f L^1_{}(^N, \\|\\|^{-()",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Weak",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
       "lean_statement": "theorem Weak (h1 : Prop) : (let Claim : Prop := h1; Claim) := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -2987,17 +3007,17 @@
           "non-markov"
         ]
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 11.57,
       "timestamp": "2026-05-09T20:01:53Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -3016,11 +3036,13 @@
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
         "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_edb06024b903b307a74eae44",
@@ -3132,16 +3154,24 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n-- [theorem] Thm Blowup O4\n-- Statement (LaTeX): Let $=0,$ $ (-1,),$ and let $0 u_0_f L^(^N).$ Then, for any $p>",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Thm_Blowup_O4",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
       "lean_statement": "theorem Thm_Blowup_O4 : False := by sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
       "promotion_gate_passed": false,
@@ -3217,17 +3247,17 @@
           "non-markov"
         ]
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 13.47,
       "timestamp": "2026-05-09T20:02:14Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": false,
@@ -3245,11 +3275,13 @@
         "lean_proof_closed",
         "translation_fidelity_ok",
         "claim_equivalent",
-        "independent_semantic_equivalence_evidence"
+        "independent_semantic_equivalence_evidence",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "diagnostic",
       "paper_statement_id": "pstmt_45d03d1383e76c0172595326",
@@ -3346,7 +3378,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n-- [theorem] Thm Blowup O5\n-- Statement (LaTeX): Let $>0,$ $ (-1,),$ and let $0 u_0_f L^(^N).$ Assume that holds.",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Thm_Blowup_O5",
@@ -3756,10 +3796,10 @@
       "theorem_name": "Mild",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
       "lean_statement": "theorem Mild : False := by sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
       "promotion_gate_passed": false,
@@ -3835,17 +3875,17 @@
           "non-markov"
         ]
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 14.84,
       "timestamp": "2026-05-09T20:02:52Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": false,
@@ -3863,11 +3903,13 @@
         "lean_proof_closed",
         "translation_fidelity_ok",
         "claim_equivalent",
-        "independent_semantic_equivalence_evidence"
+        "independent_semantic_equivalence_evidence",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "diagnostic",
       "paper_statement_id": "pstmt_8ae0901901f594d81eecb3d9",
@@ -3966,7 +4008,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n-- [theorem] Weak2\n-- Statement (LaTeX): [Weak solution] Let $u_0_f L^1_{}(^N).$ Then $u L^p_{}((0,T),L^p_{}(^N))",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Weak2",
@@ -4611,10 +4661,10 @@
       "theorem_name": "Local",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
       "lean_statement": "theorem Local (h1 : Prop) (h2 : Prop) (h3 : Prop) (h4 : Prop) (h5 : Prop) (h6 : Prop) : h1 ∧ h2 ∧ h3 ∧ h4 ∧ h5 ∧ h6 → Nonempty (Unit) := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -4739,17 +4789,17 @@
           "non-markov"
         ]
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 10.25,
       "timestamp": "2026-05-09T20:03:39Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -4768,11 +4818,13 @@
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
         "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "unrelated",
       "paper_statement_id": "pstmt_5c262a16f167de95353116b7",
@@ -4897,7 +4949,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n-- [theorem] rem_20\n-- Statement (LaTeX): When $=0,$ problem is well-studied by the second and third-named author",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "rem_20",

@@ -12,10 +12,10 @@
       "theorem_name": "thm_baseline_lift",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
       "lean_statement": "theorem thm_baseline_lift (alpha : ℝ) (halpha : alpha > 3 / 4) :\n  BaselineLiftStatement := trivial := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "theorem_proven_in_file:output/2604.21884.lean",
       "promotion_gate_passed": false,
@@ -36,17 +36,17 @@
         "label": "thm_baseline_lift",
         "cited_refs": []
       },
-      "proof_text": "trivial",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "manual-direct",
-      "proof_method": "definitional_unfold_trivial",
+      "proof_method": "unattempted",
       "rounds_used": 0,
       "time_s": 0.0,
       "timestamp": "2026-05-09T19:59:48Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -70,7 +70,8 @@
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_942284da4a8d2b3fd9237e13",
@@ -169,7 +170,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "trivial",
+        "file_body_preview": "sorry\n\n-- [theorem] thm:operator-main\n-- Statement (LaTeX): [Strongly low--high mixed random operators] Let E_T:=C_TL^2",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "prop_cubic_quartic_baseline",
@@ -832,10 +841,10 @@
       "theorem_name": "prop_mid_completion",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
       "lean_statement": "theorem prop_mid_completion (alpha s2 theta : ℝ)\n    (hadm : 0 < theta ∧ theta < 1)\n    (ha : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0) :\n  MixedRandomOperatorConvergence := trivial := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "theorem_proven_in_file:output/2604.21884.lean",
       "promotion_gate_passed": false,
@@ -864,17 +873,17 @@
         "label": "prop_mid_completion",
         "cited_refs": []
       },
-      "proof_text": "trivial",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "manual-direct",
-      "proof_method": "definitional_unfold_trivial",
+      "proof_method": "unattempted",
       "rounds_used": 0,
       "time_s": 0.0,
       "timestamp": "2026-05-09T20:00:23Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -898,7 +907,8 @@
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_d25ba768fdcae97f9e661e16",
@@ -1001,7 +1011,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "trivial",
+        "file_body_preview": "sorry\n\n-- [theorem] cor:conditional-cutoff\n-- Statement (LaTeX): [Conditional convergence of the cutoff equations] If th",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "thm_conditional_closure_intro",
@@ -1827,10 +1845,10 @@
       "theorem_name": "rem_status_emphasis",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
       "lean_statement": "theorem rem_status_emphasis (f : ℝ → ℝ) (N : ℕ) (alpha : ℝ) (hN : 0 < N) :\n    ∃ C : ℝ, 0 < C ∧ VolterraOscillation f N alpha ≤ C * (N : ℝ) ^ (6 - 7 * alpha) :=\n  VolterraOscillation_speed_separated_bound f N alpha hN",
-      "status": "AXIOM_BACKED",
-      "step_verdict": "FLAWED",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
       "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_failure",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -1963,11 +1981,11 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "VolterraOscillation_speed_separated_bound f N alpha hN",
+      "proof_text": "",
       "first_failing_step": 1,
       "error_message": "translation_repaired_pending_proof:regenerate_explicit_structured_statement,source_grounded_statement_body",
       "proof_mode": "full-draft",
-      "proof_method": "domain_axiom",
+      "proof_method": "unattempted",
       "rounds_used": 15,
       "time_s": 0.0,
       "timestamp": "2026-04-27T09:47:43Z",
@@ -1995,11 +2013,14 @@
         "repair_outcome": "faithful_statement_regeneration"
       },
       "gate_failures": [
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "lean_proof_closed",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_1323487b205f365c5d5e45ca",
@@ -2156,7 +2177,14 @@
         "paper_local_lemma:VolterraOscillation",
         "paper_definition_stub:VolterraOscillation_speed_separated_bound"
       ],
-      "source_latex": "[Status and emphasis]\\label{rem:status-emphasis}\nThe unconditional core of the paper is Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. The full stochastic Cauchy problem is conditional only because one still has to choose a closure route for the cubic forcing $F^V$ and insert an appropriate fractional periodic Klein--Gordon Strichartz theorem. In particular, the random-operator part is already complete at the level relevant to the no singular centering mechanism."
+      "source_latex": "[Status and emphasis]\\label{rem:status-emphasis}\nThe unconditional core of the paper is Theorem \\ref{thm:baseline-lift}, Proposition \\ref{prop:cubic-quartic-baseline}, Theorem \\ref{thm:operator-main}, and Proposition \\ref{prop:mid-completion}. The full stochastic Cauchy problem is conditional only because one still has to choose a closure route for the cubic forcing $F^V$ and insert an appropriate fractional periodic Klein--Gordon Strichartz theorem. In particular, the random-operator part is already complete at the level relevant to the no singular centering mechanism.",
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "VolterraOscillation_speed_separated_bound f N alpha hN",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] rem:sharpness",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "prop_sharpness",
@@ -2434,10 +2462,10 @@
       "theorem_name": "remark_9",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
       "lean_statement": "theorem remark_9 :\n  I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2 := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -2472,17 +2500,17 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 10.19,
       "timestamp": "2026-05-09T20:04:29Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -2500,11 +2528,13 @@
         "lean_proof_closed",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_8f9e5bd57d6bc0fa6b41f14b",
@@ -2599,7 +2629,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] lem:coeff-chaos-criterion\n-- Statement (LaTeX): [Coefficient-level dyadic chaos",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "remark_10",
@@ -2940,10 +2978,10 @@
       "theorem_name": "lem_centered_cov",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
       "lean_statement": "theorem lem_centered_cov (N : ℕ) (alpha eta : ℝ)\n    (hN : 0 < N) (heta : 0 < eta ∧ eta ≤ 1/2) :\n  ∃ C : ℝ, 0 < C ∧\n    DyadicBlockBound N 0 alpha ≤ C * (N : ℝ) ^ (3 - 6 * alpha) := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -2995,17 +3033,17 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "omega",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 10.88,
       "timestamp": "2026-05-09T20:05:49Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": false,
@@ -3024,11 +3062,13 @@
         "translation_fidelity_ok",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_840ee31f90a9316ef1b143df",
@@ -3128,7 +3168,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "omega",
+        "file_body_preview": "sorry\n\n-- [theorem] prop:HS-moment-increment\n-- Statement (LaTeX): [Hilbert--Schmidt moments and increments] Let $X_N(t)",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "thm_pathwise_fluct",
@@ -4342,10 +4390,10 @@
       "theorem_name": "thm_no_singular_centering",
       "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
       "lean_statement": "theorem thm_no_singular_centering :\n  ∀ w : ℝ → ℝ, MixedOperator 0 w = w ∧ C_T = C_T := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -4380,17 +4428,17 @@
           "SimonTaflin"
         ]
       },
-      "proof_text": "aesop",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 39.36,
       "timestamp": "2026-05-09T20:09:56Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -4408,11 +4456,13 @@
         "lean_proof_closed",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "unrelated",
       "paper_statement_id": "pstmt_0991e68218238ab8daa85a26",
@@ -4522,7 +4572,15 @@
       "modulo_paper_local_axioms": true,
       "paper_local_axiom_debt": [
         "paper_definition_stub:MixedOperator"
-      ]
+      ],
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "aesop",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] lem:output-comparable-comp\n-- Statement (LaTeX): [Output-comparable complement]",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "ass_strichartz",

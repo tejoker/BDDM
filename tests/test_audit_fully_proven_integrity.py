@@ -331,3 +331,80 @@ def test_audit_paper_skips_when_lean_file_missing(tmp_path: Path) -> None:
         write=True,
     )
     assert out["skipped"] == "lean_file_missing"
+
+
+# ---------------------------------------------------------------------------
+# Broader-status mode: catch bypass-IPs and bypass-ABs (round III follow-up)
+# ---------------------------------------------------------------------------
+
+
+def test_audit_demotes_bypass_intermediary_proven_row(tmp_path):
+    """The circular bypass that produced false FPs can also inflate IP. With
+    `statuses=_PROOF_CLAIMING_STATUSES`, an IP row whose actual `.lean` body
+    is `sorry` but whose stored `validation_gates.lean_proof_closed=True`
+    must be demoted to UNRESOLVED."""
+    from audit_fully_proven_integrity import (
+        audit_ledger_entries,
+        _PROOF_CLAIMING_STATUSES,
+    )
+
+    entries = [
+        {
+            "theorem_name": "fake_ip_claim",
+            "status": "INTERMEDIARY_PROVEN",
+            "proof_text": "linarith",
+            "validation_gates": {"lean_proof_closed": True},
+            "step_verdict": "VERIFIED",
+        },
+    ]
+    lean_src = "theorem fake_ip_claim : True := by\n  sorry\n"
+    result = audit_ledger_entries(
+        entries, paper_id="x.y", lean_src=lean_src,
+        statuses=_PROOF_CLAIMING_STATUSES,
+    )
+    assert result.demoted == 1
+    assert entries[0]["status"] == "UNRESOLVED"
+
+
+def test_audit_default_mode_does_not_touch_intermediary_proven(tmp_path):
+    """Default statuses=('FULLY_PROVEN',) preserves prior contract; IP rows
+    are NOT examined even if they have a bypass-True gate flag."""
+    from audit_fully_proven_integrity import audit_ledger_entries
+
+    entries = [
+        {
+            "theorem_name": "fake_ip",
+            "status": "INTERMEDIARY_PROVEN",
+            "proof_text": "linarith",
+            "validation_gates": {"lean_proof_closed": True},
+        },
+    ]
+    lean_src = "theorem fake_ip : True := by\n  sorry\n"
+    result = audit_ledger_entries(entries, paper_id="x.y", lean_src=lean_src)
+    assert result.demoted == 0
+    assert entries[0]["status"] == "INTERMEDIARY_PROVEN"
+
+
+def test_audit_broader_mode_skips_unresolved_rows(tmp_path):
+    """UNRESOLVED rows are not in any audit-set and must not be touched even
+    when broader-status mode is enabled. The audit only verifies CLAIMS of
+    proof closure; UR doesn't make any such claim."""
+    from audit_fully_proven_integrity import (
+        audit_ledger_entries,
+        _PROOF_CLAIMING_STATUSES,
+    )
+
+    entries = [
+        {
+            "theorem_name": "unresolved_row",
+            "status": "UNRESOLVED",
+            "validation_gates": {"lean_proof_closed": False},
+        },
+    ]
+    lean_src = "theorem unresolved_row : True := by\n  sorry\n"
+    result = audit_ledger_entries(
+        entries, paper_id="x.y", lean_src=lean_src,
+        statuses=_PROOF_CLAIMING_STATUSES,
+    )
+    assert result.demoted == 0
+    assert entries[0]["status"] == "UNRESOLVED"

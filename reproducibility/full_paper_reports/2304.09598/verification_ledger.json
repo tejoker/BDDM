@@ -12,10 +12,10 @@
       "theorem_name": "defin_1",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem defin_1 (b e : ℤ) (r : ℕ) (alpha : Finset (Finset ℤ)) (hb : b ≤ e) (hr : 0 < r) (halpha : ∀ delta ∈ alpha, ∃ b' e' : ℤ, b' ≤ e' ∧ delta = Finset.Icc b' e') : ∀ delta ∈ alpha, ∃ b' e' : ℤ, b' ≤ e' ∧ delta = Finset.Icc b' e' := by sorry",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -66,17 +66,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "omega",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 19.51,
       "timestamp": "2026-05-09T20:00:13Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": false,
@@ -94,11 +94,14 @@
         "translation_fidelity_ok",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "lean_proof_closed",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_2500dc77a19dd1088d045b42",
@@ -209,16 +212,24 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "omega",
+        "file_body_preview": "sorry\n\n-- [theorem] multiplicity",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "multiplicity",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem multiplicity (m_i_j : ℤ) (r_i_1_j : ℤ) (r_i_1_j_1 : ℤ) (r_i_j : ℤ) (r_i_j_1 : ℤ) (h_rank_equal_defined_inside_1 : True) :\n  m_i_j = r_i_j - r_i_1_j - r_i_j_1 + r_i_1_j_1 := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -253,17 +264,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "apply?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 76.82,
       "timestamp": "2026-05-09T20:01:35Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -281,11 +292,13 @@
         "lean_proof_closed",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "unrelated",
       "paper_statement_id": "pstmt_86867f6f0c032a286908c2a3",
@@ -398,16 +411,24 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "apply?",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] Prop:Actions",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Prop_Actions",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Prop_Actions (alpha : ℝ) (beta : ℝ) (h_label_prop_actions_let_delta_1 : True) :\n  alpha ≤ beta := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -442,17 +463,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "apply?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 115.74,
       "timestamp": "2026-05-09T20:03:57Z",
       "validation_gates": {
-        "lean_proof_closed": true,
-        "step_verdict_verified": true,
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -470,11 +491,14 @@
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
         "semantic_adversarial_checks_passed",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "lean_proof_closed",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_0e9137bad01dea7047ec3c81",
@@ -582,7 +606,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "apply?",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] Cor:BoundaryRTandMS\n-- Statement (LaTeX): [, Corollary 2.5.7.] Suppose",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Cor_BoundaryRTandMS",
@@ -815,10 +847,10 @@
       "theorem_name": "Precedes",
       "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
       "lean_statement": "theorem Precedes :\n  Delta1 = (b_1, dots, e_1) ∧ Delta2 = (b_2, dots, e_2) ∧ b_1 < b_2 ∧ e_1 < e_2 := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -844,17 +876,17 @@
           "riddlesden2022combinatorial"
         ]
       },
-      "proof_text": "apply?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 72.74,
       "timestamp": "2026-05-09T20:05:21Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -872,11 +904,13 @@
         "lean_proof_closed",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_7b9afba0f287b0aba73d1e4c",
@@ -981,7 +1015,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "apply?",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] Prop:IncreasingLength\n-- Statement (LaTeX): During each iteration of t",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "Prop_IncreasingLength",
