@@ -117,11 +117,347 @@ _RETRY_USER_TEMPLATE = (
     "```lean\n{prev_candidate}\n```\n\n"
     "Lean elaboration error:\n"
     "```\n{lean_error_tail}\n```\n\n"
+    "{anchor_section}"
     "Fix the SPECIFIC issue Lean reported above. Keep the same mathematical "
     "claim; only adjust types, scopes, instance names, missing imports/opens "
     "(use only paper-local names + Mathlib), parser syntax, or quantifier "
     "binders. Do NOT switch to a trivial body. Return the same JSON schema."
 )
+
+
+# --- Smart-retry: Lean error anchor extraction ---------------------------
+
+# Identifier shape that matches Lean naming (letters, digits, _, ', dots).
+_LEAN_IDENT = r"[A-Za-z_][A-Za-z0-9_'.]*"
+
+# Regexes for the four error kinds the smart-retry prompt understands.
+_UNKNOWN_IDENT_RX = re.compile(
+    r"unknown\s+(?:identifier|constant)\s+[`']([^`']+)[`']",
+    re.IGNORECASE,
+)
+# Match the Lean 4 typeclass-synthesis message. We capture the body after
+# "failed to synthesize" or after the `synthInstanceFailed:` prefix and parse
+# it into (Class, Type-args) shape downstream.
+_SYNTH_FAILED_RX = re.compile(
+    r"(?:synthInstanceFailed:|failed to synthesize(?:\s+instance)?)\s*"
+    r"(?:of\s+type\s+class\s*)?"
+    r"[\n\s]*"
+    r"(" + _LEAN_IDENT + r"(?:\s+" + _LEAN_IDENT + r")*)",
+    re.IGNORECASE,
+)
+# `type mismatch` / `application type mismatch` — we grab the expected and
+# actual types when Lean prints them in the standard `has type ... but is
+# expected to have type ...` shape.
+_TYPE_MISMATCH_EXPECTED_RX = re.compile(
+    r"(?:but is )?expected to have type[:\s]*\n?\s*([^\n]+)",
+    re.IGNORECASE,
+)
+_TYPE_MISMATCH_GOT_RX = re.compile(
+    r"\bhas type[:\s]*\n?\s*([^\n]+)",
+    re.IGNORECASE,
+)
+_FUNCTION_EXPECTED_RX = re.compile(
+    r"function expected at\s*\n?\s*[`']?(" + _LEAN_IDENT + r")[`']?",
+    re.IGNORECASE,
+)
+# `invalidField`: e.g. "Invalid field `segments`: The environment does not
+# contain `Nat.segments`". The smoke test on Prop_Actions hit this exact
+# failure mode and looped 3 rounds with no help. We capture the field name
+# from the leading clause and (separately) the missing constant from the
+# follow-up clause — splitting into two regexes is more robust than trying
+# to express the whole pattern with optional groups under DOTALL.
+_INVALID_FIELD_HEAD_RX = re.compile(
+    r"[Ii]nvalid (?:field|projection)\s+[`']([^`']+)[`']"
+)
+_INVALID_FIELD_MISSING_RX = re.compile(
+    r"does not contain\s+[`']([^`']+)[`']"
+)
+
+
+def _hint_entries_for(symbol: str, paper_theory_hint: str) -> list[str]:
+    """Return paper-theory-hint lines that mention `symbol` as a declared
+    identifier. We match on `def`, `abbrev`, `axiom`, `instance`, `class`,
+    `structure` heads followed (within the line) by the symbol; we also accept
+    matches where the symbol appears as a type-argument in an `instance`
+    line so e.g. `instance : LE Multisegment` is surfaced when the LLM asks
+    about `Multisegment`.
+    """
+    if not symbol or not paper_theory_hint:
+        return []
+    out: list[str] = []
+    pattern = re.compile(rf"\b{re.escape(symbol)}\b")
+    for line in paper_theory_hint.splitlines():
+        if not line.strip():
+            continue
+        head = line.strip().split()[0] if line.strip().split() else ""
+        if head.lstrip("@") not in _HINT_KEYWORDS:
+            continue
+        if pattern.search(line):
+            out.append(line.strip())
+    return out
+
+
+def _extract_lean_error_anchors(error_tail: str, paper_theory_hint: str) -> dict[str, Any]:
+    """Pull (identifier, error_kind) tuples from a Lean elaboration error tail
+    and match them against the paper-theory hint.
+
+    Returns a dict with the shape:
+      {
+        "kinds": list[str],                # error kinds detected, in order
+        "anchors": [
+          {
+            "kind": "unknown_identifier" | "synth_instance_failed" |
+                    "type_mismatch" | "function_expected",
+            "symbol": str,                 # primary identifier (may be empty)
+            "extra": dict,                 # kind-specific extras
+            "matches": list[str],          # matching paper-theory hint lines
+            "no_match_reason": str | "",   # set when matches is empty
+          },
+          ...
+        ],
+      }
+
+    The function is deterministic and never raises; on empty / unparseable
+    input it returns an empty `anchors` list and `kinds=[]`.
+    """
+    out: dict[str, Any] = {"kinds": [], "anchors": []}
+    if not (error_tail or "").strip():
+        return out
+
+    seen: set[tuple[str, str]] = set()
+
+    def _record(kind: str, symbol: str, extra: dict[str, Any] | None = None) -> None:
+        key = (kind, symbol or "")
+        if key in seen:
+            return
+        seen.add(key)
+        matches = _hint_entries_for(symbol, paper_theory_hint) if symbol else []
+        no_match_reason = ""
+        if symbol and not matches:
+            no_match_reason = (
+                f"no paper-theory entry declares `{symbol}` — this is likely a "
+                "translator-side gap (missing definition / axiom in the paper "
+                "module) rather than a fixable LLM-output issue"
+            )
+        out["anchors"].append(
+            {
+                "kind": kind,
+                "symbol": symbol,
+                "extra": dict(extra or {}),
+                "matches": matches,
+                "no_match_reason": no_match_reason,
+            }
+        )
+        if kind not in out["kinds"]:
+            out["kinds"].append(kind)
+
+    # 1. Unknown identifier / constant.
+    for m in _UNKNOWN_IDENT_RX.finditer(error_tail):
+        sym = (m.group(1) or "").strip()
+        if sym:
+            _record("unknown_identifier", sym)
+
+    # 2. Typeclass synthesis failed. Body is e.g. `HasSubset Multisegment` —
+    #    first token is the class, remainder is the type-arg list.
+    for m in _SYNTH_FAILED_RX.finditer(error_tail):
+        body = re.sub(r"\s+", " ", (m.group(1) or "").strip())
+        if not body:
+            continue
+        parts = body.split()
+        cls = parts[0]
+        type_args = parts[1:]
+        _record(
+            "synth_instance_failed",
+            cls,
+            {"type_args": type_args},
+        )
+        # Also surface the type argument so the LLM sees instance entries for it.
+        for arg in type_args:
+            _record("synth_instance_failed_type_arg", arg, {"class_name": cls})
+
+    # 3. Function expected at <name>.
+    for m in _FUNCTION_EXPECTED_RX.finditer(error_tail):
+        sym = (m.group(1) or "").strip()
+        if sym:
+            _record("function_expected", sym)
+
+    # 4. Invalid field / projection — Lean uses this when a struct projection
+    #    references a non-existent field on a type. The smoke test on
+    #    `Prop_Actions` hit `Invalid field `segments`: The environment does
+    #    not contain `Nat.segments`` and looped all 3 rounds without help.
+    head_matches = list(_INVALID_FIELD_HEAD_RX.finditer(error_tail))
+    missing_matches = list(_INVALID_FIELD_MISSING_RX.finditer(error_tail))
+    for idx, m in enumerate(head_matches):
+        field = (m.group(1) or "").strip()
+        full = ""
+        # Pair the i-th head with the i-th missing-constant clause when both
+        # are present in the same error block.
+        if idx < len(missing_matches):
+            full = (missing_matches[idx].group(1) or "").strip()
+        host_type = ""
+        if "." in full:
+            host_type = full.rsplit(".", 1)[0]
+        if field:
+            _record(
+                "invalid_field",
+                field,
+                {"host_type": host_type, "missing_constant": full},
+            )
+
+    # 5. Type mismatch — capture expected/got verbatim. Symbol slot is empty
+    #    because the offending term isn't a single identifier.
+    if re.search(r"type mismatch|application type mismatch", error_tail, re.IGNORECASE):
+        expected = ""
+        got = ""
+        m_exp = _TYPE_MISMATCH_EXPECTED_RX.search(error_tail)
+        if m_exp:
+            expected = m_exp.group(1).strip().rstrip("`'")
+        m_got = _TYPE_MISMATCH_GOT_RX.search(error_tail)
+        if m_got:
+            got = m_got.group(1).strip().rstrip("`'")
+        _record(
+            "type_mismatch",
+            "",
+            {"expected": expected, "got": got},
+        )
+
+    return out
+
+
+def _format_anchor_section(anchors: dict[str, Any]) -> str:
+    """Render the smart-retry anchor block. Returns "" when there are no
+    anchors so the prompt template can drop the section cleanly."""
+    entries = anchors.get("anchors") or []
+    if not entries:
+        return ""
+    lines: list[str] = ["SMART-RETRY ANCHORS (extracted from the Lean error above):"]
+    for entry in entries:
+        kind = entry.get("kind", "")
+        symbol = entry.get("symbol", "")
+        extra = entry.get("extra") or {}
+        matches = entry.get("matches") or []
+        no_match = entry.get("no_match_reason", "")
+        if kind == "unknown_identifier":
+            lines.append(
+                f"- Lean rejected with: `unknown identifier '{symbol}'`."
+            )
+            if matches:
+                lines.append("  Matching paper-theory entries:")
+                for m in matches:
+                    lines.append(f"    - `{m}`")
+                lines.append(
+                    "  Use ONE of these directly. Do not invent variants."
+                )
+            else:
+                lines.append(f"  ({no_match})")
+        elif kind == "synth_instance_failed":
+            type_args = extra.get("type_args") or []
+            if type_args:
+                ta = " ".join(type_args)
+                lines.append(
+                    f"- Lean rejected with: `synthInstanceFailed: {symbol} {ta}`."
+                )
+            else:
+                lines.append(
+                    f"- Lean rejected with: `synthInstanceFailed: {symbol}`."
+                )
+            if matches:
+                lines.append(
+                    f"  Paper-theory entries mentioning `{symbol}`:"
+                )
+                for m in matches:
+                    lines.append(f"    - `{m}`")
+                lines.append(
+                    "  Use the typeclass binder shape the paper-theory module "
+                    "already provides."
+                )
+            else:
+                lines.append(
+                    f"  (no paper-theory instance for `{symbol}` is in scope — "
+                    "switch to a type for which the class is derivable, or use "
+                    "an explicit binder providing the instance)"
+                )
+        elif kind == "synth_instance_failed_type_arg":
+            if matches:
+                lines.append(
+                    f"  Paper-theory entries for the type argument `{symbol}`:"
+                )
+                for m in matches:
+                    lines.append(f"    - `{m}`")
+        elif kind == "function_expected":
+            lines.append(
+                f"- Lean rejected with: `function expected at {symbol}`. "
+                f"Suggestion: declare `{symbol}` with an explicit function-type "
+                f"binder, e.g. `({symbol} : _ → _)`, or pick a paper-theory "
+                f"entry that has function shape."
+            )
+            if matches:
+                lines.append(f"  Paper-theory entries for `{symbol}`:")
+                for m in matches:
+                    lines.append(f"    - `{m}`")
+        elif kind == "invalid_field":
+            host = extra.get("host_type", "")
+            missing = extra.get("missing_constant", "")
+            if host:
+                lines.append(
+                    f"- Lean rejected with: `Invalid field '{symbol}'`. "
+                    f"The host type `{host}` does not have field `{symbol}` "
+                    f"(missing constant: `{missing}`). "
+                    "Suggestion: do NOT project `.segments` (or similar) on a "
+                    "raw paper-theory `abbrev`. Either bind the relevant value "
+                    "with an explicit typed binder whose type carries the "
+                    "field, or rewrite the expression to use the paper-theory "
+                    "function form (e.g. `c_alpha α`) instead of dot-notation."
+                )
+            else:
+                lines.append(
+                    f"- Lean rejected with: `Invalid field '{symbol}'`. "
+                    "Suggestion: replace dot-projection with a paper-theory "
+                    "function applied to the bound variable."
+                )
+            if matches:
+                lines.append(f"  Paper-theory entries mentioning `{symbol}`:")
+                for m in matches:
+                    lines.append(f"    - `{m}`")
+        elif kind == "type_mismatch":
+            expected = extra.get("expected", "")
+            got = extra.get("got", "")
+            lines.append(
+                "- Lean rejected with `type mismatch`. "
+                f"expected: `{expected or '(not parsed)'}`; "
+                f"got: `{got or '(not parsed)'}`. "
+                "Suggestion: introduce an explicit typed binder so the term "
+                "has the expected type, or adjust the conclusion."
+            )
+    lines.append("")  # trailing blank line for prompt readability
+    return "\n".join(lines) + "\n"
+
+
+def _render_smart_retry_prompt(
+    *,
+    theorem_name: str,
+    source_latex: str,
+    paper_theory_hint: str,
+    prev_round: int,
+    max_rounds: int,
+    prev_candidate: str,
+    lean_error_tail: str,
+) -> str:
+    """Render the retry user prompt with extracted Lean-error anchors. Always
+    returns a non-empty string; the anchor block is omitted (cleanly) when no
+    anchors can be extracted from the error tail."""
+    anchors = _extract_lean_error_anchors(lean_error_tail, paper_theory_hint)
+    anchor_section = _format_anchor_section(anchors)
+    return _RETRY_USER_TEMPLATE.format(
+        theorem_name=theorem_name,
+        source_latex=source_latex,
+        paper_theory_hint=paper_theory_hint or "-- (no paper-local symbols exported)",
+        prev_round=prev_round,
+        max_rounds=max_rounds,
+        prev_candidate=prev_candidate,
+        lean_error_tail=lean_error_tail or "(empty error output)",
+        anchor_section=anchor_section,
+    )
 
 
 # --- Placeholder detection -------------------------------------------------
@@ -521,16 +857,20 @@ def generate_llm_repair_candidate(
                 "retry_history": list(retry_history),
             }
 
-        # Build follow-up prompt for the next round.
+        # Build follow-up prompt for the next round. The smart-retry renderer
+        # extracts (identifier, error_kind) anchors from the Lean error tail
+        # and surfaces matching paper-theory entries verbatim — without this,
+        # smoke testing on `Cor_Quant` showed 0/3 rounds rescuing the same
+        # `unknown identifier` (the LLM repeated the structural mistake).
         tail = (error_tail or "")[-MAX_LEAN_ERROR_TAIL_CHARS:]
-        user_prompt = _RETRY_USER_TEMPLATE.format(
+        user_prompt = _render_smart_retry_prompt(
             theorem_name=theorem_name_short,
             source_latex=latex_trim,
-            paper_theory_hint=hint_trim or "-- (no paper-local symbols exported)",
+            paper_theory_hint=hint_trim,
             prev_round=round_idx,
             max_rounds=max_repair_rounds,
             prev_candidate=decl,
-            lean_error_tail=tail or "(empty error output)",
+            lean_error_tail=tail,
         )
 
     # Unreachable in normal flow (loop returns on every path) but keep a safe
