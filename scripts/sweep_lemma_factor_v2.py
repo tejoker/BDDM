@@ -95,13 +95,13 @@ FACTORED_AUX_SUFFIX = "__factored_aux"
 _ERROR_LINE_RX = re.compile(r"^(?P<path>[^:]+):(?P<line>\d+):(?P<col>\d+): error:")
 
 
-def _capture_baseline_errors(lean_file: Path, *, timeout_s: int = 180) -> set[tuple[str, int]]:
-    """Capture the (relative_path, line_no) of every `error:` in the file's
-    UNTOUCHED lake-output. Returns the empty set if the file compiles
-    cleanly.
+def _capture_baseline_errors(lean_file: Path, *, timeout_s: int = 180) -> int:
+    """Capture the COUNT of `error:` diagnostics in the file's untouched
+    lake-output. Line numbers are not stable across patches (inserting
+    aux above a parent shifts subsequent line numbers), so we use count
+    as the comparison signal instead of (path, line) tuples.
 
-    Used to whitelist pre-existing damage so the post-patch validator can
-    distinguish "MY patch broke it" from "the file was already broken".
+    Returns 0 on file compiles cleanly or on lake timeout.
     """
     try:
         proc = subprocess.run(
@@ -112,31 +112,22 @@ def _capture_baseline_errors(lean_file: Path, *, timeout_s: int = 180) -> set[tu
             timeout=timeout_s,
         )
     except subprocess.TimeoutExpired:
-        return set()
+        return 0
     out = (proc.stdout or "") + "\n" + (proc.stderr or "")
-    sigs: set[tuple[str, int]] = set()
-    for ln in out.splitlines():
-        m = _ERROR_LINE_RX.match(ln.strip())
-        if not m:
-            continue
-        try:
-            sigs.add((m.group("path"), int(m.group("line"))))
-        except Exception:
-            continue
-    return sigs
+    return sum(1 for ln in out.splitlines() if _ERROR_LINE_RX.match(ln.strip()))
 
 
 def _lake_validate_aware(
     lean_file: Path,
     theorem_name: str,
     *,
-    baseline_errors: set[tuple[str, int]],
+    baseline_errors: int,
     timeout_s: int = 60,
 ) -> tuple[bool, str]:
     """Baseline-aware lake validator. Returns (ok, error_tail) where ok=True
     iff:
       - returncode == 0, OR
-      - every `error:` in the output is in `baseline_errors`
+      - error_count <= baseline_errors (we didn't introduce fresh errors)
       AND no `declaration uses 'sorry'` warning is attached to our theorem.
 
     On failure, error_tail contains the last 1500 chars of output.
@@ -152,20 +143,10 @@ def _lake_validate_aware(
     except subprocess.TimeoutExpired:
         return False, f"lake_timeout:{timeout_s}s"
     out = (proc.stdout or "") + "\n" + (proc.stderr or "")
-    # Collect all `error:` lines and check that each is in the baseline.
-    fresh_errors: list[str] = []
-    for ln in out.splitlines():
-        m = _ERROR_LINE_RX.match(ln.strip())
-        if not m:
-            continue
-        try:
-            sig = (m.group("path"), int(m.group("line")))
-        except Exception:
-            continue
-        if sig not in baseline_errors:
-            fresh_errors.append(ln.strip())
-    if fresh_errors:
-        return False, "fresh_errors:\n" + "\n".join(fresh_errors[-5:]) + "\n" + out[-800:]
+    err_count = sum(1 for ln in out.splitlines() if _ERROR_LINE_RX.match(ln.strip()))
+    if err_count > baseline_errors:
+        delta = err_count - baseline_errors
+        return False, f"fresh_errors_count={delta} (baseline={baseline_errors}, now={err_count}):\n{out[-1000:]}"
     # Check whether OUR theorem still triggers a sorry warning.
     short = _theorem_short_name(theorem_name)
     line_no = patcher._theorem_line_in_file(lean_file, short) \
@@ -328,7 +309,7 @@ def attempt_composition(
     aux_names: list[str],
     parent_target_shape: str,
     per_lake_timeout: int,
-    baseline_errors: Optional[set[tuple[str, int]]] = None,
+    baseline_errors: int = 0,
     validator: Optional[Callable[[Path, str], tuple[bool, str]]] = None,
 ) -> tuple[bool, str, str]:
     """Try each composition shape for `parent_short_name` using `aux_names`.
@@ -346,7 +327,7 @@ def attempt_composition(
     if not bodies:
         return False, "", "no_composition_bodies"
     if validator is None:
-        baseline = baseline_errors or set()
+        baseline = int(baseline_errors or 0)
 
         def _default_validator(f: Path, name: str) -> tuple[bool, str]:
             return _lake_validate_aware(
@@ -450,18 +431,18 @@ def _sweep_paper(
         exported_symbols = lfv2.extract_exported_symbols(paper_theory_path)
     file_text = lean_file.read_text(encoding="utf-8")
 
-    # Capture baseline `error:` signatures so the post-patch validator can
+    # Capture baseline `error:` COUNT so the post-patch validator can
     # distinguish OUR damage from pre-existing damage. Several canonical
     # files have 1-47 pre-existing errors that block the naive validator.
     if not dry_run:
-        print(f"[{paper_id}] capturing baseline errors...")
+        print(f"[{paper_id}] capturing baseline errors...", flush=True)
         baseline_errors = _capture_baseline_errors(
             lean_file, timeout_s=max(120, per_lake_timeout * 2),
         )
-        print(f"[{paper_id}] baseline_errors={len(baseline_errors)}")
-        report["baseline_errors"] = len(baseline_errors)
+        print(f"[{paper_id}] baseline_errors={baseline_errors}", flush=True)
+        report["baseline_errors"] = baseline_errors
     else:
-        baseline_errors = set()
+        baseline_errors = 0
 
     # Build validator closure for aux elaboration probe.
     def _validate_aux(decl: str) -> tuple[bool, str]:
@@ -492,7 +473,7 @@ def _sweep_paper(
     cands.sort(key=lambda t: t[0])
     if max_candidates > 0:
         cands = cands[:max_candidates]
-    print(f"[{paper_id}] candidates_pre_elab={len(cands)}")
+    print(f"[{paper_id}] candidates_pre_elab={len(cands)}", flush=True)
 
     for _prio, entry in cands:
         name = str(entry.get("theorem_name", "") or "")
@@ -765,7 +746,7 @@ def _sweep_paper(
             json.dumps(entries, indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",
         )
-        print(f"[{paper_id}] ledger updated: first_pass={report['first_pass_validated']} composed={report['composed']}")
+        print(f"[{paper_id}] ledger updated: first_pass={report['first_pass_validated']} composed={report['composed']}", flush=True)
 
     return report
 
