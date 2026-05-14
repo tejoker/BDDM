@@ -13475,7 +13475,17 @@
         "statement_alignment_exact",
         "statement_alignment_not_unrelated"
       ],
-      "source_latex": "[Finite-dimensional interaction comparison]\n\t\\label{prop:localized-interaction-vs-DP}\n\tFor every state $\\Gamma$ on $\\mathfrak F(H)$,\n\t\\begin{equation}\\label{eq:localized-interaction-vs-DP}\n\t\t\\mathrm{Tr}_{\\mathfrak F(PH)}\\!\\big[W_P^{\\mathrm{re}}\\Gamma_P\\big]\n\t\t=\n\t\t\\int_{PH} D_P(u)\\,\\,\\mathrm d^\\lambda_{P,\\Gamma}(u)\n\t\t+\n\t\t\\mathcal E_{P,\\lambda}(\\Gamma),\n\t\\end{equation}\n\twhere\n\t\\begin{align}\n\t\t|\\mathcal E_{P,\\lambda}(\\Gamma)|\n\t\t&\\le\n\t\t{#1{C_\\beta\\lambda^2 \\Lambda^{4-\\beta}(1+\\log\\Lambda)}}\n\t\t+\n\t\tC\\lambda \\Lambda^2\n\t\t\\left(\n\t\t\\log\\Lambda+\\int_{PH}\\|u\\|^2\\,\\,\\mathrm d^\\lambda_{P,\\Gamma}(u)\n\t\t\\right).\n\t\t\\label{eq:localized-interaction-vs-DP-error}\n\t\\end{align}"
+      "source_latex": "[Finite-dimensional interaction comparison]\n\t\\label{prop:localized-interaction-vs-DP}\n\tFor every state $\\Gamma$ on $\\mathfrak F(H)$,\n\t\\begin{equation}\\label{eq:localized-interaction-vs-DP}\n\t\t\\mathrm{Tr}_{\\mathfrak F(PH)}\\!\\big[W_P^{\\mathrm{re}}\\Gamma_P\\big]\n\t\t=\n\t\t\\int_{PH} D_P(u)\\,\\,\\mathrm d^\\lambda_{P,\\Gamma}(u)\n\t\t+\n\t\t\\mathcal E_{P,\\lambda}(\\Gamma),\n\t\\end{equation}\n\twhere\n\t\\begin{align}\n\t\t|\\mathcal E_{P,\\lambda}(\\Gamma)|\n\t\t&\\le\n\t\t{#1{C_\\beta\\lambda^2 \\Lambda^{4-\\beta}(1+\\log\\Lambda)}}\n\t\t+\n\t\tC\\lambda \\Lambda^2\n\t\t\\left(\n\t\t\\log\\Lambda+\\int_{PH}\\|u\\|^2\\,\\,\\mathrm d^\\lambda_{P,\\Gamma}(u)\n\t\t\\right).\n\t\t\\label{eq:localized-interaction-vs-DP-error}\n\t\\end{align}",
+      "paper_id": "2604.21583",
+      "translation_rescue_attempt": {
+        "schema_version": "rescue_translation_limited.v1",
+        "attempted_lean_statement": "theorem prop_localized_interaction_vs_DP (C : ℝ) (h_finite_dimensional_interaction_comparison_1 : True) :\n  ∃ C : ℝ, 0 ≤ C := by",
+        "elaborates": null,
+        "elab_detail": "",
+        "tl_reason": "",
+        "trivial": true,
+        "result": "stays_tl_trivial"
+      }
     },
     {
       "theorem_name": "lem_pointwise_comparison",
@@ -17678,7 +17688,17 @@
         "statement_alignment_exact",
         "statement_alignment_not_unrelated"
       ],
-      "source_latex": "\\label{lem:HS-tensor-product-rdm-expansion}\n\tLet $\\Gamma_P$ be a state on $\\mathfrak{F}(PH)$ and $\\Gamma_Q$ a state on $\\mathfrak{F}(QH)$. Define\n\t\\[\n\t\\Gamma:=U^*(\\Gamma_P\\otimes\\Gamma_Q)U.\n\t\\]\n\tThen for every $k\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:HS-tensor-product-rdm-expansion}\n\t\t\\Gamma^{(k)}\n\t\t=\n\t\t\\sum_{\\ell=0}^k\n\t\t\\binom{k}{\\ell}\n\t\t\\Gamma_P^{(\\ell)}\\otimes_s \\Gamma_Q^{(k-\\ell)}.\n\t\\end{equation}"
+      "source_latex": "\\label{lem:HS-tensor-product-rdm-expansion}\n\tLet $\\Gamma_P$ be a state on $\\mathfrak{F}(PH)$ and $\\Gamma_Q$ a state on $\\mathfrak{F}(QH)$. Define\n\t\\[\n\t\\Gamma:=U^*(\\Gamma_P\\otimes\\Gamma_Q)U.\n\t\\]\n\tThen for every $k\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:HS-tensor-product-rdm-expansion}\n\t\t\\Gamma^{(k)}\n\t\t=\n\t\t\\sum_{\\ell=0}^k\n\t\t\\binom{k}{\\ell}\n\t\t\\Gamma_P^{(\\ell)}\\otimes_s \\Gamma_Q^{(k-\\ell)}.\n\t\\end{equation}",
+      "paper_id": "2604.21583",
+      "translation_rescue_attempt": {
+        "schema_version": "rescue_translation_limited.v1",
+        "attempted_lean_statement": "theorem lem_HS_tensor_product_rdm_expansion (k : ℕ) (h_tensor_product_expansion_state_1 : True) (h_every_equation_tensor_product_2 : True) :\n  k ≥ 1 ∧ Γ: = U^*(Γ_P⊗Γ_Q)U := by",
+        "elaborates": false,
+        "elab_detail": "file_check_fail:error: unexpected token ':'; expected ':=', 'where' or '|'",
+        "tl_reason": "",
+        "trivial": false,
+        "result": "stays_tl_no_elaborate"
+      }
     },
     {
       "theorem_name": "prop_HS_deFinetti_remainder_vanish",
@@ -18667,11 +18687,11 @@
     {
       "theorem_name": "prop_HS_low_frequency_to_fd_classical",
       "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-      "lean_statement": "theorem prop_HS_low_frequency_to_fd_classical  : (0 : ℕ) = 0",
-      "status": "TRANSLATION_LIMITED",
+      "lean_statement": "theorem prop_HS_low_frequency_to_fd_classical (k : ℕ) (h_prop_frequency_classical_every_1 : True) :\n  k ≥ 1 := by",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "UNKNOWN",
-      "failure_kind": "import_mismatch",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,status_alignment_ok,claim_equivalent,independent_semantic_equivalence_evidence",
       "promotion_gate_passed": false,
@@ -18716,9 +18736,9 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "final_translation_gate:trivial_nat0eq0_target",
+      "error_message": "",
       "proof_mode": "full-draft",
-      "proof_method": "translation_limited",
+      "proof_method": "rescued_translation",
       "rounds_used": 0,
       "time_s": 0.0,
       "timestamp": "2026-04-26T10:55:33Z",
@@ -18727,7 +18747,7 @@
         "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
-        "translation_fidelity_ok": false,
+        "translation_fidelity_ok": true,
         "status_alignment_ok": false,
         "dependency_trust_complete": true,
         "reproducible_env": true,
@@ -18753,7 +18773,8 @@
         "claim_equivalence_blocked:verdict_not_equivalent",
         "claim_equivalence_blocked:requires_human_for_release",
         "claim_equivalence_blocked:needs_human_review",
-        "claim_equivalence_blocked:different_conclusion"
+        "claim_equivalence_blocked:different_conclusion",
+        "translation_rescue:deterministic_retranslation"
       ],
       "review_required": true,
       "review_queue_id": "review::prop_HS_low_frequency_to_fd_classical",
@@ -18782,8 +18803,7 @@
       "debt_tier": "none",
       "proof_value": "none",
       "grounding_metadata": [],
-      "result_label": "not_formalized_translation_limited",
-      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
+      "result_label": "translation_rescued_pending_proof_search",
       "modulo_paper_local_axioms": false,
       "statement_alignment_class": "unrelated",
       "semantic_equivalence_artifact": {
@@ -18849,7 +18869,16 @@
         "statement_alignment_exact",
         "statement_alignment_not_unrelated"
       ],
-      "source_latex": "\\label{prop:HS-low-frequency-to-fd-classical}\n\tFor every fixed $k\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:HS-M-lambdaP-to-gamma-nuP}\n\t\t\\|M_{\\lambda,P}^{(k)}-\\gamma_{\\nu_P}^{(k)}\\|_{\\mathfrak S^2}\n\t\t\\le C_k r_{\\lambda,k}.\n\t\\end{equation}\n\tConsequently,\n\t\\begin{equation}\n\t\t\\label{eq:HS-low-frequency-to-fd-classical-main}\n\t\t\\|k!\\lambda^k\\Gamma_{\\lambda,P}^{(k)}-\\gamma_{\\nu_P}^{(k)}\\|_{\\mathfrak S^2}\n\t\t\\le C_k\\Bigl(r_{\\lambda,k}+\\sum_{\\ell=0}^{k-1}(\\lambda K)^{k-\\ell}(1+|\\log\\lambda|)^\\ell\\Bigr).\n\t\\end{equation}"
+      "source_latex": "\\label{prop:HS-low-frequency-to-fd-classical}\n\tFor every fixed $k\\ge1$,\n\t\\begin{equation}\n\t\t\\label{eq:HS-M-lambdaP-to-gamma-nuP}\n\t\t\\|M_{\\lambda,P}^{(k)}-\\gamma_{\\nu_P}^{(k)}\\|_{\\mathfrak S^2}\n\t\t\\le C_k r_{\\lambda,k}.\n\t\\end{equation}\n\tConsequently,\n\t\\begin{equation}\n\t\t\\label{eq:HS-low-frequency-to-fd-classical-main}\n\t\t\\|k!\\lambda^k\\Gamma_{\\lambda,P}^{(k)}-\\gamma_{\\nu_P}^{(k)}\\|_{\\mathfrak S^2}\n\t\t\\le C_k\\Bigl(r_{\\lambda,k}+\\sum_{\\ell=0}^{k-1}(\\lambda K)^{k-\\ell}(1+|\\log\\lambda|)^\\ell\\Bigr).\n\t\\end{equation}",
+      "paper_id": "2604.21583",
+      "translation_rescue": {
+        "schema_version": "rescue_translation_limited.v1",
+        "previous_status": "TRANSLATION_LIMITED",
+        "previous_lean_statement": "theorem prop_HS_low_frequency_to_fd_classical  : (0 : ℕ) = 0",
+        "previous_failure_kind": "import_mismatch",
+        "previous_error_message": "final_translation_gate:trivial_nat0eq0_target",
+        "rescue_method": "deterministic_typed_ir_retranslation"
+      }
     },
     {
       "theorem_name": "lem_periodic_yukawa_positive",

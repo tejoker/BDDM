@@ -368,6 +368,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Walks Desol/PaperTheory/*.lean (and Repair/*.lean), runs `lake build <module>` on each with a 240s timeout, and reports ok/fail/timed_out/not_attempted per module. A missing or stale paper-theory .olean silently blocks every downstream row in that paper from elaborating; this audit is the standalone fail-fast check (the existing self-heal in regenerate_paper_imports_anchor fires LATE). `--write` persists the summary; `--regenerate` re-runs paper_theory_builder on failing papers. Wired into `_publish_reproducibility_bundle` (manifest.paper_theory_olean_health).",
     },
+    "rescue_translation_limited_rows.py": {
+        "tier": "dev_tool",
+        "category": "review",
+        "summary": "Re-runs the deterministic typed-IR translator on TRANSLATION_LIMITED rows whose `lean_statement` pre-dates a translator improvement (e3b0f63 schema-fallback refusal, 622e6d3 source_latex backfill). Demotes TL → UNRESOLVED only when the new statement is BOTH non-trivial AND elaborates via `_run_isolated_file_check`. Standards-positive: a vacuous re-translation stays TL. Zero Mistral cost; LLM repair lives in repair_bad_translations.py.",
+    },
     "run_counterexample_pre_flight.py": {
         "tier": "dev_tool",
         "category": "review",

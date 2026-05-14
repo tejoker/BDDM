@@ -4962,11 +4962,11 @@
     {
       "theorem_name": "rem_20",
       "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
-      "lean_statement": "theorem rem_20 : False := by sorry\n",
-      "status": "TRANSLATION_LIMITED",
+      "lean_statement": "theorem rem_20 (gamma : ℝ) :\n  gamma = 0 := by",
+      "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "translation_failure",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_PLACEHOLDER",
       "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,provenance_linked,reproducible_env,claim_equivalent,independent_semantic_equivalence_evidence",
       "promotion_gate_passed": false,
@@ -4980,9 +4980,9 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "statement_fidelity_gate:repair_candidate:statement_validity:translation_limited,statement_validity_reason:translation_limited_status",
+      "error_message": "",
       "proof_mode": "statement-fidelity-gate",
-      "proof_method": "translation_limited",
+      "proof_method": "rescued_translation",
       "rounds_used": 0,
       "time_s": 0.0,
       "timestamp": "2026-05-10T09:21:58Z",
@@ -5011,7 +5011,8 @@
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "translation_rescue:deterministic_retranslation"
       ],
       "statement_alignment_class": "diagnostic",
       "paper_statement_id": "pstmt_d6523b3e4fe5ada14fb1ae2d",
@@ -5120,9 +5121,18 @@
       "debt_tier": "none",
       "proof_value": "none",
       "grounding_metadata": [],
-      "result_label": "not_formalized_translation_limited",
-      "claim_scope": "Excluded from closure because the generated statement is translation- or library-limited.",
-      "modulo_paper_local_axioms": false
+      "result_label": "translation_rescued_pending_proof_search",
+      "modulo_paper_local_axioms": false,
+      "paper_id": "2604.21314",
+      "translation_rescue": {
+        "schema_version": "rescue_translation_limited.v1",
+        "previous_status": "TRANSLATION_LIMITED",
+        "previous_lean_statement": "theorem rem_20 : False := by sorry\n",
+        "previous_failure_kind": "translation_failure",
+        "previous_error_message": "statement_fidelity_gate:repair_candidate:statement_validity:translation_limited,statement_validity_reason:translation_limited_status",
+        "rescue_method": "deterministic_typed_ir_retranslation"
+      },
+      "proved": false
     },
     {
       "theorem_name": "rem_21",
