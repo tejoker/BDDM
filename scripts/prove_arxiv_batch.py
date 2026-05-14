@@ -1241,6 +1241,18 @@ def prove_one(
 
     from pipeline_status import build_ledger_entry, load_ledger, save_ledger, upsert_ledger_entry
 
+    # Domain inference: feed paper_id (or the lean file's stem) to
+    # `_domain_from_paper_id`. Whatever it returns is plumbed into the two
+    # deterministic micro-prover entry points so the catalog can append
+    # domain-matched closers (analysis / probability / combinatorics / algebra).
+    _detected_domain: str = _domain_from_paper_id(paper_id) if paper_id else ""
+    if not _detected_domain:
+        try:
+            _stem = Path(thm.lean_file).stem
+            _detected_domain = _domain_from_paper_id(_stem)
+        except Exception:
+            _detected_domain = ""
+
     def _sync_base_alias_entry(entry_obj: object) -> None:
         """Mirror namespaced theorem result onto base theorem ID in the same ledger.
 
@@ -1870,6 +1882,7 @@ def prove_one(
             rel_file=rel_file,
             theorem_name=thm.full_name,
             theorem_decl=thm.declaration,
+            domain=_detected_domain,
         )
         if micro_ok:
             return True, [
@@ -2008,6 +2021,7 @@ def prove_one(
             rel_file=rel_file,
             theorem_name=thm.full_name,
             theorem_decl=thm.declaration,
+            domain=_detected_domain,
         )
         if file_micro_ok:
             proved = True
@@ -2110,6 +2124,7 @@ def prove_one(
                 rel_file=rel_file,
                 theorem_name=thm.full_name,
                 theorem_decl=thm.declaration,
+                domain=_detected_domain,
             )
             if file_micro_ok:
                 proved = True
@@ -2130,6 +2145,7 @@ def prove_one(
                     rel_file=rel_file,
                     theorem_name=thm.full_name,
                     theorem_decl=thm.declaration,
+                    domain=_detected_domain,
                 )
                 if micro_ok:
                     proved = True
@@ -2680,10 +2696,109 @@ def _is_proof_finished_obj(obj: object) -> bool:
     return type(obj).__name__ == "ProofFinished"
 
 
-def _micro_prover_scripts_for_decl(decl: str) -> list[str]:
+_FAST_PREPASS_TACTICS: tuple[str, ...] = (
+    # Ultra-cheap one-shot closers (<1s each in REPL). Tried before any
+    # shape-conditional analysis so that trivially-true goals never reach the
+    # state-MCTS or Mistral budget. Each tactic either elaborates the proof
+    # to completion or fails immediately — there's no risk of `sorry`-laden
+    # closure because lake/REPL only accepts a fully discharged proof state.
+    "rfl",
+    "trivial",
+    "decide",
+    "tauto",
+)
+
+
+def _domain_from_paper_id(paper_id: str) -> str:
+    """Recover the math domain prefix from a paper id of the form
+    ``<domain>/<arxiv_id>`` (or ``<domain>_<arxiv_id>``). Returns "" when no
+    recognisable domain prefix is present so callers can treat it as a generic
+    paper.
+    """
+    if not paper_id:
+        return ""
+    pid = str(paper_id).strip()
+    if not pid:
+        return ""
+    if "/" in pid:
+        head = pid.split("/", 1)[0]
+    elif "_" in pid:
+        head = pid.split("_", 1)[0]
+    else:
+        return ""
+    head = head.strip().lower()
+    # Whitelist of domains the pipeline produces (matches `prove_arxiv_batch
+    # --domain` / `output/<domain>_*.lean`).
+    if head in {"algebra", "analysis", "probability", "combinatorics",
+                "geometry", "topology", "logic", "number_theory",
+                "category", "physics", "ml"}:
+        return head
+    return ""
+
+
+def _domain_stratified_scripts(domain: str, s: str) -> list[str]:
+    """Return tactic scripts that are likely to close goals for ``domain``.
+
+    These are appended *in addition to* the shape-conditional catalog and only
+    when the paper's high-level math domain is known. Each script is
+    Lean-typechecked (a wrong choice fails to elaborate) so soundness is
+    unchanged.
+    """
+    if not domain:
+        return []
+    extra: list[str] = []
+    if domain == "analysis":
+        # Analytic-inequality goals — `Real.exp_pos _` and `Real.log_pos` are
+        # frequent witnesses; positivity already covers most non-negativity
+        # goals, but explicit hint chains pin tougher ones.
+        if any(tok in s for tok in ("≤", "≥", "<", ">", "Real.exp", "Real.log", "Real.rpow")):
+            extra.append("linarith [Real.exp_pos _]")
+            extra.append("nlinarith [Real.exp_pos _, sq_nonneg _]")
+        if "Real.log" in s:
+            extra.append("simp [Real.log_pos]")
+    elif domain == "probability":
+        # Probability/measure goals — most paper translations rely on
+        # ``measure_univ`` and the algebra of indicator/AE-event lemmas.
+        if any(tok in s for tok in ("Measure", "MeasureTheory", "ProbabilityTheory",
+                                     "Integrable", "ae", "Measurable")):
+            extra.append("simp [MeasureTheory.measure_univ]")
+            extra.append("simp_all [MeasureTheory.measure_univ]")
+    elif domain == "combinatorics":
+        # Finite case-splits — combinatorial proofs almost always reduce to a
+        # finite arithmetic enumeration after `interval_cases`.
+        if any(tok in s for tok in ("Fin", "Finset", "Fintype", "Nat", "Int", "ℕ", "ℤ")):
+            extra.append("interval_cases <;> omega")
+            extra.append("omega")
+    elif domain == "algebra":
+        # Algebraic-identity goals — `ring` / `noncomm_ring` after a
+        # normalisation pass closes most polynomial / module equalities.
+        if any(tok in s for tok in ("Ring", "Group", "Module", "Polynomial", "+", "*", "^")):
+            extra.append("ring")
+            extra.append("ring_nf; ring")
+    return extra
+
+
+def _micro_prover_scripts_for_decl(decl: str, *, domain: str = "") -> list[str]:
+    """Return ordered list of deterministic tactic scripts to try for ``decl``.
+
+    The optional ``domain`` parameter, when supplied (e.g. ``"analysis"``,
+    ``"probability"``, ``"combinatorics"``), causes domain-specific lemma
+    hints to be appended after the shape-conditional catalog. Callers that
+    don't know the paper's domain can omit the argument; the catalog then
+    behaves identically to the pre-expansion version (shape-based only).
+    """
     s = " ".join((decl or "").split())
     target = _decl_target(decl)
     scripts: list[str] = []
+
+    # --- Fast pre-pass: ultra-cheap one-shot closers ---
+    # These run *first* and unconditionally. `rfl` closes definitional
+    # equalities (`1 = 1`, `f x = f x`); `decide` closes decidable Prop
+    # goals (`2 < 3`); `tauto` closes propositional tautologies; `trivial`
+    # discharges `True` / `x = x` / direct hypothesis matches. They never
+    # produce a partial / sorry-laden proof — Lean either accepts the
+    # finished state or returns an error.
+    scripts.extend(_FAST_PREPASS_TACTICS)
 
     # --- Hammer passes: try before shape-specific tactics ---
     # omega: closes linear arithmetic over ℤ/ℕ (nat inequalities, modular arithmetic).
@@ -2711,6 +2826,11 @@ def _micro_prover_scripts_for_decl(decl: str) -> list[str]:
         scripts.append("linarith")
         scripts.append("nlinarith")
         scripts.append("positivity")
+        # Chained closers — discharge goals that need a single rewrite before
+        # the arith hammer fires (very common pattern in translated theorems).
+        scripts.append("simp_all; omega")
+        scripts.append("simp_all; linarith")
+        scripts.append("simp_all; nlinarith")
     if _has_nat_lit or _has_arith:
         scripts.append("norm_num")
     if _has_fin:
@@ -2720,6 +2840,10 @@ def _micro_prover_scripts_for_decl(decl: str) -> list[str]:
     scripts.append("aesop")
     scripts.append("simp_all")
     scripts.append("tauto")
+    # `push_neg; aesop` — for negated quantifier goals (`¬ ∀ ... → ∃ ¬ ...`)
+    # which aesop alone often misses because the pushed form is what its
+    # rule-set is keyed on.
+    scripts.append("push_neg; aesop")
     # Mathlib lemma retrieval (single-step closure when an existing lemma matches).
     # Routes through Desol.MathlibSearchTactic which tries `exact?` / `apply?`
     # locally first, then falls back to the LeanSearchClient network search.
@@ -2772,6 +2896,13 @@ def _micro_prover_scripts_for_decl(decl: str) -> list[str]:
                 "exact ⟨rfl, rfl, rfl⟩",
                 "constructor <;> rfl",
                 "refine ⟨?_, ?_⟩ <;> rfl",
+                # Trivial-arm closers — pure `trivial` discharges `True`,
+                # reflexive equalities, and direct hypothesis matches. Common
+                # in axiom-scaffold conjunctions after auto-instances fire.
+                "constructor <;> trivial",
+                "refine ⟨?_, ?_⟩ <;> trivial",
+                "refine ⟨?_, ?_, ?_⟩ <;> trivial",
+                "constructor; all_goals trivial",
                 # Schema-scaffold closer: theorems of the shape
                 # `(p₁ : Prop) (h₁ : p₁) … : p₁ ∧ p₂ ∧ …` where `aesop` may not
                 # find the right constructor under paper-local typeclass noise.
@@ -2818,11 +2949,31 @@ def _micro_prover_scripts_for_decl(decl: str) -> list[str]:
         lhs, rhs = split
         if lhs and rhs and lhs == rhs:
             scripts.extend(["intro h", "exact h"])
-        scripts.extend(["intro h", "aesop", "intro h", "omega", "intro h", "norm_num", "intro h", "simp_all"])
+        # `intro h; trivial` and `intro h; exact h` cover the common pattern
+        # `P → P` or `P → True` that paper translations leave behind after
+        # scaffolding. The former hits reflexivity / hypothesis discharge in
+        # one step; the latter avoids invoking aesop on a trivial goal.
+        scripts.extend([
+            "intro h; trivial",
+            "intro h; exact h",
+            "intro h; aesop",
+            "intro h; omega",
+            "intro h; norm_num",
+            "intro h; simp_all",
+            "intro h; linarith",
+        ])
     if any(tok in s for tok in ("Finset", "Set.", "∈", "⊆", "∪", "∩")):
         scripts.extend(["ext x <;> simp_all", "constructor <;> intro h <;> aesop"])
     if any(tok in s for tok in ("Ring", "Group", "Module", "Matrix", "LinearMap")):
         scripts.extend(["ring_nf", "simp_all"])
+
+    # --- Domain-stratified closers ---
+    # When the caller knows the paper's math domain, append a handful of
+    # domain-matched tactics. These are *additions*, not replacements:
+    # generic shape-conditional tactics still run first. Tested against
+    # Mathlib 4.29.0-rc7 — each lemma reference resolves.
+    scripts.extend(_domain_stratified_scripts(domain, s))
+
     return list(dict.fromkeys(x.strip() for x in scripts if x.strip()))
 
 
@@ -2833,9 +2984,15 @@ def _run_deterministic_micro_prover(
     theorem_name: str,
     theorem_decl: str,
     timeout_s: int = 90,
+    domain: str = "",
 ) -> tuple[bool, str, str]:
-    """Try deterministic tactic scripts for simple conjunction/∃! goals."""
-    scripts = _micro_prover_scripts_for_decl(theorem_decl)
+    """Try deterministic tactic scripts for simple conjunction/∃! goals.
+
+    When ``domain`` is provided (e.g. ``"analysis"``), the catalog returned by
+    ``_micro_prover_scripts_for_decl`` is extended with domain-matched
+    closers (analytic-inequality hints, measure_univ simps, etc.).
+    """
+    scripts = _micro_prover_scripts_for_decl(theorem_decl, domain=domain)
 
     try:
         from lean_repl_dojo import REPLDojo
@@ -3095,6 +3252,7 @@ def _run_deterministic_file_micro_prover(
     theorem_name: str,
     theorem_decl: str,
     timeout_s: int = 45,
+    domain: str = "",
 ) -> tuple[bool, str, str]:
     target = _decl_target(theorem_decl)
     scripts: list[list[str]] = []
@@ -3120,7 +3278,7 @@ def _run_deterministic_file_micro_prover(
             scripts.append(["constructor", f"exact {h_l}", f"exact {h_r}"])
     # Generic file-checked tactics catch simple set-membership and local-hypothesis goals
     # without opening an LLM-backed proof loop.
-    for tactic in _micro_prover_scripts_for_decl(theorem_decl):
+    for tactic in _micro_prover_scripts_for_decl(theorem_decl, domain=domain):
         scripts.append([tactic])
     if not scripts:
         return False, "", "file_micro_no_pattern"
