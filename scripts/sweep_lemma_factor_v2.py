@@ -51,6 +51,7 @@ if str(SCRIPT_DIR) not in sys.path:
 import lemma_factor_v2 as lfv2  # noqa: E402
 import leanstral_repl_proof_generator as repl_gen  # noqa: E402
 import leanstral_whole_proof_generator as gen  # noqa: E402
+import signature_typeclass_patcher as tc_patcher  # noqa: E402
 import sweep_canonical_patch_and_validate as patcher  # noqa: E402
 import sweep_leanstral_whole_proof as wp_sweep  # noqa: E402
 
@@ -73,6 +74,11 @@ try:
     from prove_arxiv_batch import _run_isolated_file_check  # type: ignore[import-not-found]
 except Exception:
     _run_isolated_file_check = None  # type: ignore[assignment]
+
+try:
+    import route_to_axiom_backed as r2ab  # type: ignore[import-not-found]
+except Exception:
+    r2ab = None  # type: ignore[assignment]
 
 
 CANONICAL_PAPERS = [
@@ -116,6 +122,30 @@ def _capture_baseline_errors(lean_file: Path, *, timeout_s: int = 180) -> int:
         return 0
     out = (proc.stdout or "") + "\n" + (proc.stderr or "")
     return sum(1 for ln in out.splitlines() if _ERROR_LINE_RX.match(ln.strip()))
+
+
+def _capture_baseline_error_tail(
+    lean_file: Path, *, timeout_s: int = 180, tail_chars: int = 4000
+) -> str:
+    """Capture the LAST `tail_chars` of lake-output for the untouched file.
+    Used by the typeclass-patcher pre-pass to look for
+    `synthInstanceFailed:` markers attributable to a specific row.
+    Returns empty string on lake timeout.
+    """
+    try:
+        proc = subprocess.run(
+            ["lake", "env", "lean", str(lean_file)],
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=timeout_s,
+        )
+    except subprocess.TimeoutExpired:
+        return ""
+    out = (proc.stdout or "") + "\n" + (proc.stderr or "")
+    if len(out) > tail_chars:
+        return out[-tail_chars:]
+    return out
 
 
 def _lake_validate_aware(
@@ -300,6 +330,57 @@ def _rename_aux_in_signature(sig: str, new_name: str) -> str:
     )
 
 
+# --- Signature splice (used by typeclass pre-pass) ------------------------
+
+
+def _splice_signature_in_file(
+    lean_file: Path, short_name: str, new_signature: str
+) -> tuple[bool, str]:
+    """Replace the on-disk signature head of `theorem <short_name>` with the
+    head of `new_signature`. The proof body (`:= by ...`) is preserved.
+
+    Returns (replaced, old_head) so the caller can revert. On failure returns
+    (False, "").
+    """
+    text = lean_file.read_text(encoding="utf-8")
+    pat = re.compile(
+        r"((?:noncomputable\s+|private\s+)?(?:theorem|lemma)\s+"
+        + re.escape(short_name)
+        + r"\b[\s\S]*?)(:=)",
+    )
+    m = pat.search(text)
+    if m is None:
+        return False, ""
+    old_head = m.group(1)
+    new_head_match = re.match(r"([\s\S]*?)(:=|$)", new_signature.strip())
+    if new_head_match is None:
+        return False, ""
+    new_head = new_head_match.group(1).rstrip() + " "
+    new_text = text[: m.start(1)] + new_head + text[m.end(1) :]
+    lean_file.write_text(new_text, encoding="utf-8")
+    return True, old_head
+
+
+def _restore_signature_in_file(
+    lean_file: Path, short_name: str, old_head: str
+) -> bool:
+    """Restore the signature head saved by `_splice_signature_in_file`."""
+    if not old_head:
+        return False
+    text = lean_file.read_text(encoding="utf-8")
+    pat = re.compile(
+        r"((?:noncomputable\s+|private\s+)?(?:theorem|lemma)\s+"
+        + re.escape(short_name)
+        + r"\b[\s\S]*?)(:=)",
+    )
+    m = pat.search(text)
+    if m is None:
+        return False
+    new_text = text[: m.start(1)] + old_head + text[m.end(1) :]
+    lean_file.write_text(new_text, encoding="utf-8")
+    return True
+
+
 # --- Composition attempt --------------------------------------------------
 
 
@@ -413,6 +494,7 @@ def _sweep_paper(
     dry_run: bool,
     bucket_counts: Counter[str],
     use_repl_prover: bool = False,
+    use_typeclass_patcher: bool = False,
 ) -> dict[str, Any]:
     led_path = PROJECT_ROOT / "output" / "verification_ledgers" / f"{paper_id}.json"
     lean_file = PROJECT_ROOT / "output" / f"{paper_id}.lean"
@@ -427,6 +509,7 @@ def _sweep_paper(
         "aux_closed": 0,
         "composed": 0,
         "audit_survived": 0,
+        "routed_to_axiom_backed": 0,
         "details": [],
     }
     if not led_path.exists() or not lean_file.exists():
@@ -514,6 +597,73 @@ def _sweep_paper(
         # --- First pass: whole-proof on parent --------------------------
         target_name = short if wp_sweep._flex_theorem_sorry_re(short).search(file_text) else name
         first_pass_validated = False
+        signature_patch_state: dict[str, Any] = {
+            "applied": False,
+            "old_head": "",
+            "patched_signature": "",
+        }
+
+        # --- Typeclass-patcher pre-pass (opt-in) ------------------------
+        # Capture the per-row baseline lake error tail; if it names a
+        # `synthInstanceFailed: <Class> <FreeVar>` pinned to a Type-var
+        # declared in the row's signature, propose a signature patch
+        # (insert `[<Class> <FreeVar>]`) and splice the FIRST candidate
+        # that elaborates into the on-disk file. The signature change
+        # persists only if a proof body subsequently closes against it
+        # (decided by the existing whole-proof + audit pipeline below).
+        if use_typeclass_patcher and _run_isolated_file_check is not None:
+            tail = _capture_baseline_error_tail(
+                lean_file, timeout_s=max(120, per_lake_timeout * 2)
+            )
+            try:
+                proposals = tc_patcher.propose_typeclass_additions(
+                    paper_id=paper_id,
+                    theorem_name=target_name,
+                    lean_statement=lean_stmt,
+                    baseline_error=tail,
+                    validate=tc_patcher.build_isolated_validator(
+                        project_root=PROJECT_ROOT,
+                        source_file=lean_file,
+                        timeout_s=max(30, per_lake_timeout),
+                    ),
+                )
+            except Exception as exc:
+                proposals = []
+                per_row["stages"].append({
+                    "stage": "typeclass_patcher_error",
+                    "err": str(exc)[:160],
+                })
+            if proposals:
+                # Splice the first elaborating candidate into the file.
+                ok, old_head = _splice_signature_in_file(
+                    lean_file, target_name, proposals[0],
+                )
+                if ok:
+                    new_baseline = _capture_baseline_errors(
+                        lean_file, timeout_s=max(120, per_lake_timeout * 2),
+                    )
+                    if new_baseline <= baseline_errors:
+                        signature_patch_state["applied"] = True
+                        signature_patch_state["old_head"] = old_head
+                        signature_patch_state["patched_signature"] = proposals[0]
+                        baseline_errors = new_baseline
+                        file_text = lean_file.read_text(encoding="utf-8")
+                        per_row["stages"].append({
+                            "stage": "typeclass_patch_spliced",
+                            "patched_sig_preview": proposals[0][:160],
+                            "new_baseline": new_baseline,
+                        })
+                    else:
+                        # Patch regressed baseline — revert.
+                        _restore_signature_in_file(lean_file, target_name, old_head)
+                        file_text = lean_file.read_text(encoding="utf-8")
+                        per_row["stages"].append({
+                            "stage": "typeclass_patch_regressed_baseline",
+                            "new_baseline": new_baseline,
+                            "prior_baseline": baseline_errors,
+                        })
+                else:
+                    per_row["stages"].append({"stage": "typeclass_patch_splice_failed"})
 
         # --- REPL-prover first pass (opt-in) ----------------------------
         # When `--use-repl-prover` is set, try the REPL-driven tactic-by-
@@ -637,17 +787,78 @@ def _sweep_paper(
             if audit_ok:
                 report["audit_survived"] += 1
                 per_row["audit"] = "survived"
+                # Record the signature-patch as part of the formalization
+                # commitment (caller-visible audit_trail field).
+                if signature_patch_state["applied"]:
+                    trail = entry.setdefault("audit_trail", [])
+                    if isinstance(trail, list):
+                        trail.append({
+                            "event": "signature_patched_for_typeclass",
+                            "patched_signature": signature_patch_state["patched_signature"],
+                            "prior_head": signature_patch_state["old_head"],
+                            "protocol": "signature_typeclass_patcher_v1",
+                        })
+                    entry["signature_patched_for_typeclass"] = True
+                    per_row["stages"].append({"stage": "signature_patch_kept"})
             else:
                 per_row["audit"] = "demoted"
                 per_row["audit_summary"] = audit_summary
                 # Roll back: revert the parent to sorry and remove
                 # accept-state from the entry.
                 wp_sweep._revert_proof_flex(lean_file, target_name)
+                # Revert any signature patch — proofless commitments are
+                # not real formalization progress.
+                if signature_patch_state["applied"]:
+                    _restore_signature_in_file(
+                        lean_file, target_name, signature_patch_state["old_head"],
+                    )
+                    per_row["stages"].append({"stage": "signature_patch_reverted_on_audit_demotion"})
                 # Re-load from disk (audit may have written).
                 data = json.loads(led_path.read_text(encoding="utf-8"))
                 entries = data if isinstance(data, list) else data.get("entries", [])
             report["details"].append(per_row)
             continue
+
+        # --- Paper-local axiom routing ----------------------------------
+        # When the first-pass lake error indicates that the row is
+        # blocked by an opaque paper-local axiom (declared as
+        # `axiom <name>` or stub `def <name> := 0/True/sorry/Set.univ`
+        # in paper-theory), route the entry to AXIOM_BACKED with the
+        # precise axiom_debt list. No tactic search can close such a
+        # row honestly; decomposition (lemma-factor) does not help
+        # against opacity. Skip the factor pass so we don't burn
+        # Mistral budget on a hopeless decomposition.
+        if r2ab is not None:
+            ax_err_tail = ""
+            for stg in reversed(per_row["stages"]):
+                if isinstance(stg, dict) and stg.get("stage") in (
+                    "first_pass_lake_error",
+                    "repl_prover_lake_error",
+                ):
+                    ax_err_tail = str(stg.get("err_tail", "") or "")
+                    break
+            if ax_err_tail:
+                ax_route = r2ab.detect_paper_axiom_block(
+                    paper_id=paper_id,
+                    theorem_name=short or name,
+                    lean_statement=lean_stmt,
+                    lake_error=ax_err_tail,
+                    paper_theory_file=paper_theory_path,
+                )
+                if ax_route is not None:
+                    r2ab.apply_route_to_entry(
+                        entry,
+                        route=ax_route,
+                        paper_id=paper_id,
+                        lake_error_preview=ax_err_tail,
+                    )
+                    report["routed_to_axiom_backed"] += 1
+                    per_row["stages"].append({
+                        "stage": "routed_to_axiom_backed",
+                        "axiom_debt": ax_route["axiom_debt"],
+                    })
+                    report["details"].append(per_row)
+                    continue
 
         # --- Factor pass: lemma-factor-v2 -------------------------------
         try:
@@ -664,6 +875,12 @@ def _sweep_paper(
         except Exception as exc:
             per_row["stages"].append({"stage": "factor_transport_error", "err": str(exc)[:200]})
             bucket_counts["transport_errors"] += 1
+            if signature_patch_state["applied"]:
+                _restore_signature_in_file(
+                    lean_file, target_name, signature_patch_state["old_head"]
+                )
+                file_text = lean_file.read_text(encoding="utf-8")
+                per_row["stages"].append({"stage": "signature_patch_reverted_no_closure"})
             report["details"].append(per_row)
             continue
         report["aux_proposed"] += len(factor_records)
@@ -675,6 +892,12 @@ def _sweep_paper(
                 "proposed": len(factor_records),
                 "elaborated": len(elaborated),
             })
+            if signature_patch_state["applied"]:
+                _restore_signature_in_file(
+                    lean_file, target_name, signature_patch_state["old_head"]
+                )
+                file_text = lean_file.read_text(encoding="utf-8")
+                per_row["stages"].append({"stage": "signature_patch_reverted_no_closure"})
             report["details"].append(per_row)
             continue
 
@@ -699,6 +922,12 @@ def _sweep_paper(
         )
         if not inserted:
             per_row["stages"].append({"stage": "aux_insert_failed"})
+            if signature_patch_state["applied"]:
+                _restore_signature_in_file(
+                    lean_file, target_name, signature_patch_state["old_head"]
+                )
+                file_text = lean_file.read_text(encoding="utf-8")
+                per_row["stages"].append({"stage": "signature_patch_reverted_no_closure"})
             report["details"].append(per_row)
             continue
         file_text = lean_file.read_text(encoding="utf-8")
@@ -771,6 +1000,12 @@ def _sweep_paper(
                 "needed": min_needed,
                 "shape": target_shape,
             })
+            if signature_patch_state["applied"]:
+                _restore_signature_in_file(
+                    lean_file, target_name, signature_patch_state["old_head"]
+                )
+                file_text = lean_file.read_text(encoding="utf-8")
+                per_row["stages"].append({"stage": "signature_patch_reverted_no_closure"})
             report["details"].append(per_row)
             continue
 
@@ -807,6 +1042,12 @@ def _sweep_paper(
                 "stage": "composition_failed",
                 "err_tail": (comp_err or "")[-160:],
             })
+            if signature_patch_state["applied"]:
+                _restore_signature_in_file(
+                    lean_file, target_name, signature_patch_state["old_head"]
+                )
+                file_text = lean_file.read_text(encoding="utf-8")
+                per_row["stages"].append({"stage": "signature_patch_reverted_no_closure"})
             report["details"].append(per_row)
             continue
 
@@ -837,11 +1078,28 @@ def _sweep_paper(
                 "stage": "composed_and_audit_survived",
                 "composition_body": comp_body[:120],
             })
+            # Record the signature-patch as part of the factored success.
+            if signature_patch_state["applied"]:
+                trail = entry.setdefault("audit_trail", [])
+                if isinstance(trail, list):
+                    trail.append({
+                        "event": "signature_patched_for_typeclass",
+                        "patched_signature": signature_patch_state["patched_signature"],
+                        "prior_head": signature_patch_state["old_head"],
+                        "protocol": "signature_typeclass_patcher_v1",
+                    })
+                entry["signature_patched_for_typeclass"] = True
+                per_row["stages"].append({"stage": "signature_patch_kept_via_factor"})
         else:
-            # Roll back the parent + aux.
+            # Roll back the parent + aux + signature patch (no closure).
             wp_sweep._revert_proof_flex(lean_file, target_name)
             cleanup_names = [nm for nm, _, _ in renamed]
             _remove_aux_lemmas(lean_file, cleanup_names)
+            if signature_patch_state["applied"]:
+                _restore_signature_in_file(
+                    lean_file, target_name, signature_patch_state["old_head"],
+                )
+                per_row["stages"].append({"stage": "signature_patch_reverted_on_audit_demotion"})
             data = json.loads(led_path.read_text(encoding="utf-8"))
             entries = data if isinstance(data, list) else data.get("entries", [])
             file_text = lean_file.read_text(encoding="utf-8")
@@ -897,6 +1155,20 @@ def main() -> int:
             "use the whole-proof generator regardless."
         ),
     )
+    parser.add_argument(
+        "--use-typeclass-patcher",
+        action="store_true",
+        default=False,
+        help=(
+            "Enable the signature-typeclass pre-pass: when the per-row "
+            "baseline lake error names `synthInstanceFailed: <Class> "
+            "<FreeVar>` for a `Type*` binder declared in the signature, "
+            "splice `[<Class> <FreeVar>]` into the signature on disk "
+            "before running the proof generator. The patch is kept only "
+            "when a proof body closes against the patched signature; "
+            "otherwise it is reverted (default OFF until calibrated)."
+        ),
+    )
     parser.add_argument("--summary", default="output/lemma_factor_v2_sweep_summary.json")
     args = parser.parse_args()
 
@@ -924,6 +1196,7 @@ def main() -> int:
             dry_run=args.dry_run,
             bucket_counts=bucket_counts,
             use_repl_prover=args.use_repl_prover,
+            use_typeclass_patcher=args.use_typeclass_patcher,
         )
         reports.append(r)
         # Persist partial summary after each paper so a mid-sweep crash
@@ -951,6 +1224,7 @@ def main() -> int:
             "aux_closed": sum(r.get("aux_closed", 0) for r in reports),
             "composed": sum(r.get("composed", 0) for r in reports),
             "audit_survived": sum(r.get("audit_survived", 0) for r in reports),
+            "routed_to_axiom_backed": sum(r.get("routed_to_axiom_backed", 0) for r in reports),
         },
         "bucket_counts": dict(bucket_counts),
     }
