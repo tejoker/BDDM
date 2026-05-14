@@ -671,6 +671,7 @@ def _build_source_backed_payload_for_action(
     use_llm_repair: bool = False,
     llm_repair_client: Any = None,
     llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
+    llm_repair_max_rounds: int = 3,
 ) -> dict[str, Any]:
     from repair_bad_translations import build_source_backed_repair_payload
 
@@ -692,9 +693,48 @@ def _build_source_backed_payload_for_action(
             client=llm_repair_client,
             model=llm_repair_model,
             validate_candidates=validate_candidates,
+            max_repair_rounds=llm_repair_max_rounds,
         )
     payload = _repair_payload_for_action(payload, action)
     return _attach_review_batch_previews(payload, action)
+
+
+def _summarize_llm_repair_per_row(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Per-row LLM-repair retry telemetry suitable for surfacing in the action
+    output. Each entry includes the theorem name, retry-round count, whether
+    the final candidate elaborated, and a short summary of each round.
+
+    Only candidates with an `llm_repair` block (i.e. the LLM overlay was
+    attempted) are included; rule-based-only rows return nothing.
+    """
+    rows: list[dict[str, Any]] = []
+    for cand in candidates or []:
+        if not isinstance(cand, dict):
+            continue
+        llm = cand.get("llm_repair")
+        if not isinstance(llm, dict):
+            continue
+        history = llm.get("retry_history") if isinstance(llm.get("retry_history"), list) else []
+        compact_history = [
+            {
+                "round": h.get("round"),
+                "elaboration_ok": h.get("elaboration_ok"),
+                "lean_error_head": (str(h.get("lean_error_tail") or "")[-200:]).replace("\n", " "),
+            }
+            for h in history
+            if isinstance(h, dict)
+        ]
+        rows.append(
+            {
+                "theorem_name": cand.get("theorem_name", ""),
+                "llm_ok": bool(llm.get("ok")),
+                "retry_rounds": int(llm.get("retry_rounds", 1) or 1),
+                "final_elaboration_ok": bool((llm.get("elaboration_gate") or {}).get("ok")) if llm.get("ok") else False,
+                "retry_history": compact_history,
+                "reason": llm.get("reason", ""),
+            }
+        )
+    return rows
 
 
 def _overlay_llm_repair_candidates(
@@ -705,6 +745,7 @@ def _overlay_llm_repair_candidates(
     client: Any,
     model: str,
     validate_candidates: bool,
+    max_repair_rounds: int = 3,
 ) -> dict[str, Any]:
     """Replace each candidate's `repaired_decl` with an LLM-generated signature
     when (a) the source_latex is non-empty and (b) the LLM output passes the
@@ -747,6 +788,9 @@ def _overlay_llm_repair_candidates(
         "skipped_no_source": 0,
         "validated_ok": 0,
         "elaboration_gate_rejected": 0,
+        "retry_rounds_total": 0,
+        "retry_rounds_max_observed": 0,
+        "retry_recovered": 0,
     }
     for raw in candidates:
         candidate = dict(raw) if isinstance(raw, dict) else {}
@@ -758,6 +802,32 @@ def _overlay_llm_repair_candidates(
             out_candidates.append(candidate)
             continue
         llm_counters["attempted"] += 1
+
+        # Build an elaboration-validator closure for the retry loop. Re-uses
+        # the same isolated `lake env lean` probe as the post-call gate, so the
+        # gate's cache absorbs the duplicate lookup. When `validate_candidates`
+        # is False we pass None — disabling retry — because there's nothing
+        # informative to feed back to the LLM.
+        _validate_elab: Optional[Any] = None
+        if validate_candidates and max_repair_rounds > 1:
+            def _validate_elab_closure(
+                cand_decl: str,
+                _paper_id: str = paper_id,
+                _theorem_name: str = theorem_name,
+                _lean_file_hint: str = lean_file_hint,
+            ) -> tuple[bool, str]:
+                gate = _run_elaboration_gate(
+                    project_root=project_root,
+                    paper_id=_paper_id,
+                    theorem_name=_theorem_name,
+                    candidate_decl=cand_decl,
+                    source_file_hint=_lean_file_hint,
+                )
+                ok_val = bool(gate.get("ok"))
+                err_tail = str(gate.get("error") or "")
+                return ok_val, err_tail
+            _validate_elab = _validate_elab_closure
+
         try:
             llm_result = generate_llm_repair_candidate(
                 source_latex=source_latex,
@@ -766,6 +836,8 @@ def _overlay_llm_repair_candidates(
                 paper_theory_hint=paper_theory_hint,
                 client=client,
                 model=model,
+                max_repair_rounds=max_repair_rounds,
+                validate_elaboration=_validate_elab,
             )
         except Exception as exc:
             candidate["llm_repair"] = {
@@ -775,12 +847,22 @@ def _overlay_llm_repair_candidates(
             out_candidates.append(candidate)
             continue
 
+        # Aggregate retry telemetry (also for rows that ultimately fail).
+        rounds_used = int((llm_result or {}).get("retry_rounds", 1) or 1)
+        llm_counters["retry_rounds_total"] += rounds_used
+        if rounds_used > llm_counters["retry_rounds_max_observed"]:
+            llm_counters["retry_rounds_max_observed"] = rounds_used
+
         if not llm_result or not llm_result.get("repaired_decl"):
             candidate["llm_repair"] = {
                 "ok": False,
                 "result": llm_result or {"error": "empty_or_none"},
+                "retry_rounds": rounds_used,
+                "retry_history": (llm_result or {}).get("retry_history", []),
             }
             llm_counters["rejected"] += 1
+            if "elaboration_gate_after_retry" in ((llm_result or {}).get("rejected") or []):
+                llm_counters["elaboration_gate_rejected"] += 1
             out_candidates.append(candidate)
             continue
 
@@ -876,8 +958,12 @@ def _overlay_llm_repair_candidates(
             "result": llm_result,
             "lean_validation_for_llm_candidate": validation,
             "elaboration_gate": elaboration_gate,
+            "retry_rounds": rounds_used,
+            "retry_history": (llm_result or {}).get("retry_history", []),
         }
         llm_counters["accepted"] += 1
+        if rounds_used > 1:
+            llm_counters["retry_recovered"] += 1
         out_candidates.append(candidate)
 
     out = dict(payload)
@@ -903,6 +989,7 @@ def _apply_source_backed_payload(
     use_llm_repair: bool = False,
     llm_repair_client: Any = None,
     llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
+    llm_repair_max_rounds: int = 3,
 ) -> dict[str, Any]:
     artifacts = action.get("artifacts") if isinstance(action.get("artifacts"), dict) else {}
     ledger = str(artifacts.get("ledger", "") or "")
@@ -920,6 +1007,7 @@ def _apply_source_backed_payload(
         use_llm_repair=use_llm_repair,
         llm_repair_client=llm_repair_client,
         llm_repair_model=llm_repair_model,
+        llm_repair_max_rounds=llm_repair_max_rounds,
     )
     candidates = repair_payload.get("repair_candidates", [])
     if not isinstance(candidates, list):
@@ -928,6 +1016,14 @@ def _apply_source_backed_payload(
     repair_blockers = _repair_candidate_blocker_counts(candidates)
     write_payload = _write_eligible_repair_payload(repair_payload)
     eligible_count = int((write_payload.get("write_eligibility_filter") or {}).get("eligible_candidate_count", 0) or 0)
+
+    # Surface LLM-repair retry telemetry (per-row + aggregate) into the action
+    # so smoke / audit / regression runs can inspect retry behavior without
+    # having to re-derive it from the on-disk repair_pack json (which is
+    # written by `build_source_backed_repair_payload` BEFORE the LLM overlay).
+    llm_repair_overlay = repair_payload.get("llm_repair_overlay") or {}
+    llm_repair_per_row = _summarize_llm_repair_per_row(candidates)
+
     if not write:
         return _non_mutating_action(
             action,
@@ -936,6 +1032,8 @@ def _apply_source_backed_payload(
             repair_blocker_counts=repair_blockers,
             candidate_graduation_preview=candidate_previews,
             write_eligibility_filter=write_payload.get("write_eligibility_filter", {}),
+            llm_repair_overlay=llm_repair_overlay,
+            llm_repair_per_row=llm_repair_per_row,
             wrote_repair_pack=True,
             regeneration_protocol="source_backed_v2",
         )
@@ -947,6 +1045,8 @@ def _apply_source_backed_payload(
             repair_blocker_counts=repair_blockers,
             candidate_graduation_preview=candidate_previews,
             write_eligibility_filter=write_payload.get("write_eligibility_filter", {}),
+            llm_repair_overlay=llm_repair_overlay,
+            llm_repair_per_row=llm_repair_per_row,
             wrote_repair_pack=True,
             regeneration_protocol="source_backed_v2",
         )
@@ -964,6 +1064,8 @@ def _apply_source_backed_payload(
             repair_blocker_counts=repair_blockers,
             candidate_graduation_preview=candidate_previews,
             write_eligibility_filter=write_payload.get("write_eligibility_filter", {}),
+            llm_repair_overlay=llm_repair_overlay,
+            llm_repair_per_row=llm_repair_per_row,
             ledger_application=dry_apply,
             wrote_repair_pack=True,
             regeneration_protocol="source_backed_v2",
@@ -985,6 +1087,8 @@ def _apply_source_backed_payload(
         "repair_blocker_counts": repair_blockers,
         "candidate_graduation_preview": candidate_previews,
         "write_eligibility_filter": write_payload.get("write_eligibility_filter", {}),
+        "llm_repair_overlay": llm_repair_overlay,
+        "llm_repair_per_row": llm_repair_per_row,
         "ledger_application": ledger_result,
         "regeneration_protocol": "source_backed_v2",
     }
@@ -1000,6 +1104,7 @@ def _execute_statement_regeneration(
     use_llm_repair: bool = False,
     llm_repair_client: Any = None,
     llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
+    llm_repair_max_rounds: int = 3,
 ) -> dict[str, Any]:
     artifacts = action.get("artifacts") if isinstance(action.get("artifacts"), dict) else {}
     report = str(artifacts.get("report", "") or "")
@@ -1019,6 +1124,7 @@ def _execute_statement_regeneration(
             use_llm_repair=use_llm_repair,
             llm_repair_client=llm_repair_client,
             llm_repair_model=llm_repair_model,
+            llm_repair_max_rounds=llm_repair_max_rounds,
         )
     if not write:
         return _non_mutating_action(action, "dry_run_write_required")
@@ -1107,6 +1213,7 @@ def _execute_source_translation_recovery(
     use_llm_repair: bool = False,
     llm_repair_client: Any = None,
     llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
+    llm_repair_max_rounds: int = 3,
 ) -> dict[str, Any]:
     if not write and not action.get("source_contexts"):
         return _non_mutating_action(
@@ -1130,6 +1237,7 @@ def _execute_source_translation_recovery(
         use_llm_repair=use_llm_repair,
         llm_repair_client=llm_repair_client,
         llm_repair_model=llm_repair_model,
+        llm_repair_max_rounds=llm_repair_max_rounds,
     )
     if not write:
         result["translation_recovery_policy"] = {
@@ -1152,6 +1260,7 @@ def execute_worker_actions(
     use_llm_repair: bool = False,
     llm_repair_client: Any = None,
     llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
+    llm_repair_max_rounds: int = 3,
     rewrite_lean_files: bool = True,
 ) -> list[dict[str, Any]]:
     executed: list[dict[str, Any]] = []
@@ -1174,6 +1283,7 @@ def execute_worker_actions(
                 use_llm_repair=use_llm_repair,
                 llm_repair_client=llm_repair_client,
                 llm_repair_model=llm_repair_model,
+                llm_repair_max_rounds=llm_repair_max_rounds,
             )
         elif route == "source_span_repair":
             result = _execute_source_span_repair(action, project_root=project_root, write=write)
@@ -1189,6 +1299,7 @@ def execute_worker_actions(
                 use_llm_repair=use_llm_repair,
                 llm_repair_client=llm_repair_client,
                 llm_repair_model=llm_repair_model,
+                llm_repair_max_rounds=llm_repair_max_rounds,
             )
         else:
             result = _non_mutating_action(action, "queued_manual_repair")
@@ -1473,6 +1584,7 @@ def run_worker(
     use_llm_repair: bool = False,
     llm_repair_client: Any = None,
     llm_repair_model: str = DEFAULT_LLM_REPAIR_MODEL,
+    llm_repair_max_rounds: int = 3,
     rewrite_lean_files: bool = True,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     actions, _ = build_worker_actions(rows, limit=limit)
@@ -1488,6 +1600,7 @@ def run_worker(
         use_llm_repair=use_llm_repair,
         llm_repair_client=llm_repair_client,
         llm_repair_model=llm_repair_model,
+        llm_repair_max_rounds=llm_repair_max_rounds,
         rewrite_lean_files=rewrite_lean_files,
     )
     summary = _summarize_actions(executed, rows=selected_rows, write=write)
@@ -1645,6 +1758,7 @@ def export_worker_run(args: argparse.Namespace) -> dict[str, Any]:
         use_llm_repair=bool(getattr(args, "use_llm_repair", False)),
         llm_repair_client=llm_client,
         llm_repair_model=str(getattr(args, "llm_repair_model", DEFAULT_LLM_REPAIR_MODEL) or DEFAULT_LLM_REPAIR_MODEL),
+        llm_repair_max_rounds=int(getattr(args, "llm_repair_max_rounds", 3) or 3),
         rewrite_lean_files=bool(getattr(args, "rewrite_lean_files", True)),
     )
     result = {
@@ -1690,6 +1804,19 @@ def _build_parser() -> argparse.ArgumentParser:
         "--llm-repair-model",
         default=DEFAULT_LLM_REPAIR_MODEL,
         help="Mistral model ID for --use-llm-repair (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--llm-repair-max-rounds",
+        type=int,
+        default=3,
+        help=(
+            "Max retry rounds for LLM statement repair (default: 3). When the "
+            "elaboration gate rejects an LLM candidate, the Lean error tail is "
+            "fed back to Leanstral with a directive to fix the specific issue. "
+            "Set to 1 to disable retry (single-attempt semantics). Each "
+            "additional round is one extra Mistral call per failing row, so "
+            "cost scales linearly with this budget."
+        ),
     )
     parser.add_argument(
         "--rewrite-lean-files",

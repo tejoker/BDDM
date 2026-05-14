@@ -28,7 +28,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -59,6 +59,8 @@ DEFAULT_MODEL = os.getenv("MISTRAL_MODEL", "labs-leanstral-2603")
 DEFAULT_MAX_TOKENS = 768
 MAX_LATEX_CHARS = 2000
 MAX_HINT_CHARS = 1500
+DEFAULT_MAX_REPAIR_ROUNDS = 3
+MAX_LEAN_ERROR_TAIL_CHARS = 500
 
 
 _SYSTEM_PROMPT = (
@@ -100,6 +102,25 @@ _USER_TEMPLATE = (
     "names freely):\n"
     "```lean\n{paper_theory_hint}\n```\n\n"
     "Produce the JSON object now."
+)
+
+
+_RETRY_USER_TEMPLATE = (
+    "Theorem name (use exactly this identifier in the Lean declaration): "
+    "`{theorem_name}`\n\n"
+    "LaTeX statement (from the paper, UNCHANGED — re-formalize the SAME claim):\n"
+    "```latex\n{source_latex}\n```\n\n"
+    "Paper-theory hint (Lean signatures already in scope):\n"
+    "```lean\n{paper_theory_hint}\n```\n\n"
+    "Your previous candidate (round {prev_round}/{max_rounds}) was REJECTED by "
+    "Lean elaboration:\n"
+    "```lean\n{prev_candidate}\n```\n\n"
+    "Lean elaboration error:\n"
+    "```\n{lean_error_tail}\n```\n\n"
+    "Fix the SPECIFIC issue Lean reported above. Keep the same mathematical "
+    "claim; only adjust types, scopes, instance names, missing imports/opens "
+    "(use only paper-local names + Mathlib), parser syntax, or quantifier "
+    "binders. Do NOT switch to a trivial body. Return the same JSON schema."
 )
 
 
@@ -275,41 +296,21 @@ def _rewrite_theorem_name(decl: str, theorem_name: str) -> str:
     )
 
 
-def generate_llm_repair_candidate(
+def _single_attempt(
     *,
-    source_latex: str,
-    paper_id: str,
-    theorem_name: str,
-    paper_theory_hint: str,
     client: Any,
-    model: str = DEFAULT_MODEL,
-    api_log_hook: Optional[Any] = None,
-    max_tokens: int = DEFAULT_MAX_TOKENS,
-) -> dict[str, Any] | None:
-    """Generate a Lean theorem signature via Leanstral.
+    model: str,
+    user: str,
+    theorem_name: str,
+    max_tokens: int,
+    api_log_hook: Optional[Any],
+) -> dict[str, Any]:
+    """Single LLM call + parse + normalize + trivialization-gate pass.
 
-    Returns a dict with keys:
-      - repaired_decl: str (the Lean signature, body normalized to `:= by sorry`)
-      - reasoning:     str (LLM justification)
-      - confidence:    float in [0, 1]
-      - protocol:      "llm_statement_repair_v1"
-      - rejected:      list[str] (empty on success)
-
-    Returns None when generation fails (empty input, transport error, refusal,
-    or output rejected by the trivialization / placeholder gate).
+    Always returns a dict (never None). On success: `repaired_decl` is set and
+    `rejected` is empty. On any failure: `repaired_decl == ""` and `rejected`
+    enumerates the reasons.
     """
-    if not (source_latex or "").strip():
-        return None
-    if client is None:
-        return None
-    latex_trim = re.sub(r"\s+", " ", source_latex).strip()[:MAX_LATEX_CHARS]
-    hint_trim = (paper_theory_hint or "").strip()[:MAX_HINT_CHARS]
-    user = _USER_TEMPLATE.format(
-        theorem_name=(theorem_name or "anon").strip().rsplit(".", 1)[-1] or "anon",
-        source_latex=latex_trim,
-        paper_theory_hint=hint_trim or "-- (no paper-local symbols exported)",
-    )
-
     try:
         raw = _call(
             client=client,
@@ -401,6 +402,140 @@ def generate_llm_repair_candidate(
         "rejected": [],
         "raw": raw[:500],
     }
+
+
+def generate_llm_repair_candidate(
+    *,
+    source_latex: str,
+    paper_id: str,
+    theorem_name: str,
+    paper_theory_hint: str,
+    client: Any,
+    model: str = DEFAULT_MODEL,
+    api_log_hook: Optional[Any] = None,
+    max_tokens: int = DEFAULT_MAX_TOKENS,
+    max_repair_rounds: int = DEFAULT_MAX_REPAIR_ROUNDS,
+    validate_elaboration: Optional[Callable[[str], tuple[bool, str]]] = None,
+) -> dict[str, Any] | None:
+    """Generate a Lean theorem signature via Leanstral with optional error-feedback retry.
+
+    Returns a dict with keys:
+      - repaired_decl: str (the Lean signature, body normalized to `:= by sorry`)
+      - reasoning:     str (LLM justification)
+      - confidence:    float in [0, 1]
+      - protocol:      "llm_statement_repair_v1"
+      - rejected:      list[str] (empty on success)
+      - retry_rounds:  int (number of LLM calls made; 1 on first-shot success)
+      - retry_history: list[dict] (per-round candidate + elaboration result; only
+                       present when `validate_elaboration` is supplied)
+
+    Returns None when generation fails (empty input, missing client).
+
+    If `validate_elaboration` is supplied, it is called with the normalized
+    candidate decl after each round and must return `(ok: bool, error_tail: str)`.
+    When it returns `ok=False`, the loop builds a follow-up prompt that feeds
+    the Lean error tail (≤500 chars) back to the LLM so it can fix the specific
+    structural issue, and re-validates. Iterates up to `max_repair_rounds`.
+
+    When `validate_elaboration` is None, this is identical to a single-attempt
+    call (no retry) — the elaboration gate is the only signal that justifies a
+    retry; trivialization/placeholder failures are deterministic.
+    """
+    if not (source_latex or "").strip():
+        return None
+    if client is None:
+        return None
+    if max_repair_rounds < 1:
+        max_repair_rounds = 1
+
+    latex_trim = re.sub(r"\s+", " ", source_latex).strip()[:MAX_LATEX_CHARS]
+    hint_trim = (paper_theory_hint or "").strip()[:MAX_HINT_CHARS]
+    theorem_name_short = (theorem_name or "anon").strip().rsplit(".", 1)[-1] or "anon"
+    initial_user = _USER_TEMPLATE.format(
+        theorem_name=theorem_name_short,
+        source_latex=latex_trim,
+        paper_theory_hint=hint_trim or "-- (no paper-local symbols exported)",
+    )
+
+    retry_history: list[dict[str, Any]] = []
+    last_result: dict[str, Any] = {}
+    user_prompt = initial_user
+
+    for round_idx in range(1, max_repair_rounds + 1):
+        attempt = _single_attempt(
+            client=client,
+            model=model,
+            user=user_prompt,
+            theorem_name=theorem_name,
+            max_tokens=max_tokens,
+            api_log_hook=api_log_hook,
+        )
+        attempt["retry_rounds"] = round_idx
+        last_result = attempt
+
+        decl = str(attempt.get("repaired_decl") or "")
+        if not decl:
+            # Trivialization/placeholder/refusal/malformed — retry won't help
+            # because the elaboration gate hasn't even seen the candidate. Stop.
+            attempt["retry_history"] = list(retry_history)
+            return attempt
+
+        if validate_elaboration is None:
+            # No elaboration callback wired — single-attempt semantics.
+            attempt["retry_history"] = list(retry_history)
+            return attempt
+
+        try:
+            ok, error_tail = validate_elaboration(decl)
+        except Exception as exc:  # pragma: no cover - defensive
+            attempt["elaboration_validator_exception"] = (
+                f"{type(exc).__name__}:{exc}"[:240]
+            )
+            attempt["retry_history"] = list(retry_history)
+            return attempt
+
+        round_record = {
+            "round": round_idx,
+            "candidate_decl": decl,
+            "elaboration_ok": bool(ok),
+            "lean_error_tail": (error_tail or "")[-MAX_LEAN_ERROR_TAIL_CHARS:],
+        }
+        retry_history.append(round_record)
+
+        if ok:
+            attempt["retry_history"] = list(retry_history)
+            return attempt
+
+        if round_idx >= max_repair_rounds:
+            # Exhausted budget; honestly reject as elaboration-failure.
+            rejected = list(attempt.get("rejected") or [])
+            if "elaboration_gate_after_retry" not in rejected:
+                rejected.append("elaboration_gate_after_retry")
+            return {
+                **attempt,
+                "repaired_decl": "",
+                "rejected": rejected,
+                "reasoning": attempt.get("reasoning") or "elaboration_gate_after_retry",
+                "candidate_decl_before_rejection": decl,
+                "lean_error_tail": round_record["lean_error_tail"],
+                "retry_history": list(retry_history),
+            }
+
+        # Build follow-up prompt for the next round.
+        tail = (error_tail or "")[-MAX_LEAN_ERROR_TAIL_CHARS:]
+        user_prompt = _RETRY_USER_TEMPLATE.format(
+            theorem_name=theorem_name_short,
+            source_latex=latex_trim,
+            paper_theory_hint=hint_trim or "-- (no paper-local symbols exported)",
+            prev_round=round_idx,
+            max_rounds=max_repair_rounds,
+            prev_candidate=decl,
+            lean_error_tail=tail or "(empty error output)",
+        )
+
+    # Unreachable in normal flow (loop returns on every path) but keep a safe
+    # fall-through for defensive completeness.
+    return last_result or None
 
 
 # --- Paper-theory hint extraction -----------------------------------------
