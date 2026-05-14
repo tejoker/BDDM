@@ -328,7 +328,7 @@
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
       "proof_body": "refine ⟨high_freq_preserved ∧ low_freq_adapted ∧ potential_replacement, Iff.rfl⟩",
-      "reasoning": "The theorem asks to prove the existence of a proposition `extension_possible` that is equivalent to the conjunction of three given propositions. The solution is straightforward: we can directly take the conjunction itself as the witness for `extension_possible`, and then the equivalence is trivially true by reflexivity of equality (Iff.rfl).",
+      "reasoning": "The theorem asks to prove the existence of a proposition `extension_possible` that is equivalent to the conjunction of three given propositions. The solution is straightforward: we can directly take the conjunction itself as the witness for `extension_possible` and use `Iff.rfl` to show the equivalence.",
       "confidence": 1.0,
       "round_idx": 1
     },

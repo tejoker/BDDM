@@ -169,10 +169,10 @@
     "theorem_name": "prop_cubic_quartic_baseline",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
     "lean_statement": "theorem prop_cubic_quartic_baseline (_alpha : ℝ) (_halpha : _alpha > 3 / 4) :\n  CubicQuarticBaselineStatement",
-    "status": "INTERMEDIARY_PROVEN",
-    "step_verdict": "VERIFIED",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
     "failure_origin": "PROOF_SEARCH_ERROR",
-    "failure_kind": "proof_search_failure",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "theorem_proven_in_file:output/2604.21884.lean",
     "promotion_gate_passed": false,
@@ -305,17 +305,17 @@
         "SimonTaflin"
       ]
     },
-    "proof_text": "trivial",
+    "proof_text": "",
     "first_failing_step": 1,
     "error_message": "",
     "proof_mode": "manual-direct",
-    "proof_method": "definitional_unfold_trivial",
+    "proof_method": "unattempted",
     "rounds_used": 15,
     "time_s": 0.0,
     "timestamp": "2026-04-27T09:47:39Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -332,14 +332,17 @@
     "gate_failures": [
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
       "insufficient_semantic_evidence",
       "claim_equivalence_adjudicated:equivalent",
       "claim_equivalence_blocked:confidence_below_threshold",
-      "claim_equivalence_blocked:requires_human_for_release"
+      "claim_equivalence_blocked:requires_human_for_release",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "unrelated",
     "paper_statement_id": "pstmt_88606fe6d4d2a70784dff6d9",
@@ -610,7 +613,14 @@
       "statement_alignment_exact",
       "statement_alignment_not_unrelated"
     ],
-    "source_latex": "[Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline}\nAssume $\\alpha>3/4$. The cubic resonant symbols\n\\begin{equation*}\n\\Gamma_1=V_2\\circ\\Psi_1,\n\\qquad\n\\Gamma_2=V_1\\circ\\Psi_2\n\\end{equation*}\nadmit canonical cutoff limits as stochastic distributions with baseline regularity\n\\begin{equation}\\label{eq:gamma-baseline}\n\\Gamma_i\\in C_T\\mathcal{C}^{4\\alpha-9/2-}.\n\\end{equation}\nThe nonzero-chaos part of $V_1V_2$ admits a canonical baseline lift in\n\\begin{equation}\\label{eq:vv-nonzero-baseline}\n(V_1V_2)^{\\neq 0}\\in C_T\\mathcal{C}^{6\\alpha-6-}.\n\\end{equation}\nMoreover, the zero-chaos part of $V_1V_2$ is a deterministic scalar process; under the speed-separated double Volterra estimate its dyadic shell is $N^{6-7\\alpha+}$, so it converges in $C_T$ for $\\alpha>6/7$."
+    "source_latex": "[Baseline cubic and quartic stochastic symbols]\\label{prop:cubic-quartic-baseline}\nAssume $\\alpha>3/4$. The cubic resonant symbols\n\\begin{equation*}\n\\Gamma_1=V_2\\circ\\Psi_1,\n\\qquad\n\\Gamma_2=V_1\\circ\\Psi_2\n\\end{equation*}\nadmit canonical cutoff limits as stochastic distributions with baseline regularity\n\\begin{equation}\\label{eq:gamma-baseline}\n\\Gamma_i\\in C_T\\mathcal{C}^{4\\alpha-9/2-}.\n\\end{equation}\nThe nonzero-chaos part of $V_1V_2$ admits a canonical baseline lift in\n\\begin{equation}\\label{eq:vv-nonzero-baseline}\n(V_1V_2)^{\\neq 0}\\in C_T\\mathcal{C}^{6\\alpha-6-}.\n\\end{equation}\nMoreover, the zero-chaos part of $V_1V_2$ is a deterministic scalar process; under the speed-separated double Volterra estimate its dyadic shell is $N^{6-7\\alpha+}$, so it converges in $C_T$ for $\\alpha>6/7$.",
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "trivial",
+      "file_body_preview": "sorry",
+      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+    }
   },
   {
     "theorem_name": "thm_operator_main",
@@ -2252,10 +2262,10 @@
     "theorem_name": "remark_10",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
     "lean_statement": "theorem remark_10 : CubicQuarticBaselineStatement",
-    "status": "INTERMEDIARY_PROVEN",
-    "step_verdict": "VERIFIED",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
     "failure_origin": "PROOF_SEARCH_ERROR",
-    "failure_kind": "proof_search_failure",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "theorem_proven_in_file:output/2604.21884.lean",
     "promotion_gate_passed": false,
@@ -2374,17 +2384,17 @@
         "SimonTaflin"
       ]
     },
-    "proof_text": "trivial",
+    "proof_text": "",
     "first_failing_step": 1,
     "error_message": "",
     "proof_mode": "manual-direct",
-    "proof_method": "definitional_unfold_trivial",
+    "proof_method": "unattempted",
     "rounds_used": 13,
     "time_s": 0.0,
     "timestamp": "2026-04-27T09:47:47Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -2405,10 +2415,14 @@
       "statement_repair_kind": "faithful_statement_regeneration",
       "repair_outcome": "faithful_statement_regeneration"
     },
-    "gate_failures": [],
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
-      "insufficient_semantic_evidence"
+      "insufficient_semantic_evidence",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "unrelated",
     "paper_statement_id": "pstmt_17569eb326d2a7e2546c971b",
@@ -2579,7 +2593,14 @@
       "statement_repair_kind": "faithful_statement_regeneration",
       "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21884.lean"
     },
-    "source_latex": "[What is already complete here]\nAt the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are finite. The real difficulty appears only if one insists on inserting the whole forcing into the conservative source norm $C_TH^{s_2-\\alpha}$."
+    "source_latex": "[What is already complete here]\nAt the level of canonical stochastic distributions, the cubic and quartic forcing terms are not the main difficulty. The already-integrated pieces enjoy additional phase geometry, and the lower-chaos contraction channels are finite. The real difficulty appears only if one insists on inserting the whole forcing into the conservative source norm $C_TH^{s_2-\\alpha}$.",
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "trivial",
+      "file_body_preview": "sorry",
+      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+    }
   },
   {
     "theorem_name": "lem_centered_cov",
@@ -2997,10 +3018,10 @@
     "theorem_name": "lem_speed_gap",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
     "lean_statement": "theorem lem_speed_gap :\n  ∃ N0 : ℕ, ∃ cstar : ℝ, 0 < cstar ∧ (N0 : ℝ) ≤ (N0 : ℝ)",
-    "status": "INTERMEDIARY_PROVEN",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NOT_FAILED",
-    "failure_kind": "unknown",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence",
     "promotion_gate_passed": false,
@@ -3070,17 +3091,17 @@
         "SimonTaflin"
       ]
     },
-    "proof_text": "  refine ⟨?_, ?_⟩\n  use 0\n  use 1\n  constructor\n  norm_num\n  norm_num",
+    "proof_text": "",
     "first_failing_step": -1,
     "error_message": "Proof finished in structured-beam precheck",
     "proof_mode": "full-draft",
-    "proof_method": "lean_verified",
+    "proof_method": "unattempted",
     "rounds_used": 6,
     "time_s": 0.0,
     "timestamp": "2026-04-27T09:47:52Z",
     "validation_gates": {
       "lean_proof_closed": false,
-      "step_verdict_verified": true,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -3097,11 +3118,13 @@
     "gate_failures": [
       "lean_proof_closed",
       "claim_equivalent",
-      "independent_semantic_equivalence_evidence"
+      "independent_semantic_equivalence_evidence",
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
-      "insufficient_semantic_evidence"
+      "insufficient_semantic_evidence",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "unrelated",
     "paper_statement_id": "pstmt_c51a501f43156298e121b0f5",
@@ -3237,16 +3260,24 @@
         "mathlib_semantic_overlap": 0.86
       }
     },
-    "source_latex": "[Speed gap]\\label{lem:speed-gap}\nFix $0<\\theta<1$ and $i\\neq j$. There exist $N_0$ and $c_*>0$ such that whenever $N\\ge N_0$, $|\\ell|\\sim N$, and $|q|\\le N^\\theta$,\n\\begin{equation}\\label{eq:speed-gap-minus}\n|\\omega_i(q+\\ell)-\\omega_j(\\ell)|\\ge c_*N^\\alpha,\n\\end{equation}\nand also\n\\begin{equation}\\label{eq:speed-gap-plus}\n\\omega_i(q+\\ell)+\\omega_j(\\ell)\\ge c_*N^\\alpha.\n\\end{equation}"
+    "source_latex": "[Speed gap]\\label{lem:speed-gap}\nFix $0<\\theta<1$ and $i\\neq j$. There exist $N_0$ and $c_*>0$ such that whenever $N\\ge N_0$, $|\\ell|\\sim N$, and $|q|\\le N^\\theta$,\n\\begin{equation}\\label{eq:speed-gap-minus}\n|\\omega_i(q+\\ell)-\\omega_j(\\ell)|\\ge c_*N^\\alpha,\n\\end{equation}\nand also\n\\begin{equation}\\label{eq:speed-gap-plus}\n\\omega_i(q+\\ell)+\\omega_j(\\ell)\\ge c_*N^\\alpha.\n\\end{equation}",
+    "proved": false,
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "  refine ⟨?_, ?_⟩\n  use 0\n  use 1\n  constructor\n  norm_num\n  norm_num",
+      "file_body_preview": "sorry\n\n-- [theorem] prop_det_contraction  injected by rewrite_lean_from_ledger",
+      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+    }
   },
   {
     "theorem_name": "lem_volterra",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
     "lean_statement": "theorem lem_volterra (_T : ℝ) (_hT : 0 < _T) (alpha : ℝ) (N : ℕ) (hN : 0 < N) :\n  ∃ C : ℝ, 0 < C ∧ VolterraOscillation (fun _ => 0) N alpha ≤ C * (N : ℝ) ^ (-alpha)",
-    "status": "INTERMEDIARY_PROVEN",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "FORMALIZATION_ERROR",
-    "failure_kind": "false_or_ambiguous_statement",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "theorem_proven_in_file:output/2604.21884.lean",
     "promotion_gate_passed": false,
@@ -3306,17 +3337,17 @@
         "SimonTaflin"
       ]
     },
-    "proof_text": "refine ⟨1, one_pos, ?_⟩; unfold VolterraOscillation; linarith [Real.rpow_nonneg (...)]",
+    "proof_text": "",
     "first_failing_step": -1,
     "error_message": "",
     "proof_mode": "manual-direct",
-    "proof_method": "definitional_unfold_with_rpow_nonneg",
+    "proof_method": "unattempted",
     "rounds_used": 0,
     "time_s": 0.0,
     "timestamp": "2026-04-27T09:47:52Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": false,
@@ -3338,11 +3369,15 @@
       "statement_repair_kind": "faithful_statement_regeneration",
       "repair_outcome": "faithful_statement_regeneration"
     },
-    "gate_failures": [],
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
       "translation_unvalidated",
-      "insufficient_semantic_evidence"
+      "insufficient_semantic_evidence",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "diagnostic",
     "paper_statement_id": "pstmt_c02ab379bd98ea5b87c0df47",
@@ -3535,7 +3570,14 @@
     "discharged_axiom_debt": [
       "paper_definition_stub:a"
     ],
-    "source_latex": "[Volterra oscillation estimate]\\label{lem:volterra}\nLet $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then\n\\begin{equation}\\label{eq:volterra-est}\n\\sup_{0\\le t\\le T}\n\\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr|\n\\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^\\infty_T}+\\|\\partial_t a\\|_{L^\\infty_T}\\bigr).\n\\end{equation}\nThe same bound holds with $\\sin((t-s)\\Phi)$ or $\\cos((t-s)\\Phi)$ in place of the exponential."
+    "source_latex": "[Volterra oscillation estimate]\\label{lem:volterra}\nLet $a\\in C^1([0,T])$ and let $|\\Phi|\\gtrsim N^\\alpha$. Then\n\\begin{equation}\\label{eq:volterra-est}\n\\sup_{0\\le t\\le T}\n\\Bigl|\\int_0^t a(s)e^{\\mathrm{i}(t-s)\\Phi}\\,ds\\Bigr|\n\\lesssim N^{-\\alpha}\\bigl(\\|a\\|_{L^\\infty_T}+\\|\\partial_t a\\|_{L^\\infty_T}\\bigr).\n\\end{equation}\nThe same bound holds with $\\sin((t-s)\\Phi)$ or $\\cos((t-s)\\Phi)$ in place of the exponential.",
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "refine ⟨1, one_pos, ?_⟩; unfold VolterraOscillation; linarith [Real.rpow_nonneg (...)]",
+      "file_body_preview": "sorry",
+      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+    }
   },
   {
     "theorem_name": "prop_det_contraction",
@@ -4605,10 +4647,10 @@
     "theorem_name": "remark_18",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
     "lean_statement": "theorem remark_18 : SafeRangeStatement",
-    "status": "INTERMEDIARY_PROVEN",
-    "step_verdict": "VERIFIED",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
     "failure_origin": "PROOF_SEARCH_ERROR",
-    "failure_kind": "proof_search_failure",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "theorem_proven_in_file:output/2604.21884.lean",
     "promotion_gate_passed": false,
@@ -4727,17 +4769,17 @@
         "SimonTaflin"
       ]
     },
-    "proof_text": "trivial",
+    "proof_text": "",
     "first_failing_step": 1,
     "error_message": "",
     "proof_mode": "manual-direct",
-    "proof_method": "definitional_unfold_trivial",
+    "proof_method": "unattempted",
     "rounds_used": 13,
     "time_s": 0.0,
     "timestamp": "2026-04-27T09:47:55Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -4758,10 +4800,14 @@
       "statement_repair_kind": "faithful_statement_regeneration",
       "repair_outcome": "faithful_statement_regeneration"
     },
-    "gate_failures": [],
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
-      "insufficient_semantic_evidence"
+      "insufficient_semantic_evidence",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "partial",
     "paper_statement_id": "pstmt_c1238754981a75a5235dde4c",
@@ -4921,7 +4967,14 @@
     },
     "discharged_axiom_debt": [
       "paper_definition_stub:HSobolev"
-    ]
+    ],
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "trivial",
+      "file_body_preview": "sorry",
+      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+    }
   },
   {
     "theorem_name": "def_admissible",
