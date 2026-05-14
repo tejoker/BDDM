@@ -56,6 +56,39 @@ MAX_AUDITED_CORE_CHARS = 4000
 # LaTeX proof-structure hint (C2): per-row structural keywords surfaced
 # in the user prompt.
 MAX_LATEX_PROOF_HINT_CHARS = 800
+# Mathlib-anchor section (A1/A3): hard cap so a chatty premise index
+# can't crowd out the statement / neighbours.
+MAX_ANCHOR_SECTION_CHARS = 2400
+
+
+# Lazy-loaded Mathlib name index (built by mathlib_align_unknown_identifier).
+# Shared across all calls in the process so the 36MB JSON is read once.
+_NAME_INDEX_CACHE: dict[str, Any] | None = None
+
+
+def _get_name_index() -> dict[str, Any] | None:
+    """Return the cached Mathlib name index, or None when unavailable.
+
+    First call reads `data/mathlib_name_index.json` (or builds it if mathlib
+    sources are on disk). Subsequent calls reuse the same dict. Used by the
+    A1 wiring in `generate_proof_candidate` when the caller didn't supply
+    an explicit `name_index`.
+    """
+    global _NAME_INDEX_CACHE
+    if _NAME_INDEX_CACHE is not None:
+        return _NAME_INDEX_CACHE
+    try:
+        from mathlib_align_unknown_identifier import build_name_index  # type: ignore[import-not-found]
+    except Exception:
+        return None
+    try:
+        idx = build_name_index(progress=False)
+    except Exception:
+        return None
+    if not idx or not idx.get("entries"):
+        return None
+    _NAME_INDEX_CACHE = idx
+    return idx
 
 # Whole-token forbidden tokens (must not appear anywhere in the body).
 FORBIDDEN_TOKENS: tuple[str, ...] = (
@@ -107,6 +140,7 @@ _USER_TEMPLATE = (
     "```lean\n{neighbours}\n```\n\n"
     "{latex_proof_section}"
     "{audited_core_section}"
+    "{anchor_section}"
     "{retry_block}"
     "Write the COMPLETE proof body now. Respond with the JSON object only."
 )
@@ -116,6 +150,12 @@ _AUDITED_CORE_SECTION_TEMPLATE = (
     "Audited proofs from the same paper (idiomatic examples — DO NOT copy "
     "verbatim, but use these to choose tactics and lemma names):\n"
     "```lean\n{audited_core_hint}\n```\n\n"
+)
+
+
+_ANCHOR_SECTION_TEMPLATE = (
+    "Mathlib-anchor evidence (real names; use ONE of these if it fits):\n"
+    "{anchor_body}\n\n"
 )
 
 
@@ -357,6 +397,10 @@ def build_user_prompt(
     error_tail: str = "",
     audited_core_hint: Optional[str] = None,
     latex_proof_hints: Optional[list[str]] = None,
+    name_index: Optional[dict[str, Any]] = None,
+    premise_index: Any = None,
+    anchor_top_k: int = 5,
+    premise_top_k: int = 10,
 ) -> str:
     """Construct the user-message prompt. Exposed for tests.
 
@@ -369,6 +413,15 @@ def build_user_prompt(
     `output/corpus/latex_proof_hints.jsonl` via
     `extract_latex_proof_hint.load_hints` keyed by
     (paper_id, theorem_name). Pass [] to disable.
+
+    `name_index` / `premise_index` (A1/A3): Mathlib alignment + premise
+    indices used to inject Mathlib-anchor candidates into the prompt.
+    When `name_index` is provided AND `error_tail` mentions
+    `unknown identifier 'X'` / `synthInstanceFailed: <Class>`, candidate
+    Mathlib names are listed. When `premise_index` is provided, top-K
+    Mathlib lemmas with overlapping identifier tokens are listed. Both
+    blocks are best-effort: silently dropped on miss. See
+    `scripts/leanstral_proof_anchors.py` for the builders.
     """
     stmt = re.sub(r"[ \t]+", " ", lean_statement or "").strip()[:MAX_STATEMENT_CHARS]
     hint = (paper_theory_hint or "").strip()[:MAX_HINT_CHARS]
@@ -417,6 +470,30 @@ def build_user_prompt(
                 block = block[:MAX_LATEX_PROOF_HINT_CHARS] + "\n  ... (truncated) ..."
             latex_section = _LATEX_PROOF_SECTION_TEMPLATE.format(latex_proof_block=block)
 
+    # Mathlib-anchor section (A1/A3): unknown-identifier + synthInstance
+    # candidates from the alignment index, plus premise-retrieval candidates
+    # from the on-disk token-overlap index. Empty when neither index is
+    # available or neither pattern fires.
+    anchor_section = ""
+    if name_index or premise_index is not None:
+        try:
+            from leanstral_proof_anchors import build_anchor_section  # type: ignore[import-not-found]
+            body = build_anchor_section(
+                error_tail=error_tail or "",
+                goal_text=stmt,
+                name_index=name_index or {},
+                premise_index=premise_index,
+                paper_id=paper_id or "",
+                anchor_top_k=anchor_top_k,
+                premise_top_k=premise_top_k,
+            )
+            if body:
+                if len(body) > MAX_ANCHOR_SECTION_CHARS:
+                    body = body[:MAX_ANCHOR_SECTION_CHARS] + "\n  ... (truncated) ..."
+                anchor_section = _ANCHOR_SECTION_TEMPLATE.format(anchor_body=body)
+        except Exception:
+            anchor_section = ""
+
     return _USER_TEMPLATE.format(
         paper_id=paper_id or "",
         theorem_name=theorem_name or "thm",
@@ -425,6 +502,7 @@ def build_user_prompt(
         neighbours=neighbours,
         latex_proof_section=latex_section,
         audited_core_section=audited_section,
+        anchor_section=anchor_section,
         retry_block=retry_block,
     )
 
@@ -443,6 +521,9 @@ def generate_proof_candidate(
     api_log_hook: Optional[Any] = None,
     audited_core_hint: Optional[str] = None,
     latex_proof_hints: Optional[list[str]] = None,
+    name_index: Optional[dict[str, Any]] = None,
+    premise_index: Any = None,
+    use_mathlib_anchors: bool = True,
 ) -> Optional[dict[str, Any]]:
     """Ask Leanstral to write a whole tactic-mode proof body for `lean_statement`.
 
@@ -460,11 +541,36 @@ def generate_proof_candidate(
     The returned dict includes `rejection_reason=None` on accept. On forbidden-
     token rejection we return None so the caller treats this candidate as a
     miss; the explicit-reason record is only logged.
+
+    Mathlib anchors (A1/A3, `use_mathlib_anchors=True`, default): lazily
+    load `data/mathlib_name_index.json` (built by
+    mathlib_align_unknown_identifier on first need) and
+    `data/mathlib_premise_index.json` (built by leanstral_proof_anchors on
+    first need). The name index drives the `unknown identifier 'X'` /
+    `synthInstanceFailed: <Class>` retry anchors; the premise index injects
+    a top-K premise block on every call (first attempt and retries). Pass
+    `use_mathlib_anchors=False` to suppress both (useful for hermetic unit
+    tests on machines without `.lake/packages/mathlib`).
     """
     if client is None:
         return None
     if not (lean_statement or "").strip():
         return None
+
+    # Lazy-load Mathlib anchors unless the caller suppressed them or supplied
+    # explicit indices. Caching is handled inside the helpers so this only
+    # pays the cost on first call.
+    effective_name_index = name_index
+    effective_premise_index = premise_index
+    if use_mathlib_anchors:
+        if effective_name_index is None:
+            effective_name_index = _get_name_index()
+        if effective_premise_index is None:
+            try:
+                from leanstral_proof_anchors import load_or_build_premise_index  # type: ignore[import-not-found]
+                effective_premise_index = load_or_build_premise_index()
+            except Exception:
+                effective_premise_index = None
 
     user = build_user_prompt(
         paper_id=paper_id,
@@ -475,6 +581,8 @@ def generate_proof_candidate(
         error_tail=error_tail,
         audited_core_hint=audited_core_hint,
         latex_proof_hints=latex_proof_hints,
+        name_index=effective_name_index,
+        premise_index=effective_premise_index,
     )
 
     try:

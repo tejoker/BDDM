@@ -178,6 +178,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "proof_search",
         "summary": "Leanstral whole-proof generator: ingests theorem statement + paper-theory hint + neighboring decls and emits a complete tactic-mode body. Forbidden-token gate (sorry/admit/apply?/axiom/native_decide) is the standards-positive guard.",
     },
+    "leanstral_proof_anchors.py": {
+        "tier": "research_experiment",
+        "category": "proof_search",
+        "summary": "Mathlib-anchor injection helpers for leanstral_whole_proof_generator: extracts unknown-identifier / synthInstanceFailed names from lake error tails and resolves them through the 220k-entry mathlib_name_index; builds a token-overlap premise index over Mathlib signatures (cached at data/mathlib_premise_index.json) for goal-similar lemma candidates.",
+    },
     "sweep_lemma_factor_v2.py": {
         "tier": "research_experiment",
         "category": "proof_search",
