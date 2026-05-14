@@ -408,3 +408,36 @@ def test_audit_broader_mode_skips_unresolved_rows(tmp_path):
     )
     assert result.demoted == 0
     assert entries[0]["status"] == "UNRESOLVED"
+
+
+def test_theorem_body_matches_namespace_qualified_ledger_name(tmp_path):
+    """A ledger entry named `ArxivPaper.lem_X` must still match the body in
+    a `.lean` source whose declaration is the bare `theorem lem_X` (inside a
+    `namespace ArxivPaper` block). Before this fix the audit silently skipped
+    such rows, leaving bypass-promotions (e.g. proof_text='apply?' over a
+    sorry-bodied file) intact."""
+    from audit_fully_proven_integrity import (
+        audit_ledger_entries,
+        _PROOF_CLAIMING_STATUSES,
+    )
+
+    entries = [
+        {
+            "theorem_name": "ArxivPaper.lem_X",
+            "status": "INTERMEDIARY_PROVEN",
+            "proof_text": "apply?",
+            "validation_gates": {"lean_proof_closed": True},
+        },
+    ]
+    lean_src = (
+        "namespace ArxivPaper\n"
+        "theorem lem_X (n : ℕ) : n = n := by\n"
+        "  sorry\n"
+        "end ArxivPaper\n"
+    )
+    result = audit_ledger_entries(
+        entries, paper_id="x.y", lean_src=lean_src,
+        statuses=_PROOF_CLAIMING_STATUSES,
+    )
+    assert result.demoted == 1, "Namespace-qualified ledger name should match bare body"
+    assert entries[0]["status"] == "UNRESOLVED"

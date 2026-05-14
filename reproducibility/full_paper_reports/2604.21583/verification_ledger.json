@@ -20979,10 +20979,10 @@
       "theorem_name": "ArxivPaper.remark_22ℓ2",
       "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_remark_22ℓ2.lean",
       "lean_statement": "theorem remark_22ℓ2 (k : ℤ × ℤ) (vbeta : ℤ × ℤ → ℝ) :\n    ∀ (r1 r2 u1 u2 : ℤ × ℤ), r1 = u2 + k → r2 = u1 - k →\n    (r1, r2, u1, u2) ∈ (Set.univ : Set ((ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ))) →\n    ∃ C : ℝ, C = |vbeta k| ^ 2 ∧\n    ∀ (f g : (ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ) × (ℤ × ℤ) → ℝ),\n    (∀ x, f x = 0 ∨ g x = 0) →\n    ∑' x, f x * g x = 0 := by\n  sorry\n",
-      "status": "INTERMEDIARY_PROVEN",
-      "step_verdict": "VERIFIED",
-      "failure_origin": "NOT_FAILED",
-      "failure_kind": "unknown",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "PROOF_SEARCH_ERROR",
+      "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
       "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
       "promotion_gate_passed": false,
@@ -21002,17 +21002,17 @@
         "label": "remark_22ℓ2",
         "cited_refs": []
       },
-      "proof_text": "exact?",
+      "proof_text": "",
       "first_failing_step": -1,
       "error_message": "",
       "proof_mode": "state-mcts",
-      "proof_method": "lean_verified",
+      "proof_method": "unattempted",
       "rounds_used": 1,
       "time_s": 72.16,
       "timestamp": "2026-05-09T20:38:24Z",
       "validation_gates": {
         "lean_proof_closed": false,
-        "step_verdict_verified": true,
+        "step_verdict_verified": false,
         "assumptions_grounded": true,
         "provenance_linked": true,
         "translation_fidelity_ok": true,
@@ -21030,11 +21030,13 @@
         "lean_proof_closed",
         "claim_equivalent",
         "independent_semantic_equivalence_evidence",
-        "no_paper_axiom_debt"
+        "no_paper_axiom_debt",
+        "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "unclear",
       "claim_equivalence_notes": [
-        "insufficient_semantic_evidence"
+        "insufficient_semantic_evidence",
+        "audit_demotion:fully_proven_integrity"
       ],
       "statement_alignment_class": "partial",
       "paper_statement_id": "pstmt_71d48229336aa952c2fa2ccc",
@@ -21129,7 +21131,15 @@
       "grounding_metadata": [],
       "result_label": "not_verified",
       "claim_scope": "No verified closure claim is made for this result.",
-      "modulo_paper_local_axioms": false
+      "modulo_paper_local_axioms": false,
+      "proved": false,
+      "audit_demotion": {
+        "schema_version": "audit_fully_proven_integrity.v1",
+        "previous_status": "FULLY_PROVEN",
+        "captured_proof_text": "exact?",
+        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] rem:HF0-main-input\n-- Statement (LaTeX): % % This is the only genuinely new inpu",
+        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      }
     },
     {
       "theorem_name": "ArxivPaper.lem_convolution_kernels_2",

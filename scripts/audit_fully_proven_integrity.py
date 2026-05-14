@@ -113,17 +113,30 @@ def _theorem_body_in_file(lean_src: str, theorem_name: str) -> str | None:
     between `:=` and `by`, AND a same-line body (`:= by sorry`). The
     `Beta := False := by sorry` form on a single line is a tactic-mode
     proof with body `sorry` — it must still be classified as such.
+
+    Handles namespace-qualified ledger names: a ledger entry named
+    `ArxivPaper.lem_X` will look for `theorem ArxivPaper.lem_X`, find
+    nothing (Lean writes the bare name inside a `namespace ArxivPaper`
+    block), then fall back to `theorem lem_X`. Without this fallback the
+    audit silently skipped namespaced rows, leaving bypass-promotions
+    (e.g. `ArxivPaper.lem_Hilbert_hypercontractivity` with
+    `proof_text='apply?'` over a sorry-bodied file) intact.
     """
-    pat = re.compile(
-        r"theorem\s+" + re.escape(theorem_name) + r"\b[\s\S]*?:=\s*by\b[ \t]*([\s\S]{1,4000}?)(?=\n(?:theorem|lemma|def|end|--|namespace|section)\b|\Z)",
-        re.MULTILINE,
-    )
-    m = pat.search(lean_src)
-    if not m:
-        return None
-    body = m.group(1)
-    # Strip leading blank/whitespace lines, keep the meaningful prefix.
-    return body.lstrip("\n").lstrip()
+    candidates: list[str] = [theorem_name]
+    if "." in theorem_name:
+        bare = theorem_name.rsplit(".", 1)[-1]
+        if bare and bare != theorem_name:
+            candidates.append(bare)
+    for cand in candidates:
+        pat = re.compile(
+            r"theorem\s+" + re.escape(cand) + r"\b[\s\S]*?:=\s*by\b[ \t]*([\s\S]{1,4000}?)(?=\n(?:theorem|lemma|def|end|--|namespace|section)\b|\Z)",
+            re.MULTILINE,
+        )
+        m = pat.search(lean_src)
+        if m:
+            body = m.group(1)
+            return body.lstrip("\n").lstrip()
+    return None
 
 
 def _body_is_sorry(body: str) -> bool:
