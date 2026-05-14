@@ -338,6 +338,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Queries Leanstral for Mathlib counterparts of a paper-local axiom (signature + description). Returns ranked candidates with elaboration check. Generalizes per-area starter types to per-symbol search; the scalable answer to AB→FP discharge for non-trivial axioms.",
     },
+    "mathlib_align_unknown_identifier.py": {
+        "tier": "official_support",
+        "category": "review",
+        "summary": "Zero-Mistral resolver for `unknown identifier 'X'` elaboration failures. Builds a Mathlib name index (cached under data/mathlib_name_index.json) by walking .lake/packages/mathlib/**/*.lean, then scores candidates by exact match / namespace normalization / token Jaccard / edit distance. Also checks the paper-theory module for missing-namespace-prefix variants. Top candidates clearing `--register-threshold` append to output/corpus/alignments.json (same schema as generate_trivial_alignments.py); audit_axioms.py + apply_reviews_to_ledger.py pick them up unchanged. Standards-positive: every candidate is verifiable because it comes from a real Mathlib source line.",
+    },
     "ledger_from_closed_lean.py": {
         "tier": "dev_tool",
         "category": "review",
