@@ -363,6 +363,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Re-validates every FULLY_PROVEN row by checking the actual `output/<paper>.lean` body against the ledger's stored `proof_text`. Demotes rows whose file body is `sorry` despite the ledger claiming `lean_proof_closed=True` (the circular-bypass defect surfaced in 2026-05). Standards-positive: a row whose .lean is sorry is not proven.",
     },
+    "audit_paper_theory_olean_health.py": {
+        "tier": "ci_gate",
+        "category": "review",
+        "summary": "Walks Desol/PaperTheory/*.lean (and Repair/*.lean), runs `lake build <module>` on each with a 240s timeout, and reports ok/fail/timed_out/not_attempted per module. A missing or stale paper-theory .olean silently blocks every downstream row in that paper from elaborating; this audit is the standalone fail-fast check (the existing self-heal in regenerate_paper_imports_anchor fires LATE). `--write` persists the summary; `--regenerate` re-runs paper_theory_builder on failing papers. Wired into `_publish_reproducibility_bundle` (manifest.paper_theory_olean_health).",
+    },
     "run_counterexample_pre_flight.py": {
         "tier": "dev_tool",
         "category": "review",

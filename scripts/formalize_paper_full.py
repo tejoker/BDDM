@@ -309,6 +309,45 @@ def _publish_reproducibility_bundle(
             # so reviewers can see when integrity wasn't enforced.
             audit_summary = {"error": f"{type(exc).__name__}: {exc}"[:500]}
 
+    # Paper-theory olean health check — mirror the FP integrity audit
+    # pattern (commit 8eba181). Every per-paper `output/<paper>.lean` imports
+    # its `Desol.PaperTheory.Paper_<id>` module. If the .olean is missing or
+    # stale, every downstream row in that paper silently fails to elaborate.
+    # The audit runs `lake build` for THIS paper's module(s) only at publish
+    # time so we don't pay for unrelated papers' cold caches; failures are
+    # recorded in the manifest so a reviewer can see the gate ran.
+    paper_theory_health: dict[str, Any] = {}
+    try:
+        import sys as _sys
+        _scripts_dir2 = Path(__file__).resolve().parent
+        if str(_scripts_dir2) not in _sys.path:
+            _sys.path.insert(0, str(_scripts_dir2))
+        from audit_paper_theory_olean_health import (  # noqa: E402
+            audit_paper_theory,
+            _summary_to_dict,
+        )
+        pt_summary = audit_paper_theory(
+            project_root=project_root, papers=[paper_id],
+        )
+        pt_dict = _summary_to_dict(pt_summary)
+        paper_theory_health = {
+            "totals": pt_dict["totals"],
+            "failing_modules": pt_dict["failing_modules"],
+            "modules": [
+                {
+                    "module": m["module"],
+                    "status": m["status"],
+                    "olean_present": m["olean_present"],
+                    "returncode": m["returncode"],
+                    "output_tail": (m["output_tail"] or "")[-200:],
+                }
+                for m in pt_dict["modules"]
+                if m["status"] != "not_attempted"
+            ],
+        }
+    except Exception as exc:
+        paper_theory_health = {"error": f"{type(exc).__name__}: {exc}"[:500]}
+
     paths: dict[str, str] = {}
     for label, src, dst_name in (
         ("report", report_out, "suite_report.json"),
@@ -351,6 +390,7 @@ def _publish_reproducibility_bundle(
             artifacts=artifact_rows,
         ),
         "fully_proven_integrity_audit": audit_summary,
+        "paper_theory_olean_health": paper_theory_health,
         "regenerate_command": regenerate_command,
     }
     manifest_path = bundle_dir / "manifest.json"
