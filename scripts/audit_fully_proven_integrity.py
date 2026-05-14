@@ -271,8 +271,44 @@ def audit_ledger_entries(
                     reason="file_body_is_sorry",
                 )
             )
-        else:
-            result.validated_clean += 1
+            continue
+        # Triviality check: a proof that closes a vacuous claim is not honest
+        # auto-closure. The translator's `_is_trivialized_signature` knows the
+        # placeholder shapes (`∃ x, x = x`, `X = X ∧ Y = Y`, Prop-binder
+        # tuples, etc.). Apply it post-proof; demote rows whose claim has
+        # no mathematical content even when the proof technically closes.
+        stmt = str(entry.get("lean_statement", "") or "")
+        if stmt:
+            try:
+                import sys as _sys
+                _scripts_dir = Path(__file__).resolve().parent
+                if str(_scripts_dir) not in _sys.path:
+                    _sys.path.insert(0, str(_scripts_dir))
+                from translator._translate import _is_trivialized_signature  # noqa: E402
+                if _is_trivialized_signature(stmt):
+                    captured = str(entry.get("proof_text", "") or "")
+                    _demote_entry(entry, captured=captured, file_preview=body[:120].rstrip())
+                    # Mark the demotion reason distinctly so reviewers can
+                    # see why a row was rejected despite passing lake.
+                    if "audit_demotion" in entry:
+                        entry["audit_demotion"]["reason"] = "trivialized_statement"
+                    result.demoted += 1
+                    result.demotions.append(
+                        Demotion(
+                            paper_id=paper_id,
+                            theorem_name=name,
+                            captured_proof_text=captured[:80],
+                            file_body_preview=body[:60].rstrip(),
+                            reason="trivialized_statement",
+                        )
+                    )
+                    continue
+            except Exception:
+                # If the translator helper is unavailable, fall through and
+                # treat the row as validated_clean. The body-is-sorry path
+                # remains the primary guard.
+                pass
+        result.validated_clean += 1
     result.fp_post = result.fp_pre - result.demoted
     return result
 

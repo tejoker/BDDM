@@ -1305,10 +1305,10 @@
     "theorem_name": "Beta",
     "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_Beta.lean",
     "lean_statement": "theorem Beta {z1 z2 : ℂ} (hz1 : 0 < z1.re) (hz2 : 0 < z2.re) :\n  ∃ B : ℂ, B = ∫ t in Set.Ioo (0 : ℝ) 1, (t : ℂ) ^ (z1 - 1) * ((1 - t) : ℂ) ^ (z2 - 1) := by sorry\n",
-    "status": "AXIOM_BACKED",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,no_paper_axiom_debt",
     "promotion_gate_passed": true,
@@ -1401,17 +1401,17 @@
         "non-markov"
       ]
     },
-    "proof_text": "refine' ⟨∫ t in Set.Ioo (0 : ℝ) 1, (t : ℂ) ^ (z1 - 1) * ((1 - t) : ℂ) ^ (z2 - 1), rfl⟩",
+    "proof_text": "",
     "first_failing_step": -1,
     "error_message": "",
     "proof_mode": "state-mcts",
-    "proof_method": "leanstral_whole_proof_v1",
+    "proof_method": "unattempted",
     "rounds_used": 1,
     "time_s": 18.09,
     "timestamp": "2026-05-14T08:37:12Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -1428,7 +1428,8 @@
     "gate_failures": [
       "claim_equivalent",
       "no_paper_axiom_debt",
-      "step_verdict_verified"
+      "step_verdict_verified",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -1568,9 +1569,9 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "rfl",
-      "file_body_preview": "sorry\n\n-- [theorem] defn_8\n-- Statement (LaTeX): [Riemann-Liouville fractional integral ] For a given integrable functio",
-      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      "captured_proof_text": "refine' ⟨∫ t in Set.Ioo (0 : ℝ) 1, (t : ℂ) ^ (z1 - 1) * ((1 - t) : ℂ) ^ (z2 - 1), rfl⟩",
+      "file_body_preview": "refine' ⟨∫ t in Set.Ioo (0 : ℝ) 1, (t : ℂ) ^ (z1 - 1) * ((1 - t) : ℂ) ^ (z2 - 1), rfl⟩",
+      "reason": "trivialized_statement"
     },
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",

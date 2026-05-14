@@ -2072,10 +2072,10 @@
     "theorem_name": "remark_9",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
     "lean_statement": "theorem remark_9 :\n  I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2 := by\n  sorry\n",
-    "status": "AXIOM_BACKED",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
     "promotion_gate_passed": true,
@@ -2110,17 +2110,17 @@
         "SimonTaflin"
       ]
     },
-    "proof_text": "constructor\n· rfl\n· rfl",
+    "proof_text": "",
     "first_failing_step": -1,
     "error_message": "",
     "proof_mode": "state-mcts",
-    "proof_method": "leanstral_whole_proof_v1",
+    "proof_method": "unattempted",
     "rounds_used": 1,
     "time_s": 10.19,
     "timestamp": "2026-05-09T20:04:29Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -2138,7 +2138,8 @@
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
       "no_paper_axiom_debt",
-      "step_verdict_verified"
+      "step_verdict_verified",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -2238,9 +2239,9 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "aesop",
-      "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] lem:coeff-chaos-criterion\n-- Statement (LaTeX): [Coefficient-level dyadic chaos",
-      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      "captured_proof_text": "constructor\n· rfl\n· rfl",
+      "file_body_preview": "constructor\n  · rfl\n  · rfl",
+      "reason": "trivialized_statement"
     },
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
@@ -5524,10 +5525,10 @@
     "theorem_name": "rem_primitive_route",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
     "lean_statement": "theorem rem_primitive_route : ∃ x : ℝ, x = x",
-    "status": "INTERMEDIARY_PROVEN",
-    "step_verdict": "VERIFIED",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
     "failure_origin": "PROOF_SEARCH_ERROR",
-    "failure_kind": "proof_search_failure",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "theorem_proven_in_file:output/2604.21884.lean",
     "promotion_gate_passed": false,
@@ -5625,17 +5626,17 @@
         "SimonTaflin"
       ]
     },
-    "proof_text": "⟨0, rfl⟩",
+    "proof_text": "",
     "first_failing_step": 1,
     "error_message": "",
     "proof_mode": "manual-direct",
-    "proof_method": "direct_witness",
+    "proof_method": "unattempted",
     "rounds_used": 10,
     "time_s": 0.0,
     "timestamp": "2026-04-27T09:47:55Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -5657,11 +5658,13 @@
       "repair_outcome": "faithful_statement_regeneration"
     },
     "gate_failures": [
-      "lean_proof_closed"
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
-      "insufficient_semantic_evidence"
+      "insufficient_semantic_evidence",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "partial",
     "paper_statement_id": "pstmt_983c392170751e8c04a7a7af",
@@ -5828,7 +5831,14 @@
     "discharged_axiom_debt": [
       "paper_definition_stub:I_i"
     ],
-    "source_latex": "[Primitive route]\\label{rem:primitive-route}\nThe deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving $G_i^V$."
+    "source_latex": "[Primitive route]\\label{rem:primitive-route}\nThe deterministic theorem above is stated in the conservative source formulation because it is the cleanest closed statement. For lowering the full SPDE threshold, however, the more natural route is to construct the primitives $G_i^V=I_i(F^V)$ directly in the solution space. This should exploit oscillatory geometry in the already-integrated cubic forcing that is invisible in the static source norm. The resulting enhanced formulation is deeper, because one must then control additional products involving $G_i^V$.",
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "⟨0, rfl⟩",
+      "file_body_preview": "refine ⟨1, one_pos, ?_⟩\n  unfold VolterraOscillation\n  have hN_pos : (0 : ℝ) < (N : ℝ) := by exact_mod_cast hN\n  have :",
+      "reason": "trivialized_statement"
+    }
   },
   {
     "theorem_name": "cor_safe_range",

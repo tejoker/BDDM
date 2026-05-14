@@ -1744,6 +1744,47 @@ def _is_trivialized_signature(sig: str) -> bool:
     ))
     if not has_real_binders and re.fullmatch(r"[a-zA-Z_]\w*\s*(?:>|<|≥|≤|=)\s*\d+", target):
         return True
+    # Degenerate existential-of-equality OR iff: `∃ X : T, X = expr` or
+    # `∃ X : Prop, X ↔ expr` where the witness can just be `expr` itself
+    # and X is not a standalone identifier in expr. Round-VII caught
+    # multiple instances — `Beta : ∃ B : ℂ, B = ∫...` and
+    # `remark_1 : ∃ X : Prop, X ↔ (P ∧ Q ∧ R)`. Mathematically vacuous;
+    # the proof is `⟨expr, rfl⟩` or `⟨expr, Iff.rfl⟩`. Allow optional
+    # paren-wrap around the binder name (`∃ (X : T), …`) and tolerate
+    # newlines/whitespace inside the type / RHS (target may be multi-line).
+    eq_match = re.fullmatch(
+        r"∃\s+\(?\s*([a-zA-Z_]\w*)\s*:\s*[^,]+?\)?\s*,\s*\1\s*(?:=|↔)\s*(.+)",
+        target,
+        re.DOTALL,
+    )
+    if eq_match:
+        bvar, rhs = eq_match.group(1), eq_match.group(2)
+        # X must not appear as a standalone identifier on the RHS — else
+        # this could be a real fixed-point claim.
+        if not re.search(rf"(?<![A-Za-z0-9_]){re.escape(bvar)}(?![A-Za-z0-9_])", rhs):
+            return True
+    # Reflexive-equality conjunction: `f X = f X ∧ g Y = g Y` (and longer
+    # variants). The proof is `⟨rfl, rfl, ...⟩` and the claim is vacuously
+    # true for any well-typed term. Round-VII `remark_9` caught here.
+    # Match a sequence of `<expr> = <same-expr>` separated by `∧`.
+    conjuncts = [c.strip() for c in re.split(r"\s*∧\s*", target) if c.strip()]
+    if len(conjuncts) >= 1 and all(
+        re.fullmatch(r"(.+?)\s*=\s*\1", c) for c in conjuncts
+    ):
+        return True
+    # Prop-binder placeholder conjunction: a body that just bundles the
+    # Prop-typed binders into a tuple. Detected via the binder shape (3+
+    # consecutive `(name : Prop)` binders) AND a target that's a `∧` of
+    # those same names with `Iff.rfl`-style closure. Round-VII
+    # `remark_1` caught here.
+    prop_binders = re.findall(r"\(\s*([a-zA-Z_]\w*)\s*:\s*Prop\s*\)", sig_no_body)
+    if len(prop_binders) >= 2:
+        # If the target is `<P1> ∧ <P2> ∧ ...` where every conjunct is a
+        # bare Prop-binder name, the theorem is just `⟨h1, h2, ...⟩` and
+        # has no mathematical content beyond the binder Props themselves.
+        bound = set(prop_binders)
+        if conjuncts and all(c.strip() in bound for c in conjuncts):
+            return True
     return False
 
 
