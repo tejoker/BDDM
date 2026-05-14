@@ -423,6 +423,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Re-validates every FULLY_PROVEN row by checking the actual `output/<paper>.lean` body against the ledger's stored `proof_text`. Demotes rows whose file body is `sorry` despite the ledger claiming `lean_proof_closed=True` (the circular-bypass defect surfaced in 2026-05). Standards-positive: a row whose .lean is sorry is not proven.",
     },
+    "audit_fuzz_mutations.py": {
+        "tier": "ci_gate",
+        "category": "review",
+        "summary": "Adversarial fuzzer for `audit_fully_proven_integrity`. Generates N random bypass shapes (random proof_text + random sorry-bearing body OR random trivialized statement) and N random legitimate shapes, then asserts the audit demotes every bypass and preserves every legitimate row. Complements the known-pattern mutation tests in `tests/test_audit_integrity_mutations.py` by covering unknown-unknowns. Reproducible (seed-deterministic); pure Python, zero lake/Mistral cost. Standards-positive: any escape surfaces a real audit gap that must be fixed in `_body_is_sorry` / `_is_trivialized_signature`, not papered over.",
+    },
     "audit_paper_theory_olean_health.py": {
         "tier": "ci_gate",
         "category": "review",
