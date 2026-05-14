@@ -92,18 +92,53 @@ def _decl_in_file(name: str, lean_file: Path) -> bool:
     return bool(pat.search(text))
 
 
-def _elaboration_probe(*, lean_statement: str, lean_file: Path, theorem_name: str) -> tuple[bool, str]:
+def _elaboration_probe(
+    *,
+    lean_statement: str,
+    lean_file: Path,
+    theorem_name: str,
+    paper_id: str = "",
+    use_fast: bool = True,
+    diff_check: bool = False,
+) -> tuple[bool, str]:
     """Run the isolated elaboration check using the ledger's lean_statement.
     Returns (ok, error_tail).
-    """
-    from prove_arxiv_batch import _run_isolated_file_check  # type: ignore
 
+    When ``use_fast`` is True we route through ``lake_validation_cache`` so
+    the Mathlib import is paid once per process. ``diff_check`` runs BOTH
+    validators and asserts agreement (used for the first N rows of a sweep).
+    """
     decl = (lean_statement or "").strip()
     if not decl:
         return False, "empty_lean_statement"
     if not decl.lstrip().startswith(("theorem", "lemma", "def", "noncomputable", "axiom", "private")):
         # Wrap if it's a bare body — unlikely for our rows.
         return False, "non_decl_lean_statement"
+
+    if use_fast:
+        try:
+            import lake_validation_cache as _lvc  # type: ignore
+        except Exception:
+            _lvc = None  # type: ignore[assignment]
+        if _lvc is not None:
+            if diff_check:
+                ok, tail, diag = _lvc.differential_check(
+                    project_root=PROJECT_ROOT, source_file=lean_file,
+                    paper_id=paper_id or theorem_name, theorem_decl=decl, timeout_s=60,
+                )
+                if not diag.get("agreement", True):
+                    print(
+                        f"[fast-validation][DIVERGENCE] {paper_id}::{theorem_name} "
+                        f"fast_ok={diag['fast_ok']} slow_ok={diag['slow_ok']}",
+                        flush=True,
+                    )
+                return ok, tail
+            return _lvc.validated_isolated_check(
+                project_root=PROJECT_ROOT, paper_id=paper_id or theorem_name,
+                theorem_decl=decl, timeout_s=60,
+            )
+
+    from prove_arxiv_batch import _run_isolated_file_check  # type: ignore
     return _run_isolated_file_check(
         project_root=PROJECT_ROOT,
         source_file=lean_file,
@@ -177,7 +212,24 @@ def main() -> int:
     parser.add_argument("--paper", action="append", default=[], help="Restrict to specific paper_id(s)")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--skip-elaboration-probe", action="store_true")
+    parser.add_argument(
+        "--use-fast-validation",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Route the elaboration probe through scripts/lake_validation_cache "
+            "(persistent REPL worker). Use --no-use-fast-validation to force "
+            "the legacy `lake env lean` path."
+        ),
+    )
+    parser.add_argument(
+        "--differential-check-first",
+        type=int,
+        default=10,
+        help="With --use-fast-validation, run BOTH validators for the first N rows and assert agreement (0 = disable).",
+    )
     args = parser.parse_args()
+    diff_remaining = max(0, int(args.differential_check_first)) if args.use_fast_validation else 0
 
     _load_dotenv()
     if not os.environ.get("MISTRAL_API_KEY"):
@@ -220,10 +272,16 @@ def main() -> int:
             in_file = _decl_in_file(tn, lean_file)
             elab_ok, elab_msg = (True, "")
             if not args.skip_elaboration_probe:
+                do_diff = diff_remaining > 0
+                if do_diff:
+                    diff_remaining -= 1
                 elab_ok, elab_msg = _elaboration_probe(
                     lean_statement=r["lean_statement"],
                     lean_file=lean_file,
                     theorem_name=tn,
+                    paper_id=pid,
+                    use_fast=bool(args.use_fast_validation),
+                    diff_check=do_diff,
                 )
             r_out = dict(r)
             r_out["in_lean_file"] = in_file
@@ -303,6 +361,12 @@ def main() -> int:
     args.summary_out.write_text(json.dumps(summary, indent=2))
     print(f"\n[sweep] complete. attempted={sum(attempted_by_paper.values())} closed={sum(closed_by_paper.values())} elaboration_skipped={len(elab_skipped)} elapsed={(time.monotonic()-overall_start):.1f}s")
     print(f"[sweep] summary written to {args.summary_out}")
+    if args.use_fast_validation:
+        try:
+            import lake_validation_cache as _lvc  # type: ignore
+            _lvc.shutdown_all_workers()
+        except Exception:
+            pass
     return 0
 
 

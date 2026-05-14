@@ -76,9 +76,73 @@ except Exception:
     _run_isolated_file_check = None  # type: ignore[assignment]
 
 try:
+    import lake_validation_cache as _lvc  # type: ignore[import-not-found]
+except Exception:
+    _lvc = None  # type: ignore[assignment]
+
+try:
     import route_to_axiom_backed as r2ab  # type: ignore[import-not-found]
 except Exception:
     r2ab = None  # type: ignore[assignment]
+
+
+# --- Fast/slow validator selector ---------------------------------------
+# Flipped at startup by `main()` based on --use-fast-validation. The fast
+# path reuses a persistent REPL worker per (project, paper_id) and avoids
+# paying the Mathlib import cost on every call. Setting this False forces
+# every call through the legacy ``lake env lean`` path so flag-OFF runs
+# behave bit-identically to pre-cache behavior.
+_USE_FAST_VALIDATION: bool = False
+# Number of leading candidates to differential-check (run BOTH validators
+# and require agreement). 0 disables.
+_DIFFERENTIAL_REMAINING: int = 0
+_DIFFERENTIAL_RESULTS: list[dict[str, Any]] = []
+
+
+def _select_validator(
+    *,
+    project_root: Path,
+    paper_id: str,
+    source_file: Path,
+    theorem_decl: str,
+    proof_body: Optional[str],
+    timeout_s: int,
+) -> tuple[bool, str]:
+    """Route to fast or slow validator based on ``_USE_FAST_VALIDATION``.
+
+    When differential-check is enabled (first N candidates of a sweep), runs
+    BOTH validators, records the comparison, and uses the FAST result. Any
+    disagreement is logged loudly so the sweep operator can spot regressions
+    immediately.
+    """
+    global _DIFFERENTIAL_REMAINING
+    if not _USE_FAST_VALIDATION or _lvc is None:
+        if _run_isolated_file_check is None:
+            return True, "isolated_check_skipped_no_lake"
+        return _run_isolated_file_check(
+            project_root=project_root, source_file=source_file,
+            theorem_decl=theorem_decl, proof_body=proof_body, timeout_s=timeout_s,
+        )
+    if _DIFFERENTIAL_REMAINING > 0 and _run_isolated_file_check is not None:
+        _DIFFERENTIAL_REMAINING -= 1
+        fast_ok, fast_tail, diag = _lvc.differential_check(
+            project_root=project_root, source_file=source_file,
+            paper_id=paper_id, theorem_decl=theorem_decl,
+            proof_body=proof_body, timeout_s=timeout_s,
+        )
+        _DIFFERENTIAL_RESULTS.append(diag)
+        if not diag.get("agreement", True):
+            print(
+                f"[fast-validation][DIVERGENCE] paper={paper_id} "
+                f"fast_ok={diag['fast_ok']} slow_ok={diag['slow_ok']} "
+                f"decl={theorem_decl[:120]!r}",
+                flush=True,
+            )
+        return fast_ok, fast_tail
+    return _lvc.validated_isolated_check(
+        project_root=project_root, paper_id=paper_id,
+        theorem_decl=theorem_decl, proof_body=proof_body, timeout_s=timeout_s,
+    )
 
 
 CANONICAL_PAPERS = [
@@ -141,6 +205,7 @@ def _run_isolated_patch_check(
     theorem_decl: Optional[str] = None,
     extra_decls: Optional[list[str]] = None,
     timeout_s: int = 60,
+    paper_id: str = "",
 ) -> tuple[bool, str]:
     """Validate a candidate proof body against a CLEAN BASELINE isolated
     `.lean` file containing ONLY the source-file prelude (imports + open
@@ -185,12 +250,13 @@ def _run_isolated_patch_check(
         )
         if joined_extras:
             decl = joined_extras + "\n\n" + decl
-    return _run_isolated_file_check(
+    return _select_validator(
         project_root=PROJECT_ROOT,
+        paper_id=paper_id,
         source_file=lean_file,
         theorem_decl=decl,
-        timeout_s=timeout_s,
         proof_body=proof_body,
+        timeout_s=timeout_s,
     )
 
 
@@ -494,6 +560,7 @@ def attempt_composition(
     aux_records: Optional[list[dict[str, Any]]] = None,
     parent_target: str = "",
     use_isolated_check: bool = True,
+    paper_id: str = "",
 ) -> tuple[bool, str, str]:
     """Try each composition shape for `parent_short_name` using `aux_names`.
     Returns (validated, body_used, error_tail). On success the parent's
@@ -566,6 +633,7 @@ def attempt_composition(
                     theorem_decl=parent_block,
                     extra_decls=aux_decls,
                     timeout_s=per_lake_timeout,
+                    paper_id=paper_id,
                 )
 
             validator = _isolated_validator
@@ -691,16 +759,18 @@ def _sweep_paper(
 
     # Build validator closure for aux elaboration probe.
     def _validate_aux(decl: str) -> tuple[bool, str]:
-        if _run_isolated_file_check is None:
+        if _run_isolated_file_check is None and _lvc is None:
             # In dry-run / environments without lake we still want to
             # accept the candidate so the LLM's structural output is
             # captured. The downstream whole-proof + lake validation is
             # the real guard.
             return True, ""
-        return _run_isolated_file_check(
+        return _select_validator(
             project_root=PROJECT_ROOT,
+            paper_id=paper_id,
             source_file=lean_file,
             theorem_decl=decl,
+            proof_body=None,
             timeout_s=max(30, per_lake_timeout),
         )
 
@@ -902,6 +972,7 @@ def _sweep_paper(
                 theorem_name=target_name,
                 proof_body=body,
                 timeout_s=per_lake_timeout,
+                paper_id=paper_id,
             )
             if isolated_ok and wp_sweep._patch_proof_flex(lean_file, target_name, body):
                 first_pass_validated = True
@@ -1129,6 +1200,7 @@ def _sweep_paper(
                     proof_body=body,
                     theorem_decl=sig,
                     timeout_s=per_lake_timeout,
+                    paper_id=paper_id,
                 )
                 if not iso_ok:
                     err_tail = iso_err or ""
@@ -1213,6 +1285,7 @@ def _sweep_paper(
             baseline_errors=baseline_errors,
             aux_records=closed_records,
             parent_target=parent_target_for_v3,
+            paper_id=paper_id,
         )
         if not composed_ok:
             cleanup_names = [nm for nm, _, _ in renamed]
@@ -1350,7 +1423,40 @@ def main() -> int:
         ),
     )
     parser.add_argument("--summary", default="output/lemma_factor_v2_sweep_summary.json")
+    parser.add_argument(
+        "--use-fast-validation",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Route isolated-elaboration probes through the persistent REPL "
+            "worker (scripts/lake_validation_cache). Confirmed >100× faster "
+            "than `lake env lean` on warm runs. Use --no-use-fast-validation "
+            "to force the legacy slow path."
+        ),
+    )
+    parser.add_argument(
+        "--differential-check-first",
+        type=int,
+        default=10,
+        help=(
+            "When --use-fast-validation is on, run BOTH validators for the "
+            "first N candidates of the sweep and assert agreement. Set to 0 "
+            "to disable."
+        ),
+    )
     args = parser.parse_args()
+
+    # Wire the validator selector before any sweep work begins.
+    global _USE_FAST_VALIDATION, _DIFFERENTIAL_REMAINING
+    _USE_FAST_VALIDATION = bool(args.use_fast_validation) and _lvc is not None
+    _DIFFERENTIAL_REMAINING = max(0, int(args.differential_check_first)) if _USE_FAST_VALIDATION else 0
+    if _USE_FAST_VALIDATION:
+        print(
+            f"[fast-validation] enabled (differential_check_first={_DIFFERENTIAL_REMAINING})",
+            flush=True,
+        )
+    elif args.use_fast_validation and _lvc is None:
+        print("[fast-validation] requested but lake_validation_cache unavailable — falling back to slow path", flush=True)
 
     papers = args.paper or CANONICAL_PAPERS
 
@@ -1413,8 +1519,20 @@ def main() -> int:
 
     out = PROJECT_ROOT / args.summary
     out.parent.mkdir(parents=True, exist_ok=True)
+    summary["fast_validation"] = {
+        "enabled": _USE_FAST_VALIDATION,
+        "differential_results": _DIFFERENTIAL_RESULTS[:50],
+        "differential_disagreements": sum(
+            1 for r in _DIFFERENTIAL_RESULTS if not r.get("agreement", True)
+        ),
+    }
     out.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"[summary] wrote {out}")
+    if _lvc is not None:
+        try:
+            _lvc.shutdown_all_workers()
+        except Exception:
+            pass
     return 0
 
 

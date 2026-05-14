@@ -579,6 +579,17 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true",
                         help="Skip LLM calls and lake; just report candidate counts.")
     parser.add_argument("--summary", default="output/leanstral_whole_proof_sweep_summary.json")
+    parser.add_argument(
+        "--use-fast-validation",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Reserved: this sweep no longer runs the isolated elaboration probe "
+            "(it trusts the in-file evidence that the signature elaborated). The "
+            "flag is accepted for compatibility with the other sweeps so a single "
+            "wrapper script can opt all sweeps in or out together."
+        ),
+    )
     args = parser.parse_args()
 
     papers = args.paper or CANONICAL_PAPERS

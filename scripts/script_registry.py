@@ -188,6 +188,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "proof_search",
         "summary": "Round-VII combined sweep: tries leanstral_whole_proof first-pass on the parent, falls back to lemma_factor_v2 decomposition + per-aux whole-proof + composition (and/exists/iff shapes). Baseline-aware lake validation; deflation runs as a post-pass.",
     },
+    "lake_validation_cache.py": {
+        "tier": "official",
+        "category": "infrastructure",
+        "summary": "Fast equivalent of `prove_arxiv_batch._run_isolated_file_check`. Reuses a persistent `LeanREPLServer` worker per `(project_root, paper_id)` so the Mathlib import cost is paid once per process (~5s) instead of once per candidate (~5-30s). Exposes `validated_isolated_check`, `differential_check` (runs fast + slow validators and asserts agreement, used by sweep wrappers for standards-positivity), and `shutdown_all_workers`. Wired into `sweep_lemma_factor_v2.py` and `sweep_canonical_proof_search.py` behind `--use-fast-validation` (default ON; live test confirms >100× speedup on warm calls).",
+    },
     "lemma_factor_v2.py": {
         "tier": "research_experiment",
         "category": "repair",

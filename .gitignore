@@ -55,6 +55,7 @@ Desol/_verify_*.lean
 Desol/Bench*.lean
 ExtractData.lean
 Desol/ReplAnchor.lean
+Desol/_repl_anchor_*.lean
 
 # Vendored/path dependencies: keep source, ignore local Lake build caches
 third_party/**/.lake/
