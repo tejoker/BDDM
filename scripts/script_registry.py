@@ -153,6 +153,21 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Retroactively copies `statement` from per-paper extracted_theorems.json into empty `source_latex` ledger fields so `run_statement_repair_worker` can generate honest repair candidates.",
     },
+    "sweep_canonical_proof_search.py": {
+        "tier": "dev_tool",
+        "category": "proof_search",
+        "summary": "Round-IV sweep driver: runs deterministic micro-prover + state-MCTS on canonical UR-with-reviewed-equivalent rows. Records per-row outcomes to logs/sweep_canonical_proof_search.json. Companion to the patch+audit scripts.",
+    },
+    "sweep_canonical_patch_and_validate.py": {
+        "tier": "dev_tool",
+        "category": "proof_search",
+        "summary": "Companion to sweep_canonical_proof_search: writes successful proof_text into output/<paper>.lean and runs lake env lean to validate. Refuses to write `apply?`/`sorry`-laden proofs (the bypass pattern the integrity audit catches downstream).",
+    },
+    "sweep_canonical_publish_and_audit.py": {
+        "tier": "dev_tool",
+        "category": "proof_search",
+        "summary": "Companion to the sweep: mirrors patched ledgers to reproducibility/ and runs audit_fully_proven_integrity --include-ip-ab so any unbacked promotion gets demoted before publish.",
+    },
     "benchmark_bridge_world_model.py": {
         "tier": "research_experiment",
         "category": "bridge",
