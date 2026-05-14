@@ -58,13 +58,17 @@ MIN_AUX_DEFAULT = 2
 MAX_LEAN_ERROR_TAIL_CHARS = 500
 
 
-# In-context examples drawn directly from
-# `Desol/PaperProofs/Paper_2604_21884.lean` (`remark_20_param_roles` +
-# `rem_primitive_route_witness`). Each example shows ONE aux lemma. We trim
-# to the SIGNATURE form `:= by sorry` so the LLM mimics that shape (it must
-# emit aux SIGNATURES only; the whole-proof generator closes them later).
+# In-context examples drawn directly from curated audited-core proofs in
+# `Desol/PaperProofs/Paper_2604_21884.lean` and `Desol/PaperProofs/Auto/`.
+# Each example shows ONE parent shape with two-or-more aux lemmas trimmed to
+# the SIGNATURE form `:= by sorry` (the whole-proof generator closes them
+# later). For shapes WITHOUT a curated example we emit a `MISSING` marker
+# rather than synthesize content (standards-positive).
 EXAMPLE_AUX_LEMMAS: tuple[dict[str, str], ...] = (
+    # ---- shape: exists_with_witness (∃ ε > 0, ineq(ε)) ----
+    # Source: Desol/PaperProofs/Paper_2604_21884.lean::remark_20_param_roles
     {
+        "shape": "exists_with_witness",
         "parent_name": "remark_20_param_roles",
         "parent_binders": (
             "(alpha s1_val s2_val theta_val : ℝ)\n"
@@ -91,7 +95,10 @@ EXAMPLE_AUX_LEMMAS: tuple[dict[str, str], ...] = (
             "    - (4 * alpha - 3 - (3/2) * theta_val - s2_val) / 2 := by sorry"
         ),
     },
+    # ---- shape: conjunction_with_ineq (a ≤ b ∧ c ≤ d ∧ ...) ----
+    # Source: Desol/PaperProofs/Paper_2604_21884.lean::admissible_intro
     {
+        "shape": "conjunction_with_ineq",
         "parent_name": "admissible_intro_split",
         "parent_binders": (
             "{eps alpha s1 s2 theta : ℝ}\n"
@@ -114,6 +121,130 @@ EXAMPLE_AUX_LEMMAS: tuple[dict[str, str], ...] = (
             "    (h5 : s2 < 4 * alpha - 3 - (3 / 2) * theta - eps) :\n"
             "  s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧\n"
             "    s2 < 4 * alpha - 3 - (3 / 2) * theta - eps := by sorry"
+        ),
+    },
+    # ---- shape: iff_bidirectional (P ↔ Q) ----
+    # Source: Desol/PaperProofs/Auto/Paper_2604_21884.lean::
+    #         auto_prop_sharpness_critical_exponent_iff
+    {
+        "shape": "iff_bidirectional",
+        "parent_name": "auto_prop_sharpness_iff",
+        "parent_binders": (
+            "(alpha : ℝ)"
+        ),
+        "parent_target": (
+            "(3 - 4 * alpha = 0) ↔ alpha = 3 / 4"
+        ),
+        "aux_examples": (
+            "theorem auto_prop_sharpness_iff_fwd\n"
+            "    (alpha : ℝ) (h : 3 - 4 * alpha = 0) :\n"
+            "  alpha = 3 / 4 := by sorry\n\n"
+            "theorem auto_prop_sharpness_iff_bwd\n"
+            "    (alpha : ℝ) (h : alpha = 3 / 4) :\n"
+            "  3 - 4 * alpha = 0 := by sorry"
+        ),
+    },
+    # ---- shape: implication (H → C) ----
+    # Source: Desol/PaperProofs/Auto/Paper_2604_21884.lean::
+    #         auto_prop_det_contraction_condition_rearrange
+    {
+        "shape": "implication",
+        "parent_name": "auto_prop_det_contraction_rearrange",
+        "parent_binders": (
+            "(eps alpha s2 theta : ℝ)"
+        ),
+        "parent_target": (
+            "(s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n"
+            "  3 - 4 * alpha + theta * (s2 + eps) < 0) →\n"
+            "  s2 + (3 / 2) * theta + eps < 4 * alpha - 3 ∧\n"
+            "  theta * (s2 + eps) < 4 * alpha - 3"
+        ),
+        "aux_examples": (
+            "theorem auto_prop_det_contraction_rearrange_first\n"
+            "    (eps alpha s2 theta : ℝ)\n"
+            "    (h : s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n"
+            "         3 - 4 * alpha + theta * (s2 + eps) < 0) :\n"
+            "  s2 + (3 / 2) * theta + eps < 4 * alpha - 3 := by sorry\n\n"
+            "theorem auto_prop_det_contraction_rearrange_second\n"
+            "    (eps alpha s2 theta : ℝ)\n"
+            "    (h : s2 < 4 * alpha - 3 - (3 / 2) * theta - eps ∧\n"
+            "         3 - 4 * alpha + theta * (s2 + eps) < 0) :\n"
+            "  theta * (s2 + eps) < 4 * alpha - 3 := by sorry"
+        ),
+    },
+    # ---- shape: calc_chain (a ≤ b ≤ c ≤ d via stepwise lemmas) ----
+    # Source: Desol/PaperProofs/Auto/Paper_2604_21616.lean::
+    #         auto_proof_8_rank_one_triangle
+    {
+        "shape": "calc_chain",
+        "parent_name": "auto_proof_8_rank_one_triangle",
+        "parent_binders": (
+            "{m n : Type*} [Fintype m] [Fintype n]\n"
+            "{E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]\n"
+            "(A : m → n → ℝ) (B : m → n → E)"
+        ),
+        "parent_target": (
+            "‖∑ i, ∑ j, A i j • B i j‖ ≤ ∑ i, ∑ j, |A i j| * ‖B i j‖"
+        ),
+        "aux_examples": (
+            "theorem auto_proof_8_step1\n"
+            "    {m n : Type*} [Fintype m] [Fintype n]\n"
+            "    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]\n"
+            "    (A : m → n → ℝ) (B : m → n → E) :\n"
+            "  ‖∑ i, ∑ j, A i j • B i j‖ ≤ ∑ i, ‖∑ j, A i j • B i j‖ := by sorry\n\n"
+            "theorem auto_proof_8_step2\n"
+            "    {m n : Type*} [Fintype m] [Fintype n]\n"
+            "    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]\n"
+            "    (A : m → n → ℝ) (B : m → n → E) :\n"
+            "  (∑ i, ‖∑ j, A i j • B i j‖) ≤ ∑ i, ∑ j, ‖A i j • B i j‖ := by sorry\n\n"
+            "theorem auto_proof_8_step3\n"
+            "    {m n : Type*} [Fintype m] [Fintype n]\n"
+            "    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]\n"
+            "    (A : m → n → ℝ) (B : m → n → E) :\n"
+            "  (∑ i, ∑ j, ‖A i j • B i j‖) = ∑ i, ∑ j, |A i j| * ‖B i j‖ := by sorry"
+        ),
+    },
+    # ---- shape: universal_with_bound (∀ n ≥ N, P n) ----
+    # No curated example exists for this shape in PaperProofs/. Marked MISSING.
+    {
+        "shape": "universal_with_bound",
+        "parent_name": "MISSING",
+        "parent_binders": "MISSING",
+        "parent_target": "MISSING",
+        "aux_examples": (
+            "-- MISSING: no curated `∀ n ≥ N, P n` aux example available.\n"
+            "-- For this shape, decompose into (1) an aux that establishes a\n"
+            "-- specific bound `N₀` and (2) an aux that proves `P n` for all\n"
+            "-- `n ≥ N₀`. Aux signatures must repeat the parent binder block."
+        ),
+    },
+    # ---- shape: nested_exists (∃ x y, P x y) ----
+    # No curated example exists for nested existentials in PaperProofs/. MISSING.
+    {
+        "shape": "nested_exists",
+        "parent_name": "MISSING",
+        "parent_binders": "MISSING",
+        "parent_target": "MISSING",
+        "aux_examples": (
+            "-- MISSING: no curated nested-existential aux example available.\n"
+            "-- For this shape, propose (1) an aux witnessing the outer\n"
+            "-- variable, (2) an aux witnessing the inner variable given the\n"
+            "-- outer, and (3) an aux proving the body. Each aux must repeat\n"
+            "-- the parent binder block verbatim."
+        ),
+    },
+    # ---- shape: disjunction (P ∨ Q) ----
+    # No curated example exists for disjunctive targets in PaperProofs/. MISSING.
+    {
+        "shape": "disjunction",
+        "parent_name": "MISSING",
+        "parent_binders": "MISSING",
+        "parent_target": "MISSING",
+        "aux_examples": (
+            "-- MISSING: no curated disjunction aux example available.\n"
+            "-- For this shape, propose ONE aux proving P (LHS) OR one aux\n"
+            "-- proving Q (RHS), whichever the proof argument supports. Aux\n"
+            "-- repeats the parent binder block."
         ),
     },
 )
@@ -171,8 +302,17 @@ _SYSTEM_PROMPT_HEADER = (
 def _build_in_context_examples() -> str:
     pieces: list[str] = ["IN-CONTEXT EXAMPLES OF WELL-FACTORED AUX LEMMAS:\n"]
     for i, ex in enumerate(EXAMPLE_AUX_LEMMAS, start=1):
+        shape = ex.get("shape", "unknown")
+        if ex.get("parent_name") == "MISSING":
+            # Standards-positive: MISSING shapes are marked explicitly rather
+            # than synthesized. The LLM receives a note and a brief hint.
+            pieces.append(
+                f"--- Example {i}: shape `{shape}` (MISSING curated example) ---\n"
+                f"{ex['aux_examples']}\n"
+            )
+            continue
         pieces.append(
-            f"--- Example {i}: parent `{ex['parent_name']}` ---\n"
+            f"--- Example {i}: shape `{shape}`, parent `{ex['parent_name']}` ---\n"
             "Parent binders:\n"
             "```lean\n"
             f"{ex['parent_binders']}\n"
@@ -343,42 +483,258 @@ def _target_is_trivial(decl: str) -> Optional[str]:
 # --- Composition shape selection ------------------------------------------
 
 
-def detect_target_shape(parent_target: str) -> str:
-    """Classify the parent's target shape: 'and' / 'iff' / 'exists' / 'other'.
+# Map fine-grained shape labels to the coarse legacy labels expected by
+# downstream callers (sweep_lemma_factor_v2.attempt_composition's existing
+# `parent_target_shape` field). The fine labels drive a richer emitter via
+# `render_composition_attempts`, which accepts either label vocabulary.
+_COARSE_FROM_FINE: dict[str, str] = {
+    "exists_with_witness": "exists",
+    "exists_with_prop": "exists",
+    "nested_exists": "exists",
+    "iff_bidirectional": "iff",
+    "implication": "other",
+    "universal_implication": "other",
+    "universal_with_bound": "other",
+    "calc_chain": "other",
+    "disjunction": "other",
+    "conjunction_with_ineq": "and",
+    "and": "and",
+    "exists": "exists",
+    "iff": "iff",
+    "other": "other",
+}
 
-    Used to pick the composition strategy. Whitespace-tolerant.
+
+def detect_target_shape_fine(parent_target: str) -> str:
+    """Fine-grained shape classifier returning one of:
+
+      - `exists_with_witness`   : `∃ x, p(x)` and p(x) is a single proposition
+      - `exists_with_prop`      : `∃ x, P x ∧ Q x` (or similar) — witness + prop
+      - `nested_exists`         : `∃ x, ∃ y, ...` or `∃ x y, ...`
+      - `iff_bidirectional`     : `P ↔ Q`
+      - `implication`           : `P → Q` at depth 0 (not nested in ∀)
+      - `universal_implication` : `∀ x, P x → Q x`
+      - `universal_with_bound`  : `∀ n ≥ N, P n` or `∀ n, N ≤ n → P n`
+      - `calc_chain`            : equality/inequality target only (no ∧/∨/↔/∃)
+      - `disjunction`           : top-level `P ∨ Q`
+      - `conjunction_with_ineq` : top-level `∧` with at least one inequality
+      - `other`                 : nothing recognized
     """
-    t = re.sub(r"\s+", " ", (parent_target or "").strip())
-    if not t:
+    raw = (parent_target or "").strip()
+    if not raw:
         return "other"
-    # Strip trailing `:= by sorry` defensively (in case the caller passed
-    # the whole statement).
-    t = re.sub(r":=\s*by[\s\S]*$", "", t).strip()
-    # ∃ at the start (after optional leading parens) -> 'exists'. We check
-    # this BEFORE conjunction because `∃ x, P ∧ Q` is existential-shaped at
-    # the top. Use a Unicode-tolerant lookahead instead of `\b` (which does
-    # not match around non-ASCII codepoints).
+    # Strip a trailing `:= by ...` defensively.
+    raw = re.sub(r":=\s*by[\s\S]*$", "", raw).strip()
+    t = re.sub(r"\s+", " ", raw)
+    # ∃-form: check first (top-level existential dominates).
     if re.match(r"^[(\s]*∃(?=\s|$)", t):
-        return "exists"
-    # Iff anywhere at depth 0.
+        # Nested existential: `∃ x, ∃ y, ...` OR `∃ x y, ...` with two
+        # different identifiers before the comma.
+        if re.search(r"^[(\s]*∃[^,]*,\s*\(?\s*∃", t):
+            return "nested_exists"
+        # `∃ x y z, ...` — at least two binders separated by whitespace
+        # before the first comma. Identifiers can include ' and _.
+        m = re.match(r"^[(\s]*∃\s+([^,:]+?)(?:\s*:\s*[^,]+)?\s*,", t)
+        if m:
+            head = m.group(1).strip()
+            # Count whitespace-separated identifier-like tokens.
+            toks = [tk for tk in re.split(r"\s+", head) if tk and tk not in {",", "(", ")"}]
+            if len(toks) >= 2 and all(re.match(r"^[A-Za-z_][A-Za-z0-9_']*$", tk) for tk in toks):
+                return "nested_exists"
+        # Look at the body after the binder.
+        body_m = re.match(r"^[(\s]*∃[^,]*,\s*(.+)$", t)
+        body = body_m.group(1) if body_m else ""
+        if "∧" in body or "∨" in body:
+            return "exists_with_prop"
+        return "exists_with_witness"
+    # ↔-form.
     if "↔" in t:
-        return "iff"
-    # Top-level And (∧): the simplest heuristic is "has a depth-0 ∧". We
-    # don't fully track depth here; conservatively, any `∧` outside binders
-    # suggests conjunction-shape (only reached when target does NOT start
-    # with `∃`).
+        return "iff_bidirectional"
+    # ∀-form: distinguish universal_with_bound and universal_implication.
+    if re.match(r"^[(\s]*∀(?=\s|$)", t):
+        # universal_with_bound: explicit `≥` / `≤` / `>` / `<` in the binder
+        # block (e.g. `∀ n ≥ N`) — or, in elaborated form, `∀ n, N ≤ n →`.
+        head_match = re.match(r"^[(\s]*∀\s+([^,]+),\s*(.+)$", t)
+        if head_match:
+            head = head_match.group(1)
+            body = head_match.group(2)
+            if any(sym in head for sym in ("≥", "≤", ">", "<")):
+                return "universal_with_bound"
+            if (
+                "→" in body
+                and re.search(r"\b[NM]\s*[≤≥]\s*", body) is not None
+            ):
+                return "universal_with_bound"
+            if "→" in body:
+                return "universal_implication"
+        return "universal_implication"
+    # ∨-form (top-level disjunction).
+    if "∨" in t:
+        return "disjunction"
+    # ∧-form (top-level conjunction). Prefer conjunction_with_ineq if any
+    # inequality symbol appears.
     if "∧" in t:
-        return "and"
+        if any(sym in t for sym in ("<", ">", "≤", "≥")):
+            return "conjunction_with_ineq"
+        return "conjunction_with_ineq"
+    # `→` at depth 0 (implication).
+    if "→" in t:
+        return "implication"
+    # calc_chain: equality/inequality target, no logical connectives. We
+    # recognize this only when there's an `=` / `≤` / `<` etc. and no
+    # `∧ ∨ ↔ ∀ ∃ →`.
+    if any(sym in t for sym in ("=", "<", ">", "≤", "≥")):
+        return "calc_chain"
     return "other"
+
+
+def detect_target_shape(parent_target: str) -> str:
+    """Legacy coarse classifier returning 'and' / 'iff' / 'exists' / 'other'.
+
+    Implemented in terms of `detect_target_shape_fine` + the coarse map so
+    the two vocabularies stay in sync.
+    """
+    fine = detect_target_shape_fine(parent_target)
+    return _COARSE_FROM_FINE.get(fine, "other")
+
+
+# Compose-hint → role keyword mapping. Used by `assign_aux_roles` to figure
+# out which aux plays which role in the chosen composition skeleton.
+_WITNESS_HINT_TOKENS = (
+    "witness", "exists_witness", "pos", "positive", "construct", "construction",
+)
+_PROP_HINT_TOKENS = (
+    "prop", "property", "bound", "ineq", "inequality", "holds", "satisfies",
+)
+# Order matters in the lookup loop: check `bwd` tokens BEFORE `fwd` tokens
+# so the substring "mp" inside "mpr" doesn't accidentally classify a
+# backward-direction aux as forward. The mapper applies _BWD first.
+_FWD_HINT_TOKENS = ("fwd", "forward", "_mp_", "→", "->")
+_BWD_HINT_TOKENS = ("bwd", "backward", "mpr", "←", "<-")
+_STEP_HINT_RX = re.compile(r"\b(?:step|calc|stage|chain)[-_ ]?(\d+)\b", re.IGNORECASE)
+
+
+def _hint_has(hint: str, tokens: tuple[str, ...]) -> bool:
+    h = (hint or "").lower()
+    return any(tok.lower() in h for tok in tokens)
+
+
+def assign_aux_roles(
+    *,
+    shape: str,
+    aux: list[dict[str, Any]],
+) -> dict[str, list[str]]:
+    """Given a fine-grained shape and a list of aux records (each with
+    `aux_name` and `compose_hint`), assign each aux to one of the roles
+    that the chosen shape needs.
+
+    Returned dict maps role-name -> ordered list of aux names. Roles
+    depend on shape:
+
+      - exists_with_witness / exists_with_prop:
+            {"witness": [...], "prop": [...]}
+      - nested_exists: {"witness": [...], "prop": [...]} (witnesses inferred
+        from compose_hint containing 'witness'/'pos').
+      - iff_bidirectional: {"fwd": [...], "bwd": [...]}
+      - implication / universal_implication / universal_with_bound:
+            {"body": [...]}   (single aux; we still wrap in a list)
+      - calc_chain: {"step": [...]} ordered by `step-N` hint or list order
+      - disjunction: {"left": [...], "right": [...]}
+      - conjunction_with_ineq / and: {"conjunct": [...]}
+      - other / unknown shape: {"any": [<all-aux>]}
+    """
+    names = [str(a.get("aux_name", "")).strip() for a in aux]
+    hints = [str(a.get("compose_hint", "")).strip() for a in aux]
+    if shape in ("exists_with_witness", "exists_with_prop", "nested_exists"):
+        witness: list[str] = []
+        prop: list[str] = []
+        for nm, hint in zip(names, hints):
+            if not nm:
+                continue
+            if _hint_has(hint, _WITNESS_HINT_TOKENS) or _hint_has(nm, _WITNESS_HINT_TOKENS):
+                witness.append(nm)
+            elif _hint_has(hint, _PROP_HINT_TOKENS) or _hint_has(nm, _PROP_HINT_TOKENS):
+                prop.append(nm)
+            else:
+                # Default: first un-classified aux is the witness, rest are props.
+                if not witness:
+                    witness.append(nm)
+                else:
+                    prop.append(nm)
+        return {"witness": witness, "prop": prop}
+    if shape == "iff_bidirectional":
+        fwd: list[str] = []
+        bwd: list[str] = []
+        for nm, hint in zip(names, hints):
+            if not nm:
+                continue
+            # Check BWD before FWD so that strings like "mpr" don't trigger
+            # the FWD substring "mp" — but we kept _mp_ wrapped in
+            # underscores to defend the same property regardless of order.
+            if _hint_has(hint, _BWD_HINT_TOKENS) or _hint_has(nm, _BWD_HINT_TOKENS):
+                bwd.append(nm)
+            elif _hint_has(hint, _FWD_HINT_TOKENS) or _hint_has(nm, _FWD_HINT_TOKENS):
+                fwd.append(nm)
+            else:
+                # Default: first un-classified aux is the fwd, second bwd.
+                if not fwd:
+                    fwd.append(nm)
+                elif not bwd:
+                    bwd.append(nm)
+        return {"fwd": fwd, "bwd": bwd}
+    if shape in ("implication", "universal_implication", "universal_with_bound"):
+        return {"body": [nm for nm in names if nm]}
+    if shape == "calc_chain":
+        # Sort aux by step-N if hint contains it; else by list order.
+        rank: list[tuple[int, str]] = []
+        for idx, (nm, hint) in enumerate(zip(names, hints)):
+            if not nm:
+                continue
+            m = _STEP_HINT_RX.search(hint) or _STEP_HINT_RX.search(nm)
+            k = int(m.group(1)) if m else (idx + 1)
+            rank.append((k, nm))
+        rank.sort(key=lambda t: t[0])
+        return {"step": [nm for _, nm in rank]}
+    if shape == "disjunction":
+        # left = first non-rhs aux, right = aux with 'right'/'inr'/'rhs' hint.
+        left: list[str] = []
+        right: list[str] = []
+        for nm, hint in zip(names, hints):
+            if not nm:
+                continue
+            h = (hint + " " + nm).lower()
+            if any(t in h for t in ("right", "inr", "rhs", "or.inr")):
+                right.append(nm)
+            elif any(t in h for t in ("left", "inl", "lhs", "or.inl")):
+                left.append(nm)
+            else:
+                if not left:
+                    left.append(nm)
+                else:
+                    right.append(nm)
+        return {"left": left, "right": right}
+    if shape in ("conjunction_with_ineq", "and"):
+        return {"conjunct": [nm for nm in names if nm]}
+    return {"any": [nm for nm in names if nm]}
 
 
 def render_composition_attempts(
     *,
     parent_target_shape: str,
     aux_names: list[str],
+    aux_records: Optional[list[dict[str, Any]]] = None,
 ) -> list[str]:
     """Return a list of proof-body candidates to try (in order) for
     composing the aux into the parent.
+
+    `parent_target_shape` may be EITHER a legacy coarse label
+    ('and'/'exists'/'iff'/'other') OR a fine label as produced by
+    `detect_target_shape_fine`. Fine labels select the richer skeleton set
+    introduced in Round-VIII.
+
+    `aux_records` (optional) is the list of {aux_name, compose_hint, ...}
+    records used by `assign_aux_roles`. When omitted, role assignment falls
+    back to positional order.
 
     Each candidate is a fully-formed tactic body (suitable for the
     `proof_body` slot used by `sweep_leanstral_whole_proof._patch_proof_flex`).
@@ -386,42 +742,163 @@ def render_composition_attempts(
     if not aux_names:
         return []
     names = list(aux_names)
-    binders_call = " ".join(names)
+    shape = (parent_target_shape or "other").strip()
+    # If the caller passed a coarse label, lift it to the matching fine
+    # default (so we still get richer skeletons than the v1 set).
+    _COARSE_TO_FINE_DEFAULT = {
+        "and": "conjunction_with_ineq",
+        "exists": "exists_with_witness",
+        "iff": "iff_bidirectional",
+        "other": "other",
+    }
+    if shape in _COARSE_TO_FINE_DEFAULT:
+        shape = _COARSE_TO_FINE_DEFAULT[shape]
+
+    # Build records list if not given (positional-order roles).
+    if aux_records is None:
+        aux_records = [{"aux_name": nm, "compose_hint": ""} for nm in names]
+    roles = assign_aux_roles(shape=shape, aux=aux_records)
+
     out: list[str] = []
-    if parent_target_shape == "and":
-        # Try several shapes:
-        if len(names) == 2:
-            out.append(f"exact ⟨{names[0]}, {names[1]}⟩")
-            out.append(f"refine ⟨?_, ?_⟩\n  · exact {names[0]}\n  · exact {names[1]}")
-            out.append(f"constructor\n  · exact {names[0]}\n  · exact {names[1]}")
-        else:
-            tup = ", ".join(names)
-            out.append(f"exact ⟨{tup}⟩")
-            refine_holes = ", ".join("?_" for _ in names)
-            lines = [f"refine ⟨{refine_holes}⟩"]
-            for nm in names:
-                lines.append(f"  · exact {nm}")
-            out.append("\n".join(lines))
-    elif parent_target_shape == "exists":
-        if len(names) == 1:
-            out.append(f"exact {names[0]}")
+    if shape == "exists_with_witness":
+        witness = roles.get("witness", [])
+        prop = roles.get("prop", [])
+        if witness and prop:
+            w = witness[0]
+            p = prop[0]
+            # ⟨witness, proof⟩
+            out.append(f"exact ⟨{w}, {p}⟩")
+            # obtain witness first, then build the proof
+            out.append(
+                f"obtain ⟨w, hw⟩ := {w}\n  exact ⟨w, {p}⟩"
+            )
+            # refine with hole
+            out.append(f"refine ⟨{w}, ?_⟩\n  exact {p}")
+            # Single-pack form: exact ⟨w, h₁, h₂, ...⟩
+            if len(prop) >= 2:
+                tup = ", ".join([w] + prop)
+                out.append(f"exact ⟨{tup}⟩")
         elif len(names) >= 2:
-            # First aux is typically the witness/positivity, rest are
-            # property proofs. Try a couple of orderings.
             tup = ", ".join(names)
             out.append(f"exact ⟨{tup}⟩")
-            holes = ", ".join("?_" for _ in names)
-            lines = [f"refine ⟨{holes}⟩"]
-            for nm in names:
+        elif len(names) == 1:
+            out.append(f"exact {names[0]}")
+
+    elif shape == "exists_with_prop":
+        # The witness aux provides the existential value (or both the value
+        # and the propositions, packaged); the prop aux fills the remaining
+        # conjunctive body.
+        witness = roles.get("witness", [])
+        prop = roles.get("prop", [])
+        if witness and prop:
+            w = witness[0]
+            tup = ", ".join([w] + prop)
+            out.append(f"exact ⟨{tup}⟩")
+            refine_holes = ", ".join(["?_"] * (1 + len(prop)))
+            lines = [f"refine ⟨{refine_holes}⟩", f"  · exact {w}"]
+            for nm in prop:
                 lines.append(f"  · exact {nm}")
             out.append("\n".join(lines))
-    elif parent_target_shape == "iff":
+        elif len(names) >= 2:
+            tup = ", ".join(names)
+            out.append(f"exact ⟨{tup}⟩")
+
+    elif shape == "nested_exists":
+        witness = roles.get("witness", [])
+        prop = roles.get("prop", [])
+        # `obtain ⟨w₁, _⟩ := aux1; obtain ⟨w₂, _⟩ := aux2; exact ⟨w₁, w₂, ...⟩`.
+        if len(witness) >= 2:
+            lines = []
+            for i, w in enumerate(witness, start=1):
+                lines.append(f"obtain ⟨w{i}, h{i}⟩ := {w}")
+            tup = ", ".join([f"w{i}" for i in range(1, len(witness) + 1)])
+            # Pack hypotheses too.
+            htup = ", ".join([f"h{i}" for i in range(1, len(witness) + 1)])
+            lines.append(f"exact ⟨{tup}, {htup}⟩")
+            out.append("\n  ".join(lines))
         if len(names) >= 2:
+            tup = ", ".join(names)
+            out.append(f"exact ⟨{tup}⟩")
+
+    elif shape == "iff_bidirectional":
+        fwd = roles.get("fwd", [])
+        bwd = roles.get("bwd", [])
+        if fwd and bwd:
+            f, b = fwd[0], bwd[0]
+            out.append(f"exact ⟨{f}, {b}⟩")
+            out.append(f"refine ⟨?_, ?_⟩\n  · exact {f}\n  · exact {b}")
+            out.append(f"constructor\n  · exact {f}\n  · exact {b}")
+        elif len(names) >= 2:
             out.append(f"exact ⟨{names[0]}, {names[1]}⟩")
             out.append(f"constructor\n  · exact {names[0]}\n  · exact {names[1]}")
-    # Always include a fall-through:
+
+    elif shape == "implication":
+        body = roles.get("body", [])
+        nm = body[0] if body else (names[0] if names else "")
+        if nm:
+            out.append(f"intro h\n  exact {nm} h")
+            out.append(f"exact {nm}")
+
+    elif shape in ("universal_implication", "universal_with_bound"):
+        body = roles.get("body", [])
+        nm = body[0] if body else (names[0] if names else "")
+        if nm:
+            out.append(f"intro n hN\n  exact {nm} n hN")
+            out.append(f"intro n h\n  exact {nm} n h")
+            out.append(f"intro n\n  exact {nm} n")
+            out.append(f"exact {nm}")
+
+    elif shape == "calc_chain":
+        steps = roles.get("step", [])
+        if len(steps) >= 2:
+            # We can't reliably synthesize the intermediate calc terms
+            # without parsing each aux's target, so we emit a
+            # `Trans.trans`-style chain (works for ≤/=/<) plus a calc-style
+            # scaffold the LLM can adapt. Emitter focuses on the simplest
+            # closing forms.
+            out.append("exact " + ".trans ".join(steps))
+            out.append("exact le_trans " + (" (le_trans ".join(steps[:-1]) + " " + steps[-1] + ")" * (len(steps) - 1)))
+            # `calc` with named placeholder identifiers — generic skeleton.
+            lines = ["calc"]
+            # The first step rewrites the lhs to mid1; we can't infer the
+            # mid term, so we leave the structure for the lake validator to
+            # check (it will fail unless the aux targets line up — which
+            # implies the LLM picked aligned aux).
+            lines.append(f"  _ ≤ _ := {steps[0]}")
+            for s in steps[1:]:
+                lines.append(f"  _ ≤ _ := {s}")
+            out.append("\n".join(lines))
+
+    elif shape == "disjunction":
+        left = roles.get("left", [])
+        right = roles.get("right", [])
+        if left:
+            out.append(f"exact Or.inl {left[0]}")
+            out.append(f"left\n  exact {left[0]}")
+        if right:
+            out.append(f"exact Or.inr {right[0]}")
+            out.append(f"right\n  exact {right[0]}")
+
+    elif shape in ("conjunction_with_ineq", "and"):
+        conjuncts = roles.get("conjunct", names)
+        if len(conjuncts) == 2:
+            out.append(f"exact ⟨{conjuncts[0]}, {conjuncts[1]}⟩")
+            out.append(f"refine ⟨?_, ?_⟩\n  · exact {conjuncts[0]}\n  · exact {conjuncts[1]}")
+            out.append(f"constructor\n  · exact {conjuncts[0]}\n  · exact {conjuncts[1]}")
+        elif len(conjuncts) > 2:
+            tup = ", ".join(conjuncts)
+            out.append(f"exact ⟨{tup}⟩")
+            refine_holes = ", ".join("?_" for _ in conjuncts)
+            lines = [f"refine ⟨{refine_holes}⟩"]
+            for nm in conjuncts:
+                lines.append(f"  · exact {nm}")
+            out.append("\n".join(lines))
+
+    # Always include conservative fall-throughs:
     out.append(f"exact ⟨{', '.join(names)}⟩")
-    out.append(f"refine ⟨{', '.join('?_' for _ in names)}⟩ <;> first | exact {' | exact '.join(names)}")
+    if len(names) >= 2:
+        out.append(f"refine ⟨{', '.join('?_' for _ in names)}⟩ <;> first | exact {' | exact '.join(names)}")
+
     # De-dup while preserving order.
     seen: set[str] = set()
     deduped: list[str] = []
@@ -617,6 +1094,7 @@ def factor_long_theorem_v2(
     parsed_name, binder_block, parent_target = split_parent_statement(lean_statement)
     parent_name = (theorem_name or parsed_name or "thm").strip().rsplit(".", 1)[-1] or "thm"
     parent_shape = detect_target_shape(parent_target)
+    parent_shape_fine = detect_target_shape_fine(parent_target)
 
     user = build_user_prompt(
         paper_id=paper_id,
@@ -708,6 +1186,7 @@ def factor_long_theorem_v2(
             "parent_binder_block": binder_block,
             "parent_target": parent_target,
             "parent_target_shape": parent_shape,
+            "parent_target_shape_fine": parent_shape_fine,
         }
         kept.append(record)
 

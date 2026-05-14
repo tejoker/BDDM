@@ -311,11 +311,22 @@ def attempt_composition(
     per_lake_timeout: int,
     baseline_errors: int = 0,
     validator: Optional[Callable[[Path, str], tuple[bool, str]]] = None,
+    aux_records: Optional[list[dict[str, Any]]] = None,
 ) -> tuple[bool, str, str]:
     """Try each composition shape for `parent_short_name` using `aux_names`.
     Returns (validated, body_used, error_tail). On success the parent's
     proof body is left in the file; on failure the parent is reverted to
     `:= by sorry`.
+
+    `parent_target_shape` may be a fine label
+    (`exists_with_witness`, `conjunction_with_ineq`, `iff_bidirectional`,
+    `implication`, `universal_implication`, `universal_with_bound`,
+    `calc_chain`, `disjunction`, `nested_exists`, `exists_with_prop`) or a
+    legacy coarse label (`and` / `exists` / `iff` / `other`). The emitter
+    handles both vocabularies.
+
+    `aux_records` carries `{aux_name, compose_hint}` rows so the role-mapper
+    can place each aux into the right slot of the chosen skeleton.
 
     `validator(lean_file, theorem_name) -> (ok, err_tail)` defaults to the
     baseline-aware validator if not provided.
@@ -323,6 +334,7 @@ def attempt_composition(
     bodies = lfv2.render_composition_attempts(
         parent_target_shape=parent_target_shape,
         aux_names=aux_names,
+        aux_records=aux_records,
     )
     if not bodies:
         return False, "", "no_composition_bodies"
@@ -600,7 +612,12 @@ def _sweep_paper(
 
         report["factored"] += 1
         # Rename each aux for global uniqueness + factored-aux suffix.
-        target_shape = elaborated[0].get("parent_target_shape", "other")
+        # Prefer the fine shape (Round-VIII); fall back to the coarse one
+        # if the field is absent (older records).
+        target_shape = elaborated[0].get(
+            "parent_target_shape_fine",
+            elaborated[0].get("parent_target_shape", "other"),
+        )
         renamed: list[tuple[str, str, dict[str, Any]]] = []  # (new_name, sig, record)
         for idx, rec in enumerate(elaborated, start=1):
             new_name = _qualify_aux_name(short or name, rec["aux_name"], idx)
@@ -666,7 +683,16 @@ def _sweep_paper(
         per_row["aux_closed"] = aux_closed_names
         per_row["aux_proposed_count"] = len(renamed)
 
-        if len(aux_closed_names) < 2:
+        # Shapes that can be composed from a single aux:
+        _SINGLE_AUX_OK_SHAPES = {
+            "implication",
+            "universal_implication",
+            "universal_with_bound",
+            "disjunction",
+            "exists_with_witness",
+        }
+        min_needed = 1 if target_shape in _SINGLE_AUX_OK_SHAPES else 2
+        if len(aux_closed_names) < min_needed:
             # Insufficient closed aux to attempt composition; clean up.
             cleanup_names = [nm for nm, _, _ in renamed]
             _remove_aux_lemmas(lean_file, cleanup_names)
@@ -674,12 +700,23 @@ def _sweep_paper(
             per_row["stages"].append({
                 "stage": "insufficient_aux_closed",
                 "closed": len(aux_closed_names),
-                "needed": 2,
+                "needed": min_needed,
+                "shape": target_shape,
             })
             report["details"].append(per_row)
             continue
 
         # --- Attempt parent composition --------------------------------
+        # Build aux records so the role-mapper can place each closed aux
+        # into the right slot of the chosen skeleton.
+        closed_records = [
+            {
+                "aux_name": new_name,
+                "compose_hint": rec.get("compose_hint", ""),
+            }
+            for (new_name, _sig, rec) in renamed
+            if new_name in aux_closed_names
+        ]
         composed_ok, comp_body, comp_err = attempt_composition(
             lean_file=lean_file,
             parent_short_name=target_name,
@@ -687,6 +724,7 @@ def _sweep_paper(
             parent_target_shape=target_shape,
             per_lake_timeout=per_lake_timeout,
             baseline_errors=baseline_errors,
+            aux_records=closed_records,
         )
         if not composed_ok:
             cleanup_names = [nm for nm, _, _ in renamed]
