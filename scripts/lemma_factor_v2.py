@@ -733,11 +733,276 @@ def assign_aux_roles(
     return {"any": [nm for nm in names if nm]}
 
 
+# --- Composition v3: per-aux-type role-aware -------------------------------
+#
+# Round-VIII's 0/12 parent-composition rate was bounded by aux signatures
+# whose SHAPE matched the parent role (e.g. "first conjunct") but whose
+# TYPE didn't fit — most often when a parent's `∃ K D_X D_Z : ℕ → ℕ` needed
+# an aux that PRODUCED the function witnesses, not Props about them.
+#
+# v3 classifies each aux by its return TYPE (parsed from the aux's
+# signature) and re-runs role assignment with that information so the
+# emitter picks the right composition skeleton.
+
+
+def _extract_aux_target(aux_signature: str) -> str:
+    """Return the `target` portion of an aux signature (the substring after
+    the top-level `:` and before `:= by sorry`). Falls back to the full
+    signature when parsing fails — caller still gets best-effort matching.
+    """
+    sig = (aux_signature or "").strip()
+    if not sig:
+        return ""
+    # Strip `:= by ...` tail.
+    sig = re.sub(r":=\s*by[\s\S]*$", "", sig).rstrip()
+    # First, strip the leading `theorem <name>` so the colon-walker starts
+    # at the binder block.
+    m = _THEOREM_HEAD_RX.match(sig)
+    if m:
+        sig = sig[m.end():]
+    depth = 0
+    opens = {"(": ")", "{": "}", "[": "]", "⟨": "⟩"}
+    closers = set(opens.values())
+    i = 0
+    n = len(sig)
+    while i < n:
+        ch = sig[i]
+        if ch in opens:
+            depth += 1
+        elif ch in closers:
+            if depth > 0:
+                depth -= 1
+        elif ch == ":" and depth == 0:
+            if i + 1 < n and sig[i + 1] == "=":
+                i += 2
+                continue
+            return sig[i + 1:].strip()
+        i += 1
+    return sig.strip()
+
+
+# Aux type classification.
+#
+# - witness_producing: returns ∃ x, P x (or nested universal-then-exists
+#   `∀ ε > 0, ∃ δ > 0, ...`).
+# - property_establishing: returns a non-existential Prop (e.g. inequality,
+#   conjunction of bounds, implication chain).
+# - type_coercion: returns a TypeClass instance / coerced value (signature
+#   ends with a known Mathlib instance name or a `[...]` style typeclass).
+# - equational: returns an equality `f x = g x` or `f = g` at the top.
+
+
+_INSTANCE_TOKENS = (
+    "Inhabited", "Nonempty", "Decidable", "DecidableEq",
+    "Fintype", "Group", "Monoid", "CommMonoid", "AddCommGroup",
+    "AddGroup", "Ring", "CommRing", "Field", "Module", "Algebra",
+    "NormedAddCommGroup", "NormedSpace", "MetricSpace",
+    "TopologicalSpace", "OrderedField", "LinearOrder", "PartialOrder",
+)
+
+
+def classify_aux_type(aux_signature: str) -> str:
+    """Classify an aux's return TYPE into one of:
+
+    - ``"witness_producing"`` — target starts with `∃` (possibly nested
+      under `∀`), so the aux delivers a witness.
+    - ``"equational"``        — target is an equality at the top level
+      (e.g. `f x = g x`) with no `∧ ∨ ↔ ∀ ∃ →` outside the equality.
+    - ``"type_coercion"``     — target is a typeclass instance / coerced
+      structure (e.g. `Inhabited X`, `Nonempty Y`).
+    - ``"property_establishing"`` — anything else (inequality, conjunction,
+      implication, plain Prop).
+    - ``"unknown"``           — could not parse a target.
+    """
+    target = _extract_aux_target(aux_signature)
+    if not target:
+        return "unknown"
+    t = re.sub(r"\s+", " ", target).strip()
+    # Strip outer parens once for the top-level check.
+    while t.startswith("(") and t.endswith(")"):
+        # Ensure balanced.
+        d = 0
+        ok = True
+        for k, ch in enumerate(t):
+            if ch == "(":
+                d += 1
+            elif ch == ")":
+                d -= 1
+                if d == 0 and k != len(t) - 1:
+                    ok = False
+                    break
+        if not ok:
+            break
+        t = t[1:-1].strip()
+    # Type coercion: target is `Inhabited X` or other named instance.
+    head = t.split(" ", 1)[0] if t else ""
+    if head in _INSTANCE_TOKENS:
+        return "type_coercion"
+    # Witness producing: top-level `∃` (allow leading `∀ ... ,` containing
+    # an `∃` inside the body — `∀ ε > 0, ∃ δ > 0, ...`). `\b` doesn't
+    # behave for Unicode `∃`/`∀`, so we use an explicit whitespace check.
+    if re.match(r"^∃(?:\s|$)", t) or re.match(r"^\(\s*∃(?:\s|$)", t):
+        return "witness_producing"
+    if re.match(r"^∀(?:\s|$)", t):
+        body_m = re.match(r"^∀[^,]*,\s*(.+)$", t)
+        if body_m and re.match(r"^[(\s]*∃(?:\s|$)", body_m.group(1)):
+            return "witness_producing"
+    # Equational: top-level `=` with NO `∧ ∨ ↔ ∀ ∃ →`.
+    if "=" in t and not any(s in t for s in ("∧", "∨", "↔", "∀", "∃", "→")):
+        # Require the `=` to be a real binary equality (skip `≠`, `:=`).
+        if re.search(r"(?<![≠:])=(?!=)", t):
+            return "equational"
+    return "property_establishing"
+
+
+def count_outer_existential_binders(parent_target: str) -> int:
+    """Count how many existential witnesses the parent target needs at its
+    OUTER nesting. Recognizes:
+
+    - `∃ x, ...`              → 1
+    - `∃ x y, ...`            → 2
+    - `∃ x y z, ...`          → 3
+    - `∃ x, ∃ y, ...`         → 2 (nested existential)
+    - `∃ K D : ℕ → ℕ, ...`    → 2 (two binders sharing a type ascription)
+
+    Returns 0 if the target is not an outer existential.
+    """
+    raw = (parent_target or "").strip()
+    if not raw:
+        return 0
+    raw = re.sub(r":=\s*by[\s\S]*$", "", raw).strip()
+    t = re.sub(r"\s+", " ", raw)
+    # Strip outer parens.
+    while t.startswith("(") and t.endswith(")"):
+        d = 0
+        ok = True
+        for k, ch in enumerate(t):
+            if ch == "(":
+                d += 1
+            elif ch == ")":
+                d -= 1
+                if d == 0 and k != len(t) - 1:
+                    ok = False
+                    break
+        if not ok:
+            break
+        t = t[1:-1].strip()
+    if not re.match(r"^∃(?:\s|$)", t):
+        return 0
+    total = 0
+    # Walk through nested `∃ ... , ∃ ..., ...` chains while counting the
+    # binders in each `∃`.
+    while re.match(r"^∃(?:\s|$)", t):
+        m = re.match(r"^∃\s+([^,]+?)\s*,\s*(.+)$", t)
+        if not m:
+            break
+        head = m.group(1).strip()
+        body = m.group(2).strip()
+        # `head` may be `x` or `x y z` or `x y : T` or `K D : ℕ → ℕ`.
+        # Strip a type ascription `: T` if present (top-level).
+        depth = 0
+        cut = len(head)
+        for idx, ch in enumerate(head):
+            if ch in "({[⟨":
+                depth += 1
+            elif ch in ")}]⟩":
+                if depth > 0:
+                    depth -= 1
+            elif ch == ":" and depth == 0:
+                cut = idx
+                break
+        binders_str = head[:cut].strip()
+        # Count whitespace-separated identifier-like tokens.
+        toks = [tk for tk in re.split(r"\s+", binders_str) if tk]
+        identlike = [tk for tk in toks if re.match(r"^[A-Za-z_][A-Za-z0-9_']*$", tk)]
+        if not identlike:
+            inner_m = re.match(r"^\((.+)\)$", head)
+            if inner_m:
+                inner = inner_m.group(1)
+                cut2 = len(inner)
+                depth = 0
+                for idx, ch in enumerate(inner):
+                    if ch in "({[⟨":
+                        depth += 1
+                    elif ch in ")}]⟩":
+                        if depth > 0:
+                            depth -= 1
+                    elif ch == ":" and depth == 0:
+                        cut2 = idx
+                        break
+                inner_binders = inner[:cut2].strip()
+                identlike = [
+                    tk for tk in re.split(r"\s+", inner_binders) if tk and
+                    re.match(r"^[A-Za-z_][A-Za-z0-9_']*$", tk)
+                ]
+        total += max(1, len(identlike)) if identlike else 1
+        t = body.lstrip("(").strip()
+    return total
+
+
+def assign_aux_roles_v3(
+    *,
+    shape: str,
+    aux: list[dict[str, Any]],
+    parent_target: str = "",
+) -> dict[str, list[str]]:
+    """Type-aware role assignment (Round-IX, composition v3).
+
+    Inspects each aux's `aux_signature` to classify its return TYPE, then
+    matches aux to parent roles by TYPE rather than hint/name alone.
+
+    For witness-shape parents, returns:
+
+    - ``{"witness": [aux of type witness_producing, in input order],
+        "prop":    [aux of type property_establishing / equational]}``
+
+    The number of witnesses requested by the parent is inferred from
+    ``parent_target`` via ``count_outer_existential_binders``. If FEWER
+    witness-producing aux are available than the parent needs, v3 returns
+    EMPTY witness/prop role lists — emitter will then refuse to synthesize.
+
+    For non-witness shapes, v3 falls back to the v2 mapper.
+    """
+    if shape not in ("exists_with_witness", "exists_with_prop", "nested_exists"):
+        return assign_aux_roles(shape=shape, aux=aux)
+
+    n_witness_needed = count_outer_existential_binders(parent_target) if parent_target else 1
+    n_witness_needed = max(1, n_witness_needed)
+    witness: list[str] = []
+    prop: list[str] = []
+    other: list[str] = []
+    for a in aux:
+        name = str(a.get("aux_name", "")).strip()
+        if not name:
+            continue
+        sig = str(a.get("aux_signature", "")).strip()
+        if sig:
+            atype = classify_aux_type(sig)
+        else:
+            atype = "unknown"
+        if atype == "witness_producing":
+            witness.append(name)
+        elif atype in ("property_establishing", "equational"):
+            prop.append(name)
+        else:
+            other.append(name)
+    # Type-mismatch guard: if the parent needs witnesses but NO aux is
+    # witness-producing, return empty roles so the emitter declines.
+    if not witness:
+        return {"witness": [], "prop": []}
+    # Enforce enough witnesses for the parent's outer existential.
+    if len(witness) < n_witness_needed:
+        return {"witness": [], "prop": []}
+    prop.extend(other)
+    return {"witness": witness, "prop": prop}
+
+
 def render_composition_attempts(
     *,
     parent_target_shape: str,
     aux_names: list[str],
     aux_records: Optional[list[dict[str, Any]]] = None,
+    parent_target: str = "",
 ) -> list[str]:
     """Return a list of proof-body candidates to try (in order) for
     composing the aux into the parent.
@@ -749,7 +1014,14 @@ def render_composition_attempts(
 
     `aux_records` (optional) is the list of {aux_name, compose_hint, ...}
     records used by `assign_aux_roles`. When omitted, role assignment falls
-    back to positional order.
+    back to positional order. When records include `aux_signature`, role
+    assignment switches to the v3 type-aware mapper for witness shapes.
+
+    `parent_target` (optional) is the parent's target string. When present
+    AND the shape is a witness shape, v3 uses it to count the number of
+    outer existential binders the parent needs — type-mismatch (parent
+    needs N witnesses but only properties are available) yields an empty
+    composition list rather than a spurious `exact ⟨prop_aux⟩` body.
 
     Each candidate is a fully-formed tactic body (suitable for the
     `proof_body` slot used by `sweep_leanstral_whole_proof._patch_proof_flex`).
@@ -772,7 +1044,66 @@ def render_composition_attempts(
     # Build records list if not given (positional-order roles).
     if aux_records is None:
         aux_records = [{"aux_name": nm, "compose_hint": ""} for nm in names]
-    roles = assign_aux_roles(shape=shape, aux=aux_records)
+    # Composition v3: when records include `aux_signature` AND the parent
+    # is a witness shape, use the type-aware mapper. Type-mismatch yields
+    # an EMPTY composition list — emitter declines to synthesize.
+    use_v3 = (
+        shape in ("exists_with_witness", "exists_with_prop", "nested_exists")
+        and any(str(r.get("aux_signature", "")).strip() for r in aux_records)
+    )
+    if use_v3:
+        roles_v3 = assign_aux_roles_v3(
+            shape=shape, aux=aux_records, parent_target=parent_target,
+        )
+        # Type-mismatch: parent needs witness but no witness-producing aux.
+        if not roles_v3.get("witness"):
+            return []
+        roles = roles_v3
+        # If parent needs >=2 outer existential witnesses AND we have >=2
+        # witness-producing aux, emit a nested-obtain composition.
+        n_witness_needed = count_outer_existential_binders(parent_target)
+        if n_witness_needed >= 2 and len(roles_v3.get("witness", [])) >= n_witness_needed:
+            ws = roles_v3["witness"][:n_witness_needed]
+            ps = roles_v3.get("prop", [])
+            obtains = []
+            wnames = []
+            for i, wname in enumerate(ws, start=1):
+                obtains.append(f"obtain ⟨w{i}, _⟩ := {wname}")
+                wnames.append(f"w{i}")
+            pack_args = wnames + ps
+            bodies_nested: list[str] = []
+            if ps:
+                # form 1: pass property aux as-is.
+                bodies_nested.append(
+                    "\n  ".join(obtains + [f"exact ⟨{', '.join(pack_args)}⟩"])
+                )
+                # form 2: apply property aux to the witnesses.
+                applied_args = wnames + [f"{ps[0]} {' '.join(wnames)}"]
+                bodies_nested.append(
+                    "\n  ".join(obtains + [f"exact ⟨{', '.join(applied_args)}⟩"])
+                )
+                # form 3: refine + property under each witness via `exact`.
+                holes = ", ".join(["?_"] * (n_witness_needed + len(ps)))
+                lines = [f"refine ⟨{holes}⟩"]
+                for nm in ws:
+                    lines.append(f"  · exact {nm}.choose")
+                for nm in ps:
+                    lines.append(f"  · exact {nm}")
+                bodies_nested.append("\n".join(lines))
+            else:
+                bodies_nested.append(
+                    "\n  ".join(obtains + [f"exact ⟨{', '.join(wnames)}⟩"])
+                )
+            seen: set[str] = set()
+            deduped: list[str] = []
+            for c in bodies_nested:
+                if not c or c in seen:
+                    continue
+                seen.add(c)
+                deduped.append(c)
+            return deduped
+    else:
+        roles = assign_aux_roles(shape=shape, aux=aux_records)
 
     out: list[str] = []
     if shape == "exists_with_witness":

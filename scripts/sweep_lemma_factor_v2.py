@@ -313,6 +313,7 @@ def attempt_composition(
     baseline_errors: int = 0,
     validator: Optional[Callable[[Path, str], tuple[bool, str]]] = None,
     aux_records: Optional[list[dict[str, Any]]] = None,
+    parent_target: str = "",
 ) -> tuple[bool, str, str]:
     """Try each composition shape for `parent_short_name` using `aux_names`.
     Returns (validated, body_used, error_tail). On success the parent's
@@ -336,6 +337,7 @@ def attempt_composition(
         parent_target_shape=parent_target_shape,
         aux_names=aux_names,
         aux_records=aux_records,
+        parent_target=parent_target,
     )
     if not bodies:
         return False, "", "no_composition_bodies"
@@ -774,15 +776,19 @@ def _sweep_paper(
 
         # --- Attempt parent composition --------------------------------
         # Build aux records so the role-mapper can place each closed aux
-        # into the right slot of the chosen skeleton.
+        # into the right slot of the chosen skeleton. Round-IX (v3): we
+        # surface each aux's RENAMED signature so the type-aware mapper
+        # can classify witness vs property aux from the return-type itself.
         closed_records = [
             {
                 "aux_name": new_name,
                 "compose_hint": rec.get("compose_hint", ""),
+                "aux_signature": new_sig,
             }
-            for (new_name, _sig, rec) in renamed
+            for (new_name, new_sig, rec) in renamed
             if new_name in aux_closed_names
         ]
+        parent_target_for_v3 = elaborated[0].get("parent_target", "") if elaborated else ""
         composed_ok, comp_body, comp_err = attempt_composition(
             lean_file=lean_file,
             parent_short_name=target_name,
@@ -791,6 +797,7 @@ def _sweep_paper(
             per_lake_timeout=per_lake_timeout,
             baseline_errors=baseline_errors,
             aux_records=closed_records,
+            parent_target=parent_target_for_v3,
         )
         if not composed_ok:
             cleanup_names = [nm for nm, _, _ in renamed]
