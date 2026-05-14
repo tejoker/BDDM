@@ -160,8 +160,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 24.36,
-    "timestamp": "2026-05-14T07:43:05Z",
+    "time_s": 24.77,
+    "timestamp": "2026-05-14T08:37:48Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -180,7 +180,8 @@
     },
     "gate_failures": [
       "claim_equivalent",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -419,8 +420,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 24.48,
-    "timestamp": "2026-05-14T07:43:37Z",
+    "time_s": 27.33,
+    "timestamp": "2026-05-14T08:38:23Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -439,7 +440,8 @@
     },
     "gate_failures": [
       "claim_equivalent",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -2041,8 +2043,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 88.8,
-    "timestamp": "2026-05-14T07:45:23Z",
+    "time_s": 93.01,
+    "timestamp": "2026-05-14T08:40:16Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -2061,7 +2063,8 @@
     },
     "gate_failures": [
       "claim_equivalent",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -7143,8 +7146,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 81.29,
-    "timestamp": "2026-05-14T07:47:13Z",
+    "time_s": 86.23,
+    "timestamp": "2026-05-14T08:42:10Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -7163,7 +7166,8 @@
     },
     "gate_failures": [
       "claim_equivalent",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -7602,8 +7606,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 91.05,
-    "timestamp": "2026-05-14T07:48:57Z",
+    "time_s": 86.78,
+    "timestamp": "2026-05-14T08:43:52Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -7622,7 +7626,8 @@
     },
     "gate_failures": [
       "claim_equivalent",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -8492,8 +8497,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 96.39,
-    "timestamp": "2026-05-14T07:50:57Z",
+    "time_s": 94.7,
+    "timestamp": "2026-05-14T08:45:51Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -8512,7 +8517,8 @@
     },
     "gate_failures": [
       "claim_equivalent",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -11218,8 +11224,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 100.32,
-    "timestamp": "2026-05-14T07:53:15Z",
+    "time_s": 104.09,
+    "timestamp": "2026-05-14T08:48:15Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -14584,8 +14590,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 96.13,
-    "timestamp": "2026-05-14T07:55:44Z",
+    "time_s": 98.98,
+    "timestamp": "2026-05-14T08:50:50Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -14604,7 +14610,8 @@
     },
     "gate_failures": [
       "claim_equivalent",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [

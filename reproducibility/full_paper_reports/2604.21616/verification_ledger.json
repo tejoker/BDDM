@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-05-14T07:56:05Z",
-  "pipeline_commit": "3866e2110faffd6c089e6363864e3cb17ef556ed",
+  "generated_at": "2026-05-14T08:51:14Z",
+  "pipeline_commit": "ec6af9b26e1605134de337e6528f71a8f7387d78",
   "toolchain_versions": {
     "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
     "python": "unknown",
@@ -1388,8 +1388,8 @@
       "proof_mode": "state-mcts",
       "proof_method": "unattempted",
       "rounds_used": 1,
-      "time_s": 10.17,
-      "timestamp": "2026-05-14T07:56:05Z",
+      "time_s": 11.3,
+      "timestamp": "2026-05-14T08:51:14Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,

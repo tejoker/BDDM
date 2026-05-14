@@ -1358,7 +1358,7 @@
   },
   {
     "theorem_name": "EqualLN",
-    "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
+    "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_EqualLN.lean",
     "lean_statement": "theorem EqualLN (alpha beta : Multisegment)\n    (h1 : L_tilde alpha = n_alpha alpha)\n    (h2 : alpha ≤ beta)\n    (h3 : dual alpha ≤ dual beta) :\n  n_alpha alpha = n_alpha beta ∧ L_tilde alpha = L_tilde beta := by\n  sorry\n",
     "status": "UNRESOLVED",
     "step_verdict": "VERIFIED",
@@ -1370,7 +1370,7 @@
     "step_obligations": [
       {
         "step_index": 1,
-        "tactic": "aesop",
+        "tactic": "trivial",
         "result": "proof-finished",
         "detail": "deterministic_file_micro_prover",
         "verified": true
@@ -1414,8 +1414,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 28.21,
-    "timestamp": "2026-05-14T07:40:14Z",
+    "time_s": 14.08,
+    "timestamp": "2026-05-14T08:34:08Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -1715,7 +1715,7 @@
   },
   {
     "theorem_name": "Prop_SimpleFacts",
-    "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
+    "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_Prop_SimpleFacts.lean",
     "lean_statement": "theorem Prop_SimpleFacts (alpha : Multisegment) (halpha : IsSimple alpha) :\n  n_tilde_alpha alpha = L_alpha alpha := by\n  sorry\n",
     "status": "UNRESOLVED",
     "step_verdict": "VERIFIED",
@@ -1727,7 +1727,7 @@
     "step_obligations": [
       {
         "step_index": 1,
-        "tactic": "aesop",
+        "tactic": "rfl",
         "result": "proof-finished",
         "detail": "deterministic_file_micro_prover",
         "verified": true
@@ -1755,8 +1755,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 10.48,
-    "timestamp": "2026-05-14T07:40:32Z",
+    "time_s": 10.6,
+    "timestamp": "2026-05-14T08:34:26Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -1907,15 +1907,15 @@
   },
   {
     "theorem_name": "EqualAB",
-    "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
+    "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_EqualAB.lean",
     "lean_statement": "theorem EqualAB (alpha beta : Multisegment) (halpha : IsSimple alpha) (hab : alpha ≤ beta) (hL : L_alpha alpha = L_alpha beta) : alpha = beta := by\n  sorry\n",
     "status": "UNRESOLVED",
     "step_verdict": "VERIFIED",
     "failure_origin": "NOT_FAILED",
     "failure_kind": "unknown",
     "trust_class": "TRUST_INTERNAL_PROVED",
-    "trust_reference": "internal_verified_pipeline",
-    "promotion_gate_passed": true,
+    "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,no_paper_axiom_debt",
+    "promotion_gate_passed": false,
     "step_obligations": [
       {
         "step_index": 1,
@@ -1963,8 +1963,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 28.7,
-    "timestamp": "2026-05-08T08:38:08Z",
+    "time_s": 56.0,
+    "timestamp": "2026-05-14T08:35:30Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -1977,29 +1977,23 @@
       "claim_equivalent": true,
       "independent_semantic_equivalence_evidence": true,
       "semantic_adversarial_checks_passed": true,
-      "no_paper_axiom_debt": true,
+      "no_paper_axiom_debt": false,
       "statement_alignment_exact": true,
       "statement_alignment_not_unrelated": true
     },
-    "gate_failures": [],
+    "gate_failures": [
+      "lean_proof_closed",
+      "claim_equivalent",
+      "no_paper_axiom_debt"
+    ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
-      "insufficient_semantic_evidence",
-      "claim_equivalence_adjudicated:unclear",
-      "claim_equivalence_blocked:verdict_not_equivalent",
-      "claim_equivalence_blocked:confidence_below_threshold",
-      "claim_equivalence_blocked:requires_human_for_release",
-      "claim_equivalence_blocked:needs_human_review",
-      "claim_equivalence_blocked:different_conclusion",
-      "claim_equivalence_blocked:incomplete_assumption_alignment",
-      "equivalent_independent_semantic_evidence",
-      "claim_equivalent:hybrid",
-      "semantic_equivalence:verified"
+      "insufficient_semantic_evidence"
     ],
-    "statement_alignment_class": "exact",
-    "paper_statement_id": "pstmt_7b379e4cbbd9e0fd799c535a",
+    "statement_alignment_class": "partial",
+    "paper_statement_id": "pstmt_3ef33c40ccf4cee95c7b5e1f",
     "canonical_theorem_id": "cth_fb358e04e8577e2824503af2",
-    "alignment_pair_id": "align_6b6ca20542e77c688629346e",
+    "alignment_pair_id": "align_b29e76b75e69341d57af7204",
     "translation_fidelity_score": 0.9,
     "status_alignment_score": 0.95,
     "semantic_equivalence_artifact": {
@@ -2012,7 +2006,7 @@
         "(hL : L_alpha alpha = L_alpha beta)"
       ],
       "extracted_conclusion": "alpha = beta",
-      "equivalence_verdict": "equivalent",
+      "equivalence_verdict": "unclear",
       "reviewer_evaluator_evidence": [
         "insufficient_semantic_evidence",
         "claim_equivalence_note:insufficient_semantic_evidence",
@@ -2059,19 +2053,19 @@
         }
       },
       "independent_semantic_evidence": true,
-      "alignment_class": "exact",
+      "alignment_class": "partial",
       "alignment_decision": {
-        "alignment_class": "exact",
-        "confidence": 0.85,
+        "alignment_class": "partial",
+        "confidence": 0.6725,
         "reasons": [
-          "insufficient_exact_alignment_evidence",
-          "human_or_hybrid_adjudicated_exact"
+          "insufficient_exact_alignment_evidence"
         ],
         "evidence_sources": [
+          "independent_semantic_evidence",
           "canonical_lean_statement"
         ],
-        "paper_statement_id": "pstmt_7b379e4cbbd9e0fd799c535a",
-        "alignment_pair_id": "align_6b6ca20542e77c688629346e",
+        "paper_statement_id": "pstmt_3ef33c40ccf4cee95c7b5e1f",
+        "alignment_pair_id": "align_b29e76b75e69341d57af7204",
         "paper_text_coverage": 0.0,
         "lean_text_coverage": 0.0,
         "missing_assumptions": [],
@@ -2084,24 +2078,16 @@
         "diagnostic": false,
         "schema_version": "1.0"
       },
-      "schema_version": "1.0",
-      "adjudication": {
-        "review_id": "assisted_reviewed_statement_alignment:2304.09598:EqualAB:v1",
-        "adjudicator": "hybrid:conservative-assisted-review",
-        "reviewer_type": "hybrid",
-        "review_policy": "release_eligible",
-        "verdict": "equivalent",
-        "confidence": 0.85,
-        "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "risk_flags": [],
-        "release_eligible": true,
-        "blockers": []
-      }
+      "schema_version": "1.0"
     },
-    "review_required": false,
-    "review_queue_id": "",
+    "review_required": true,
+    "review_queue_id": "review::ArxivPaper.EqualAB",
     "context_pack": {},
-    "axiom_debt": [],
+    "axiom_debt": [
+      "paper_definition_stub:Multisegment",
+      "paper_definition_stub:L_alpha",
+      "paper_definition_stub:IsSimple"
+    ],
     "axiom_debt_hash": "58592bbcaf25d0cb",
     "closure_claim": "not_closed",
     "proof_eligible": false,
@@ -2109,15 +2095,12 @@
     "statement_fidelity_blockers": [
       "statement_validity:claim_review_pending",
       "statement_validity_reason:lean_proof_closed",
-      "statement_validity_reason:provenance_linked",
       "statement_validity_reason:claim_equivalent",
-      "statement_validity_reason:independent_semantic_equivalence_evidence",
       "statement_validity_reason:no_paper_axiom_debt"
     ],
     "statement_fidelity_source": "none",
-    "source_content_hash": "596425f7b1a7c428",
+    "source_content_hash": "3b992a69393f4eea",
     "source_span_id": "",
-    "remaining_blockers_after_adjudication": [],
     "reviewed_equivalence_verdict": "equivalent",
     "reviewed_statement_alignment_class": "exact",
     "reviewed_alignment_confidence": 0.85,
@@ -2130,17 +2113,8 @@
       "schema_version": "reviewed_statement_alignment.v1",
       "source_span_sha256": "26656190d13cf345d7840c0f8c7ef172e596524de2e5635e7aa7750e011263ec"
     },
-    "reproducible_env": true,
-    "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
-    "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
-    "discharged_axiom_debt": [
-      "paper_definition_stub:Multisegment",
-      "paper_definition_stub:L_alpha",
-      "paper_definition_stub:IsSimple"
-    ],
     "reviewer_type": "hybrid",
-    "review_policy": "release_eligible",
-    "source_latex": "[\\cite{riddlesden2022combinatorial}, Lemma  4.2.8.]\\label{EqualAB}\nIf $\\alpha$ is simple, $\\alpha \\leq \\beta$ and $L_{\\alpha} = L_{\\beta}$, then $\\alpha = \\beta$."
+    "review_policy": "release_eligible"
   },
   {
     "theorem_name": "Thm_Simple",
@@ -2862,7 +2836,7 @@
   },
   {
     "theorem_name": "Lem_AB",
-    "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
+    "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_Lem_AB.lean",
     "lean_statement": "theorem Lem_AB (alpha beta : Multisegment)\n    (h1 : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha)\n    (h2 : alpha ≤ beta)\n    (h3 : dual alpha ≤ dual beta) :\n  n_tilde_alpha alpha = n_tilde_alpha beta ∧\n  n_alpha alpha = n_alpha beta ∧\n  n_tilde_alpha beta + n_alpha beta = S_alpha beta + c_alpha beta := by\n  sorry\n",
     "status": "UNRESOLVED",
     "step_verdict": "VERIFIED",
@@ -2874,7 +2848,7 @@
     "step_obligations": [
       {
         "step_index": 1,
-        "tactic": "aesop",
+        "tactic": "trivial",
         "result": "proof-finished",
         "detail": "deterministic_file_micro_prover",
         "verified": true
@@ -2918,8 +2892,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 29.37,
-    "timestamp": "2026-05-14T07:41:09Z",
+    "time_s": 13.98,
+    "timestamp": "2026-05-14T08:35:51Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -3287,7 +3261,7 @@
   },
   {
     "theorem_name": "Lem_IrredQFM",
-    "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
+    "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_Lem_IrredQFM.lean",
     "lean_statement": "theorem Lem_IrredQFM (alpha : Multisegment) (h : alpha ∈ IrreducibleLadderMultisegment) :\n  n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha := by\n  sorry\n",
     "status": "UNRESOLVED",
     "step_verdict": "VERIFIED",
@@ -3327,8 +3301,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 10.42,
-    "timestamp": "2026-05-14T07:41:27Z",
+    "time_s": 10.64,
+    "timestamp": "2026-05-14T08:36:10Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -3481,7 +3455,7 @@
   },
   {
     "theorem_name": "Lem_Quant",
-    "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
+    "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_Lem_Quant.lean",
     "lean_statement": "theorem Lem_Quant (alpha : Multisegment)\n    (h_eq : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha) :\n  IsLadderMultisegment alpha := by\n  sorry\n",
     "status": "UNRESOLVED",
     "step_verdict": "VERIFIED",
@@ -3521,8 +3495,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 14.72,
-    "timestamp": "2026-05-14T07:41:50Z",
+    "time_s": 14.87,
+    "timestamp": "2026-05-14T08:36:32Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,

@@ -84,8 +84,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 58.68,
-    "timestamp": "2026-05-14T07:39:31Z",
+    "time_s": 86.09,
+    "timestamp": "2026-05-14T08:33:39Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -105,7 +105,8 @@
     "gate_failures": [
       "assumptions_grounded",
       "dependency_trust_complete",
-      "claim_equivalent"
+      "claim_equivalent",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [

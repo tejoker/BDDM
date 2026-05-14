@@ -2771,7 +2771,7 @@
   },
   {
     "theorem_name": "thm_pathwise_fluct",
-    "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
+    "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_thm_pathwise_fluct.lean",
     "lean_statement": "theorem thm_pathwise_fluct (alpha s2 theta kappa : ℝ)\n    (ha : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0)\n    (hkappa : 0 < kappa) :\n  ∃ C_omega : ℝ, 0 < C_omega ∧ ∀ N : ℕ, 0 < N →\n    DyadicBlockBound N 0 alpha ≤ C_omega * (N : ℝ) ^ ((6 - 8 * alpha + 2 * s2 + 3 * theta) / 2 + kappa) := by sorry",
     "status": "UNRESOLVED",
     "step_verdict": "VERIFIED",
@@ -2834,8 +2834,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 10.45,
-    "timestamp": "2026-05-14T07:58:21Z",
+    "time_s": 11.88,
+    "timestamp": "2026-05-14T08:53:39Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
@@ -4079,7 +4079,8 @@
       "semantic_adversarial_checks_passed": true,
       "no_paper_axiom_debt": false,
       "statement_alignment_exact": false,
-      "statement_alignment_not_unrelated": false
+      "statement_alignment_not_unrelated": false,
+      "reconcile_trivial_file_match": true
     },
     "gate_failures": [
       "lean_proof_closed",
@@ -4187,7 +4188,9 @@
       "captured_proof_text": "aesop",
       "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] lem:output-comparable-comp\n-- Statement (LaTeX): [Output-comparable complement]",
       "reason": "file_body_is_sorry_but_ledger_claimed_closed"
-    }
+    },
+    "reconcile_trivial_file_match": true,
+    "reconcile_note": "trivial proof pattern observed; status not promoted"
   },
   {
     "theorem_name": "ass_strichartz",
@@ -4917,7 +4920,7 @@
   },
   {
     "theorem_name": "def_admissible",
-    "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
+    "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_def_admissible.lean",
     "lean_statement": "theorem def_admissible :\n  ∃ alpha epsilon : ℝ, 0 < epsilon ∧ 0 < s1 ∧ s1 < s2 ∧ 0 < theta ∧ theta < 1 ∧ s2 < 4 * alpha - 3 - (3 / 2) * theta - epsilon ∧ 3 - 4 * alpha + theta * (s2 + epsilon) < 0 ∧ s1 < 2 * alpha - (3 / 2) - epsilon ∧ 3 / 2 - alpha + epsilon < s2 ∧ s2 < s1 + 2 * alpha - (3 / 2) - epsilon ∧ s2 ≤ s1 + alpha / 4 ∧ 0 < rho_V + s1 ∧ s2 - alpha < rho_V := by\n  sorry\n",
     "status": "UNRESOLVED",
     "step_verdict": "VERIFIED",
@@ -4963,8 +4966,8 @@
     "proof_mode": "state-mcts",
     "proof_method": "lean_verified",
     "rounds_used": 1,
-    "time_s": 78.23,
-    "timestamp": "2026-05-14T08:00:08Z",
+    "time_s": 78.14,
+    "timestamp": "2026-05-14T08:55:26Z",
     "validation_gates": {
       "lean_proof_closed": false,
       "step_verdict_verified": true,
