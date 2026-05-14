@@ -168,6 +168,36 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "proof_search",
         "summary": "Companion to the sweep: mirrors patched ledgers to reproducibility/ and runs audit_fully_proven_integrity --include-ip-ab so any unbacked promotion gets demoted before publish.",
     },
+    "sweep_leanstral_whole_proof.py": {
+        "tier": "research_experiment",
+        "category": "proof_search",
+        "summary": "Round-VI sweep driver: invokes leanstral_whole_proof_generator on UR/IP candidates and patches whole-proof bodies into output/<paper>.lean with baseline-aware lake validation. Pairs with sweep_lemma_factor_v2 (Round-VII).",
+    },
+    "leanstral_whole_proof_generator.py": {
+        "tier": "research_experiment",
+        "category": "proof_search",
+        "summary": "Leanstral whole-proof generator: ingests theorem statement + paper-theory hint + neighboring decls and emits a complete tactic-mode body. Forbidden-token gate (sorry/admit/apply?/axiom/native_decide) is the standards-positive guard.",
+    },
+    "sweep_lemma_factor_v2.py": {
+        "tier": "research_experiment",
+        "category": "proof_search",
+        "summary": "Round-VII combined sweep: tries leanstral_whole_proof first-pass on the parent, falls back to lemma_factor_v2 decomposition + per-aux whole-proof + composition (and/exists/iff shapes). Baseline-aware lake validation; deflation runs as a post-pass.",
+    },
+    "lemma_factor_v2.py": {
+        "tier": "research_experiment",
+        "category": "repair",
+        "summary": "Binder-preserving v2 of lemma_factor_assistant: injects the full parent binder block + exported paper-theory symbols + 2 in-context examples; rejects trivial targets and forbidden-token aux. Includes composition-shape detection + body rendering for the sweep driver.",
+    },
+    "deflate_sorry_dependent_factored.py": {
+        "tier": "dev_tool",
+        "category": "reliability",
+        "summary": "Post-sweep deflation pass: reverts any ledger row whose proof_text references a `__factored_aux` aux that is still sorry-bodied (Lean does not propagate the `declaration uses 'sorry'` warning across `apply`, so the standard audit misses these). Strips orphan aux declarations from output/<paper>.lean.",
+    },
+    "_report_honest_delta.py": {
+        "tier": "dev_tool",
+        "category": "reliability",
+        "summary": "Prints honest FP/AB/IP/UR/TL/FL counts across the canonical 8 papers from either ephemeral (output/verification_ledgers/) or canonical (reproducibility/full_paper_reports/) ledgers. Used before/after a sweep to compute the audit-survived delta.",
+    },
     "benchmark_bridge_world_model.py": {
         "tier": "research_experiment",
         "category": "bridge",
