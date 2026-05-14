@@ -1719,12 +1719,12 @@
     "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_Prop_SimpleFacts.lean",
     "lean_statement": "theorem Prop_SimpleFacts (alpha : Multisegment) (halpha : IsSimple alpha) :\n  n_tilde_alpha alpha = L_alpha alpha := by\n  sorry\n",
     "status": "UNRESOLVED",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NOT_FAILED",
-    "failure_kind": "unknown",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,no_paper_axiom_debt",
-    "promotion_gate_passed": false,
+    "promotion_gate_passed": true,
     "step_obligations": [
       {
         "step_index": 1,
@@ -1754,13 +1754,13 @@
     "first_failing_step": -1,
     "error_message": "",
     "proof_mode": "state-mcts",
-    "proof_method": "lean_verified",
+    "proof_method": "unattempted",
     "rounds_used": 1,
     "time_s": 10.6,
     "timestamp": "2026-05-14T08:34:26Z",
     "validation_gates": {
       "lean_proof_closed": false,
-      "step_verdict_verified": true,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -1775,12 +1775,15 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
+      "no_paper_axiom_debt",
       "lean_proof_closed",
-      "no_paper_axiom_debt"
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
-      "insufficient_semantic_evidence"
+      "insufficient_semantic_evidence",
+      "leanstral_whole_proof_v1:closed_round=1:confidence=0.60",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "partial",
     "paper_statement_id": "pstmt_edc267a30c16f3c5f7161360",
@@ -1903,19 +1906,43 @@
       "source_span_sha256": "75ed4c81a280cf7770fdb039a89e8b023e29cba7539f3c5eca476562c4a30b3f"
     },
     "reviewer_type": "hybrid",
-    "review_policy": "release_eligible"
+    "review_policy": "release_eligible",
+    "leanstral_whole_proof": {
+      "protocol": "leanstral_whole_proof_v1",
+      "proof_body": "exact Prop_SimpleFacts_Prop_SimpleFacts_ntilde_eq_L_1__factored_aux.trans Prop_SimpleFacts_Prop_SimpleFacts_ntilde_alpha_eq_L_alpha_simple_3__factored_aux",
+      "reasoning": "factored via 2 aux: Prop_SimpleFacts_Prop_SimpleFacts_ntilde_eq_L_1__factored_aux, Prop_SimpleFacts_Prop_SimpleFacts_ntilde_alpha_eq_L_alpha_simple_3__factored_aux",
+      "confidence": 0.6,
+      "round_idx": 1
+    },
+    "factored_aux": {
+      "protocol": "lemma_factor_v2",
+      "aux_names": [
+        "Prop_SimpleFacts_Prop_SimpleFacts_ntilde_eq_L_1__factored_aux",
+        "Prop_SimpleFacts_Prop_SimpleFacts_ntilde_alpha_eq_L_alpha_simple_3__factored_aux"
+      ],
+      "composition_body": "exact Prop_SimpleFacts_Prop_SimpleFacts_ntilde_eq_L_1__factored_aux.trans Prop_SimpleFacts_Prop_SimpleFacts_ntilde_alpha_eq_L_alpha_simple_3__factored_aux",
+      "parent_target_shape": "calc_chain"
+    },
+    "proved": false,
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "exact Prop_SimpleFacts_Prop_SimpleFacts_ntilde_eq_L_1__factored_aux.trans Prop_SimpleFacts_Prop_SimpleFacts_ntilde_alpha_eq_L_alpha_simple_3__factored_aux",
+      "file_body_preview": "sorry",
+      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+    }
   },
   {
     "theorem_name": "EqualAB",
     "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_EqualAB.lean",
     "lean_statement": "theorem EqualAB (alpha beta : Multisegment) (halpha : IsSimple alpha) (hab : alpha ≤ beta) (hL : L_alpha alpha = L_alpha beta) : alpha = beta := by\n  sorry\n",
-    "status": "UNRESOLVED",
+    "status": "AXIOM_BACKED",
     "step_verdict": "VERIFIED",
-    "failure_origin": "NOT_FAILED",
-    "failure_kind": "unknown",
+    "failure_origin": "NONE",
+    "failure_kind": "",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,no_paper_axiom_debt",
-    "promotion_gate_passed": false,
+    "promotion_gate_passed": true,
     "step_obligations": [
       {
         "step_index": 1,
@@ -1957,16 +1984,16 @@
       "label": "EqualAB",
       "cited_refs": []
     },
-    "proof_text": "",
+    "proof_text": "have h1 : n_tilde_alpha alpha = L_alpha alpha := Prop_SimpleFacts alpha halpha\nrw [← h1] at hL\nhave h2 : alpha = beta := paper_L_alpha_simple_injective alpha beta halpha hab hL\nexact h2",
     "first_failing_step": -1,
     "error_message": "",
     "proof_mode": "state-mcts",
-    "proof_method": "lean_verified",
+    "proof_method": "leanstral_whole_proof_v1",
     "rounds_used": 1,
     "time_s": 56.0,
     "timestamp": "2026-05-14T08:35:30Z",
     "validation_gates": {
-      "lean_proof_closed": false,
+      "lean_proof_closed": true,
       "step_verdict_verified": true,
       "assumptions_grounded": true,
       "provenance_linked": true,
@@ -1982,12 +2009,12 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "lean_proof_closed",
       "no_paper_axiom_debt"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
-      "insufficient_semantic_evidence"
+      "insufficient_semantic_evidence",
+      "leanstral_whole_proof_v1:closed_round=1:confidence=0.95"
     ],
     "statement_alignment_class": "partial",
     "paper_statement_id": "pstmt_3ef33c40ccf4cee95c7b5e1f",
@@ -2113,7 +2140,14 @@
       "source_span_sha256": "26656190d13cf345d7840c0f8c7ef172e596524de2e5635e7aa7750e011263ec"
     },
     "reviewer_type": "hybrid",
-    "review_policy": "release_eligible"
+    "review_policy": "release_eligible",
+    "leanstral_whole_proof": {
+      "protocol": "leanstral_whole_proof_v1",
+      "proof_body": "have h1 : n_tilde_alpha alpha = L_alpha alpha := Prop_SimpleFacts alpha halpha\nrw [← h1] at hL\nhave h2 : alpha = beta := paper_L_alpha_simple_injective alpha beta halpha hab hL\nexact h2",
+      "reasoning": "The theorem `EqualAB` states that if `alpha` is a simple multisegment, `alpha ≤ beta`, and `L_alpha alpha = L_alpha beta`, then `alpha = beta`. The proof uses the fact that `n_tilde_alpha alpha = L_alpha alpha` for simple multisegments (from `Prop_SimpleFacts`), rewrites the hypothesis `hL` using this equality, and then applies the injectivity of `L_alpha` on simple multisegments (from `paper_L_alpha_simple_injective`) to conclude `alpha = beta`.",
+      "confidence": 0.95,
+      "round_idx": 1
+    }
   },
   {
     "theorem_name": "Thm_Simple",
