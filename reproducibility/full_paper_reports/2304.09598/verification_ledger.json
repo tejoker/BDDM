@@ -1361,9 +1361,9 @@
     "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_EqualLN.lean",
     "lean_statement": "theorem EqualLN (alpha beta : Multisegment)\n    (h1 : L_tilde alpha = n_alpha alpha)\n    (h2 : alpha ≤ beta)\n    (h3 : dual alpha ≤ dual beta) :\n  n_alpha alpha = n_alpha beta ∧ L_tilde alpha = L_tilde beta := by\n  sorry\n",
     "status": "UNRESOLVED",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NOT_FAILED",
-    "failure_kind": "unknown",
+    "step_verdict": "PENDING",
+    "failure_origin": "NONE",
+    "failure_kind": "",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,no_paper_axiom_debt",
     "promotion_gate_passed": false,
@@ -1412,13 +1412,13 @@
     "first_failing_step": -1,
     "error_message": "",
     "proof_mode": "state-mcts",
-    "proof_method": "lean_verified",
+    "proof_method": "",
     "rounds_used": 1,
     "time_s": 14.08,
     "timestamp": "2026-05-14T08:34:08Z",
     "validation_gates": {
       "lean_proof_closed": false,
-      "step_verdict_verified": true,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -1433,13 +1433,15 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "lean_proof_closed",
       "claim_equivalent",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
-      "insufficient_semantic_evidence"
+      "insufficient_semantic_evidence",
+      "leanstral_whole_proof_v1:closed_round=1:confidence=0.90",
+      "deflated_sorry_dependent_factored_aux"
     ],
     "statement_alignment_class": "partial",
     "paper_statement_id": "pstmt_a6804cae8f85ba8094fd2993",
