@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-05-10T09:33:15Z",
-  "pipeline_commit": "31068248a5c47b2f1257e874bf7c407539aed277",
+  "generated_at": "2026-05-14T07:56:05Z",
+  "pipeline_commit": "3866e2110faffd6c089e6363864e3cb17ef556ed",
   "toolchain_versions": {
     "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
     "python": "unknown",
@@ -1332,15 +1332,23 @@
     {
       "theorem_name": "nuclear_l1_norms",
       "lean_file": "/home/projectx/BDDM/output/2604.21616.lean",
-      "lean_statement": "theorem nuclear_l1_norms {m n : ℕ} (A : Matrix (Fin m) (Fin n) ℝ) :\n  nuclearNorm A ≤ l1MatrixNorm A :=\n  nuclearNorm_le_l1MatrixNorm A",
+      "lean_statement": "theorem nuclear_l1_norms {m n : ℕ} (A : Matrix (Fin m) (Fin n) ℝ) :\n  nuclearNorm A ≤ l1MatrixNorm A := by sorry",
       "status": "UNRESOLVED",
       "step_verdict": "INCOMPLETE",
       "failure_origin": "PROOF_SEARCH_ERROR",
       "failure_kind": "proof_search_unattempted",
       "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,step_verdict_verified",
+      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,no_paper_axiom_debt",
       "promotion_gate_passed": false,
-      "step_obligations": [],
+      "step_obligations": [
+        {
+          "step_index": 1,
+          "tactic": "rfl",
+          "result": "proof-finished",
+          "detail": "deterministic_file_micro_prover",
+          "verified": true
+        }
+      ],
       "assumptions": [],
       "provenance": {
         "paper_id": "2604.21616",
@@ -1376,12 +1384,12 @@
       },
       "proof_text": "",
       "first_failing_step": -1,
-      "error_message": "translation_repaired_pending_proof:regenerate_explicit_structured_statement,source_grounded_statement_body",
-      "proof_mode": "full-draft",
+      "error_message": "",
+      "proof_mode": "state-mcts",
       "proof_method": "unattempted",
-      "rounds_used": 0,
-      "time_s": 0.0,
-      "timestamp": "2026-04-27T09:47:42Z",
+      "rounds_used": 1,
+      "time_s": 10.17,
+      "timestamp": "2026-05-14T07:56:05Z",
       "validation_gates": {
         "lean_proof_closed": false,
         "step_verdict_verified": false,
@@ -1394,44 +1402,40 @@
         "claim_equivalent": true,
         "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": true,
+        "no_paper_axiom_debt": false,
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
         "lean_proof_closed",
+        "claim_equivalent",
+        "no_paper_axiom_debt",
         "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
-        "translation_unvalidated",
         "insufficient_semantic_evidence",
-        "equivalent_independent_semantic_evidence",
-        "claim_equivalent:hybrid",
-        "semantic_equivalence:verified",
-        "claim_equivalence_adjudicated:equivalent",
-        "claim_equivalence_blocked:requires_human_for_release",
         "audit_demotion:fully_proven_integrity"
       ],
-      "statement_alignment_class": "exact",
-      "paper_statement_id": "pstmt_409d4e6735de82d403b80c68",
-      "canonical_theorem_id": "cth_33bab6ec70e55e70f8ac17a3",
-      "alignment_pair_id": "align_d391bdbbcbf664f05c91fc48",
+      "statement_alignment_class": "unrelated",
+      "paper_statement_id": "pstmt_fa9726a94f841cf41b11c7af",
+      "canonical_theorem_id": "cth_1eebe1eedc8697ff7e6203f0",
+      "alignment_pair_id": "align_aa8abe32336bc41cbe82f030",
       "translation_fidelity_score": 0.9,
       "status_alignment_score": 0.8,
       "semantic_equivalence_artifact": {
         "original_latex_theorem": "\\label{nuclear-l1-norms}\nFor any matrix $\\A$, we have $\\|\\A\\|_*\\leq \\|\\A\\|_1$.",
         "normalized_natural_language_theorem": "Quantifiers: For any Conclusion: The nuclear norm of A is less than or equal to the L1 norm of A",
-        "lean_statement": "theorem nuclear_l1_norms {m n : ℕ} (A : Matrix (Fin m) (Fin n) ℝ) :\n  nuclearNorm A ≤ l1MatrixNorm A :=\n  nuclearNorm_le_l1MatrixNorm A",
+        "lean_statement": "theorem nuclear_l1_norms {m n : ℕ} (A : Matrix (Fin m) (Fin n) ℝ) :\n  nuclearNorm A ≤ l1MatrixNorm A := by sorry",
         "extracted_assumptions": [],
         "extracted_conclusion": "The nuclear norm of A is less than or equal to the L1 norm of A",
-        "equivalence_verdict": "equivalent",
+        "equivalence_verdict": "unclear",
         "reviewer_evaluator_evidence": [
+          "insufficient_semantic_evidence",
           "formalization_unvalidated",
           "schema_stage_used",
           "statement_repair_needed:schema_fallback",
           "translation_unvalidated",
-          "insufficient_semantic_evidence",
           "claim_equivalence_note:translation_unvalidated",
           "claim_equivalence_note:insufficient_semantic_evidence",
           "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2604.21616:nuclear-l1-norms:v1",
@@ -1474,150 +1478,48 @@
           }
         },
         "independent_semantic_evidence": true,
-        "alignment_class": "exact",
+        "alignment_class": "unrelated",
         "alignment_decision": {
-          "alignment_class": "exact",
-          "confidence": 0.9,
+          "alignment_class": "unrelated",
+          "confidence": 0.75,
           "reasons": [
-            "translation_unvalidated",
-            "diagnostic_or_translation_artifact",
-            "human_or_hybrid_adjudicated_exact"
+            "low_cross_text_overlap"
           ],
           "evidence_sources": [
+            "independent_semantic_evidence",
             "canonical_lean_statement"
           ],
-          "paper_statement_id": "pstmt_409d4e6735de82d403b80c68",
-          "alignment_pair_id": "align_d391bdbbcbf664f05c91fc48",
+          "paper_statement_id": "pstmt_fa9726a94f841cf41b11c7af",
+          "alignment_pair_id": "align_aa8abe32336bc41cbe82f030",
           "paper_text_coverage": 0.0,
           "lean_text_coverage": 0.0,
           "missing_assumptions": [],
           "added_assumptions": [],
           "conclusion_relation": "mismatch",
-          "diagnostic": true,
+          "diagnostic": false,
           "schema_version": "1.0"
         },
-        "schema_version": "1.0",
-        "adjudication": {
-          "review_id": "assisted_reviewed_statement_alignment:2604.21616:nuclear-l1-norms:v1",
-          "adjudicator": "hybrid:conservative-assisted-review",
-          "reviewer_type": "hybrid",
-          "review_policy": "release_eligible",
-          "verdict": "equivalent",
-          "confidence": 0.85,
-          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-          "risk_flags": [],
-          "release_eligible": true,
-          "blockers": []
-        }
+        "schema_version": "1.0"
       },
-      "review_required": false,
-      "review_queue_id": "",
-      "context_pack": {
-        "theorem_name": "nuclear_l1_norms",
-        "original_latex_theorem": "\\label{nuclear-l1-norms}\nFor any matrix $\\A$, we have $\\|\\A\\|_*\\leq \\|\\A\\|_1$.",
-        "definitions": [
-          "Let $\\e_i$ denote the $i$-th standard basis vector."
-        ],
-        "notations": [],
-        "local_assumptions": [],
-        "nearby_claims": [
-          "theorem statements: - \\label{nuclear-l1-norms} For any matrix $\\A$, we have $\\|\\A\\|_*\\leq \\|\\A\\|_1$."
-        ],
-        "context_excerpt": "Paper glossary memory: - ALC: \\def\\ALC@item[#1]{% - Huge: \\def\\Huge{\\@setsize\\Huge{28pt}\\xxvpt\\@xxvpt} - LARGE: \\def\\LARGE{\\@setsize\\LARGE{20pt}\\xviipt\\@xviipt} - Large: \\def\\Large{\\@setsize\\Large{16pt}\\xivpt\\@xivpt} - abovespace: \\def\\abovespace{\\abovestrut{0.20in}} - abovestrut: \\def\\abovestrut#1{\\rule[0in]{0in}{#1}\\ignorespaces} - addcontentsline: \\def\\addcontentsline#1#2#3{} - addstringtofullauthorlist: \\newcommand\\addstringtofullauthorlist{\\g@addto@macro\\icmlfullauthorlist} - addtofullauthorlist: \\newcommand\\addtofullauthorlist[1]{% - addtomylist: \\newcommand\\addtomylist[2]{% - aroundspace: \\def\\aroundspace{\\abovestrut{0.20in}\\belowstrut{0.10in}} - belowspace: \\def\\belowspace{\\belowstrut{0.10in}} - belowstrut: \\def\\belowstrut#1{\\rule[-#1]{0in}{#1}\\ignorespaces} - bottomtitlebar: \\def\\bottomtitlebar{\\vskip .22in \\hrule height1pt \\vskip .3in} - comment: \\def\\comment#1{} - fillzeros: \\def\\fillzeros[#1]#2{\\cv@tmpc@=#2\\relax\\ifnum\\cv@tmpc@<0\\cv@tmpc@=-\\cv@tmpc@\\fi - fnum: \\def\\fnum@figure{Figure \\thefigure} - footnoterule: \\def\\footnoterule{\\kern-3pt \\hrule width 0.8in \\kern 2.6pt } Nearby theorem statements: - \\label{nuclear-l1-norms} For any matrix $\\A$, we have $\\|\\A\\|_*\\leq \\|\\A\\|_1$. Declared notation/macros: - \\newcommand{\\x}{\\mathbf{x}} - \\newcommand{\\y}{\\mathbf{y}} - \\newcommand{\\z}{\\mathbf{z}} - \\newcommand{\\g}{\\mathbf{g}} - \\newcommand{\\w}{\\mathbf{w}} - \\newcommand{\\s}{\\mathbf{s}} - \\newcommand{\\m}{\\mathbf{m}} - \\newcommand{\\e}{\\mathbf{e}} Nearby source context: j}+\\varepsilon}}\\right]\\\\ \\leq&\\sqrt{\\sigma_{op}^2+\\varepsilon}+\\sum_{t=1}^k\\sqrt{\\beta^{k-t}}(1-\\beta)\\E_{\\F_{t-1}}\\left[\\frac{\\left|\\bP_{t-1,:,i}^T\\nabla f(\\X_t)\\bQ_{t-1,:,j}\\right|^2}{\\sqrt{\\widetilde\\V_{t,i,j}+\\varepsilon}}\\right], \\end{aligned} \\end{eqnarray} where we use $\\V_0=\\0$. Summing over $",
-        "translation_acceptance_gate": {
-          "accepted": false,
-          "reason": "strict_statement_validity:schema_translation_placeholder",
-          "status": "FLAWED",
-          "failure_kind": "false_or_ambiguous_statement",
-          "gate_failures": [
-            "translation_acceptance_gate",
-            "strict_statement_validity",
-            "translation_fidelity_ok"
-          ]
-        },
-        "translation_statement_schema": {
-          "objects": [
-            "matrix A"
-          ],
-          "quantifiers": [
-            "For any"
-          ],
-          "assumptions": [],
-          "claim": "The nuclear norm of A is less than or equal to the L1 norm of A",
-          "symbols": [
-            "‖A‖_*",
-            "‖A‖_1"
-          ],
-          "constraints": [],
-          "theorem_intent": "inequality"
-        }
-      },
-      "axiom_debt": [],
-      "axiom_debt_hash": "6ac170cf80d452fe",
-      "closure_claim": "not_closed",
-      "debt_tier": "definition_stub_grounding",
-      "proof_value": "definition_grounding",
-      "grounding_metadata": [
-        {
-          "schema_version": "1.0.0",
-          "debt_item": "paper_definition_stub:nuclear_l1_norms",
-          "symbol": "nuclear_l1_norms",
-          "grounding_kind": "transparent_definition_stub",
-          "grounding_source": "paper_symbol_inventory",
-          "grounding_trust": "syntax_only_not_semantic_proof",
-          "paper_agnostic_rule_id": "definition_stub.syntax_only",
-          "proof_countable": false,
-          "hidden_assumption": false,
-          "requires_verified_replacement": false
-        }
-      ],
-      "result_label": "not_verified_with_paper_local_axiom_debt",
-      "claim_scope": "No verified closure claim is made, and the statement still references paper-local axiom debt.",
-      "modulo_paper_local_axioms": true,
-      "paper_local_axiom_debt": [
+      "review_required": true,
+      "review_queue_id": "review::ArxivPaper.nuclear_l1_norms",
+      "context_pack": {},
+      "axiom_debt": [
         "paper_definition_stub:nuclear_l1_norms"
       ],
-      "canonical_statement": "theorem _ (Fin m) (Fin n) : ‖A‖_* <= ‖A‖_1",
-      "statement_fingerprint": "33bab6ec70e55e70f8ac17a3c7ab815371931692ff41b54de1489ebf6b3c7ea8",
-      "claim_shape": "inequality",
-      "novelty_status": "duplicate_in_corpus",
-      "novelty_evidence": {
-        "schema_version": "1.0.0",
-        "method": "canonical_fingerprint",
-        "reason": "canonical statement fingerprint matched another corpus statement",
-        "matches": [
-          {
-            "paper_id": "2604.21616",
-            "theorem_name": "proof_8",
-            "statement_id": "2604.21616|proof_8|7",
-            "statement_fingerprint": "33bab6ec70e55e70f8ac17a3c7ab815371931692ff41b54de1489ebf6b3c7ea8"
-          }
-        ],
-        "mathlib": {
-          "matched": false,
-          "method": "mathlib_no_overlap_found",
-          "reason": "no Mathlib overlap detected by available checks",
-          "unavailable_checks": [
-            "mathlib_seed_missing",
-            "lean_exact_check_disabled",
-            "mathlib_semantic_index_disabled"
-          ]
-        },
-        "thresholds": {
-          "semantic_near_duplicate": 0.78,
-          "mathlib_semantic_overlap": 0.86
-        }
-      },
-      "proved": false,
-      "translation_repair": {
-        "changes": [
-          "regenerate_explicit_structured_statement",
-          "source_grounded_statement_body"
-        ],
-        "repair_abstraction_kind": "",
-        "statement_repair_kind": "faithful_statement_regeneration",
-        "repair_theory": "/home/projectx/BDDM/Desol/PaperTheory/Repair/Paper_2604_21616.lean"
-      },
+      "axiom_debt_hash": "6ac170cf80d452fe",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "a6c17e3e48834aa2",
+      "source_span_id": "",
       "reviewed_equivalence_verdict": "equivalent",
       "reviewed_statement_alignment_class": "exact",
       "reviewed_alignment_confidence": 0.85,
@@ -1630,25 +1532,13 @@
         "schema_version": "reviewed_statement_alignment.v1",
         "source_span_sha256": "e3a91759964fa1640ae7406c3507a7c449fa8d5c582952f489664df9f1de1a13"
       },
-      "remaining_blockers_after_adjudication": [
-        "lean_proof_closed",
-        "step_verdict_verified"
-      ],
-      "reproducible_env": true,
-      "pipeline_commit": "84e9b82c6d24f6cbe33ae21267a4bd9d2e0af758",
-      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
-      "discharged_axiom_debt": [
-        "paper_definition_stub:nuclearNorm",
-        "paper_definition_stub:l1MatrixNorm",
-        "paper_definition_stub:nuclearNorm_le_l1MatrixNorm"
-      ],
       "reviewer_type": "hybrid",
       "review_policy": "release_eligible",
-      "source_latex": "\\label{nuclear-l1-norms}\nFor any matrix $\\mathbf{A}$, we have $\\|\\mathbf{A}\\|_*\\leq \\|\\mathbf{A}\\|_1$.",
+      "proved": false,
       "audit_demotion": {
         "schema_version": "audit_fully_proven_integrity.v1",
         "previous_status": "FULLY_PROVEN",
-        "captured_proof_text": "nuclearNorm_le_l1MatrixNorm A",
+        "captured_proof_text": "rfl",
         "file_body_preview": "sorry\n\n-- [theorem] proof_8\n-- Statement (LaTeX): Let $_i$ denote the $i$-th standard basis vector. \\|\\|_*=\\|_{i,j}_{ij}",
         "reason": "file_body_is_sorry_but_ledger_claimed_closed"
       }

@@ -1,509 +1,461 @@
-{
-  "schema_version": "2.0",
-  "generated_at": "2026-05-10T09:38:53Z",
-  "pipeline_commit": "31068248a5c47b2f1257e874bf7c407539aed277",
-  "toolchain_versions": {
-    "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
-    "python": "unknown",
-    "mistral_model": "labs-leanstral-2603"
-  },
-  "entries": [
-    {
-      "theorem_name": "theorem_1",
-      "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_theorem_1.lean",
-      "lean_statement": "theorem theorem_1 (N : ℕ) :\n    ∃ (K D_X D_Z : ℕ → ℕ),\n    (∃ (f g : ℕ → ℝ), f =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧ g =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧\n    ∀ n, K n = ((n : ℝ) ^ (2 / 3 : ℝ) + f n) * (n : ℝ) ^ (2 / 3 : ℝ) ∧\n    D_X n = ((n : ℝ) ^ (1 / 3 : ℝ) + g n) * (n : ℝ) ^ (1 / 3 : ℝ) ∧\n    D_Z n = ((n : ℝ) + f n) * (n : ℝ)) ∧\n    (∀ n, K n ∈ Set.Icc (n ^ (2 / 3 : ℕ) / 2) (2 * n ^ (2 / 3 : ℕ))) ∧\n    (∀ n, D_X n ≥ n ^ (1 / 3 : ℕ) / 2) ∧\n    (∀ n, D_Z n ∈ Set.Icc (n / 2) (2 * n)) := by\n  sorry\n",
-      "status": "UNRESOLVED",
-      "step_verdict": "INCOMPLETE",
-      "failure_origin": "PROOF_SEARCH_ERROR",
-      "failure_kind": "proof_search_unattempted",
-      "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "internal_verified_pipeline;gate_failures=assumptions_grounded,dependency_trust_complete",
-      "promotion_gate_passed": false,
-      "step_obligations": [
-        {
-          "step_index": 1,
-          "tactic": "apply?",
-          "result": "proof-finished",
-          "detail": "deterministic_file_micro_prover",
-          "verified": true
-        }
-      ],
-      "assumptions": [
-        {
-          "label": "Filter.atTop",
-          "lean_expr": "[Filter.atTop]",
-          "grounding": "UNGROUNDED",
-          "grounding_source": "bridge_candidate:lem_cross_terms_controlled",
-          "trust_class": "TRUST_PLACEHOLDER",
-          "trust_reference": "untrusted"
-        }
-      ],
-      "provenance": {
-        "paper_id": "2012.09271",
-        "section": "",
-        "label": "theorem_1",
-        "cited_refs": [
-          "IEEEhowto:kopka",
-          "alon1988explicit",
-          "bacon2017sparse",
-          "bohdanowicz2019good",
-          "bombin2007homological",
-          "bravyi2010majorana",
-          "breuckmann2014space",
-          "breuckmann2016constructions",
-          "breuckmann2017homological",
-          "breuckmann2020single",
-          "breuckmann2021ldpc",
-          "conder2020constructing",
-          "davidoff2003elementary",
-          "dowling2017fast",
-          "fawzi2018constant",
-          "forney2018codes",
-          "freedman2002z2",
-          "friedman2003relative",
-          "guth2014quantum",
-          "hastings2016weight",
-          "hastings2020fiber",
-          "james2012general",
-          "kaufman2010symmetric",
-          "kaufman_lubotzky",
-          "langer1989erzeugende",
-          "leslie2014hypermap",
-          "lubotzky1988ramanujan",
-          "magnus1974noneuclidean",
-          "meshulam2018graph",
-          "moreno1991exponential",
-          "panteleev2019degenerate",
-          "panteleev_almostlinear",
-          "ramanujancomplexesone",
-          "ramanujancomplexestwo",
-          "ratcliffe2006foundations",
-          "salehi2017super",
-          "sipser1996expander",
-          "tanner_local_codes",
-          "terhal2015quantum",
-          "tillich2013quantum",
-          "van1991repeated",
-          "zeng2019higher"
-        ]
-      },
-      "proof_text": "",
-      "first_failing_step": -1,
-      "error_message": "",
-      "proof_mode": "state-mcts",
-      "proof_method": "unattempted",
-      "rounds_used": 1,
-      "time_s": 78.02,
-      "timestamp": "2026-05-10T09:38:47Z",
-      "validation_gates": {
-        "lean_proof_closed": false,
-        "step_verdict_verified": false,
-        "assumptions_grounded": false,
-        "provenance_linked": true,
-        "translation_fidelity_ok": true,
-        "status_alignment_ok": true,
-        "dependency_trust_complete": false,
-        "reproducible_env": true,
-        "claim_equivalent": true,
-        "independent_semantic_equivalence_evidence": true,
-        "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": true,
-        "statement_alignment_exact": true,
-        "statement_alignment_not_unrelated": true
-      },
-      "gate_failures": [
-        "assumptions_grounded",
-        "dependency_trust_complete",
-        "lean_proof_closed",
-        "step_verdict_verified"
-      ],
-      "claim_equivalence_verdict": "equivalent",
-      "claim_equivalence_notes": [
-        "insufficient_semantic_evidence",
-        "equivalent_independent_semantic_evidence",
-        "claim_equivalent:hybrid",
-        "semantic_equivalence:verified",
-        "audit_demotion:fully_proven_integrity"
-      ],
-      "statement_alignment_class": "exact",
-      "paper_statement_id": "pstmt_dac989fa2334bc24e5bf6625",
-      "canonical_theorem_id": "cth_d777f9cb7550245d48954c35",
-      "alignment_pair_id": "align_6d634ecf676d80f802a62ef6",
-      "translation_fidelity_score": 0.9,
-      "status_alignment_score": 0.8,
-      "semantic_equivalence_artifact": {
-        "original_latex_theorem": "",
-        "normalized_natural_language_theorem": "",
-        "lean_statement": "theorem theorem_1 (N : ℕ) :\n    ∃ (K D_X D_Z : ℕ → ℕ),\n    (∃ (f g : ℕ → ℝ), f =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧ g =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧\n    ∀ n, K n = ((n : ℝ) ^ (2 / 3 : ℝ) + f n) * (n : ℝ) ^ (2 / 3 : ℝ) ∧\n    D_X n = ((n : ℝ) ^ (1 / 3 : ℝ) + g n) * (n : ℝ) ^ (1 / 3 : ℝ) ∧\n    D_Z n = ((n : ℝ) + f n) * (n : ℝ)) ∧\n    (∀ n, K n ∈ Set.Icc (n ^ (2 / 3 : ℕ) / 2) (2 * n ^ (2 / 3 : ℕ))) ∧\n    (∀ n, D_X n ≥ n ^ (1 / 3 : ℕ) / 2) ∧\n    (∀ n, D_Z n ∈ Set.Icc (n / 2) (2 * n)) := by\n  sorry\n",
-        "extracted_assumptions": [
-          "[Filter.atTop]"
-        ],
-        "extracted_conclusion": "∃ (K D_X D_Z : ℕ → ℕ),\n    (∃ (f g : ℕ → ℝ), f =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧ g =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧\n    ∀ n, K n = ((n : ℝ) ^ (2 / 3 : ℝ) + f n) * (n : ℝ) ^ (2 / 3 : ℝ) ∧\n    D_X n = ((n : ℝ) ^ (1 / 3 : ℝ) + g n) * (n : ℝ) ^ (1 / 3 : ℝ) ∧\n    D_Z n = ((n : ℝ) + f n) * (n : ℝ)) ∧\n    (∀ n, K n ∈ Set.Icc (n ^ (2 / 3 : ℕ) / 2) (2 * n ^ (2 / 3 : ℕ))) ∧\n    (∀ n, D_X n ≥ n ^ (1 / 3 : ℕ) / 2) ∧\n    (∀ n, D_Z n ∈ Set.Icc (n / 2) (2 * n))",
-        "equivalence_verdict": "equivalent",
-        "reviewer_evaluator_evidence": [
-          "insufficient_semantic_evidence",
-          "claim_equivalence_adjudication:42dfd87de3c8b1da8f62c3b8e44c7ef7a95bf3e7e85cd535f01e298b40956bb4",
-          "adjudicator:llm:mistral-large-latest",
-          "reviewer_type:llm",
-          "review_policy:requires_human_for_release",
-          "adjudication_verdict:unclear",
-          "adjudication_confidence:0.3",
-          "claim_equivalence:llm_triage_only",
-          "adjudication_rationale:The paper theorem statement is missing, so it is impossible to directly compare the semantic content of the Lean theorem to the original claim. The Lean theorem provides an existential statement about functions K, D_X, and D_Z with specific asymptotic bounds and constraints, but without the paper theorem's context, assumptions, or conclusion, we cannot determine if the Lean statement is equivalent, weaker, stronger, or not equivalent.",
-          "claim_equivalence_note:insufficient_semantic_evidence",
-          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2012.09271:theorem_1:v1",
-          "adjudicator:hybrid:conservative-assisted-review",
-          "reviewer_type:hybrid",
-          "review_policy:release_eligible",
-          "adjudication_verdict:equivalent",
-          "adjudication_confidence:0.85",
-          "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-          "semantic_equivalence:verified",
-          "claim_equivalent:hybrid",
-          "equivalent_independent_semantic_evidence"
-        ],
-        "adversarial_checks": {
-          "lean_theorem_weaker": {
-            "passed": true,
-            "evidence": []
-          },
-          "trivialized_by_hypothesis": {
-            "passed": true,
-            "evidence": []
-          },
-          "domain_object_replaced_by_prop": {
-            "passed": true,
-            "evidence": []
-          },
-          "analytic_estimate_tautology": {
-            "passed": true,
-            "evidence": []
-          },
-          "quantifiers_erased": {
-            "passed": true,
-            "evidence": []
-          }
-        },
-        "independent_semantic_evidence": true,
-        "alignment_class": "exact",
-        "alignment_decision": {
-          "alignment_class": "exact",
-          "confidence": 0.85,
-          "reasons": [
-            "insufficient_exact_alignment_evidence",
-            "human_or_hybrid_adjudicated_exact"
-          ],
-          "evidence_sources": [
-            "independent_semantic_evidence",
-            "canonical_lean_statement"
-          ],
-          "paper_statement_id": "pstmt_dac989fa2334bc24e5bf6625",
-          "alignment_pair_id": "align_6d634ecf676d80f802a62ef6",
-          "paper_text_coverage": 0.0,
-          "lean_text_coverage": 0.0,
-          "missing_assumptions": [],
-          "added_assumptions": [],
-          "conclusion_relation": "matched",
-          "diagnostic": false,
-          "schema_version": "1.0"
-        },
-        "schema_version": "1.0",
-        "adjudication": {
-          "review_id": "assisted_reviewed_statement_alignment:2012.09271:theorem_1:v1",
-          "adjudicator": "hybrid:conservative-assisted-review",
-          "reviewer_type": "hybrid",
-          "review_policy": "release_eligible",
-          "verdict": "equivalent",
-          "confidence": 0.85,
-          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-          "risk_flags": [],
-          "release_eligible": true,
-          "blockers": []
-        }
-      },
-      "review_required": false,
-      "review_queue_id": "",
-      "context_pack": {},
-      "axiom_debt": [],
-      "axiom_debt_hash": "",
-      "closure_claim": "not_closed",
-      "proof_eligible": false,
-      "statement_fidelity_verdict": "blocked",
-      "statement_fidelity_blockers": [
-        "statement_validity:claim_review_pending",
-        "statement_validity_reason:assumptions_grounded",
-        "statement_validity_reason:dependency_trust_complete",
-        "statement_validity_reason:claim_equivalent"
-      ],
-      "statement_fidelity_source": "none",
-      "source_content_hash": "73aae6d016b64a7a",
-      "source_span_id": "",
-      "reviewed_equivalence_verdict": "equivalent",
-      "reviewed_statement_alignment_class": "exact",
-      "reviewed_alignment_confidence": 0.85,
-      "review_provenance": {
-        "artifact_id": "assisted_reviewed_statement_alignment:2012.09271:theorem_1:v1",
-        "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-12T17:49:55Z",
-        "reviewed_by": "hybrid:conservative-assisted-review",
-        "reviewer_role": "conservative_assisted_exact_adjudicator",
-        "schema_version": "reviewed_statement_alignment.v1",
-        "source_span_sha256": "582c841bf7c65f78ba28eeb544663af616e0f3cb976d071cb0192f2845853b15"
-      },
+[
+  {
+    "theorem_name": "theorem_1",
+    "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_theorem_1.lean",
+    "lean_statement": "theorem theorem_1 (N : ℕ) :\n    ∃ (K D_X D_Z : ℕ → ℕ),\n    (∃ (f g : ℕ → ℝ), f =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧ g =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧\n    ∀ n, K n = ((n : ℝ) ^ (2 / 3 : ℝ) + f n) * (n : ℝ) ^ (2 / 3 : ℝ) ∧\n    D_X n = ((n : ℝ) ^ (1 / 3 : ℝ) + g n) * (n : ℝ) ^ (1 / 3 : ℝ) ∧\n    D_Z n = ((n : ℝ) + f n) * (n : ℝ)) ∧\n    (∀ n, K n ∈ Set.Icc (n ^ (2 / 3 : ℕ) / 2) (2 * n ^ (2 / 3 : ℕ))) ∧\n    (∀ n, D_X n ≥ n ^ (1 / 3 : ℕ) / 2) ∧\n    (∀ n, D_Z n ∈ Set.Icc (n / 2) (2 * n)) := by\n  sorry\n",
+    "status": "UNRESOLVED",
+    "step_verdict": "VERIFIED",
+    "failure_origin": "NOT_FAILED",
+    "failure_kind": "unknown",
+    "trust_class": "TRUST_INTERNAL_PROVED",
+    "trust_reference": "internal_verified_pipeline;gate_failures=assumptions_grounded,dependency_trust_complete,claim_equivalent",
+    "promotion_gate_passed": false,
+    "step_obligations": [
+      {
+        "step_index": 1,
+        "tactic": "apply?",
+        "result": "proof-finished",
+        "detail": "deterministic_file_micro_prover",
+        "verified": true
+      }
+    ],
+    "assumptions": [
+      {
+        "label": "Filter.atTop",
+        "lean_expr": "[Filter.atTop]",
+        "grounding": "UNGROUNDED",
+        "grounding_source": "bridge_candidate:def_bal",
+        "trust_class": "TRUST_PLACEHOLDER",
+        "trust_reference": "untrusted"
+      }
+    ],
+    "provenance": {
+      "paper_id": "2012.09271",
+      "section": "",
+      "label": "theorem_1",
+      "cited_refs": [
+        "IEEEhowto:kopka",
+        "alon1988explicit",
+        "bacon2017sparse",
+        "bohdanowicz2019good",
+        "bombin2007homological",
+        "bravyi2010majorana",
+        "breuckmann2014space",
+        "breuckmann2016constructions",
+        "breuckmann2017homological",
+        "breuckmann2020single",
+        "breuckmann2021ldpc",
+        "conder2020constructing",
+        "davidoff2003elementary",
+        "dowling2017fast",
+        "fawzi2018constant",
+        "forney2018codes",
+        "freedman2002z2",
+        "friedman2003relative",
+        "guth2014quantum",
+        "hastings2016weight",
+        "hastings2020fiber",
+        "james2012general",
+        "kaufman2010symmetric",
+        "kaufman_lubotzky",
+        "langer1989erzeugende",
+        "leslie2014hypermap",
+        "lubotzky1988ramanujan",
+        "magnus1974noneuclidean",
+        "meshulam2018graph",
+        "moreno1991exponential",
+        "panteleev2019degenerate",
+        "panteleev_almostlinear",
+        "ramanujancomplexesone",
+        "ramanujancomplexestwo",
+        "ratcliffe2006foundations",
+        "salehi2017super",
+        "sipser1996expander",
+        "tanner_local_codes",
+        "terhal2015quantum",
+        "tillich2013quantum",
+        "van1991repeated",
+        "zeng2019higher"
+      ]
+    },
+    "proof_text": "",
+    "first_failing_step": -1,
+    "error_message": "",
+    "proof_mode": "state-mcts",
+    "proof_method": "lean_verified",
+    "rounds_used": 1,
+    "time_s": 58.68,
+    "timestamp": "2026-05-14T07:39:31Z",
+    "validation_gates": {
+      "lean_proof_closed": false,
+      "step_verdict_verified": true,
+      "assumptions_grounded": false,
+      "provenance_linked": true,
+      "translation_fidelity_ok": true,
+      "status_alignment_ok": true,
+      "dependency_trust_complete": false,
       "reproducible_env": true,
-      "pipeline_commit": "31068248a5c47b2f1257e874bf7c407539aed277",
-      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
-      "remaining_blockers_after_adjudication": [
-        "assumptions_grounded",
-        "dependency_trust_complete"
+      "claim_equivalent": true,
+      "independent_semantic_equivalence_evidence": true,
+      "semantic_adversarial_checks_passed": true,
+      "no_paper_axiom_debt": true,
+      "statement_alignment_exact": true,
+      "statement_alignment_not_unrelated": true
+    },
+    "gate_failures": [
+      "assumptions_grounded",
+      "dependency_trust_complete",
+      "claim_equivalent"
+    ],
+    "claim_equivalence_verdict": "equivalent",
+    "claim_equivalence_notes": [
+      "insufficient_semantic_evidence"
+    ],
+    "statement_alignment_class": "partial",
+    "paper_statement_id": "pstmt_dac989fa2334bc24e5bf6625",
+    "canonical_theorem_id": "cth_d777f9cb7550245d48954c35",
+    "alignment_pair_id": "align_6d634ecf676d80f802a62ef6",
+    "translation_fidelity_score": 0.9,
+    "status_alignment_score": 0.8,
+    "semantic_equivalence_artifact": {
+      "original_latex_theorem": "",
+      "normalized_natural_language_theorem": "",
+      "lean_statement": "theorem theorem_1 (N : ℕ) :\n    ∃ (K D_X D_Z : ℕ → ℕ),\n    (∃ (f g : ℕ → ℝ), f =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧ g =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧\n    ∀ n, K n = ((n : ℝ) ^ (2 / 3 : ℝ) + f n) * (n : ℝ) ^ (2 / 3 : ℝ) ∧\n    D_X n = ((n : ℝ) ^ (1 / 3 : ℝ) + g n) * (n : ℝ) ^ (1 / 3 : ℝ) ∧\n    D_Z n = ((n : ℝ) + f n) * (n : ℝ)) ∧\n    (∀ n, K n ∈ Set.Icc (n ^ (2 / 3 : ℕ) / 2) (2 * n ^ (2 / 3 : ℕ))) ∧\n    (∀ n, D_X n ≥ n ^ (1 / 3 : ℕ) / 2) ∧\n    (∀ n, D_Z n ∈ Set.Icc (n / 2) (2 * n)) := by\n  sorry\n",
+      "extracted_assumptions": [
+        "[Filter.atTop]"
       ],
-      "reviewer_type": "hybrid",
-      "review_policy": "release_eligible",
-      "source_latex": "[see \\Cref{thm:explicitfamily}]\nThere is an explicit family of $[[N,K,D_X,D_Z]]$ LDPC quantum codes encoding $K \\in \\Theta(N^\\frac{2}{3})$ logical qubits with $X$-distance $D_X \\in \\Omega(N^\\frac{1}{3})$ and $Z$-distance $D_Z \\in \\Theta(N)$.",
-      "proved": false,
-      "audit_demotion": {
-        "schema_version": "audit_fully_proven_integrity.v1",
-        "previous_status": "FULLY_PROVEN",
-        "captured_proof_text": "apply?",
-        "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] corollary_2\n-- Statement (LaTeX): [see ] There is an explicit family of $[[N,K,D]]$",
-        "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      "extracted_conclusion": "∃ (K D_X D_Z : ℕ → ℕ),\n    (∃ (f g : ℕ → ℝ), f =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧ g =O[Filter.atTop] (fun _ => (1 : ℝ)) ∧\n    ∀ n, K n = ((n : ℝ) ^ (2 / 3 : ℝ) + f n) * (n : ℝ) ^ (2 / 3 : ℝ) ∧\n    D_X n = ((n : ℝ) ^ (1 / 3 : ℝ) + g n) * (n : ℝ) ^ (1 / 3 : ℝ) ∧\n    D_Z n = ((n : ℝ) + f n) * (n : ℝ)) ∧\n    (∀ n, K n ∈ Set.Icc (n ^ (2 / 3 : ℕ) / 2) (2 * n ^ (2 / 3 : ℕ))) ∧\n    (∀ n, D_X n ≥ n ^ (1 / 3 : ℕ) / 2) ∧\n    (∀ n, D_Z n ∈ Set.Icc (n / 2) (2 * n))",
+      "equivalence_verdict": "unclear",
+      "reviewer_evaluator_evidence": [
+        "insufficient_semantic_evidence",
+        "claim_equivalence_adjudication:42dfd87de3c8b1da8f62c3b8e44c7ef7a95bf3e7e85cd535f01e298b40956bb4",
+        "adjudicator:llm:mistral-large-latest",
+        "reviewer_type:llm",
+        "review_policy:requires_human_for_release",
+        "adjudication_verdict:unclear",
+        "adjudication_confidence:0.3",
+        "claim_equivalence:llm_triage_only",
+        "adjudication_rationale:The paper theorem statement is missing, so it is impossible to directly compare the semantic content of the Lean theorem to the original claim. The Lean theorem provides an existential statement about functions K, D_X, and D_Z with specific asymptotic bounds and constraints, but without the paper theorem's context, assumptions, or conclusion, we cannot determine if the Lean statement is equivalent, weaker, stronger, or not equivalent.",
+        "claim_equivalence_note:insufficient_semantic_evidence",
+        "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2012.09271:theorem_1:v1",
+        "adjudicator:hybrid:conservative-assisted-review",
+        "reviewer_type:hybrid",
+        "review_policy:release_eligible",
+        "adjudication_verdict:equivalent",
+        "adjudication_confidence:0.85",
+        "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "semantic_equivalence:verified",
+        "claim_equivalent:hybrid",
+        "equivalent_independent_semantic_evidence"
+      ],
+      "adversarial_checks": {
+        "lean_theorem_weaker": {
+          "passed": true,
+          "evidence": []
+        },
+        "trivialized_by_hypothesis": {
+          "passed": true,
+          "evidence": []
+        },
+        "domain_object_replaced_by_prop": {
+          "passed": true,
+          "evidence": []
+        },
+        "analytic_estimate_tautology": {
+          "passed": true,
+          "evidence": []
+        },
+        "quantifiers_erased": {
+          "passed": true,
+          "evidence": []
+        }
+      },
+      "independent_semantic_evidence": true,
+      "alignment_class": "partial",
+      "alignment_decision": {
+        "alignment_class": "partial",
+        "confidence": 0.65,
+        "reasons": [
+          "insufficient_exact_alignment_evidence"
+        ],
+        "evidence_sources": [
+          "independent_semantic_evidence",
+          "canonical_lean_statement"
+        ],
+        "paper_statement_id": "pstmt_dac989fa2334bc24e5bf6625",
+        "alignment_pair_id": "align_6d634ecf676d80f802a62ef6",
+        "paper_text_coverage": 0.0,
+        "lean_text_coverage": 0.0,
+        "missing_assumptions": [],
+        "added_assumptions": [],
+        "conclusion_relation": "matched",
+        "diagnostic": false,
+        "schema_version": "1.0"
+      },
+      "schema_version": "1.0"
+    },
+    "review_required": true,
+    "review_queue_id": "review::ArxivPaper.theorem_1",
+    "context_pack": {},
+    "axiom_debt": [],
+    "axiom_debt_hash": "",
+    "closure_claim": "not_closed",
+    "proof_eligible": false,
+    "statement_fidelity_verdict": "blocked",
+    "statement_fidelity_blockers": [
+      "statement_validity:claim_review_pending",
+      "statement_validity_reason:assumptions_grounded",
+      "statement_validity_reason:dependency_trust_complete",
+      "statement_validity_reason:claim_equivalent"
+    ],
+    "statement_fidelity_source": "none",
+    "source_content_hash": "73aae6d016b64a7a",
+    "source_span_id": "",
+    "reviewed_equivalence_verdict": "equivalent",
+    "reviewed_statement_alignment_class": "exact",
+    "reviewed_alignment_confidence": 0.85,
+    "review_provenance": {
+      "artifact_id": "assisted_reviewed_statement_alignment:2012.09271:theorem_1:v1",
+      "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+      "reviewed_at": "2026-05-13T20:52:10Z",
+      "reviewed_by": "hybrid:conservative-assisted-review",
+      "reviewer_role": "conservative_assisted_exact_adjudicator",
+      "schema_version": "reviewed_statement_alignment.v1",
+      "source_span_sha256": "582c841bf7c65f78ba28eeb544663af616e0f3cb976d071cb0192f2845853b15"
+    },
+    "reviewer_type": "hybrid",
+    "review_policy": "release_eligible"
+  },
+  {
+    "theorem_name": "corollary_2",
+    "lean_file": "/home/projectx/BDDM/output/2012.09271.lean",
+    "lean_statement": "theorem corollary_2 :\n    ∃ (N K D : ℕ) (alpha : Type*) [MetricSpace alpha] [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha],\n    ∃ (family : ℕ → (ℕ × ℕ × ℕ)),\n      (∀ n, (family n).1 = N * n) ∧\n      (∀ n, (family n).2.1 = K * n) ∧\n      (∀ n, (family n).2.2 = D * n) ∧\n      (∀ n, ∃ eps : ℕ → ℝ, eps =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (K * n : ℝ) = (1 + eps n) * (N * n : ℝ) ^ (4 / 5 : ℝ)) ∧\n      (∀ n, ∃ delta : ℕ → ℝ, delta =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (D * n : ℝ) = (1 + delta n) * (N * n : ℝ) ^ (3 / 5 : ℝ)) := by\n  sorry\n",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "FORMALIZATION_ERROR",
+    "failure_kind": "elaboration_failure",
+    "trust_class": "TRUST_PLACEHOLDER",
+    "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,assumptions_grounded,provenance_linked,dependency_trust_complete",
+    "promotion_gate_passed": false,
+    "step_obligations": [],
+    "assumptions": [
+      {
+        "label": "MetricSpace",
+        "lean_expr": "[MetricSpace alpha]",
+        "grounding": "GROUNDED_MATHLIB",
+        "grounding_source": "Mathlib",
+        "trust_class": "TRUST_MATHLIB",
+        "trust_reference": "mathlib"
+      },
+      {
+        "label": "NormedAddCommGroup",
+        "lean_expr": "[NormedAddCommGroup alpha]",
+        "grounding": "GROUNDED_MATHLIB",
+        "grounding_source": "Mathlib",
+        "trust_class": "TRUST_MATHLIB",
+        "trust_reference": "mathlib"
+      },
+      {
+        "label": "InnerProductSpace",
+        "lean_expr": "[InnerProductSpace ℝ alpha]",
+        "grounding": "GROUNDED_MATHLIB",
+        "grounding_source": "Mathlib",
+        "trust_class": "TRUST_MATHLIB",
+        "trust_reference": "mathlib"
+      },
+      {
+        "label": "CompleteSpace",
+        "lean_expr": "[CompleteSpace alpha]",
+        "grounding": "GROUNDED_MATHLIB",
+        "grounding_source": "Mathlib",
+        "trust_class": "TRUST_MATHLIB",
+        "trust_reference": "mathlib"
+      },
+      {
+        "label": "Filter.atTop",
+        "lean_expr": "[Filter.atTop]",
+        "grounding": "UNGROUNDED",
+        "grounding_source": "",
+        "trust_class": "TRUST_PLACEHOLDER",
+        "trust_reference": "untrusted"
+      }
+    ],
+    "provenance": null,
+    "proof_text": "",
+    "first_failing_step": -1,
+    "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2012.09271_corollary_2_isolated_z7t_yaud.lean:24:33: error: unexpected token '['; expected ','",
+    "proof_mode": "validation-gate",
+    "proof_method": "unknown",
+    "rounds_used": 0,
+    "time_s": 0.0,
+    "timestamp": "2026-05-13T21:00:19Z",
+    "validation_gates": {
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
+      "assumptions_grounded": false,
+      "provenance_linked": false,
+      "translation_fidelity_ok": true,
+      "status_alignment_ok": true,
+      "dependency_trust_complete": false,
+      "reproducible_env": true,
+      "claim_equivalent": true,
+      "independent_semantic_equivalence_evidence": true,
+      "semantic_adversarial_checks_passed": true,
+      "no_paper_axiom_debt": true,
+      "statement_alignment_exact": true,
+      "statement_alignment_not_unrelated": true
+    },
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "assumptions_grounded",
+      "provenance_linked",
+      "dependency_trust_complete"
+    ],
+    "claim_equivalence_verdict": "equivalent",
+    "claim_equivalence_notes": [
+      "insufficient_semantic_evidence",
+      "equivalent_independent_semantic_evidence",
+      "claim_equivalent:hybrid",
+      "semantic_equivalence:verified"
+    ],
+    "statement_alignment_class": "exact",
+    "paper_statement_id": "pstmt_1d253201a80b025c4d0a9a41",
+    "canonical_theorem_id": "cth_d86d39e7a866e974d64ea487",
+    "alignment_pair_id": "align_8e2ed04fd2258fbd53ffe28a",
+    "translation_fidelity_score": 0.9,
+    "status_alignment_score": 0.8,
+    "semantic_equivalence_artifact": {
+      "original_latex_theorem": "",
+      "normalized_natural_language_theorem": "",
+      "lean_statement": "theorem corollary_2 :\n    ∃ (N K D : ℕ) (alpha : Type*) [MetricSpace alpha] [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha],\n    ∃ (family : ℕ → (ℕ × ℕ × ℕ)),\n      (∀ n, (family n).1 = N * n) ∧\n      (∀ n, (family n).2.1 = K * n) ∧\n      (∀ n, (family n).2.2 = D * n) ∧\n      (∀ n, ∃ eps : ℕ → ℝ, eps =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (K * n : ℝ) = (1 + eps n) * (N * n : ℝ) ^ (4 / 5 : ℝ)) ∧\n      (∀ n, ∃ delta : ℕ → ℝ, delta =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (D * n : ℝ) = (1 + delta n) * (N * n : ℝ) ^ (3 / 5 : ℝ)) := by\n  sorry\n",
+      "extracted_assumptions": [
+        "[MetricSpace alpha]",
+        "[NormedAddCommGroup alpha]",
+        "[InnerProductSpace ℝ alpha]",
+        "[CompleteSpace alpha]",
+        "[Filter.atTop]"
+      ],
+      "extracted_conclusion": "∃ (N K D : ℕ) (alpha : Type*) [MetricSpace alpha] [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha],\n    ∃ (family : ℕ → (ℕ × ℕ × ℕ)),\n      (∀ n, (family n).1 = N * n) ∧\n      (∀ n, (family n).2.1 = K * n) ∧\n      (∀ n, (family n).2.2 = D * n) ∧\n      (∀ n, ∃ eps : ℕ → ℝ, eps =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (K * n : ℝ) = (1 + eps n) * (N * n : ℝ) ^ (4 / 5 : ℝ)) ∧\n      (∀ n, ∃ delta : ℕ → ℝ, delta =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (D * n : ℝ) = (1 + delta n) * (N * n : ℝ) ^ (3 / 5 : ℝ))",
+      "equivalence_verdict": "equivalent",
+      "reviewer_evaluator_evidence": [
+        "insufficient_semantic_evidence",
+        "claim_equivalence_note:insufficient_semantic_evidence",
+        "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2012.09271:corollary_2:v1",
+        "adjudicator:hybrid:conservative-assisted-review",
+        "reviewer_type:hybrid",
+        "review_policy:release_eligible",
+        "adjudication_verdict:equivalent",
+        "adjudication_confidence:0.85",
+        "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "semantic_equivalence:verified",
+        "claim_equivalent:hybrid",
+        "equivalent_independent_semantic_evidence"
+      ],
+      "adversarial_checks": {
+        "lean_theorem_weaker": {
+          "passed": true,
+          "evidence": []
+        },
+        "trivialized_by_hypothesis": {
+          "passed": true,
+          "evidence": []
+        },
+        "domain_object_replaced_by_prop": {
+          "passed": true,
+          "evidence": []
+        },
+        "analytic_estimate_tautology": {
+          "passed": true,
+          "evidence": []
+        },
+        "quantifiers_erased": {
+          "passed": true,
+          "evidence": []
+        }
+      },
+      "independent_semantic_evidence": true,
+      "alignment_class": "exact",
+      "alignment_decision": {
+        "alignment_class": "exact",
+        "confidence": 0.85,
+        "reasons": [
+          "insufficient_exact_alignment_evidence",
+          "human_or_hybrid_adjudicated_exact"
+        ],
+        "evidence_sources": [
+          "canonical_lean_statement"
+        ],
+        "paper_statement_id": "pstmt_1d253201a80b025c4d0a9a41",
+        "alignment_pair_id": "align_8e2ed04fd2258fbd53ffe28a",
+        "paper_text_coverage": 0.0,
+        "lean_text_coverage": 0.0,
+        "missing_assumptions": [],
+        "added_assumptions": [],
+        "conclusion_relation": "matched",
+        "diagnostic": false,
+        "schema_version": "1.0"
+      },
+      "schema_version": "1.0",
+      "adjudication": {
+        "review_id": "assisted_reviewed_statement_alignment:2012.09271:corollary_2:v1",
+        "adjudicator": "hybrid:conservative-assisted-review",
+        "reviewer_type": "hybrid",
+        "review_policy": "release_eligible",
+        "verdict": "equivalent",
+        "confidence": 0.85,
+        "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "risk_flags": [],
+        "release_eligible": true,
+        "blockers": []
       }
     },
-    {
-      "theorem_name": "corollary_2",
-      "lean_file": "/home/projectx/BDDM/output/2012.09271.lean",
-      "lean_statement": "theorem corollary_2 :\n    ∃ (N K D : ℕ) (alpha : Type*) [MetricSpace alpha] [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha],\n    ∃ (family : ℕ → (ℕ × ℕ × ℕ)),\n      (∀ n, (family n).1 = N * n) ∧\n      (∀ n, (family n).2.1 = K * n) ∧\n      (∀ n, (family n).2.2 = D * n) ∧\n      (∀ n, ∃ eps : ℕ → ℝ, eps =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (K * n : ℝ) = (1 + eps n) * (N * n : ℝ) ^ (4 / 5 : ℝ)) ∧\n      (∀ n, ∃ delta : ℕ → ℝ, delta =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (D * n : ℝ) = (1 + delta n) * (N * n : ℝ) ^ (3 / 5 : ℝ)) := by\n  sorry\n",
-      "status": "UNRESOLVED",
-      "step_verdict": "INCOMPLETE",
-      "failure_origin": "FORMALIZATION_ERROR",
-      "failure_kind": "elaboration_failure",
-      "trust_class": "TRUST_PLACEHOLDER",
-      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,assumptions_grounded,dependency_trust_complete",
-      "promotion_gate_passed": false,
-      "step_obligations": [],
-      "assumptions": [
-        {
-          "label": "MetricSpace",
-          "lean_expr": "[MetricSpace alpha]",
-          "grounding": "GROUNDED_MATHLIB",
-          "grounding_source": "Mathlib",
-          "trust_class": "TRUST_MATHLIB",
-          "trust_reference": "mathlib"
-        },
-        {
-          "label": "NormedAddCommGroup",
-          "lean_expr": "[NormedAddCommGroup alpha]",
-          "grounding": "GROUNDED_MATHLIB",
-          "grounding_source": "Mathlib",
-          "trust_class": "TRUST_MATHLIB",
-          "trust_reference": "mathlib"
-        },
-        {
-          "label": "InnerProductSpace",
-          "lean_expr": "[InnerProductSpace ℝ alpha]",
-          "grounding": "GROUNDED_MATHLIB",
-          "grounding_source": "Mathlib",
-          "trust_class": "TRUST_MATHLIB",
-          "trust_reference": "mathlib"
-        },
-        {
-          "label": "CompleteSpace",
-          "lean_expr": "[CompleteSpace alpha]",
-          "grounding": "GROUNDED_MATHLIB",
-          "grounding_source": "Mathlib",
-          "trust_class": "TRUST_MATHLIB",
-          "trust_reference": "mathlib"
-        },
-        {
-          "label": "Filter.atTop",
-          "lean_expr": "[Filter.atTop]",
-          "grounding": "UNGROUNDED",
-          "grounding_source": "",
-          "trust_class": "TRUST_PLACEHOLDER",
-          "trust_reference": "untrusted"
-        }
-      ],
-      "provenance": {
-        "paper_id": "2012.09271",
-        "section": "",
-        "label": "corollary_2",
-        "cited_refs": []
-      },
-      "proof_text": "",
-      "first_failing_step": -1,
-      "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2012.09271_corollary_2_isolated_tjy9cbbw.lean:24:33: error: unexpected token '['; expected ','",
-      "proof_mode": "validation-gate",
-      "proof_method": "unknown",
-      "rounds_used": 0,
-      "time_s": 0.0,
-      "timestamp": "2026-05-10T09:38:53Z",
-      "validation_gates": {
-        "lean_proof_closed": false,
-        "step_verdict_verified": false,
-        "assumptions_grounded": false,
-        "provenance_linked": true,
-        "translation_fidelity_ok": true,
-        "status_alignment_ok": true,
-        "dependency_trust_complete": false,
-        "reproducible_env": true,
-        "claim_equivalent": true,
-        "independent_semantic_equivalence_evidence": true,
-        "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": true,
-        "statement_alignment_exact": true,
-        "statement_alignment_not_unrelated": true
-      },
-      "gate_failures": [
-        "lean_proof_closed",
-        "step_verdict_verified",
-        "assumptions_grounded",
-        "dependency_trust_complete"
-      ],
-      "claim_equivalence_verdict": "equivalent",
-      "claim_equivalence_notes": [
-        "insufficient_semantic_evidence",
-        "equivalent_independent_semantic_evidence",
-        "claim_equivalent:hybrid",
-        "semantic_equivalence:verified"
-      ],
-      "statement_alignment_class": "exact",
-      "paper_statement_id": "pstmt_1d253201a80b025c4d0a9a41",
-      "canonical_theorem_id": "cth_d86d39e7a866e974d64ea487",
-      "alignment_pair_id": "align_8e2ed04fd2258fbd53ffe28a",
-      "translation_fidelity_score": 0.9,
-      "status_alignment_score": 0.8,
-      "semantic_equivalence_artifact": {
-        "original_latex_theorem": "",
-        "normalized_natural_language_theorem": "",
-        "lean_statement": "theorem corollary_2 :\n    ∃ (N K D : ℕ) (alpha : Type*) [MetricSpace alpha] [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha],\n    ∃ (family : ℕ → (ℕ × ℕ × ℕ)),\n      (∀ n, (family n).1 = N * n) ∧\n      (∀ n, (family n).2.1 = K * n) ∧\n      (∀ n, (family n).2.2 = D * n) ∧\n      (∀ n, ∃ eps : ℕ → ℝ, eps =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (K * n : ℝ) = (1 + eps n) * (N * n : ℝ) ^ (4 / 5 : ℝ)) ∧\n      (∀ n, ∃ delta : ℕ → ℝ, delta =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (D * n : ℝ) = (1 + delta n) * (N * n : ℝ) ^ (3 / 5 : ℝ)) := by\n  sorry\n",
-        "extracted_assumptions": [
-          "[MetricSpace alpha]",
-          "[NormedAddCommGroup alpha]",
-          "[InnerProductSpace ℝ alpha]",
-          "[CompleteSpace alpha]",
-          "[Filter.atTop]"
-        ],
-        "extracted_conclusion": "∃ (N K D : ℕ) (alpha : Type*) [MetricSpace alpha] [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha],\n    ∃ (family : ℕ → (ℕ × ℕ × ℕ)),\n      (∀ n, (family n).1 = N * n) ∧\n      (∀ n, (family n).2.1 = K * n) ∧\n      (∀ n, (family n).2.2 = D * n) ∧\n      (∀ n, ∃ eps : ℕ → ℝ, eps =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (K * n : ℝ) = (1 + eps n) * (N * n : ℝ) ^ (4 / 5 : ℝ)) ∧\n      (∀ n, ∃ delta : ℕ → ℝ, delta =o[Filter.atTop] (fun _ => (1 : ℝ)) ∧ (D * n : ℝ) = (1 + delta n) * (N * n : ℝ) ^ (3 / 5 : ℝ))",
-        "equivalence_verdict": "equivalent",
-        "reviewer_evaluator_evidence": [
-          "insufficient_semantic_evidence",
-          "claim_equivalence_note:insufficient_semantic_evidence",
-          "claim_equivalence_adjudication:assisted_reviewed_statement_alignment:2012.09271:corollary_2:v1",
-          "adjudicator:hybrid:conservative-assisted-review",
-          "reviewer_type:hybrid",
-          "review_policy:release_eligible",
-          "adjudication_verdict:equivalent",
-          "adjudication_confidence:0.85",
-          "adjudication_rationale:Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-          "semantic_equivalence:verified",
-          "claim_equivalent:hybrid",
-          "equivalent_independent_semantic_evidence"
-        ],
-        "adversarial_checks": {
-          "lean_theorem_weaker": {
-            "passed": true,
-            "evidence": []
-          },
-          "trivialized_by_hypothesis": {
-            "passed": true,
-            "evidence": []
-          },
-          "domain_object_replaced_by_prop": {
-            "passed": true,
-            "evidence": []
-          },
-          "analytic_estimate_tautology": {
-            "passed": true,
-            "evidence": []
-          },
-          "quantifiers_erased": {
-            "passed": true,
-            "evidence": []
-          }
-        },
-        "independent_semantic_evidence": true,
-        "alignment_class": "exact",
-        "alignment_decision": {
-          "alignment_class": "exact",
-          "confidence": 0.85,
-          "reasons": [
-            "insufficient_exact_alignment_evidence",
-            "human_or_hybrid_adjudicated_exact"
-          ],
-          "evidence_sources": [
-            "canonical_lean_statement"
-          ],
-          "paper_statement_id": "pstmt_1d253201a80b025c4d0a9a41",
-          "alignment_pair_id": "align_8e2ed04fd2258fbd53ffe28a",
-          "paper_text_coverage": 0.0,
-          "lean_text_coverage": 0.0,
-          "missing_assumptions": [],
-          "added_assumptions": [],
-          "conclusion_relation": "matched",
-          "diagnostic": false,
-          "schema_version": "1.0"
-        },
-        "schema_version": "1.0",
-        "adjudication": {
-          "review_id": "assisted_reviewed_statement_alignment:2012.09271:corollary_2:v1",
-          "adjudicator": "hybrid:conservative-assisted-review",
-          "reviewer_type": "hybrid",
-          "review_policy": "release_eligible",
-          "verdict": "equivalent",
-          "confidence": 0.85,
-          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-          "risk_flags": [],
-          "release_eligible": true,
-          "blockers": []
-        }
-      },
-      "review_required": false,
-      "review_queue_id": "",
-      "context_pack": {},
-      "axiom_debt": [],
-      "axiom_debt_hash": "",
-      "closure_claim": "not_closed",
-      "proof_eligible": false,
-      "statement_fidelity_verdict": "blocked",
-      "statement_fidelity_blockers": [
-        "lean_elaboration_failed",
-        "statement_validity:claim_review_pending",
-        "statement_validity_reason:lean_proof_closed",
-        "statement_validity_reason:step_verdict_verified",
-        "statement_validity_reason:assumptions_grounded",
-        "statement_validity_reason:provenance_linked",
-        "statement_validity_reason:dependency_trust_complete",
-        "statement_validity_reason:reproducible_env",
-        "statement_validity_reason:claim_equivalent",
-        "statement_validity_reason:independent_semantic_equivalence_evidence"
-      ],
-      "statement_fidelity_source": "none",
-      "source_content_hash": "f6fdc49fd5a08576",
-      "source_span_id": "",
-      "reviewed_equivalence_verdict": "equivalent",
-      "reviewed_statement_alignment_class": "exact",
-      "reviewed_alignment_confidence": 0.85,
-      "review_provenance": {
-        "artifact_id": "assisted_reviewed_statement_alignment:2012.09271:corollary_2:v1",
-        "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-12T17:49:55Z",
-        "reviewed_by": "hybrid:conservative-assisted-review",
-        "reviewer_role": "conservative_assisted_exact_adjudicator",
-        "schema_version": "reviewed_statement_alignment.v1",
-        "source_span_sha256": "b9bd81a272c4916414cf688dcb329cd22074825312b2c0c1a059107d05fd1fcf"
-      },
-      "reproducible_env": true,
-      "pipeline_commit": "31068248a5c47b2f1257e874bf7c407539aed277",
-      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
-      "remaining_blockers_after_adjudication": [
-        "lean_proof_closed",
-        "step_verdict_verified",
-        "assumptions_grounded",
-        "dependency_trust_complete"
-      ],
-      "reviewer_type": "hybrid",
-      "review_policy": "release_eligible",
-      "source_latex": "[see \\Cref{cor:explicitfamily}]\nThere is an explicit family of $[[N,K,D]]$ LDPC quantum codes encoding $K \\in \\Theta(N^\\frac{4}{5})$ logical qubits with distance $D \\in \\Omega(N^\\frac{3}{5})$."
-    }
-  ]
-}
+    "review_required": false,
+    "review_queue_id": "",
+    "context_pack": {},
+    "axiom_debt": [],
+    "axiom_debt_hash": "",
+    "closure_claim": "not_closed",
+    "proof_eligible": false,
+    "statement_fidelity_verdict": "blocked",
+    "statement_fidelity_blockers": [
+      "lean_elaboration_failed",
+      "statement_validity:claim_review_pending",
+      "statement_validity_reason:lean_proof_closed",
+      "statement_validity_reason:step_verdict_verified",
+      "statement_validity_reason:assumptions_grounded",
+      "statement_validity_reason:provenance_linked",
+      "statement_validity_reason:dependency_trust_complete",
+      "statement_validity_reason:reproducible_env",
+      "statement_validity_reason:claim_equivalent",
+      "statement_validity_reason:independent_semantic_equivalence_evidence"
+    ],
+    "statement_fidelity_source": "none",
+    "source_content_hash": "f6fdc49fd5a08576",
+    "source_span_id": "",
+    "reviewed_equivalence_verdict": "equivalent",
+    "reviewed_statement_alignment_class": "exact",
+    "reviewed_alignment_confidence": 0.85,
+    "review_provenance": {
+      "artifact_id": "assisted_reviewed_statement_alignment:2012.09271:corollary_2:v1",
+      "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+      "reviewed_at": "2026-05-13T20:52:10Z",
+      "reviewed_by": "hybrid:conservative-assisted-review",
+      "reviewer_role": "conservative_assisted_exact_adjudicator",
+      "schema_version": "reviewed_statement_alignment.v1",
+      "source_span_sha256": "b9bd81a272c4916414cf688dcb329cd22074825312b2c0c1a059107d05fd1fcf"
+    },
+    "reproducible_env": true,
+    "pipeline_commit": "60d869f7390fc59ed94e5f0b37912332db494764",
+    "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+    "reviewer_type": "hybrid",
+    "review_policy": "release_eligible",
+    "remaining_blockers_after_adjudication": [
+      "lean_proof_closed",
+      "step_verdict_verified",
+      "assumptions_grounded",
+      "provenance_linked",
+      "dependency_trust_complete"
+    ]
+  }
+]
