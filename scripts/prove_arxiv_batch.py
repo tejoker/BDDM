@@ -699,15 +699,24 @@ def _save_results(results: list[ProofResult], out_path: Path) -> None:
 
 
 def _patch_proof_into_file(lean_file: Path, theorem_name: str, proof_text: str) -> bool:
-    """Replace the sorry body of theorem_name with proof_text in the lean file."""
+    """Replace the sorry body of theorem_name with proof_text in the lean file.
+
+    Handles multi-line declarations where `:= by` is on a later line than
+    the `theorem <name>` keyword (the legacy single-line regex silently
+    failed on such decls, leaving the ledger claiming `proved=True` while
+    the on-disk body remained `sorry` — caught by the FP integrity audit).
+    """
     text = lean_file.read_text(encoding="utf-8")
-    # Find the sorry block for this theorem.
+    name_re = re.escape(theorem_name)
+    # Multi-line tactic-mode: match across newlines up to the first `:= by\n`
+    # after the declaration head, then a sorry body.
     pattern = re.compile(
-        r"(theorem\s+" + re.escape(theorem_name) + r"[^\n]*:= by\s*\n)\s*sorry",
-        re.MULTILINE,
+        r"((?:theorem|lemma|noncomputable\s+theorem|noncomputable\s+lemma|private\s+theorem|private\s+lemma)\s+"
+        + name_re
+        + r"\b[\s\S]*?:=\s*by\s*\n)\s*sorry\b",
     )
     new_text = pattern.sub(
-        lambda m: m.group(1) + proof_text.rstrip() + "\n",
+        lambda m: m.group(1) + (proof_text.rstrip() or "  sorry") + "\n",
         text,
         count=1,
     )
