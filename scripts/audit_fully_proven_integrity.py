@@ -140,19 +140,37 @@ def _theorem_body_in_file(lean_src: str, theorem_name: str) -> str | None:
 
 
 def _body_is_sorry(body: str) -> bool:
-    """A body is 'sorry' when its first meaningful token is `sorry`."""
+    """A body is `sorry`-bearing when EITHER:
+      - its first meaningful token is `sorry` (placeholder body), OR
+      - any non-comment line contains the standalone `sorry` identifier
+        (hidden mid-body sorry — Lean still closes the goal at lake-build
+        time because `sorry` solves any obligation, but the proof carries
+        no mathematical content).
+
+    Bare `sorryAx`, `sorry_` and similar identifiers that merely *start
+    with* "sorry" do not count. The token must be the keyword on its own,
+    delimited by whitespace, punctuation, or end-of-string.
+    """
     if not body:
         return False
     stripped = body.strip()
     if not stripped:
         return False
-    # First non-comment, non-blank line should NOT be `sorry` (or start with
-    # `sorry` followed only by whitespace/comments).
+    # Mid-body sorry: match the standalone keyword on any non-comment line.
+    # `re.search` here uses a word-boundary-equivalent that rules out
+    # `sorryAx` / `sorry_foo` while accepting `; sorry`, `<;> sorry`, etc.
+    _sorry_token = re.compile(r"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])")
     for line in stripped.splitlines():
-        line = line.strip()
-        if not line or line.startswith("--"):
+        line_stripped = line.strip()
+        if not line_stripped or line_stripped.startswith("--"):
             continue
-        return line == "sorry" or line.startswith("sorry ")
+        # Strip inline `-- ...` comments before scanning so a comment that
+        # mentions "sorry" doesn't trigger demotion.
+        code = line_stripped
+        if "--" in code:
+            code = code.split("--", 1)[0].rstrip()
+        if _sorry_token.search(code):
+            return True
     return False
 
 
