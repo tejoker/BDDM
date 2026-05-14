@@ -173,6 +173,51 @@ _RETRY_BLOCK_TEMPLATE = (
 )
 
 
+# Clarification surfaced when the previous attempt was rejected by the
+# forbidden-token gate (placeholder tactic / open goal). The retry should
+# produce a COMPLETE tactic-mode proof without placeholders. The token
+# placeholder is filled in at format time. The wording is standards-positive:
+# we name closure strategies, never the forbidden tokens beyond the literal
+# rejection notice itself.
+_FORBIDDEN_TOKEN_CLARIFICATION_TEMPLATE = (
+    "Your previous attempt was rejected because it contained the forbidden "
+    "token `{token}`. Placeholder tactics like `sorry`, `admit`, `apply?`, "
+    "`axiom`, `native_decide` leave the proof open and do NOT close the goal. "
+    "Produce a COMPLETE tactic-based proof without placeholders. Common "
+    "alternatives:\n"
+    "  - Use `aesop` or `simp_all` to close finite-goal cases automatically\n"
+    "  - Use `intro h; exact h.left` etc. for explicit term-mode closures\n"
+    "  - Use `omega`, `linarith`, `nlinarith` for arithmetic\n"
+    "  - Use `rfl` / `decide` / `tauto` for decidable equality / propositional"
+)
+
+
+# Sentinel prefix on `error_tail` that signals the retry block builder to
+# use the forbidden-token clarification wording (rather than the generic
+# `lake env lean` error block).
+FORBIDDEN_TOKEN_CLARIFICATION_PREFIX = "__forbidden_token_clarification__\n"
+
+
+def build_forbidden_token_clarification(token: str) -> str:
+    """Return the clarification body for a forbidden-token rejection.
+
+    The returned string is prefixed with FORBIDDEN_TOKEN_CLARIFICATION_PREFIX
+    so the caller can pass it as `error_tail` to `generate_proof_candidate`
+    / `build_user_prompt`; the prompt builder strips the prefix and uses the
+    clarification template instead of the generic `lake env lean` error
+    template. The wording surfaces WHY the previous attempt was rejected
+    without ever suggesting forbidden tokens as a path forward.
+    """
+    tok = (token or "").strip() or "sorry"
+    body = _FORBIDDEN_TOKEN_CLARIFICATION_TEMPLATE.format(token=tok)
+    return FORBIDDEN_TOKEN_CLARIFICATION_PREFIX + body
+
+
+_FORBIDDEN_RETRY_BLOCK_TEMPLATE = (
+    "{clarification_body}\n\n"
+)
+
+
 # --- JSON extraction ------------------------------------------------------
 
 
@@ -431,8 +476,18 @@ def build_user_prompt(
     ) or "-- (no neighbouring declarations available)"
     retry_block = ""
     if error_tail:
-        tail = error_tail[-MAX_ERROR_TAIL_CHARS:]
-        retry_block = _RETRY_BLOCK_TEMPLATE.format(error_tail=tail)
+        # Forbidden-token rejection clarification: surface WHY the previous
+        # attempt was rejected (placeholder tactic) and list valid closure
+        # alternatives, instead of replaying a (likely empty) lake error tail.
+        if error_tail.startswith(FORBIDDEN_TOKEN_CLARIFICATION_PREFIX):
+            clarification = error_tail[len(FORBIDDEN_TOKEN_CLARIFICATION_PREFIX):]
+            clarification = clarification[-MAX_ERROR_TAIL_CHARS:]
+            retry_block = _FORBIDDEN_RETRY_BLOCK_TEMPLATE.format(
+                clarification_body=clarification,
+            )
+        else:
+            tail = error_tail[-MAX_ERROR_TAIL_CHARS:]
+            retry_block = _RETRY_BLOCK_TEMPLATE.format(error_tail=tail)
 
     # Audited-core hint (B3): load by paper_id if the caller did not supply.
     audited_section = ""
@@ -526,6 +581,7 @@ def generate_proof_candidate(
     name_index: Optional[dict[str, Any]] = None,
     premise_index: Any = None,
     use_mathlib_anchors: bool = True,
+    rejection_sink: Optional[dict[str, Any]] = None,
 ) -> Optional[dict[str, Any]]:
     """Ask Leanstral to write a whole tactic-mode proof body for `lean_statement`.
 
@@ -553,6 +609,16 @@ def generate_proof_candidate(
     a top-K premise block on every call (first attempt and retries). Pass
     `use_mathlib_anchors=False` to suppress both (useful for hermetic unit
     tests on machines without `.lake/packages/mathlib`).
+
+    `rejection_sink` (Improvement 1): optional mutable dict the caller can
+    pass to receive the rejection reason on a None return. On forbidden-
+    token rejection we set:
+        rejection_sink["reason"] = "forbidden_token:<tok>"
+        rejection_sink["token"] = "<tok>"
+        rejection_sink["clarification"] = build_forbidden_token_clarification(tok)
+    The caller's retry loop can then thread `clarification` back as the
+    next-round `error_tail` so the LLM gets a clear signal about WHY the
+    previous attempt was discarded.
     """
     if client is None:
         return None
@@ -611,6 +677,10 @@ def generate_proof_candidate(
 
     forbidden = _contains_forbidden_token(body)
     if forbidden is not None:
+        if rejection_sink is not None:
+            rejection_sink["reason"] = f"forbidden_token:{forbidden}"
+            rejection_sink["token"] = forbidden
+            rejection_sink["clarification"] = build_forbidden_token_clarification(forbidden)
         return None
 
     reasoning = str(parsed.get("reasoning", "") or "").strip()[:600]

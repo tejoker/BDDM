@@ -33,7 +33,7 @@ import tempfile
 import time
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Optional
 
 from dotenv import load_dotenv
 
@@ -3129,6 +3129,7 @@ def _run_isolated_file_check(
     source_file: Path,
     theorem_decl: str,
     timeout_s: int = 45,
+    proof_body: Optional[str] = None,
 ) -> tuple[bool, str]:
     """Standalone elaboration probe: build an isolated `.lean` file with the
     source-file prelude + `theorem_decl` (rewritten to `:= by sorry`) and run
@@ -3143,16 +3144,37 @@ def _run_isolated_file_check(
 
     Falls back to a minimal `import Mathlib` prelude when the source file is
     missing or the prelude scrape yields nothing.
+
+    Improvement 2 (patch isolation): when `proof_body` is supplied, the
+    theorem decl is rewritten to use THAT body instead of `:= by sorry`,
+    so the probe validates a candidate proof against a clean baseline (no
+    pre-existing errors from unrelated theorems in `source_file` can
+    contaminate the lake output). On success the result has no
+    `declaration uses 'sorry'` warning, which is the standards-positive
+    accept gate.
     """
     decl_clean = (theorem_decl or "").strip()
     if not decl_clean:
         return False, "isolated_check_empty_decl"
-    # Strip any existing proof body and force `:= by sorry` so we exercise
-    # ONLY statement-level elaboration, not the candidate's (often empty)
-    # proof.
+    # Strip any existing proof body and either substitute the supplied
+    # candidate body or force `:= by sorry` for a signature-only probe.
     decl_clean = re.sub(r":=\s*by[\s\S]*$", "", decl_clean).rstrip()
     decl_clean = re.sub(r":=[\s\S]*$", "", decl_clean).rstrip()
-    isolated_decl = f"{decl_clean} := by\n  sorry"
+    if proof_body is not None:
+        body = proof_body.rstrip()
+        if not body.strip():
+            return False, "isolated_check_empty_body"
+        # Normalize: each non-empty line gets a 2-space indent so the body
+        # nests under `:= by`. Tabs are converted (Lean rejects tabs).
+        body = body.replace("\t", "  ")
+        body_lines = body.splitlines()
+        indented = "\n".join(
+            ("  " + ln.lstrip()) if i == 0 else ("  " + ln if ln else "")
+            for i, ln in enumerate(body_lines)
+        )
+        isolated_decl = f"{decl_clean} := by\n{indented}"
+    else:
+        isolated_decl = f"{decl_clean} := by\n  sorry"
 
     prelude_lines: list[str] = []
     src = source_file if source_file.is_absolute() else (project_root / source_file)
@@ -3196,9 +3218,24 @@ def _run_isolated_file_check(
             timeout=max(20, int(timeout_s)),
         )
         out = ((proc.stdout or "") + "\n" + (proc.stderr or "")).strip()
+        low = out.lower()
+        # When a candidate proof body was supplied, a `declaration uses 'sorry'`
+        # warning means the supplied body still left an open goal (e.g.
+        # `aesop` failed silently) — reject. When NO body was supplied this
+        # is the expected post-state of a signature-only probe (the placeholder
+        # `by sorry` always triggers the warning) and we accept on rc==0.
+        if proof_body is not None:
+            sorry_warning = (
+                ("warning: declaration uses 'sorry'" in low)
+                or ("warning: declaration uses `sorry`" in low)
+            )
+            if proc.returncode == 0 and not sorry_warning:
+                return True, ""
+            if sorry_warning:
+                return False, "isolated_check_body_emits_sorry_warning"
+            return False, f"file_check_fail:{out[-300:]}"
         if proc.returncode == 0:
             return True, ""
-        low = out.lower()
         if ("error:" not in low) and ("warning: declaration uses `sorry`" in low):
             return True, ""
         return False, f"file_check_fail:{out[-300:]}"

@@ -480,6 +480,7 @@ def _sweep_paper(
         validated = False
         round_details: list[dict[str, Any]] = []
         for round_idx in range(1, max_rounds + 1):
+            rejection_sink: dict[str, Any] = {}
             try:
                 cand = gen.generate_proof_candidate(
                     paper_id=paper_id,
@@ -490,6 +491,7 @@ def _sweep_paper(
                     error_tail=error_tail,
                     client=client,
                     model=model,
+                    rejection_sink=rejection_sink,
                 )
             except Exception as exc:
                 report["transport_errors"] += 1
@@ -499,9 +501,17 @@ def _sweep_paper(
             if cand is None:
                 report["forbidden_token_rejects"] += 1
                 bucket_counts["forbidden_token_rejects"] += 1
-                round_details.append({"round": round_idx, "outcome": "forbidden_or_malformed"})
-                # No body to validate this round; retry without an error tail
-                # (the LLM's output was self-rejected, not a lake error).
+                round_detail: dict[str, Any] = {"round": round_idx, "outcome": "forbidden_or_malformed"}
+                if rejection_sink.get("reason"):
+                    round_detail["rejection_reason"] = rejection_sink["reason"]
+                round_details.append(round_detail)
+                # Improvement 1: feed the clarification tail into the next
+                # round so the LLM has a signal about WHY its previous
+                # attempt was rejected. Otherwise the retry just replays the
+                # same forbidden placeholder.
+                clarification = rejection_sink.get("clarification") or ""
+                if clarification:
+                    error_tail = clarification
                 continue
             proof_body = cand["proof_body"]
             # Step b cont'd: patch the proof body into the file using the

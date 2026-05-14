@@ -96,6 +96,104 @@ DEFAULT_MODEL = os.getenv("MISTRAL_MODEL", "labs-leanstral-2603")
 FACTORED_AUX_SUFFIX = "__factored_aux"
 
 
+# --- Patch isolation (Improvement 2) -------------------------------------
+
+
+def _extract_theorem_decl_from_file(lean_text: str, theorem_name: str) -> str:
+    """Return the full theorem declaration block (head through last
+    body-or-signature line) for `theorem_name` from `lean_text`, or "" if
+    not found. The block ends just before the next top-level decl or
+    `end`/`namespace` directive. Matches both the fully-qualified name
+    and the short suffix.
+    """
+    if not lean_text or not theorem_name:
+        return ""
+    short = theorem_name.rsplit(".", 1)[-1]
+    lines = lean_text.splitlines()
+    head_pat = re.compile(
+        r"^\s*(?:noncomputable\s+|private\s+)?(?:theorem|lemma)\s+(?:"
+        + re.escape(theorem_name) + r"|" + re.escape(short)
+        + r")\b"
+    )
+    next_pat = re.compile(
+        r"^\s*(?:noncomputable\s+|private\s+)?(?:theorem|lemma|def|abbrev|axiom|end|namespace)\b"
+    )
+    start = -1
+    for i, ln in enumerate(lines):
+        if head_pat.match(ln):
+            start = i
+            break
+    if start < 0:
+        return ""
+    end = len(lines)
+    for j in range(start + 1, len(lines)):
+        if next_pat.match(lines[j]):
+            end = j
+            break
+    return "\n".join(lines[start:end]).rstrip()
+
+
+def _run_isolated_patch_check(
+    *,
+    lean_file: Path,
+    theorem_name: str,
+    proof_body: str,
+    theorem_decl: Optional[str] = None,
+    extra_decls: Optional[list[str]] = None,
+    timeout_s: int = 60,
+) -> tuple[bool, str]:
+    """Validate a candidate proof body against a CLEAN BASELINE isolated
+    `.lean` file containing ONLY the source-file prelude (imports + open
+    scopes + namespace prologue), any `extra_decls` (e.g. aux lemmas the
+    target proof depends on), and the target theorem with the candidate
+    body. Returns (ok, error_tail).
+
+    Why: lake reports errors from the ENTIRE on-disk file, including
+    pre-existing errors in unrelated theorems. Validating against the
+    full file means a perfectly good patch can be rejected (or, worse,
+    spuriously accepted) — the baseline-error-count comparator can't
+    tell whose error each diagnostic belongs to. The isolated path
+    eliminates cross-theorem contamination.
+
+    Re-uses `prove_arxiv_batch._run_isolated_file_check` (extended in
+    Improvement 2 to accept an optional `proof_body`); when `extra_decls`
+    are supplied we concatenate them ahead of the target theorem so the
+    composition body can reference them.
+
+    `theorem_decl` defaults to the decl text scraped from `lean_file`. The
+    caller may override (e.g. for an aux that lives only in memory).
+    """
+    if _run_isolated_file_check is None:
+        # No lake bridge available — treat as pass so the caller's
+        # downstream gates remain the load-bearing guard.
+        return True, "isolated_check_skipped_no_lake"
+    decl = (theorem_decl or "").strip()
+    if not decl:
+        try:
+            text = lean_file.read_text(encoding="utf-8")
+        except Exception:
+            return False, "isolated_patch_check_read_failed"
+        decl = _extract_theorem_decl_from_file(text, theorem_name)
+        if not decl:
+            return False, f"isolated_patch_check_decl_not_found:{theorem_name}"
+    if extra_decls:
+        # Prepend aux/etc decls to the target so the isolated probe sees
+        # them. Each extra is treated as a self-contained block; we don't
+        # rewrite its body.
+        joined_extras = "\n\n".join(
+            (d or "").rstrip() for d in extra_decls if (d or "").strip()
+        )
+        if joined_extras:
+            decl = joined_extras + "\n\n" + decl
+    return _run_isolated_file_check(
+        project_root=PROJECT_ROOT,
+        source_file=lean_file,
+        theorem_decl=decl,
+        timeout_s=timeout_s,
+        proof_body=proof_body,
+    )
+
+
 # --- Baseline error fingerprinting ----------------------------------------
 
 
@@ -395,6 +493,7 @@ def attempt_composition(
     validator: Optional[Callable[[Path, str], tuple[bool, str]]] = None,
     aux_records: Optional[list[dict[str, Any]]] = None,
     parent_target: str = "",
+    use_isolated_check: bool = True,
 ) -> tuple[bool, str, str]:
     """Try each composition shape for `parent_short_name` using `aux_names`.
     Returns (validated, body_used, error_tail). On success the parent's
@@ -412,7 +511,12 @@ def attempt_composition(
     can place each aux into the right slot of the chosen skeleton.
 
     `validator(lean_file, theorem_name) -> (ok, err_tail)` defaults to the
-    baseline-aware validator if not provided.
+    isolated patch-check (Improvement 2) when `use_isolated_check=True`,
+    otherwise the legacy baseline-aware full-file validator. The isolated
+    path eliminates contamination from pre-existing errors in unrelated
+    theorems; the aux blocks (with their now-closed proof bodies) are
+    pulled from `lean_file` and prepended to the isolated probe so the
+    composition body can reference them.
     """
     bodies = lfv2.render_composition_attempts(
         parent_target_shape=parent_target_shape,
@@ -422,17 +526,59 @@ def attempt_composition(
     )
     if not bodies:
         return False, "", "no_composition_bodies"
+    # Shared single-element list so the isolated_validator closure can read
+    # the current composition body being attempted (avoids re-parsing it
+    # out of the on-disk file which has been patched in-place).
+    _current_body: list[str] = [""]
     if validator is None:
         baseline = int(baseline_errors or 0)
 
-        def _default_validator(f: Path, name: str) -> tuple[bool, str]:
-            return _lake_validate_aware(
-                f, name, baseline_errors=baseline, timeout_s=per_lake_timeout,
-            )
+        if use_isolated_check and _run_isolated_file_check is not None:
+            def _isolated_validator(f: Path, name: str) -> tuple[bool, str]:
+                # Pull each aux's full block (with closed body) so the
+                # composition body can reference it inside the isolated
+                # baseline. Falls back to the baseline-aware validator if
+                # any aux block can't be scraped (file read failure or a
+                # missing aux declaration).
+                try:
+                    file_text_local = f.read_text(encoding="utf-8")
+                except Exception:
+                    return _lake_validate_aware(
+                        f, name, baseline_errors=baseline, timeout_s=per_lake_timeout,
+                    )
+                aux_decls: list[str] = []
+                for aux_nm in aux_names:
+                    block = _extract_theorem_decl_from_file(file_text_local, aux_nm)
+                    if not block:
+                        return _lake_validate_aware(
+                            f, name, baseline_errors=baseline, timeout_s=per_lake_timeout,
+                        )
+                    aux_decls.append(block)
+                parent_block = _extract_theorem_decl_from_file(file_text_local, name)
+                if not parent_block:
+                    return _lake_validate_aware(
+                        f, name, baseline_errors=baseline, timeout_s=per_lake_timeout,
+                    )
+                return _run_isolated_patch_check(
+                    lean_file=f,
+                    theorem_name=name,
+                    proof_body=_current_body[0],
+                    theorem_decl=parent_block,
+                    extra_decls=aux_decls,
+                    timeout_s=per_lake_timeout,
+                )
 
-        validator = _default_validator
+            validator = _isolated_validator
+        else:
+            def _default_validator(f: Path, name: str) -> tuple[bool, str]:
+                return _lake_validate_aware(
+                    f, name, baseline_errors=baseline, timeout_s=per_lake_timeout,
+                )
+
+            validator = _default_validator
     last_err = ""
     for body in bodies:
+        _current_body[0] = body
         # Patch parent to body, validate, on failure revert.
         patched = wp_sweep._patch_proof_flex(lean_file, parent_short_name, body)
         if not patched:
@@ -728,6 +874,7 @@ def _sweep_paper(
 
         # Whole-proof first pass runs only if REPL prover didn't already win.
         cand = None
+        first_pass_rejection_sink: dict[str, Any] = {}
         if not first_pass_validated:
             try:
                 cand = gen.generate_proof_candidate(
@@ -739,6 +886,7 @@ def _sweep_paper(
                     error_tail="",
                     client=client,
                     model=model,
+                    rejection_sink=first_pass_rejection_sink,
                 )
             except Exception as exc:
                 per_row["stages"].append({"stage": "first_pass_transport_error", "err": str(exc)[:200]})
@@ -746,39 +894,44 @@ def _sweep_paper(
 
         if cand is not None:
             body = cand["proof_body"]
-            if wp_sweep._patch_proof_flex(lean_file, target_name, body):
-                ok, err_tail = _lake_validate_aware(
-                    lean_file, target_name,
-                    baseline_errors=baseline_errors,
-                    timeout_s=per_lake_timeout,
+            # Improvement 2: validate against a CLEAN BASELINE isolated
+            # `.lean` (prelude + target only, no cross-theorem
+            # contamination). On accept, patch into the on-disk file.
+            isolated_ok, isolated_err = _run_isolated_patch_check(
+                lean_file=lean_file,
+                theorem_name=target_name,
+                proof_body=body,
+                timeout_s=per_lake_timeout,
+            )
+            if isolated_ok and wp_sweep._patch_proof_flex(lean_file, target_name, body):
+                first_pass_validated = True
+                report["first_pass_validated"] += 1
+                wp_sweep._apply_accept_to_entry(
+                    entry,
+                    proof_body=body,
+                    reasoning=cand.get("reasoning", ""),
+                    confidence=float(cand.get("confidence", 0.0)),
+                    round_idx=1,
                 )
-                if ok:
-                    first_pass_validated = True
-                    report["first_pass_validated"] += 1
-                    wp_sweep._apply_accept_to_entry(
-                        entry,
-                        proof_body=body,
-                        reasoning=cand.get("reasoning", ""),
-                        confidence=float(cand.get("confidence", 0.0)),
-                        round_idx=1,
-                    )
-                    per_row["stages"].append({
-                        "stage": "first_pass_validated",
-                        "body_preview": body[:80],
-                    })
-                else:
-                    wp_sweep._revert_proof_flex(lean_file, target_name)
-                    per_row["stages"].append({
-                        "stage": "first_pass_lake_error",
-                        "err_tail": (err_tail or "")[-160:],
-                    })
-                    bucket_counts["lake_errors"] += 1
-                # Refresh in-memory file_text after any patch/revert.
+                per_row["stages"].append({
+                    "stage": "first_pass_validated",
+                    "body_preview": body[:80],
+                    "validator": "isolated_patch_check",
+                })
                 file_text = lean_file.read_text(encoding="utf-8")
+            elif not isolated_ok:
+                per_row["stages"].append({
+                    "stage": "first_pass_isolated_check_failed",
+                    "err_tail": (isolated_err or "")[-160:],
+                })
+                bucket_counts["lake_errors"] += 1
             else:
                 per_row["stages"].append({"stage": "first_pass_patch_failed"})
         else:
-            per_row["stages"].append({"stage": "first_pass_forbidden_or_malformed"})
+            stage_record: dict[str, Any] = {"stage": "first_pass_forbidden_or_malformed"}
+            if first_pass_rejection_sink.get("reason"):
+                stage_record["rejection_reason"] = first_pass_rejection_sink["reason"]
+            per_row["stages"].append(stage_record)
             bucket_counts["forbidden_token_rejects"] += 1
 
         if first_pass_validated:
@@ -938,6 +1091,7 @@ def _sweep_paper(
             err_tail = ""
             closed = False
             for round_idx in range(1, max_rounds + 1):
+                aux_rejection_sink: dict[str, Any] = {}
                 try:
                     aux_cand = gen.generate_proof_candidate(
                         paper_id=paper_id,
@@ -948,6 +1102,7 @@ def _sweep_paper(
                         error_tail=err_tail,
                         client=client,
                         model=model,
+                        rejection_sink=aux_rejection_sink,
                     )
                 except Exception as exc:
                     bucket_counts["transport_errors"] += 1
@@ -956,11 +1111,36 @@ def _sweep_paper(
                     break
                 if aux_cand is None:
                     bucket_counts["forbidden_token_rejects"] += 1
+                    # Improvement 1: thread the clarification into the
+                    # next-round error_tail so the LLM has a signal about
+                    # WHY its previous attempt was discarded.
+                    clarification = aux_rejection_sink.get("clarification") or ""
+                    if clarification:
+                        err_tail = clarification
                     continue
                 body = aux_cand["proof_body"]
+                # Improvement 2: validate the aux against a clean isolated
+                # baseline first so pre-existing errors in unrelated
+                # theorems can't contaminate the result. The aux signature
+                # is supplied explicitly via `theorem_decl=sig`.
+                iso_ok, iso_err = _run_isolated_patch_check(
+                    lean_file=lean_file,
+                    theorem_name=new_name,
+                    proof_body=body,
+                    theorem_decl=sig,
+                    timeout_s=per_lake_timeout,
+                )
+                if not iso_ok:
+                    err_tail = iso_err or ""
+                    bucket_counts["lake_errors"] += 1
+                    continue
                 if not wp_sweep._patch_proof_flex(lean_file, new_name, body):
                     per_row["stages"].append({"stage": "aux_patch_failed", "aux": new_name})
                     break
+                # Defensive: the isolated check accepted the body. We still
+                # run the baseline-aware full-file check as a second gate
+                # because the aux now lives in the on-disk file and the
+                # composition path will rely on the on-disk state.
                 ok, t = _lake_validate_aware(
                     lean_file, new_name,
                     baseline_errors=baseline_errors,
