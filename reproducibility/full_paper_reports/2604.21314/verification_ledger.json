@@ -84,7 +84,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "step_verdict_verified",
       "reproducible_env",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
@@ -1426,7 +1425,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "claim_equivalent",
       "no_paper_axiom_debt",
       "step_verdict_verified",
       "lean_proof_closed"

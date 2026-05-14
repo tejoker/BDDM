@@ -105,7 +105,6 @@
     "gate_failures": [
       "assumptions_grounded",
       "dependency_trust_complete",
-      "claim_equivalent",
       "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
@@ -307,7 +306,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "step_verdict_verified",
       "assumptions_grounded",
       "provenance_linked",
       "dependency_trust_complete"

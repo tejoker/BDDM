@@ -468,7 +468,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "step_verdict_verified",
       "translation_fidelity_ok",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
@@ -2719,7 +2718,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "claim_equivalent",
       "lean_proof_closed",
       "step_verdict_verified"
     ],

@@ -1408,7 +1408,6 @@
       },
       "gate_failures": [
         "lean_proof_closed",
-        "claim_equivalent",
         "no_paper_axiom_debt",
         "step_verdict_verified"
       ],

@@ -330,8 +330,6 @@
       "statement_alignment_not_unrelated": false
     },
     "gate_failures": [
-      "lean_proof_closed",
-      "step_verdict_verified",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
       "no_paper_axiom_debt"
@@ -1549,8 +1547,7 @@
       "repair_outcome": "faithful_statement_regeneration"
     },
     "gate_failures": [
-      "no_paper_axiom_debt",
-      "step_verdict_verified"
+      "no_paper_axiom_debt"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -2408,9 +2405,7 @@
       "statement_repair_kind": "faithful_statement_regeneration",
       "repair_outcome": "faithful_statement_regeneration"
     },
-    "gate_failures": [
-      "lean_proof_closed"
-    ],
+    "gate_failures": [],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
       "insufficient_semantic_evidence"
@@ -2869,7 +2864,6 @@
     },
     "gate_failures": [
       "lean_proof_closed",
-      "claim_equivalent",
       "no_paper_axiom_debt"
     ],
     "claim_equivalence_verdict": "equivalent",
@@ -3344,9 +3338,7 @@
       "statement_repair_kind": "faithful_statement_regeneration",
       "repair_outcome": "faithful_statement_regeneration"
     },
-    "gate_failures": [
-      "lean_proof_closed"
-    ],
+    "gate_failures": [],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
       "translation_unvalidated",
@@ -4766,9 +4758,7 @@
       "statement_repair_kind": "faithful_statement_regeneration",
       "repair_outcome": "faithful_statement_regeneration"
     },
-    "gate_failures": [
-      "lean_proof_closed"
-    ],
+    "gate_failures": [],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
       "insufficient_semantic_evidence"
@@ -5000,7 +4990,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "claim_equivalent",
       "no_paper_axiom_debt",
       "lean_proof_closed"
     ],

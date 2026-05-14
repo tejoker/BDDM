@@ -1773,16 +1773,23 @@ def _is_trivialized_signature(sig: str) -> bool:
     ):
         return True
     # Prop-binder placeholder conjunction: a body that just bundles the
-    # Prop-typed binders into a tuple. Detected via the binder shape (3+
-    # consecutive `(name : Prop)` binders) AND a target that's a `∧` of
-    # those same names with `Iff.rfl`-style closure. Round-VII
-    # `remark_1` caught here.
-    prop_binders = re.findall(r"\(\s*([a-zA-Z_]\w*)\s*:\s*Prop\s*\)", sig_no_body)
+    # Prop-typed binders into a tuple. Detected via the binder shape
+    # (≥2 `(name : Prop)` OR multi-name `(P Q R : Prop)` binders) AND a
+    # target that's a `∧` of those same names with `Iff.rfl`-style closure.
+    # Round-VII `remark_1` caught here.
+    prop_binders: list[str] = []
+    # Single-name form: `(P : Prop)`
+    for m in re.finditer(r"\(\s*([a-zA-Z_]\w*)\s*:\s*Prop\s*\)", sig_no_body):
+        prop_binders.append(m.group(1))
+    # Multi-name form: `(P Q R : Prop)` declares P, Q, R all as Prop.
+    for m in re.finditer(r"\(\s*((?:[a-zA-Z_]\w*\s+)+[a-zA-Z_]\w*)\s*:\s*Prop\s*\)", sig_no_body):
+        prop_binders.extend(m.group(1).split())
     if len(prop_binders) >= 2:
         # If the target is `<P1> ∧ <P2> ∧ ...` where every conjunct is a
         # bare Prop-binder name, the theorem is just `⟨h1, h2, ...⟩` and
         # has no mathematical content beyond the binder Props themselves.
-        bound = set(prop_binders)
+        # `target` is already lowercased; compare case-insensitively.
+        bound = {n.lower() for n in prop_binders}
         if conjuncts and all(c.strip() in bound for c in conjuncts):
             return True
     return False
