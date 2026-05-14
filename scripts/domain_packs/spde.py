@@ -25,4 +25,17 @@ PACK = DomainPack(
         "norm_num",
         "ring_nf",
     ],
+    # Area-typical SPDE placeholders. Cover noise / mild-solution / adapted
+    # process vocabulary specific to stochastic PDEs.
+    starter_definitions=[
+        "noncomputable def spdeNoise (_t : ℝ) : ℝ → ℝ := fun _ => 0",
+        "def spdeMildSolution (_u : ℝ → ℝ → ℝ) : Prop := True",
+        "def spdeAdapted (_X : ℝ → ℝ → ℝ) : Prop := True",
+        "def spdeBrownianMotion (_W : ℝ → ℝ → ℝ) : Prop := True",
+    ],
+    starter_lemmas=[
+        "theorem spdeMildSolution_holds (u : ℝ → ℝ → ℝ) : spdeMildSolution u := trivial",
+        "theorem spdeAdapted_holds (X : ℝ → ℝ → ℝ) : spdeAdapted X := trivial",
+        "theorem spdeBrownianMotion_holds (W : ℝ → ℝ → ℝ) : spdeBrownianMotion W := trivial",
+    ],
 )
