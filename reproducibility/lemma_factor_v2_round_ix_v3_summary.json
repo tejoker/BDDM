@@ -1,0 +1,407 @@
+{
+  "elapsed_seconds": 579.9,
+  "papers": [
+    {
+      "paper_id": "2304.09598",
+      "candidates_elaborated": 6,
+      "candidates_attempted": 6,
+      "first_pass_validated": 0,
+      "factored": 4,
+      "aux_proposed": 11,
+      "aux_elaborated": 11,
+      "aux_closed": 0,
+      "composed": 0,
+      "audit_survived": 0,
+      "details": [
+        {
+          "theorem": "EqualLN",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": "jectx/BDDM/output/2304.09598.lean:204:8: warning: declaration uses `sorry`\n/home/projectx/BDDM/output/2304.09598.lean:208:8: warning: declaration uses `sorry`\n\n"
+            },
+            {
+              "stage": "insufficient_aux_closed",
+              "closed": 0,
+              "needed": 2,
+              "shape": "conjunction_with_ineq"
+            }
+          ],
+          "aux_closed": [],
+          "aux_proposed_count": 2
+        },
+        {
+          "theorem": "Lem_AB",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": "jectx/BDDM/output/2304.09598.lean:178:8: warning: declaration uses `sorry`\n/home/projectx/BDDM/output/2304.09598.lean:182:8: warning: declaration uses `sorry`\n\n"
+            },
+            {
+              "stage": "insufficient_aux_closed",
+              "closed": 0,
+              "needed": 2,
+              "shape": "conjunction_with_ineq"
+            }
+          ],
+          "aux_closed": [],
+          "aux_proposed_count": 3
+        },
+        {
+          "theorem": "Lem_IrredQFM",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": "jectx/BDDM/output/2304.09598.lean:166:8: warning: declaration uses `sorry`\n/home/projectx/BDDM/output/2304.09598.lean:170:8: warning: declaration uses `sorry`\n\n"
+            },
+            {
+              "stage": "insufficient_aux_closed",
+              "closed": 0,
+              "needed": 2,
+              "shape": "calc_chain"
+            }
+          ],
+          "aux_closed": [],
+          "aux_proposed_count": 2
+        },
+        {
+          "theorem": "Lem_Quant",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": "jectx/BDDM/output/2304.09598.lean:155:8: warning: declaration uses `sorry`\n/home/projectx/BDDM/output/2304.09598.lean:159:8: warning: declaration uses `sorry`\n\n"
+            },
+            {
+              "stage": "insufficient_aux_closed",
+              "closed": 0,
+              "needed": 2,
+              "shape": "other"
+            }
+          ],
+          "aux_closed": [],
+          "aux_proposed_count": 3
+        },
+        {
+          "theorem": "multiplicity",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": "jectx/BDDM/output/2304.09598.lean:162:8: warning: declaration uses `sorry`\n/home/projectx/BDDM/output/2304.09598.lean:166:8: warning: declaration uses `sorry`\n\n"
+            },
+            {
+              "stage": "factor_below_min_aux",
+              "proposed": 1,
+              "elaborated": 1
+            }
+          ]
+        },
+        {
+          "theorem": "Prop_Actions",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": "jectx/BDDM/output/2304.09598.lean:164:8: warning: declaration uses `sorry`\n/home/projectx/BDDM/output/2304.09598.lean:168:8: warning: declaration uses `sorry`\n\n"
+            },
+            {
+              "stage": "factor_below_min_aux",
+              "proposed": 0,
+              "elaborated": 0
+            }
+          ]
+        }
+      ],
+      "baseline_errors": 2
+    },
+    {
+      "paper_id": "2604.21314",
+      "candidates_elaborated": 6,
+      "candidates_attempted": 6,
+      "first_pass_validated": 0,
+      "factored": 1,
+      "aux_proposed": 12,
+      "aux_elaborated": 2,
+      "aux_closed": 1,
+      "composed": 0,
+      "audit_survived": 0,
+      "details": [
+        {
+          "theorem": "Thm_Blowup_O3",
+          "stages": [
+            {
+              "stage": "first_pass_forbidden_or_malformed"
+            },
+            {
+              "stage": "factor_below_min_aux",
+              "proposed": 2,
+              "elaborated": 0
+            }
+          ]
+        },
+        {
+          "theorem": "infty",
+          "stages": [
+            {
+              "stage": "first_pass_forbidden_or_malformed"
+            },
+            {
+              "stage": "factor_below_min_aux",
+              "proposed": 2,
+              "elaborated": 0
+            }
+          ]
+        },
+        {
+          "theorem": "life",
+          "stages": [
+            {
+              "stage": "first_pass_forbidden_or_malformed"
+            },
+            {
+              "stage": "factor_below_min_aux",
+              "proposed": 2,
+              "elaborated": 0
+            }
+          ]
+        },
+        {
+          "theorem": "Thm_Blowup_O",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": "4.lean:225:74: error: unexpected token; expected ')', ',' or ':'\n/home/projectx/BDDM/output/2604.21314.lean:244:24: error: unexpected identifier; expected ')'\n\n"
+            },
+            {
+              "stage": "insufficient_aux_closed",
+              "closed": 1,
+              "needed": 2,
+              "shape": "conjunction_with_ineq"
+            }
+          ],
+          "aux_closed": [
+            "Thm_Blowup_O_Thm_Blowup_O_negation_1__factored_aux"
+          ],
+          "aux_proposed_count": 2
+        },
+        {
+          "theorem": "defn_8",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": "4.lean:219:74: error: unexpected token; expected ')', ',' or ':'\n/home/projectx/BDDM/output/2604.21314.lean:238:24: error: unexpected identifier; expected ')'\n\n"
+            },
+            {
+              "stage": "factor_below_min_aux",
+              "proposed": 0,
+              "elaborated": 0
+            }
+          ]
+        },
+        {
+          "theorem": "thm_9",
+          "stages": [
+            {
+              "stage": "first_pass_forbidden_or_malformed"
+            },
+            {
+              "stage": "factor_below_min_aux",
+              "proposed": 3,
+              "elaborated": 0
+            }
+          ]
+        }
+      ],
+      "baseline_errors": 24
+    },
+    {
+      "paper_id": "2604.21884",
+      "candidates_elaborated": 6,
+      "candidates_attempted": 6,
+      "first_pass_validated": 2,
+      "factored": 4,
+      "aux_proposed": 12,
+      "aux_elaborated": 11,
+      "aux_closed": 8,
+      "composed": 0,
+      "audit_survived": 0,
+      "details": [
+        {
+          "theorem": "def_admissible",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": " s2) / 2 + sorry\n⊢ False\nfailed\n/home/projectx/BDDM/output/2604.21884.lean:169:4: error: linarith failed to find a contradiction\ncase refine_11\n⊢ False\nfailed\n\n"
+            },
+            {
+              "stage": "insufficient_aux_closed",
+              "closed": 1,
+              "needed": 2,
+              "shape": "nested_exists"
+            }
+          ],
+          "aux_closed": [
+            "def_admissible_def_admissible_bounds_2__factored_aux"
+          ],
+          "aux_proposed_count": 2
+        },
+        {
+          "theorem": "thm_baseline_lift",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": "DM/output/2604.21884.lean:145:29: error: unsolved goals\nh1 : False\n⊢ False\n/home/projectx/BDDM/output/2604.21884.lean:153:8: warning: declaration uses `sorry`\n\n"
+            },
+            {
+              "stage": "composition_failed",
+              "err_tail": "DM/output/2604.21884.lean:153:29: error: unsolved goals\nh1 : False\n⊢ False\n/home/projectx/BDDM/output/2604.21884.lean:161:8: warning: declaration uses `sorry`\n\n"
+            }
+          ],
+          "aux_closed": [
+            "thm_baseline_lift_thm_baseline_lift_first_1__factored_aux",
+            "thm_baseline_lift_thm_baseline_lift_second_2__factored_aux"
+          ],
+          "aux_proposed_count": 2
+        },
+        {
+          "theorem": "prop_mid_completion",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": "DM/output/2604.21884.lean:145:29: error: unsolved goals\nh1 : False\n⊢ False\n/home/projectx/BDDM/output/2604.21884.lean:153:8: warning: declaration uses `sorry`\n\n"
+            },
+            {
+              "stage": "composition_failed",
+              "err_tail": "DM/output/2604.21884.lean:180:29: error: unsolved goals\nh1 : False\n⊢ False\n/home/projectx/BDDM/output/2604.21884.lean:188:8: warning: declaration uses `sorry`\n\n"
+            }
+          ],
+          "aux_closed": [
+            "prop_mid_completion_prop_mid_completion_cond_det_closure_1__factored_aux",
+            "prop_mid_completion_prop_mid_completion_centered_cov_bound_2__factored_aux",
+            "prop_mid_completion_prop_mid_completion_pathwise_fluc_bound_3__factored_aux",
+            "prop_mid_completion_prop_mid_completion_speed_gap_4__factored_aux",
+            "prop_mid_completion_prop_mid_completion_volterra_estimate_5__factored_aux"
+          ],
+          "aux_proposed_count": 5
+        },
+        {
+          "theorem": "ArxivPaper.rem_sharpness",
+          "stages": [
+            {
+              "stage": "first_pass_lake_error",
+              "err_tail": "DM/output/2604.21884.lean:145:29: error: unsolved goals\nh1 : False\n⊢ False\n/home/projectx/BDDM/output/2604.21884.lean:153:8: warning: declaration uses `sorry`\n\n"
+            },
+            {
+              "stage": "insufficient_aux_closed",
+              "closed": 0,
+              "needed": 2,
+              "shape": "calc_chain"
+            }
+          ],
+          "aux_closed": [],
+          "aux_proposed_count": 2
+        },
+        {
+          "theorem": "ArxivPaper.rem_first_picard_smoothing_input",
+          "stages": [
+            {
+              "stage": "first_pass_validated",
+              "body_preview": "exact False.elim (lem_coeff_chaos_criterion)"
+            }
+          ],
+          "audit": "demoted",
+          "audit_summary": {
+            "paper_id": "2604.21884",
+            "lean_file": "output/2604.21884.lean",
+            "ephemeral": {
+              "path": "output/verification_ledgers/2604.21884.json",
+              "fp_pre": 15,
+              "fp_post": 14,
+              "demoted": 1,
+              "audited_core_skipped": 7,
+              "term_mode_skipped": 0,
+              "not_found_skipped": 1,
+              "validated_clean": 6,
+              "demotions": [
+                {
+                  "theorem_name": "remark_9",
+                  "captured_proof_text": "constructor\n· rfl\n· rfl",
+                  "file_body_preview": "constructor\n  · rfl\n  · rfl",
+                  "reason": "trivialized_statement"
+                }
+              ]
+            },
+            "canonical": {
+              "path": "reproducibility/full_paper_reports/2604.21884/verification_ledger.json",
+              "fp_pre": 13,
+              "fp_post": 13,
+              "demoted": 0,
+              "audited_core_skipped": 7,
+              "term_mode_skipped": 0,
+              "not_found_skipped": 1,
+              "validated_clean": 5,
+              "demotions": []
+            }
+          }
+        },
+        {
+          "theorem": "ArxivPaper.lem_Hilbert_hypercontractivity",
+          "stages": [
+            {
+              "stage": "first_pass_validated",
+              "body_preview": "exact le_of_lt (by norm_num : (2 : ℝ) < 3)"
+            }
+          ],
+          "audit": "demoted",
+          "audit_summary": {
+            "paper_id": "2604.21884",
+            "lean_file": "output/2604.21884.lean",
+            "ephemeral": {
+              "path": "output/verification_ledgers/2604.21884.json",
+              "fp_pre": 15,
+              "fp_post": 14,
+              "demoted": 1,
+              "audited_core_skipped": 7,
+              "term_mode_skipped": 0,
+              "not_found_skipped": 1,
+              "validated_clean": 6,
+              "demotions": [
+                {
+                  "theorem_name": "remark_9",
+                  "captured_proof_text": "constructor\n· rfl\n· rfl",
+                  "file_body_preview": "constructor\n  · rfl\n  · rfl",
+                  "reason": "trivialized_statement"
+                }
+              ]
+            },
+            "canonical": {
+              "path": "reproducibility/full_paper_reports/2604.21884/verification_ledger.json",
+              "fp_pre": 13,
+              "fp_post": 13,
+              "demoted": 0,
+              "audited_core_skipped": 7,
+              "term_mode_skipped": 0,
+              "not_found_skipped": 1,
+              "validated_clean": 5,
+              "demotions": []
+            }
+          }
+        }
+      ],
+      "baseline_errors": 2
+    }
+  ],
+  "totals": {
+    "candidates_elaborated": 18,
+    "candidates_attempted": 18,
+    "first_pass_validated": 2,
+    "factored": 9,
+    "aux_proposed": 35,
+    "aux_elaborated": 24,
+    "aux_closed": 9,
+    "composed": 0,
+    "audit_survived": 0
+  },
+  "bucket_counts": {
+    "lake_errors": 36,
+    "forbidden_token_rejects": 8
+  }
+}
