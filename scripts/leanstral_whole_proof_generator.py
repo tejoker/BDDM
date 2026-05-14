@@ -49,6 +49,13 @@ MAX_STATEMENT_CHARS = 2400
 MAX_HINT_CHARS = 1800
 MAX_NEIGHBOUR_CHARS = 2200
 MAX_ERROR_TAIL_CHARS = 800
+# Audited-core hint (B3): surfaced as a labelled section in the user
+# prompt — paper-local curated proofs as in-context examples. Mirrors
+# `extract_audited_core_hints.DEFAULT_MAX_CHARS`.
+MAX_AUDITED_CORE_CHARS = 4000
+# LaTeX proof-structure hint (C2): per-row structural keywords surfaced
+# in the user prompt.
+MAX_LATEX_PROOF_HINT_CHARS = 800
 
 # Whole-token forbidden tokens (must not appear anywhere in the body).
 FORBIDDEN_TOKENS: tuple[str, ...] = (
@@ -98,8 +105,22 @@ _USER_TEMPLATE = (
     "```lean\n{paper_theory_hint}\n```\n\n"
     "Neighbouring declarations from the same file (for context):\n"
     "```lean\n{neighbours}\n```\n\n"
+    "{latex_proof_section}"
+    "{audited_core_section}"
     "{retry_block}"
     "Write the COMPLETE proof body now. Respond with the JSON object only."
+)
+
+
+_AUDITED_CORE_SECTION_TEMPLATE = (
+    "Audited proofs from the same paper (idiomatic examples — DO NOT copy "
+    "verbatim, but use these to choose tactics and lemma names):\n"
+    "```lean\n{audited_core_hint}\n```\n\n"
+)
+
+
+_LATEX_PROOF_SECTION_TEMPLATE = (
+    "{latex_proof_block}\n\n"
 )
 
 
@@ -334,8 +355,21 @@ def build_user_prompt(
     paper_theory_hint: str,
     paper_local_file: str,
     error_tail: str = "",
+    audited_core_hint: Optional[str] = None,
+    latex_proof_hints: Optional[list[str]] = None,
 ) -> str:
-    """Construct the user-message prompt. Exposed for tests."""
+    """Construct the user-message prompt. Exposed for tests.
+
+    `audited_core_hint` (B3): per-paper curated proof excerpts. If None,
+    loaded from `data/paper_audited_proof_hints/<paper_id>.txt` via
+    `extract_audited_core_hints.load_hint`. Pass "" to disable.
+
+    `latex_proof_hints` (C2): per-row structural keywords from the
+    paper's LaTeX proof. If None, loaded from
+    `output/corpus/latex_proof_hints.jsonl` via
+    `extract_latex_proof_hint.load_hints` keyed by
+    (paper_id, theorem_name). Pass [] to disable.
+    """
     stmt = re.sub(r"[ \t]+", " ", lean_statement or "").strip()[:MAX_STATEMENT_CHARS]
     hint = (paper_theory_hint or "").strip()[:MAX_HINT_CHARS]
     neighbours = _top_neighbour_declarations(
@@ -346,12 +380,51 @@ def build_user_prompt(
     if error_tail:
         tail = error_tail[-MAX_ERROR_TAIL_CHARS:]
         retry_block = _RETRY_BLOCK_TEMPLATE.format(error_tail=tail)
+
+    # Audited-core hint (B3): load by paper_id if the caller did not supply.
+    audited_section = ""
+    audited_hint = audited_core_hint
+    if audited_hint is None:
+        try:
+            from extract_audited_core_hints import load_hint as _load_audited_hint  # type: ignore[import-not-found]
+            audited_hint = _load_audited_hint(paper_id or "")
+        except Exception:
+            audited_hint = ""
+    audited_hint = (audited_hint or "").strip()
+    if audited_hint:
+        if len(audited_hint) > MAX_AUDITED_CORE_CHARS:
+            audited_hint = audited_hint[:MAX_AUDITED_CORE_CHARS] + "\n-- ... (truncated) ..."
+        audited_section = _AUDITED_CORE_SECTION_TEMPLATE.format(audited_core_hint=audited_hint)
+
+    # LaTeX proof-structure hint (C2): load by (paper_id, theorem_name).
+    latex_section = ""
+    effective_latex_hints = latex_proof_hints
+    if effective_latex_hints is None:
+        try:
+            from extract_latex_proof_hint import load_hints as _load_latex_hints  # type: ignore[import-not-found]
+            cache = _load_latex_hints()
+            effective_latex_hints = cache.get((paper_id or "", theorem_name or ""), [])
+        except Exception:
+            effective_latex_hints = []
+    if effective_latex_hints:
+        try:
+            from extract_latex_proof_hint import format_hint_block as _fmt_latex_hints  # type: ignore[import-not-found]
+            block = _fmt_latex_hints(list(effective_latex_hints))
+        except Exception:
+            block = ""
+        if block:
+            if len(block) > MAX_LATEX_PROOF_HINT_CHARS:
+                block = block[:MAX_LATEX_PROOF_HINT_CHARS] + "\n  ... (truncated) ..."
+            latex_section = _LATEX_PROOF_SECTION_TEMPLATE.format(latex_proof_block=block)
+
     return _USER_TEMPLATE.format(
         paper_id=paper_id or "",
         theorem_name=theorem_name or "thm",
         lean_statement=stmt,
         paper_theory_hint=hint or "-- (no paper-local symbols exported)",
         neighbours=neighbours,
+        latex_proof_section=latex_section,
+        audited_core_section=audited_section,
         retry_block=retry_block,
     )
 
@@ -368,6 +441,8 @@ def generate_proof_candidate(
     model: str = DEFAULT_MODEL,
     max_tokens: int = DEFAULT_MAX_TOKENS,
     api_log_hook: Optional[Any] = None,
+    audited_core_hint: Optional[str] = None,
+    latex_proof_hints: Optional[list[str]] = None,
 ) -> Optional[dict[str, Any]]:
     """Ask Leanstral to write a whole tactic-mode proof body for `lean_statement`.
 
@@ -398,6 +473,8 @@ def generate_proof_candidate(
         paper_theory_hint=paper_theory_hint,
         paper_local_file=paper_local_file,
         error_tail=error_tail,
+        audited_core_hint=audited_core_hint,
+        latex_proof_hints=latex_proof_hints,
     )
 
     try:

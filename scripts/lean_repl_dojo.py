@@ -268,18 +268,51 @@ def _extract_unsolved_goals(output: str) -> str | None:
     return None
 
 
-def _extract_lean_error(output: str) -> str | None:
-    """Extract the first meaningful Lean error message (not 'unsolved goals')."""
+def _extract_lean_error(
+    output: str,
+    *,
+    target_line: int | None = None,
+    target_line_max: int | None = None,
+) -> str | None:
+    """Extract the first meaningful Lean error message (not 'unsolved goals').
+
+    When `target_line` is provided, only errors whose `<file>:<line>:<col>`
+    line number falls in `[target_line, target_line_max]` (inclusive) are
+    reported. This prevents PRE-EXISTING errors in unrelated theorems of
+    the file from masquerading as our tactic's failure — the bug that
+    blocked B1's REPL prover smoke (e.g. `2304.09598.lean` line 99/110
+    constructor-fail errors got reported as Lem_Quant's failure even
+    though Lem_Quant is at line 50 with a perfectly fine candidate tactic).
+
+    When `target_line_max` is None, the range is unbounded above (handles
+    the case where the caller doesn't know where the next theorem starts).
+    When both targets are None, behavior is identical to the legacy call
+    (first error wins) — backward-compatible default.
+    """
+    line_re = re.compile(r".+?:(\d+):\d+:\s+(?:error:\s+)?(.+)$")
     for line in output.splitlines():
-        m1 = re.match(r"error:\s+.+?:\d+:\d+:\s+(.+)$", line)
-        m2 = re.match(r".+?:\d+:\d+:\s+error:\s+(.+)$", line)
+        m1 = re.match(r"error:\s+.+?:(\d+):\d+:\s+(.+)$", line)
+        m2 = line_re.match(line)
         msg = None
+        err_line: int | None = None
         if m1:
-            msg = m1.group(1).strip()
+            err_line = int(m1.group(1))
+            msg = m1.group(2).strip()
         elif m2:
-            msg = m2.group(1).strip()
-        if msg and "unsolved goals" not in msg.lower():
-            return msg[:600]
+            err_line = int(m2.group(1))
+            msg = m2.group(2).strip()
+            # `m2` matches both `error:` and other diagnostics — filter to error.
+            if "error:" not in line:
+                continue
+        if not msg or "unsolved goals" in msg.lower():
+            continue
+        # Scope filter: skip errors outside the target theorem's line range.
+        if target_line is not None and err_line is not None:
+            if err_line < target_line:
+                continue
+            if target_line_max is not None and err_line > target_line_max:
+                continue
+        return msg[:600]
     return None
 
 
@@ -483,7 +516,13 @@ class REPLDojo:
 
         # Prefer concrete Lean diagnostics over generic unsolved-goal parsing.
         # Some malformed tactics can emit both; in that case this must be an error.
-        err = _extract_lean_error(output)
+        # Scope to the target theorem's line range so pre-existing errors in
+        # OTHER theorems in the file don't get reported as our tactic's failure.
+        # `self._decl_line` is the 1-indexed line of `theorem <name>` in the
+        # original source. We don't have an exact `target_line_max` since the
+        # tactic insert may shift line numbers; passing only the lower bound
+        # is enough to filter unrelated upstream errors (the common case).
+        err = _extract_lean_error(output, target_line=self._decl_line or None)
         if err:
             self._traces.append(
                 StepTrace(

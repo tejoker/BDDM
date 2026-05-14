@@ -344,8 +344,23 @@ _USER_TEMPLATE = (
     "```lean\n{paper_theory_hint}\n```\n\n"
     "Exports (paper-local symbols already in scope, no binders needed):\n"
     "```lean\n{exported_symbols}\n```\n\n"
+    "{audited_core_section}"
     "Propose 2-5 auxiliary lemmas now. Respond with the JSON object only."
 )
+
+
+_AUDITED_CORE_SECTION_TEMPLATE = (
+    "Audited proofs from the same paper (paper-local in-context examples — "
+    "use them to pick aux-lemma names and shapes that fit this paper's "
+    "idioms):\n"
+    "```lean\n{audited_core_hint}\n```\n\n"
+)
+
+
+# Audited-core budget for v2's user prompt. Capped lower than the
+# whole-proof generator's because v2 already carries the full binder
+# block + exports + paper-theory hint in the user message.
+MAX_AUDITED_CORE_CHARS_V2 = 2400
 
 
 # --- Parent statement decomposition ---------------------------------------
@@ -1037,8 +1052,14 @@ def build_user_prompt(
     lean_statement: str,
     paper_theory_hint: str,
     exported_symbols: str,
+    audited_core_hint: Optional[str] = None,
 ) -> str:
-    """Construct the user-message prompt for v2. Exposed for tests."""
+    """Construct the user-message prompt for v2. Exposed for tests.
+
+    `audited_core_hint` (B3): if None, load from
+    `data/paper_audited_proof_hints/<paper_id>.txt` automatically. Pass
+    "" to disable.
+    """
     parsed_name, binder_block, parent_target = split_parent_statement(lean_statement)
     parent_name = (theorem_name or parsed_name or "thm").strip()
     full_stmt = re.sub(r"[ \t]+", " ", lean_statement or "").strip()[:MAX_STATEMENT_CHARS]
@@ -1046,6 +1067,21 @@ def build_user_prompt(
     exports = (exported_symbols or "").strip()[:MAX_EXPORTS_CHARS]
     binders_trimmed = (binder_block or "").strip()[:MAX_BINDER_CHARS]
     target_trimmed = (parent_target or "").strip()[:MAX_STATEMENT_CHARS]
+
+    audited_hint = audited_core_hint
+    if audited_hint is None:
+        try:
+            from extract_audited_core_hints import load_hint as _load_audited_hint  # type: ignore[import-not-found]
+            audited_hint = _load_audited_hint(paper_id or "")
+        except Exception:
+            audited_hint = ""
+    audited_hint = (audited_hint or "").strip()
+    audited_section = ""
+    if audited_hint:
+        if len(audited_hint) > MAX_AUDITED_CORE_CHARS_V2:
+            audited_hint = audited_hint[:MAX_AUDITED_CORE_CHARS_V2] + "\n-- ... (truncated) ..."
+        audited_section = _AUDITED_CORE_SECTION_TEMPLATE.format(audited_core_hint=audited_hint)
+
     return _USER_TEMPLATE.format(
         parent_name=parent_name,
         binder_block=binders_trimmed or "-- (no explicit binders)",
@@ -1053,6 +1089,7 @@ def build_user_prompt(
         full_statement=full_stmt,
         paper_theory_hint=hint or "-- (no paper-local symbols exported)",
         exported_symbols=exports or "-- (no exports detected)",
+        audited_core_section=audited_section,
     )
 
 
@@ -1070,6 +1107,7 @@ def factor_long_theorem_v2(
     validate_elaboration: Optional[Callable[[str], tuple[bool, str]]] = None,
     max_aux: int = MAX_AUX_DEFAULT,
     min_aux: int = MIN_AUX_DEFAULT,
+    audited_core_hint: Optional[str] = None,
 ) -> list[dict[str, Any]]:
     """Ask Leanstral (v2 binder-preserving) to propose aux lemmas.
 
@@ -1102,6 +1140,7 @@ def factor_long_theorem_v2(
         lean_statement=lean_statement,
         paper_theory_hint=paper_theory_hint,
         exported_symbols=exported_symbols,
+        audited_core_hint=audited_core_hint,
     )
 
     try:

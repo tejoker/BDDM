@@ -478,6 +478,16 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "repair",
         "summary": "Exports paper-agnostic silver repair data with explicit positive and negative labels.",
     },
+    "extract_audited_core_hints.py": {
+        "tier": "official_support",
+        "category": "proof_search",
+        "summary": "Builds per-paper audited-core hint cache (data/paper_audited_proof_hints/<paper_id>.txt) from Desol/PaperProofs/Paper_*.lean; consumed by leanstral_whole_proof_generator and lemma_factor_v2 as paper-local in-context examples.",
+    },
+    "extract_latex_proof_hint.py": {
+        "tier": "official_support",
+        "category": "proof_search",
+        "summary": "Builds per-row LaTeX proof structural hints (output/corpus/latex_proof_hints.jsonl) from extracted_theorems.json; surfaces tactic-level keywords like 'applies Cauchy-Schwarz' / 'uses integration by parts' to leanstral_whole_proof_generator.",
+    },
     "focus_blocker_loop.py": {
         "tier": "research_experiment",
         "category": "repair",
