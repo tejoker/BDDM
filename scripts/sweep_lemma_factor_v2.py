@@ -89,6 +89,94 @@ DEFAULT_MODEL = os.getenv("MISTRAL_MODEL", "labs-leanstral-2603")
 FACTORED_AUX_SUFFIX = "__factored_aux"
 
 
+# --- Baseline error fingerprinting ----------------------------------------
+
+
+_ERROR_LINE_RX = re.compile(r"^(?P<path>[^:]+):(?P<line>\d+):(?P<col>\d+): error:")
+
+
+def _capture_baseline_errors(lean_file: Path, *, timeout_s: int = 180) -> set[tuple[str, int]]:
+    """Capture the (relative_path, line_no) of every `error:` in the file's
+    UNTOUCHED lake-output. Returns the empty set if the file compiles
+    cleanly.
+
+    Used to whitelist pre-existing damage so the post-patch validator can
+    distinguish "MY patch broke it" from "the file was already broken".
+    """
+    try:
+        proc = subprocess.run(
+            ["lake", "env", "lean", str(lean_file)],
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=timeout_s,
+        )
+    except subprocess.TimeoutExpired:
+        return set()
+    out = (proc.stdout or "") + "\n" + (proc.stderr or "")
+    sigs: set[tuple[str, int]] = set()
+    for ln in out.splitlines():
+        m = _ERROR_LINE_RX.match(ln.strip())
+        if not m:
+            continue
+        try:
+            sigs.add((m.group("path"), int(m.group("line"))))
+        except Exception:
+            continue
+    return sigs
+
+
+def _lake_validate_aware(
+    lean_file: Path,
+    theorem_name: str,
+    *,
+    baseline_errors: set[tuple[str, int]],
+    timeout_s: int = 60,
+) -> tuple[bool, str]:
+    """Baseline-aware lake validator. Returns (ok, error_tail) where ok=True
+    iff:
+      - returncode == 0, OR
+      - every `error:` in the output is in `baseline_errors`
+      AND no `declaration uses 'sorry'` warning is attached to our theorem.
+
+    On failure, error_tail contains the last 1500 chars of output.
+    """
+    try:
+        proc = subprocess.run(
+            ["lake", "env", "lean", str(lean_file)],
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=timeout_s,
+        )
+    except subprocess.TimeoutExpired:
+        return False, f"lake_timeout:{timeout_s}s"
+    out = (proc.stdout or "") + "\n" + (proc.stderr or "")
+    # Collect all `error:` lines and check that each is in the baseline.
+    fresh_errors: list[str] = []
+    for ln in out.splitlines():
+        m = _ERROR_LINE_RX.match(ln.strip())
+        if not m:
+            continue
+        try:
+            sig = (m.group("path"), int(m.group("line")))
+        except Exception:
+            continue
+        if sig not in baseline_errors:
+            fresh_errors.append(ln.strip())
+    if fresh_errors:
+        return False, "fresh_errors:\n" + "\n".join(fresh_errors[-5:]) + "\n" + out[-800:]
+    # Check whether OUR theorem still triggers a sorry warning.
+    short = _theorem_short_name(theorem_name)
+    line_no = patcher._theorem_line_in_file(lean_file, short) \
+        or patcher._theorem_line_in_file(lean_file, theorem_name)
+    if line_no is None:
+        return False, f"theorem_not_found_in_file:{theorem_name}"
+    if not patcher._file_compiles_clean_for_theorem(out, line_no):
+        return False, "patched_body_emits_sorry_warning"
+    return True, ""
+
+
 # --- Candidate selection (mirrors sweep_leanstral_whole_proof) ------------
 
 
@@ -240,11 +328,16 @@ def attempt_composition(
     aux_names: list[str],
     parent_target_shape: str,
     per_lake_timeout: int,
+    baseline_errors: Optional[set[tuple[str, int]]] = None,
+    validator: Optional[Callable[[Path, str], tuple[bool, str]]] = None,
 ) -> tuple[bool, str, str]:
     """Try each composition shape for `parent_short_name` using `aux_names`.
     Returns (validated, body_used, error_tail). On success the parent's
     proof body is left in the file; on failure the parent is reverted to
     `:= by sorry`.
+
+    `validator(lean_file, theorem_name) -> (ok, err_tail)` defaults to the
+    baseline-aware validator if not provided.
     """
     bodies = lfv2.render_composition_attempts(
         parent_target_shape=parent_target_shape,
@@ -252,15 +345,22 @@ def attempt_composition(
     )
     if not bodies:
         return False, "", "no_composition_bodies"
+    if validator is None:
+        baseline = baseline_errors or set()
+
+        def _default_validator(f: Path, name: str) -> tuple[bool, str]:
+            return _lake_validate_aware(
+                f, name, baseline_errors=baseline, timeout_s=per_lake_timeout,
+            )
+
+        validator = _default_validator
     last_err = ""
     for body in bodies:
         # Patch parent to body, validate, on failure revert.
         patched = wp_sweep._patch_proof_flex(lean_file, parent_short_name, body)
         if not patched:
             return False, body, "patch_failed"
-        ok, err_tail = wp_sweep._lake_validate_file_clean_for(
-            lean_file, parent_short_name, timeout_s=per_lake_timeout,
-        )
+        ok, err_tail = validator(lean_file, parent_short_name)
         if ok:
             return True, body, ""
         last_err = err_tail or "lake_error"
@@ -350,6 +450,19 @@ def _sweep_paper(
         exported_symbols = lfv2.extract_exported_symbols(paper_theory_path)
     file_text = lean_file.read_text(encoding="utf-8")
 
+    # Capture baseline `error:` signatures so the post-patch validator can
+    # distinguish OUR damage from pre-existing damage. Several canonical
+    # files have 1-47 pre-existing errors that block the naive validator.
+    if not dry_run:
+        print(f"[{paper_id}] capturing baseline errors...")
+        baseline_errors = _capture_baseline_errors(
+            lean_file, timeout_s=max(120, per_lake_timeout * 2),
+        )
+        print(f"[{paper_id}] baseline_errors={len(baseline_errors)}")
+        report["baseline_errors"] = len(baseline_errors)
+    else:
+        baseline_errors = set()
+
     # Build validator closure for aux elaboration probe.
     def _validate_aux(decl: str) -> tuple[bool, str]:
         if _run_isolated_file_check is None:
@@ -423,8 +536,10 @@ def _sweep_paper(
         if cand is not None:
             body = cand["proof_body"]
             if wp_sweep._patch_proof_flex(lean_file, target_name, body):
-                ok, err_tail = wp_sweep._lake_validate_file_clean_for(
-                    lean_file, target_name, timeout_s=per_lake_timeout,
+                ok, err_tail = _lake_validate_aware(
+                    lean_file, target_name,
+                    baseline_errors=baseline_errors,
+                    timeout_s=per_lake_timeout,
                 )
                 if ok:
                     first_pass_validated = True
@@ -551,8 +666,10 @@ def _sweep_paper(
                 if not wp_sweep._patch_proof_flex(lean_file, new_name, body):
                     per_row["stages"].append({"stage": "aux_patch_failed", "aux": new_name})
                     break
-                ok, t = wp_sweep._lake_validate_file_clean_for(
-                    lean_file, new_name, timeout_s=per_lake_timeout,
+                ok, t = _lake_validate_aware(
+                    lean_file, new_name,
+                    baseline_errors=baseline_errors,
+                    timeout_s=per_lake_timeout,
                 )
                 if ok:
                     closed = True
@@ -588,6 +705,7 @@ def _sweep_paper(
             aux_names=aux_closed_names,
             parent_target_shape=target_shape,
             per_lake_timeout=per_lake_timeout,
+            baseline_errors=baseline_errors,
         )
         if not composed_ok:
             cleanup_names = [nm for nm, _, _ in renamed]
