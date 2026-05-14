@@ -318,6 +318,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "repair",
         "summary": "Leanstral-driven statement repair candidate generator (replaces the rule-based path in run_statement_repair_worker when --use-llm-repair is set; default OFF until calibrated).",
     },
+    "lemma_factor_assistant.py": {
+        "tier": "research_experiment",
+        "category": "repair",
+        "summary": "Leanstral-driven lemma factoring assistant: decomposes long UR theorems into 2-5 auxiliary lemma signatures with per-aux elaboration gating; wired as an OPTIONAL audit-only probe in prove_arxiv_batch behind --enable-lemma-factoring (default OFF).",
+    },
     "rewrite_lean_from_ledger.py": {
         "tier": "dev_tool",
         "category": "translation",

@@ -1228,6 +1228,9 @@ def prove_one(
     verbose: bool = True,
     fallback_to_full_draft: bool = True,
     bypass_fidelity_gate: bool = False,
+    enable_lemma_factoring: bool = False,
+    lemma_factor_min_chars: int = 300,
+    lemma_factor_output_jsonl: str = "output/lemma_factor_candidates.jsonl",
 ) -> ProofResult:
     """Attempt to prove a single sorry theorem."""
     if dry_run:
@@ -2036,6 +2039,72 @@ def prove_one(
                 }
             ]
             last_error = ""
+        else:
+            # OPTIONAL: lemma-factoring probe. When enabled, ask Leanstral to
+            # propose 2-5 aux lemma signatures that decompose the conclusion;
+            # validate each via `_run_isolated_file_check` and append to the
+            # audit JSONL. This is a SIDE EFFECT only — it does not change
+            # proof-search semantics; downstream tooling can pick up the aux
+            # candidates and attempt them with the deterministic micro-prover.
+            if (
+                enable_lemma_factoring
+                and client is not None
+                and len((thm.declaration or "")) >= int(lemma_factor_min_chars)
+            ):
+                try:
+                    from lemma_factor_assistant import (
+                        extract_paper_theory_hint,
+                        factor_long_theorem,
+                        write_lemma_factor_jsonl,
+                    )
+
+                    _hint = ""
+                    if paper_id:
+                        # Best-effort: scrape Paper_<id>.lean header signatures.
+                        _pid_tail = (paper_id or "").rsplit("/", 1)[-1]
+                        _pid_safe = re.sub(r"[^A-Za-z0-9_]", "_", _pid_tail)
+                        _pt_path = project_root / "Desol" / "PaperTheory" / f"Paper_{_pid_safe}.lean"
+                        if _pt_path.exists():
+                            _hint = extract_paper_theory_hint(_pt_path)
+
+                    def _factor_validator(decl: str) -> tuple[bool, str]:
+                        return _run_isolated_file_check(
+                            project_root=project_root,
+                            source_file=rel_file,
+                            theorem_decl=decl,
+                            timeout_s=45,
+                        )
+
+                    _factor_cands = factor_long_theorem(
+                        paper_id=paper_id or "",
+                        theorem_name=thm.full_name,
+                        lean_statement=thm.declaration,
+                        paper_theory_hint=_hint,
+                        client=client,
+                        model=model,
+                        validate_elaboration=_factor_validator,
+                    )
+                    if _factor_cands:
+                        _factor_out = project_root / lemma_factor_output_jsonl
+                        write_lemma_factor_jsonl(
+                            candidates=_factor_cands, output_path=_factor_out, append=True
+                        )
+                        if verbose:
+                            _kept = sum(1 for c in _factor_cands if not c.get("rejected"))
+                            print(
+                                f"    lemma_factor: proposed={len(_factor_cands)} "
+                                f"elaborated={_kept} → {lemma_factor_output_jsonl}",
+                                flush=True,
+                            )
+                except Exception as _factor_exc:
+                    if verbose:
+                        print(
+                            f"    lemma_factor skipped: {type(_factor_exc).__name__}:{_factor_exc}",
+                            flush=True,
+                        )
+
+        if file_micro_ok:
+            pass  # already handled above
         elif proof_mode in ("state-mcts", "hierarchical-state"):
             from mcts_search import run_hierarchical_state_mcts, run_state_mcts
             # Auto-promote to hierarchical when the conclusion is a top-level
@@ -3482,6 +3551,27 @@ def main() -> int:
         action="store_true",
         help="Use legacy aggressive non-trivial declaration filter (default: relaxed).",
     )
+    p.add_argument(
+        "--enable-lemma-factoring",
+        action="store_true",
+        help=(
+            "When the deterministic micro-prover fails on a long theorem, ask "
+            "Leanstral to propose 2-5 aux lemma signatures and write elaborated "
+            "candidates to --lemma-factor-output-jsonl. Side-effect only — does "
+            "not change proof-search semantics. Default OFF until proven."
+        ),
+    )
+    p.add_argument(
+        "--lemma-factor-min-chars",
+        type=int,
+        default=300,
+        help="Minimum lean_statement length to trigger lemma factoring (default 300).",
+    )
+    p.add_argument(
+        "--lemma-factor-output-jsonl",
+        default="output/lemma_factor_candidates.jsonl",
+        help="Where to append aux-lemma candidate rows (JSONL).",
+    )
     args = p.parse_args()
 
     project_root = Path(args.project_root).resolve()
@@ -3814,6 +3904,9 @@ def main() -> int:
                 dry_run=args.dry_run,
                 fallback_to_full_draft=bool(args.state_fallback_full_draft),
                 bypass_fidelity_gate=bool(args.disable_require_claim_equivalent),
+                enable_lemma_factoring=bool(args.enable_lemma_factoring),
+                lemma_factor_min_chars=int(args.lemma_factor_min_chars),
+                lemma_factor_output_jsonl=str(args.lemma_factor_output_jsonl),
             )
             if r_inner.proved:
                 break
