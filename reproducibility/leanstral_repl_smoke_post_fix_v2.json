@@ -1,0 +1,200 @@
+{
+  "rows_attempted": 5,
+  "rows_closed": 0,
+  "total_wall_clock_s": 117.2,
+  "max_steps": 6,
+  "max_attempts_per_step": 3,
+  "rows": [
+    {
+      "paper_id": "2304.09598",
+      "theorem": "Lem_Quant",
+      "wall_clock_s": 30.0,
+      "closed": false,
+      "proof_body_preview": null,
+      "failure_outcome": "all_candidates_failed",
+      "steps_failed": [
+        {
+          "step_idx": 0,
+          "state_before": "alpha : Multisegment\nh_eq : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha\n⊢ IsLadderMultisegment alpha",
+          "state_after": "alpha : Multisegment\nh_eq : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha\n⊢ True\noutput/2304.09598.lean:147:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:150:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:154:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:160:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:163:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:167:8: warning: declaration uses `sorry`",
+          "chosen_tactic": "unfold IsLadderMultisegment",
+          "result": "state_advanced",
+          "tried": 1
+        },
+        {
+          "step_idx": 1,
+          "state_before": "alpha : Multisegment\nh_eq : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha\n⊢ True\noutput/2304.09598.lean:147:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:150:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:154:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:160:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:163:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:167:8: warning: declaration uses `sorry`",
+          "chosen_tactic": null,
+          "result": "all_candidates_failed",
+          "tried": 3,
+          "failed_tactics": [
+            [
+              "trivial",
+              "output/2304.09598.lean:22:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:25:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:29:8: warning: declaration uses `sorry`\noutput/2304"
+            ],
+            [
+              "simp [IsLadderMultisegment]",
+              "output/2304.09598.lean:22:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:25:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:29:8: warning: declaration uses `sorry`\noutput/2304"
+            ],
+            [
+              "exact True.intro",
+              "output/2304.09598.lean:22:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:25:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:29:8: warning: declaration uses `sorry`\noutput/2304"
+            ]
+          ]
+        }
+      ],
+      "api_calls": 2,
+      "accepted_before_fail": [
+        "unfold IsLadderMultisegment"
+      ]
+    },
+    {
+      "paper_id": "2304.09598",
+      "theorem": "Lem_IrredQFM",
+      "wall_clock_s": 82.6,
+      "closed": false,
+      "proof_body_preview": null,
+      "failure_outcome": "all_candidates_failed",
+      "steps_failed": [
+        {
+          "step_idx": 1,
+          "state_before": "alpha : Multisegment\n⊢ n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha\noutput/2304.09598.lean:142:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:147:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:150:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:154:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:160:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:163:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:167:8: warning: declaration uses `sorry`",
+          "state_after": "alpha : Multisegment\nh3 : IsLadderMultisegment alpha\n⊢ n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha\noutput/2304.09598.lean:143:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:148:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:151:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:155:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:161:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:164:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:168:8: warning: declaration uses `sorry`",
+          "chosen_tactic": "have h3 : IsLadderMultisegment alpha := h1",
+          "result": "state_advanced",
+          "tried": 2
+        },
+        {
+          "step_idx": 2,
+          "state_before": "alpha : Multisegment\nh3 : IsLadderMultisegment alpha\n⊢ n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha\noutput/2304.09598.lean:143:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:148:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:151:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:155:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:161:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:164:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:168:8: warning: declaration uses `sorry`",
+          "state_after": "alpha : Multisegment\nh3 : IsLadderMultisegment alpha\nh4 : IsSimple alpha\n⊢ n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha\noutput/2304.09598.lean:144:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:149:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:152:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:156:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:162:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:165:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:169:8: warning: declaration uses `sorry`",
+          "chosen_tactic": "have h4 : IsSimple alpha := h2",
+          "result": "state_advanced",
+          "tried": 2
+        },
+        {
+          "step_idx": 3,
+          "state_before": "alpha : Multisegment\nh3 : IsLadderMultisegment alpha\nh4 : IsSimple alpha\n⊢ n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha\noutput/2304.09598.lean:144:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:149:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:152:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:156:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:162:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:165:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:169:8: warning: declaration uses `sorry`",
+          "chosen_tactic": null,
+          "result": "all_candidates_failed",
+          "tried": 3,
+          "failed_tactics": [
+            [
+              "simp [n_tilde_alpha, n_alpha, S_alpha, c_alpha]",
+              "output/2304.09598.lean:22:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:25:8: warning: declaration uses `sorry`\noutput/2304.09598.lean:29:8: warning: declaration uses `sorry`\noutput/2304"
+            ],
+            [
+              "omega",
+              "omega could not prove the goal:"
+            ],
+            [
+              "linarith",
+              "linarith failed to find a contradiction"
+            ]
+          ]
+        }
+      ],
+      "api_calls": 4,
+      "accepted_before_fail": [
+        "rcases h with ⟨h1, h2⟩",
+        "have h3 : IsLadderMultisegment alpha := h1",
+        "have h4 : IsSimple alpha := h2"
+      ]
+    },
+    {
+      "paper_id": "2304.09598",
+      "theorem": "EqualLN",
+      "wall_clock_s": 1.0,
+      "closed": false,
+      "proof_body_preview": null,
+      "failure_outcome": "all_candidates_failed",
+      "steps_failed": [
+        {
+          "step_idx": 0,
+          "state_before": "alpha : Multisegment\nbeta : Multisegment\nh1 : L_tilde alpha = n_alpha alpha\nh2 : alpha ≤ beta\nh3 : dual alpha ≤ dual beta\n⊢ n_alpha alpha = n_alpha beta ∧ L_tilde alpha = L_tilde beta",
+          "chosen_tactic": null,
+          "result": "all_candidates_failed",
+          "tried": 2,
+          "failed_tactics": [
+            [
+              "constructor",
+              "Tactic `constructor` failed: no applicable constructor found"
+            ],
+            [
+              "exact ⟨h4, h5⟩",
+              "Tactic `constructor` failed: no applicable constructor found"
+            ]
+          ]
+        }
+      ],
+      "api_calls": 1,
+      "accepted_before_fail": []
+    },
+    {
+      "paper_id": "2604.21314",
+      "theorem": "infty",
+      "wall_clock_s": 2.1,
+      "closed": false,
+      "proof_body_preview": null,
+      "failure_outcome": "all_candidates_failed",
+      "steps_failed": [
+        {
+          "step_idx": 0,
+          "state_before": "alpha : Type*\ng : alpha → ℝ\nt : ℝ\nht : t > 0\n⊢ ∥(fun x => ∫ y, (fun z => Real.exp (t * (inner z z))) (x - y) * g y) x∥ ≤ ∥g x∥",
+          "chosen_tactic": null,
+          "result": "all_candidates_failed",
+          "tried": 3,
+          "failed_tactics": [
+            [
+              "simp only [norm_eq_sqrt_inner, inner_mul_left, inner_mul_right, mul_comm (g _), mul_assoc]",
+              "expected token"
+            ],
+            [
+              "have h1 : ∀ x, ∫ y, Real.exp (t * inner (x - y) (x - y)) * g y = ∫ y, Real.exp (t * (inner x x - 2 * inner x y + inner y y)) * g y := by intro x; congr 1; ext y; ring_nf",
+              "expected token"
+            ],
+            [
+              "rw [h1]",
+              "expected token"
+            ]
+          ]
+        }
+      ],
+      "api_calls": 1,
+      "accepted_before_fail": []
+    },
+    {
+      "paper_id": "2604.21583",
+      "theorem": "prop_shell_vanishing_local",
+      "wall_clock_s": 1.4,
+      "closed": false,
+      "proof_body_preview": null,
+      "failure_outcome": "all_candidates_failed",
+      "steps_failed": [
+        {
+          "step_idx": 0,
+          "state_before": "alpha : ℝ\nbeta : ℝ\nη : ℝ\nΛ : ℝ\nΛ1 : ℝ\nhbeta : 3/2 < beta ∧ beta ≤ 2\nhη : η ∈ Set.Ioo (2 - beta) (beta - 1)\nhalpha : 3/4 - alpha1 - alpha/2 * (2 - beta) > 0\nhΛ : 0 < Λ\nhΛ1 : 0 < Λ1\nhlam : 0 < lam\n⊢ |E_shell Γ_lam| ≤ C_beta * (1 + |Real.log lam|)^(5/2) * Λ^((2 - beta)/2) * (Λ^(-η/2) + lam^(3/4) * Λ1) + C_beta * lam * (1 + |Real.log lam|^2) * Λ1^(2 - beta)",
+          "chosen_tactic": null,
+          "result": "all_candidates_failed",
+          "tried": 3,
+          "failed_tactics": [
+            [
+              "simp only [Set.mem_Ioo] at hη",
+              "Function expected at"
+            ],
+            [
+              "rcases hη with ⟨hη1, hη2⟩",
+              "Function expected at"
+            ],
+            [
+              "have h1 : 0 < 2 - beta := by linarith [hbeta.1]",
+              "Function expected at"
+            ]
+          ]
+        }
+      ],
+      "api_calls": 1,
+      "accepted_before_fail": []
+    }
+  ]
+}
