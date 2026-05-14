@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+from pathlib import Path
 
 from formalize_paper_full import (
     _apply_auto_reliable_core_promotions,
@@ -1073,3 +1074,97 @@ def test_detect_curated_paper_package_finds_desol_paper_proofs(tmp_path) -> None
     assert info["theorem_count"] == 1
     assert info["axiom_count"] == 0
     assert info["sorry_count"] == 0
+
+
+def test_publish_reproducibility_bundle_runs_fp_integrity_audit(tmp_path) -> None:
+    """Wire test: `_publish_reproducibility_bundle` must invoke
+    `audit_fully_proven_integrity.audit_ledger_file` on the ephemeral ledger
+    before copying. A row whose actual `output/<paper>.lean` body is `sorry`
+    but whose ledger claims FULLY_PROVEN must be demoted in the published
+    bundle. Prevents the circular-bypass defect (commit c60c63d) from
+    republishing bypass-FPs."""
+    import json
+    from formalize_paper_full import _publish_reproducibility_bundle
+
+    paper_id = "9999.99999"
+    project = tmp_path
+    # Bare-minimum filesystem layout the audit reads from.
+    (project / "output").mkdir(parents=True)
+    (project / "reproducibility" / "full_paper_reports").mkdir(parents=True)
+    lean_file = project / "output" / f"{paper_id}.lean"
+    lean_file.write_text(
+        "theorem fp_with_sorry_body : True := by\n  sorry\n",
+        encoding="utf-8",
+    )
+    ledger_path = project / "output" / f"{paper_id}_ledger.json"
+    ledger_path.write_text(
+        json.dumps([
+            {
+                "theorem_name": "fp_with_sorry_body",
+                "status": "FULLY_PROVEN",
+                "proof_text": "aesop",
+                "validation_gates": {"lean_proof_closed": True, "step_verdict_verified": True},
+                "step_verdict": "VERIFIED",
+            },
+        ], indent=2),
+        encoding="utf-8",
+    )
+    # Other inputs the publish helper may copy — keep them minimal.
+    report_out = project / "output" / "suite_report.json"
+    report_out.write_text("{}", encoding="utf-8")
+    unresolved_out = project / "output" / "unresolved.json"
+    unresolved_out.write_text("[]", encoding="utf-8")
+
+    paths = _publish_reproducibility_bundle(
+        project_root=project,
+        paper_id=paper_id,
+        report_out=report_out,
+        ledger_path=ledger_path,
+        unresolved_out=unresolved_out,
+    )
+
+    # Post-audit ephemeral ledger must show the demotion.
+    post_audit = json.loads(ledger_path.read_text(encoding="utf-8"))
+    assert post_audit[0]["status"] == "UNRESOLVED", (
+        f"Audit must demote sorry-bodied FP row; got status={post_audit[0]['status']}"
+    )
+    # Manifest must surface the audit summary so reviewers can see integrity was enforced.
+    manifest = json.loads(Path(paths["manifest"]).read_text(encoding="utf-8"))
+    audit_summary = manifest.get("fully_proven_integrity_audit", {})
+    assert audit_summary.get("fp_pre") == 1
+    assert audit_summary.get("fp_post") == 0
+    assert audit_summary.get("demoted") == 1
+    assert "fp_with_sorry_body" in audit_summary.get("demotion_theorem_names", [])
+
+
+def test_publish_reproducibility_bundle_audit_records_skip_when_lean_file_missing(tmp_path) -> None:
+    """If the `output/<paper>.lean` file is missing, the audit can't run.
+    The wiring must surface that as a clear `skipped` reason in the manifest
+    rather than silently passing."""
+    import json
+    from formalize_paper_full import _publish_reproducibility_bundle
+
+    paper_id = "9999.99998"
+    project = tmp_path
+    (project / "output").mkdir()
+    (project / "reproducibility" / "full_paper_reports").mkdir(parents=True)
+    ledger_path = project / "output" / f"{paper_id}_ledger.json"
+    ledger_path.write_text(
+        json.dumps([{"theorem_name": "t", "status": "UNRESOLVED"}], indent=2),
+        encoding="utf-8",
+    )
+    report_out = project / "output" / "report.json"
+    report_out.write_text("{}", encoding="utf-8")
+    unresolved_out = project / "output" / "unresolved.json"
+    unresolved_out.write_text("[]", encoding="utf-8")
+
+    paths = _publish_reproducibility_bundle(
+        project_root=project,
+        paper_id=paper_id,
+        report_out=report_out,
+        ledger_path=ledger_path,
+        unresolved_out=unresolved_out,
+    )
+    manifest = json.loads(Path(paths["manifest"]).read_text(encoding="utf-8"))
+    audit_summary = manifest.get("fully_proven_integrity_audit", {})
+    assert audit_summary.get("skipped") == "lean_file_missing"

@@ -266,10 +266,49 @@ def _publish_reproducibility_bundle(
     claim_equivalence_review_out: Path | None = None,
     claim_equivalence_adjudications: Path | None = None,
 ) -> dict[str, str]:
-    """Copy the report bundle into committed reproducibility/ evidence paths."""
+    """Copy the report bundle into committed reproducibility/ evidence paths.
+
+    Runs the FULLY_PROVEN integrity audit on the ephemeral ledger BEFORE
+    copying — any FP row whose `output/<paper>.lean` body is `sorry` is
+    demoted to UNRESOLVED. This prevents the circular-bypass defect (commit
+    c60c63d) from republishing bypass-FPs into committed evidence.
+    """
     safe = _safe_id(paper_id)
     bundle_dir = project_root / "reproducibility" / "full_paper_reports" / safe
     bundle_dir.mkdir(parents=True, exist_ok=True)
+
+    # Integrity audit — must run BEFORE the ledger copy so the published
+    # canonical ledger reflects post-audit state. Failures here block publish.
+    audit_summary: dict[str, Any] = {}
+    if ledger_path.exists():
+        try:
+            import sys as _sys
+            _scripts_dir = Path(__file__).resolve().parent
+            if str(_scripts_dir) not in _sys.path:
+                _sys.path.insert(0, str(_scripts_dir))
+            from audit_fully_proven_integrity import audit_ledger_file  # noqa: E402
+
+            lean_file_path = project_root / "output" / f"{paper_id}.lean"
+            if lean_file_path.exists():
+                audit_result = audit_ledger_file(
+                    ledger_path, lean_file_path, paper_id=paper_id, write=True,
+                )
+                audit_summary = {
+                    "fp_pre": audit_result.fp_pre,
+                    "fp_post": audit_result.fp_post,
+                    "demoted": audit_result.demoted,
+                    "audited_core_skipped": audit_result.audited_core_skipped,
+                    "term_mode_skipped": audit_result.term_mode_skipped,
+                    "validated_clean": audit_result.validated_clean,
+                    "demotion_theorem_names": [d.theorem_name for d in audit_result.demotions],
+                }
+            else:
+                audit_summary = {"skipped": "lean_file_missing", "lean_file": str(lean_file_path)}
+        except Exception as exc:
+            # Audit must not silently swallow errors — log them in the bundle
+            # so reviewers can see when integrity wasn't enforced.
+            audit_summary = {"error": f"{type(exc).__name__}: {exc}"[:500]}
+
     paths: dict[str, str] = {}
     for label, src, dst_name in (
         ("report", report_out, "suite_report.json"),
@@ -311,6 +350,7 @@ def _publish_reproducibility_bundle(
             command=regenerate_command.split(),
             artifacts=artifact_rows,
         ),
+        "fully_proven_integrity_audit": audit_summary,
         "regenerate_command": regenerate_command,
     }
     manifest_path = bundle_dir / "manifest.json"
