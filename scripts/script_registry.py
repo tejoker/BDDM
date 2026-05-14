@@ -438,6 +438,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Counterexample-search probe over UNRESOLVED rows: asks Leanstral whether the as-stated theorem admits a counterexample (e.g. dropped binding hypothesis). Writes informational `counterexample_preflight` metadata; does not mutate status. Recall 75% / FP 0% on the 4-row 2604.21884 calibration.",
     },
+    "route_to_axiom_backed.py": {
+        "tier": "dev_tool",
+        "category": "review",
+        "summary": "Detects paper-local axiom opacity in lake error tails and routes UR rows to AXIOM_BACKED with a precise axiom_debt list. Cross-references each candidate identifier against `Desol/PaperTheory/Paper_<id>.lean`: real `axiom <name>` declarations and stubby `def <name> := 0/True/sorry/Set.univ` definitions both count as opaque (no exploitable definitional content). Wired into `sweep_lemma_factor_v2._sweep_paper` after the first-pass whole-proof lake failure to skip the factor pass on rows blocked by opacity (decomposition does not help against opaque axioms). Pure analysis: zero Mistral budget.",
+    },
     "mark_ghost_translation_failures.py": {
         "tier": "dev_tool",
         "category": "review",
