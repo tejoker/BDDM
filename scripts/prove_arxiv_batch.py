@@ -60,8 +60,81 @@ except Exception:
 from build_gold_proof_queue import proof_candidate_blockers
 from statement_validity import statement_fidelity_gate
 
+# Per-paper tactic priors (re-ranking only — never changes which tactics run).
+# See ``scripts/per_paper_tactic_priors.py`` for the store schema.
+try:
+    from per_paper_tactic_priors import (
+        load_paper_priors as _ppp_load_paper_priors,
+        rank_tactics as _ppp_rank_tactics,
+        record_outcome as _ppp_record_outcome,
+    )
+except Exception:  # pragma: no cover — defensive: missing module is non-fatal.
+    _ppp_load_paper_priors = None  # type: ignore[assignment]
+    _ppp_rank_tactics = None  # type: ignore[assignment]
+    _ppp_record_outcome = None  # type: ignore[assignment]
+
 
 _GOLD_PROOF_QUEUE_OVERRIDES: dict[tuple[str, str], dict[str, Any]] = {}
+
+# Per-paper-priors runtime config. Populated by ``main()`` from
+# ``--use-paper-priors`` / ``--paper-priors-store``. When disabled the
+# micro-prover paths run identically to the pre-priors version (cold-start
+# safety: priors are an INCREMENTAL improvement, never a regression).
+_PAPER_PRIORS_ENABLED: bool = False
+_PAPER_PRIORS_STORE: Path | None = None
+
+
+def _maybe_rerank_with_priors(
+    *,
+    scripts: list[str],
+    paper_id: str,
+) -> list[str]:
+    """Re-rank ``scripts`` by per-paper tactic success rate when enabled.
+
+    No-op when the feature is disabled, when ``paper_id`` is empty, when the
+    store hasn't been configured, or when the priors module is unavailable.
+    """
+
+    if not _PAPER_PRIORS_ENABLED:
+        return scripts
+    if not paper_id or _PAPER_PRIORS_STORE is None:
+        return scripts
+    if _ppp_rank_tactics is None:
+        return scripts
+    try:
+        return _ppp_rank_tactics(
+            paper_id=paper_id,
+            candidates=scripts,
+            store_path=_PAPER_PRIORS_STORE,
+        )
+    except Exception:
+        # Priors are a best-effort optimisation; never fail the proof loop.
+        return scripts
+
+
+def _maybe_record_prior_outcome(
+    *,
+    paper_id: str,
+    theorem_name: str,
+    tactic: str,
+    closed: bool,
+) -> None:
+    """Append a (paper, tactic, theorem, outcome) record when priors are on."""
+
+    if not _PAPER_PRIORS_ENABLED:
+        return
+    if not paper_id or _PAPER_PRIORS_STORE is None or _ppp_record_outcome is None:
+        return
+    try:
+        _ppp_record_outcome(
+            paper_id=paper_id,
+            theorem_name=theorem_name,
+            tactic=tactic,
+            closed=closed,
+            store_path=_PAPER_PRIORS_STORE,
+        )
+    except Exception:
+        pass
 
 
 # ---------------------------------------------------------------------------
@@ -1895,6 +1968,7 @@ def prove_one(
             theorem_name=thm.full_name,
             theorem_decl=thm.declaration,
             domain=_detected_domain,
+            paper_id=paper_id,
         )
         if micro_ok:
             return True, [
@@ -2034,6 +2108,7 @@ def prove_one(
             theorem_name=thm.full_name,
             theorem_decl=thm.declaration,
             domain=_detected_domain,
+            paper_id=paper_id,
         )
         if file_micro_ok:
             proved = True
@@ -2203,6 +2278,7 @@ def prove_one(
                 theorem_name=thm.full_name,
                 theorem_decl=thm.declaration,
                 domain=_detected_domain,
+                paper_id=paper_id,
             )
             if file_micro_ok:
                 proved = True
@@ -2224,6 +2300,7 @@ def prove_one(
                     theorem_name=thm.full_name,
                     theorem_decl=thm.declaration,
                     domain=_detected_domain,
+                    paper_id=paper_id,
                 )
                 if micro_ok:
                     proved = True
@@ -3063,14 +3140,22 @@ def _run_deterministic_micro_prover(
     theorem_decl: str,
     timeout_s: int = 90,
     domain: str = "",
+    paper_id: str = "",
 ) -> tuple[bool, str, str]:
     """Try deterministic tactic scripts for simple conjunction/∃! goals.
 
     When ``domain`` is provided (e.g. ``"analysis"``), the catalog returned by
     ``_micro_prover_scripts_for_decl`` is extended with domain-matched
     closers (analytic-inequality hints, measure_univ simps, etc.).
+
+    When ``paper_id`` is non-empty and the global priors flag is on, the
+    candidate list is re-ranked by per-paper tactic success rate (the full
+    catalog still runs — priors only change ATTEMPT ORDER, never membership).
+    Each attempted script's outcome is recorded back to the priors store
+    so the prior improves online.
     """
     scripts = _micro_prover_scripts_for_decl(theorem_decl, domain=domain)
+    scripts = _maybe_rerank_with_priors(scripts=scripts, paper_id=paper_id)
 
     try:
         from lean_repl_dojo import REPLDojo
@@ -3107,12 +3192,28 @@ def _run_deterministic_micro_prover(
                         outcome = dojo.run_tac(cur, tactic)
                         executed.append(tactic)
                         if _is_proof_finished_obj(outcome):
+                            # Record success for single-tactic candidates only —
+                            # chained scripts are not 1:1 with catalog entries.
+                            if len(script) == 1:
+                                _maybe_record_prior_outcome(
+                                    paper_id=paper_id,
+                                    theorem_name=theorem_name,
+                                    tactic=script[0],
+                                    closed=True,
+                                )
                             return True, "\n".join(executed), ""
                         if _is_tactic_state_obj(outcome):
                             cur = outcome
                             continue
                         ok = False
                         break
+                    if not ok and len(script) == 1:
+                        _maybe_record_prior_outcome(
+                            paper_id=paper_id,
+                            theorem_name=theorem_name,
+                            tactic=script[0],
+                            closed=False,
+                        )
                     if ok and executed and _is_tactic_state_obj(cur):
                         follow = dojo.run_tac(cur, "exact?")
                         if _is_proof_finished_obj(follow):
@@ -3368,6 +3469,7 @@ def _run_deterministic_file_micro_prover(
     theorem_decl: str,
     timeout_s: int = 45,
     domain: str = "",
+    paper_id: str = "",
 ) -> tuple[bool, str, str]:
     target = _decl_target(theorem_decl)
     scripts: list[list[str]] = []
@@ -3393,7 +3495,9 @@ def _run_deterministic_file_micro_prover(
             scripts.append(["constructor", f"exact {h_l}", f"exact {h_r}"])
     # Generic file-checked tactics catch simple set-membership and local-hypothesis goals
     # without opening an LLM-backed proof loop.
-    for tactic in _micro_prover_scripts_for_decl(theorem_decl, domain=domain):
+    catalog = _micro_prover_scripts_for_decl(theorem_decl, domain=domain)
+    catalog = _maybe_rerank_with_priors(scripts=catalog, paper_id=paper_id)
+    for tactic in catalog:
         scripts.append([tactic])
     if not scripts:
         return False, "", "file_micro_no_pattern"
@@ -3422,6 +3526,14 @@ def _run_deterministic_file_micro_prover(
                 script=sc,
                 timeout_s=timeout_s,
             )
+            # Record per-tactic outcome for single-tactic catalog entries.
+            if len(sc) == 1:
+                _maybe_record_prior_outcome(
+                    paper_id=paper_id,
+                    theorem_name=theorem_name,
+                    tactic=sc[0],
+                    closed=bool(ok),
+                )
             if ok:
                 return True, "\n".join(sc), ""
             last_err = err or last_err
@@ -3618,10 +3730,41 @@ def main() -> int:
         default="output/lemma_factor_candidates.jsonl",
         help="Where to append aux-lemma candidate rows (JSONL).",
     )
+    p.add_argument(
+        "--use-paper-priors",
+        action="store_true",
+        help=(
+            "Re-rank deterministic micro-prover tactics by per-paper success "
+            "rate (see scripts/per_paper_tactic_priors.py). The full catalog "
+            "still runs; only the attempt ORDER changes. Default OFF until we "
+            "have telemetry data."
+        ),
+    )
+    p.add_argument(
+        "--paper-priors-store",
+        default="data/tactic_priors.jsonl",
+        help=(
+            "JSONL store for per-(paper, tactic) outcomes. Created on first "
+            "write. The default lives under data/ which is gitignored."
+        ),
+    )
     args = p.parse_args()
 
     project_root = Path(args.project_root).resolve()
     output_dir = project_root / args.output_dir
+
+    # Wire per-paper priors config (module-level so micro-prover paths can
+    # consult it without threading another argument through every call).
+    global _PAPER_PRIORS_ENABLED, _PAPER_PRIORS_STORE
+    _PAPER_PRIORS_ENABLED = bool(args.use_paper_priors)
+    if _PAPER_PRIORS_ENABLED:
+        _ppp_store = Path(args.paper_priors_store)
+        if not _ppp_store.is_absolute():
+            _ppp_store = project_root / _ppp_store
+        _PAPER_PRIORS_STORE = _ppp_store
+        print(f"[priors] per-paper tactic priors ENABLED (store={_PAPER_PRIORS_STORE})")
+    else:
+        _PAPER_PRIORS_STORE = None
 
     lean_files = _collect_lean_files(
         output_dir=output_dir,
