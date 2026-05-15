@@ -1977,8 +1977,7 @@
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
       "semantic_adversarial_checks_passed",
-      "no_paper_axiom_debt",
-      "step_verdict_verified"
+      "no_paper_axiom_debt"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [

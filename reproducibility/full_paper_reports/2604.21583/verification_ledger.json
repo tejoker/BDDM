@@ -179,7 +179,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "claim_equivalent",
       "no_paper_axiom_debt",
       "step_verdict_verified",
       "lean_proof_closed"
@@ -457,7 +456,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "claim_equivalent",
       "no_paper_axiom_debt",
       "lean_proof_closed"
     ],
@@ -2080,7 +2078,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "claim_equivalent",
       "no_paper_axiom_debt",
       "lean_proof_closed"
     ],
@@ -7183,7 +7180,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "claim_equivalent",
       "no_paper_axiom_debt",
       "lean_proof_closed"
     ],
@@ -7643,7 +7639,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "claim_equivalent",
       "no_paper_axiom_debt",
       "lean_proof_closed"
     ],
@@ -8534,7 +8529,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "claim_equivalent",
       "no_paper_axiom_debt",
       "lean_proof_closed"
     ],
@@ -11262,7 +11256,6 @@
     },
     "gate_failures": [
       "lean_proof_closed",
-      "claim_equivalent",
       "no_paper_axiom_debt"
     ],
     "claim_equivalence_verdict": "equivalent",
@@ -14627,7 +14620,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "claim_equivalent",
       "no_paper_axiom_debt",
       "lean_proof_closed"
     ],

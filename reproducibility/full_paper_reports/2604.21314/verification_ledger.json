@@ -1155,7 +1155,6 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "step_verdict_verified",
       "provenance_linked"
     ],
     "claim_equivalence_verdict": "equivalent",
