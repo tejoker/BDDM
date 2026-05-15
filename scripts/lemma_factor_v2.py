@@ -1563,6 +1563,221 @@ def factor_long_theorem_v2(
     return kept
 
 
+# --- Recursive factoring (depth-2+) ---------------------------------------
+#
+# Round-X showed 9/27 aux closed at depth-1. Many of the surviving (unclosed)
+# aux were themselves long (>200 chars) or multi-conjunction targets — i.e.
+# they have ROOM to factor further. `factor_long_theorem_recursive` applies
+# the SAME factoring prompt to each unclosed-and-still-long aux up to a hard
+# depth cap.
+#
+# Termination guarantee:
+#   - `max_depth` is a hard cap (default 2, validated 0..4).
+#   - At each depth we only recurse on aux that BOTH (a) didn't close at
+#     this level (their whole_proof attempt left a `sorry` body) AND (b)
+#     have a "long" signature (>LONG_SIGNATURE_CHAR_THRESHOLD chars OR
+#     contains a multi-conjunction in target).
+#   - Each level applies `max_aux_per_level` (default 5) — so the worst-
+#     case branching factor is 5 and the worst-case node count is bounded
+#     by 5^max_depth ≤ 5^4 = 625. In practice the "long" gate filters
+#     aggressively so the tree stays small.
+#   - The recursion is depth-first; we never re-visit a closed aux.
+
+LONG_SIGNATURE_CHAR_THRESHOLD = 200
+MULTI_CONJUNCTION_THRESHOLD = 3  # >=3 `∧` in target ⇒ multi-conjunction
+
+
+def _aux_signature_is_long(aux_signature: str) -> bool:
+    """Return True when an aux signature is "long enough" to merit a
+    recursive factoring attempt.
+
+    Two triggers (logical OR):
+      - raw signature length > LONG_SIGNATURE_CHAR_THRESHOLD chars (200)
+      - target portion contains >=3 top-level `∧` (multi-conjunction)
+    """
+    sig = (aux_signature or "").strip()
+    if not sig:
+        return False
+    if len(sig) > LONG_SIGNATURE_CHAR_THRESHOLD:
+        return True
+    target = _extract_aux_target(sig)
+    if not target:
+        return False
+    # Count top-level `∧` occurrences. We don't need full depth-tracking
+    # here — `∧` rarely appears inside parens at the top of an aux target.
+    n_and = target.count("∧")
+    return n_and >= MULTI_CONJUNCTION_THRESHOLD
+
+
+def factor_long_theorem_recursive(
+    *,
+    paper_id: str,
+    theorem_name: str,
+    lean_statement: str,
+    paper_theory_hint: str,
+    client: Any,
+    model: str = DEFAULT_MODEL,
+    max_depth: int = 2,
+    max_aux_per_level: int = MAX_AUX_DEFAULT,
+    min_aux: int = MIN_AUX_DEFAULT,
+    exported_symbols: str = "",
+    audited_core_hint: Optional[str] = None,
+    validate_elaboration: Optional[Callable[[str], tuple[bool, str]]] = None,
+    whole_proof_attempt: Optional[Callable[[dict[str, Any]], dict[str, Any]]] = None,
+    api_log_hook: Optional[Any] = None,
+    _depth: int = 0,
+) -> dict[str, Any]:
+    """Recursively factor a long theorem into sub-aux up to ``max_depth``.
+
+    At each level we:
+      1. Run `factor_long_theorem_v2` on the current target.
+      2. For each aux that elaborates, optionally run ``whole_proof_attempt``
+         (the caller's closer — when None, we treat ALL aux as unclosed so
+         the tree-shape under test in unit suites is deterministic).
+      3. For each aux that DIDN'T close AND has a "long" signature AND
+         ``_depth + 1 < max_depth``, recurse with `_depth + 1`.
+
+    Returns a dict shaped::
+
+        {
+          "depth":           0,
+          "theorem_name":    "...",
+          "aux":             [
+              {
+                "aux_name":          "...",
+                "aux_signature":     "...",
+                "compose_hint":      "...",
+                "rejected":          [...],
+                "elaboration_ok":    True | False | None,
+                "closed":            True | False,
+                "close_result":      {...} (whatever whole_proof_attempt returned),
+                "sub_factor":        <nested dict same shape> | None,
+                "long_enough":       True | False,
+                # ... plus all the standard lemma_factor_v2 fields
+              },
+              ...
+          ],
+          "telemetry": {
+              "attempts":   <int>   # how many recursive factoring calls this subtree made
+              "closures":   <int>   # how many aux closed in this subtree
+              "sub_aux_closures": <int>   # closures at depth > _depth
+          },
+        }
+
+    Caller responsibilities:
+      - ``whole_proof_attempt`` MUST return a dict shaped
+        ``{"closed": bool, ...}``. When omitted we set ``closed=False`` for
+        every aux (so recursion happens whenever ``long_enough`` holds).
+      - ``validate_elaboration`` is passed straight through to
+        ``factor_long_theorem_v2`` at each level.
+      - ``max_depth`` is clamped to [0, 4]. When ``max_depth=0`` we run the
+        depth-0 factoring pass and never recurse (the result still records
+        per-aux ``closed`` from the caller's ``whole_proof_attempt``).
+    """
+    max_depth = max(0, min(int(max_depth), 4))
+    max_aux_per_level = max(1, min(int(max_aux_per_level or MAX_AUX_DEFAULT), 10))
+    min_aux = max(1, min(int(min_aux or MIN_AUX_DEFAULT), max_aux_per_level))
+
+    telemetry = {"attempts": 1, "closures": 0, "sub_aux_closures": 0}
+
+    factor_records = factor_long_theorem_v2(
+        paper_id=paper_id,
+        theorem_name=theorem_name,
+        lean_statement=lean_statement,
+        paper_theory_hint=paper_theory_hint,
+        exported_symbols=exported_symbols,
+        client=client,
+        model=model,
+        validate_elaboration=validate_elaboration,
+        max_aux=max_aux_per_level,
+        min_aux=min_aux,
+        audited_core_hint=audited_core_hint,
+        api_log_hook=api_log_hook,
+    )
+
+    aux_results: list[dict[str, Any]] = []
+    for rec in factor_records:
+        out_rec = dict(rec)
+        out_rec.setdefault("closed", False)
+        out_rec["close_result"] = None
+        out_rec["sub_factor"] = None
+        out_rec["long_enough"] = False
+
+        # Skip closing attempts entirely on rejected aux.
+        if rec.get("rejected"):
+            aux_results.append(out_rec)
+            continue
+
+        # Step 2: ask the caller to close this aux.
+        close_result: dict[str, Any] = {"closed": False}
+        if whole_proof_attempt is not None:
+            try:
+                close_result = whole_proof_attempt(rec) or {"closed": False}
+            except Exception as exc:  # pragma: no cover - defensive
+                close_result = {"closed": False, "error": f"{type(exc).__name__}:{exc}"}
+        out_rec["close_result"] = close_result
+        is_closed = bool(close_result.get("closed", False))
+        out_rec["closed"] = is_closed
+        if is_closed:
+            telemetry["closures"] += 1
+            aux_results.append(out_rec)
+            continue
+
+        # Step 3: should we recurse on this aux?
+        sig = str(rec.get("aux_signature", "") or "")
+        long_enough = _aux_signature_is_long(sig)
+        out_rec["long_enough"] = long_enough
+        if not long_enough or (_depth + 1) >= max_depth:
+            aux_results.append(out_rec)
+            continue
+
+        # Recurse: factor THIS aux as the next-level parent.
+        sub_factor = factor_long_theorem_recursive(
+            paper_id=paper_id,
+            theorem_name=str(rec.get("aux_name", "") or theorem_name),
+            lean_statement=sig,
+            paper_theory_hint=paper_theory_hint,
+            client=client,
+            model=model,
+            max_depth=max_depth,
+            max_aux_per_level=max_aux_per_level,
+            min_aux=min_aux,
+            exported_symbols=exported_symbols,
+            audited_core_hint=audited_core_hint,
+            validate_elaboration=validate_elaboration,
+            whole_proof_attempt=whole_proof_attempt,
+            api_log_hook=api_log_hook,
+            _depth=_depth + 1,
+        )
+        out_rec["sub_factor"] = sub_factor
+        # Roll up sub-tree telemetry.
+        sub_tel = sub_factor.get("telemetry", {}) if isinstance(sub_factor, dict) else {}
+        telemetry["attempts"] += int(sub_tel.get("attempts", 0) or 0)
+        sub_closures = int(sub_tel.get("closures", 0) or 0)
+        telemetry["closures"] += sub_closures
+        telemetry["sub_aux_closures"] += sub_closures + int(
+            sub_tel.get("sub_aux_closures", 0) or 0
+        )
+        # If ALL sub-aux of THIS aux closed, mark this aux as "closed-via-sub".
+        sub_aux = sub_factor.get("aux", []) if isinstance(sub_factor, dict) else []
+        elaborated_sub = [s for s in sub_aux if not s.get("rejected")]
+        if elaborated_sub and all(bool(s.get("closed")) for s in elaborated_sub):
+            out_rec["closed_via_sub"] = True
+        else:
+            out_rec["closed_via_sub"] = False
+        aux_results.append(out_rec)
+
+    return {
+        "depth": _depth,
+        "theorem_name": theorem_name,
+        "lean_statement": lean_statement,
+        "aux": aux_results,
+        "telemetry": telemetry,
+        "protocol": "lemma_factor_v2_recursive",
+        "max_depth": max_depth,
+    }
+
+
 # --- JSONL writer (mirrors v1; protocol field is auto-discriminating) -----
 
 

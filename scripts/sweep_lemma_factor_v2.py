@@ -797,11 +797,16 @@ def _sweep_paper(
 
     # Filter and sort candidates by priority.
     cands: list[tuple[int, dict[str, Any]]] = []
+    theorem_filter_set = {t.strip() for t in (theorem_filter or ()) if t.strip()}
     for entry in entries:
         ok, prio = _is_candidate_row(entry)
         if not ok:
             continue
         name = str(entry.get("theorem_name", "") or "")
+        short = _theorem_short_name(name)
+        if theorem_filter_set:
+            if name not in theorem_filter_set and short not in theorem_filter_set:
+                continue
         is_sorry, _ = wp_sweep._file_has_sorry_body_for(lean_file, name)
         if not is_sorry:
             continue
@@ -1333,6 +1338,204 @@ def _sweep_paper(
                 aux_closed_names.append(new_name)
                 report["aux_closed"] += 1
 
+        # --- Recursive depth-2 factoring (opt-in via --max-factor-depth) ----
+        # For aux that elaborated but failed their whole_proof attempt at
+        # depth-1 AND have a "long" signature, re-factor them with the SAME
+        # prompt. If enough sub-aux close, attempt the sub-composition. If
+        # the sub-composition lands a body on the original aux, the aux is
+        # promoted to closed-via-sub so the parent's composition can use it.
+        if max_factor_depth >= 2:
+            unclosed_long: list[tuple[str, str, dict[str, Any]]] = [
+                (nm, sg, rc) for (nm, sg, rc) in renamed
+                if nm not in aux_closed_names
+                and not rc.get("rejected")
+                and lfv2._aux_signature_is_long(sg)
+            ]
+            for new_name, sig, rec in unclosed_long:
+                report["factor_recursive_attempts"] += 1
+                per_row["stages"].append({
+                    "stage": "factor_recursive_attempt",
+                    "aux": new_name,
+                    "signature_len": len(sig),
+                })
+                try:
+                    sub_records = lfv2.factor_long_theorem_v2(
+                        paper_id=paper_id,
+                        theorem_name=new_name,
+                        lean_statement=sig,
+                        paper_theory_hint=paper_theory_hint,
+                        exported_symbols=exported_symbols,
+                        client=client,
+                        model=model,
+                        validate_elaboration=_validate_aux,
+                    )
+                except Exception as exc:
+                    per_row["stages"].append({
+                        "stage": "factor_recursive_transport_error",
+                        "aux": new_name,
+                        "err": str(exc)[:160],
+                    })
+                    bucket_counts["transport_errors"] += 1
+                    continue
+                sub_elaborated = [r for r in sub_records if not r["rejected"]]
+                if len(sub_elaborated) < 2:
+                    per_row["stages"].append({
+                        "stage": "factor_recursive_below_min_aux",
+                        "aux": new_name,
+                        "sub_proposed": len(sub_records),
+                        "sub_elaborated": len(sub_elaborated),
+                    })
+                    continue
+                sub_renamed: list[tuple[str, str, dict[str, Any]]] = []
+                for sidx, srec in enumerate(sub_elaborated, start=1):
+                    sub_new_name = _qualify_aux_name(
+                        new_name, srec["aux_name"], sidx,
+                    )
+                    sub_new_sig = _rename_aux_in_signature(
+                        srec["aux_signature"], sub_new_name,
+                    )
+                    sub_renamed.append((sub_new_name, sub_new_sig, srec))
+                sub_sigs_only = [s for _, s, _ in sub_renamed]
+                inserted, _ = _insert_aux_lemmas_above_parent(
+                    lean_file, new_name, sub_sigs_only,
+                )
+                if not inserted:
+                    per_row["stages"].append({
+                        "stage": "factor_recursive_insert_failed",
+                        "aux": new_name,
+                    })
+                    continue
+                file_text = lean_file.read_text(encoding="utf-8")
+
+                sub_closed_names: list[str] = []
+                for sub_name, sub_sig, srec in sub_renamed:
+                    sub_err_tail = ""
+                    sub_closed = False
+                    for _round in range(1, max_rounds + 1):
+                        sub_sink: dict[str, Any] = {}
+                        try:
+                            sub_cand = gen.generate_proof_candidate(
+                                paper_id=paper_id,
+                                theorem_name=sub_name,
+                                lean_statement=sub_sig,
+                                paper_theory_hint=paper_theory_hint,
+                                paper_local_file=file_text,
+                                error_tail=sub_err_tail,
+                                client=client,
+                                model=model,
+                                rejection_sink=sub_sink,
+                            )
+                        except Exception as exc:
+                            bucket_counts["transport_errors"] += 1
+                            per_row["stages"].append({
+                                "stage": "factor_recursive_sub_transport_error",
+                                "sub_aux": sub_name,
+                                "err": str(exc)[:120],
+                            })
+                            break
+                        if sub_cand is None:
+                            clar = sub_sink.get("clarification") or ""
+                            if clar:
+                                sub_err_tail = clar
+                            bucket_counts["forbidden_token_rejects"] += 1
+                            continue
+                        sub_body = sub_cand["proof_body"]
+                        iso_ok, iso_err = _run_isolated_patch_check(
+                            lean_file=lean_file,
+                            theorem_name=sub_name,
+                            proof_body=sub_body,
+                            theorem_decl=sub_sig,
+                            timeout_s=per_lake_timeout,
+                            paper_id=paper_id,
+                        )
+                        if not iso_ok:
+                            sub_err_tail = iso_err or ""
+                            bucket_counts["lake_errors"] += 1
+                            continue
+                        if not wp_sweep._patch_proof_flex(lean_file, sub_name, sub_body):
+                            per_row["stages"].append({
+                                "stage": "factor_recursive_sub_patch_failed",
+                                "sub_aux": sub_name,
+                            })
+                            break
+                        ok2, t2 = _lake_validate_aware(
+                            lean_file, sub_name,
+                            baseline_errors=baseline_errors,
+                            timeout_s=per_lake_timeout,
+                        )
+                        if ok2:
+                            sub_closed = True
+                            file_text = lean_file.read_text(encoding="utf-8")
+                            break
+                        wp_sweep._revert_proof_flex(lean_file, sub_name)
+                        sub_err_tail = t2 or ""
+                        bucket_counts["lake_errors"] += 1
+                    if sub_closed:
+                        sub_closed_names.append(sub_name)
+                        report["factor_recursive_closures"] += 1
+                aux_target_shape = rec.get(
+                    "parent_target_shape_fine",
+                    rec.get("parent_target_shape", "other"),
+                )
+                _SUB_SINGLE_OK = {
+                    "implication", "universal_implication",
+                    "universal_with_bound", "disjunction",
+                    "exists_with_witness",
+                }
+                sub_min_needed = 1 if aux_target_shape in _SUB_SINGLE_OK else 2
+                if len(sub_closed_names) < sub_min_needed:
+                    _remove_aux_lemmas(lean_file, [n for n, _, _ in sub_renamed])
+                    file_text = lean_file.read_text(encoding="utf-8")
+                    per_row["stages"].append({
+                        "stage": "factor_recursive_insufficient_sub_closures",
+                        "aux": new_name,
+                        "sub_closed": len(sub_closed_names),
+                        "sub_needed": sub_min_needed,
+                    })
+                    continue
+                sub_closed_records = [
+                    {
+                        "aux_name": sn,
+                        "compose_hint": sr.get("compose_hint", ""),
+                        "aux_signature": sg2,
+                    }
+                    for (sn, sg2, sr) in sub_renamed if sn in sub_closed_names
+                ]
+                sub_parent_target = rec.get("parent_target", "") or ""
+                sub_composed_ok, sub_comp_body, sub_comp_err = attempt_composition(
+                    lean_file=lean_file,
+                    parent_short_name=new_name,
+                    aux_names=sub_closed_names,
+                    parent_target_shape=aux_target_shape,
+                    per_lake_timeout=per_lake_timeout,
+                    baseline_errors=baseline_errors,
+                    aux_records=sub_closed_records,
+                    parent_target=sub_parent_target,
+                    paper_id=paper_id,
+                )
+                if not sub_composed_ok:
+                    _remove_aux_lemmas(lean_file, [n for n, _, _ in sub_renamed])
+                    file_text = lean_file.read_text(encoding="utf-8")
+                    per_row["stages"].append({
+                        "stage": "factor_recursive_sub_composition_failed",
+                        "aux": new_name,
+                        "err_tail": (sub_comp_err or "")[-160:],
+                    })
+                    continue
+                # The aux's body has been patched by `attempt_composition` —
+                # the previously-failed-at-depth-1 aux is NOW closed via its
+                # sub-aux. Promote it.
+                aux_closed_names.append(new_name)
+                report["aux_closed"] += 1
+                report["factor_recursive_closures"] += 1
+                per_row["stages"].append({
+                    "stage": "factor_recursive_aux_closed_via_sub",
+                    "aux": new_name,
+                    "sub_aux": sub_closed_names,
+                    "sub_composition_body": sub_comp_body[:120],
+                })
+                file_text = lean_file.read_text(encoding="utf-8")
+
         per_row["aux_closed"] = aux_closed_names
         per_row["aux_proposed_count"] = len(renamed)
 
@@ -1495,6 +1698,28 @@ def _build_mistral_client() -> Any | None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--paper", action="append", default=[])
+    parser.add_argument(
+        "--theorem",
+        action="append",
+        default=[],
+        help=(
+            "Restrict candidates to theorems whose name (or short name) "
+            "matches the given value. May be repeated. Empty = no filter."
+        ),
+    )
+    parser.add_argument(
+        "--max-factor-depth",
+        type=int,
+        default=1,
+        help=(
+            "Recursive lemma-factor depth cap. 1 = depth-1 only (current "
+            "behaviour: factor parent, close each aux). 2 = if an aux at "
+            "depth-1 elaborates but does NOT close via whole-proof AND its "
+            "signature is `long` (>200 chars or multi-conjunction), "
+            "re-factor it into sub-aux and try to close those, then "
+            "compose them back into the original aux. Hard cap is 4."
+        ),
+    )
     parser.add_argument("--max-candidates", type=int, default=12,
                         help="Per-paper cap on candidates (0 = no limit).")
     parser.add_argument("--max-rounds", type=int, default=2,
@@ -1616,6 +1841,8 @@ def main() -> int:
             use_repl_prover=args.use_repl_prover,
             use_typeclass_patcher=args.use_typeclass_patcher,
             multi_shot_samples=args.multi_shot_samples,
+            max_factor_depth=max(1, min(int(args.max_factor_depth or 1), 4)),
+            theorem_filter=tuple(args.theorem or ()),
         )
         reports.append(r)
         # Persist partial summary after each paper so a mid-sweep crash
@@ -1644,6 +1871,12 @@ def main() -> int:
             "composed": sum(r.get("composed", 0) for r in reports),
             "audit_survived": sum(r.get("audit_survived", 0) for r in reports),
             "routed_to_axiom_backed": sum(r.get("routed_to_axiom_backed", 0) for r in reports),
+            "factor_recursive_attempts": sum(
+                r.get("factor_recursive_attempts", 0) for r in reports
+            ),
+            "factor_recursive_closures": sum(
+                r.get("factor_recursive_closures", 0) for r in reports
+            ),
         },
         "bucket_counts": dict(bucket_counts),
     }
