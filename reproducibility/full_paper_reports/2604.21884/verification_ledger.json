@@ -1831,7 +1831,7 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "rfl",
+      "captured_proof_text": "trivial",
       "file_body_preview": "exact VolterraOscillation_speed_separated_bound f N alpha hN",
       "reason": "file_body_does_not_elaborate",
       "lake_error_lines": [
@@ -1843,8 +1843,8 @@
     },
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
-      "proof_body": "rfl",
-      "reasoning": "deterministic micro-prover: rfl",
+      "proof_body": "trivial",
+      "reasoning": "deterministic micro-prover: trivial",
       "confidence": 1.0,
       "round_idx": 1
     },
@@ -1855,6 +1855,14 @@
         "sha": "dd5128980bba4bed803fd8254a209543e76ccf3f197239be4b90a582812b7891",
         "autoproved_name": "rem_status_emphasis__autoproved",
         "status": "written",
+        "protocol": "autoproved_promotion_v1"
+      },
+      {
+        "event": "autoproved_promotion",
+        "file": "/home/projectx/BDDM/Desol/PaperProofs/Paper_2604_21884.lean",
+        "sha": "dd5128980bba4bed803fd8254a209543e76ccf3f197239be4b90a582812b7891",
+        "autoproved_name": "rem_status_emphasis__autoproved",
+        "status": "idempotent",
         "protocol": "autoproved_promotion_v1"
       }
     ]
@@ -2315,14 +2323,14 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "rfl",
+      "captured_proof_text": "trivial",
       "file_body_preview": "constructor\n  · rfl\n  · rfl",
       "reason": "trivialized_statement"
     },
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
-      "proof_body": "rfl",
-      "reasoning": "deterministic micro-prover: rfl",
+      "proof_body": "trivial",
+      "reasoning": "deterministic micro-prover: trivial",
       "confidence": 1.0,
       "round_idx": 1
     },

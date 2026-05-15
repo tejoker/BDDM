@@ -34,19 +34,32 @@ from typing import Any, Callable, Optional
 # Ordered by yield expectation × speed. `trivial`/`rfl` are tried first
 # because they're cheapest and the most-frequent closures for shallow aux.
 # `aesop` and `exact?` go last because they're slowest.
+#
+# Catalog expanded after Round-XVI (commit f174a10): added paper-grade
+# tactics shown to close real research lemmas — polyrith for polynomial
+# arithmetic, linear_combination for equality goals with explicit
+# coefficients, gcongr for monotonicity chains, tauto for propositional
+# tautologies, constructor for inductive types, norm_cast for coercion
+# bridges.
 _DEFAULT_CATALOG: tuple[str, ...] = (
     "trivial",
     "rfl",
     "decide",
+    "tauto",
     "norm_num",
+    "norm_cast",
     "positivity",
     "linarith",
     "omega",
     "nlinarith",
+    "gcongr",
     "simp_all",
     "field_simp",
     "ring",
     "ring_nf",
+    "polyrith",
+    "linear_combination 0",
+    "constructor",
     "aesop",
     "exact?",
 )

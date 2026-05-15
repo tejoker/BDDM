@@ -1632,14 +1632,14 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "norm_num",
+      "captured_proof_text": "tauto",
       "file_body_preview": "refine ⟨∫ t in Set.Ioo (0 : ℝ) 1, (t : ℂ) ^ (z1 - 1) * ((1 - t) : ℂ) ^ (z2 - 1), rfl⟩",
       "reason": "trivialized_statement"
     },
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
-      "proof_body": "norm_num",
-      "reasoning": "deterministic micro-prover: norm_num",
+      "proof_body": "tauto",
+      "reasoning": "deterministic micro-prover: tauto",
       "confidence": 1.0,
       "round_idx": 1
     }

@@ -326,8 +326,8 @@
     "review_policy": "release_eligible",
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
-      "proof_body": "aesop",
-      "reasoning": "deterministic micro-prover: aesop",
+      "proof_body": "tauto",
+      "reasoning": "deterministic micro-prover: tauto",
       "confidence": 1.0,
       "round_idx": 1
     },
@@ -335,7 +335,7 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "aesop",
+      "captured_proof_text": "tauto",
       "file_body_preview": "refine ⟨high_freq_preserved ∧ low_freq_adapted ∧ potential_replacement, Iff.rfl⟩",
       "reason": "trivialized_statement"
     },
@@ -630,8 +630,8 @@
     "review_policy": "release_eligible",
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
-      "proof_body": "linarith",
-      "reasoning": "deterministic micro-prover: linarith",
+      "proof_body": "tauto",
+      "reasoning": "deterministic micro-prover: tauto",
       "confidence": 1.0,
       "round_idx": 1
     },
@@ -639,7 +639,7 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "linarith",
+      "captured_proof_text": "tauto",
       "file_body_preview": "refine ⟨high_freq_preserved ∧ low_freq_adapted ∧ potential_replacement, Iff.rfl⟩",
       "reason": "file_body_does_not_elaborate",
       "lake_error_lines": [
