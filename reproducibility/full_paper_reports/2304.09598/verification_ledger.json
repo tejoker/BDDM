@@ -85,7 +85,8 @@
       "translation_fidelity_ok",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -1781,7 +1782,8 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -4139,6 +4141,7 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
+      "step_verdict_verified",
       "assumptions_grounded",
       "provenance_linked",
       "dependency_trust_complete"
