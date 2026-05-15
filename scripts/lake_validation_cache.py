@@ -185,7 +185,7 @@ class WorkerCache:
                 continue
             env_id = resp.get("env", 0)
             # env=0 IS a valid post-anchor env per the REPL protocol — do not
-            # interpret it as "missing env" (see CLAUDE.md gotcha).
+            # interpret it as "missing env" (see AGENTS.md gotcha).
             return _WorkerEntry(
                 server=server,
                 env_id=int(env_id),

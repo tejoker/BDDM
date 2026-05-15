@@ -14,7 +14,7 @@ training, focused on three tasks the pipeline routinely needs:
      mark whether the tactic worked. Pulls from MCTS proof traces.
 
 Output is a chat-format jsonl (one JSON per line, `{"messages": [...]}`)
-compatible with OpenAI / Mistral / Anthropic SFT formats.
+compatible with standard OpenAI / Mistral SFT formats.
 
 Not a publication step — the user reviews and decides whether to upload.
 

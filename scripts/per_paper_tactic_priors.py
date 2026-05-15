@@ -7,7 +7,7 @@ module adds a *finer* per-(paper, tactic) layer: if paper ``2604.21884`` has
 historically closed 5/8 of its theorems with ``linarith [Real.exp_pos]``, we
 want ``linarith`` to be attempted earlier *for that paper specifically*.
 
-Design constraints (cf. CLAUDE.md):
+Design constraints (cf. AGENTS.md):
 
 * Standards-positive — priors only RE-ORDER the candidate list; they never
   change which tactics get tried. The full catalog still runs (up to timeout),

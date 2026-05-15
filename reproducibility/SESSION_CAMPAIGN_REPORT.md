@@ -182,6 +182,45 @@ reasoning**:
    honestly; the row should be marked `AXIOM_BACKED` modulo those
    axioms, not closed-from-scratch
 
+## Remaining non-LLM margins (not yet captured)
+
+Honest enumeration — these are concrete margins beyond Leanstral capability.
+Listed roughly by leverage × tractability:
+
+1. **Compositional templates (highest expected yield)** — Round-XII produced
+   26 factored / 0 composed. The aux lemmas closed individually but parent
+   composition failed every time. A syntactic composer that tries
+   `⟨h1, h2, h3⟩`, `And.intro`, `Or.inl/inr`, `Exists.intro h1 h2`,
+   `(h1.symm.trans h2)`, etc. given the aux *types* (no LLM call) would
+   likely capture a meaningful fraction of the 26.
+
+2. **Term-mode extraction** — for closures using `by exact term`, extract
+   the bare term and try as `:= term`. Validation is ~10× faster, and it
+   exposes more rows to the deterministic gate before MCTS.
+
+3. **Aesop-ruleset compounding from autoproved closures** — currently the
+   `__autoproved` companions feed back as B3 hints. Promoting them with
+   `@[aesop safe]` would let aesop close downstream rows without
+   re-deriving them.
+
+4. **Statement-fingerprint dedup across papers** — many statements are
+   structurally similar. Index canonicalized statement-shape across the
+   corpus; reuse a closure verbatim when the shape matches.
+
+5. **Per-axiom unfolding hints** — for paper-local axioms with
+   definitional content, auto-emit `simp [axiom_name]` lemmas that the
+   proof engine can pick up without LLM calls.
+
+6. **Lemma-factor with Mathlib-aware aux types** — currently emits abstract
+   aux types; could probe Mathlib for matching shape and call by-name.
+
+7. **Translator-side syntax repair** — some elaboration failures have
+   pure-syntax fixes (paren balance, implicit/explicit binder confusion)
+   that don't need an LLM round-trip.
+
+8. **Higher fuzz iteration count** — current audit fuzz is 18,000 × 9 seeds
+   = 162,000 trials. Push to 10⁶ for stronger asymptotic guarantee.
+
 ## Recommended next directions (not done this session)
 
 1. **Signature-patching pass** — before whole-proof generation, run a

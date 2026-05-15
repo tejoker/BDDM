@@ -189,8 +189,8 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "summary": "Round-VII combined sweep: tries leanstral_whole_proof first-pass on the parent, falls back to lemma_factor_v2 decomposition + per-aux whole-proof + composition (and/exists/iff shapes). Baseline-aware lake validation; deflation runs as a post-pass.",
     },
     "lake_validation_cache.py": {
-        "tier": "official",
-        "category": "infrastructure",
+        "tier": "official_support",
+        "category": "lean_backend",
         "summary": "Fast equivalent of `prove_arxiv_batch._run_isolated_file_check`. Reuses a persistent `LeanREPLServer` worker per `(project_root, paper_id)` so the Mathlib import cost is paid once per process (~5s) instead of once per candidate (~5-30s). Exposes `validated_isolated_check`, `differential_check` (runs fast + slow validators and asserts agreement, used by sweep wrappers for standards-positivity), and `shutdown_all_workers`. Wired into `sweep_lemma_factor_v2.py` and `sweep_canonical_proof_search.py` behind `--use-fast-validation` (default ON; live test confirms >100× speedup on warm calls).",
     },
     "lemma_factor_v2.py": {
@@ -957,6 +957,46 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "tier": "internal_support",
         "category": "support",
         "summary": "Package marker for importable script modules.",
+    },
+    "audit_gate_consistency.py": {
+        "tier": "ci_gate",
+        "category": "reliability",
+        "summary": "Audits ledger rows for gate consistency: cleans spurious gate_failures (e.g. claim_review_pending rows incorrectly flagged) without weakening any gate. Standards-positive: a gate that should fire still fires.",
+    },
+    "leanstral_repl_proof_generator.py": {
+        "tier": "research_experiment",
+        "category": "proof_search",
+        "summary": "REPL-driven step-by-step proof construction via Leanstral. Forbidden-token filter before each REPL call; _extract_lean_error scoped to target theorem's line range to avoid pre-existing-error contamination. Default OFF until full smoke produces honest closures.",
+    },
+    "per_paper_tactic_priors.py": {
+        "tier": "official_support",
+        "category": "proof_search",
+        "summary": "Per-paper deterministic micro-prover tactic priors. Re-rank the catalog by paper-specific success rate; priors only re-order candidates, never change which tactics are tried — adopting priors cannot regress closure rate. Append-only JSONL store; cold-start safe.",
+    },
+    "promote_closed_aux_as_rows.py": {
+        "tier": "official_support",
+        "category": "reporting",
+        "summary": "Credits individually-closed lemma-factor aux as derived `<parent>::aux::<aux_local_name>` IP/AB ledger rows. Captures Round-XII's aux-closes-but-parent-fails-to-compose case (26 factored, 0 composed). The audit fallback in _theorem_body_in_file resolves aux_local_name= so derived rows audit-survive.",
+    },
+    "signature_typeclass_patcher.py": {
+        "tier": "research_experiment",
+        "category": "repair",
+        "summary": "Pre-pass that proposes typeclass-instance additions to a paper signature (e.g. `[MeasurableSpace alpha]`) by parsing synthInstanceFailed errors. Addresses the B2 failure-mode that proof-body-only retry cannot fix.",
+    },
+    "smoke_repl_prover.py": {
+        "tier": "dev_tool",
+        "category": "proof_search",
+        "summary": "Smoke driver for leanstral_repl_proof_generator. Honest measurement scaffold; runs the REPL prover on a handful of canonical UR rows and logs per-row outcomes for diagnostics.",
+    },
+    "sweep_reliability_check.py": {
+        "tier": "ci_gate",
+        "category": "reliability",
+        "summary": "Two-seed cross-validation for sweep determinism: runs a sweep at seed=A and seed=B, computes reliability_rate = |intersection|/|union| of closures. Surfaces non-determinism that the integrity audit alone wouldn't catch.",
+    },
+    "sweep_repl_prover_first_pass.py": {
+        "tier": "research_experiment",
+        "category": "proof_search",
+        "summary": "First-pass sweep wrapper around leanstral_repl_proof_generator. Pairs with sweep_lemma_factor_v2 in Round-XII orchestration. Default OFF until smoke produces honest closures.",
     },
 }
 
