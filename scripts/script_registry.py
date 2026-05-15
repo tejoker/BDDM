@@ -428,6 +428,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Re-validates every FULLY_PROVEN row by checking the actual `output/<paper>.lean` body against the ledger's stored `proof_text`. Demotes rows whose file body is `sorry` despite the ledger claiming `lean_proof_closed=True` (the circular-bypass defect surfaced in 2026-05). Standards-positive: a row whose .lean is sorry is not proven. `--fail-on-demote` flips the exit code for CI use without mutating any ledger.",
     },
+    "autoproved_promotion.py": {
+        "tier": "official_support",
+        "category": "proof_search",
+        "summary": "Promotes pipeline-generated proofs (whole-proof generator + first-pass tactic chains) that pass the audit into `Desol/PaperProofs/Paper_<id>.lean` as `<name>__autoproved` companions. Two benefits: (1) the autoproved companion becomes an in-context example for future leanstral_whole_proof_generator / lemma_factor_v2 calls (compounding — see commit 4d7c0e6), and (2) the proof survives future repository changes since Desol/PaperProofs/ is committed evidence. Standards-positive: re-checks trivialization + forbidden-token gates before writing; atomic-rename file write; optional caller-supplied `validate_elaboration` callback rolls back the write on lake failure. Wired into sweep_lemma_factor_v2.py behind `--auto-promote-to-curated` (default ON).",
+    },
     "reproduce_canonical_evidence.py": {
         "tier": "ci_gate",
         "category": "review",

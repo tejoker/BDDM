@@ -1560,12 +1560,28 @@ def main() -> int:
             "to disable."
         ),
     )
+    parser.add_argument(
+        "--auto-promote-to-curated",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "After a first-pass proof closes and the integrity audit "
+            "survives, mirror the proof into "
+            "Desol/PaperProofs/Paper_<id>.lean as a `<name>__autoproved` "
+            "companion. Purely additive: failures don't block the close, "
+            "and curated/non-trivial pre-conditions are re-checked inside "
+            "autoproved_promotion.promote_to_autoproved."
+        ),
+    )
     args = parser.parse_args()
 
     # Wire the validator selector before any sweep work begins.
-    global _USE_FAST_VALIDATION, _DIFFERENTIAL_REMAINING
+    global _USE_FAST_VALIDATION, _DIFFERENTIAL_REMAINING, _AUTO_PROMOTE_TO_CURATED
     _USE_FAST_VALIDATION = bool(args.use_fast_validation) and _lvc is not None
     _DIFFERENTIAL_REMAINING = max(0, int(args.differential_check_first)) if _USE_FAST_VALIDATION else 0
+    _AUTO_PROMOTE_TO_CURATED = bool(args.auto_promote_to_curated) and autoprom is not None
+    if args.auto_promote_to_curated and autoprom is None:
+        print("[auto-promote] requested but autoproved_promotion unavailable — skipping", flush=True)
     if _USE_FAST_VALIDATION:
         print(
             f"[fast-validation] enabled (differential_check_first={_DIFFERENTIAL_REMAINING})",
