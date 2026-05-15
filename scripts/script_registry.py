@@ -413,6 +413,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Zero-Mistral resolver for `unknown identifier 'X'` elaboration failures. Builds a Mathlib name index (cached under data/mathlib_name_index.json) by walking .lake/packages/mathlib/**/*.lean, then scores candidates by exact match / namespace normalization / token Jaccard / edit distance. Also checks the paper-theory module for missing-namespace-prefix variants. Top candidates clearing `--register-threshold` append to output/corpus/alignments.json (same schema as generate_trivial_alignments.py); audit_axioms.py + apply_reviews_to_ledger.py pick them up unchanged. Standards-positive: every candidate is verifiable because it comes from a real Mathlib source line.",
     },
+    "paper_theory_symbol_stubber.py": {
+        "tier": "official_support",
+        "category": "proof_search",
+        "summary": "Auto-emits paper-theory stubs for `unknown identifier 'X'` / `unknown constant 'X'` errors when X is a paper-local symbol NOT declared in Desol/PaperTheory/Paper_<id>.lean AND NOT resolvable against the Mathlib name index (Phase D handles those). Infers kind+signature from usage (axiom with universe-polymorphic binders for applied symbols, `def : Prop := True` for hypothesis-position symbols, etc.) and wraps dotted names like `Multisegment.ofSegments` in the right `namespace ... end` block. Wired into sweep_lemma_factor_v2 behind `--auto-stub-missing-symbols` (default OFF until calibrated); stubs persist only when a proof body closes AND the integrity audit survives, otherwise the paper-theory file is reverted from the in-memory snapshot. Audit's trivialization detector is the final arbiter on any closure benefitting from a stub.",
+    },
     "ledger_from_closed_lean.py": {
         "tier": "dev_tool",
         "category": "review",
