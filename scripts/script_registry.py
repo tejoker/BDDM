@@ -426,7 +426,12 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
     "audit_fully_proven_integrity.py": {
         "tier": "ci_gate",
         "category": "review",
-        "summary": "Re-validates every FULLY_PROVEN row by checking the actual `output/<paper>.lean` body against the ledger's stored `proof_text`. Demotes rows whose file body is `sorry` despite the ledger claiming `lean_proof_closed=True` (the circular-bypass defect surfaced in 2026-05). Standards-positive: a row whose .lean is sorry is not proven.",
+        "summary": "Re-validates every FULLY_PROVEN row by checking the actual `output/<paper>.lean` body against the ledger's stored `proof_text`. Demotes rows whose file body is `sorry` despite the ledger claiming `lean_proof_closed=True` (the circular-bypass defect surfaced in 2026-05). Standards-positive: a row whose .lean is sorry is not proven. `--fail-on-demote` flips the exit code for CI use without mutating any ledger.",
+    },
+    "reproduce_canonical_evidence.py": {
+        "tier": "ci_gate",
+        "category": "review",
+        "summary": "Public-facing reproducer of the canonical FP / AB / IP table. For each canonical paper, walks `reproducibility/full_paper_reports/<id>/verification_ledger.json` and verifies every FP/AB/IP row is structurally backed by `output/<id>.lean` (real tactic-mode body, term-mode declaration, or curated `__audited_core` replacement). Sorry-bodied or trivialized rows fail verification. Optional `--lake-check` runs `lake env lean` per file and refuses to credit any row from a paper whose lake build emits a `uses 'sorry'` warning. Standards-positive: exit 0 iff every (paper, tier) cell has `verified == claimed`. Reuses the same primitives as audit_fully_proven_integrity so the two cannot drift.",
     },
     "audit_fuzz_mutations.py": {
         "tier": "ci_gate",

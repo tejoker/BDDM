@@ -124,6 +124,16 @@ def main() -> int:
     parser.add_argument("--repro-dir", type=Path, default=DEFAULT_LEDGER_DIR)
     parser.add_argument("--ephemeral-dir", type=Path, default=DEFAULT_EPHEMERAL_DIR)
     parser.add_argument("--write", action="store_true", help="Apply rebuilds; default is dry-run")
+    parser.add_argument(
+        "--fail-on-rebuild",
+        action="store_true",
+        help=(
+            "Exit non-zero when any row would need its `gate_failures` list "
+            "rebuilt. Intended for CI gates: ledger drift between "
+            "validation_gates and gate_failures is a data-integrity defect "
+            "that should block merges."
+        ),
+    )
     args = parser.parse_args()
 
     summary: dict[str, Any] = {
@@ -164,6 +174,8 @@ def main() -> int:
             summary["totals"]["missing_entries"] += r.missing_entries
 
     print(json.dumps(summary, indent=2, ensure_ascii=False))
+    if args.fail_on_rebuild and summary["totals"]["rebuilt"] > 0:
+        return 1
     return 0
 
 

@@ -449,6 +449,16 @@ def main() -> int:
             "for backward compat; turning ON gives a fuller integrity sweep."
         ),
     )
+    parser.add_argument(
+        "--fail-on-demote",
+        action="store_true",
+        help=(
+            "Exit non-zero when any row would be demoted (still dry-run unless "
+            "`--write` is also passed). Intended for CI gates: a non-zero exit "
+            "signals that the on-disk evidence no longer backs the ledger's "
+            "FP/AB/IP claims."
+        ),
+    )
     args = parser.parse_args()
 
     statuses: tuple[str, ...] = (
@@ -490,6 +500,8 @@ def main() -> int:
                 break
     summary["totals"] = totals
     print(json.dumps(summary, indent=2, ensure_ascii=False))
+    if args.fail_on_demote and totals["demoted"] > 0:
+        return 1
     return 0
 
 
