@@ -125,3 +125,38 @@ jobs:
           name: audit-paper-theory-olean-health
           path: output/audits/paper_theory_olean_health.json
           if-no-files-found: ignore
+
+  audit-lake-validate-bodies:
+    name: Audit lake-validate-bodies (heavy, with Mathlib)
+    runs-on: ubuntu-latest
+    # Triggered manually or on a schedule — not on every PR because
+    # downloading Mathlib + running lake on every canonical paper takes
+    # ~10-20 min. The lightweight body-is-sorry + trivialization checks
+    # in `audit-fully-proven-integrity` above cover most regressions on
+    # every push; this one catches the file_body_does_not_elaborate
+    # class that requires lake.
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install python deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+      - name: Audit with lake-validate-bodies (non-zero on any demotion)
+        run: |
+          python scripts/audit_fully_proven_integrity.py \
+            --include-ip-ab \
+            --lake-validate-bodies \
+            --fail-on-demote \
+            > output/audits/audit_lake_validate_bodies.json
+      - name: Upload audit summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-lake-validate-bodies
+          path: output/audits/audit_lake_validate_bodies.json
+          if-no-files-found: ignore
