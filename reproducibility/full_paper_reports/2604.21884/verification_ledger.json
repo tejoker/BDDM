@@ -2130,10 +2130,10 @@
     "theorem_name": "remark_9",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
     "lean_statement": "theorem remark_9 :\n  I_i ξ1 = I_i ξ1 ∧ I_i ξ2 = I_i ξ2 := by\n  sorry\n",
-    "status": "UNRESOLVED",
-    "step_verdict": "INCOMPLETE",
-    "failure_origin": "PROOF_SEARCH_ERROR",
-    "failure_kind": "proof_search_unattempted",
+    "status": "AXIOM_BACKED",
+    "step_verdict": "VERIFIED",
+    "failure_origin": "NONE",
+    "failure_kind": "",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
     "promotion_gate_passed": true,
@@ -2168,17 +2168,17 @@
         "SimonTaflin"
       ]
     },
-    "proof_text": "",
+    "proof_text": "constructor\n· rfl\n· rfl",
     "first_failing_step": -1,
     "error_message": "",
     "proof_mode": "state-mcts",
-    "proof_method": "unattempted",
+    "proof_method": "leanstral_whole_proof_v1",
     "rounds_used": 1,
     "time_s": 10.19,
     "timestamp": "2026-05-09T20:04:29Z",
     "validation_gates": {
-      "lean_proof_closed": false,
-      "step_verdict_verified": false,
+      "lean_proof_closed": true,
+      "step_verdict_verified": true,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -2196,8 +2196,7 @@
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
       "no_paper_axiom_debt",
-      "step_verdict_verified",
-      "lean_proof_closed"
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -2304,7 +2303,7 @@
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
       "proof_body": "constructor\n· rfl\n· rfl",
-      "reasoning": "The goal is a conjunction of two equalities, both of which are trivial (X = X). The `constructor` tactic splits the conjunction, and `rfl` proves each reflexivity goal.",
+      "reasoning": "The goal is a conjunction of two equalities, both of which are trivial (x = x). The `constructor` tactic splits the conjunction, and `rfl` proves each trivial equality.",
       "confidence": 1.0,
       "round_idx": 1
     },
@@ -9832,5 +9831,77 @@
       "paper_definition_stub:theta"
     ],
     "axiom_debt_hash": "a974ef98d292f109"
+  },
+  {
+    "theorem_name": "thm_operator_main::aux::thm_operator_main_thm_operator_main_exponent_neg_1__factored_aux",
+    "lean_statement": "theorem thm_operator_main_thm_operator_main_exponent_neg_1__factored_aux (alpha eps s2 theta T : ℝ) (halpha : (3:ℝ)/4 < alpha) (hT : 0 < T ∧ T ≤ 1) (heps : 0 < eps) (htheta : 0 < theta ∧ theta < 1) (hs2 : 0 < s2) (hs2_bound : s2 < 4 * alpha - 3 - (3/2) * theta - eps) : 3 - 4 * alpha + theta * (s2 + eps) < 0",
+    "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
+    "proof_text": "nlinarith",
+    "proof_method": "lemma_factor_aux_promotion_v1",
+    "proof_mode": "derived-from-factor",
+    "proved": true,
+    "step_verdict": "VERIFIED",
+    "failure_origin": "NONE",
+    "failure_kind": "",
+    "first_failing_step": -1,
+    "promotion_gate_passed": true,
+    "validation_gates": {
+      "lean_proof_closed": true,
+      "step_verdict_verified": true,
+      "assumptions_grounded": true,
+      "provenance_linked": true,
+      "translation_fidelity_ok": true,
+      "status_alignment_ok": true,
+      "dependency_trust_complete": true,
+      "reproducible_env": false,
+      "claim_equivalent": false,
+      "independent_semantic_equivalence_evidence": false,
+      "semantic_adversarial_checks_passed": true,
+      "no_paper_axiom_debt": false,
+      "statement_alignment_exact": false,
+      "statement_alignment_not_unrelated": true
+    },
+    "gate_failures": [
+      "reproducible_env",
+      "claim_equivalent",
+      "independent_semantic_equivalence_evidence",
+      "no_paper_axiom_debt"
+    ],
+    "status": "AXIOM_BACKED",
+    "ledger_role": "derived_aux_from_factor",
+    "parent_theorem_name": "thm_operator_main",
+    "aux_local_name": "thm_operator_main_thm_operator_main_exponent_neg_1__factored_aux",
+    "claim_equivalence_notes": [
+      "promoted_closed_aux:lemma_factor_v2"
+    ],
+    "claim_equivalence_verdict": "unclear",
+    "lemma_factor_metadata": {
+      "protocol": "lemma_factor_v2",
+      "compose_hint": "proves the exponent in the tendsto statement is negative, which is needed for the bound on C",
+      "aux_signature": "theorem thm_operator_main_thm_operator_main_exponent_neg_1__factored_aux (alpha eps s2 theta T : ℝ) (halpha : (3:ℝ)/4 < alpha) (hT : 0 < T ∧ T ≤ 1) (heps : 0 < eps) (htheta : 0 < theta ∧ theta < 1) (hs2 : 0 < s2) (hs2_bound : s2 < 4 * alpha - 3 - (3/2) * theta - eps) : 3 - 4 * alpha + theta * (s2 + eps) < 0 := by sorry"
+    },
+    "audit_trail": [
+      {
+        "event": "derived_aux_from_factor",
+        "parent": "thm_operator_main",
+        "paper_id": "2604.21884",
+        "protocol": "lemma_factor_aux_promotion_v1"
+      }
+    ],
+    "rounds_used": 1,
+    "time_s": 0.0,
+    "paper_statement_id": "pstmt_442fb5bfddfe80cb9df17803",
+    "provenance": {
+      "paper_id": "2604.21884",
+      "section": "",
+      "label": "thm_operator_main",
+      "cited_refs": []
+    },
+    "trust_class": "TRUST_PLACEHOLDER",
+    "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,provenance_linked,reproducible_env,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+    "translation_fidelity_score": 0.8,
+    "status_alignment_score": 0.8,
+    "axiom_debt": [],
+    "axiom_debt_hash": "539dfbc09e708525"
   }
 ]

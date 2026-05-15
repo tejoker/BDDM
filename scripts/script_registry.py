@@ -963,6 +963,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "reliability",
         "summary": "Audits ledger rows for gate consistency: cleans spurious gate_failures (e.g. claim_review_pending rows incorrectly flagged) without weakening any gate. Standards-positive: a gate that should fire still fires.",
     },
+    "aux_deterministic_prover.py": {
+        "tier": "official_support",
+        "category": "proof_search",
+        "summary": "Non-LLM deterministic micro-prover catalog for lemma-factor aux. Tries trivial/rfl/decide/norm_num/positivity/linarith/omega/nlinarith/simp_all/aesop/exact? against each aux via the SAME isolated patch-check the Leanstral path uses. First-success-wins. Round-XII showed aux closure rate at 4/192 (~2%) was the real bottleneck (NOT composition templates); the pre-pass attacks the cases where aux are shape-shallow but the LLM path still consumed retry budget. Standards-positive: accept criteria identical to LLM path.",
+    },
     "leanstral_repl_proof_generator.py": {
         "tier": "research_experiment",
         "category": "proof_search",

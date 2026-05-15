@@ -85,11 +85,15 @@ class _ScriptedValidator:
 
 def test_first_attempt_succeeds_one_llm_call() -> None:
     """When elaboration succeeds on round 1, no retry is needed."""
-    client = ScriptedClient([_ok_response("theorem foo (n : Nat) : n = n := by sorry")])
+    # Use a non-trivial claim — the post-Round-X trivialization gate rejects
+    # reflexive shapes like `n = n`, so fixtures must carry real content.
+    client = ScriptedClient(
+        [_ok_response("theorem foo (n : Nat) (h : 0 < n) : 0 < 2 * n := by sorry")]
+    )
     validator = _ScriptedValidator([(True, "")])
 
     result = lsr.generate_llm_repair_candidate(
-        source_latex="Trivial reflexivity over naturals.",
+        source_latex="For positive naturals, 2n is positive.",
         paper_id="p",
         theorem_name="foo",
         paper_theory_hint="",
@@ -111,8 +115,8 @@ def test_first_attempt_succeeds_one_llm_call() -> None:
 
 def test_first_fails_second_succeeds_two_llm_calls() -> None:
     """Round 1 fails elaboration, round 2 succeeds. Final candidate is round 2's."""
-    bad = "theorem foo (alpha : ConjugacyClass) : alpha = alpha := by sorry"
-    good = "theorem foo (n : Nat) : n = n := by sorry"
+    bad = "theorem foo (alpha : ConjugacyClass) (h : 0 < alpha) : 0 < 2 * alpha := by sorry"
+    good = "theorem foo (n : Nat) (h : 0 < n) : 0 < 2 * n := by sorry"
     client = ScriptedClient([_ok_response(bad), _ok_response(good)])
     error_tail = (
         "error(lean.synthInstanceFailed): failed to synthesize instance"
@@ -243,7 +247,7 @@ def test_elaboration_called_between_attempts_not_after_final_when_succeed_early(
     loop terminates as soon as elaboration passes — no extra validator call."""
     client = ScriptedClient(
         [
-            _ok_response("theorem foo (n : Nat) : n = n := by sorry"),
+            _ok_response("theorem foo (n : Nat) (h : 0 < n) : 0 < 2 * n := by sorry"),
             # Second response should never be consumed.
             _ok_response("theorem foo (m : Nat) : m = m := by sorry"),
         ]
@@ -270,7 +274,7 @@ def test_elaboration_called_between_attempts_not_after_final_when_succeed_early(
 def test_no_validator_means_single_attempt_legacy_semantics() -> None:
     """When `validate_elaboration=None`, the loop behaves like the pre-retry path:
     one LLM call, no retry attempted even if `max_repair_rounds=3`."""
-    client = ScriptedClient([_ok_response("theorem foo (n : Nat) : n = n := by sorry")])
+    client = ScriptedClient([_ok_response("theorem foo (n : Nat) (h : 0 < n) : 0 < 2 * n := by sorry")])
 
     result = lsr.generate_llm_repair_candidate(
         source_latex="Reflexivity.",
@@ -322,7 +326,7 @@ def test_trivialization_failure_does_not_trigger_retry() -> None:
         [
             _ok_response("theorem foo : ∃ x : ℝ, x = x := by sorry"),
             # This second response should NOT be consumed.
-            _ok_response("theorem foo (n : Nat) : n = n := by sorry"),
+            _ok_response("theorem foo (n : Nat) (h : 0 < n) : 0 < 2 * n := by sorry"),
         ]
     )
     validator = _ScriptedValidator([(True, "")])

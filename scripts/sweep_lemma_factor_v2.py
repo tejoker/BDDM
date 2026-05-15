@@ -59,6 +59,11 @@ import sweep_canonical_patch_and_validate as patcher  # noqa: E402
 import sweep_leanstral_whole_proof as wp_sweep  # noqa: E402
 
 try:
+    import aux_deterministic_prover as aux_det  # type: ignore[import-not-found]
+except Exception:
+    aux_det = None  # type: ignore[assignment]
+
+try:
     from mistralai import Mistral  # type: ignore[import-not-found]
 except Exception:
     try:
@@ -134,6 +139,13 @@ _AUTO_PROMOTE_TO_CURATED: bool = True
 # the same audit gates as a primary theorem lands as a first-class derived
 # row whose audit_trail records the parent.
 _PROMOTE_AUX_AS_ROWS: bool = False
+
+# When True (default), each aux gets a non-LLM deterministic micro-prover
+# pre-pass (`aux_deterministic_prover.try_deterministic_close_aux`) before
+# any Leanstral call. Flipped by ``--no-aux-deterministic-prepass`` for
+# ablation studies. Round-XII data: aux closure rate was 4/192 (~2%); many
+# of those failed aux are shape-shallow (linarith/positivity/aesop-closable).
+_USE_AUX_DETERMINISTIC_PREPASS: bool = True
 
 
 def _select_validator(
@@ -1529,6 +1541,61 @@ def _sweep_paper(
         for new_name, sig, rec in renamed:
             err_tail = ""
             closed = False
+
+            # --- Non-LLM pre-pass: deterministic micro-prover catalog ---
+            # Round-XII found aux closure at 4/192 (~2%) was the bottleneck;
+            # the LLM path consumed retry budget on aux that close trivially
+            # with `linarith` / `positivity` / `aesop` etc. The pre-pass
+            # exits early on success without spending a Leanstral call.
+            if aux_det is not None and _USE_AUX_DETERMINISTIC_PREPASS:
+                def _aux_det_validator(
+                    f: Path, theorem_name: str, proof_body: str,
+                ) -> tuple[bool, str]:
+                    return _run_isolated_patch_check(
+                        lean_file=f,
+                        theorem_name=theorem_name,
+                        proof_body=proof_body,
+                        theorem_decl=sig,
+                        timeout_s=per_lake_timeout,
+                        paper_id=paper_id,
+                    )
+
+                det_ok, det_body, det_err = aux_det.try_deterministic_close_aux(
+                    lean_file=lean_file,
+                    aux_name=new_name,
+                    aux_signature=sig,
+                    validator=_aux_det_validator,
+                )
+                if det_ok:
+                    # Mirror the LLM-success path: patch on-disk, baseline
+                    # re-check, accept on success.
+                    if wp_sweep._patch_proof_flex(lean_file, new_name, det_body):
+                        ok2, _t2 = _lake_validate_aware(
+                            lean_file, new_name,
+                            baseline_errors=baseline_errors,
+                            timeout_s=per_lake_timeout,
+                        )
+                        if ok2:
+                            closed = True
+                            file_text = lean_file.read_text(encoding="utf-8")
+                            aux_closed_bodies[new_name] = det_body
+                            bucket_counts["aux_deterministic_closures"] = (
+                                bucket_counts.get("aux_deterministic_closures", 0) + 1
+                            )
+                            per_row["stages"].append({
+                                "stage": "aux_deterministic_close",
+                                "aux": new_name,
+                                "tactic": det_body,
+                            })
+                            aux_closed_names.append(new_name)
+                            report["aux_closed"] += 1
+                            continue
+                        else:
+                            wp_sweep._revert_proof_flex(lean_file, new_name)
+                # Either no deterministic body worked or the baseline check
+                # failed — fall through to the Leanstral retry loop.
+                err_tail = det_err or err_tail
+
             for round_idx in range(1, max_rounds + 1):
                 aux_rejection_sink: dict[str, Any] = {}
                 try:
@@ -2222,14 +2289,37 @@ def main() -> int:
             "lake-in-context elaboration). Default OFF until calibrated."
         ),
     )
+    parser.add_argument(
+        "--aux-deterministic-prepass",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Non-LLM deterministic micro-prover pre-pass for each aux "
+            "(trivial/rfl/decide/norm_num/positivity/linarith/omega/"
+            "nlinarith/simp_all/aesop/exact?). Validates each candidate "
+            "via the SAME isolated patch-check the Leanstral path uses, "
+            "so accept criteria are identical. First-success-wins; "
+            "Leanstral retry runs only if no deterministic body closes. "
+            "Default ON — disable with --no-aux-deterministic-prepass "
+            "for ablation studies."
+        ),
+    )
     args = parser.parse_args()
 
     # Wire the validator selector before any sweep work begins.
-    global _USE_FAST_VALIDATION, _DIFFERENTIAL_REMAINING, _AUTO_PROMOTE_TO_CURATED, _PROMOTE_AUX_AS_ROWS
+    global _USE_FAST_VALIDATION, _DIFFERENTIAL_REMAINING, _AUTO_PROMOTE_TO_CURATED, _PROMOTE_AUX_AS_ROWS, _USE_AUX_DETERMINISTIC_PREPASS
     _USE_FAST_VALIDATION = bool(args.use_fast_validation) and _lvc is not None
     _DIFFERENTIAL_REMAINING = max(0, int(args.differential_check_first)) if _USE_FAST_VALIDATION else 0
     _AUTO_PROMOTE_TO_CURATED = bool(args.auto_promote_to_curated) and autoprom is not None
     _PROMOTE_AUX_AS_ROWS = bool(args.promote_aux_as_rows) and paux is not None
+    _USE_AUX_DETERMINISTIC_PREPASS = bool(args.aux_deterministic_prepass) and aux_det is not None
+    if args.aux_deterministic_prepass and aux_det is None:
+        print(
+            "[aux-deterministic-prepass] requested but module unavailable — skipping",
+            flush=True,
+        )
+    if _USE_AUX_DETERMINISTIC_PREPASS:
+        print("[aux-deterministic-prepass] enabled", flush=True)
     if args.promote_aux_as_rows and paux is None:
         print(
             "[promote-aux-as-rows] requested but promote_closed_aux_as_rows unavailable — skipping",
