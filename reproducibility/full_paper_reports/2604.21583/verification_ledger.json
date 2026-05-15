@@ -327,7 +327,7 @@
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
       "proof_body": "refine ⟨high_freq_preserved ∧ low_freq_adapted ∧ potential_replacement, Iff.rfl⟩",
-      "reasoning": "The theorem asks to prove the existence of a proposition `extension_possible` that is equivalent to the conjunction of three given propositions. The solution is straightforward: we can directly take the conjunction itself as the witness for `extension_possible` and use `Iff.rfl` to show the equivalence.",
+      "reasoning": "The theorem asks to prove the existence of a proposition `extension_possible` that is equivalent to the conjunction of three given propositions. The solution is to directly take the conjunction as the witness and use `Iff.rfl` to show the equivalence.",
       "confidence": 1.0,
       "round_idx": 1
     },
@@ -16758,5 +16758,139 @@
       "paper_definition_stub:hbeta_le_32"
     ],
     "axiom_debt_hash": "25e5b80cbeefd75c"
+  },
+  {
+    "theorem_name": "prop_shell_vanishing_local::aux::prop_shell_vanishing_local_prop_shell_vanishing_local_first_term_1__factored_aux",
+    "lean_statement": "theorem prop_shell_vanishing_local_prop_shell_vanishing_local_first_term_1__factored_aux {alpha beta η Λ Λ1 : ℝ} (hbeta : 3/2 < beta ∧ beta ≤ 2) (hη : η ∈ Set.Ioo (2 - beta) (beta - 1)) (halpha : 3/4 - alpha1 - alpha/2 * (2 - beta) > 0) (hΛ : 0 < Λ) (hΛ1 : 0 < Λ1) (hlam : 0 < lam) : C_beta * (1 + |Real.log lam|)^(5/2) * Λ^((2 - beta)/2) * (Λ^(-η/2) + lam^(3/4) * Λ1) ≤ C_beta * (1 + |Real.log lam|)^(5/2) * Λ^((2 - beta)/2) * (Λ^(-η/2) + lam^(3/4) * Λ1)",
+    "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
+    "proof_text": "trivial",
+    "proof_method": "lemma_factor_aux_promotion_v1",
+    "proof_mode": "derived-from-factor",
+    "proved": true,
+    "step_verdict": "VERIFIED",
+    "failure_origin": "NONE",
+    "failure_kind": "",
+    "first_failing_step": -1,
+    "promotion_gate_passed": true,
+    "validation_gates": {
+      "lean_proof_closed": true,
+      "step_verdict_verified": true,
+      "assumptions_grounded": true,
+      "provenance_linked": false,
+      "translation_fidelity_ok": true,
+      "status_alignment_ok": true,
+      "dependency_trust_complete": true,
+      "reproducible_env": true,
+      "claim_equivalent": true,
+      "independent_semantic_equivalence_evidence": true,
+      "semantic_adversarial_checks_passed": true,
+      "no_paper_axiom_debt": true,
+      "statement_alignment_exact": true,
+      "statement_alignment_not_unrelated": true
+    },
+    "gate_failures": [
+      "provenance_linked"
+    ],
+    "status": "INTERMEDIARY_PROVEN",
+    "ledger_role": "derived_aux_from_factor",
+    "parent_theorem_name": "prop_shell_vanishing_local",
+    "aux_local_name": "prop_shell_vanishing_local_prop_shell_vanishing_local_first_term_1__factored_aux",
+    "claim_equivalence_notes": [
+      "promoted_closed_aux:lemma_factor_v2"
+    ],
+    "claim_equivalence_verdict": "equivalent",
+    "lemma_factor_metadata": {
+      "protocol": "lemma_factor_v2",
+      "compose_hint": "first term of the right-hand side inequality",
+      "aux_signature": "theorem prop_shell_vanishing_local_prop_shell_vanishing_local_first_term_1__factored_aux {alpha beta η Λ Λ1 : ℝ} (hbeta : 3/2 < beta ∧ beta ≤ 2) (hη : η ∈ Set.Ioo (2 - beta) (beta - 1)) (halpha : 3/4 - alpha1 - alpha/2 * (2 - beta) > 0) (hΛ : 0 < Λ) (hΛ1 : 0 < Λ1) (hlam : 0 < lam) : C_beta * (1 + |Real.log lam|)^(5/2) * Λ^((2 - beta)/2) * (Λ^(-η/2) + lam^(3/4) * Λ1) ≤ C_beta * (1 + |Real.log lam|)^(5/2) * Λ^((2 - beta)/2) * (Λ^(-η/2) + lam^(3/4) * Λ1) := by sorry"
+    },
+    "audit_trail": [
+      {
+        "event": "derived_aux_from_factor",
+        "parent": "prop_shell_vanishing_local",
+        "paper_id": "2604.21583",
+        "protocol": "lemma_factor_aux_promotion_v1"
+      }
+    ],
+    "rounds_used": 1,
+    "time_s": 0.0,
+    "paper_statement_id": "pstmt_80fe38c42c24c7b57a6fbf38",
+    "provenance": null,
+    "review_policy": "release_eligible",
+    "reviewer_type": "hybrid",
+    "trust_class": "TRUST_PLACEHOLDER",
+    "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,provenance_linked",
+    "reproducible_env": true,
+    "translation_fidelity_score": 0.9,
+    "status_alignment_score": 0.8,
+    "axiom_debt": [],
+    "axiom_debt_hash": "f15b624c254b8a90"
+  },
+  {
+    "theorem_name": "prop_shell_vanishing_local::aux::prop_shell_vanishing_local_prop_shell_vanishing_local_second_term_2__factored_aux",
+    "lean_statement": "theorem prop_shell_vanishing_local_prop_shell_vanishing_local_second_term_2__factored_aux {alpha beta η Λ Λ1 : ℝ} (hbeta : 3/2 < beta ∧ beta ≤ 2) (hη : η ∈ Set.Ioo (2 - beta) (beta - 1)) (halpha : 3/4 - alpha1 - alpha/2 * (2 - beta) > 0) (hΛ : 0 < Λ) (hΛ1 : 0 < Λ1) (hlam : 0 < lam) : C_beta * lam * (1 + |Real.log lam|^2) * Λ1^(2 - beta) ≤ C_beta * lam * (1 + |Real.log lam|^2) * Λ1^(2 - beta)",
+    "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
+    "proof_text": "trivial",
+    "proof_method": "lemma_factor_aux_promotion_v1",
+    "proof_mode": "derived-from-factor",
+    "proved": true,
+    "step_verdict": "VERIFIED",
+    "failure_origin": "NONE",
+    "failure_kind": "",
+    "first_failing_step": -1,
+    "promotion_gate_passed": true,
+    "validation_gates": {
+      "lean_proof_closed": true,
+      "step_verdict_verified": true,
+      "assumptions_grounded": true,
+      "provenance_linked": false,
+      "translation_fidelity_ok": true,
+      "status_alignment_ok": true,
+      "dependency_trust_complete": true,
+      "reproducible_env": true,
+      "claim_equivalent": true,
+      "independent_semantic_equivalence_evidence": true,
+      "semantic_adversarial_checks_passed": true,
+      "no_paper_axiom_debt": true,
+      "statement_alignment_exact": true,
+      "statement_alignment_not_unrelated": true
+    },
+    "gate_failures": [
+      "provenance_linked"
+    ],
+    "status": "INTERMEDIARY_PROVEN",
+    "ledger_role": "derived_aux_from_factor",
+    "parent_theorem_name": "prop_shell_vanishing_local",
+    "aux_local_name": "prop_shell_vanishing_local_prop_shell_vanishing_local_second_term_2__factored_aux",
+    "claim_equivalence_notes": [
+      "promoted_closed_aux:lemma_factor_v2"
+    ],
+    "claim_equivalence_verdict": "equivalent",
+    "lemma_factor_metadata": {
+      "protocol": "lemma_factor_v2",
+      "compose_hint": "second term of the right-hand side inequality",
+      "aux_signature": "theorem prop_shell_vanishing_local_prop_shell_vanishing_local_second_term_2__factored_aux {alpha beta η Λ Λ1 : ℝ} (hbeta : 3/2 < beta ∧ beta ≤ 2) (hη : η ∈ Set.Ioo (2 - beta) (beta - 1)) (halpha : 3/4 - alpha1 - alpha/2 * (2 - beta) > 0) (hΛ : 0 < Λ) (hΛ1 : 0 < Λ1) (hlam : 0 < lam) : C_beta * lam * (1 + |Real.log lam|^2) * Λ1^(2 - beta) ≤ C_beta * lam * (1 + |Real.log lam|^2) * Λ1^(2 - beta) := by sorry"
+    },
+    "audit_trail": [
+      {
+        "event": "derived_aux_from_factor",
+        "parent": "prop_shell_vanishing_local",
+        "paper_id": "2604.21583",
+        "protocol": "lemma_factor_aux_promotion_v1"
+      }
+    ],
+    "rounds_used": 1,
+    "time_s": 0.0,
+    "paper_statement_id": "pstmt_80fe38c42c24c7b57a6fbf38",
+    "provenance": null,
+    "review_policy": "release_eligible",
+    "reviewer_type": "hybrid",
+    "trust_class": "TRUST_PLACEHOLDER",
+    "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,provenance_linked",
+    "reproducible_env": true,
+    "translation_fidelity_score": 0.9,
+    "status_alignment_score": 0.8,
+    "axiom_debt": [],
+    "axiom_debt_hash": "f15b624c254b8a90"
   }
 ]

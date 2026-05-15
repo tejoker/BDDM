@@ -1588,8 +1588,8 @@
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
       "proof_body": "refine ⟨∫ t in Set.Ioo (0 : ℝ) 1, (t : ℂ) ^ (z1 - 1) * ((1 - t) : ℂ) ^ (z2 - 1), rfl⟩",
-      "reasoning": "The theorem asks to prove the existence of a complex number B equal to a given integral. The integral is well-defined because the integrand is continuous on the open interval (0,1) and the interval is bounded. The existence is constructive, so we can directly provide the integral as the witness and use reflexivity to show the equality.",
-      "confidence": 0.9,
+      "reasoning": "The theorem asks to prove the existence of a complex number B equal to the given integral. The proof is constructive: we explicitly provide the integral as the witness for B and use reflexivity to show the equality.",
+      "confidence": 1.0,
       "round_idx": 1
     }
   },
@@ -4333,14 +4333,14 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "intro h\napply Nonempty.intro\nexact ()",
+      "captured_proof_text": "intro h\napply Nonempty.intro\napply Unit.unit",
       "file_body_preview": "intro h\n  apply Nonempty.intro\n  exact ()",
       "reason": "trivialized_statement"
     },
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
-      "proof_body": "intro h\napply Nonempty.intro\nexact ()",
-      "reasoning": "The goal is to show `Nonempty (Unit)` given a conjunction of propositions. Since `Unit` is inhabited by `()`, we can directly construct a `Nonempty (Unit)` instance without using the hypothesis.",
+      "proof_body": "intro h\napply Nonempty.intro\napply Unit.unit",
+      "reasoning": "The goal is to show that given a conjunction of six propositions, there exists a term of type `Unit`. Since `Unit` is inhabited by `()`, we can directly construct a `Nonempty (Unit)` using `Nonempty.intro` and `Unit.unit`. The hypothesis `h` is not needed for this trivial construction.",
       "confidence": 1.0,
       "round_idx": 1
     }
