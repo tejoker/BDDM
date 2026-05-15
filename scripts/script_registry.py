@@ -433,6 +433,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Adversarial fuzzer for `audit_fully_proven_integrity`. Generates N random bypass shapes (random proof_text + random sorry-bearing body OR random trivialized statement) and N random legitimate shapes, then asserts the audit demotes every bypass and preserves every legitimate row. Complements the known-pattern mutation tests in `tests/test_audit_integrity_mutations.py` by covering unknown-unknowns. Reproducible (seed-deterministic); pure Python, zero lake/Mistral cost. Standards-positive: any escape surfaces a real audit gap that must be fixed in `_body_is_sorry` / `_is_trivialized_signature`, not papered over.",
     },
+    "proof_attempt_cache.py": {
+        "tier": "official_support",
+        "category": "proof_search",
+        "summary": "Statement-hash cache for proof attempts (statement_hash + method → proof_body + validated + timestamp). Dedupes repeat Mistral calls across sweep rounds. Cache file: `data/proof_attempt_cache.jsonl` (gitignored). Standards-positive: cached entries still pass through the integrity audit; this is an optimization, not a trust layer.",
+    },
     "audit_paper_theory_olean_health.py": {
         "tier": "ci_gate",
         "category": "review",
