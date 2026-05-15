@@ -2297,14 +2297,14 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "constructor\n· rfl\n· rfl",
+      "captured_proof_text": "trivial",
       "file_body_preview": "constructor\n  · rfl\n  · rfl",
       "reason": "trivialized_statement"
     },
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
-      "proof_body": "constructor\n· rfl\n· rfl",
-      "reasoning": "The goal is a conjunction of two equalities, both of which are trivial (x = x). The `constructor` tactic splits the conjunction, and `rfl` proves each trivial equality.",
+      "proof_body": "trivial",
+      "reasoning": "deterministic micro-prover: trivial",
       "confidence": 1.0,
       "round_idx": 1
     },

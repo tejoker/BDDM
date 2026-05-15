@@ -16763,18 +16763,18 @@
     "theorem_name": "prop_shell_vanishing_local::aux::prop_shell_vanishing_local_prop_shell_vanishing_local_first_term_1__factored_aux",
     "lean_statement": "theorem prop_shell_vanishing_local_prop_shell_vanishing_local_first_term_1__factored_aux {alpha beta η Λ Λ1 : ℝ} (hbeta : 3/2 < beta ∧ beta ≤ 2) (hη : η ∈ Set.Ioo (2 - beta) (beta - 1)) (halpha : 3/4 - alpha1 - alpha/2 * (2 - beta) > 0) (hΛ : 0 < Λ) (hΛ1 : 0 < Λ1) (hlam : 0 < lam) : C_beta * (1 + |Real.log lam|)^(5/2) * Λ^((2 - beta)/2) * (Λ^(-η/2) + lam^(3/4) * Λ1) ≤ C_beta * (1 + |Real.log lam|)^(5/2) * Λ^((2 - beta)/2) * (Λ^(-η/2) + lam^(3/4) * Λ1)",
     "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-    "proof_text": "trivial",
-    "proof_method": "lemma_factor_aux_promotion_v1",
+    "proof_text": "",
+    "proof_method": "unattempted",
     "proof_mode": "derived-from-factor",
-    "proved": true,
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "proved": false,
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "first_failing_step": -1,
     "promotion_gate_passed": true,
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": false,
       "translation_fidelity_ok": true,
@@ -16789,14 +16789,17 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "provenance_linked"
+      "provenance_linked",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
-    "status": "INTERMEDIARY_PROVEN",
+    "status": "UNRESOLVED",
     "ledger_role": "derived_aux_from_factor",
     "parent_theorem_name": "prop_shell_vanishing_local",
     "aux_local_name": "prop_shell_vanishing_local_prop_shell_vanishing_local_first_term_1__factored_aux",
     "claim_equivalence_notes": [
-      "promoted_closed_aux:lemma_factor_v2"
+      "promoted_closed_aux:lemma_factor_v2",
+      "audit_demotion:fully_proven_integrity"
     ],
     "claim_equivalence_verdict": "equivalent",
     "lemma_factor_metadata": {
@@ -16824,24 +16827,31 @@
     "translation_fidelity_score": 0.9,
     "status_alignment_score": 0.8,
     "axiom_debt": [],
-    "axiom_debt_hash": "f15b624c254b8a90"
+    "axiom_debt_hash": "f15b624c254b8a90",
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "trivial",
+      "file_body_preview": "sorry",
+      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+    }
   },
   {
     "theorem_name": "prop_shell_vanishing_local::aux::prop_shell_vanishing_local_prop_shell_vanishing_local_second_term_2__factored_aux",
     "lean_statement": "theorem prop_shell_vanishing_local_prop_shell_vanishing_local_second_term_2__factored_aux {alpha beta η Λ Λ1 : ℝ} (hbeta : 3/2 < beta ∧ beta ≤ 2) (hη : η ∈ Set.Ioo (2 - beta) (beta - 1)) (halpha : 3/4 - alpha1 - alpha/2 * (2 - beta) > 0) (hΛ : 0 < Λ) (hΛ1 : 0 < Λ1) (hlam : 0 < lam) : C_beta * lam * (1 + |Real.log lam|^2) * Λ1^(2 - beta) ≤ C_beta * lam * (1 + |Real.log lam|^2) * Λ1^(2 - beta)",
     "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
-    "proof_text": "trivial",
-    "proof_method": "lemma_factor_aux_promotion_v1",
+    "proof_text": "",
+    "proof_method": "unattempted",
     "proof_mode": "derived-from-factor",
-    "proved": true,
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "proved": false,
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "first_failing_step": -1,
     "promotion_gate_passed": true,
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": false,
       "translation_fidelity_ok": true,
@@ -16856,14 +16866,17 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "provenance_linked"
+      "provenance_linked",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
-    "status": "INTERMEDIARY_PROVEN",
+    "status": "UNRESOLVED",
     "ledger_role": "derived_aux_from_factor",
     "parent_theorem_name": "prop_shell_vanishing_local",
     "aux_local_name": "prop_shell_vanishing_local_prop_shell_vanishing_local_second_term_2__factored_aux",
     "claim_equivalence_notes": [
-      "promoted_closed_aux:lemma_factor_v2"
+      "promoted_closed_aux:lemma_factor_v2",
+      "audit_demotion:fully_proven_integrity"
     ],
     "claim_equivalence_verdict": "equivalent",
     "lemma_factor_metadata": {
@@ -16891,6 +16904,13 @@
     "translation_fidelity_score": 0.9,
     "status_alignment_score": 0.8,
     "axiom_debt": [],
-    "axiom_debt_hash": "f15b624c254b8a90"
+    "axiom_debt_hash": "f15b624c254b8a90",
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "trivial",
+      "file_body_preview": "sorry",
+      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+    }
   }
 ]

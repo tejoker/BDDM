@@ -121,6 +121,20 @@ axiom paper_L_alpha_simple_injective (α β : Multisegment)
 
 attribute [aesop safe apply] paper_L_alpha_simple_injective
 
+
+-- Auto-stubbed paper-local symbols (paper_theory_symbol_stubber.py)
+-- Each stub is real formalization debt: axioms / sorry-bodied
+-- defs. The integrity audit's trivialization detector is the
+-- final arbiter on any subsequent closure.
+namespace Multisegment
+-- `Paper_2304_09598.Multisegment.ofList` is unknown and its usage couldn't be classified; emitting `axiom ofList : Prop`. Real formalization debt; audit's trivialization detector is the final arbiter.
+axiom ofList : Prop
+attribute [aesop safe apply] ofList
+end Multisegment
+-- `import` is unknown and its usage couldn't be classified; emitting `axiom import : Prop`. Real formalization debt; audit's trivialization detector is the final arbiter.
+axiom import : Prop
+attribute [aesop safe apply] import
+
 end Paper_2304_09598
 
 export Paper_2304_09598 (Multisegment dual c_alpha S_alpha L_alpha n_alpha L_tilde n_tilde_alpha ntilde_alpha IsSimple IsLadderMultisegment IrreducibleLadderMultisegment C a alpha_1 b_1 b_2 defin_1 defin_14 e_1 e_2 h_and_are_ladder_multisegments_1 h_dual_multisegments_respectively_2 h_is_a_ladder_multisegment_1 h_is_a_multisegment_formed_by__1 h_is_a_simple_multisegment_1 h_is_simple_1 h_l_l_3 h_label_prop_actions_let_delta_1 h_multisegment_1 h_multisegments_1 h_n_n_3 h_rank_equal_defined_inside_1 h_source_2_2 h_source_3_3 kern7 r_i_1_j r_i_1_j_1 r_i_j_1 raise4 raise7 utf8)

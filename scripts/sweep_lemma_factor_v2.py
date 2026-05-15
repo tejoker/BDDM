@@ -1178,6 +1178,55 @@ def _sweep_paper(
             else:
                 per_row["stages"].append({"stage": "repl_prover_returned_none"})
 
+        # --- Non-LLM parent pre-pass: deterministic micro-prover catalog ---
+        # Same module that closes shape-shallow aux can close shape-shallow
+        # parents too (e.g. statements that reduce to omega / aesop /
+        # nlinarith after the typeclass-patcher/symbol-stubber prelude
+        # work). Skips Leanstral entirely when a catalog tactic validates
+        # via the SAME isolated patch-check the LLM path uses.
+        if (
+            not first_pass_validated
+            and aux_det is not None
+            and _USE_AUX_DETERMINISTIC_PREPASS
+        ):
+            def _parent_det_validator(
+                f: Path, theorem_name: str, proof_body: str,
+            ) -> tuple[bool, str]:
+                return _run_isolated_patch_check(
+                    lean_file=f,
+                    theorem_name=theorem_name,
+                    proof_body=proof_body,
+                    timeout_s=per_lake_timeout,
+                    paper_id=paper_id,
+                )
+
+            det_ok, det_body, det_err = aux_det.try_deterministic_close_aux(
+                lean_file=lean_file,
+                aux_name=target_name,
+                aux_signature=lean_stmt,
+                validator=_parent_det_validator,
+            )
+            if det_ok and wp_sweep._patch_proof_flex(lean_file, target_name, det_body):
+                # Mirror the LLM-success path: write proof_text + bookkeeping.
+                first_pass_validated = True
+                report["first_pass_validated"] += 1
+                bucket_counts["parent_deterministic_closures"] = (
+                    bucket_counts.get("parent_deterministic_closures", 0) + 1
+                )
+                wp_sweep._apply_accept_to_entry(
+                    entry,
+                    proof_body=det_body,
+                    reasoning=f"deterministic micro-prover: {det_body}",
+                    confidence=1.0,
+                    round_idx=1,
+                )
+                per_row["stages"].append({
+                    "stage": "parent_deterministic_close",
+                    "tactic": det_body,
+                    "validator": "isolated_patch_check",
+                })
+                file_text = lean_file.read_text(encoding="utf-8")
+
         # Whole-proof first pass runs only if REPL prover didn't already win.
         cand = None
         first_pass_rejection_sink: dict[str, Any] = {}
