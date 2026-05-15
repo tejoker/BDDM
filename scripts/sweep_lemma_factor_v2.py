@@ -38,8 +38,10 @@ import os
 import re
 import subprocess
 import sys
+import threading
 import time
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any, Callable, Optional
 
@@ -51,6 +53,7 @@ if str(SCRIPT_DIR) not in sys.path:
 import lemma_factor_v2 as lfv2  # noqa: E402
 import leanstral_repl_proof_generator as repl_gen  # noqa: E402
 import leanstral_whole_proof_generator as gen  # noqa: E402
+import paper_theory_symbol_stubber as pt_stubber  # noqa: E402
 import signature_typeclass_patcher as tc_patcher  # noqa: E402
 import sweep_canonical_patch_and_validate as patcher  # noqa: E402
 import sweep_leanstral_whole_proof as wp_sweep  # noqa: E402
@@ -90,6 +93,11 @@ try:
 except Exception:
     autoprom = None  # type: ignore[assignment]
 
+try:
+    import promote_closed_aux_as_rows as paux  # type: ignore[import-not-found]
+except Exception:
+    paux = None  # type: ignore[assignment]
+
 
 # --- Fast/slow validator selector ---------------------------------------
 # Flipped at startup by `main()` based on --use-fast-validation. The fast
@@ -102,12 +110,30 @@ _USE_FAST_VALIDATION: bool = False
 # and require agreement). 0 disables.
 _DIFFERENTIAL_REMAINING: int = 0
 _DIFFERENTIAL_RESULTS: list[dict[str, Any]] = []
+# Locks for cross-thread access when --parallel-papers > 1. The Counter
+# (`bucket_counts`), the differential remaining counter, and the
+# differential results list are all touched concurrently by per-paper
+# threads. Single-threaded runs pay only the (negligible) lock-acquire
+# cost.
+_DIFFERENTIAL_LOCK = threading.Lock()
+_BUCKET_COUNTS_LOCK = threading.Lock()
+_SUMMARY_WRITE_LOCK = threading.Lock()
 
 # When True, audit-surviving first-pass closures are also mirrored to
 # `Desol/PaperProofs/Paper_<id>.lean` as `<name>__autoproved`. Flipped by
 # the `--auto-promote-to-curated` CLI flag (default ON). Purely additive
 # infrastructure: a failed promotion never blocks the underlying close.
 _AUTO_PROMOTE_TO_CURATED: bool = True
+
+# When True, individually-closed aux that fail to compose into the parent
+# are credited as their own derived ledger rows (status IP/AB) via
+# ``promote_closed_aux_as_rows.promote_closed_aux``. Flipped by the
+# ``--promote-aux-as-rows`` CLI flag (default OFF until calibrated).
+# Round-XI observation: 4/162 aux closed but 0 composed; without this
+# flag those rows are DISCARDED. With it ON, each closed aux that passes
+# the same audit gates as a primary theorem lands as a first-class derived
+# row whose audit_trail records the parent.
+_PROMOTE_AUX_AS_ROWS: bool = False
 
 
 def _select_validator(
@@ -134,14 +160,21 @@ def _select_validator(
             project_root=project_root, source_file=source_file,
             theorem_decl=theorem_decl, proof_body=proof_body, timeout_s=timeout_s,
         )
-    if _DIFFERENTIAL_REMAINING > 0 and _run_isolated_file_check is not None:
-        _DIFFERENTIAL_REMAINING -= 1
+    # Claim a differential slot under the lock so concurrent paper threads
+    # don't double-count or overshoot `differential_check_first`.
+    claimed_differential = False
+    with _DIFFERENTIAL_LOCK:
+        if _DIFFERENTIAL_REMAINING > 0 and _run_isolated_file_check is not None:
+            _DIFFERENTIAL_REMAINING -= 1
+            claimed_differential = True
+    if claimed_differential:
         fast_ok, fast_tail, diag = _lvc.differential_check(
             project_root=project_root, source_file=source_file,
             paper_id=paper_id, theorem_decl=theorem_decl,
             proof_body=proof_body, timeout_s=timeout_s,
         )
-        _DIFFERENTIAL_RESULTS.append(diag)
+        with _DIFFERENTIAL_LOCK:
+            _DIFFERENTIAL_RESULTS.append(diag)
         if not diag.get("agreement", True):
             print(
                 f"[fast-validation][DIVERGENCE] paper={paper_id} "
@@ -705,6 +738,96 @@ def _run_integrity_audit(paper_id: str) -> tuple[bool, dict[str, Any]]:
     return (demoted == 0), result
 
 
+# --- Aux-as-row promotion (Round-XI residual recovery) -------------------
+
+
+def _promote_closed_aux_to_ledger(
+    *,
+    paper_id: str,
+    parent_entry: dict[str, Any],
+    parent_theorem_name: str,
+    renamed: list[tuple[str, str, dict[str, Any]]],
+    aux_closed_names: list[str],
+    aux_closed_bodies: dict[str, str],
+    entries: list[dict[str, Any]],
+    validate_aux: Optional[Callable[[str], tuple[bool, str]]] = None,
+) -> dict[str, Any]:
+    """Build derived ledger rows for individually-closed aux and append
+    each survivor to ``entries`` in place. Returns a summary dict::
+
+        {"promoted": int, "idempotent": int, "refused": int,
+         "results": [<per-aux result>], "rows": [<appended derived rows>]}
+
+    A subsequent ``_run_integrity_audit`` MUST be invoked by the caller
+    (after the ledger is written back to disk) so the appended rows are
+    subject to the same FP/AB/IP audit gates as primary theorems.
+    """
+    summary: dict[str, Any] = {
+        "promoted": 0,
+        "idempotent": 0,
+        "refused": 0,
+        "results": [],
+        "rows": [],
+    }
+    if paux is None:
+        summary["error"] = "promote_closed_aux_as_rows_unavailable"
+        return summary
+    if not aux_closed_names:
+        return summary
+
+    # Build aux_records (with proof_body) from `renamed` filtered to
+    # closed-only.
+    aux_records: list[dict[str, Any]] = []
+    for new_name, new_sig, rec in renamed:
+        if new_name not in aux_closed_names:
+            continue
+        proof_body = aux_closed_bodies.get(new_name, "")
+        if not proof_body:
+            # We can't promote without a captured body; skip silently
+            # (the caller's report will still list the aux as closed).
+            continue
+        aux_records.append({
+            "aux_name": new_name,
+            "aux_signature": new_sig,
+            "proof_body": proof_body,
+            "compose_hint": rec.get("compose_hint", ""),
+        })
+    if not aux_records:
+        return summary
+
+    try:
+        results = paux.promote_closed_aux(
+            paper_id=paper_id,
+            parent_theorem_name=parent_theorem_name,
+            parent_entry=parent_entry,
+            aux_records=aux_records,
+            project_root=PROJECT_ROOT,
+            ledger_entries=entries,
+            validate_elaboration=validate_aux,
+        )
+    except Exception as exc:  # pragma: no cover - defensive
+        summary["error"] = f"promote_closed_aux_raised:{type(exc).__name__}:{exc}"
+        return summary
+
+    for r in results:
+        status = str(r.get("status", "") or "")
+        summary["results"].append({
+            "aux_name": r.get("aux_name", ""),
+            "derived_name": r.get("derived_name", ""),
+            "status": status,
+            "error": r.get("error", ""),
+        })
+        if status == "promoted" and isinstance(r.get("row"), dict):
+            entries.append(r["row"])
+            summary["promoted"] += 1
+            summary["rows"].append(r["row"])
+        elif status == "idempotent":
+            summary["idempotent"] += 1
+        else:
+            summary["refused"] += 1
+    return summary
+
+
 # --- Main sweep loop ------------------------------------------------------
 
 
@@ -720,6 +843,7 @@ def _sweep_paper(
     bucket_counts: Counter[str],
     use_repl_prover: bool = False,
     use_typeclass_patcher: bool = False,
+    auto_stub_missing_symbols: bool = False,
     multi_shot_samples: int = 1,
     max_factor_depth: int = 1,
     theorem_filter: tuple[str, ...] = (),
@@ -844,6 +968,76 @@ def _sweep_paper(
             "old_head": "",
             "patched_signature": "",
         }
+        symbol_stub_state: dict[str, Any] = {
+            "applied": False,
+            "old_paper_theory_text": "",
+            "stubs": [],
+        }
+
+        # --- Paper-theory symbol stubber pre-pass (opt-in) --------------
+        # When the per-row baseline lake error names
+        # ``unknown identifier 'X'`` / ``Unknown constant 'X'`` for a
+        # paper-local symbol X that is NOT declared in paper-theory and
+        # NOT resolvable against Mathlib, propose stubs (axiom/def/Prop)
+        # and splice them into the paper-theory file. The stubs persist
+        # only when a proof body subsequently closes AND the integrity
+        # audit survives — exactly the same survival contract used by
+        # the typeclass patcher.
+        if (
+            auto_stub_missing_symbols
+            and _run_isolated_file_check is not None
+            and paper_theory_path.exists()
+        ):
+            tail_for_stub = _capture_baseline_error_tail(
+                lean_file, timeout_s=max(120, per_lake_timeout * 2)
+            )
+            try:
+                stub_proposals = pt_stubber.propose_paper_theory_stubs(
+                    paper_id=paper_id,
+                    theorem_name=target_name,
+                    lean_statement=lean_stmt,
+                    baseline_error=tail_for_stub,
+                    paper_theory_file=paper_theory_path,
+                    mathlib_name_index=None,
+                )
+            except Exception as exc:
+                stub_proposals = []
+                per_row["stages"].append({
+                    "stage": "symbol_stubber_error",
+                    "err": str(exc)[:160],
+                })
+            if stub_proposals:
+                ok_splice, old_pt_text = pt_stubber.insert_stubs_into_paper_theory(
+                    paper_theory_path, stub_proposals,
+                )
+                if ok_splice:
+                    new_baseline = _capture_baseline_errors(
+                        lean_file, timeout_s=max(120, per_lake_timeout * 2),
+                    )
+                    if new_baseline <= baseline_errors:
+                        symbol_stub_state["applied"] = True
+                        symbol_stub_state["old_paper_theory_text"] = old_pt_text
+                        symbol_stub_state["stubs"] = stub_proposals
+                        baseline_errors = new_baseline
+                        per_row["stages"].append({
+                            "stage": "symbol_stubs_spliced",
+                            "stub_names": [s["name"] for s in stub_proposals],
+                            "new_baseline": new_baseline,
+                        })
+                    else:
+                        # Stub regressed baseline — revert.
+                        pt_stubber.restore_paper_theory(
+                            paper_theory_path, old_pt_text,
+                        )
+                        per_row["stages"].append({
+                            "stage": "symbol_stubs_regressed_baseline",
+                            "new_baseline": new_baseline,
+                            "prior_baseline": baseline_errors,
+                        })
+                else:
+                    per_row["stages"].append({
+                        "stage": "symbol_stubs_splice_failed",
+                    })
 
         # --- Typeclass-patcher pre-pass (opt-in) ------------------------
         # Capture the per-row baseline lake error tail; if it names a
@@ -1096,6 +1290,30 @@ def _sweep_paper(
                         })
                     entry["signature_patched_for_typeclass"] = True
                     per_row["stages"].append({"stage": "signature_patch_kept"})
+                # Record paper-theory stub debt as audit-trail evidence.
+                # Each kept stub is REAL formalization debt — caller-
+                # visible so reviewers can see the symbol was filled by
+                # the auto-stubber and audit it accordingly.
+                if symbol_stub_state["applied"]:
+                    trail = entry.setdefault("audit_trail", [])
+                    if isinstance(trail, list):
+                        trail.append({
+                            "event": "paper_theory_symbols_stubbed",
+                            "stubs": [
+                                {
+                                    "name": s["name"],
+                                    "kind": s["kind"],
+                                    "signature": s["signature"],
+                                    "rationale": s.get("rationale", ""),
+                                }
+                                for s in symbol_stub_state["stubs"]
+                            ],
+                            "protocol": "paper_theory_symbol_stubber_v1",
+                        })
+                    entry["paper_theory_symbols_stubbed"] = [
+                        s["name"] for s in symbol_stub_state["stubs"]
+                    ]
+                    per_row["stages"].append({"stage": "symbol_stubs_kept"})
                 # --- Auto-promote to curated PaperProofs ----------------
                 # Mirror the audit-surviving proof into
                 # `Desol/PaperProofs/Paper_<id>.lean` as a `__autoproved`
@@ -1146,6 +1364,18 @@ def _sweep_paper(
                         lean_file, target_name, signature_patch_state["old_head"],
                     )
                     per_row["stages"].append({"stage": "signature_patch_reverted_on_audit_demotion"})
+                # Revert any auto-stubbed paper-theory symbols — proofless
+                # commitments aren't real formalization progress, AND a
+                # demoted closure means the audit's trivialization detector
+                # may have caught the stub trivializing the theorem.
+                if symbol_stub_state["applied"]:
+                    pt_stubber.restore_paper_theory(
+                        paper_theory_path,
+                        symbol_stub_state["old_paper_theory_text"],
+                    )
+                    per_row["stages"].append({
+                        "stage": "symbol_stubs_reverted_on_audit_demotion",
+                    })
                 # Re-load from disk (audit may have written).
                 data = json.loads(led_path.read_text(encoding="utf-8"))
                 entries = data if isinstance(data, list) else data.get("entries", [])
@@ -1214,6 +1444,12 @@ def _sweep_paper(
                 )
                 file_text = lean_file.read_text(encoding="utf-8")
                 per_row["stages"].append({"stage": "signature_patch_reverted_no_closure"})
+            if symbol_stub_state["applied"]:
+                pt_stubber.restore_paper_theory(
+                    paper_theory_path,
+                    symbol_stub_state["old_paper_theory_text"],
+                )
+                per_row["stages"].append({"stage": "symbol_stubs_reverted_no_closure"})
             report["details"].append(per_row)
             continue
         report["aux_proposed"] += len(factor_records)
@@ -1231,6 +1467,12 @@ def _sweep_paper(
                 )
                 file_text = lean_file.read_text(encoding="utf-8")
                 per_row["stages"].append({"stage": "signature_patch_reverted_no_closure"})
+            if symbol_stub_state["applied"]:
+                pt_stubber.restore_paper_theory(
+                    paper_theory_path,
+                    symbol_stub_state["old_paper_theory_text"],
+                )
+                per_row["stages"].append({"stage": "symbol_stubs_reverted_no_closure"})
             report["details"].append(per_row)
             continue
 
@@ -1261,12 +1503,25 @@ def _sweep_paper(
                 )
                 file_text = lean_file.read_text(encoding="utf-8")
                 per_row["stages"].append({"stage": "signature_patch_reverted_no_closure"})
+            if symbol_stub_state["applied"]:
+                pt_stubber.restore_paper_theory(
+                    paper_theory_path,
+                    symbol_stub_state["old_paper_theory_text"],
+                )
+                per_row["stages"].append({"stage": "symbol_stubs_reverted_no_closure"})
             report["details"].append(per_row)
             continue
         file_text = lean_file.read_text(encoding="utf-8")
 
         # --- Close each aux via whole-proof generator -------------------
         aux_closed_names: list[str] = []
+        # Parallel dict capturing each closed aux's validated proof body
+        # (keyed on the renamed aux name). The body is the last value
+        # that survived BOTH the isolated and baseline-aware lake checks
+        # — i.e. the in-file body the aux is currently using. Round-XI
+        # need: the body is forfeited when composition fails unless the
+        # aux-promotion path picks it up later.
+        aux_closed_bodies: dict[str, str] = {}
         for new_name, sig, rec in renamed:
             err_tail = ""
             closed = False
@@ -1330,6 +1585,7 @@ def _sweep_paper(
                 if ok:
                     closed = True
                     file_text = lean_file.read_text(encoding="utf-8")
+                    aux_closed_bodies[new_name] = body
                     break
                 wp_sweep._revert_proof_flex(lean_file, new_name)
                 err_tail = t or ""
@@ -1466,6 +1722,7 @@ def _sweep_paper(
                         if ok2:
                             sub_closed = True
                             file_text = lean_file.read_text(encoding="utf-8")
+                            aux_closed_bodies[sub_name] = sub_body
                             break
                         wp_sweep._revert_proof_flex(lean_file, sub_name)
                         sub_err_tail = t2 or ""
@@ -1549,8 +1806,44 @@ def _sweep_paper(
         }
         min_needed = 1 if target_shape in _SINGLE_AUX_OK_SHAPES else 2
         if len(aux_closed_names) < min_needed:
-            # Insufficient closed aux to attempt composition; clean up.
-            cleanup_names = [nm for nm, _, _ in renamed]
+            # Round-XI: individually-closed aux that miss the composition
+            # threshold are credited as their own derived ledger rows when
+            # `--promote-aux-as-rows` is set. Promotion runs BEFORE cleanup
+            # so the audit can verify the aux body on disk; promoted aux
+            # are excluded from `cleanup_names` and remain in the file.
+            promoted_aux_names: list[str] = []
+            if _PROMOTE_AUX_AS_ROWS and paux is not None and aux_closed_names:
+                promo_summary = _promote_closed_aux_to_ledger(
+                    paper_id=paper_id,
+                    parent_entry=entry,
+                    parent_theorem_name=short or name,
+                    renamed=renamed,
+                    aux_closed_names=aux_closed_names,
+                    aux_closed_bodies=aux_closed_bodies,
+                    entries=entries,
+                    validate_aux=_validate_aux,
+                )
+                promoted_aux_names = [
+                    nm for nm in aux_closed_names
+                    if any(
+                        rr.get("aux_name") == nm and rr.get("status") == "promoted"
+                        for rr in promo_summary.get("results", [])
+                    )
+                ]
+                report["aux_promoted_as_rows"] = (
+                    report.get("aux_promoted_as_rows", 0)
+                    + int(promo_summary.get("promoted", 0))
+                )
+                per_row["stages"].append({
+                    "stage": "aux_promoted_as_rows_after_insufficient",
+                    "promoted": promo_summary.get("promoted", 0),
+                    "idempotent": promo_summary.get("idempotent", 0),
+                    "refused": promo_summary.get("refused", 0),
+                    "results": promo_summary.get("results", []),
+                })
+            cleanup_names = [
+                nm for nm, _, _ in renamed if nm not in promoted_aux_names
+            ]
             _remove_aux_lemmas(lean_file, cleanup_names)
             file_text = lean_file.read_text(encoding="utf-8")
             per_row["stages"].append({
@@ -1558,6 +1851,7 @@ def _sweep_paper(
                 "closed": len(aux_closed_names),
                 "needed": min_needed,
                 "shape": target_shape,
+                "promoted_aux": promoted_aux_names,
             })
             if signature_patch_state["applied"]:
                 _restore_signature_in_file(
@@ -1565,6 +1859,12 @@ def _sweep_paper(
                 )
                 file_text = lean_file.read_text(encoding="utf-8")
                 per_row["stages"].append({"stage": "signature_patch_reverted_no_closure"})
+            if symbol_stub_state["applied"]:
+                pt_stubber.restore_paper_theory(
+                    paper_theory_path,
+                    symbol_stub_state["old_paper_theory_text"],
+                )
+                per_row["stages"].append({"stage": "symbol_stubs_reverted_no_closure"})
             report["details"].append(per_row)
             continue
 
@@ -1608,6 +1908,12 @@ def _sweep_paper(
                 )
                 file_text = lean_file.read_text(encoding="utf-8")
                 per_row["stages"].append({"stage": "signature_patch_reverted_no_closure"})
+            if symbol_stub_state["applied"]:
+                pt_stubber.restore_paper_theory(
+                    paper_theory_path,
+                    symbol_stub_state["old_paper_theory_text"],
+                )
+                per_row["stages"].append({"stage": "symbol_stubs_reverted_no_closure"})
             report["details"].append(per_row)
             continue
 
@@ -1650,6 +1956,27 @@ def _sweep_paper(
                     })
                 entry["signature_patched_for_typeclass"] = True
                 per_row["stages"].append({"stage": "signature_patch_kept_via_factor"})
+            # Record paper-theory stub debt as part of the factored success.
+            if symbol_stub_state["applied"]:
+                trail = entry.setdefault("audit_trail", [])
+                if isinstance(trail, list):
+                    trail.append({
+                        "event": "paper_theory_symbols_stubbed",
+                        "stubs": [
+                            {
+                                "name": s["name"],
+                                "kind": s["kind"],
+                                "signature": s["signature"],
+                                "rationale": s.get("rationale", ""),
+                            }
+                            for s in symbol_stub_state["stubs"]
+                        ],
+                        "protocol": "paper_theory_symbol_stubber_v1",
+                    })
+                entry["paper_theory_symbols_stubbed"] = [
+                    s["name"] for s in symbol_stub_state["stubs"]
+                ]
+                per_row["stages"].append({"stage": "symbol_stubs_kept_via_factor"})
         else:
             # Roll back the parent + aux + signature patch (no closure).
             wp_sweep._revert_proof_flex(lean_file, target_name)
@@ -1660,6 +1987,12 @@ def _sweep_paper(
                     lean_file, target_name, signature_patch_state["old_head"],
                 )
                 per_row["stages"].append({"stage": "signature_patch_reverted_on_audit_demotion"})
+            if symbol_stub_state["applied"]:
+                pt_stubber.restore_paper_theory(
+                    paper_theory_path,
+                    symbol_stub_state["old_paper_theory_text"],
+                )
+                per_row["stages"].append({"stage": "symbol_stubs_reverted_on_audit_demotion"})
             data = json.loads(led_path.read_text(encoding="utf-8"))
             entries = data if isinstance(data, list) else data.get("entries", [])
             file_text = lean_file.read_text(encoding="utf-8")
@@ -1752,6 +2085,23 @@ def main() -> int:
         ),
     )
     parser.add_argument(
+        "--auto-stub-missing-symbols",
+        action="store_true",
+        default=False,
+        help=(
+            "Enable the paper-theory symbol-stubber pre-pass: when the "
+            "per-row baseline lake error names `unknown identifier 'X'` "
+            "for a paper-local symbol X that is NOT declared in "
+            "paper-theory and NOT resolvable against the Mathlib index, "
+            "infer the right kind from usage and splice an "
+            "axiom/def/Prop stub into `Desol/PaperTheory/Paper_<id>.lean`. "
+            "Stubs are kept only when a proof body subsequently closes "
+            "AND the integrity audit survives. Default OFF until "
+            "calibrated; the audit's trivialization detector is the "
+            "final arbiter on any closure that benefits from a stub."
+        ),
+    )
+    parser.add_argument(
         "--multi-shot-samples",
         type=int,
         default=3,
@@ -1783,6 +2133,20 @@ def main() -> int:
             "When --use-fast-validation is on, run BOTH validators for the "
             "first N candidates of the sweep and assert agreement. Set to 0 "
             "to disable."
+        ),
+    )
+    parser.add_argument(
+        "--parallel-papers",
+        type=int,
+        default=1,
+        help=(
+            "Number of papers to sweep concurrently. 1 = legacy "
+            "sequential behaviour. >1 = use a ThreadPoolExecutor of that "
+            "size. Threads (not processes) are required because the "
+            "persistent REPL workers are per-paper and not pickle-safe; "
+            "the GIL is held only across `lake env lean`/subprocess waits, "
+            "so threads still get true parallelism for the I/O-bound work. "
+            "Safe defaults to 1 — flip to >=2 only after a smoke run."
         ),
     )
     parser.add_argument(
@@ -1828,8 +2192,13 @@ def main() -> int:
     t0 = time.time()
     bucket_counts: Counter[str] = Counter()
     reports: list[dict[str, Any]] = []
-    for pid in papers:
-        r = _sweep_paper(
+    parallel_n = max(1, int(args.parallel_papers or 1))
+
+    def _run_one(pid: str) -> tuple[str, dict[str, Any], Counter[str]]:
+        # Each thread gets its OWN bucket_counts so we don't race on
+        # increments inside _sweep_paper. We merge under the lock below.
+        local_counts: Counter[str] = Counter()
+        rep = _sweep_paper(
             paper_id=pid,
             client=client,
             model=args.model,
@@ -1837,24 +2206,59 @@ def main() -> int:
             max_rounds=args.max_rounds,
             per_lake_timeout=args.per_lake_timeout,
             dry_run=args.dry_run,
-            bucket_counts=bucket_counts,
+            bucket_counts=local_counts,
             use_repl_prover=args.use_repl_prover,
             use_typeclass_patcher=args.use_typeclass_patcher,
+            auto_stub_missing_symbols=args.auto_stub_missing_symbols,
             multi_shot_samples=args.multi_shot_samples,
             max_factor_depth=max(1, min(int(args.max_factor_depth or 1), 4)),
             theorem_filter=tuple(args.theorem or ()),
         )
-        reports.append(r)
-        # Persist partial summary after each paper so a mid-sweep crash
-        # doesn't lose data.
+        return pid, rep, local_counts
+
+    def _persist_partial() -> None:
+        # Atomic write: serialize under the summary lock and use .tmp +
+        # os.replace so a mid-write crash leaves the prior summary intact.
         partial = {
             "elapsed_seconds": round(time.time() - t0, 1),
-            "papers": reports,
+            "papers": list(reports),
             "bucket_counts": dict(bucket_counts),
         }
         out = PROJECT_ROOT / args.summary
-        out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(json.dumps(partial, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        with _SUMMARY_WRITE_LOCK:
+            out.parent.mkdir(parents=True, exist_ok=True)
+            tmp = out.with_suffix(out.suffix + ".tmp")
+            tmp.write_text(
+                json.dumps(partial, indent=2, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+            os.replace(tmp, out)
+
+    if parallel_n <= 1 or len(papers) <= 1:
+        for pid in papers:
+            _pid, r, lc = _run_one(pid)
+            reports.append(r)
+            bucket_counts.update(lc)
+            _persist_partial()
+    else:
+        print(
+            f"[parallel] running {len(papers)} papers with "
+            f"max_workers={parallel_n} (threads)",
+            flush=True,
+        )
+        with ThreadPoolExecutor(max_workers=parallel_n) as ex:
+            futures = {ex.submit(_run_one, pid): pid for pid in papers}
+            for fut in as_completed(futures):
+                pid = futures[fut]
+                try:
+                    _pid, r, lc = fut.result()
+                except Exception as e:  # surface but don't crash sibling threads
+                    r = {"paper_id": pid, "error": f"thread_exception:{e!r}"}
+                    lc = Counter()
+                with _BUCKET_COUNTS_LOCK:
+                    reports.append(r)
+                    bucket_counts.update(lc)
+                _persist_partial()
 
     elapsed = time.time() - t0
     summary = {
@@ -1884,7 +2288,6 @@ def main() -> int:
     print(json.dumps(summary["totals"], indent=2))
 
     out = PROJECT_ROOT / args.summary
-    out.parent.mkdir(parents=True, exist_ok=True)
     summary["fast_validation"] = {
         "enabled": _USE_FAST_VALIDATION,
         "differential_results": _DIFFERENTIAL_RESULTS[:50],
@@ -1892,7 +2295,17 @@ def main() -> int:
             1 for r in _DIFFERENTIAL_RESULTS if not r.get("agreement", True)
         ),
     }
-    out.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    summary["parallel_papers"] = parallel_n
+    # Final write under the same lock as the partial writes so we can't
+    # interleave with a late-finishing partial write.
+    with _SUMMARY_WRITE_LOCK:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        tmp = out.with_suffix(out.suffix + ".tmp")
+        tmp.write_text(
+            json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        os.replace(tmp, out)
     print(f"[summary] wrote {out}")
     if _lvc is not None:
         try:
