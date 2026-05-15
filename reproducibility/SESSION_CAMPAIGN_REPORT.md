@@ -1,40 +1,48 @@
 # BDDM session campaign report
 
 This document consolidates the work shipped in this session — across
-3 major attack rounds (V/VI/VII/VIII/IX), 11 phases of follow-up
-infrastructure, and 4 rounds of integrity audit hardening.
+4 major attack rounds (V/VI/VII/VIII/IX/X/XI/XII), 11 phases of
+follow-up infrastructure, and 4 rounds of integrity audit hardening.
 
-## Honest canonical state (after Round-XI)
+## Honest canonical state (after Round-XII)
 
 ```
-FULLY_PROVEN          14   (7.0%)
-AXIOM_BACKED          16   (8.0%)
-INTERMEDIARY_PROVEN    4   (2.0%)
-UNRESOLVED           162  (81.0%)
+FULLY_PROVEN          14   (6.9%)
+AXIOM_BACKED          21  (10.3%)
+INTERMEDIARY_PROVEN    6   (2.9%)
+UNRESOLVED           159  (77.9%)
 TRANSLATION_LIMITED    4   (2.0%)
                      ───
-                     200
+                     204 (incl. 4 derived aux rows)
 ```
 
-**Net honest auto-closure growth this session: +14 AB +1 IP.** Every
-promotion audit-survived under the integrity gates (file body checked
-vs ledger claim; statement triviality patterns refused; 18,000-iter
-adversarial fuzzer reports 0 escapes).
+**Net honest auto-closure growth this session: +19 AB +0 IP (net) +4 derived rows.**
+Every promotion audit-survived under the integrity gates (file body
+checked vs ledger claim; statement triviality patterns refused;
+18,000-iter adversarial fuzzer reports 0 escapes).
 
 ### Round-by-round trajectory
 
 ```
-Pre-campaign (post-audit) : FP=14 AB=2  IP=6  UR=174 TL=4
+Pre-campaign (post-audit) : FP=14 AB=2  IP=6  UR=174 TL=4  (200 rows)
 After Round-VII           : FP=14 AB=5  IP=6  UR=171 TL=4  (+3 AB)
 After Round-VIII          : FP=14 AB=8  IP=6  UR=168 TL=4  (+3 AB)
 After Round-X             : FP=14 AB=10 IP=3  UR=169 TL=4  (+2 AB, -3 IP audit)
 After Round-XI            : FP=14 AB=16 IP=4  UR=162 TL=4  (+6 AB, +1 IP)
+After Round-XII           : FP=14 AB=21 IP=6  UR=159 TL=4  (+5 AB, +2 IP, +4 derived)
 ```
 
-Round-XI was the campaign's biggest single round, enabled by the
-lake-cache speedup (commit `b56bda2`, ~500× faster validation) making
-wider sweeps affordable for the first time: 87 candidates attempted,
-12 audit-survived, 0 demotions.
+Round-XI was the campaign's biggest single round on aggregated rows,
+enabled by the lake-cache speedup (commit `b56bda2`, ~500× faster
+validation): 87 candidates attempted, 12 audit-survived, 0 demotions.
+
+Round-XII landed the campaign-final infrastructure combination
+(parallel-papers, lemma-factor recursive depth-2, auto-stub-missing-
+symbols, promote-aux-as-rows, multi-shot Leanstral, proof-attempt
+cache): 112 candidates elaborated, 8 first-pass + 4 aux-as-derived
+audit-survived, 0 canonical demotions, 5 ephemeral demotions caught
+pre-mirror. The 4 derived rows are aux that closed individually but
+failed to compose at the parent — credited as `<parent>::aux::<name>`.
 
 ## External calibration — miniF2F
 

@@ -1588,7 +1588,7 @@
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
       "proof_body": "refine ⟨∫ t in Set.Ioo (0 : ℝ) 1, (t : ℂ) ^ (z1 - 1) * ((1 - t) : ℂ) ^ (z2 - 1), rfl⟩",
-      "reasoning": "The theorem asks to prove the existence of a complex number B equal to a given integral. The integral is well-defined under the given hypotheses (positive real parts of z1 and z2), so we can directly construct B as the integral and prove equality by reflexivity.",
+      "reasoning": "The theorem asks to prove the existence of a complex number B equal to a given integral. The integral is well-defined because the integrand is continuous on the open interval (0,1) and the interval is bounded. The existence is constructive, so we can directly provide the integral as the witness and use reflexivity to show the equality.",
       "confidence": 0.9,
       "round_idx": 1
     }
@@ -4340,7 +4340,7 @@
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
       "proof_body": "intro h\napply Nonempty.intro\nexact ()",
-      "reasoning": "The goal is to show `Nonempty Unit` given a conjunction of propositions. Since `Unit` is inhabited by `()`, we can directly construct a `Nonempty Unit` instance without using the hypothesis.",
+      "reasoning": "The goal is to show `Nonempty (Unit)` given a conjunction of propositions. Since `Unit` is inhabited by `()`, we can directly construct a `Nonempty (Unit)` instance without using the hypothesis.",
       "confidence": 1.0,
       "round_idx": 1
     }

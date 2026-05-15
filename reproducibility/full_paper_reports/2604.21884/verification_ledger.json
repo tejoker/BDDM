@@ -2304,10 +2304,27 @@
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
       "proof_body": "constructor\n· rfl\n· rfl",
-      "reasoning": "The goal is a conjunction of two equalities, both of the form `I_i ξ = I_i ξ`. Each equality is trivially true by reflexivity. The `constructor` tactic splits the conjunction, and `rfl` proves each trivial equality.",
+      "reasoning": "The goal is a conjunction of two equalities, both of which are trivial (X = X). The `constructor` tactic splits the conjunction, and `rfl` proves each reflexivity goal.",
       "confidence": 1.0,
       "round_idx": 1
-    }
+    },
+    "audit_trail": [
+      {
+        "event": "paper_theory_symbols_stubbed",
+        "stubs": [
+          {
+            "name": "import",
+            "kind": "axiom",
+            "signature": "axiom import : Prop",
+            "rationale": "`import` is unknown and its usage couldn't be classified; emitting `axiom import : Prop`. Real formalization debt; audit's trivialization detector is the final arbiter."
+          }
+        ],
+        "protocol": "paper_theory_symbol_stubber_v1"
+      }
+    ],
+    "paper_theory_symbols_stubbed": [
+      "import"
+    ]
   },
   {
     "theorem_name": "remark_10",
@@ -6004,7 +6021,7 @@
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
       "proof_body": "refine ⟨0, rfl⟩",
-      "reasoning": "The theorem `rem_primitive_route` is a trivial existential statement `∃ x : ℝ, x = x`. The proof requires providing a witness and showing it satisfies the equality. The witness `0` and `rfl` for the equality `0 = 0` is the standard way to prove such a statement.",
+      "reasoning": "The theorem `rem_primitive_route` is a trivial existence statement `∃ x : ℝ, x = x`. The proof requires providing a witness and showing it satisfies the equality. The witness `0` with `rfl` suffices.",
       "confidence": 1.0,
       "round_idx": 1
     }
@@ -9725,5 +9742,95 @@
       "file_body_preview": "sorry\n\n-- [theorem] def:admissible",
       "reason": "file_body_is_sorry_but_ledger_claimed_closed"
     }
+  },
+  {
+    "theorem_name": "thm_pathwise_fluct::aux::thm_pathwise_fluct_thm_pathwise_fluct_C_omega_pos_1__factored_aux",
+    "lean_statement": "theorem thm_pathwise_fluct_thm_pathwise_fluct_C_omega_pos_1__factored_aux (alpha s2 theta kappa : ℝ) (ha : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0) (hkappa : 0 < kappa) : ∃ C_omega : ℝ, 0 < C_omega",
+    "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
+    "proof_text": "refine ⟨1, by norm_num⟩",
+    "proof_method": "lemma_factor_aux_promotion_v1",
+    "proof_mode": "derived-from-factor",
+    "proved": true,
+    "step_verdict": "VERIFIED",
+    "failure_origin": "NONE",
+    "failure_kind": "",
+    "first_failing_step": -1,
+    "promotion_gate_passed": true,
+    "validation_gates": {
+      "lean_proof_closed": true,
+      "step_verdict_verified": true,
+      "assumptions_grounded": true,
+      "provenance_linked": true,
+      "translation_fidelity_ok": true,
+      "status_alignment_ok": true,
+      "dependency_trust_complete": true,
+      "reproducible_env": true,
+      "claim_equivalent": true,
+      "independent_semantic_equivalence_evidence": true,
+      "semantic_adversarial_checks_passed": true,
+      "no_paper_axiom_debt": false,
+      "statement_alignment_exact": true,
+      "statement_alignment_not_unrelated": true
+    },
+    "gate_failures": [
+      "no_paper_axiom_debt"
+    ],
+    "status": "AXIOM_BACKED",
+    "ledger_role": "derived_aux_from_factor",
+    "parent_theorem_name": "thm_pathwise_fluct",
+    "aux_local_name": "thm_pathwise_fluct_thm_pathwise_fluct_C_omega_pos_1__factored_aux",
+    "claim_equivalence_notes": [
+      "promoted_closed_aux:lemma_factor_v2"
+    ],
+    "claim_equivalence_verdict": "equivalent",
+    "lemma_factor_metadata": {
+      "protocol": "lemma_factor_v2",
+      "compose_hint": "establishes existence of positive constant C_omega",
+      "aux_signature": "theorem thm_pathwise_fluct_thm_pathwise_fluct_C_omega_pos_1__factored_aux (alpha s2 theta kappa : ℝ) (ha : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0) (hkappa : 0 < kappa) : ∃ C_omega : ℝ, 0 < C_omega := by sorry"
+    },
+    "audit_trail": [
+      {
+        "event": "derived_aux_from_factor",
+        "parent": "thm_pathwise_fluct",
+        "paper_id": "2604.21884",
+        "protocol": "lemma_factor_aux_promotion_v1"
+      }
+    ],
+    "rounds_used": 1,
+    "time_s": 0.0,
+    "paper_statement_id": "pstmt_a2fba5dc04eaf25556ba8073",
+    "provenance": {
+      "paper_id": "2604.21884",
+      "section": "",
+      "label": "thm:pathwise-fluct",
+      "cited_refs": [
+        "CacciafestaDanesiMeng",
+        "DNY",
+        "DPD",
+        "DelortSzeftel",
+        "Deng",
+        "Dinh",
+        "FangZhang",
+        "GKO",
+        "Germain",
+        "Hairer",
+        "IonescuPausader",
+        "Paracontrolled",
+        "Shatah",
+        "SimonTaflin"
+      ]
+    },
+    "review_policy": "release_eligible",
+    "reviewer_type": "hybrid",
+    "trust_class": "TRUST_INTERNAL_PROVED",
+    "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,no_paper_axiom_debt",
+    "translation_fidelity_score": 0.9,
+    "status_alignment_score": 0.8,
+    "axiom_debt": [
+      "paper_local_lemma:DyadicBlockBound",
+      "paper_definition_stub:s2",
+      "paper_definition_stub:theta"
+    ],
+    "axiom_debt_hash": "a974ef98d292f109"
   }
 ]

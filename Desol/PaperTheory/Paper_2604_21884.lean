@@ -261,6 +261,15 @@ attribute [aesop safe apply] VolterraOscillation_speed_separated_bound
 attribute [aesop safe apply] DyadicBlockBound_sharpness
 
 
+
+-- Auto-stubbed paper-local symbols (paper_theory_symbol_stubber.py)
+-- Each stub is real formalization debt: axioms / sorry-bodied
+-- defs. The integrity audit's trivialization detector is the
+-- final arbiter on any subsequent closure.
+-- `import` is unknown and its usage couldn't be classified; emitting `axiom import : Prop`. Real formalization debt; audit's trivialization detector is the final arbiter.
+axiom import : Prop
+attribute [aesop safe apply] import
+
 end Paper_2604_21884
 
 export Paper_2604_21884 (HSobolev C_T L2Space I_i omega B_N D_N MixedOperator infty BaselineLiftStatement CubicQuarticBaselineStatement MixedRandomOperatorConvergence ConditionalDeterministicClosure CenteredCovarianceBound PathwiseFluctuationBound SpeedGapStatement VolterraEstimateStatement StrichartzAssumptionStatement SafeRangeStatement PrimitiveRouteStatement C a a_0 a_0N a_N alpha2 c_1 c_2 delta_0 delta_0N eta_0 f_N f_Ng_N frac12 frac14 frac32 frac34 frac9 frac92 g_N ge1 ge2 geq1 gg1 h_gives_heuristic_lower_bound_1 h_source_1_1 int_0 kappa_X kappa_Y le1 leq1 lesssim1 lesssim_T mu_V neq0 omega_1 omega_2 otimes_1 otimes_1g p2 p_X partial_tV_ partial_tV_i pi_N pm1 q_X remark_30 remark_33 remark_38 remark_58 remark_74 remark_75 remark_9 rho_N rho_V s1 s2 s_1 s_2 sigma_0 sigma_1 sigma_2 sum_N theta to0 to4 u_1u_2 utf8 widehatC_1 widehatV_2 xi_1 xi_2 ξ1 ξ2 VolterraOscillation DyadicBlockBound)
