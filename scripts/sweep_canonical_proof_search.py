@@ -228,7 +228,23 @@ def main() -> int:
         default=10,
         help="With --use-fast-validation, run BOTH validators for the first N rows and assert agreement (0 = disable).",
     )
+    parser.add_argument(
+        "--multi-shot-samples",
+        type=int,
+        default=1,
+        help=(
+            "Pass-through compatibility flag. This sweep delegates proof "
+            "search to prove_arxiv_batch (state-MCTS + tactic catalog), "
+            "which does NOT use the Leanstral whole-proof generator. The "
+            "flag is accepted (and ignored) so a single wrapper script "
+            "can pass the same arg to all sweeps without breaking this "
+            "one. Default 1 (no-op)."
+        ),
+    )
     args = parser.parse_args()
+    # Explicitly read+discard so a value other than the default doesn't
+    # silently disappear; the no-op contract is intentional.
+    _ = args.multi_shot_samples
     diff_remaining = max(0, int(args.differential_check_first)) if args.use_fast_validation else 0
 
     _load_dotenv()

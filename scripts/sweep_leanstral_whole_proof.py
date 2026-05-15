@@ -409,6 +409,7 @@ def _sweep_paper(
     per_lake_timeout: int,
     dry_run: bool,
     bucket_counts: Counter[str],
+    multi_shot_samples: int = 1,
 ) -> dict[str, Any]:
     led_path, entries = _load_ledger(paper_id)
     lean_file = PROJECT_ROOT / "output" / f"{paper_id}.lean"
@@ -481,18 +482,73 @@ def _sweep_paper(
         round_details: list[dict[str, Any]] = []
         for round_idx in range(1, max_rounds + 1):
             rejection_sink: dict[str, Any] = {}
+            multi_shot_meta: dict[str, Any] = {}
             try:
-                cand = gen.generate_proof_candidate(
-                    paper_id=paper_id,
-                    theorem_name=short or name,
-                    lean_statement=lean_stmt,
-                    paper_theory_hint=paper_theory_hint,
-                    paper_local_file=file_text,
-                    error_tail=error_tail,
-                    client=client,
-                    model=model,
-                    rejection_sink=rejection_sink,
-                )
+                # Multi-shot is only useful on round 1 (no error tail yet);
+                # subsequent rounds carry a targeted error tail and want to
+                # focus the retry on that specific failure mode, so we stay
+                # with single-shot for round_idx >= 2.
+                if multi_shot_samples and multi_shot_samples > 1 and round_idx == 1:
+                    # Use a per-candidate patch+lake-validate as the
+                    # elaboration callback so EACH sample gets tried
+                    # against the real file. The first survivor is
+                    # already validated by the callback, so the caller
+                    # can apply-accept without re-validating.
+                    target_name_local = short if _flex_theorem_sorry_re(short).search(
+                        lean_file.read_text(encoding="utf-8")
+                    ) else name
+
+                    def _ms_lake_validator(c: dict[str, Any]) -> tuple[bool, str]:
+                        body = c["proof_body"]
+                        if not _patch_proof_flex(lean_file, target_name_local, body):
+                            return False, "patch_failed"
+                        ok_v, err_v = _lake_validate_file_clean_for(
+                            lean_file, target_name_local, timeout_s=per_lake_timeout,
+                        )
+                        if not ok_v:
+                            _revert_proof_flex(lean_file, target_name_local)
+                        return ok_v, err_v or ""
+
+                    multi_shot_sink: dict[str, Any] = {}
+                    cands_list = gen.generate_proof_candidates_multi_shot(
+                        paper_id=paper_id,
+                        theorem_name=short or name,
+                        lean_statement=lean_stmt,
+                        paper_theory_hint=paper_theory_hint,
+                        paper_local_file=file_text,
+                        client=client,
+                        model=model,
+                        n_samples=int(multi_shot_samples),
+                        validate_elaboration=_ms_lake_validator,
+                        rejection_sink=multi_shot_sink,
+                    )
+                    multi_shot_meta = {
+                        "n_samples": int(multi_shot_samples),
+                        "short_circuited": bool(multi_shot_sink.get("short_circuited")),
+                        "winning_sample_idx": multi_shot_sink.get("winning_sample_idx"),
+                        "winning_temperature": multi_shot_sink.get("winning_temperature"),
+                        "rejection_log": multi_shot_sink.get("rejection_log", []),
+                        "candidates_returned": len(cands_list),
+                    }
+                    cand = cands_list[0] if cands_list else None
+                    # If short-circuited, the winning candidate is ALREADY
+                    # patched into the file (the validator did it). Mark
+                    # it so the post-multi-shot accept path skips the
+                    # second patch.
+                    if multi_shot_sink.get("short_circuited") and cand is not None:
+                        cand["_already_patched"] = True
+                else:
+                    cand = gen.generate_proof_candidate(
+                        paper_id=paper_id,
+                        theorem_name=short or name,
+                        lean_statement=lean_stmt,
+                        paper_theory_hint=paper_theory_hint,
+                        paper_local_file=file_text,
+                        error_tail=error_tail,
+                        client=client,
+                        model=model,
+                        rejection_sink=rejection_sink,
+                    )
             except Exception as exc:
                 report["transport_errors"] += 1
                 bucket_counts["transport_errors"] += 1
@@ -504,6 +560,8 @@ def _sweep_paper(
                 round_detail: dict[str, Any] = {"round": round_idx, "outcome": "forbidden_or_malformed"}
                 if rejection_sink.get("reason"):
                     round_detail["rejection_reason"] = rejection_sink["reason"]
+                if multi_shot_meta:
+                    round_detail["multi_shot"] = multi_shot_meta
                 round_details.append(round_detail)
                 # Improvement 1: feed the clarification tail into the next
                 # round so the LLM has a signal about WHY its previous
@@ -519,15 +577,31 @@ def _sweep_paper(
             # forms; always rewrites to multi-line).
             file_text_now = lean_file.read_text(encoding="utf-8")
             target_name = short if _flex_theorem_sorry_re(short).search(file_text_now) else name
-            patched = _patch_proof_flex(lean_file, target_name, proof_body)
-            if not patched:
-                round_details.append({"round": round_idx, "outcome": "patch_failed"})
-                # The sorry-body slot wasn't where we expected.
-                continue
-            report["patched"] += 1
-            ok, err_tail = _lake_validate_file_clean_for(
-                lean_file, target_name, timeout_s=per_lake_timeout,
-            )
+            if cand.get("_already_patched"):
+                # Multi-shot's per-candidate validator already patched +
+                # validated this body against the real file. Skip the
+                # redundant second patch+lake-validate and treat as a
+                # confirmed win.
+                report["patched"] += 1
+                ok, err_tail = True, ""
+            elif multi_shot_meta and not multi_shot_meta.get("short_circuited"):
+                # Multi-shot already tried EVERY sample with the lake
+                # validator and none survived. Don't re-patch — record
+                # the failure with the head-of-sorted-list's elaboration
+                # error and let the round fail through to the next
+                # retry (or end of attempts).
+                ok = False
+                err_tail = cand.get("elaboration_error", "") or "multi_shot_all_samples_failed"
+            else:
+                patched = _patch_proof_flex(lean_file, target_name, proof_body)
+                if not patched:
+                    round_details.append({"round": round_idx, "outcome": "patch_failed"})
+                    # The sorry-body slot wasn't where we expected.
+                    continue
+                report["patched"] += 1
+                ok, err_tail = _lake_validate_file_clean_for(
+                    lean_file, target_name, timeout_s=per_lake_timeout,
+                )
             if ok:
                 validated = True
                 _apply_accept_to_entry(
@@ -540,20 +614,33 @@ def _sweep_paper(
                 # Refresh the in-memory file_text so subsequent neighbour
                 # extraction sees the now-closed proof.
                 file_text = lean_file.read_text(encoding="utf-8")
-                round_details.append({
+                validated_detail: dict[str, Any] = {
                     "round": round_idx, "outcome": "validated",
                     "body_preview": proof_body[:80],
-                })
+                }
+                if multi_shot_meta:
+                    validated_detail["multi_shot"] = multi_shot_meta
+                    if "temperature" in cand:
+                        validated_detail["winning_temperature"] = cand.get("temperature")
+                round_details.append(validated_detail)
                 break
             # Lake failure — revert and feed error tail to next round.
+            # When multi-shot ran all N candidates with its own
+            # patch+validate validator, the file has already been reverted
+            # by the validator. Calling revert again is a no-op but cheap.
             _revert_proof_flex(lean_file, target_name)
             error_tail = err_tail or ""
             bucket_counts["lake_errors"] += 1
             report["lake_errors"] += 1
-            round_details.append({
+            lake_error_detail: dict[str, Any] = {
                 "round": round_idx, "outcome": "lake_error",
                 "err_tail": (err_tail or "")[-200:],
-            })
+            }
+            if multi_shot_meta:
+                lake_error_detail["multi_shot"] = multi_shot_meta
+                if "temperature" in cand:
+                    lake_error_detail["candidate_temperature"] = cand.get("temperature")
+            round_details.append(lake_error_detail)
 
         if validated:
             report["validated"] += 1
@@ -578,6 +665,19 @@ def main() -> int:
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--dry-run", action="store_true",
                         help="Skip LLM calls and lake; just report candidate counts.")
+    parser.add_argument(
+        "--multi-shot-samples",
+        type=int,
+        default=3,
+        help=(
+            "Number of parallel proof candidates to sample from Leanstral "
+            "for round 1 (with diverse temperatures 0.0/0.3/0.5/0.7/0.9). "
+            "First forbidden-token-gate survivor is patched + validated. "
+            "Subsequent retry rounds remain single-shot (they carry a "
+            "targeted error tail). 1 = legacy deterministic behaviour. "
+            "Default 3."
+        ),
+    )
     parser.add_argument("--summary", default="output/leanstral_whole_proof_sweep_summary.json")
     parser.add_argument(
         "--use-fast-validation",
@@ -615,6 +715,7 @@ def main() -> int:
             per_lake_timeout=args.per_lake_timeout,
             dry_run=args.dry_run,
             bucket_counts=bucket_counts,
+            multi_shot_samples=args.multi_shot_samples,
         )
         reports.append(r)
 

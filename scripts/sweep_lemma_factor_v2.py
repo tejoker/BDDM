@@ -85,6 +85,11 @@ try:
 except Exception:
     r2ab = None  # type: ignore[assignment]
 
+try:
+    import autoproved_promotion as autoprom  # type: ignore[import-not-found]
+except Exception:
+    autoprom = None  # type: ignore[assignment]
+
 
 # --- Fast/slow validator selector ---------------------------------------
 # Flipped at startup by `main()` based on --use-fast-validation. The fast
@@ -97,6 +102,12 @@ _USE_FAST_VALIDATION: bool = False
 # and require agreement). 0 disables.
 _DIFFERENTIAL_REMAINING: int = 0
 _DIFFERENTIAL_RESULTS: list[dict[str, Any]] = []
+
+# When True, audit-surviving first-pass closures are also mirrored to
+# `Desol/PaperProofs/Paper_<id>.lean` as `<name>__autoproved`. Flipped by
+# the `--auto-promote-to-curated` CLI flag (default ON). Purely additive
+# infrastructure: a failed promotion never blocks the underlying close.
+_AUTO_PROMOTE_TO_CURATED: bool = True
 
 
 def _select_validator(
@@ -709,6 +720,9 @@ def _sweep_paper(
     bucket_counts: Counter[str],
     use_repl_prover: bool = False,
     use_typeclass_patcher: bool = False,
+    multi_shot_samples: int = 1,
+    max_factor_depth: int = 1,
+    theorem_filter: tuple[str, ...] = (),
 ) -> dict[str, Any]:
     led_path = PROJECT_ROOT / "output" / "verification_ledgers" / f"{paper_id}.json"
     lean_file = PROJECT_ROOT / "output" / f"{paper_id}.lean"
@@ -724,6 +738,13 @@ def _sweep_paper(
         "composed": 0,
         "audit_survived": 0,
         "routed_to_axiom_backed": 0,
+        # Recursive factoring (--max-factor-depth >= 2). When the depth-1
+        # factor pass leaves long unclosed aux on the table, sweep can
+        # recursively factor them up to ``max_factor_depth``. These
+        # counters track per-paper recursive activity even when
+        # max_factor_depth=1 (in which case they stay at 0).
+        "factor_recursive_attempts": 0,
+        "factor_recursive_closures": 0,
         "details": [],
     }
     if not led_path.exists() or not lean_file.exists():
@@ -945,19 +966,60 @@ def _sweep_paper(
         # Whole-proof first pass runs only if REPL prover didn't already win.
         cand = None
         first_pass_rejection_sink: dict[str, Any] = {}
+        multi_shot_meta: dict[str, Any] = {}
         if not first_pass_validated:
             try:
-                cand = gen.generate_proof_candidate(
-                    paper_id=paper_id,
-                    theorem_name=short or name,
-                    lean_statement=lean_stmt,
-                    paper_theory_hint=paper_theory_hint,
-                    paper_local_file=file_text,
-                    error_tail="",
-                    client=client,
-                    model=model,
-                    rejection_sink=first_pass_rejection_sink,
-                )
+                if multi_shot_samples and multi_shot_samples > 1:
+                    # Multi-shot mode: N parallel samples with diverse
+                    # temperatures, each independently validated via the
+                    # fast isolated-elaboration probe. Short-circuit on
+                    # the first survivor; otherwise return the sorted
+                    # list and hand the head off to the downstream
+                    # isolated-check below (which will reject again, but
+                    # we still surface diagnostic temperature data).
+                    def _ms_validator(c: dict[str, Any]) -> tuple[bool, str]:
+                        return _run_isolated_patch_check(
+                            lean_file=lean_file,
+                            theorem_name=target_name,
+                            proof_body=c["proof_body"],
+                            timeout_s=per_lake_timeout,
+                            paper_id=paper_id,
+                        )
+
+                    multi_shot_sink: dict[str, Any] = {}
+                    cands_list = gen.generate_proof_candidates_multi_shot(
+                        paper_id=paper_id,
+                        theorem_name=short or name,
+                        lean_statement=lean_stmt,
+                        paper_theory_hint=paper_theory_hint,
+                        paper_local_file=file_text,
+                        client=client,
+                        model=model,
+                        n_samples=int(multi_shot_samples),
+                        validate_elaboration=_ms_validator,
+                        rejection_sink=multi_shot_sink,
+                    )
+                    multi_shot_meta = {
+                        "n_samples": int(multi_shot_samples),
+                        "short_circuited": bool(multi_shot_sink.get("short_circuited")),
+                        "winning_sample_idx": multi_shot_sink.get("winning_sample_idx"),
+                        "winning_temperature": multi_shot_sink.get("winning_temperature"),
+                        "rejection_log": multi_shot_sink.get("rejection_log", []),
+                        "candidates_returned": len(cands_list),
+                    }
+                    cand = cands_list[0] if cands_list else None
+                else:
+                    cand = gen.generate_proof_candidate(
+                        paper_id=paper_id,
+                        theorem_name=short or name,
+                        lean_statement=lean_stmt,
+                        paper_theory_hint=paper_theory_hint,
+                        paper_local_file=file_text,
+                        error_tail="",
+                        client=client,
+                        model=model,
+                        rejection_sink=first_pass_rejection_sink,
+                    )
             except Exception as exc:
                 per_row["stages"].append({"stage": "first_pass_transport_error", "err": str(exc)[:200]})
                 bucket_counts["transport_errors"] += 1
@@ -984,11 +1046,14 @@ def _sweep_paper(
                     confidence=float(cand.get("confidence", 0.0)),
                     round_idx=1,
                 )
-                per_row["stages"].append({
+                validated_stage: dict[str, Any] = {
                     "stage": "first_pass_validated",
                     "body_preview": body[:80],
                     "validator": "isolated_patch_check",
-                })
+                }
+                if multi_shot_meta:
+                    validated_stage["multi_shot"] = multi_shot_meta
+                per_row["stages"].append(validated_stage)
                 file_text = lean_file.read_text(encoding="utf-8")
             elif not isolated_ok:
                 per_row["stages"].append({
@@ -1002,6 +1067,8 @@ def _sweep_paper(
             stage_record: dict[str, Any] = {"stage": "first_pass_forbidden_or_malformed"}
             if first_pass_rejection_sink.get("reason"):
                 stage_record["rejection_reason"] = first_pass_rejection_sink["reason"]
+            if multi_shot_meta:
+                stage_record["multi_shot"] = multi_shot_meta
             per_row["stages"].append(stage_record)
             bucket_counts["forbidden_token_rejects"] += 1
 
@@ -1024,6 +1091,43 @@ def _sweep_paper(
                         })
                     entry["signature_patched_for_typeclass"] = True
                     per_row["stages"].append({"stage": "signature_patch_kept"})
+                # --- Auto-promote to curated PaperProofs ----------------
+                # Mirror the audit-surviving proof into
+                # `Desol/PaperProofs/Paper_<id>.lean` as a `__autoproved`
+                # companion. This is purely additive infrastructure: a
+                # failed promotion never blocks the underlying close.
+                if _AUTO_PROMOTE_TO_CURATED and autoprom is not None:
+                    try:
+                        autoprom_result = autoprom.promote_to_autoproved(
+                            paper_id=paper_id,
+                            theorem_name=short or name,
+                            lean_statement=lean_stmt,
+                            proof_body=body,
+                            project_root=PROJECT_ROOT,
+                            validate_elaboration=None,
+                        )
+                    except Exception as exc:
+                        autoprom_result = {
+                            "ok": False,
+                            "status": f"raised:{exc.__class__.__name__}",
+                        }
+                    if autoprom_result.get("ok"):
+                        trail = entry.setdefault("audit_trail", [])
+                        if isinstance(trail, list):
+                            trail.append({
+                                "event": "autoproved_promotion",
+                                "file": autoprom_result.get("path", ""),
+                                "sha": autoprom_result.get("sha", ""),
+                                "autoproved_name": autoprom_result.get("autoproved_name", ""),
+                                "status": autoprom_result.get("status", ""),
+                                "protocol": "autoproved_promotion_v1",
+                            })
+                    per_row["stages"].append({
+                        "stage": "autoproved_promotion",
+                        "ok": bool(autoprom_result.get("ok")),
+                        "status": autoprom_result.get("status", ""),
+                        "autoproved_name": autoprom_result.get("autoproved_name", ""),
+                    })
             else:
                 per_row["audit"] = "demoted"
                 per_row["audit_summary"] = audit_summary
@@ -1422,6 +1526,18 @@ def main() -> int:
             "otherwise it is reverted (default OFF until calibrated)."
         ),
     )
+    parser.add_argument(
+        "--multi-shot-samples",
+        type=int,
+        default=3,
+        help=(
+            "Number of parallel proof candidates to sample from Leanstral "
+            "for the parent first-pass (with diverse temperatures 0.0/0.3/0.5/0.7/0.9). "
+            "Each candidate is independently validated via the isolated-elaboration "
+            "gate; the first survivor short-circuits the loop. 1 = legacy "
+            "single-shot deterministic behaviour. Default 3."
+        ),
+    )
     parser.add_argument("--summary", default="output/lemma_factor_v2_sweep_summary.json")
     parser.add_argument(
         "--use-fast-validation",
@@ -1483,6 +1599,7 @@ def main() -> int:
             bucket_counts=bucket_counts,
             use_repl_prover=args.use_repl_prover,
             use_typeclass_patcher=args.use_typeclass_patcher,
+            multi_shot_samples=args.multi_shot_samples,
         )
         reports.append(r)
         # Persist partial summary after each paper so a mid-sweep crash

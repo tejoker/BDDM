@@ -36,7 +36,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -390,6 +390,7 @@ def _call(
     user: str,
     max_tokens: int,
     api_log_hook: Optional[Any] = None,
+    temperature: float = 0.0,
 ) -> str:
     messages = [
         {"role": "system", "content": _SYSTEM_PROMPT},
@@ -402,7 +403,7 @@ def _call(
             client=client,
             model=model,
             messages=messages,
-            temperature=0.0,
+            temperature=temperature,
             max_tokens=max_tokens,
             purpose="leanstral_whole_proof_generator",
             api_log_hook=api_log_hook,
@@ -412,7 +413,7 @@ def _call(
         response = client.chat.complete(
             model=model,
             messages=messages,
-            temperature=0.0,
+            temperature=temperature,
             max_tokens=max_tokens,
         )
         text = ""
@@ -582,6 +583,7 @@ def generate_proof_candidate(
     premise_index: Any = None,
     use_mathlib_anchors: bool = True,
     rejection_sink: Optional[dict[str, Any]] = None,
+    temperature: float = 0.0,
 ) -> Optional[dict[str, Any]]:
     """Ask Leanstral to write a whole tactic-mode proof body for `lean_statement`.
 
@@ -660,6 +662,7 @@ def generate_proof_candidate(
             user=user,
             max_tokens=max_tokens,
             api_log_hook=api_log_hook,
+            temperature=temperature,
         )
     except Exception:
         return None
@@ -692,6 +695,178 @@ def generate_proof_candidate(
         "rejection_reason": None,
         "protocol": "leanstral_whole_proof_v1",
     }
+
+
+# --- Multi-shot parallel proof attempts ----------------------------------
+
+# Default temperature ladder for N=5. The first slot stays at 0.0 so the
+# multi-shot mode is a strict superset of the deterministic single-shot
+# baseline; subsequent slots step through diverse sampling levels.
+DEFAULT_MULTI_SHOT_TEMPERATURES: tuple[float, ...] = (0.0, 0.3, 0.5, 0.7, 0.9)
+
+
+def _resolve_multi_shot_temperatures(
+    n_samples: int,
+    temperatures: tuple[float, ...],
+) -> tuple[float, ...]:
+    """Pick `n_samples` temperatures from the supplied ladder.
+
+    If the ladder has fewer entries than `n_samples`, extend by repeating
+    the last temperature. If it has more, take the prefix. This keeps the
+    first slot at 0.0 (deterministic anchor) regardless of N.
+    """
+    if n_samples <= 0:
+        return ()
+    ladder = list(temperatures) if temperatures else list(DEFAULT_MULTI_SHOT_TEMPERATURES)
+    if not ladder:
+        ladder = [0.0]
+    while len(ladder) < n_samples:
+        ladder.append(ladder[-1])
+    return tuple(ladder[:n_samples])
+
+
+def generate_proof_candidates_multi_shot(
+    *,
+    paper_id: str,
+    theorem_name: str,
+    lean_statement: str,
+    paper_theory_hint: str,
+    paper_local_file: str,
+    client: Any,
+    model: str = DEFAULT_MODEL,
+    n_samples: int = 5,
+    temperatures: tuple[float, ...] = DEFAULT_MULTI_SHOT_TEMPERATURES,
+    validate_elaboration: Optional[Callable[[dict[str, Any]], tuple[bool, str]]] = None,
+    error_tail: str = "",
+    max_tokens: int = DEFAULT_MAX_TOKENS,
+    api_log_hook: Optional[Any] = None,
+    audited_core_hint: Optional[str] = None,
+    latex_proof_hints: Optional[list[str]] = None,
+    name_index: Optional[dict[str, Any]] = None,
+    premise_index: Any = None,
+    use_mathlib_anchors: bool = True,
+    rejection_sink: Optional[dict[str, Any]] = None,
+) -> list[dict[str, Any]]:
+    """Generate `n_samples` parallel proof candidates with diverse temperatures.
+
+    Algorithm:
+      1. For each (sample_idx, temperature) pair, call Leanstral with that
+         temperature via `generate_proof_candidate` (which already applies
+         the forbidden-token gate per response).
+      2. If `validate_elaboration` is supplied, run it on the candidate.
+         The callback receives the candidate dict (`{"proof_body": ...,
+         "reasoning": ..., "confidence": ...}`) and returns
+         `(ok: bool, error_message: str)`.
+      3. SHORT-CIRCUIT: as soon as ONE candidate passes the elaboration
+         gate (or, when no validator is supplied, as soon as one survives
+         the forbidden-token gate), return a single-element list with
+         just that candidate.
+      4. If none pass, return the full list of forbidden-gate survivors
+         sorted by (elaboration_ok desc, temperature asc) so the caller
+         can pick whichever shape it likes. Empty list if every sample
+         was rejected by transport / malformed / forbidden-token.
+
+    Standards-positive: every returned candidate has already passed the
+    forbidden-token gate inside `generate_proof_candidate`. The
+    elaboration gate, when supplied, is the second guard. None bypass.
+
+    The returned dicts are augmented with two diagnostic fields:
+      `sample_idx` (int): the 0-based sample index that produced it.
+      `temperature` (float): the temperature used for that call.
+      `elaboration_ok` (bool, only when `validate_elaboration` was supplied)
+      `elaboration_error` (str, only when `validate_elaboration` was supplied)
+    """
+    if client is None:
+        return []
+    if n_samples <= 0:
+        return []
+    if not (lean_statement or "").strip():
+        return []
+
+    temps = _resolve_multi_shot_temperatures(n_samples, temperatures)
+    survivors: list[dict[str, Any]] = []
+    rejection_log: list[dict[str, Any]] = []
+
+    for idx, temp in enumerate(temps):
+        per_sample_sink: dict[str, Any] = {}
+        try:
+            cand = generate_proof_candidate(
+                paper_id=paper_id,
+                theorem_name=theorem_name,
+                lean_statement=lean_statement,
+                paper_theory_hint=paper_theory_hint,
+                paper_local_file=paper_local_file,
+                error_tail=error_tail,
+                client=client,
+                model=model,
+                max_tokens=max_tokens,
+                api_log_hook=api_log_hook,
+                audited_core_hint=audited_core_hint,
+                latex_proof_hints=latex_proof_hints,
+                name_index=name_index,
+                premise_index=premise_index,
+                use_mathlib_anchors=use_mathlib_anchors,
+                rejection_sink=per_sample_sink,
+                temperature=temp,
+            )
+        except Exception as exc:  # pragma: no cover - transport rarely
+            rejection_log.append({
+                "sample_idx": idx,
+                "temperature": temp,
+                "reason": f"transport_error:{type(exc).__name__}",
+            })
+            continue
+
+        if cand is None:
+            rejection_log.append({
+                "sample_idx": idx,
+                "temperature": temp,
+                "reason": per_sample_sink.get("reason", "forbidden_or_malformed"),
+            })
+            continue
+
+        cand["sample_idx"] = idx
+        cand["temperature"] = float(temp)
+
+        if validate_elaboration is None:
+            # No validator wired: short-circuit on the first
+            # forbidden-gate survivor (preserves the single-shot
+            # contract: caller's downstream validator is the load-
+            # bearing guard).
+            if rejection_sink is not None:
+                rejection_sink["rejection_log"] = rejection_log
+                rejection_sink["short_circuited"] = True
+            return [cand]
+
+        try:
+            ok, err = validate_elaboration(cand)
+        except Exception as exc:  # pragma: no cover - validator rarely
+            ok, err = False, f"validator_exception:{type(exc).__name__}:{exc}"
+        cand["elaboration_ok"] = bool(ok)
+        cand["elaboration_error"] = "" if ok else (err or "")
+        survivors.append(cand)
+        if ok:
+            # Short-circuit on the first validated candidate.
+            if rejection_sink is not None:
+                rejection_sink["rejection_log"] = rejection_log
+                rejection_sink["short_circuited"] = True
+                rejection_sink["winning_sample_idx"] = idx
+                rejection_sink["winning_temperature"] = float(temp)
+            return [cand]
+
+    if rejection_sink is not None:
+        rejection_sink["rejection_log"] = rejection_log
+        rejection_sink["short_circuited"] = False
+
+    # Sort the full list by (elaboration_ok desc, temperature asc) so the
+    # caller can pick the most-likely candidate without re-reading the
+    # ladder. When no validator was wired we never reach this branch
+    # (we short-circuit on the first survivor above).
+    survivors.sort(key=lambda c: (
+        0 if c.get("elaboration_ok") else 1,
+        float(c.get("temperature", 0.0)),
+    ))
+    return survivors
 
 
 # --- Paper-theory hint reuse ---------------------------------------------
