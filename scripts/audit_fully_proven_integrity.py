@@ -33,6 +33,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -100,6 +101,95 @@ def _is_audited_core_row(entry: dict[str, Any]) -> bool:
     if bool(entry.get("superseded_by_audited_core")):
         return True
     return False
+
+
+_LAKE_ERROR_RX = re.compile(
+    r"^output/[^:]+:(?P<line>\d+):(?P<col>\d+):\s*error", re.MULTILINE,
+)
+
+
+def collect_lake_error_lines(
+    lean_path: Path, *, timeout_s: int = 180, project_root: Path | None = None,
+) -> dict[int, str]:
+    """Run ``lake env lean <file>`` once and return ``{line_number: message_head}``.
+
+    Used to lake-validate the on-disk body of each FP/AB/IP row. Any
+    error whose line number falls inside a theorem's body line range
+    means that body does NOT elaborate; the row should be demoted with
+    reason ``file_body_does_not_elaborate``.
+
+    Empty dict on lake timeout / missing file / project_root mismatch
+    — the audit then falls back to the legacy body-is-sorry path.
+    """
+    if not lean_path.exists():
+        return {}
+    cwd = project_root or Path.cwd()
+    try:
+        proc = subprocess.run(
+            ["lake", "env", "lean", str(lean_path)],
+            cwd=str(cwd),
+            capture_output=True,
+            text=True,
+            timeout=timeout_s,
+        )
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        return {}
+    blob = (proc.stdout or "") + "\n" + (proc.stderr or "")
+    errs: dict[int, str] = {}
+    for m in _LAKE_ERROR_RX.finditer(blob):
+        try:
+            ln = int(m.group("line"))
+        except (TypeError, ValueError):
+            continue
+        # Capture a short tail after the match for forensics.
+        tail_start = m.end()
+        tail = blob[tail_start: tail_start + 200].splitlines()[0].strip()
+        errs.setdefault(ln, tail)
+    return errs
+
+
+def _theorem_line_range_in_file(
+    lean_src: str,
+    theorem_name: str,
+    *,
+    aux_local_name: str | None = None,
+) -> tuple[int, int] | None:
+    """Find the 1-based ``(start_line, end_line)`` of a theorem's
+    declaration block (signature + body) in ``lean_src``. End line is
+    inclusive; the block stops at the next ``theorem``/``lemma``/``def``/
+    ``end``/comment line or end-of-file.
+
+    Returns None when the theorem isn't found by any candidate name.
+    """
+    candidates: list[str] = [theorem_name]
+    if "." in theorem_name:
+        bare = theorem_name.rsplit(".", 1)[-1]
+        if bare and bare != theorem_name:
+            candidates.append(bare)
+    if aux_local_name:
+        local = str(aux_local_name).strip()
+        if local and local not in candidates:
+            candidates.append(local)
+    lines = lean_src.splitlines()
+    n = len(lines)
+    for cand in candidates:
+        decl_rx = re.compile(r"^\s*theorem\s+" + re.escape(cand) + r"\b")
+        start_idx = None
+        for i, ln in enumerate(lines):
+            if decl_rx.search(ln):
+                start_idx = i
+                break
+        if start_idx is None:
+            continue
+        # Find the end of the block: next top-level decl.
+        end_idx = n - 1
+        boundary_rx = re.compile(r"^\s*(theorem|lemma|def|abbrev|axiom|namespace|end|--)\b")
+        for j in range(start_idx + 1, n):
+            if boundary_rx.search(lines[j]):
+                end_idx = j - 1
+                break
+        return (start_idx + 1, end_idx + 1)
+    return None
 
 
 def _theorem_body_in_file(
@@ -249,6 +339,7 @@ def audit_ledger_entries(
     paper_id: str,
     lean_src: str,
     statuses: tuple[str, ...] = ("FULLY_PROVEN",),
+    lake_error_lines: dict[int, str] | None = None,
 ) -> AuditResult:
     """Walk one ledger's entries; demote rows that claim proof closure but
     whose actual .lean file body is `sorry`. Returns AuditResult.
@@ -319,6 +410,43 @@ def audit_ledger_entries(
                 )
             )
             continue
+        # Lake-validate on-disk body: if the file's lake output reports any
+        # error inside this theorem's line range, the body does NOT elaborate.
+        # This catches a class of bypasses the body-is-sorry check misses:
+        # ledger claims a proof closed, but the file body is broken (e.g.
+        # invokes a non-existent identifier `lem_X_ax hbeta hs hs1` against a
+        # paper-theory that declares only `axiom lem_X_ax : Prop`).
+        if lake_error_lines:
+            line_range = _theorem_line_range_in_file(
+                lean_src, name, aux_local_name=aux_local_name,
+            )
+            if line_range is not None:
+                lo, hi = line_range
+                offending = [(ln, msg) for ln, msg in lake_error_lines.items()
+                             if lo <= ln <= hi]
+                if offending:
+                    captured = str(entry.get("proof_text", "") or "")
+                    file_preview = body[:120].rstrip()
+                    err_summary = (
+                        f"lake_errors_at_lines={','.join(str(ln) for ln, _ in offending[:3])}"
+                    )
+                    _demote_entry(entry, captured=captured, file_preview=file_preview)
+                    if "audit_demotion" in entry:
+                        entry["audit_demotion"]["reason"] = "file_body_does_not_elaborate"
+                        entry["audit_demotion"]["lake_error_lines"] = [
+                            {"line": ln, "msg_head": msg[:120]} for ln, msg in offending[:5]
+                        ]
+                    result.demoted += 1
+                    result.demotions.append(
+                        Demotion(
+                            paper_id=paper_id,
+                            theorem_name=name,
+                            captured_proof_text=captured[:80],
+                            file_body_preview=err_summary,
+                            reason="file_body_does_not_elaborate",
+                        )
+                    )
+                    continue
         # Triviality check: a proof that closes a vacuous claim is not honest
         # auto-closure. The translator's `_is_trivialized_signature` knows the
         # placeholder shapes (`∃ x, x = x`, `X = X ∧ Y = Y`, Prop-binder
@@ -367,6 +495,7 @@ def audit_ledger_file(
     paper_id: str,
     write: bool = False,
     statuses: tuple[str, ...] = ("FULLY_PROVEN",),
+    lake_error_lines: dict[int, str] | None = None,
 ) -> AuditResult:
     """Audit one ledger file against one Lean source file.
 
@@ -374,6 +503,12 @@ def audit_ledger_file(
     `write=True` AND at least one demotion occurred. `statuses` defaults to
     just FULLY_PROVEN; pass the broader tuple to also audit AB/IP rows
     whose stored `lean_proof_closed=True` flag came from the circular bypass.
+
+    ``lake_error_lines`` (optional): the result of
+    ``collect_lake_error_lines(lean_path)``. When supplied, any FP/AB/IP
+    row whose theorem body shares a line range with a lake error is
+    demoted with reason ``file_body_does_not_elaborate``. Computed once
+    per paper by the caller to amortize the lake-build cost.
     """
     if not ledger_path.exists() or not lean_path.exists():
         return AuditResult(paper_id=paper_id)
@@ -382,6 +517,7 @@ def audit_ledger_file(
     lean_src = lean_path.read_text(encoding="utf-8")
     result = audit_ledger_entries(
         entries, paper_id=paper_id, lean_src=lean_src, statuses=statuses,
+        lake_error_lines=lake_error_lines,
     )
     if write and result.demoted > 0:
         payload = data if isinstance(data, list) else {**data, "entries": entries}
@@ -400,6 +536,7 @@ def audit_paper(
     repro_dir: Path,
     write: bool = False,
     statuses: tuple[str, ...] = ("FULLY_PROVEN",),
+    lake_validate_bodies: bool = True,
 ) -> dict[str, Any]:
     """Audit both ephemeral and canonical ledgers for one paper.
 
@@ -407,6 +544,12 @@ def audit_paper(
     the demotion verdict is consistent across them. Returns a summary dict
     suitable for JSON output. `statuses` defaults to just FULLY_PROVEN; pass
     `_PROOF_CLAIMING_STATUSES` to also catch bypass-IPs and bypass-ABs.
+
+    ``lake_validate_bodies`` (default True): runs ``lake env lean`` once
+    on the source file and demotes any FP/AB/IP row whose body line range
+    overlaps a lake error. Catches bypasses where the ledger claims a
+    proof closed but the on-disk body is broken (e.g. invokes a
+    non-existent identifier).
     """
     lean_path = lean_dir / f"{paper_id}.lean"
     ephem = ledger_dir / f"{paper_id}.json"
@@ -415,12 +558,17 @@ def audit_paper(
     if not lean_path.exists():
         out["skipped"] = "lean_file_missing"
         return out
+    lake_errs: dict[int, str] | None = None
+    if lake_validate_bodies:
+        lake_errs = collect_lake_error_lines(lean_path)
+        out["lake_error_line_count"] = len(lake_errs)
     for label, path in (("ephemeral", ephem), ("canonical", canonical)):
         if not path.exists():
             out[label] = {"missing": True}
             continue
         r = audit_ledger_file(
             path, lean_path, paper_id=paper_id, write=write, statuses=statuses,
+            lake_error_lines=lake_errs,
         )
         out[label] = {
             "path": str(path),
@@ -488,6 +636,18 @@ def main() -> int:
             "FP/AB/IP claims."
         ),
     )
+    parser.add_argument(
+        "--lake-validate-bodies",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Run `lake env lean` once per paper and demote any FP/AB/IP row "
+            "whose theorem body line range overlaps a lake error. Catches "
+            "bypasses where the ledger claims a proof closed but the on-disk "
+            "body is broken (e.g. invokes a non-existent identifier). Default "
+            "ON; disable for fast pre-mirror smoke checks."
+        ),
+    )
     args = parser.parse_args()
 
     statuses: tuple[str, ...] = (
@@ -513,6 +673,7 @@ def main() -> int:
             repro_dir=args.repro_dir,
             write=args.write,
             statuses=statuses,
+            lake_validate_bodies=bool(args.lake_validate_bodies),
         )
         summary["papers"][pid] = result
         # Totals are computed from the canonical ledger when present, else

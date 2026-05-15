@@ -3,10 +3,10 @@
     "theorem_name": "Thm_Glo2",
     "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
     "lean_statement": "theorem Thm_Glo2 (gamma : ℝ) (alpha : ℝ) (u0 : ℝ → ℝ) (f : ℝ → ℝ) (ℍN : Type*) [MeasurableSpace ℍN] (p Q : ℝ) (T_max : ℝ) (h : ℝ → ℝ → ℝ) (B : ℝ) (T_eps eps beta : ℝ) (u v : ℝ → ℝ) (hgamma : gamma ≥ 0) (halpha : alpha ∈ Set.Ioo (-1) 0) (hu0 : u0 ∈ Set.range (fun x : ℝ → ℝ => x)) (hf : f ∈ Set.range (fun x : ℝ → ℝ => x) ∩ Set.range (fun x : ℝ → ℝ => x)) (hu0_nonneg : u0 ≥ 0) (hf_int_pos : ∫ x, f x > 0) (hp : p ∈ Set.Ioo 1 ((Q - 2 * alpha) / (Q - 2 - 2 * alpha))) (hT_eps : T_eps ≤ C * eps ^ ((beta - (gamma + p) / (p - 1) - alpha)⁻1)) : ∀ u, IsGlobalWeakSolution u → False := by sorry",
-    "status": "AXIOM_BACKED",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_PLACEHOLDER",
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,provenance_linked,reproducible_env,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
     "promotion_gate_passed": true,
@@ -59,17 +59,17 @@
       "label": "Thm_Glo2",
       "cited_refs": []
     },
-    "proof_text": "intro u hu\nobtain ⟨T, hT, h⟩ := hu\nspecialize h 0 (by simp) (by linarith)\nobtain ⟨u0, hu0_nonneg, hu0_int⟩ := h\nhave h1 := hu0_int\nhave h2 := hu0_nonneg\nhave h3 := hf_int_pos\nlinarith",
+    "proof_text": "",
     "first_failing_step": -1,
     "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2604.21314_Thm_Glo2_isolated_8_t601pd.lean:24:534: error: unexpected token; expected ')', ',' or ':'",
     "proof_mode": "validation-gate",
-    "proof_method": "leanstral_whole_proof_v1",
+    "proof_method": "unattempted",
     "rounds_used": 0,
     "time_s": 0.0,
     "timestamp": "2026-05-09T19:59:50Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -87,12 +87,15 @@
       "reproducible_env",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
       "insufficient_semantic_evidence",
-      "leanstral_whole_proof_v1:closed_round=1:confidence=0.70"
+      "leanstral_whole_proof_v1:closed_round=1:confidence=0.70",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "partial",
     "paper_statement_id": "pstmt_0de00039bd432a8d72c7eac0",
@@ -206,6 +209,20 @@
       "reasoning": "The theorem assumes the existence of a global weak solution `u` and aims to derive a contradiction. By specializing the solution property at `t = 0`, we obtain a non-negative function `u0` with a finite integral. However, the hypothesis `hf_int_pos` states that the integral of `f` is positive, which contradicts the non-negativity and finiteness of `u0`'s integral under the given constraints.",
       "confidence": 0.7,
       "round_idx": 1
+    },
+    "proved": false,
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "intro u hu\nobtain ⟨T, hT, h⟩ := hu\nspecialize h 0 (by simp) (by linarith)\nobtain ⟨u0, hu0_nonneg, hu0_int⟩ := h\nhave h1 := hu0_int\nhave h2 := hu0_nonneg\nhave h3 := hf_int_pos\nlinarith",
+      "file_body_preview": "intro u hu\n  obtain ⟨T, hT, h⟩ := hu\n  specialize h 0 (by simp) (by linarith)\n  obtain ⟨u0, hu0_nonneg, hu0_int⟩ := h",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 22,
+          "msg_head": ": unexpected token; expected ')', ',' or ':'"
+        }
+      ]
     }
   },
   {
@@ -685,10 +702,10 @@
     "theorem_name": "Thm_Blowup_O2",
     "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
     "lean_statement": "theorem Thm_Blowup_O2\n    {N : ℕ} (gamma : ℝ) (alpha : ℝ) (p : ℝ) (u0 f : ℝ → ℝ)\n    (hgamma : gamma ∈ Set.Icc 0 1) (halpha : alpha ∈ Set.Ioi 0) (hp : p > 1)\n    (h0 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u0 ξ d_dtmu < infty)\n    (hf : 0 < ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * f ξ d_dtmu ∧ ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * f ξ d_dtmu < infty) :\n    ¬∃ T : ℝ, T = infty ∧ ∀ t ∈ Set.Ici 0, t < T → ∃ u : ℝ → ℝ,\n      IsWeakSolution u t := by sorry",
-    "status": "AXIOM_BACKED",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_PLACEHOLDER",
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,provenance_linked,reproducible_env,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
     "promotion_gate_passed": true,
@@ -725,17 +742,17 @@
       "label": "Thm_Blowup_O2",
       "cited_refs": []
     },
-    "proof_text": "intro h\nobtain ⟨T, hT_eq, hT⟩ := h\nspecialize hT 0 (Set.mem_Ici.mpr (by norm_num)) (by simp [hT_eq])\nobtain ⟨u, hu⟩ := hT\nhave h1 := hu.1\nhave h2 := hu.2\nhave h3 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u ξ d_dtmu < infty := by\n  apply h2\nhave h4 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u0 ξ d_dtmu < infty := h0\nhave h5 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * f ξ d_dtmu < infty := hf.2\nhave h6 : 0 < ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * f ξ d_dtmu := hf.1\nhave h7 : ∀ t ∈ Set.Ici 0, t < T → ∃ u : ℝ → ℝ, IsWeakSolution u t := hT\nspecialize h7 0 (Set.mem_Ici.mpr (by norm_num)) (by simp [hT_eq])\nobtain ⟨u', hu'⟩ := h7\nhave h8 : ∀ ξ, u' ξ ≥ 0 := hu'.1\nhave h9 : ∀ ξ, u' ξ = u0 ξ + ∫ s in Set.Icc 0 0, (∫ ξ', (Real.sqrt ((ξ - ξ') * (ξ - ξ') + 1)) ^ (-mu 0) * f ξ') * (h s ξ) dξ' := hu'.2\nsimp at h9\nhave h10 : u' = u0 := by\n  ext ξ\n  simp [h9]\nhave h11 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u' ξ d_dtmu < infty := by\n  rw [h10]\n  exact h0\nhave h12 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u' ξ d_dtmu ≥ 0 := by\n  apply integral_nonneg\n  intro ξ\n  apply mul_nonneg\n  · apply pow_nonneg\n    apply norm_nonneg\n  · apply h8\nhave h13 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u' ξ d_dtmu = ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u0 ξ d_dtmu := by\n  rw [h10]\nrw [h13] at h11\nexact h11",
+    "proof_text": "",
     "first_failing_step": -1,
     "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2604.21314_Thm_Blowup_O2_isolated_aoj0v19z.lean:27:22: error: unexpected identifier; expected ')'",
     "proof_mode": "validation-gate",
-    "proof_method": "leanstral_whole_proof_v1",
+    "proof_method": "unattempted",
     "rounds_used": 0,
     "time_s": 0.0,
     "timestamp": "2026-05-09T20:00:10Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -753,12 +770,15 @@
       "reproducible_env",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
       "insufficient_semantic_evidence",
-      "leanstral_whole_proof_v1:closed_round=1:confidence=0.70"
+      "leanstral_whole_proof_v1:closed_round=1:confidence=0.70",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "partial",
     "paper_statement_id": "pstmt_941ded3bd5eff12357823ed6",
@@ -862,6 +882,20 @@
       "reasoning": "The theorem states that there does not exist a time T = infty such that for all t in [0, T), there exists a weak solution u. The proof proceeds by contradiction: assuming such a T exists, we derive a contradiction by showing that the integral condition on u0 is violated.",
       "confidence": 0.7,
       "round_idx": 1
+    },
+    "proved": false,
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "intro h\nobtain ⟨T, hT_eq, hT⟩ := h\nspecialize hT 0 (Set.mem_Ici.mpr (by norm_num)) (by simp [hT_eq])\nobtain ⟨u, hu⟩ := hT\nhave h1 := hu.1\nhave h2 := hu.2\nhave h3 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u ξ d_dtmu < infty := by\n  apply h2\nhave h4 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u0 ξ d_dtmu < infty := h0\nhave h5 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * f ξ d_dtmu < infty := hf.2\nhave h6 : 0 < ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * f ξ d_dtmu := hf.1\nhave h7 : ∀ t ∈ Set.Ici 0, t < T → ∃ u : ℝ → ℝ, IsWeakSolution u t := hT\nspecialize h7 0 (Set.mem_Ici.mpr (by norm_num)) (by simp [hT_eq])\nobtain ⟨u', hu'⟩ := h7\nhave h8 : ∀ ξ, u' ξ ≥ 0 := hu'.1\nhave h9 : ∀ ξ, u' ξ = u0 ξ + ∫ s in Set.Icc 0 0, (∫ ξ', (Real.sqrt ((ξ - ξ') * (ξ - ξ') + 1)) ^ (-mu 0) * f ξ') * (h s ξ) dξ' := hu'.2\nsimp at h9\nhave h10 : u' = u0 := by\n  ext ξ\n  simp [h9]\nhave h11 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u' ξ d_dtmu < infty := by\n  rw [h10]\n  exact h0\nhave h12 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u' ξ d_dtmu ≥ 0 := by\n  apply integral_nonneg\n  intro ξ\n  apply mul_nonneg\n  · apply pow_nonneg\n    apply norm_nonneg\n  · apply h8\nhave h13 : ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u' ξ d_dtmu = ∫ ξ : ℝ, ‖ξ‖_H ^ (-mu lam) * u0 ξ d_dtmu := by\n  rw [h10]\nrw [h13] at h11\nexact h11",
+      "file_body_preview": "intro h\n  obtain ⟨T, hT_eq, hT⟩ := h\n  specialize hT 0 (Set.mem_Ici.mpr (by norm_num)) (by simp [hT_eq])\n  obtain ⟨u, hu",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 56,
+          "msg_head": ": unexpected identifier; expected ')'"
+        }
+      ]
     }
   },
   {
@@ -1087,10 +1121,10 @@
     "theorem_name": "infty",
     "lean_file": "/home/projectx/BDDM/output/2604.21314.lean",
     "lean_statement": "theorem infty {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] [CompleteSpace alpha] (g : alpha → ℝ) (t : ℝ) (ht : t > 0) :\n  ∥(fun x => ∫ y, (fun z => Real.exp (t * (inner z z))) (x - y) * g y) x∥ ≤ ∥g x∥ := by sorry",
-    "status": "INTERMEDIARY_PROVEN",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_PLACEHOLDER",
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,provenance_linked",
     "promotion_gate_passed": true,
@@ -1130,17 +1164,17 @@
       }
     ],
     "provenance": null,
-    "proof_text": "intro x\nhave h1 : ∀ y, ∥(fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ ≤ ∥g y∥ := by\n  intro y\n  have h2 : ∥(fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ = Real.exp (t * (inner (x - y) (x - y))) * ∥g y∥ := by\n    simp [norm_mul, Real.norm_exp]\n  rw [h2]\n  have h3 : Real.exp (t * (inner (x - y) (x - y))) ≤ 1 := by\n    have h4 : t * (inner (x - y) (x - y)) ≤ 0 := by\n      have h5 : inner (x - y) (x - y) ≥ 0 := by\n        exact inner_self_nonneg (x - y)\n      nlinarith\n    have h6 : Real.exp (t * (inner (x - y) (x - y))) ≤ Real.exp (0 : ℝ) := by\n      apply Real.exp_le_exp_of_le\n      linarith\n    simp at h6\n    linarith\n  nlinarith\nhave h2 : ∥∫ y, (fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ ≤ ∫ y, ∥(fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ := by\n  apply norm_integral_le_of_le\n  intro y\n  exact h1 y\nhave h3 : ∫ y, ∥(fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ ≤ ∫ y, ∥g y∥ := by\n  apply integral_mono\n  intro y\n  exact h1 y\nhave h4 : ∫ y, ∥g y∥ = ∥g x∥ := by\n  simp\nhave h5 : ∥∫ y, (fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ ≤ ∥g x∥ := by\n  linarith\nexact h5",
+    "proof_text": "",
     "first_failing_step": -1,
     "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2604.21314_infty_isolated_pxncz1zh.lean:25:2: error: expected token",
     "proof_mode": "validation-gate",
-    "proof_method": "leanstral_whole_proof_v1",
+    "proof_method": "unattempted",
     "rounds_used": 0,
     "time_s": 0.0,
     "timestamp": "2026-05-13T21:00:41Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": false,
       "translation_fidelity_ok": true,
@@ -1155,7 +1189,9 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "provenance_linked"
+      "provenance_linked",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -1163,7 +1199,8 @@
       "equivalent_independent_semantic_evidence",
       "claim_equivalent:hybrid",
       "semantic_equivalence:verified",
-      "leanstral_whole_proof_v1:closed_round=1:confidence=0.70"
+      "leanstral_whole_proof_v1:closed_round=1:confidence=0.70",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "exact",
     "paper_statement_id": "pstmt_a980bcb0a12447b8e3a8e6c4",
@@ -1310,6 +1347,20 @@
       "reasoning": "The proof uses the properties of the norm and the exponential function to show that the norm of the integral is bounded by the norm of g. The key steps involve showing that the exponential term is bounded by 1 and then applying properties of integrals and norms.",
       "confidence": 0.7,
       "round_idx": 1
+    },
+    "proved": false,
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "intro x\nhave h1 : ∀ y, ∥(fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ ≤ ∥g y∥ := by\n  intro y\n  have h2 : ∥(fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ = Real.exp (t * (inner (x - y) (x - y))) * ∥g y∥ := by\n    simp [norm_mul, Real.norm_exp]\n  rw [h2]\n  have h3 : Real.exp (t * (inner (x - y) (x - y))) ≤ 1 := by\n    have h4 : t * (inner (x - y) (x - y)) ≤ 0 := by\n      have h5 : inner (x - y) (x - y) ≥ 0 := by\n        exact inner_self_nonneg (x - y)\n      nlinarith\n    have h6 : Real.exp (t * (inner (x - y) (x - y))) ≤ Real.exp (0 : ℝ) := by\n      apply Real.exp_le_exp_of_le\n      linarith\n    simp at h6\n    linarith\n  nlinarith\nhave h2 : ∥∫ y, (fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ ≤ ∫ y, ∥(fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ := by\n  apply norm_integral_le_of_le\n  intro y\n  exact h1 y\nhave h3 : ∫ y, ∥(fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ ≤ ∫ y, ∥g y∥ := by\n  apply integral_mono\n  intro y\n  exact h1 y\nhave h4 : ∫ y, ∥g y∥ = ∥g x∥ := by\n  simp\nhave h5 : ∥∫ y, (fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ ≤ ∥g x∥ := by\n  linarith\nexact h5",
+      "file_body_preview": "intro x\n  have h1 : ∀ y, ∥(fun z => Real.exp (t * (inner z z))) (x - y) * g y∥ ≤ ∥g y∥ := by\n    intro y\n    have h2 : ∥",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 105,
+          "msg_head": ": expected token"
+        }
+      ]
     }
   },
   {

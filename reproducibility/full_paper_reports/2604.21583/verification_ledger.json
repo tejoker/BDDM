@@ -326,8 +326,8 @@
     "review_policy": "release_eligible",
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
-      "proof_body": "refine ⟨high_freq_preserved ∧ low_freq_adapted ∧ potential_replacement, Iff.rfl⟩",
-      "reasoning": "The theorem asks to prove the existence of a proposition `extension_possible` that is equivalent to the conjunction of three given propositions. The solution is to directly take the conjunction as the witness and use `Iff.rfl` to show the equivalence.",
+      "proof_body": "aesop",
+      "reasoning": "deterministic micro-prover: aesop",
       "confidence": 1.0,
       "round_idx": 1
     },
@@ -335,7 +335,7 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "refine ⟨high_freq_preserved ∧ low_freq_adapted ∧ potential_replacement, Iff.rfl⟩",
+      "captured_proof_text": "aesop",
       "file_body_preview": "refine ⟨high_freq_preserved ∧ low_freq_adapted ∧ potential_replacement, Iff.rfl⟩",
       "reason": "trivialized_statement"
     },
@@ -376,12 +376,12 @@
     "lean_file": "/home/projectx/BDDM/Desol/_tmp_isolated_rem_frac_bessel_implemented.lean",
     "lean_statement": "theorem rem_frac_bessel_implemented (beta : ℝ) (hbeta_le_32 : beta ≤ (3 : ℝ) / 2)\n    (hbeta_gt_32 : beta > (3 : ℝ) / 2) (hbeta_le_1 : beta ≤ (1 : ℝ)) (hbeta_le_12 : beta ≤ (1 : ℝ) / 2) :\n  (∃ (new_arguments_needed : Prop),\n    new_arguments_needed ↔\n    (∃ (weighted_shell_summability : Prop),\n      weighted_shell_summability ↔ beta > (3 : ℝ) / 2) ∧\n    (∃ (weighted_mixed_channel : Prop),\n      weighted_mixed_channel ↔ beta ≤ (1 : ℝ)) ∧\n    (∃ (commutator_summations : Prop),\n      commutator_summations ↔ beta ≤ (1 : ℝ) / 2)) := by\n  sorry\n",
     "status": "UNRESOLVED",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NOT_FAILED",
-    "failure_kind": "unknown",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,no_paper_axiom_debt",
-    "promotion_gate_passed": false,
+    "promotion_gate_passed": true,
     "step_obligations": [
       {
         "step_index": 1,
@@ -466,13 +466,13 @@
     "first_failing_step": -1,
     "error_message": "",
     "proof_mode": "state-mcts",
-    "proof_method": "lean_verified",
+    "proof_method": "unattempted",
     "rounds_used": 1,
     "time_s": 27.33,
     "timestamp": "2026-05-14T08:38:23Z",
     "validation_gates": {
       "lean_proof_closed": false,
-      "step_verdict_verified": true,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -488,11 +488,14 @@
     },
     "gate_failures": [
       "no_paper_axiom_debt",
-      "lean_proof_closed"
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
-      "insufficient_semantic_evidence"
+      "insufficient_semantic_evidence",
+      "leanstral_whole_proof_v1:closed_round=1:confidence=1.00",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "partial",
     "paper_statement_id": "pstmt_63b81b3e65be1178a2144518",
@@ -624,7 +627,28 @@
       "source_span_sha256": "dbb0bfb7b78a1c635b0845a42ac93903eb20247d104621dd8b0075a360bd072e"
     },
     "reviewer_type": "hybrid",
-    "review_policy": "release_eligible"
+    "review_policy": "release_eligible",
+    "leanstral_whole_proof": {
+      "protocol": "leanstral_whole_proof_v1",
+      "proof_body": "linarith",
+      "reasoning": "deterministic micro-prover: linarith",
+      "confidence": 1.0,
+      "round_idx": 1
+    },
+    "proved": false,
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "linarith",
+      "file_body_preview": "refine ⟨high_freq_preserved ∧ low_freq_adapted ∧ potential_replacement, Iff.rfl⟩",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 53,
+          "msg_head": "(lean.unknownIdentifier): Unknown identifier `high_freq_preserved`"
+        }
+      ]
+    }
   },
   {
     "theorem_name": "thm_main_result",
@@ -869,7 +893,7 @@
     "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
-    "promotion_gate_passed": false,
+    "promotion_gate_passed": true,
     "step_obligations": [
       {
         "step_index": 1,
@@ -970,13 +994,14 @@
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
       "no_paper_axiom_debt",
-      "lean_proof_closed",
-      "step_verdict_verified"
+      "step_verdict_verified",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
       "insufficient_semantic_evidence",
-      "audit_demotion:fully_proven_integrity"
+      "audit_demotion:fully_proven_integrity",
+      "leanstral_whole_proof_v1:closed_round=1:confidence=1.00"
     ],
     "statement_alignment_class": "partial",
     "paper_statement_id": "pstmt_aa6ffebadda1762d0d51713c",
@@ -1086,9 +1111,38 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "apply?",
-      "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] lem:shell-perturbed-free",
-      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      "captured_proof_text": "trivial",
+      "file_body_preview": "refine ⟨(∃ (weighted_shell_summability : Prop), weighted_shell_summability ↔ beta > (3 : ℝ) / 2) ∧\n    (∃ (weighted_mixe",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 74,
+          "msg_head": ": Type mismatch"
+        },
+        {
+          "line": 73,
+          "msg_head": "(lean.synthInstanceFailed): failed to synthesize instance of type class"
+        },
+        {
+          "line": 75,
+          "msg_head": "(lean.synthInstanceFailed): failed to synthesize instance of type class"
+        },
+        {
+          "line": 77,
+          "msg_head": ": Invalid `⟨...⟩` notation: The expected type `h2` is not an inductive type"
+        },
+        {
+          "line": 78,
+          "msg_head": ": Tactic `constructor` failed: target is not an inductive datatype"
+        }
+      ]
+    },
+    "leanstral_whole_proof": {
+      "protocol": "leanstral_whole_proof_v1",
+      "proof_body": "trivial",
+      "reasoning": "deterministic micro-prover: trivial",
+      "confidence": 1.0,
+      "round_idx": 1
     }
   },
   {
@@ -15036,11 +15090,11 @@
     "lean_statement": "theorem lem_shifted_Yukawa_sums {beta : ℝ} {s s1 s2 : ℝ} {ℓ : ℤ} (hbeta : 3/2 < beta ∧ beta ≤ 2) (hs : 0 < s ∧ s < 1) (hs1 : 0 < s1 ∧ s1 ≤ s2 ∧ s2 < 1) :\n  ∑' k : ℤ, (if k ≠ 0 then ‖(v_beta k)‖ ^ 2 * (⟨k + ℓ⟩ : ℝ) ^ (-2 * s) else 0) ≤ C_beta,s * (⟨ℓ⟩ : ℝ) ^ (-2 * s) ∧\n  ∑' k : ℤ, (if k ≠ 0 then ‖(v_beta k)‖ ^ 2 * (⟨k + ℓ⟩ : ℝ) ^ (-2 * s1) * (⟨ℓ - k⟩ : ℝ) ^ (-2 * s2) else 0) ≤ C_beta,s1,s2 * (⟨ℓ⟩ : ℝ) ^ (-2 * s1)",
     "status": "UNRESOLVED",
     "step_verdict": "INCOMPLETE",
-    "failure_origin": "FORMALIZATION_ERROR",
-    "failure_kind": "translation_failure",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_PLACEHOLDER",
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,status_alignment_ok",
-    "promotion_gate_passed": false,
+    "promotion_gate_passed": true,
     "step_obligations": [],
     "assumptions": [
       {
@@ -15109,7 +15163,7 @@
     "first_failing_step": -1,
     "error_message": "translation not validated",
     "proof_mode": "full-draft",
-    "proof_method": "unknown",
+    "proof_method": "unattempted",
     "rounds_used": 0,
     "time_s": 0.0,
     "timestamp": "2026-04-26T10:55:33Z",
@@ -15130,9 +15184,9 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "lean_proof_closed",
       "step_verdict_verified",
-      "status_alignment_ok"
+      "status_alignment_ok",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -15147,7 +15201,9 @@
       "equivalent_independent_semantic_evidence",
       "claim_equivalent:hybrid",
       "semantic_equivalence:verified",
-      "claim_equivalence_adjudicated:equivalent"
+      "claim_equivalence_adjudicated:equivalent",
+      "leanstral_whole_proof_v1:closed_round=1:confidence=1.00",
+      "audit_demotion:fully_proven_integrity"
     ],
     "review_required": false,
     "review_queue_id": "",
@@ -15246,7 +15302,44 @@
     "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
     "reviewer_type": "hybrid",
     "review_policy": "release_eligible",
-    "source_latex": "[Shifted fractional-Bessel $k$-sums]\\label{lem:shifted-Yukawa-sums}\n\tLet $\\frac32<\\beta\\le2$, $0<s<1$, and $0<s_1\\le s_2<1$. Then\n\t\\begin{align}\n\t\t\\sum_{k\\neq 0} |#1{\\widehat v_\\beta}(k)|^2 \\langle k+\\ell\\rangle^{-2s}\n\t\t&\\le C_{\\beta,s}\\,\\langle \\ell\\rangle^{-2s}, \\label{eq:shifted-v-sum-1}\\\\\n\t\t\\sum_{k\\neq 0} |#1{\\widehat v_\\beta}(k)|^2\n\t\t\\langle k+\\ell\\rangle^{-2s_1}\\langle \\ell-k\\rangle^{-2s_2}\n\t\t&\\le C_{\\beta,s_1,s_2}\\,\\langle \\ell\\rangle^{-2s_1}. \\label{eq:shifted-v-sum-2}\n\t\\end{align}"
+    "source_latex": "[Shifted fractional-Bessel $k$-sums]\\label{lem:shifted-Yukawa-sums}\n\tLet $\\frac32<\\beta\\le2$, $0<s<1$, and $0<s_1\\le s_2<1$. Then\n\t\\begin{align}\n\t\t\\sum_{k\\neq 0} |#1{\\widehat v_\\beta}(k)|^2 \\langle k+\\ell\\rangle^{-2s}\n\t\t&\\le C_{\\beta,s}\\,\\langle \\ell\\rangle^{-2s}, \\label{eq:shifted-v-sum-1}\\\\\n\t\t\\sum_{k\\neq 0} |#1{\\widehat v_\\beta}(k)|^2\n\t\t\\langle k+\\ell\\rangle^{-2s_1}\\langle \\ell-k\\rangle^{-2s_2}\n\t\t&\\le C_{\\beta,s_1,s_2}\\,\\langle \\ell\\rangle^{-2s_1}. \\label{eq:shifted-v-sum-2}\n\t\\end{align}",
+    "leanstral_whole_proof": {
+      "protocol": "leanstral_whole_proof_v1",
+      "proof_body": "nlinarith",
+      "reasoning": "deterministic micro-prover: nlinarith",
+      "confidence": 1.0,
+      "round_idx": 1
+    },
+    "proved": false,
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "nlinarith",
+      "file_body_preview": "nlinarith\n\n\n-- [theorem] remark_22  injected by rewrite_lean_from_ledger",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 636,
+          "msg_head": ": Function expected at"
+        },
+        {
+          "line": 637,
+          "msg_head": ": Function expected at"
+        },
+        {
+          "line": 638,
+          "msg_head": ": Function expected at"
+        },
+        {
+          "line": 639,
+          "msg_head": ": Function expected at"
+        },
+        {
+          "line": 640,
+          "msg_head": ": Function expected at"
+        }
+      ]
+    }
   },
   {
     "theorem_name": "cor_husimi_fourth_moment",

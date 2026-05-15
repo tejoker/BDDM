@@ -4133,10 +4133,10 @@
     "theorem_name": "Lem_A1",
     "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
     "lean_statement": "theorem Lem_A1 (alpha alpha1 : Multisegment) (b e : ℤ) (halpha1_sub : alpha1 ⊆ alpha) (halpha1_form : alpha1 = Multisegment.ofList [Segment.mk (-e) b, Segment.mk (-e + 1) (b + 1), Segment.mk (-b - 1) (e - 1), Segment.mk (-b) e]) (halpha1_minmax : alpha1.contains (shortest_segment_containing (-e)) ∧ alpha1.contains (shortest_segment_containing e)) : ∀ gamma ⊆ alpha, gamma ≠ alpha1 → ¬(CanGenerate gamma [b, e]) := by sorry",
-    "status": "INTERMEDIARY_PROVEN",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_PLACEHOLDER",
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,assumptions_grounded,provenance_linked,dependency_trust_complete",
     "promotion_gate_passed": true,
@@ -4168,17 +4168,17 @@
       }
     ],
     "provenance": null,
-    "proof_text": "intro gamma hgamma hne hgen\nobtain ⟨h1, h2⟩ := halpha1_minmax\nhave h3 : gamma ⊆ alpha1 := Subset.trans hgamma halpha1_sub\nhave h4 : gamma ≠ alpha1 := hne\nhave h5 : ¬(CanGenerate gamma [b, e]) := by\n  intro hgen'\n  have h6 : CanGenerate gamma [b, e] := hgen'\n  have h7 : gamma = alpha1 := by\n    apply paper_L_alpha_simple_injective\n    exact h6\n  contradiction\nexact h5",
+    "proof_text": "",
     "first_failing_step": -1,
     "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Lem_A1_isolated_zneoz2g2.lean:24:70: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  HasSubset Multisegment\n\nHint: Type class instance resolution failures can be inspected",
     "proof_mode": "validation-gate",
-    "proof_method": "leanstral_whole_proof_v1",
+    "proof_method": "unattempted",
     "rounds_used": 0,
     "time_s": 0.0,
     "timestamp": "2026-05-13T21:00:31Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": false,
       "provenance_linked": false,
       "translation_fidelity_ok": true,
@@ -4196,7 +4196,8 @@
       "step_verdict_verified",
       "assumptions_grounded",
       "provenance_linked",
-      "dependency_trust_complete"
+      "dependency_trust_complete",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -4204,7 +4205,8 @@
       "equivalent_independent_semantic_evidence",
       "claim_equivalent:hybrid",
       "semantic_equivalence:verified",
-      "leanstral_whole_proof_v1:closed_round=1:confidence=0.70"
+      "leanstral_whole_proof_v1:closed_round=1:confidence=0.70",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "exact",
     "paper_statement_id": "pstmt_ccd9634cf417f0525393ab09",
@@ -4356,6 +4358,24 @@
       "reasoning": "The proof proceeds by contradiction. Assume there exists a gamma that is a proper subset of alpha and can generate [b, e]. Using the injectivity property of CanGenerate for simple multisegments, we derive that gamma must equal alpha1, contradicting the assumption that gamma ≠ alpha1.",
       "confidence": 0.7,
       "round_idx": 1
+    },
+    "proved": false,
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "intro gamma hgamma hne hgen\nobtain ⟨h1, h2⟩ := halpha1_minmax\nhave h3 : gamma ⊆ alpha1 := Subset.trans hgamma halpha1_sub\nhave h4 : gamma ≠ alpha1 := hne\nhave h5 : ¬(CanGenerate gamma [b, e]) := by\n  intro hgen'\n  have h6 : CanGenerate gamma [b, e] := hgen'\n  have h7 : gamma = alpha1 := by\n    apply paper_L_alpha_simple_injective\n    exact h6\n  contradiction\nexact h5",
+      "file_body_preview": "intro gamma hgamma hne hgen\n  obtain ⟨h1, h2⟩ := halpha1_minmax\n  have h3 : gamma ⊆ alpha1 := Subset.trans hgamma halpha",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 212,
+          "msg_head": "(lean.synthInstanceFailed): failed to synthesize instance of type class"
+        },
+        {
+          "line": 215,
+          "msg_head": "(lean.synthInstanceFailed): failed to synthesize instance of type class"
+        }
+      ]
     }
   },
   {

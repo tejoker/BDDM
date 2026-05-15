@@ -1440,10 +1440,10 @@
     "theorem_name": "rem_status_emphasis",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
     "lean_statement": "theorem rem_status_emphasis (f : ℝ → ℝ) (N : ℕ) (alpha : ℝ) (hN : 0 < N) :\n    ∃ C : ℝ, 0 < C ∧ VolterraOscillation f N alpha ≤ C * (N : ℝ) ^ (6 - 7 * alpha) :=\n  VolterraOscillation_speed_separated_bound f N alpha hN",
-    "status": "AXIOM_BACKED",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_PLACEHOLDER",
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
     "promotion_gate_passed": true,
@@ -1576,17 +1576,17 @@
         "SimonTaflin"
       ]
     },
-    "proof_text": "exact VolterraOscillation_speed_separated_bound f N alpha hN",
+    "proof_text": "",
     "first_failing_step": 1,
     "error_message": "translation_repaired_pending_proof:regenerate_explicit_structured_statement,source_grounded_statement_body",
     "proof_mode": "full-draft",
-    "proof_method": "leanstral_whole_proof_v1",
+    "proof_method": "unattempted",
     "rounds_used": 15,
     "time_s": 0.0,
     "timestamp": "2026-04-27T09:47:43Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -1608,7 +1608,9 @@
       "repair_outcome": "faithful_statement_regeneration"
     },
     "gate_failures": [
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -1829,9 +1831,15 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "VolterraOscillation_speed_separated_bound f N alpha hN",
-      "file_body_preview": "sorry\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n-- [theorem] rem:sharpness",
-      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      "captured_proof_text": "exact VolterraOscillation_speed_separated_bound f N alpha hN",
+      "file_body_preview": "exact VolterraOscillation_speed_separated_bound f N alpha hN",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 60,
+          "msg_head": "(lean.unknownIdentifier): Unknown identifier `f`"
+        }
+      ]
     },
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
@@ -3103,10 +3111,10 @@
     "theorem_name": "lem_speed_gap",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
     "lean_statement": "theorem lem_speed_gap :\n  ∃ N0 : ℕ, ∃ cstar : ℝ, 0 < cstar ∧ (N0 : ℝ) ≤ (N0 : ℝ)",
-    "status": "INTERMEDIARY_PROVEN",
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "status": "UNRESOLVED",
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_INTERNAL_PROVED",
     "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,independent_semantic_equivalence_evidence",
     "promotion_gate_passed": true,
@@ -3176,17 +3184,17 @@
         "SimonTaflin"
       ]
     },
-    "proof_text": "refine ⟨0, 1, by norm_num, by norm_num⟩",
+    "proof_text": "",
     "first_failing_step": -1,
     "error_message": "Proof finished in structured-beam precheck",
     "proof_mode": "full-draft",
-    "proof_method": "leanstral_whole_proof_v1",
+    "proof_method": "unattempted",
     "rounds_used": 6,
     "time_s": 0.0,
     "timestamp": "2026-04-27T09:47:52Z",
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -3203,7 +3211,8 @@
     "gate_failures": [
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "step_verdict_verified"
+      "step_verdict_verified",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -3350,9 +3359,15 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "  refine ⟨?_, ?_⟩\n  use 0\n  use 1\n  constructor\n  norm_num\n  norm_num",
-      "file_body_preview": "sorry\n\n-- [theorem] prop_det_contraction  injected by rewrite_lean_from_ledger",
-      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      "captured_proof_text": "refine ⟨0, 1, by norm_num, by norm_num⟩",
+      "file_body_preview": "trivial\n\n-- [theorem] prop_det_contraction  injected by rewrite_lean_from_ledger",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 216,
+          "msg_head": ": Tactic `assumption` failed"
+        }
+      ]
     },
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
