@@ -102,7 +102,12 @@ def _is_audited_core_row(entry: dict[str, Any]) -> bool:
     return False
 
 
-def _theorem_body_in_file(lean_src: str, theorem_name: str) -> str | None:
+def _theorem_body_in_file(
+    lean_src: str,
+    theorem_name: str,
+    *,
+    aux_local_name: str | None = None,
+) -> str | None:
     """Return the body that follows `theorem <name> ... := by` in lean_src.
 
     Returns None when the theorem isn't found by name, OR when the
@@ -121,12 +126,24 @@ def _theorem_body_in_file(lean_src: str, theorem_name: str) -> str | None:
     audit silently skipped namespaced rows, leaving bypass-promotions
     (e.g. `ArxivPaper.lem_Hilbert_hypercontractivity` with
     `proof_text='apply?'` over a sorry-bodied file) intact.
+
+    ``aux_local_name`` (optional): when the ledger row is a derived aux
+    (see ``scripts/promote_closed_aux_as_rows.py``), its ``theorem_name``
+    is ``<parent>::aux::<aux_name>`` — a synthetic name that does NOT
+    appear in the lean file. The on-file declaration uses the renamed
+    aux name instead. Pass it via this hook so the audit consults the
+    REAL on-file body. Without this fallback derived rows would land in
+    ``not_found_skipped`` and be unverified.
     """
     candidates: list[str] = [theorem_name]
     if "." in theorem_name:
         bare = theorem_name.rsplit(".", 1)[-1]
         if bare and bare != theorem_name:
             candidates.append(bare)
+    if aux_local_name:
+        local = str(aux_local_name).strip()
+        if local and local not in candidates:
+            candidates.append(local)
     for cand in candidates:
         pat = re.compile(
             r"theorem\s+" + re.escape(cand) + r"\b[\s\S]*?:=\s*by\b[ \t]*([\s\S]{1,4000}?)(?=\n(?:theorem|lemma|def|end|--|namespace|section)\b|\Z)",
@@ -262,14 +279,26 @@ def audit_ledger_entries(
         if not name:
             result.not_found_skipped += 1
             continue
-        body = _theorem_body_in_file(lean_src, name)
+        # Derived aux rows (`<parent>::aux::<name>`) declare their proof
+        # under the renamed aux name on disk. Forward the local name so
+        # the body-finder consults the actual declaration. See
+        # `scripts/promote_closed_aux_as_rows.py`.
+        aux_local_name = str(entry.get("aux_local_name", "") or "") or None
+        body = _theorem_body_in_file(lean_src, name, aux_local_name=aux_local_name)
         if body is None:
             # No `:= by` block found — either term-mode proof (e.g. `:= rfl`)
             # or the theorem isn't in this file at all.
-            if re.search(
-                r"theorem\s+" + re.escape(name) + r"\b[\s\S]*?:=\s*(?!by\b)",
-                lean_src,
-            ):
+            lookup_names = [name]
+            if aux_local_name:
+                lookup_names.append(aux_local_name)
+            term_mode = any(
+                re.search(
+                    r"theorem\s+" + re.escape(ln) + r"\b[\s\S]*?:=\s*(?!by\b)",
+                    lean_src,
+                )
+                for ln in lookup_names
+            )
+            if term_mode:
                 # Term-mode declaration: Lean has compiled it.
                 result.term_mode_skipped += 1
             else:

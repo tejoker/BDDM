@@ -861,6 +861,10 @@ def _sweep_paper(
         "aux_closed": 0,
         "composed": 0,
         "audit_survived": 0,
+        # Round-XI: closed aux that fail composition (or miss min-aux) and
+        # are credited as derived ledger rows (`<parent>::aux::<name>`).
+        # Always present in the report; 0 when --promote-aux-as-rows is off.
+        "aux_promoted_as_rows": 0,
         "routed_to_axiom_backed": 0,
         # Recursive factoring (--max-factor-depth >= 2). When the depth-1
         # factor pass leaves long unclosed aux on the table, sweep can
@@ -1895,12 +1899,48 @@ def _sweep_paper(
             paper_id=paper_id,
         )
         if not composed_ok:
-            cleanup_names = [nm for nm, _, _ in renamed]
+            # Round-XI: even when composition fails for the parent, each
+            # individually-closed aux is still a real proven lemma. When
+            # `--promote-aux-as-rows` is set, credit it as a derived row.
+            promoted_aux_names: list[str] = []
+            if _PROMOTE_AUX_AS_ROWS and paux is not None and aux_closed_names:
+                promo_summary = _promote_closed_aux_to_ledger(
+                    paper_id=paper_id,
+                    parent_entry=entry,
+                    parent_theorem_name=short or name,
+                    renamed=renamed,
+                    aux_closed_names=aux_closed_names,
+                    aux_closed_bodies=aux_closed_bodies,
+                    entries=entries,
+                    validate_aux=_validate_aux,
+                )
+                promoted_aux_names = [
+                    nm for nm in aux_closed_names
+                    if any(
+                        rr.get("aux_name") == nm and rr.get("status") == "promoted"
+                        for rr in promo_summary.get("results", [])
+                    )
+                ]
+                report["aux_promoted_as_rows"] = (
+                    report.get("aux_promoted_as_rows", 0)
+                    + int(promo_summary.get("promoted", 0))
+                )
+                per_row["stages"].append({
+                    "stage": "aux_promoted_as_rows_after_composition_fail",
+                    "promoted": promo_summary.get("promoted", 0),
+                    "idempotent": promo_summary.get("idempotent", 0),
+                    "refused": promo_summary.get("refused", 0),
+                    "results": promo_summary.get("results", []),
+                })
+            cleanup_names = [
+                nm for nm, _, _ in renamed if nm not in promoted_aux_names
+            ]
             _remove_aux_lemmas(lean_file, cleanup_names)
             file_text = lean_file.read_text(encoding="utf-8")
             per_row["stages"].append({
                 "stage": "composition_failed",
                 "err_tail": (comp_err or "")[-160:],
+                "promoted_aux": promoted_aux_names,
             })
             if signature_patch_state["applied"]:
                 _restore_signature_in_file(
@@ -2002,13 +2042,20 @@ def _sweep_paper(
 
         report["details"].append(per_row)
 
-    # Save ledger if any progress.
-    if not dry_run and (report["first_pass_validated"] + report["composed"]) > 0:
+    # Save ledger if any progress (parent closure OR promoted aux rows).
+    promoted_count = int(report.get("aux_promoted_as_rows", 0) or 0)
+    if not dry_run and (
+        report["first_pass_validated"] + report["composed"] + promoted_count
+    ) > 0:
         led_path.write_text(
             json.dumps(entries, indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",
         )
-        print(f"[{paper_id}] ledger updated: first_pass={report['first_pass_validated']} composed={report['composed']}", flush=True)
+        print(
+            f"[{paper_id}] ledger updated: first_pass={report['first_pass_validated']} "
+            f"composed={report['composed']} aux_promoted={promoted_count}",
+            flush=True,
+        )
 
     return report
 
@@ -2162,13 +2209,34 @@ def main() -> int:
             "autoproved_promotion.promote_to_autoproved."
         ),
     )
+    parser.add_argument(
+        "--promote-aux-as-rows",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help=(
+            "Credit individually-closed aux that fail composition (or miss "
+            "the min-aux threshold) as their own derived ledger rows. "
+            "Each derived row's theorem_name is <parent>::aux::<aux_name> "
+            "and the row carries the same audit gates a primary theorem "
+            "would (forbidden-token clean, non-trivial signature, "
+            "lake-in-context elaboration). Default OFF until calibrated."
+        ),
+    )
     args = parser.parse_args()
 
     # Wire the validator selector before any sweep work begins.
-    global _USE_FAST_VALIDATION, _DIFFERENTIAL_REMAINING, _AUTO_PROMOTE_TO_CURATED
+    global _USE_FAST_VALIDATION, _DIFFERENTIAL_REMAINING, _AUTO_PROMOTE_TO_CURATED, _PROMOTE_AUX_AS_ROWS
     _USE_FAST_VALIDATION = bool(args.use_fast_validation) and _lvc is not None
     _DIFFERENTIAL_REMAINING = max(0, int(args.differential_check_first)) if _USE_FAST_VALIDATION else 0
     _AUTO_PROMOTE_TO_CURATED = bool(args.auto_promote_to_curated) and autoprom is not None
+    _PROMOTE_AUX_AS_ROWS = bool(args.promote_aux_as_rows) and paux is not None
+    if args.promote_aux_as_rows and paux is None:
+        print(
+            "[promote-aux-as-rows] requested but promote_closed_aux_as_rows unavailable — skipping",
+            flush=True,
+        )
+    if _PROMOTE_AUX_AS_ROWS:
+        print("[promote-aux-as-rows] enabled", flush=True)
     if args.auto_promote_to_curated and autoprom is None:
         print("[auto-promote] requested but autoproved_promotion unavailable — skipping", flush=True)
     if _USE_FAST_VALIDATION:
@@ -2274,6 +2342,9 @@ def main() -> int:
             "aux_closed": sum(r.get("aux_closed", 0) for r in reports),
             "composed": sum(r.get("composed", 0) for r in reports),
             "audit_survived": sum(r.get("audit_survived", 0) for r in reports),
+            "aux_promoted_as_rows": sum(
+                r.get("aux_promoted_as_rows", 0) for r in reports
+            ),
             "routed_to_axiom_backed": sum(r.get("routed_to_axiom_backed", 0) for r in reports),
             "factor_recursive_attempts": sum(
                 r.get("factor_recursive_attempts", 0) for r in reports
