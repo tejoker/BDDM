@@ -4,21 +4,37 @@ This document consolidates the work shipped in this session — across
 3 major attack rounds (V/VI/VII/VIII/IX), 11 phases of follow-up
 infrastructure, and 4 rounds of integrity audit hardening.
 
-## Honest canonical state
+## Honest canonical state (after Round-XI)
 
 ```
 FULLY_PROVEN          14   (7.0%)
-AXIOM_BACKED           8   (4.0%)
-INTERMEDIARY_PROVEN    6   (3.0%)
-UNRESOLVED           168  (84.0%)
+AXIOM_BACKED          16   (8.0%)
+INTERMEDIARY_PROVEN    4   (2.0%)
+UNRESOLVED           162  (81.0%)
 TRANSLATION_LIMITED    4   (2.0%)
                      ───
                      200
 ```
 
-**Net honest auto-closure growth this session: +6 AB.** Every promotion
-audit-survived under the integrity gates (file body checked vs ledger
-claim; statement triviality patterns refused).
+**Net honest auto-closure growth this session: +14 AB +1 IP.** Every
+promotion audit-survived under the integrity gates (file body checked
+vs ledger claim; statement triviality patterns refused; 18,000-iter
+adversarial fuzzer reports 0 escapes).
+
+### Round-by-round trajectory
+
+```
+Pre-campaign (post-audit) : FP=14 AB=2  IP=6  UR=174 TL=4
+After Round-VII           : FP=14 AB=5  IP=6  UR=171 TL=4  (+3 AB)
+After Round-VIII          : FP=14 AB=8  IP=6  UR=168 TL=4  (+3 AB)
+After Round-X             : FP=14 AB=10 IP=3  UR=169 TL=4  (+2 AB, -3 IP audit)
+After Round-XI            : FP=14 AB=16 IP=4  UR=162 TL=4  (+6 AB, +1 IP)
+```
+
+Round-XI was the campaign's biggest single round, enabled by the
+lake-cache speedup (commit `b56bda2`, ~500× faster validation) making
+wider sweeps affordable for the first time: 87 candidates attempted,
+12 audit-survived, 0 demotions.
 
 ## External calibration — miniF2F
 
