@@ -206,15 +206,6 @@ axiom d_dts : Measure ℝ
 attribute [aesop safe apply] VolterraOscillation
 attribute [aesop safe apply] d_dts
 
-
--- Auto-stubbed paper-local symbols (paper_theory_symbol_stubber.py)
--- Each stub is real formalization debt: axioms / sorry-bodied
--- defs. The integrity audit's trivialization detector is the
--- final arbiter on any subsequent closure.
--- `import` is unknown and its usage couldn't be classified; emitting `axiom import : Prop`. Real formalization debt; audit's trivialization detector is the final arbiter.
-axiom import : Prop
-attribute [aesop safe apply] import
-
 end Paper_1911_01982
 
 export Paper_1911_01982 (HSobolev C_T L2Space infty StrichartzAssumptionStatement C a adj2 allez_continuous_2015 alpha_1 alpha_2 betternewstr2 defXi2 differencet0 expH2 int_I it_0 j_0 j_1 lemma_38 neg1 neg2 p_1 p_2 p_3 p_4 pde74 prop11 prop3 prop33 q_1 q_2 s_0 s_1 t_0 t_1 u_0 v_0 v_1 v_2 v_N w_0 h_source_1_1 u0 h_K h_smooth_compact_surface_1 h_source_2_2 h0 h1 h2 h3 u_1 u_2 u_3 burq_2004_strichartz_compact_manifold t0 t1 ξ_eps ξ_ hss1 hu0 s0 s1 v0 w0 alpha1 alpha2 halpha1 p1 p2 hT_size h4 h5 q1 q2 hp12 h_source_3_3 h_source_4_4 p3 p32 p4 p42 CTHEnvelope h_C h_E h_Gamma h_H strongH_bounds VolterraOscillation d_dts)

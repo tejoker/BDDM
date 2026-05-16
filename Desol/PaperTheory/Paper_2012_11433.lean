@@ -459,15 +459,6 @@ def hX_lc : ℝ := 0
 -- Local lemmas / theorem-like facts.
 -- Explicit axioms / unresolved paper assumptions.
 
-
--- Auto-stubbed paper-local symbols (paper_theory_symbol_stubber.py)
--- Each stub is real formalization debt: axioms / sorry-bodied
--- defs. The integrity audit's trivialization detector is the
--- final arbiter on any subsequent closure.
--- `import` is unknown and its usage couldn't be classified; emitting `axiom import : Prop`. Real formalization debt; audit's trivialization detector is the final arbiter.
-axiom import : Prop
-attribute [aesop safe apply] import
-
 end Paper_2012_11433
 
 export Paper_2012_11433 (omega infty C a aC_1 a_1 a_2 a_2l a_2x_2 a_3 a_3m a_3x_3 a_iD_i a_iS_i a_jF_j ambro01 bC_2 birkar17 bm16 bm97 brunella00 c_1 c_N c_R corollary_23 eta_W example_1 example_16 example_7 f_1 fujita83 gamma_1 gamma_N i00 inv_antinef2 ix_1 jouanolou78 k00 kl0 km0 kollar13 kollar96 kx_2 lambda_1 lx_3 martinet81 mcq04 mcq08 mendes00 mp13 mu_C mu_DA mu_P mu_PB mu_Q n_1 n_N n_U nabla_E p_1 partial_0 partial_N partial_S pi_1 q_C question_36 r_D r_E r_Ea section1 section2 section3 section4 section5 section6 section7 spicer20 t_cone2 t_cone3 theorem_1 theorem_2 theorem_22 theorem_3 times_X times_Y times_Z vert_D vert_E vert_U vert_W vert_Z x_1 x_2 x_3 z_0 vert_S flips_exist2 hF_canonical u_1 u_2 u_3 u_4 u_5 u_6 u_7 hK_F inst_1 inst_2 hK_G h1 h2 h_antinef2_normal_projective_surface_1 h_divisors_enumerate_curve_which_2 mu_CDelta h_contained_invariant_terminal_generic_6 h_curve_5 h_divisor_invariant_support_reduced_2 h_normalisation_3 h_prop_comp_normal_threefold_1 h_write_induced_foliation_divisors_4 sing_plus_F hF_not_ai hC_not_sing hDelta_multiplicity hDelta_nonneg hDelta_support hS_not_sing hC_nu hS_nu h3 h4 h5 h6 h10 h7 h8 h9 hC_0 d_dtN d_dtS hd_dtN hd_dtS curve_x_eq_y_eq_0 foliation_F_on_X quotient_of_C3_by_Z2_action vector_field_partial_N vector_field_partial_S hC_F_inv hC_smooth hF_sing hM_W h_invariant_curve_3 h_normal_variety_1 h_rank_foliation_2 h_source_5_5 h_terminal_every_closed_point_4 cal_F Γ_is_log_pair hC_D hX_dim hX_quotient hC_sub hF_canon hS_inv hH_R hC_D_i hD_i exists_L_such_that_for_sufficiently_large_m_general_D_klt_and_log_canonical log_pair_D_i_C_log_canonical_at_x_i sing_X_inter_C_finite f_restricted_to_D_is_contraction_of_relative_Picard_number_one hC_conn hF_simple negative_on_C hF_term hX_sing h_analytic_neighbourhood_3 h_invariant_1 h_source_2_2 h_C h_D h_D_inter h_D_inv hC1 hC2 hKNeg1 hKNeg2 hR1 hR2 hF_hol hX_smooth hR_dim hGamma_inv hGamma_lc hGamma_nonneg hGamma_not_D hX_fact hX_klt hR_loc hF_seq hF_i sing_F_plus a_iD cal_F' cal_F'_Invariant hE_i hcal_F hcal_F' a_E_F_ hKF_delta_pe hX_delta_ Θ_plus hX_Qfactorial hC_in_R hF_not_canonical hP_in_C hF_lc hX_lc)
