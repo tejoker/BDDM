@@ -72,8 +72,8 @@ Artifact: `reproducibility/minif2f_test_244_v429rc7_results.json`.
 **44 canonical arxiv papers** (math.* across 2010–2024), 1,464 theorem-like rows total:
 
 ```
-FULLY_PROVEN          14   ( 1.0%)
-AXIOM_BACKED          43   ( 2.9%)
+FULLY_PROVEN          20   ( 1.4%)
+AXIOM_BACKED          37   ( 2.5%)
 INTERMEDIARY_PROVEN    4   ( 0.3%)
 UNRESOLVED           224   (15.3%)
 FLAWED              1037   (70.8%)
@@ -145,7 +145,7 @@ arXiv ID
 
 ## 5. Honest limitations
 
-**1. No FP gain this campaign.** All 14 `FULLY_PROVEN` rows were in the pre-campaign baseline. The +27 net closures across rounds XIII-XXI all landed at AB or IP — never at FP. Reason: the `no_paper_axiom_debt` gate requires every paper-local symbol to be discharged via `align_def`, which is multi-day research-Lean work per axiom. The pipeline can scaffold this but cannot automate it.
+**1. FP gain is bottlenecked by `align_def` discharge.** The campaign moved FP from 14 → **20 (+6 honest)** via automated proposal of trivial alignments (script `auto_align_proposer.py`: parse paper-theory stub → infer alignment shape → lake-validate → register). The hardened audit caught 7 spurious promotions in the same pass (rows whose `axiom_debt` was discharged but whose proof body was still `sorry`) — those were demoted, leaving +6 audit-survived FP. Beyond this, `align_def` discharge for non-trivial paper-local concepts (real mathematical content, not `:= 0` stubs) requires research-Lean work that no LLM currently automates — `paperDef ↔ MathlibDef` proofs for novel concepts are weeks-per-axiom human work or require Mathlib-side definitional growth.
 
 **2. Parent composition is 0/N every round.** Lemma-factor v3 produces aux statements that close individually but whose conjunction/structure doesn't match what the parent needs. This is a binder-spatial-reasoning gap in the LLM, not a tactic-search gap. Likely needs richer type-aware composition templates and/or stronger LLM reasoning.
 

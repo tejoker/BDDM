@@ -290,8 +290,8 @@ value/policy networks. The 28-min wall-clock is competitive.</p>
 <h3 id="arxiv-corpus-closure">3.2 ArXiv corpus closure</h3>
 <p><strong>44 canonical arxiv papers</strong> (math.* across 2010–2024),
 1,464 theorem-like rows total:</p>
-<pre><code>FULLY_PROVEN          14   ( 1.0%)
-AXIOM_BACKED          43   ( 2.9%)
+<pre><code>FULLY_PROVEN          20   ( 1.4%)
+AXIOM_BACKED          37   ( 2.5%)
 INTERMEDIARY_PROVEN    4   ( 0.3%)
 UNRESOLVED           224   (15.3%)
 FLAWED              1037   (70.8%)
@@ -445,13 +445,20 @@ summary)</h2>
    ▼ [12] Optional: align_def discharge → AB → FP promotion</code></pre>
 <hr />
 <h2 id="honest-limitations">5. Honest limitations</h2>
-<p><strong>1. No FP gain this campaign.</strong> All 14
-<code>FULLY_PROVEN</code> rows were in the pre-campaign baseline. The
-+27 net closures across rounds XIII-XXI all landed at AB or IP — never
-at FP. Reason: the <code>no_paper_axiom_debt</code> gate requires every
-paper-local symbol to be discharged via <code>align_def</code>, which is
-multi-day research-Lean work per axiom. The pipeline can scaffold this
-but cannot automate it.</p>
+<p><strong>1. FP gain is bottlenecked by <code>align_def</code>
+discharge.</strong> The campaign moved FP from 14 → <strong>20 (+6
+honest)</strong> via automated proposal of trivial alignments (script
+<code>auto_align_proposer.py</code>: parse paper-theory stub → infer
+alignment shape → lake-validate → register). The hardened audit caught 7
+spurious promotions in the same pass (rows whose <code>axiom_debt</code>
+was discharged but whose proof body was still <code>sorry</code>) —
+those were demoted, leaving +6 audit-survived FP. Beyond this,
+<code>align_def</code> discharge for non-trivial paper-local concepts
+(real mathematical content, not <code>:= 0</code> stubs) requires
+research-Lean work that no LLM currently automates —
+<code>paperDef ↔︎ MathlibDef</code> proofs for novel concepts are
+weeks-per-axiom human work or require Mathlib-side definitional
+growth.</p>
 <p><strong>2. Parent composition is 0/N every round.</strong>
 Lemma-factor v3 produces aux statements that close individually but
 whose conjunction/structure doesn’t match what the parent needs. This is
