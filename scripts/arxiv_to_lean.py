@@ -2878,8 +2878,16 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--translation-candidates",
         type=int,
-        default=1,
-        help="Number of translation candidates sampled per repair round (default: 1)",
+        default=3,
+        help=(
+            "Number of translation candidates sampled per repair round "
+            "(default: 3). Each candidate uses a different temperature "
+            "(temperature + 0.12 × cand_idx); higher N raises the chance "
+            "a single repair round produces an elaboration-surviving "
+            "translation but multiplies API cost per row. Default bumped "
+            "from 1 → 3 post-Round-XXII campaign — translation acceptance "
+            "is the next gate after the proof-search ceiling was hit."
+        ),
     )
     p.add_argument(
         "--prove-mode",
