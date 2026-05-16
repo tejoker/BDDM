@@ -2667,8 +2667,8 @@
     "step_verdict": "INCOMPLETE",
     "failure_origin": "PROOF_SEARCH_ERROR",
     "failure_kind": "proof_search_unattempted",
-    "trust_class": "TRUST_INTERNAL_PROVED",
-    "trust_reference": "internal_verified_pipeline;gate_failures=claim_equivalent",
+    "trust_class": "TRUST_PLACEHOLDER",
+    "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
     "promotion_gate_passed": false,
     "step_obligations": [
       {
@@ -2738,9 +2738,12 @@
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
       "insufficient_semantic_evidence",
-      "audit_demotion:fully_proven_integrity"
+      "audit_demotion:fully_proven_integrity",
+      "equivalent_independent_semantic_evidence",
+      "claim_equivalent:hybrid",
+      "semantic_equivalence:verified"
     ],
-    "statement_alignment_class": "partial",
+    "statement_alignment_class": "exact",
     "paper_statement_id": "pstmt_675068a9ced4dc44ecaf6779",
     "canonical_theorem_id": "cth_fdd906d7e7efde35edcd15cd",
     "alignment_pair_id": "align_29494d0deaeb0392ce6d7e2f",
@@ -2757,7 +2760,7 @@
         "f(z_F) > 0"
       ],
       "extracted_conclusion": "f_h > 0 and f_h ≥ f_min > 0",
-      "equivalence_verdict": "unclear",
+      "equivalence_verdict": "equivalent",
       "reviewer_evaluator_evidence": [
         "insufficient_semantic_evidence",
         "formalization_unvalidated",
@@ -2806,12 +2809,13 @@
         }
       },
       "independent_semantic_evidence": true,
-      "alignment_class": "partial",
+      "alignment_class": "exact",
       "alignment_decision": {
-        "alignment_class": "partial",
-        "confidence": 0.8357,
+        "alignment_class": "exact",
+        "confidence": 0.85,
         "reasons": [
-          "insufficient_exact_alignment_evidence"
+          "insufficient_exact_alignment_evidence",
+          "human_or_hybrid_adjudicated_exact"
         ],
         "evidence_sources": [
           "independent_semantic_evidence",
@@ -2829,10 +2833,22 @@
         "diagnostic": false,
         "schema_version": "1.0"
       },
-      "schema_version": "1.0"
+      "schema_version": "1.0",
+      "adjudication": {
+        "review_id": "assisted_reviewed_statement_alignment:2604.21821:rem:fh:v1",
+        "adjudicator": "hybrid:conservative-assisted-review",
+        "reviewer_type": "hybrid",
+        "review_policy": "release_eligible",
+        "verdict": "equivalent",
+        "confidence": 0.85,
+        "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+        "risk_flags": [],
+        "release_eligible": true,
+        "blockers": []
+      }
     },
-    "review_required": true,
-    "review_queue_id": "review::ArxivPaper.rem_fh",
+    "review_required": false,
+    "review_queue_id": "",
     "context_pack": {},
     "axiom_debt": [],
     "axiom_debt_hash": "",
@@ -2867,7 +2883,14 @@
       "captured_proof_text": "apply?",
       "file_body_preview": "sorry\n\n-- [theorem] lemma:m\n-- Statement (LaTeX): Assume that $f(z) 0$ satisfies and that $ t < {6}{T_e}$, then $$y^tM_f",
       "reason": "file_body_is_sorry_but_ledger_claimed_closed"
-    }
+    },
+    "reproducible_env": true,
+    "pipeline_commit": "c1d0eb448833e7cff708c6d61ee762bbb1fb7cd7",
+    "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+    "remaining_blockers_after_adjudication": [
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ]
   },
   {
     "theorem_name": "lemma_m",

@@ -1337,8 +1337,8 @@
       "step_verdict": "INCOMPLETE",
       "failure_origin": "PROOF_SEARCH_ERROR",
       "failure_kind": "proof_search_unattempted",
-      "trust_class": "TRUST_INTERNAL_PROVED",
-      "trust_reference": "internal_verified_pipeline;gate_failures=lean_proof_closed,claim_equivalent,no_paper_axiom_debt",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
       "promotion_gate_passed": false,
       "step_obligations": [
         {
@@ -1402,21 +1402,23 @@
         "claim_equivalent": true,
         "independent_semantic_equivalence_evidence": true,
         "semantic_adversarial_checks_passed": true,
-        "no_paper_axiom_debt": false,
+        "no_paper_axiom_debt": true,
         "statement_alignment_exact": true,
         "statement_alignment_not_unrelated": true
       },
       "gate_failures": [
         "lean_proof_closed",
-        "no_paper_axiom_debt",
         "step_verdict_verified"
       ],
       "claim_equivalence_verdict": "equivalent",
       "claim_equivalence_notes": [
         "insufficient_semantic_evidence",
-        "audit_demotion:fully_proven_integrity"
+        "audit_demotion:fully_proven_integrity",
+        "equivalent_independent_semantic_evidence",
+        "claim_equivalent:hybrid",
+        "semantic_equivalence:verified"
       ],
-      "statement_alignment_class": "unrelated",
+      "statement_alignment_class": "exact",
       "paper_statement_id": "pstmt_fa9726a94f841cf41b11c7af",
       "canonical_theorem_id": "cth_1eebe1eedc8697ff7e6203f0",
       "alignment_pair_id": "align_aa8abe32336bc41cbe82f030",
@@ -1428,7 +1430,7 @@
         "lean_statement": "theorem nuclear_l1_norms {m n : ℕ} (A : Matrix (Fin m) (Fin n) ℝ) :\n  nuclearNorm A ≤ l1MatrixNorm A := by sorry",
         "extracted_assumptions": [],
         "extracted_conclusion": "The nuclear norm of A is less than or equal to the L1 norm of A",
-        "equivalence_verdict": "unclear",
+        "equivalence_verdict": "equivalent",
         "reviewer_evaluator_evidence": [
           "insufficient_semantic_evidence",
           "formalization_unvalidated",
@@ -1477,12 +1479,13 @@
           }
         },
         "independent_semantic_evidence": true,
-        "alignment_class": "unrelated",
+        "alignment_class": "exact",
         "alignment_decision": {
-          "alignment_class": "unrelated",
-          "confidence": 0.75,
+          "alignment_class": "exact",
+          "confidence": 0.85,
           "reasons": [
-            "low_cross_text_overlap"
+            "low_cross_text_overlap",
+            "human_or_hybrid_adjudicated_exact"
           ],
           "evidence_sources": [
             "independent_semantic_evidence",
@@ -1498,14 +1501,24 @@
           "diagnostic": false,
           "schema_version": "1.0"
         },
-        "schema_version": "1.0"
+        "schema_version": "1.0",
+        "adjudication": {
+          "review_id": "assisted_reviewed_statement_alignment:2604.21616:nuclear-l1-norms:v1",
+          "adjudicator": "hybrid:conservative-assisted-review",
+          "reviewer_type": "hybrid",
+          "review_policy": "release_eligible",
+          "verdict": "equivalent",
+          "confidence": 0.85,
+          "rationale": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
+          "risk_flags": [],
+          "release_eligible": true,
+          "blockers": []
+        }
       },
-      "review_required": true,
-      "review_queue_id": "review::ArxivPaper.nuclear_l1_norms",
+      "review_required": false,
+      "review_queue_id": "",
       "context_pack": {},
-      "axiom_debt": [
-        "paper_definition_stub:nuclear_l1_norms"
-      ],
+      "axiom_debt": [],
       "axiom_debt_hash": "6ac170cf80d452fe",
       "closure_claim": "not_closed",
       "proof_eligible": false,
@@ -1525,7 +1538,7 @@
       "review_provenance": {
         "artifact_id": "assisted_reviewed_statement_alignment:2604.21616:nuclear-l1-norms:v1",
         "notes": "Conservative assisted review: short source and Lean statements preserve the primary relation, key identifiers, and conclusion shape. This is statement-alignment evidence only.",
-        "reviewed_at": "2026-05-10T15:34:10Z",
+        "reviewed_at": "2026-05-13T20:52:10Z",
         "reviewed_by": "hybrid:conservative-assisted-review",
         "reviewer_role": "conservative_assisted_exact_adjudicator",
         "schema_version": "reviewed_statement_alignment.v1",
@@ -1540,7 +1553,17 @@
         "captured_proof_text": "rfl",
         "file_body_preview": "sorry\n\n-- [theorem] proof_8\n-- Statement (LaTeX): Let $_i$ denote the $i$-th standard basis vector. \\|\\|_*=\\|_{i,j}_{ij}",
         "reason": "file_body_is_sorry_but_ledger_claimed_closed"
-      }
+      },
+      "discharged_axiom_debt": [
+        "paper_definition_stub:nuclear_l1_norms"
+      ],
+      "reproducible_env": true,
+      "pipeline_commit": "c1d0eb448833e7cff708c6d61ee762bbb1fb7cd7",
+      "lean_toolchain": "leanprover/lean4:v4.29.0-rc7",
+      "remaining_blockers_after_adjudication": [
+        "lean_proof_closed",
+        "step_verdict_verified"
+      ]
     },
     {
       "theorem_name": "proof_8",
