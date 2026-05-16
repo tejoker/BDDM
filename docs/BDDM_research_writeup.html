@@ -291,15 +291,15 @@ value/policy networks. The 28-min wall-clock is competitive.</p>
 <p><strong>44 canonical arxiv papers</strong> (math.* across 2010–2024),
 1,464 theorem-like rows total:</p>
 <pre><code>FULLY_PROVEN          20   ( 1.4%)
-AXIOM_BACKED          37   ( 2.5%)
-INTERMEDIARY_PROVEN    4   ( 0.3%)
+AXIOM_BACKED          39   ( 2.7%)
+INTERMEDIARY_PROVEN    6   ( 0.4%)
 UNRESOLVED           224   (15.3%)
 FLAWED              1037   (70.8%)
 TRANSLATION_LIMITED  142   ( 9.7%)
                     ────
                     1464</code></pre>
-<p><strong>Honest closure rate:</strong> 61/(61+224) =
-<strong>21.4%</strong> over closure-eligible rows (FP+AB+IP vs UR).</p>
+<p><strong>Honest closure rate:</strong> 65/(65+224) =
+<strong>22.5%</strong> over closure-eligible rows (FP+AB+IP vs UR).</p>
 <p>The 71% FLAWED rate is honest failure-mode evidence — the translation
 acceptance gate refuses placeholder / shape-mismatched /
 quantifier-flipped translations rather than promoting them. This is a
@@ -358,6 +358,16 @@ fixed:</p>
 <td>XXI</td>
 <td>multi-shot N=8 + aesop-safe compounding</td>
 <td style="text-align: right;">+2</td>
+</tr>
+<tr class="odd">
+<td>XXIa</td>
+<td><code>align_def</code> auto-proposer</td>
+<td style="text-align: right;">+6 FP (AB→FP)</td>
+</tr>
+<tr class="even">
+<td>XXII</td>
+<td>type-aware destructure (∧ / ↔︎ splits)</td>
+<td style="text-align: right;">+4 (2 AB + 2 IP)</td>
 </tr>
 </tbody>
 </table>
@@ -459,12 +469,19 @@ research-Lean work that no LLM currently automates —
 <code>paperDef ↔︎ MathlibDef</code> proofs for novel concepts are
 weeks-per-axiom human work or require Mathlib-side definitional
 growth.</p>
-<p><strong>2. Parent composition is 0/N every round.</strong>
-Lemma-factor v3 produces aux statements that close individually but
-whose conjunction/structure doesn’t match what the parent needs. This is
-a binder-spatial-reasoning gap in the LLM, not a tactic-search gap.
-Likely needs richer type-aware composition templates and/or stronger LLM
-reasoning.</p>
+<p><strong>2. Parent composition is 0/N every round.</strong> Round-XXII
+shipped <em>type-aware destructure</em>
+(<code>scripts/type_aware_factor.py</code>) which splits parent targets
+on top-level <code>∧</code> / <code>↔︎</code> and emits aux specs whose
+conjunction is the parent BY CONSTRUCTION — eliminating the “wrong
+factorization shape” bottleneck. Empirical result: 12/25 attempted rows
+produced ≥2 type-correct aux, 4 honest closures landed (2 conjunct
+splits, 2 iff fwd/bwd splits). Parent recomposition still 0 because most
+aux remain individually unprovable by Leanstral — the bottleneck shifted
+from <em>factorization shape</em> to <em>per-aux proof difficulty</em>.
+The next research direction is deeper proof-search per aux (curriculum,
+larger context, or a stronger reasoning model for the binder-spatial
+step).</p>
 <p><strong>3. Single-LLM lock-in.</strong> The current code path uses
 Leanstral exclusively. A model ensemble (DeepSeek-Prover, Kimina,
 Llemma) would almost certainly raise closure rates by ~10–30%, at the

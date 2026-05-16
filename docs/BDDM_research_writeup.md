@@ -73,8 +73,8 @@ Artifact: `reproducibility/minif2f_test_244_v429rc7_results.json`.
 
 ```
 FULLY_PROVEN          20   ( 1.4%)
-AXIOM_BACKED          37   ( 2.5%)
-INTERMEDIARY_PROVEN    4   ( 0.3%)
+AXIOM_BACKED          39   ( 2.7%)
+INTERMEDIARY_PROVEN    6   ( 0.4%)
 UNRESOLVED           224   (15.3%)
 FLAWED              1037   (70.8%)
 TRANSLATION_LIMITED  142   ( 9.7%)
@@ -82,7 +82,7 @@ TRANSLATION_LIMITED  142   ( 9.7%)
                     1464
 ```
 
-**Honest closure rate:** 61/(61+224) = **21.4%** over closure-eligible rows (FP+AB+IP vs UR).
+**Honest closure rate:** 65/(65+224) = **22.5%** over closure-eligible rows (FP+AB+IP vs UR).
 
 The 71% FLAWED rate is honest failure-mode evidence — the translation acceptance gate refuses placeholder / shape-mismatched / quantifier-flipped translations rather than promoting them. This is a feature, not a bug: a translation pipeline that "succeeds" on every row is a pipeline that lies.
 
@@ -100,6 +100,8 @@ A multi-round campaign measured how much closure could be gained from **non-LLM*
 | XVIII–XIX | + scale to new arxiv | +5 |
 | XX | additional sweep | +4 |
 | XXI | multi-shot N=8 + aesop-safe compounding | +2 |
+| XXIa | `align_def` auto-proposer | +6 FP (AB→FP) |
+| XXII | type-aware destructure (∧ / ↔ splits) | +4 (2 AB + 2 IP) |
 
 **Round XVII produced 0 honest gains** — empirical evidence of the non-Leanstral ceiling under the current architecture. Subsequent gains came from scaling (more papers) rather than infrastructure changes on the existing papers.
 
@@ -147,7 +149,7 @@ arXiv ID
 
 **1. FP gain is bottlenecked by `align_def` discharge.** The campaign moved FP from 14 → **20 (+6 honest)** via automated proposal of trivial alignments (script `auto_align_proposer.py`: parse paper-theory stub → infer alignment shape → lake-validate → register). The hardened audit caught 7 spurious promotions in the same pass (rows whose `axiom_debt` was discharged but whose proof body was still `sorry`) — those were demoted, leaving +6 audit-survived FP. Beyond this, `align_def` discharge for non-trivial paper-local concepts (real mathematical content, not `:= 0` stubs) requires research-Lean work that no LLM currently automates — `paperDef ↔ MathlibDef` proofs for novel concepts are weeks-per-axiom human work or require Mathlib-side definitional growth.
 
-**2. Parent composition is 0/N every round.** Lemma-factor v3 produces aux statements that close individually but whose conjunction/structure doesn't match what the parent needs. This is a binder-spatial-reasoning gap in the LLM, not a tactic-search gap. Likely needs richer type-aware composition templates and/or stronger LLM reasoning.
+**2. Parent composition is 0/N every round.** Round-XXII shipped *type-aware destructure* (`scripts/type_aware_factor.py`) which splits parent targets on top-level `∧` / `↔` and emits aux specs whose conjunction is the parent BY CONSTRUCTION — eliminating the "wrong factorization shape" bottleneck. Empirical result: 12/25 attempted rows produced ≥2 type-correct aux, 4 honest closures landed (2 conjunct splits, 2 iff fwd/bwd splits). Parent recomposition still 0 because most aux remain individually unprovable by Leanstral — the bottleneck shifted from *factorization shape* to *per-aux proof difficulty*. The next research direction is deeper proof-search per aux (curriculum, larger context, or a stronger reasoning model for the binder-spatial step).
 
 **3. Single-LLM lock-in.** The current code path uses Leanstral exclusively. A model ensemble (DeepSeek-Prover, Kimina, Llemma) would almost certainly raise closure rates by ~10–30%, at the cost of pipeline complexity. Deliberately deferred to keep variance controlled while the integrity audit was being hardened.
 
