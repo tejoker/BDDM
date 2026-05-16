@@ -1,0 +1,3166 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-05-16T10:47:21Z",
+  "pipeline_commit": "73938c8a2a2e4e1ab7511263761ea87766cc5d10",
+  "toolchain_versions": {
+    "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
+    "python": "unknown",
+    "mistral_model": "labs-leanstral-2603"
+  },
+  "paper_id": "2201.06382",
+  "source_label": "2201.06382",
+  "prove_mode": "auto",
+  "model": "labs-leanstral-2603",
+  "entry_count": 11,
+  "compiler_feedback_repair_run_id": "arxiv_to_lean_2201.06382_1778928219_1431225",
+  "compiler_feedback_repair_run_dataset": "/home/projectx/BDDM/output/flywheel/runs/arxiv_to_lean_2201.06382_1778928219_1431225/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset_summary": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset_summary.json",
+  "entries": [
+    {
+      "theorem_name": "lemmalagrangianR3",
+      "lean_file": "/home/projectx/BDDM/output/2201.06382.lean",
+      "lean_statement": "theorem lemmalagrangianR3 : False",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2201.06382",
+        "section": "",
+        "label": "lemmalagrangianR3",
+        "cited_refs": [
+          "asl2021analysis",
+          "baydin2018automatic",
+          "bierler",
+          "bjorken",
+          "cfs",
+          "cfsweblink",
+          "continuum",
+          "conway+sloane",
+          "dice2014",
+          "dice2018",
+          "discrete",
+          "gaugefix",
+          "guo2018nonsmooth",
+          "harris2020numpy",
+          "hunter2007matplotlib",
+          "intro",
+          "jax2018github",
+          "jet",
+          "lawson+michelsohn",
+          "lewis2009nonsmooth",
+          "lewis2013nonsmooth",
+          "nocedal2006numerical",
+          "peskin+schroeder",
+          "powell1976some",
+          "reed+simon4",
+          "review",
+          "saff+kuijlaars",
+          "sloane",
+          "small",
+          "snygg",
+          "sphere",
+          "support",
+          "vanrossum2009python",
+          "welch"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:strict_statement_validity:false_target_without_source_contradiction",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T10:47:19Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "strict_statement_validity",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_c3b3a76f1a61faadcaa7c9e1",
+      "canonical_theorem_id": "cth_e25416f8743c6564e03b088a",
+      "alignment_pair_id": "align_0dd8efffe2910e412d7f8a68",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{lemmalagrangianR3}\nLet $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$. We denote the angle between~$\\vec{x}$\nand~$\\vec{x}'$ by~$\\vartheta \\in [0, \\pi]$ (i.e.\\ $\\cos \\vartheta = \\vec{x}\\cdot \\vec{y}$).\nThen the operator product $F_\\tau(\\vec x)F_{\\tau'}(\\vec x')$ has the eigenvalues\n\\begin{equation}\\label{evals_product}\n\\lambda_{1,2}=\\frac{1}{4}\\: \\Big(1+\\tau\\tau'\\cos\\vartheta \\pm\\sqrt{  (1+\\tau \\tau'\\cos \\vartheta)^2-(\\tau^2-1)(\\tau'^2-1)  }\\Big) \\:.\n\\end{equation}\nMoreover,\n\\begin{equation}\\label{lagrangian_R3}\n{\\mathcal{L}} \\big((\\tau, \\vec x), (\\tau', \\vec x') \\big) = \\frac1{8} \\Big( \\big( 1+\\tau\\tau'\\cos\\vartheta \\big)^2-(\\tau^2-1)(\\tau'^2-1) \\Big) \\,\\big( 1- \\chi_{[\\vartheta_-,\\vartheta_+]}(\\vartheta) \\big) \\:,\n\\end{equation}\nwhere $ \\chi_{[\\vartheta_-,\\vartheta_+]}$ is the characteristic function of the interval defined by\n\\begin{equation}\\label{eq:critical_angles}\n\\cos\\vartheta_\\pm=\\frac{-1\\mp\\sqrt{(\\tau^2-1)(\\tau'^2-1)}}{\\tau\\tau'} \\:.\n\\end{equation}",
+        "normalized_natural_language_theorem": "Assumptions: \\label{lemmalagrangianR3} Let $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$.; \\end{equation} Moreover, \\begin{equation}\\label{lagrangian_R3} {\\mathcal{L}} \\big((\\tau, \\vec x), (\\tau', \\vec x') \\big) = \\frac1{8} \\Big( \\big( 1+\\tau\\tau'\\cos\\vartheta \\big)^2-(\\tau^2-1)(\\tau'^2-1) \\Big) \\,\\big( 1- \\chi_{[\\vartheta_-,\\vartheta_+]}(\\vartheta) \\big) \\:, \\end{equation} where $ \\chi_{[\\vartheta_-,\\vartheta_+]}$ is the characteristic function of the interval defined by \\begin{equation}\\label{eq:critical_angles} \\cos\\vartheta_\\pm=\\frac{-1\\mp\\sqrt{(\\tau^2-1)(\\tau'^2-1)}}{\\tau\\tau'} \\:. Conclusion: We denote the angle between~$\\vec{x}$ and~$\\vec{x}'$ by~$\\vartheta \\in [0, \\pi]$ (i.e.\\ $\\cos \\vartheta = \\vec{x}\\cdot \\vec{y}$). Then the operator product $F_\\tau(\\vec x)F_{\\tau'}(\\vec x')$ has the eigenvalues \\begin{equation}\\label{evals_product} \\lambda_{1,2}=\\frac{1}{4}\\: \\Big(1+\\tau\\tau'\\cos\\vartheta \\pm\\sqrt{ (1+\\tau \\tau'\\cos \\vartheta)^2-(\\tau^2-1)(\\tau'^2-1) }\\Big) \\:. \\end{equation}",
+        "lean_statement": "theorem lemmalagrangianR3 : False",
+        "extracted_assumptions": [
+          "\\label{lemmalagrangianR3} Let $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$.",
+          "\\end{equation} Moreover, \\begin{equation}\\label{lagrangian_R3} {\\mathcal{L}} \\big((\\tau, \\vec x), (\\tau', \\vec x') \\big) = \\frac1{8} \\Big( \\big( 1+\\tau\\tau'\\cos\\vartheta \\big)^2-(\\tau^2-1)(\\tau'^2-1) \\Big) \\,\\big( 1- \\chi_{[\\vartheta_-,\\vartheta_+]}(\\vartheta) \\big) \\:, \\end{equation} where $ \\chi_{[\\vartheta_-,\\vartheta_+]}$ is the characteristic function of the interval defined by \\begin{equation}\\label{eq:critical_angles} \\cos\\vartheta_\\pm=\\frac{-1\\mp\\sqrt{(\\tau^2-1)(\\tau'^2-1)}}{\\tau\\tau'} \\:."
+        ],
+        "extracted_conclusion": "We denote the angle between~$\\vec{x}$ and~$\\vec{x}'$ by~$\\vartheta \\in [0, \\pi]$ (i.e.\\ $\\cos \\vartheta = \\vec{x}\\cdot \\vec{y}$). Then the operator product $F_\\tau(\\vec x)F_{\\tau'}(\\vec x')$ has the eigenvalues \\begin{equation}\\label{evals_product} \\lambda_{1,2}=\\frac{1}{4}\\: \\Big(1+\\tau\\tau'\\cos\\vartheta \\pm\\sqrt{ (1+\\tau \\tau'\\cos \\vartheta)^2-(\\tau^2-1)(\\tau'^2-1) }\\Big) \\:. \\end{equation}",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_c3b3a76f1a61faadcaa7c9e1",
+          "alignment_pair_id": "align_0dd8efffe2910e412d7f8a68",
+          "paper_text_coverage": 0.0182,
+          "lean_text_coverage": 0.3333,
+          "missing_assumptions": [
+            "\\label{lemmalagrangianR3} Let $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$.",
+            "\\end{equation} Moreover, \\begin{equation}\\label{lagrangian_R3} {\\mathcal{L}} \\big((\\tau, \\vec x), (\\tau', \\vec x') \\big) = \\frac1{8} \\Big( \\big( 1+\\tau\\tau'\\cos\\vartheta \\big)^2-(\\tau^2-1)(\\tau'^2-1) \\Big) \\,\\big( 1- \\chi_{[\\vartheta_-,\\vartheta_+]}(\\vartheta) \\big) \\:, \\end{equation} where $ \\chi_{[\\vartheta_-,\\vartheta_+]}$ is the characteristic function of the interval defined by \\begin{equation}\\label{eq:critical_angles} \\cos\\vartheta_\\pm=\\frac{-1\\mp\\sqrt{(\\tau^2-1)(\\tau'^2-1)}}{\\tau\\tau'} \\:."
+          ],
+          "added_assumptions": [],
+          "conclusion_relation": "trivial_target",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::lemmalagrangianR3",
+      "context_pack": {
+        "theorem_name": "lemmalagrangianR3",
+        "original_latex_theorem": "\\label{lemmalagrangianR3}\nLet $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$. We denote the angle between~$\\vec{x}$\nand~$\\vec{x}'$ by~$\\vartheta \\in [0, \\pi]$ (i.e.\\ $\\cos \\vartheta = \\vec{x}\\cdot \\vec{y}$).\nThen the operator product $F_\\tau(\\vec x)F_{\\tau'}(\\vec x')$ has the eigenvalues\n\\begin{equation}\\label{evals_product}\n\\lambda_{1,2}=\\frac{1}{4}\\: \\Big(1+\\tau\\tau'\\cos\\vartheta \\pm\\sqrt{  (1+\\tau \\tau'\\cos \\vartheta)^2-(\\tau^2-1)(\\tau'^2-1)  }\\Big) \\:.\n\\end{equation}\nMoreover,\n\\begin{equation}\\label{lagrangian_R3}\n{\\mathcal{L}} \\big((\\tau, \\vec x), (\\tau', \\vec x') \\big) = \\frac1{8} \\Big( \\big( 1+\\tau\\tau'\\cos\\vartheta \\big)^2-(\\tau^2-1)(\\tau'^2-1) \\Big) \\,\\big( 1- \\chi_{[\\vartheta_-,\\vartheta_+]}(\\vartheta) \\big) \\:,\n\\end{equation}\nwhere $ \\chi_{[\\vartheta_-,\\vartheta_+]}$ is the characteristic function of the interval defined by\n\\begin{equation}\\label{eq:critical_angles}\n\\cos\\vartheta_\\pm=\\frac{-1\\mp\\sqrt{(\\tau^2-1)(\\tau'^2-1)}}{\\tau\\tau'} \\:.\n\\end{equation}",
+        "source_file": "/tmp/desol_arxiv_cycle/2201.06382/expanded_source/numerics.tex",
+        "source_span_id": "srcspan_fa2567537d4fa61e2fb3",
+        "source_char_range": [
+          27194,
+          28206
+        ],
+        "statement_char_range": [
+          27208,
+          28194
+        ],
+        "source_line_range": [
+          470,
+          485
+        ],
+        "env_name": "lemma",
+        "latex_label": "lemmalagrangianR3",
+        "section": "The Lagrangian and the Causal Structure",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{Lemma} \\label{lemmalagrangianR3} Let $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$. We denote the angle between~$\\vec{x}$ and~$\\vec{x}'$ by~$\\vartheta \\in [0, \\pi]$ (i.e.\\ $\\cos \\vartheta = \\vec{x}\\cdot \\vec{y}$). Then the operator product $F_\\tau(\\vec x)F_{\\tau'}(\\vec x')$ has the eigenvalues \\begin{equation}\\label{evals_product} \\lambda_{1,2}=\\frac{1}{4}\\: \\Big(1+\\tau\\tau'\\cos\\vartheta \\pm\\sqrt{ (1+\\tau \\tau'\\cos \\vartheta)^2-(\\tau^2-1)(\\tau'^2-1) }\\Big) \\:. \\end{equation} Moreover, \\begin{equation}\\label{lagrangian_R3} {\\mathcal{L}} \\big((\\tau, \\vec x), (\\tau', \\vec x') \\big) = \\frac1{8} \\Big( \\big( 1+\\tau\\tau'\\cos\\vartheta \\big)^2-(\\tau^2-1)(\\tau'^2-1) \\Big) \\,\\big( 1- \\chi_{[\\vartheta_-,\\vartheta_+]}(\\vartheta) \\big) \\:, \\end{equation} where $ \\chi_{[\\vartheta_-,\\vartheta_+]}$ is the characteristic function of the interval defined by \\begin{equation}\\label{eq:critical_angles} \\cos\\vartheta_\\pm=\\frac{-1\\mp\\sqrt{(\\tau^2-1)(\\tau'^2-1)}}{\\tau\\tau'} \\:. \\end{equation} \\end{Lemma}",
+        "definitions": [
+          "Let $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$.",
+          "Let $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - \\label{lemmalagrangianR3} Let $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$.",
+          "theorem source span: \\begin{Lemma} \\label{lemmalagrangianR3} Let $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$.",
+          "Lemma} Local proof sketch: The proof is a direct generalization of the computations in the case $\\tau=\\tau'$ as carried out in~\\cite[Proposition~4."
+        ],
+        "context_excerpt": "Paper glossary memory: - Felix: \\newcommand\\Felix[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{F}}: #1}} - H_i^1: simply the matrix~$B^1_i + (B^1_i)^{*}$ with all diagonal entries set to zero (these diagonal entries describe irrelevan - Niki: \\newcommand\\Niki[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{N}}: #1}} - Robert: \\newcommand\\Robert[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{R}}: #1}} - S^2: s the unit sphere in~$\\R^3$) - S^4: given asymptotically by \\begin{align} m &= \\frac{\\delta_4\\: \\mu(S^4)}{\\mu \\big( B^4_{\\vartheta_{\\max}/2} \\big)} \\: \\Big( - bookmark: \\newcommand\\bookmark{\\marginpar {\\flushleft\\sffamily\\footnotesize bookmark {\\tt{Felix}}}} - f: sufficiently large - g: monotone increasing in~$X$ - m: known yet - mpar: \\newcommand\\mpar[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize #1}} - x: the basis vector~$e_1$ and that~$y = \\cos \\vartheta\\ - y: spacelike separated from $x$ if and only if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Nearby theorem statements: - \\label{lemmalagrangianR3} Let $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$. We denote the angle between~$\\vec{x}$ and~$\\vec{x}'$ by~$\\vartheta \\in [0, \\pi]$ (i.e.\\ $\\cos \\vartheta = \\vec{x}\\cdot \\vec{y}$). Then the operator product $F_\\tau(\\vec x)F_{ Declared notation/macros: - \\newcommand{\\vspace*{.5em} \\noindent \\thanks}{\\vspace*{.5em} \\noindent \\thanks} - \\newcommand{\\begin{equation}}{\\begin{equation}} - \\newcommand{\\end{equation}}{\\end{equation}} - \\newcommand{\\begin{proof}}{\\begin{proof}} - \\newcommand{\\end{proof} \\noindent}{\\end{proof} \\noindent} - \\newcommand{\\ \\hfill $\\Diamond$}{\\ \\hfill $\\Diamond$} - \\newcommand{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;}{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;} - \\newcommand{\\langle",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "strict_statement_validity:false_target_without_source_contradiction",
+          "status": "FLAWED",
+          "failure_kind": "false_or_ambiguous_statement",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "strict_statement_validity",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "Big",
+            "F",
+            "L",
+            "Let",
+            "Moreover",
+            "S",
+            "Then",
+            "We",
+            "and",
+            "angle",
+            "begin",
+            "between"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "\\label{lemmalagrangianR3} Let $\\tau,\\tau'\\in[1,\\infty)$ and~$\\vec x,\\vec{x}'\\in S^2$.",
+            "\\end{equation} Moreover, \\begin{equation}\\label{lagrangian_R3} {\\mathcal{L}} \\big((\\tau, \\vec x), (\\tau', \\vec x') \\big) = \\frac1{8} \\Big( \\big( 1+\\tau\\tau'\\cos\\vartheta \\big)^2-(\\tau^2-1)(\\tau'^2-1) \\Big) \\,\\big( 1- \\chi_{[\\vartheta_-,\\vartheta_+]}(\\vartheta) \\big) \\:, \\end{equation} where $ \\chi_{[\\vartheta_-,\\vartheta_+]}$ is the characteristic function of the interval defined by \\begin{equation}\\label{eq:critical_angles} \\cos\\vartheta_\\pm=\\frac{-1\\mp\\sqrt{(\\tau^2-1)(\\tau'^2-1)}}{\\tau\\tau'} \\:."
+          ],
+          "claim": "We denote the angle between~$\\vec{x}$ and~$\\vec{x}'$ by~$\\vartheta \\in [0, \\pi]$ (i.e.\\ $\\cos \\vartheta = \\vec{x}\\cdot \\vec{y}$). Then the operator product $F_\\tau(\\vec x)F_{\\tau'}(\\vec x')$ has the eigenvalues \\begin{equation}\\label{evals_product} \\lambda_{1,2}=\\frac{1}{4}\\: \\Big(1+\\tau\\tau'\\cos\\vartheta \\pm\\sqrt{ (1+\\tau \\tau'\\cos \\vartheta)^2-(\\tau^2-1)(\\tau'^2-1) }\\Big) \\:. \\end{equation}",
+          "symbols": [
+            "Big",
+            "F",
+            "L",
+            "Let",
+            "Moreover",
+            "S",
+            "Then",
+            "We",
+            "and",
+            "angle",
+            "begin",
+            "between",
+            "big",
+            "by",
+            "cdot",
+            "characteristic",
+            "chi",
+            "cos",
+            "critical_angles",
+            "defined",
+            "denote",
+            "e",
+            "eigenvalues",
+            "end"
+          ],
+          "constraints": [],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "\\cos \\vartheta = \\vec{x}\\cdot \\vec{y}",
+            "\\lambda_{1,2}=\\frac{1}{4}\\: \\Big(1+\\tau\\tau'\\cos\\vartheta \\pm\\sqrt{ (1+\\tau \\tau'\\cos \\vartheta)^2-(\\tau^2-1)(\\tau'^2-1) }\\Big) \\:.",
+            "{\\mathcal{L}} \\big((\\tau, \\vec x), (\\tau', \\vec x') \\big) = \\frac1{8} \\Big( \\big( 1+\\tau\\tau'\\cos\\vartheta \\big)^2-(\\tau^2-1)(\\tau'^2-1) \\Big) \\,\\big( 1- \\chi_{[\\vartheta_-,\\vartheta_+]}(\\vartheta) \\big) \\:,",
+            "\\cos\\vartheta_\\pm=\\frac{-1\\mp\\sqrt{(\\tau^2-1)(\\tau'^2-1)}}{\\tau\\tau'} \\:."
+          ]
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:lemmalagrangianR3"
+      ],
+      "axiom_debt_hash": "1e052dec8e942095",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:false_target_without_source_contradiction"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "9f1bd4db2c56a7d8",
+      "source_span_id": "srcspan_fa2567537d4fa61e2fb3"
+    },
+    {
+      "theorem_name": "propositionn1_fixedtau",
+      "lean_file": "/home/projectx/BDDM/output/2201.06382.lean",
+      "lean_statement": "theorem propositionn1_fixedtau (tau tau' : ℝ) (htau : 1 ≤ tau) (htau' : 1 ≤ tau') (hne : (tau, tau') ≠ (1, 1)) : Paper_2201_06382.Liso tau tau' > 1 / 6",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "htau",
+          "lean_expr": "(htau : 1 ≤ tau)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2201.06382",
+        "section": "",
+        "label": "propositionn1_fixedtau",
+        "cited_refs": [
+          "asl2021analysis",
+          "baydin2018automatic",
+          "bierler",
+          "bjorken",
+          "cfs",
+          "cfsweblink",
+          "continuum",
+          "conway+sloane",
+          "dice2014",
+          "dice2018",
+          "discrete",
+          "gaugefix",
+          "guo2018nonsmooth",
+          "harris2020numpy",
+          "hunter2007matplotlib",
+          "intro",
+          "jax2018github",
+          "jet",
+          "lawson+michelsohn",
+          "lewis2009nonsmooth",
+          "lewis2013nonsmooth",
+          "nocedal2006numerical",
+          "peskin+schroeder",
+          "powell1976some",
+          "reed+simon4",
+          "review",
+          "saff+kuijlaars",
+          "sloane",
+          "small",
+          "snygg",
+          "sphere",
+          "support",
+          "vanrossum2009python",
+          "welch"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:claim_shape_mismatch:eq->ineq",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T10:47:19Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_12a5ed8db7436dd962f49bd5",
+      "canonical_theorem_id": "cth_185ec7b8e9311e6fa8ade1b8",
+      "alignment_pair_id": "align_01ff26b7bc3baa1d9a93e9e1",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{propositionn1_fixedtau} For an isotropic measure~\\eqref{spherical}, the causal action\ncan be written as\n\\begin{align}\n{\\mathcal{S}}(\\rho) &= \\int_1^\\infty d\\mu(\\tau) \\int_1^\\infty d\\mu(\\tau') \\: {\\mathcal{L}}_\\text{iso}(\\tau, \\tau') \n\\qquad \\text{with} \\\\\n {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') &= \\frac{(\\tau^2-1)^\\frac{3}{2}\\: (\\tau'^2-1)^\\frac{3}{2}}{12\\, \\tau \\tau'} - \\frac{\\tau^2 \\tau'^2}{12} + \\frac{\\tau^2+\\tau'^2}{8} \\:. \\label{Liso}\n\\end{align}\nMoreover, the isotropic Lagrangian~${\\mathcal{L}}_\\text{\\rm{iso}}$ is bounded from below by\n\\begin{equation}\\label{eq:iso_measure_bound}\n{\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') > {\\mathcal{L}}_\\text{\\rm{iso}}(1,1) = \\frac{1}{6}\\qquad \\text{for all~$\\tau, \\tau'\n\\in [1, \\infty)$ with~$(\\tau, \\tau') \\neq (1,1)$}\\:.\n\\end{equation}",
+        "normalized_natural_language_theorem": "Quantifiers: forall Assumptions: \\label{propositionn1_fixedtau} For an isotropic measure~\\eqref{spherical}, the causal action can be written as \\begin{align} {\\mathcal{S}}(\\rho) &= \\int_1^\\infty d\\mu(\\tau) \\int_1^\\infty d\\mu(\\tau') \\: {\\mathcal{L}}_\\text{iso}(\\tau, \\tau') \\qquad \\text{with} \\\\ {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') &= \\frac{(\\tau^2-1)^\\frac{3}{2}\\: (\\tau'^2-1)^\\frac{3}{2}}{12\\, \\tau \\tau'} - \\frac{\\tau^2 \\tau'^2}{12} + \\frac{\\tau^2+\\tau'^2}{8} \\:.; \\label{Liso} \\end{align} Moreover, the isotropic Lagrangian~${\\mathcal{L}}_\\text{\\rm{iso}}$ is bounded from below by \\begin{equation}\\label{eq:iso_measure_bound} {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') > {\\mathcal{L}}_\\text{\\rm{iso}}(1,1) = \\frac{1}{6}\\qquad \\text{for all~$\\tau, \\tau' \\in [1, \\infty)$ with~$(\\tau, \\tau') \\neq (1,1)$}\\:. Conclusion: \\end{equation}",
+        "lean_statement": "theorem propositionn1_fixedtau (tau tau' : ℝ) (htau : 1 ≤ tau) (htau' : 1 ≤ tau') (hne : (tau, tau') ≠ (1, 1)) : Paper_2201_06382.Liso tau tau' > 1 / 6",
+        "extracted_assumptions": [
+          "\\label{propositionn1_fixedtau} For an isotropic measure~\\eqref{spherical}, the causal action can be written as \\begin{align} {\\mathcal{S}}(\\rho) &= \\int_1^\\infty d\\mu(\\tau) \\int_1^\\infty d\\mu(\\tau') \\: {\\mathcal{L}}_\\text{iso}(\\tau, \\tau') \\qquad \\text{with} \\\\ {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') &= \\frac{(\\tau^2-1)^\\frac{3}{2}\\: (\\tau'^2-1)^\\frac{3}{2}}{12\\, \\tau \\tau'} - \\frac{\\tau^2 \\tau'^2}{12} + \\frac{\\tau^2+\\tau'^2}{8} \\:.",
+          "\\label{Liso} \\end{align} Moreover, the isotropic Lagrangian~${\\mathcal{L}}_\\text{\\rm{iso}}$ is bounded from below by \\begin{equation}\\label{eq:iso_measure_bound} {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') > {\\mathcal{L}}_\\text{\\rm{iso}}(1,1) = \\frac{1}{6}\\qquad \\text{for all~$\\tau, \\tau' \\in [1, \\infty)$ with~$(\\tau, \\tau') \\neq (1,1)$}\\:."
+        ],
+        "extracted_conclusion": "\\end{equation}",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_12a5ed8db7436dd962f49bd5",
+          "alignment_pair_id": "align_01ff26b7bc3baa1d9a93e9e1",
+          "paper_text_coverage": 0.125,
+          "lean_text_coverage": 0.5455,
+          "missing_assumptions": [
+            "\\label{propositionn1_fixedtau} For an isotropic measure~\\eqref{spherical}, the causal action can be written as \\begin{align} {\\mathcal{S}}(\\rho) &= \\int_1^\\infty d\\mu(\\tau) \\int_1^\\infty d\\mu(\\tau') \\: {\\mathcal{L}}_\\text{iso}(\\tau, \\tau') \\qquad \\text{with} \\\\ {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') &= \\frac{(\\tau^2-1)^\\frac{3}{2}\\: (\\tau'^2-1)^\\frac{3}{2}}{12\\, \\tau \\tau'} - \\frac{\\tau^2 \\tau'^2}{12} + \\frac{\\tau^2+\\tau'^2}{8} \\:."
+          ],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::propositionn1_fixedtau",
+      "context_pack": {
+        "theorem_name": "propositionn1_fixedtau",
+        "original_latex_theorem": "\\label{propositionn1_fixedtau} For an isotropic measure~\\eqref{spherical}, the causal action\ncan be written as\n\\begin{align}\n{\\mathcal{S}}(\\rho) &= \\int_1^\\infty d\\mu(\\tau) \\int_1^\\infty d\\mu(\\tau') \\: {\\mathcal{L}}_\\text{iso}(\\tau, \\tau') \n\\qquad \\text{with} \\\\\n {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') &= \\frac{(\\tau^2-1)^\\frac{3}{2}\\: (\\tau'^2-1)^\\frac{3}{2}}{12\\, \\tau \\tau'} - \\frac{\\tau^2 \\tau'^2}{12} + \\frac{\\tau^2+\\tau'^2}{8} \\:. \\label{Liso}\n\\end{align}\nMoreover, the isotropic Lagrangian~${\\mathcal{L}}_\\text{\\rm{iso}}$ is bounded from below by\n\\begin{equation}\\label{eq:iso_measure_bound}\n{\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') > {\\mathcal{L}}_\\text{\\rm{iso}}(1,1) = \\frac{1}{6}\\qquad \\text{for all~$\\tau, \\tau'\n\\in [1, \\infty)$ with~$(\\tau, \\tau') \\neq (1,1)$}\\:.\n\\end{equation}",
+        "source_file": "/tmp/desol_arxiv_cycle/2201.06382/expanded_source/numerics.tex",
+        "source_span_id": "srcspan_5c7b8ef2a78a9bab60d8",
+        "source_char_range": [
+          40166,
+          40985
+        ],
+        "statement_char_range": [
+          40177,
+          40975
+        ],
+        "source_line_range": [
+          664,
+          676
+        ],
+        "env_name": "prp",
+        "latex_label": "propositionn1_fixedtau",
+        "section": "Minimizing in the Class of Isotropic Measures",
+        "cited_refs": [
+          "spherical"
+        ],
+        "exact_source_excerpt": "\\begin{Prp}\\label{propositionn1_fixedtau} For an isotropic measure~\\eqref{spherical}, the causal action can be written as \\begin{align} {\\mathcal{S}}(\\rho) &= \\int_1^\\infty d\\mu(\\tau) \\int_1^\\infty d\\mu(\\tau') \\: {\\mathcal{L}}_\\text{iso}(\\tau, \\tau') \\qquad \\text{with} \\\\ {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') &= \\frac{(\\tau^2-1)^\\frac{3}{2}\\: (\\tau'^2-1)^\\frac{3}{2}}{12\\, \\tau \\tau'} - \\frac{\\tau^2 \\tau'^2}{12} + \\frac{\\tau^2+\\tau'^2}{8} \\:. \\label{Liso} \\end{align} Moreover, the isotropic Lagrangian~${\\mathcal{L}}_\\text{\\rm{iso}}$ is bounded from below by \\begin{equation}\\label{eq:iso_measure_bound} {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') > {\\mathcal{L}}_\\text{\\rm{iso}}(1,1) = \\frac{1}{6}\\qquad \\text{for all~$\\tau, \\tau' \\in [1, \\infty)$ with~$(\\tau, \\tau') \\neq (1,1)$}\\:. \\end{equation} \\end{Prp}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [
+          "if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{.",
+          "if~$\\tau$ is increased."
+        ],
+        "nearby_claims": [],
+        "context_excerpt": "Paper glossary memory: - Felix: \\newcommand\\Felix[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{F}}: #1}} - H_i^1: simply the matrix~$B^1_i + (B^1_i)^{*}$ with all diagonal entries set to zero (these diagonal entries describe irrelevan - Niki: \\newcommand\\Niki[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{N}}: #1}} - Robert: \\newcommand\\Robert[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{R}}: #1}} - S^2: s the unit sphere in~$\\R^3$) - S^4: given asymptotically by \\begin{align} m &= \\frac{\\delta_4\\: \\mu(S^4)}{\\mu \\big( B^4_{\\vartheta_{\\max}/2} \\big)} \\: \\Big( - bookmark: \\newcommand\\bookmark{\\marginpar {\\flushleft\\sffamily\\footnotesize bookmark {\\tt{Felix}}}} - f: sufficiently large - g: monotone increasing in~$X$ - m: known yet - mpar: \\newcommand\\mpar[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize #1}} - x: the basis vector~$e_1$ and that~$y = \\cos \\vartheta\\ - y: spacelike separated from $x$ if and only if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{.5em} \\noindent \\thanks}{\\vspace*{.5em} \\noindent \\thanks} - \\newcommand{\\begin{equation}}{\\begin{equation}} - \\newcommand{\\end{equation}}{\\end{equation}} - \\newcommand{\\begin{proof}}{\\begin{proof}} - \\newcommand{\\end{proof} \\noindent}{\\end{proof} \\noindent} - \\newcommand{\\ \\hfill $\\Diamond$}{\\ \\hfill $\\Diamond$} - \\newcommand{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;}{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;} - \\newcommand{\\langle}{\\langle} Nearby source context: This {\\em{self-contribution}} can be computed by evaluating~\\eqref{lagrangian_R3} in the case~$\\tau'=\\tau$ and~$\\vec{x}'=\\vec{x}$, \\begin{equation} \\label{Ldiag} {\\mathcal{L}} \\big((\\tau, \\vec x), (\\tau, \\vec x) \\big) = \\frac1{8} \\Big( \\big( 1+\\tau^2)^2-\\b",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "claim_shape_mismatch:eq->ineq",
+          "status": "FLAWED",
+          "failure_kind": "false_or_ambiguous_statement",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok",
+            "claim_equivalent"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "For",
+            "L",
+            "Lagrangian",
+            "Liso",
+            "Moreover",
+            "S",
+            "action",
+            "align",
+            "all",
+            "an",
+            "as",
+            "be"
+          ],
+          "quantifiers": [
+            "forall"
+          ],
+          "assumptions": [
+            "\\label{propositionn1_fixedtau} For an isotropic measure~\\eqref{spherical}, the causal action can be written as \\begin{align} {\\mathcal{S}}(\\rho) &= \\int_1^\\infty d\\mu(\\tau) \\int_1^\\infty d\\mu(\\tau') \\: {\\mathcal{L}}_\\text{iso}(\\tau, \\tau') \\qquad \\text{with} \\\\ {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') &= \\frac{(\\tau^2-1)^\\frac{3}{2}\\: (\\tau'^2-1)^\\frac{3}{2}}{12\\, \\tau \\tau'} - \\frac{\\tau^2 \\tau'^2}{12} + \\frac{\\tau^2+\\tau'^2}{8} \\:.",
+            "\\label{Liso} \\end{align} Moreover, the isotropic Lagrangian~${\\mathcal{L}}_\\text{\\rm{iso}}$ is bounded from below by \\begin{equation}\\label{eq:iso_measure_bound} {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') > {\\mathcal{L}}_\\text{\\rm{iso}}(1,1) = \\frac{1}{6}\\qquad \\text{for all~$\\tau, \\tau' \\in [1, \\infty)$ with~$(\\tau, \\tau') \\neq (1,1)$}\\:."
+          ],
+          "claim": "\\end{equation}",
+          "symbols": [
+            "For",
+            "L",
+            "Lagrangian",
+            "Liso",
+            "Moreover",
+            "S",
+            "action",
+            "align",
+            "all",
+            "an",
+            "as",
+            "be",
+            "begin",
+            "below",
+            "bound",
+            "bounded",
+            "by",
+            "can",
+            "causal",
+            "d",
+            "end",
+            "eq",
+            "eqref",
+            "equation"
+          ],
+          "constraints": [
+            "{\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') > {\\mathcal{L}}_\\text{\\rm{iso}}(1,1) = \\frac{1}{6}\\qquad \\text{for all~$\\tau, \\tau' \\in [1, \\infty)$ with~$(\\tau, \\tau') \\neq (1,1)$}\\:."
+          ],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "{\\mathcal{S}}(\\rho) = \\int_1^\\infty d\\mu(\\tau) \\int_1^\\infty d\\mu(\\tau') \\: {\\mathcal{L}}_\\text{iso}(\\tau, \\tau') \\qquad \\text{with} \\\\ {\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') = \\frac{(\\tau^2-1)^\\frac{3}{2}\\: (\\tau'^2-1)^\\frac{3}{2}}{12\\, \\tau \\tau'} - \\frac{\\tau^2 \\tau'^2}{12} + \\frac{\\tau^2+\\tau'^2}{8} \\:.",
+            "{\\mathcal{L}}_\\text{\\rm{iso}}(\\tau, \\tau') > {\\mathcal{L}}_\\text{\\rm{iso}}(1,1) = \\frac{1}{6}\\qquad \\text{for all~$\\tau, \\tau' \\in [1, \\infty)$ with~$(\\tau, \\tau') \\neq (1,1)$}\\:."
+          ]
+        }
+      },
+      "axiom_debt": [
+        "paper_theory_reference"
+      ],
+      "axiom_debt_hash": "2e7ae54c0ad8d9b6",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:claim_shape_mismatch"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "dee35cc22c5d0582",
+      "source_span_id": "srcspan_5c7b8ef2a78a9bab60d8"
+    },
+    {
+      "theorem_name": "propositionn1",
+      "lean_file": "/home/projectx/BDDM/output/2201.06382.lean",
+      "lean_statement": "theorem propositionn1 (m : ℕ) (tau S : ℝ) (h_tammes : ∃ (x : Fin m → ℝ × ℝ × ℝ), (∀ i, ‖x i‖ = tau) ∧ (∀ i j, i ≠ j → arccos (inner (x i) (x j)) ≥ theta_min)) : tau = (3 ^ (1/4)) / (2 * pi) ^ (1/2) * (m : ℝ) ^ (1/2) + 𝒪[atTop] (1 / (m : ℝ) ^ (1/2)) ∧ S = (3 ^ (1/2)) / (4 * pi) + 𝒪[atTop] (1 / (m : ℝ))",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,assumptions_grounded,translation_fidelity_ok,dependency_trust_complete,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "atTop",
+          "lean_expr": "[atTop]",
+          "grounding": "UNGROUNDED",
+          "grounding_source": "bridge_candidate:def_bal",
+          "trust_class": "TRUST_PLACEHOLDER",
+          "trust_reference": "untrusted"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2201.06382",
+        "section": "",
+        "label": "propositionn1",
+        "cited_refs": [
+          "asl2021analysis",
+          "baydin2018automatic",
+          "bierler",
+          "bjorken",
+          "cfs",
+          "cfsweblink",
+          "continuum",
+          "conway+sloane",
+          "dice2014",
+          "dice2018",
+          "discrete",
+          "gaugefix",
+          "guo2018nonsmooth",
+          "harris2020numpy",
+          "hunter2007matplotlib",
+          "intro",
+          "jax2018github",
+          "jet",
+          "lawson+michelsohn",
+          "lewis2009nonsmooth",
+          "lewis2013nonsmooth",
+          "nocedal2006numerical",
+          "peskin+schroeder",
+          "powell1976some",
+          "reed+simon4",
+          "review",
+          "saff+kuijlaars",
+          "sloane",
+          "small",
+          "snygg",
+          "sphere",
+          "support",
+          "vanrossum2009python",
+          "welch"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_8e71ae3a.lean:9:50: error: unexpected token ')'; expected term",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T10:47:20Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": false,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": false,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "assumptions_grounded",
+        "dependency_trust_complete",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_d516f1df7c4af92824b7b9f3",
+      "canonical_theorem_id": "cth_f3f5bf84fbd0f82383074cca",
+      "alignment_pair_id": "align_ccf05a9c952930a9c2ccc167",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "{\\bf{(The two-dimensional discrete Dirac sphere)}} \\label{propositionn1} Choosing the points on the sphere of radius~$\\tau$ according to the Tammes distribution with~$\\vartheta_m = \\vartheta_-$, the parameter~$\\tau$ and the causal action\nhave the following asymptotics for large~$m$,\n\\begin{align}\n\\tau &= \\frac{\\sqrt[4]{3}}{\\sqrt{2 \\pi}}\\: \\sqrt{m} + {\\mathscr{O}} \\Big( \\frac{1}{\\sqrt{m}} \\Big) \\label{tau_2dim_Dirac} \\\\\n{\\mathcal{S}} &= \\frac{\\sqrt{3}}{4 \\pi} + {\\mathscr{O}} \\Big( \\frac{1}{m} \\Big) \\:. \\label{Sasy}\n\\end{align}",
+        "normalized_natural_language_theorem": "Assumptions: {\\bf{(The two-dimensional discrete Dirac sphere)}} \\label{propositionn1} Choosing the points on the sphere of radius~$\\tau$ according to the Tammes distribution with~$\\vartheta_m = \\vartheta_-$, the parameter~$\\tau$ and the causal action have the following asymptotics for large~$m$, \\begin{align} \\tau &= \\frac{\\sqrt[4]{3}}{\\sqrt{2 \\pi}}\\: \\sqrt{m} + {\\mathscr{O}} \\Big( \\frac{1}{\\sqrt{m}} \\Big) \\label{tau_2dim_Dirac} \\\\ {\\mathcal{S}} &= \\frac{\\sqrt{3}}{4 \\pi} + {\\mathscr{O}} \\Big( \\frac{1}{m} \\Big) \\:. Conclusion: \\label{Sasy} \\end{align}",
+        "lean_statement": "theorem propositionn1 (m : ℕ) (tau S : ℝ) (h_tammes : ∃ (x : Fin m → ℝ × ℝ × ℝ), (∀ i, ‖x i‖ = tau) ∧ (∀ i j, i ≠ j → arccos (inner (x i) (x j)) ≥ theta_min)) : tau = (3 ^ (1/4)) / (2 * pi) ^ (1/2) * (m : ℝ) ^ (1/2) + 𝒪[atTop] (1 / (m : ℝ) ^ (1/2)) ∧ S = (3 ^ (1/2)) / (4 * pi) + 𝒪[atTop] (1 / (m : ℝ))",
+        "extracted_assumptions": [
+          "{\\bf{(The two-dimensional discrete Dirac sphere)}} \\label{propositionn1} Choosing the points on the sphere of radius~$\\tau$ according to the Tammes distribution with~$\\vartheta_m = \\vartheta_-$, the parameter~$\\tau$ and the causal action have the following asymptotics for large~$m$, \\begin{align} \\tau &= \\frac{\\sqrt[4]{3}}{\\sqrt{2 \\pi}}\\: \\sqrt{m} + {\\mathscr{O}} \\Big( \\frac{1}{\\sqrt{m}} \\Big) \\label{tau_2dim_Dirac} \\\\ {\\mathcal{S}} &= \\frac{\\sqrt{3}}{4 \\pi} + {\\mathscr{O}} \\Big( \\frac{1}{m} \\Big) \\:."
+        ],
+        "extracted_conclusion": "\\label{Sasy} \\end{align}",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_d516f1df7c4af92824b7b9f3",
+          "alignment_pair_id": "align_ccf05a9c952930a9c2ccc167",
+          "paper_text_coverage": 0.2093,
+          "lean_text_coverage": 0.4286,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::propositionn1",
+      "context_pack": {
+        "theorem_name": "propositionn1",
+        "original_latex_theorem": "{\\bf{(The two-dimensional discrete Dirac sphere)}} \\label{propositionn1} Choosing the points on the sphere of radius~$\\tau$ according to the Tammes distribution with~$\\vartheta_m = \\vartheta_-$, the parameter~$\\tau$ and the causal action\nhave the following asymptotics for large~$m$,\n\\begin{align}\n\\tau &= \\frac{\\sqrt[4]{3}}{\\sqrt{2 \\pi}}\\: \\sqrt{m} + {\\mathscr{O}} \\Big( \\frac{1}{\\sqrt{m}} \\Big) \\label{tau_2dim_Dirac} \\\\\n{\\mathcal{S}} &= \\frac{\\sqrt{3}}{4 \\pi} + {\\mathscr{O}} \\Big( \\frac{1}{m} \\Big) \\:. \\label{Sasy}\n\\end{align}",
+        "source_file": "/tmp/desol_arxiv_cycle/2201.06382/expanded_source/numerics.tex",
+        "source_span_id": "srcspan_439eaf8d62a267028398",
+        "source_char_range": [
+          48631,
+          49184
+        ],
+        "statement_char_range": [
+          48643,
+          49174
+        ],
+        "source_line_range": [
+          787,
+          793
+        ],
+        "env_name": "prp",
+        "latex_label": "propositionn1",
+        "section": "The Two-Dimensional Discrete Dirac Sphere",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{Prp} {\\bf{(The two-dimensional discrete Dirac sphere)}} \\label{propositionn1} Choosing the points on the sphere of radius~$\\tau$ according to the Tammes distribution with~$\\vartheta_m = \\vartheta_-$, the parameter~$\\tau$ and the causal action have the following asymptotics for large~$m$, \\begin{align} \\tau &= \\frac{\\sqrt[4]{3}}{\\sqrt{2 \\pi}}\\: \\sqrt{m} + {\\mathscr{O}} \\Big( \\frac{1}{\\sqrt{m}} \\Big) \\label{tau_2dim_Dirac} \\\\ {\\mathcal{S}} &= \\frac{\\sqrt{3}}{4 \\pi} + {\\mathscr{O}} \\Big( \\frac{1}{m} \\Big) \\:. \\label{Sasy} \\end{align} \\end{Prp}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [
+          "if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{."
+        ],
+        "nearby_claims": [],
+        "context_excerpt": "Paper glossary memory: - Felix: \\newcommand\\Felix[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{F}}: #1}} - H_i^1: simply the matrix~$B^1_i + (B^1_i)^{*}$ with all diagonal entries set to zero (these diagonal entries describe irrelevan - Niki: \\newcommand\\Niki[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{N}}: #1}} - Robert: \\newcommand\\Robert[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{R}}: #1}} - S^2: s the unit sphere in~$\\R^3$) - S^4: given asymptotically by \\begin{align} m &= \\frac{\\delta_4\\: \\mu(S^4)}{\\mu \\big( B^4_{\\vartheta_{\\max}/2} \\big)} \\: \\Big( - bookmark: \\newcommand\\bookmark{\\marginpar {\\flushleft\\sffamily\\footnotesize bookmark {\\tt{Felix}}}} - f: sufficiently large - g: monotone increasing in~$X$ - m: known yet - mpar: \\newcommand\\mpar[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize #1}} - x: the basis vector~$e_1$ and that~$y = \\cos \\vartheta\\ - y: spacelike separated from $x$ if and only if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{.5em} \\noindent \\thanks}{\\vspace*{.5em} \\noindent \\thanks} - \\newcommand{\\begin{equation}}{\\begin{equation}} - \\newcommand{\\end{equation}}{\\end{equation}} - \\newcommand{\\begin{proof}}{\\begin{proof}} - \\newcommand{\\end{proof} \\noindent}{\\end{proof} \\noindent} - \\newcommand{\\ \\hfill $\\Diamond$}{\\ \\hfill $\\Diamond$} - \\newcommand{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;}{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;} - \\newcommand{\\langle}{\\langle} Nearby source context: dial coordinates of all points equal to~$\\tau_i=\\tau$. In other words, we distribute the points on a sphere of radius~$\\tau$. The resulting causal variational principle on the sphere was introduced in~\\cite[Example~2.8]{continuum} and analyzed further in~\\",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_8e71ae3a.lean:9:50: error: unexpected token ')'; expected term",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "Big",
+            "Choosing",
+            "Dirac",
+            "O",
+            "S",
+            "Sasy",
+            "Tammes",
+            "The",
+            "according",
+            "action",
+            "align",
+            "and"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "{\\bf{(The two-dimensional discrete Dirac sphere)}} \\label{propositionn1} Choosing the points on the sphere of radius~$\\tau$ according to the Tammes distribution with~$\\vartheta_m = \\vartheta_-$, the parameter~$\\tau$ and the causal action have the following asymptotics for large~$m$, \\begin{align} \\tau &= \\frac{\\sqrt[4]{3}}{\\sqrt{2 \\pi}}\\: \\sqrt{m} + {\\mathscr{O}} \\Big( \\frac{1}{\\sqrt{m}} \\Big) \\label{tau_2dim_Dirac} \\\\ {\\mathcal{S}} &= \\frac{\\sqrt{3}}{4 \\pi} + {\\mathscr{O}} \\Big( \\frac{1}{m} \\Big) \\:."
+          ],
+          "claim": "\\label{Sasy} \\end{align}",
+          "symbols": [
+            "Big",
+            "Choosing",
+            "Dirac",
+            "O",
+            "S",
+            "Sasy",
+            "Tammes",
+            "The",
+            "according",
+            "action",
+            "align",
+            "and",
+            "asymptotics",
+            "begin",
+            "bf",
+            "causal",
+            "dimensional",
+            "discrete",
+            "distribution",
+            "end",
+            "following",
+            "for",
+            "frac",
+            "have"
+          ],
+          "constraints": [],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "\\vartheta_m = \\vartheta_-",
+            "\\tau = \\frac{\\sqrt[4]{3}}{\\sqrt{2 \\pi}}\\: \\sqrt{m} + {\\mathscr{O}} \\Big( \\frac{1}{\\sqrt{m}} \\Big) \\\\ {\\mathcal{S}} = \\frac{\\sqrt{3}}{4 \\pi} + {\\mathscr{O}} \\Big( \\frac{1}{m} \\Big) \\:."
+          ]
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:propositionn1"
+      ],
+      "axiom_debt_hash": "1a5dcec0418c296e",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:assumptions_grounded",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:dependency_trust_complete",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "a001ebc04b452335",
+      "source_span_id": "srcspan_439eaf8d62a267028398"
+    },
+    {
+      "theorem_name": "propositionn1T",
+      "lean_file": "/home/projectx/BDDM/output/2201.06382.lean",
+      "lean_statement": "theorem propositionn1T (m : ℝ) : ∃ (C : ℝ), ∀ m, m ≥ C → |(3 / (16 * Real.pi ^ 2)) * m ^ 2 - T m| ≤ m",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2201.06382",
+        "section": "",
+        "label": "propositionn1T",
+        "cited_refs": [
+          "asl2021analysis",
+          "baydin2018automatic",
+          "bierler",
+          "bjorken",
+          "cfs",
+          "cfsweblink",
+          "continuum",
+          "conway+sloane",
+          "dice2014",
+          "dice2018",
+          "discrete",
+          "gaugefix",
+          "guo2018nonsmooth",
+          "harris2020numpy",
+          "hunter2007matplotlib",
+          "intro",
+          "jax2018github",
+          "jet",
+          "lawson+michelsohn",
+          "lewis2009nonsmooth",
+          "lewis2013nonsmooth",
+          "nocedal2006numerical",
+          "peskin+schroeder",
+          "powell1976some",
+          "reed+simon4",
+          "review",
+          "saff+kuijlaars",
+          "sloane",
+          "small",
+          "snygg",
+          "sphere",
+          "support",
+          "vanrossum2009python",
+          "welch"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:claim_shape_mismatch:ineq->exists",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T10:47:20Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_c2722c5ed25928c77d4021ca",
+      "canonical_theorem_id": "cth_7bc32a509636f17e4966effb",
+      "alignment_pair_id": "align_a709d12fc7ace664054fc4ec",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{propositionn1T} For the measure describing the two-dimensional discrete Dirac sphere\nin Proposition~\\ref{propositionn1}, the functional~$\\mathcal{T}$ in~\\eqref{Tdef} has the asymptotics\n\\[ \\mathcal{T}%&= \\frac14+\\frac14 \\frac{3}{4\\pi^2} m^2 +{\\mathscr{O}}(m^{-2}) + \\left(\\frac{\\sqrt3}{2\\pi} m+{\\mathscr{O}}(m^{-1})\\right) \\left(\\frac1m-\\frac12\\right) \\nonumber\\\\ &\n=  \\frac{3}{16\\, \\pi^2}\\:m^2 +{\\mathscr{O}}(m) \\:. \\]",
+        "normalized_natural_language_theorem": "Assumptions: \\label{propositionn1T} For the measure describing the two-dimensional discrete Dirac sphere in Proposition~\\ref{propositionn1}, the functional~$\\mathcal{T}$ in~\\eqref{Tdef} has the asymptotics \\[ \\mathcal{T}%&= \\frac14+\\frac14 \\frac{3}{4\\pi^2} m^2 +{\\mathscr{O}}(m^{-2}) + \\left(\\frac{\\sqrt3}{2\\pi} m+{\\mathscr{O}}(m^{-1})\\right) \\left(\\frac1m-\\frac12\\right) \\nonumber\\\\ & = \\frac{3}{16\\, \\pi^2}\\:m^2 +{\\mathscr{O}}(m) \\:. Conclusion: \\]",
+        "lean_statement": "theorem propositionn1T (m : ℝ) : ∃ (C : ℝ), ∀ m, m ≥ C → |(3 / (16 * Real.pi ^ 2)) * m ^ 2 - T m| ≤ m",
+        "extracted_assumptions": [
+          "\\label{propositionn1T} For the measure describing the two-dimensional discrete Dirac sphere in Proposition~\\ref{propositionn1}, the functional~$\\mathcal{T}$ in~\\eqref{Tdef} has the asymptotics \\[ \\mathcal{T}%&= \\frac14+\\frac14 \\frac{3}{4\\pi^2} m^2 +{\\mathscr{O}}(m^{-2}) + \\left(\\frac{\\sqrt3}{2\\pi} m+{\\mathscr{O}}(m^{-1})\\right) \\left(\\frac1m-\\frac12\\right) \\nonumber\\\\ & = \\frac{3}{16\\, \\pi^2}\\:m^2 +{\\mathscr{O}}(m) \\:."
+        ],
+        "extracted_conclusion": "\\]",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_c2722c5ed25928c77d4021ca",
+          "alignment_pair_id": "align_a709d12fc7ace664054fc4ec",
+          "paper_text_coverage": 0.1892,
+          "lean_text_coverage": 0.5833,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::propositionn1T",
+      "context_pack": {
+        "theorem_name": "propositionn1T",
+        "original_latex_theorem": "\\label{propositionn1T} For the measure describing the two-dimensional discrete Dirac sphere\nin Proposition~\\ref{propositionn1}, the functional~$\\mathcal{T}$ in~\\eqref{Tdef} has the asymptotics\n\\[ \\mathcal{T}%&= \\frac14+\\frac14 \\frac{3}{4\\pi^2} m^2 +{\\mathscr{O}}(m^{-2}) + \\left(\\frac{\\sqrt3}{2\\pi} m+{\\mathscr{O}}(m^{-1})\\right) \\left(\\frac1m-\\frac12\\right) \\nonumber\\\\ &\n=  \\frac{3}{16\\, \\pi^2}\\:m^2 +{\\mathscr{O}}(m) \\:. \\]",
+        "source_file": "/tmp/desol_arxiv_cycle/2201.06382/expanded_source/numerics.tex",
+        "source_span_id": "srcspan_08f22d011a60a76bc9b8",
+        "source_char_range": [
+          52295,
+          52742
+        ],
+        "statement_char_range": [
+          52306,
+          52732
+        ],
+        "source_line_range": [
+          841,
+          845
+        ],
+        "env_name": "prp",
+        "latex_label": "propositionn1T",
+        "section": "The Two-Dimensional Discrete Dirac Sphere",
+        "cited_refs": [
+          "Tdef",
+          "propositionn1"
+        ],
+        "exact_source_excerpt": "\\begin{Prp}\\label{propositionn1T} For the measure describing the two-dimensional discrete Dirac sphere in Proposition~\\ref{propositionn1}, the functional~$\\mathcal{T}$ in~\\eqref{Tdef} has the asymptotics \\[ \\mathcal{T}%&= \\frac14+\\frac14 \\frac{3}{4\\pi^2} m^2 +{\\mathscr{O}}(m^{-2}) + \\left(\\frac{\\sqrt3}{2\\pi} m+{\\mathscr{O}}(m^{-1})\\right) \\left(\\frac1m-\\frac12\\right) \\nonumber\\\\ & = \\frac{3}{16\\, \\pi^2}\\:m^2 +{\\mathscr{O}}(m) \\:. \\] \\end{Prp}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [
+          "if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{.",
+          "If the points $(\\tau,\\vec x)$ and $(\\tau',\\vec x')$ are {\\em{spacelike}} separated, these eigenvalues form a complex conjugate pair (because the square root is zero or imaginary).",
+          "if the points are {\\em{timelike}} separated, both eigenvalues are real and have the same sign."
+        ],
+        "nearby_claims": [],
+        "context_excerpt": "Paper glossary memory: - Felix: \\newcommand\\Felix[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{F}}: #1}} - H_i^1: simply the matrix~$B^1_i + (B^1_i)^{*}$ with all diagonal entries set to zero (these diagonal entries describe irrelevan - Niki: \\newcommand\\Niki[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{N}}: #1}} - Robert: \\newcommand\\Robert[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{R}}: #1}} - S^2: s the unit sphere in~$\\R^3$) - S^4: given asymptotically by \\begin{align} m &= \\frac{\\delta_4\\: \\mu(S^4)}{\\mu \\big( B^4_{\\vartheta_{\\max}/2} \\big)} \\: \\Big( - bookmark: \\newcommand\\bookmark{\\marginpar {\\flushleft\\sffamily\\footnotesize bookmark {\\tt{Felix}}}} - f: sufficiently large - g: monotone increasing in~$X$ - m: known yet - mpar: \\newcommand\\mpar[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize #1}} - x: the basis vector~$e_1$ and that~$y = \\cos \\vartheta\\ - y: spacelike separated from $x$ if and only if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{.5em} \\noindent \\thanks}{\\vspace*{.5em} \\noindent \\thanks} - \\newcommand{\\begin{equation}}{\\begin{equation}} - \\newcommand{\\end{equation}}{\\end{equation}} - \\newcommand{\\begin{proof}}{\\begin{proof}} - \\newcommand{\\end{proof} \\noindent}{\\end{proof} \\noindent} - \\newcommand{\\ \\hfill $\\Diamond$}{\\ \\hfill $\\Diamond$} - \\newcommand{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;}{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;} - \\newcommand{\\langle}{\\langle} Nearby source context: F_\\tau(\\vec x_i) \\big) = \\frac{1}{m}\\: \\frac{\\tau^2}{8}\\: 2\\cdot2 = \\frac{\\tau^2}{2m} = \\frac{\\sqrt{3}}{4 \\pi} + {\\mathscr{O}} \\Big( \\frac{1}{m} \\Big) \\:, \\] concluding the proof. \\end{proof} \\noindent Comparing the asymptotics~\\eqref{Sasy} with the estima",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "claim_shape_mismatch:ineq->exists",
+          "status": "FLAWED",
+          "failure_kind": "false_or_ambiguous_statement",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok",
+            "claim_equivalent"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "Dirac",
+            "For",
+            "O",
+            "Proposition",
+            "T",
+            "Tdef",
+            "asymptotics",
+            "describing",
+            "dimensional",
+            "discrete",
+            "eqref",
+            "frac"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "\\label{propositionn1T} For the measure describing the two-dimensional discrete Dirac sphere in Proposition~\\ref{propositionn1}, the functional~$\\mathcal{T}$ in~\\eqref{Tdef} has the asymptotics \\[ \\mathcal{T}%&= \\frac14+\\frac14 \\frac{3}{4\\pi^2} m^2 +{\\mathscr{O}}(m^{-2}) + \\left(\\frac{\\sqrt3}{2\\pi} m+{\\mathscr{O}}(m^{-1})\\right) \\left(\\frac1m-\\frac12\\right) \\nonumber\\\\ & = \\frac{3}{16\\, \\pi^2}\\:m^2 +{\\mathscr{O}}(m) \\:."
+          ],
+          "claim": "\\]",
+          "symbols": [
+            "Dirac",
+            "For",
+            "O",
+            "Proposition",
+            "T",
+            "Tdef",
+            "asymptotics",
+            "describing",
+            "dimensional",
+            "discrete",
+            "eqref",
+            "frac",
+            "functional",
+            "has",
+            "in",
+            "label",
+            "left",
+            "m",
+            "mathcal",
+            "mathscr",
+            "measure",
+            "nonumber",
+            "pi",
+            "propositionn"
+          ],
+          "constraints": [],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "\\mathcal{T} = \\frac{3}{16\\, \\pi^2}\\:m^2 +{\\mathscr{O}}(m) \\:."
+          ]
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:C"
+      ],
+      "axiom_debt_hash": "60246891a4871dfc",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:claim_shape_mismatch"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "a70aebb74dbd5d2c",
+      "source_span_id": "srcspan_08f22d011a60a76bc9b8"
+    },
+    {
+      "theorem_name": "prp_6",
+      "lean_file": "/home/projectx/BDDM/output/2201.06382.lean",
+      "lean_statement": "theorem prp_6 (k : ℕ) (h_causally_trivial_measure_optimal_1 : True) (h_every_spacetime_point_supp_2 : True) (h_every_spacetime_point_lies_3 : True) (h_source_4_4 : True) :\n  k ≥ 3 ∧ τ_i ≥ √(k/(k-2))",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "failure_kind": "proof_search_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,semantic_adversarial_checks_passed,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h_causally_trivial_measure_optimal_1",
+          "lean_expr": "(h_causally_trivial_measure_optimal_1 : True)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_every_spacetime_point_supp_2",
+          "lean_expr": "(h_every_spacetime_point_supp_2 : True)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_every_spacetime_point_lies_3",
+          "lean_expr": "(h_every_spacetime_point_lies_3 : True)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_source_4_4",
+          "lean_expr": "(h_source_4_4 : True)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2201.06382",
+        "section": "",
+        "label": "prp_6",
+        "cited_refs": [
+          "asl2021analysis",
+          "baydin2018automatic",
+          "bierler",
+          "bjorken",
+          "cfs",
+          "cfsweblink",
+          "continuum",
+          "conway+sloane",
+          "dice2014",
+          "dice2018",
+          "discrete",
+          "gaugefix",
+          "guo2018nonsmooth",
+          "harris2020numpy",
+          "hunter2007matplotlib",
+          "intro",
+          "jax2018github",
+          "jet",
+          "lawson+michelsohn",
+          "lewis2009nonsmooth",
+          "lewis2013nonsmooth",
+          "nocedal2006numerical",
+          "peskin+schroeder",
+          "powell1976some",
+          "reed+simon4",
+          "review",
+          "saff+kuijlaars",
+          "sloane",
+          "small",
+          "snygg",
+          "sphere",
+          "support",
+          "vanrossum2009python",
+          "welch"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T10:47:20Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": false,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "semantic_adversarial_checks_passed",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "partial",
+      "paper_statement_id": "pstmt_71f82d467361f1e55e8c291b",
+      "canonical_theorem_id": "cth_e5170db6663c24edea482525",
+      "alignment_pair_id": "align_e0cc9c60c6a6f08d6a8b2414",
+      "translation_fidelity_score": 0.86,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "Let~$\\rho$ be a causally trivial measure with optimal weights~\\eqref{civals}.\nAssume that every spacetime point~$(\\tau_i,\\vec x_i)$ in $supp \\rho$ is angular lightlike restricted and \nlies on the boundary of the light cone for at least $k\\geq 3$ points. Moreover, assume that the radial coordinates of all points are at least\n\\[ \\tau_i\\geq\\sqrt{\\frac{k}{k-2}} \\:. \\]\nThen~$\\rho$ is a local minimizer of the causal action principle.",
+        "normalized_natural_language_theorem": "Quantifiers: every; at least k≥3 Assumptions: ρ is a causally trivial measure with optimal weights; every spacetime point (τ_i, x_i) in supp ρ is angular lightlike restricted; every spacetime point (τ_i, x_i) lies on the boundary of the light cone for at least k≥3 points; τ_i ≥ √(k/(k-2)) Conclusion: ρ is a local minimizer of the causal action principle",
+        "lean_statement": "theorem prp_6 (k : ℕ) (h_causally_trivial_measure_optimal_1 : True) (h_every_spacetime_point_supp_2 : True) (h_every_spacetime_point_lies_3 : True) (h_source_4_4 : True) :\n  k ≥ 3 ∧ τ_i ≥ √(k/(k-2))",
+        "extracted_assumptions": [
+          "ρ is a causally trivial measure with optimal weights",
+          "every spacetime point (τ_i, x_i) in supp ρ is angular lightlike restricted",
+          "every spacetime point (τ_i, x_i) lies on the boundary of the light cone for at least k≥3 points",
+          "τ_i ≥ √(k/(k-2))"
+        ],
+        "extracted_conclusion": "ρ is a local minimizer of the causal action principle",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "typed_statement_ir",
+          "schema_stage_used",
+          "review_required_typed_ir",
+          "leanstral_judge_not_equivalent",
+          "leanstral_judge_confidence:0.90",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": false,
+            "evidence": [
+              "lean_statement_concludes_true"
+            ]
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "partial",
+        "alignment_decision": {
+          "alignment_class": "partial",
+          "confidence": 0.456,
+          "reasons": [
+            "missing_paper_assumptions"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_71f82d467361f1e55e8c291b",
+          "alignment_pair_id": "align_e0cc9c60c6a6f08d6a8b2414",
+          "paper_text_coverage": 0.125,
+          "lean_text_coverage": 0.3636,
+          "missing_assumptions": [
+            "ρ is a causally trivial measure with optimal weights",
+            "every spacetime point (τ_i, x_i) in supp ρ is angular lightlike restricted"
+          ],
+          "added_assumptions": [
+            "h_causally_trivial_measure_optimal_1: True",
+            "h_every_spacetime_point_supp_2: True",
+            "h_every_spacetime_point_lies_3: True",
+            "h_source_4_4: True"
+          ],
+          "conclusion_relation": "mismatch",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::prp_6",
+      "context_pack": {
+        "theorem_name": "prp_6",
+        "original_latex_theorem": "Let~$\\rho$ be a causally trivial measure with optimal weights~\\eqref{civals}.\nAssume that every spacetime point~$(\\tau_i,\\vec x_i)$ in $supp \\rho$ is angular lightlike restricted and \nlies on the boundary of the light cone for at least $k\\geq 3$ points. Moreover, assume that the radial coordinates of all points are at least\n\\[ \\tau_i\\geq\\sqrt{\\frac{k}{k-2}} \\:. \\]\nThen~$\\rho$ is a local minimizer of the causal action principle.",
+        "source_file": "/tmp/desol_arxiv_cycle/2201.06382/expanded_source/numerics.tex",
+        "source_span_id": "srcspan_6627a707f3f83b509380",
+        "source_char_range": [
+          57311,
+          57764
+        ],
+        "statement_char_range": [
+          57323,
+          57754
+        ],
+        "source_line_range": [
+          910,
+          915
+        ],
+        "env_name": "prp",
+        "latex_label": "",
+        "section": "Causally Trivial Measures as Local Minimizers",
+        "cited_refs": [
+          "civals"
+        ],
+        "exact_source_excerpt": "\\begin{Prp} Let~$\\rho$ be a causally trivial measure with optimal weights~\\eqref{civals}. Assume that every spacetime point~$(\\tau_i,\\vec x_i)$ in $supp \\rho$ is angular lightlike restricted and lies on the boundary of the light cone for at least $k\\geq 3$ points. Moreover, assume that the radial coordinates of all points are at least \\[ \\tau_i\\geq\\sqrt{\\frac{k}{k-2}} \\:. \\] Then~$\\rho$ is a local minimizer of the causal action principle. \\end{Prp}",
+        "definitions": [
+          "Let~$\\rho$ be a causally trivial measure with optimal weights~\\eqref{civals}.",
+          "Assume that every spacetime point~$(\\tau_i,\\vec x_i)$ in $supp \\rho$ is angular lightlike restricted and lies on the boundary of the light cone for at least $k\\geq 3$ points.",
+          "assume that the radial coordinates of all points are at least \\[ \\tau_i\\geq\\sqrt{\\frac{k}{k-2}} \\:."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{."
+        ],
+        "nearby_claims": [
+          "theorem source span: \\begin{Prp} Let~$\\rho$ be a causally trivial measure with optimal weights~\\eqref{civals}."
+        ],
+        "context_excerpt": "Paper glossary memory: - Felix: \\newcommand\\Felix[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{F}}: #1}} - H_i^1: simply the matrix~$B^1_i + (B^1_i)^{*}$ with all diagonal entries set to zero (these diagonal entries describe irrelevan - Niki: \\newcommand\\Niki[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{N}}: #1}} - Robert: \\newcommand\\Robert[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{R}}: #1}} - S^2: s the unit sphere in~$\\R^3$) - S^4: given asymptotically by \\begin{align} m &= \\frac{\\delta_4\\: \\mu(S^4)}{\\mu \\big( B^4_{\\vartheta_{\\max}/2} \\big)} \\: \\Big( - bookmark: \\newcommand\\bookmark{\\marginpar {\\flushleft\\sffamily\\footnotesize bookmark {\\tt{Felix}}}} - f: sufficiently large - g: monotone increasing in~$X$ - m: known yet - mpar: \\newcommand\\mpar[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize #1}} - x: the basis vector~$e_1$ and that~$y = \\cos \\vartheta\\ - y: spacelike separated from $x$ if and only if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{.5em} \\noindent \\thanks}{\\vspace*{.5em} \\noindent \\thanks} - \\newcommand{\\begin{equation}}{\\begin{equation}} - \\newcommand{\\end{equation}}{\\end{equation}} - \\newcommand{\\begin{proof}}{\\begin{proof}} - \\newcommand{\\end{proof} \\noindent}{\\end{proof} \\noindent} - \\newcommand{\\ \\hfill $\\Diamond$}{\\ \\hfill $\\Diamond$} - \\newcommand{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;}{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;} - \\newcommand{\\langle}{\\langle} Nearby source context: to local minima of the causal action. Again using the identification~\\eqref{eq:R3DiracMap}, we write the measure~\\eqref{weightdelta} as \\[ \\rho=\\sum_{i=1}^m c_i \\,\\delta_{F_{\\tau_i}(\\vec x_i)} \\:. \\] If this measure is causally trivial, in the causal actio",
+        "translation_statement_schema": {
+          "objects": [
+            "ρ",
+            "τ_i",
+            "x_i",
+            "k",
+            "S^2",
+            "F_{τ_i}(x_i)",
+            "c_i",
+            "L",
+            "B^4_{θ_{max}/2}",
+            "μ(S^4)",
+            "μ(B^4_{θ_{max}/2})",
+            "δ_4"
+          ],
+          "quantifiers": [
+            "every",
+            "at least k≥3"
+          ],
+          "assumptions": [
+            "ρ is a causally trivial measure with optimal weights",
+            "every spacetime point (τ_i, x_i) in supp ρ is angular lightlike restricted",
+            "every spacetime point (τ_i, x_i) lies on the boundary of the light cone for at least k≥3 points",
+            "τ_i ≥ √(k/(k-2))"
+          ],
+          "claim": "ρ is a local minimizer of the causal action principle",
+          "symbols": [
+            "ρ",
+            "τ_i",
+            "x_i",
+            "k",
+            "S^2",
+            "F_{τ_i}(x_i)",
+            "c_i",
+            "L",
+            "B^4_{θ_{max}/2}",
+            "μ(S^4)",
+            "μ(B^4_{θ_{max}/2})",
+            "δ_4"
+          ],
+          "constraints": [
+            "τ_i ≥ √(k/(k-2))"
+          ],
+          "theorem_intent": "sufficient condition for local minimality of causal action"
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:prp_6",
+        "paper_definition_stub:h_causally_trivial_measure_optimal_1",
+        "paper_definition_stub:h_every_spacetime_point_lies_3",
+        "paper_definition_stub:h_every_spacetime_point_supp_2",
+        "paper_definition_stub:h_source_4_4"
+      ],
+      "axiom_debt_hash": "0a9cc74eac4dc9db",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:semantic_adversarial_checks_passed",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "556ad2f7fa88f3c1",
+      "source_span_id": "srcspan_6627a707f3f83b509380"
+    },
+    {
+      "theorem_name": "thetamax4",
+      "lean_file": "/home/projectx/BDDM/output/2201.06382.lean",
+      "lean_statement": "theorem thetamax4\n    {tau : ℝ}\n    (F : ℝ → ℝ)\n    (x y : ℝ)\n    (theta : ℝ)\n    (htheta : theta = Real.arccos ((x * y) / (Real.sqrt (x * x) * Real.sqrt (y * y))))\n    (htheta_max : theta ≤ Real.arccos (1 - 2 / (tau * tau))) :\n    F x * F y = (tau * tau / 64) * (1 + Real.cos theta) * (2 - tau * tau * (1 - Real.cos theta)) * Real.asymptotics_isLittleO (fun _ => theta_max - theta)",
+      "status": "TRANSLATION_LIMITED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "missing_definition",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2201.06382",
+        "section": "",
+        "label": "thetamax4",
+        "cited_refs": [
+          "asl2021analysis",
+          "baydin2018automatic",
+          "bierler",
+          "bjorken",
+          "cfs",
+          "cfsweblink",
+          "continuum",
+          "conway+sloane",
+          "dice2014",
+          "dice2018",
+          "discrete",
+          "gaugefix",
+          "guo2018nonsmooth",
+          "harris2020numpy",
+          "hunter2007matplotlib",
+          "intro",
+          "jax2018github",
+          "jet",
+          "lawson+michelsohn",
+          "lewis2009nonsmooth",
+          "lewis2013nonsmooth",
+          "nocedal2006numerical",
+          "peskin+schroeder",
+          "powell1976some",
+          "reed+simon4",
+          "review",
+          "saff+kuijlaars",
+          "sloane",
+          "small",
+          "snygg",
+          "sphere",
+          "support",
+          "vanrossum2009python",
+          "welch"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:unresolved_identifier_or_missing_paper_local_theory",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T10:47:20Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "identifiers_resolve_or_declared",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_b37a86c763e769ae6da31879",
+      "canonical_theorem_id": "cth_4ba66a6e3e3cec2a3c99372f",
+      "alignment_pair_id": "align_53e65ccec67c9b74ca8d21a1",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "Denoting the angle between the vectors~$x,y \\in \\mathbb{R}^5$ by~$\\vartheta$,\n\\begin{align*}\n{\\mathcal{L}}(F(x), F(y) \\big)\n&= \\frac{\\tau^2}{64}\\: (1+\\cos \\vartheta) \\left( 2 - \\tau^2 \\:(1-\\cos \\vartheta) \\right) \\:\n\\Theta(\\vartheta_{\\max}-\\vartheta) \\:,\n\\end{align*}\nwhere\n\\begin{equation} \\label{thetamax4}\n\\vartheta_{\\max} := \\arccos \\!\\left( 1-\\frac{2}{\\tau^2} \\right) \\:.\n\\end{equation}",
+        "normalized_natural_language_theorem": "Conclusion: 𝒯(F(x), F(y)) = (τ^2/64) * (1 + cos ϑ) * (2 - τ^2 * (1 - cos ϑ)) * Θ(ϑ_max - ϑ)",
+        "lean_statement": "theorem thetamax4\n    {tau : ℝ}\n    (F : ℝ → ℝ)\n    (x y : ℝ)\n    (theta : ℝ)\n    (htheta : theta = Real.arccos ((x * y) / (Real.sqrt (x * x) * Real.sqrt (y * y))))\n    (htheta_max : theta ≤ Real.arccos (1 - 2 / (tau * tau))) :\n    F x * F y = (tau * tau / 64) * (1 + Real.cos theta) * (2 - tau * tau * (1 - Real.cos theta)) * Real.asymptotics_isLittleO (fun _ => theta_max - theta)",
+        "extracted_assumptions": [],
+        "extracted_conclusion": "𝒯(F(x), F(y)) = (τ^2/64) * (1 + cos ϑ) * (2 - τ^2 * (1 - cos ϑ)) * Θ(ϑ_max - ϑ)",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "unknown_symbol",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_b37a86c763e769ae6da31879",
+          "alignment_pair_id": "align_53e65ccec67c9b74ca8d21a1",
+          "paper_text_coverage": 0.7778,
+          "lean_text_coverage": 0.3684,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::thetamax4",
+      "context_pack": {
+        "theorem_name": "thetamax4",
+        "original_latex_theorem": "Denoting the angle between the vectors~$x,y \\in \\mathbb{R}^5$ by~$\\vartheta$,\n\\begin{align*}\n{\\mathcal{L}}(F(x), F(y) \\big)\n&= \\frac{\\tau^2}{64}\\: (1+\\cos \\vartheta) \\left( 2 - \\tau^2 \\:(1-\\cos \\vartheta) \\right) \\:\n\\Theta(\\vartheta_{\\max}-\\vartheta) \\:,\n\\end{align*}\nwhere\n\\begin{equation} \\label{thetamax4}\n\\vartheta_{\\max} := \\arccos \\!\\left( 1-\\frac{2}{\\tau^2} \\right) \\:.\n\\end{equation}",
+        "source_file": "/tmp/desol_arxiv_cycle/2201.06382/expanded_source/numerics.tex",
+        "source_span_id": "srcspan_ff755965ea5648f49887",
+        "source_char_range": [
+          65755,
+          66172
+        ],
+        "statement_char_range": [
+          65769,
+          66160
+        ],
+        "source_line_range": [
+          1024,
+          1035
+        ],
+        "env_name": "lemma",
+        "latex_label": "thetamax4",
+        "section": "The Four-Dimensional Discrete Dirac Sphere",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{Lemma} Denoting the angle between the vectors~$x,y \\in \\mathbb{R}^5$ by~$\\vartheta$, \\begin{align*} {\\mathcal{L}}(F(x), F(y) \\big) &= \\frac{\\tau^2}{64}\\: (1+\\cos \\vartheta) \\left( 2 - \\tau^2 \\:(1-\\cos \\vartheta) \\right) \\: \\Theta(\\vartheta_{\\max}-\\vartheta) \\:, \\end{align*} where \\begin{equation} \\label{thetamax4} \\vartheta_{\\max} := \\arccos \\!\\left( 1-\\frac{2}{\\tau^2} \\right) \\:. \\end{equation} \\end{Lemma}",
+        "definitions": [
+          "Let us verify that the matrix~$F(x)$ lies in~${\\mathscr{F}}$: First, this matrix is obviously symmetric and has trace one.",
+          "Let us compute the eigenvalues of the operator product~$F(x)\\, F(y)$."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "Lemma} Local proof sketch: Let us compute the eigenvalues of the operator product~$F(x)\\, F(y)$."
+        ],
+        "context_excerpt": "Paper glossary memory: - Felix: \\newcommand\\Felix[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{F}}: #1}} - H_i^1: simply the matrix~$B^1_i + (B^1_i)^{*}$ with all diagonal entries set to zero (these diagonal entries describe irrelevan - Niki: \\newcommand\\Niki[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{N}}: #1}} - Robert: \\newcommand\\Robert[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{R}}: #1}} - S^2: s the unit sphere in~$\\R^3$) - S^4: given asymptotically by \\begin{align} m &= \\frac{\\delta_4\\: \\mu(S^4)}{\\mu \\big( B^4_{\\vartheta_{\\max}/2} \\big)} \\: \\Big( - bookmark: \\newcommand\\bookmark{\\marginpar {\\flushleft\\sffamily\\footnotesize bookmark {\\tt{Felix}}}} - f: sufficiently large - g: monotone increasing in~$X$ - m: known yet - mpar: \\newcommand\\mpar[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize #1}} - x: the basis vector~$e_1$ and that~$y = \\cos \\vartheta\\ - y: spacelike separated from $x$ if and only if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Nearby theorem statements: - Denoting the angle between the vectors~$x,y \\in \\mathbb{R}^5$ by~$\\vartheta$, \\begin{align*} {\\mathcal{L}}(F(x), F(y) \\big) &= \\frac{\\tau^2}{64}\\: (1+\\cos \\vartheta) \\left( 2 - \\tau^2 \\:(1-\\cos \\vartheta) \\right) \\: \\Theta(\\vartheta_{\\max}-\\vartheta) \\:, \\end{ Declared notation/macros: - \\newcommand{\\vspace*{.5em} \\noindent \\thanks}{\\vspace*{.5em} \\noindent \\thanks} - \\newcommand{\\begin{equation}}{\\begin{equation}} - \\newcommand{\\end{equation}}{\\end{equation}} - \\newcommand{\\begin{proof}}{\\begin{proof}} - \\newcommand{\\end{proof} \\noindent}{\\end{proof} \\noindent} - \\newcommand{\\ \\hfill $\\Diamond$}{\\ \\hfill $\\Diamond$} - \\newcommand{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;}{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;} - \\newcommand{\\langle",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "unresolved_identifier_or_missing_paper_local_theory",
+          "status": "TRANSLATION_LIMITED",
+          "failure_kind": "missing_definition",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "identifiers_resolve_or_declared"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "vectors x, y",
+            "ℝ^5",
+            "angle ϑ",
+            "𝒯(F(x), F(y))",
+            "τ",
+            "Θ(ϑ_max - ϑ)",
+            "ϑ_max"
+          ],
+          "quantifiers": [],
+          "assumptions": [],
+          "claim": "𝒯(F(x), F(y)) = (τ^2/64) * (1 + cos ϑ) * (2 - τ^2 * (1 - cos ϑ)) * Θ(ϑ_max - ϑ)",
+          "symbols": [
+            "𝒯",
+            "F(x)",
+            "F(y)",
+            "τ",
+            "ϑ",
+            "Θ",
+            "ϑ_max",
+            "cos",
+            "arccos"
+          ],
+          "constraints": [
+            "ϑ_max = arccos(1 - 2/τ^2)"
+          ],
+          "theorem_intent": "Define the function 𝒯(F(x), F(y)) in terms of the angle ϑ between vectors x and y in ℝ^5, with a constraint on ϑ_max."
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:thetamax4",
+        "paper_definition_stub:asymptotics_isLittleO",
+        "paper_definition_stub:theta"
+      ],
+      "axiom_debt_hash": "120aae8361b8271d",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "117d21c292984d91",
+      "source_span_id": "srcspan_ff755965ea5648f49887"
+    },
+    {
+      "theorem_name": "propositionn2",
+      "lean_file": "/home/projectx/BDDM/output/2201.06382.lean",
+      "lean_statement": "theorem propositionn2 (m : ℝ) (tau theta_m theta_max : ℝ) (h_tau : tau = 3^(1/4) / Real.sqrt pi * m^(1/4) + Asymptotics.IsLittleO (m^(-3/4)) (m : ℝ)) (h_thetamax : theta_m = theta_max) : S = Real.sqrt 3 / (16 * Real.pi) * m^(-1/2) + Asymptotics.IsLittleO (m^(-3/2)) (m : ℝ)",
+      "status": "TRANSLATION_LIMITED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "missing_definition",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h_thetamax",
+          "lean_expr": "(h_thetamax : theta_m = theta_max)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2201.06382",
+        "section": "",
+        "label": "propositionn2",
+        "cited_refs": [
+          "asl2021analysis",
+          "baydin2018automatic",
+          "bierler",
+          "bjorken",
+          "cfs",
+          "cfsweblink",
+          "continuum",
+          "conway+sloane",
+          "dice2014",
+          "dice2018",
+          "discrete",
+          "gaugefix",
+          "guo2018nonsmooth",
+          "harris2020numpy",
+          "hunter2007matplotlib",
+          "intro",
+          "jax2018github",
+          "jet",
+          "lawson+michelsohn",
+          "lewis2009nonsmooth",
+          "lewis2013nonsmooth",
+          "nocedal2006numerical",
+          "peskin+schroeder",
+          "powell1976some",
+          "reed+simon4",
+          "review",
+          "saff+kuijlaars",
+          "sloane",
+          "small",
+          "snygg",
+          "sphere",
+          "support",
+          "vanrossum2009python",
+          "welch"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:unresolved_identifier_or_missing_paper_local_theory",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T10:47:20Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "identifiers_resolve_or_declared",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_9114ae929b72fddde923402f",
+      "canonical_theorem_id": "cth_bda7635920e04df80f390866",
+      "alignment_pair_id": "align_bfabef53658640e2653888e0",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{propositionn2} Choosing the points on~$S^4$ according to the Tammes distribution\non the four-sphere with~$\\vartheta_m = \\vartheta_{\\max}$ and\n\\begin{equation} \\label{tauval4}\n\\tau = \\frac{3^\\frac{1}{4}}{\\sqrt{\\pi}}\\: \\sqrt[4]{m} + {\\mathscr{O}} \\big( m^{-\\frac{3}{4}} \\big) \\:,\n\\end{equation}\nthe causal action has the asymptotics\n\\[ {\\mathcal{S}} = \\frac{\\sqrt{3}}{16\\, \\pi} \\frac{1}{\\sqrt{m}} + {\\mathscr{O}} \\big( m^{-\\frac{3}{2}} \\big) \\:. \\]",
+        "normalized_natural_language_theorem": "Conclusion: \\label{propositionn2} Choosing the points on~$S^4$ according to the Tammes distribution on the four-sphere with~$\\vartheta_m = \\vartheta_{\\max}$ and \\begin{equation} \\label{tauval4} \\tau = \\frac{3^\\frac{1}{4}}{\\sqrt{\\pi}}\\: \\sqrt[4]{m} + {\\mathscr{O}} \\big( m^{-\\frac{3}{4}} \\big) \\:, \\end{equation} the causal action has the asymptotics \\[ {\\mathcal{S}} = \\frac{\\sqrt{3}}{16\\, \\pi} \\frac{1}{\\sqrt{m}} + {\\mathscr{O}} \\big( m^{-\\frac{3}{2}} \\big) \\:. \\]",
+        "lean_statement": "theorem propositionn2 (m : ℝ) (tau theta_m theta_max : ℝ) (h_tau : tau = 3^(1/4) / Real.sqrt pi * m^(1/4) + Asymptotics.IsLittleO (m^(-3/4)) (m : ℝ)) (h_thetamax : theta_m = theta_max) : S = Real.sqrt 3 / (16 * Real.pi) * m^(-1/2) + Asymptotics.IsLittleO (m^(-3/2)) (m : ℝ)",
+        "extracted_assumptions": [
+          "(h_thetamax : theta_m = theta_max)"
+        ],
+        "extracted_conclusion": "\\label{propositionn2} Choosing the points on~$S^4$ according to the Tammes distribution on the four-sphere with~$\\vartheta_m = \\vartheta_{\\max}$ and \\begin{equation} \\label{tauval4} \\tau = \\frac{3^\\frac{1}{4}}{\\sqrt{\\pi}}\\: \\sqrt[4]{m} + {\\mathscr{O}} \\big( m^{-\\frac{3}{4}} \\big) \\:, \\end{equation} the causal action has the asymptotics \\[ {\\mathcal{S}} = \\frac{\\sqrt{3}}{16\\, \\pi} \\frac{1}{\\sqrt{m}} + {\\mathscr{O}} \\big( m^{-\\frac{3}{2}} \\big) \\:. \\]",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "type_mismatch",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_9114ae929b72fddde923402f",
+          "alignment_pair_id": "align_bfabef53658640e2653888e0",
+          "paper_text_coverage": 0.3429,
+          "lean_text_coverage": 0.6316,
+          "missing_assumptions": [],
+          "added_assumptions": [
+            "h_thetamax: theta_m = theta_max"
+          ],
+          "conclusion_relation": "compatible",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::propositionn2",
+      "context_pack": {
+        "theorem_name": "propositionn2",
+        "original_latex_theorem": "\\label{propositionn2} Choosing the points on~$S^4$ according to the Tammes distribution\non the four-sphere with~$\\vartheta_m = \\vartheta_{\\max}$ and\n\\begin{equation} \\label{tauval4}\n\\tau = \\frac{3^\\frac{1}{4}}{\\sqrt{\\pi}}\\: \\sqrt[4]{m} + {\\mathscr{O}} \\big( m^{-\\frac{3}{4}} \\big) \\:,\n\\end{equation}\nthe causal action has the asymptotics\n\\[ {\\mathcal{S}} = \\frac{\\sqrt{3}}{16\\, \\pi} \\frac{1}{\\sqrt{m}} + {\\mathscr{O}} \\big( m^{-\\frac{3}{2}} \\big) \\:. \\]",
+        "source_file": "/tmp/desol_arxiv_cycle/2201.06382/expanded_source/numerics.tex",
+        "source_span_id": "srcspan_c12ecb2ccdc2667554bf",
+        "source_char_range": [
+          70862,
+          71336
+        ],
+        "statement_char_range": [
+          70873,
+          71326
+        ],
+        "source_line_range": [
+          1112,
+          1119
+        ],
+        "env_name": "prp",
+        "latex_label": "propositionn2",
+        "section": "The Four-Dimensional Discrete Dirac Sphere",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{Prp}\\label{propositionn2} Choosing the points on~$S^4$ according to the Tammes distribution on the four-sphere with~$\\vartheta_m = \\vartheta_{\\max}$ and \\begin{equation} \\label{tauval4} \\tau = \\frac{3^\\frac{1}{4}}{\\sqrt{\\pi}}\\: \\sqrt[4]{m} + {\\mathscr{O}} \\big( m^{-\\frac{3}{4}} \\big) \\:, \\end{equation} the causal action has the asymptotics \\[ {\\mathcal{S}} = \\frac{\\sqrt{3}}{16\\, \\pi} \\frac{1}{\\sqrt{m}} + {\\mathscr{O}} \\big( m^{-\\frac{3}{2}} \\big) \\:. \\] \\end{Prp}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [
+          "if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{.",
+          "If~$\\vartheta$ is sufficiently small, then the term~$(1-\\langle x,y \\rangle)$ in~\\eqref{leigen4} is close to zero, and thus the arguments of the square roots are all positive.",
+          "if the~$\\lambda_{1\\!/\\!2}$ are both real, then they have the same sign."
+        ],
+        "nearby_claims": [],
+        "context_excerpt": "Paper glossary memory: - Felix: \\newcommand\\Felix[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{F}}: #1}} - H_i^1: simply the matrix~$B^1_i + (B^1_i)^{*}$ with all diagonal entries set to zero (these diagonal entries describe irrelevan - Niki: \\newcommand\\Niki[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{N}}: #1}} - Robert: \\newcommand\\Robert[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{R}}: #1}} - S^2: s the unit sphere in~$\\R^3$) - S^4: given asymptotically by \\begin{align} m &= \\frac{\\delta_4\\: \\mu(S^4)}{\\mu \\big( B^4_{\\vartheta_{\\max}/2} \\big)} \\: \\Big( - bookmark: \\newcommand\\bookmark{\\marginpar {\\flushleft\\sffamily\\footnotesize bookmark {\\tt{Felix}}}} - f: sufficiently large - g: monotone increasing in~$X$ - m: known yet - mpar: \\newcommand\\mpar[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize #1}} - x: the basis vector~$e_1$ and that~$y = \\cos \\vartheta\\ - y: spacelike separated from $x$ if and only if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{.5em} \\noindent \\thanks}{\\vspace*{.5em} \\noindent \\thanks} - \\newcommand{\\begin{equation}}{\\begin{equation}} - \\newcommand{\\end{equation}}{\\end{equation}} - \\newcommand{\\begin{proof}}{\\begin{proof}} - \\newcommand{\\end{proof} \\noindent}{\\end{proof} \\noindent} - \\newcommand{\\ \\hfill $\\Diamond$}{\\ \\hfill $\\Diamond$} - \\newcommand{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;}{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;} - \\newcommand{\\langle}{\\langle} Nearby source context: \\!2} = \\frac{1}{16} \\Big( 1+\\tau^2 \\: \\langle x,y \\rangle \\pm \\tau \\,\\sqrt{1+\\langle x,y \\rangle}\\: \\sqrt{2 - \\tau^2 \\:(1-\\langle x,y \\rangle)} \\Big) \\:. \\end{equation} Moreover, taking the trace of~\\eqref{trrel}, one finds \\[ tr \\big( 16\\,F(x) \\:F(y) \\big",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "unresolved_identifier_or_missing_paper_local_theory",
+          "status": "TRANSLATION_LIMITED",
+          "failure_kind": "missing_definition",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "identifiers_resolve_or_declared"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "Choosing",
+            "O",
+            "S",
+            "Tammes",
+            "according",
+            "action",
+            "and",
+            "asymptotics",
+            "begin",
+            "big",
+            "causal",
+            "distribution"
+          ],
+          "quantifiers": [],
+          "assumptions": [],
+          "claim": "\\label{propositionn2} Choosing the points on~$S^4$ according to the Tammes distribution on the four-sphere with~$\\vartheta_m = \\vartheta_{\\max}$ and \\begin{equation} \\label{tauval4} \\tau = \\frac{3^\\frac{1}{4}}{\\sqrt{\\pi}}\\: \\sqrt[4]{m} + {\\mathscr{O}} \\big( m^{-\\frac{3}{4}} \\big) \\:, \\end{equation} the causal action has the asymptotics \\[ {\\mathcal{S}} = \\frac{\\sqrt{3}}{16\\, \\pi} \\frac{1}{\\sqrt{m}} + {\\mathscr{O}} \\big( m^{-\\frac{3}{2}} \\big) \\:. \\]",
+          "symbols": [
+            "Choosing",
+            "O",
+            "S",
+            "Tammes",
+            "according",
+            "action",
+            "and",
+            "asymptotics",
+            "begin",
+            "big",
+            "causal",
+            "distribution",
+            "end",
+            "equation",
+            "four",
+            "frac",
+            "has",
+            "label",
+            "m",
+            "mathcal",
+            "mathscr",
+            "max",
+            "on",
+            "pi"
+          ],
+          "constraints": [],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "\\vartheta_m = \\vartheta_{\\max}",
+            "{\\mathcal{S}} = \\frac{\\sqrt{3}}{16\\, \\pi} \\frac{1}{\\sqrt{m}} + {\\mathscr{O}} \\big( m^{-\\frac{3}{2}} \\big) \\:.",
+            "\\tau = \\frac{3^\\frac{1}{4}}{\\sqrt{\\pi}}\\: \\sqrt[4]{m} + {\\mathscr{O}} \\big( m^{-\\frac{3}{4}} \\big) \\:,"
+          ]
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:propositionn2"
+      ],
+      "axiom_debt_hash": "431e4d5331cff6fd",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "fbb417de1c6c0e04",
+      "source_span_id": "srcspan_c12ecb2ccdc2667554bf"
+    },
+    {
+      "theorem_name": "prpT4",
+      "lean_file": "/home/projectx/BDDM/output/2201.06382.lean",
+      "lean_statement": "theorem prpT4 (m : ℕ) (tau : ℝ) (h_tau : tau = tauval4) (h_m_pos : 0 < m)\n    (h_points : PointsOnS4WithTammesDistribution m)\n    (h_theta : ThetaMaxCondition m) :\n    T = (1/16) * (1 + tau)^2 * (1 - tau)^2 + Asymptotics.O (1 / (m : ℝ))",
+      "status": "TRANSLATION_LIMITED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "missing_definition",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h_tau",
+          "lean_expr": "(h_tau : tau = tauval4)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_m_pos",
+          "lean_expr": "(h_m_pos : 0 < m)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_points",
+          "lean_expr": "(h_points : PointsOnS4WithTammesDistribution m)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_theta",
+          "lean_expr": "(h_theta : ThetaMaxCondition m)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2201.06382",
+        "section": "",
+        "label": "prpT4",
+        "cited_refs": [
+          "asl2021analysis",
+          "baydin2018automatic",
+          "bierler",
+          "bjorken",
+          "cfs",
+          "cfsweblink",
+          "continuum",
+          "conway+sloane",
+          "dice2014",
+          "dice2018",
+          "discrete",
+          "gaugefix",
+          "guo2018nonsmooth",
+          "harris2020numpy",
+          "hunter2007matplotlib",
+          "intro",
+          "jax2018github",
+          "jet",
+          "lawson+michelsohn",
+          "lewis2009nonsmooth",
+          "lewis2013nonsmooth",
+          "nocedal2006numerical",
+          "peskin+schroeder",
+          "powell1976some",
+          "reed+simon4",
+          "review",
+          "saff+kuijlaars",
+          "sloane",
+          "small",
+          "snygg",
+          "sphere",
+          "support",
+          "vanrossum2009python",
+          "welch"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:unresolved_identifier_or_missing_paper_local_theory",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T10:47:20Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "identifiers_resolve_or_declared",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_6243acc3f9de8a9e7e83384a",
+      "canonical_theorem_id": "cth_2db1c05ed203f1bd6664b907",
+      "alignment_pair_id": "align_96c15a866237c144ee706e32",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{prpT4} Choosing the points on~$S^4$ according to the Tammes distribution\non the four-sphere with~$\\vartheta_m = \\vartheta_{\\max}$ and~$\\tau$ according to~\\eqref{tauval4},\nthe functional~$\\mathcal{T}$ in~\\eqref{Tdef} has the asymptotics\n\\begin{equation} \\label{Tform}\n\\mathcal{T} =  \\frac{1}{16}\\: (1+\\tau)^2 (1-\\tau)^2 + {\\mathscr{O}} \\Big( \\frac{1}{m} \\Big) \\:.\n\\end{equation}",
+        "normalized_natural_language_theorem": "Assumptions: points on S^4 according to the Tammes distribution; θ_m = θ_max; τ according to eqref{tauval4} Conclusion: 𝒯 = 1/16 (1+τ)^2 (1-τ)^2 + 𝒪(1/m)",
+        "lean_statement": "theorem prpT4 (m : ℕ) (tau : ℝ) (h_tau : tau = tauval4) (h_m_pos : 0 < m)\n    (h_points : PointsOnS4WithTammesDistribution m)\n    (h_theta : ThetaMaxCondition m) :\n    T = (1/16) * (1 + tau)^2 * (1 - tau)^2 + Asymptotics.O (1 / (m : ℝ))",
+        "extracted_assumptions": [
+          "points on S^4 according to the Tammes distribution",
+          "θ_m = θ_max",
+          "τ according to eqref{tauval4}"
+        ],
+        "extracted_conclusion": "𝒯 = 1/16 (1+τ)^2 (1-τ)^2 + 𝒪(1/m)",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "unknown_symbol",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_6243acc3f9de8a9e7e83384a",
+          "alignment_pair_id": "align_96c15a866237c144ee706e32",
+          "paper_text_coverage": 0.3333,
+          "lean_text_coverage": 0.2778,
+          "missing_assumptions": [
+            "points on S^4 according to the Tammes distribution"
+          ],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::prpT4",
+      "context_pack": {
+        "theorem_name": "prpT4",
+        "original_latex_theorem": "\\label{prpT4} Choosing the points on~$S^4$ according to the Tammes distribution\non the four-sphere with~$\\vartheta_m = \\vartheta_{\\max}$ and~$\\tau$ according to~\\eqref{tauval4},\nthe functional~$\\mathcal{T}$ in~\\eqref{Tdef} has the asymptotics\n\\begin{equation} \\label{Tform}\n\\mathcal{T} =  \\frac{1}{16}\\: (1+\\tau)^2 (1-\\tau)^2 + {\\mathscr{O}} \\Big( \\frac{1}{m} \\Big) \\:.\n\\end{equation}",
+        "source_file": "/tmp/desol_arxiv_cycle/2201.06382/expanded_source/numerics.tex",
+        "source_span_id": "srcspan_d184d4da83eca1b32a8d",
+        "source_char_range": [
+          73070,
+          73475
+        ],
+        "statement_char_range": [
+          73081,
+          73465
+        ],
+        "source_line_range": [
+          1146,
+          1152
+        ],
+        "env_name": "prp",
+        "latex_label": "prpT4",
+        "section": "The Four-Dimensional Discrete Dirac Sphere",
+        "cited_refs": [
+          "Tdef",
+          "tauval4"
+        ],
+        "exact_source_excerpt": "\\begin{Prp}\\label{prpT4} Choosing the points on~$S^4$ according to the Tammes distribution on the four-sphere with~$\\vartheta_m = \\vartheta_{\\max}$ and~$\\tau$ according to~\\eqref{tauval4}, the functional~$\\mathcal{T}$ in~\\eqref{Tdef} has the asymptotics \\begin{equation} \\label{Tform} \\mathcal{T} = \\frac{1}{16}\\: (1+\\tau)^2 (1-\\tau)^2 + {\\mathscr{O}} \\Big( \\frac{1}{m} \\Big) \\:. \\end{equation} \\end{Prp}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [
+          "if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{."
+        ],
+        "nearby_claims": [
+          "Proposition~\\ref{propositionn1T}, the leading contribution to~$\\mathcal{T}$ comes from pairs of points with spacelike separation."
+        ],
+        "context_excerpt": "Paper glossary memory: - Felix: \\newcommand\\Felix[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{F}}: #1}} - H_i^1: simply the matrix~$B^1_i + (B^1_i)^{*}$ with all diagonal entries set to zero (these diagonal entries describe irrelevan - Niki: \\newcommand\\Niki[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{N}}: #1}} - Robert: \\newcommand\\Robert[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{R}}: #1}} - S^2: s the unit sphere in~$\\R^3$) - S^4: given asymptotically by \\begin{align} m &= \\frac{\\delta_4\\: \\mu(S^4)}{\\mu \\big( B^4_{\\vartheta_{\\max}/2} \\big)} \\: \\Big( - bookmark: \\newcommand\\bookmark{\\marginpar {\\flushleft\\sffamily\\footnotesize bookmark {\\tt{Felix}}}} - f: sufficiently large - g: monotone increasing in~$X$ - m: known yet - mpar: \\newcommand\\mpar[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize #1}} - x: the basis vector~$e_1$ and that~$y = \\cos \\vartheta\\ - y: spacelike separated from $x$ if and only if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{.5em} \\noindent \\thanks}{\\vspace*{.5em} \\noindent \\thanks} - \\newcommand{\\begin{equation}}{\\begin{equation}} - \\newcommand{\\end{equation}}{\\end{equation}} - \\newcommand{\\begin{proof}}{\\begin{proof}} - \\newcommand{\\end{proof} \\noindent}{\\end{proof} \\noindent} - \\newcommand{\\ \\hfill $\\Diamond$}{\\ \\hfill $\\Diamond$} - \\newcommand{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;}{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;} - \\newcommand{\\langle}{\\langle} Nearby source context: {m}} + {\\mathscr{O}} \\big( m^{-\\frac{3}{2}} \\big) \\:. \\] \\end{Prp} \\begin{proof} The packing density~$\\delta_4$ of the densest sphere packing in~$\\mathbb{R}^4$ is given by (see~\\cite[Section~1.5]{conway+sloane}) \\[ \\delta_4 = \\frac{\\pi^2}{16} \\:. \\] Moreov",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "unresolved_identifier_or_missing_paper_local_theory",
+          "status": "TRANSLATION_LIMITED",
+          "failure_kind": "missing_definition",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "identifiers_resolve_or_declared"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "S^4",
+            "Tammes distribution",
+            "four-sphere",
+            "τ",
+            "𝒯",
+            "m"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "points on S^4 according to the Tammes distribution",
+            "θ_m = θ_max",
+            "τ according to eqref{tauval4}"
+          ],
+          "claim": "𝒯 = 1/16 (1+τ)^2 (1-τ)^2 + 𝒪(1/m)",
+          "symbols": [
+            "𝒯",
+            "τ",
+            "m",
+            "θ_m",
+            "θ_max"
+          ],
+          "constraints": [],
+          "theorem_intent": "asymptotic behavior of functional 𝒯"
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:prpT4",
+        "paper_definition_stub:tauval4"
+      ],
+      "axiom_debt_hash": "710df78864a92dae",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "144d25ea0d3a2051",
+      "source_span_id": "srcspan_d184d4da83eca1b32a8d"
+    },
+    {
+      "theorem_name": "prpproject",
+      "lean_file": "/home/projectx/BDDM/output/2201.06382.lean",
+      "lean_statement": "theorem prpproject (nu'_plus nu'_minus nu'_1 nu'_2 : ℝ) (pi_xypi_x : ℝ → ℝ) (tr_pi_xypi_x : ℝ)\n    (h_nu'_plus : nu'_plus > 0) (h_nu'_minus : nu'_minus = (1 - nu'_plus) ∧ nu'_minus ≤ 0) :\n    nu'_minus ≤ nu'_1 ∧ nu'_1 ≤ 0 ∧ 0 ≤ nu'_2 ∧ nu'_2 ≤ nu'_plus ∧ nu'_minus ≤ tr_pi_xypi_x ∧ tr_pi_xypi_x ≤ nu'_plus",
+      "status": "UNRESOLVED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "UNKNOWN",
+      "failure_kind": "proof_search_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2201.06382",
+        "section": "",
+        "label": "prpproject",
+        "cited_refs": [
+          "asl2021analysis",
+          "baydin2018automatic",
+          "bierler",
+          "bjorken",
+          "cfs",
+          "cfsweblink",
+          "continuum",
+          "conway+sloane",
+          "dice2014",
+          "dice2018",
+          "discrete",
+          "gaugefix",
+          "guo2018nonsmooth",
+          "harris2020numpy",
+          "hunter2007matplotlib",
+          "intro",
+          "jax2018github",
+          "jet",
+          "lawson+michelsohn",
+          "lewis2009nonsmooth",
+          "lewis2013nonsmooth",
+          "nocedal2006numerical",
+          "peskin+schroeder",
+          "powell1976some",
+          "reed+simon4",
+          "review",
+          "saff+kuijlaars",
+          "sloane",
+          "small",
+          "snygg",
+          "sphere",
+          "support",
+          "vanrossum2009python",
+          "welch"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translate-only mode",
+      "proof_mode": "auto",
+      "proof_method": "unknown",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T10:47:21Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": true,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true
+      },
+      "gate_failures": [
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "partial",
+      "paper_statement_id": "pstmt_a3d92f53f574c61e27fb9d01",
+      "canonical_theorem_id": "cth_684175614e3064bd1bd48e83",
+      "alignment_pair_id": "align_2bd65bf68c8bd0248495de6e",
+      "translation_fidelity_score": 0.85,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{prpproject}\nLet $\\nu'_+>0$ and $\\nu'_-=(1-\\nu'_+)\\leq0$ denote the non-trivial eigenvalues of $y$. Then the\neigenvalues~$\\nu'_1,\\nu'_2$ of the operator~$\\pi_xy\\pi_x$, ordered by size~$\\nu'_1 \\leq \\nu'_2$, satisfy the inequalities\n\\begin{align}\\label{eq:restriction_projected_evs}\n\\nu'_- \\leq \\nu'_1 \\leq 0 \\leq \\nu'_2 \\leq \\nu'_+ \\:.\n\\end{align}\nFurthermore, the trace of the projected operator is bounded by\n\\[ \\nu'_-\\leq tr \\big( \\pi_xy\\pi_x \\big) \\leq \\nu'_+ \\:. \\]",
+        "normalized_natural_language_theorem": "Assumptions: ν'_+ > 0; ν'_- = (1 - ν'_+) ≤ 0 Conclusion: The eigenvalues ν'_1, ν'_2 of the operator π_xyπ_x, ordered by size ν'_1 ≤ ν'_2, satisfy ν'_- ≤ ν'_1 ≤ 0 ≤ ν'_2 ≤ ν'_+ and the trace of the projected operator is bounded by ν'_- ≤ tr(π_xyπ_x) ≤ ν'_+.",
+        "lean_statement": "theorem prpproject (nu'_plus nu'_minus nu'_1 nu'_2 : ℝ) (pi_xypi_x : ℝ → ℝ) (tr_pi_xypi_x : ℝ)\n    (h_nu'_plus : nu'_plus > 0) (h_nu'_minus : nu'_minus = (1 - nu'_plus) ∧ nu'_minus ≤ 0) :\n    nu'_minus ≤ nu'_1 ∧ nu'_1 ≤ 0 ∧ 0 ≤ nu'_2 ∧ nu'_2 ≤ nu'_plus ∧ nu'_minus ≤ tr_pi_xypi_x ∧ tr_pi_xypi_x ≤ nu'_plus",
+        "extracted_assumptions": [
+          "ν'_+ > 0",
+          "ν'_- = (1 - ν'_+) ≤ 0"
+        ],
+        "extracted_conclusion": "The eigenvalues ν'_1, ν'_2 of the operator π_xyπ_x, ordered by size ν'_1 ≤ ν'_2, satisfy ν'_- ≤ ν'_1 ≤ 0 ≤ ν'_2 ≤ ν'_+ and the trace of the projected operator is bounded by ν'_- ≤ tr(π_xyπ_x) ≤ ν'_+.",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "repaired_once",
+          "schema_stage_used",
+          "leanstral_judge_not_equivalent",
+          "leanstral_judge_confidence:0.90",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "partial",
+        "alignment_decision": {
+          "alignment_class": "partial",
+          "confidence": 0.5546,
+          "reasons": [
+            "insufficient_exact_alignment_evidence"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_a3d92f53f574c61e27fb9d01",
+          "alignment_pair_id": "align_2bd65bf68c8bd0248495de6e",
+          "paper_text_coverage": 0.125,
+          "lean_text_coverage": 0.1667,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": false,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::prpproject",
+      "context_pack": {
+        "theorem_name": "prpproject",
+        "original_latex_theorem": "\\label{prpproject}\nLet $\\nu'_+>0$ and $\\nu'_-=(1-\\nu'_+)\\leq0$ denote the non-trivial eigenvalues of $y$. Then the\neigenvalues~$\\nu'_1,\\nu'_2$ of the operator~$\\pi_xy\\pi_x$, ordered by size~$\\nu'_1 \\leq \\nu'_2$, satisfy the inequalities\n\\begin{align}\\label{eq:restriction_projected_evs}\n\\nu'_- \\leq \\nu'_1 \\leq 0 \\leq \\nu'_2 \\leq \\nu'_+ \\:.\n\\end{align}\nFurthermore, the trace of the projected operator is bounded by\n\\[ \\nu'_-\\leq tr \\big( \\pi_xy\\pi_x \\big) \\leq \\nu'_+ \\:. \\]",
+        "source_file": "/tmp/desol_arxiv_cycle/2201.06382/expanded_source/numerics.tex",
+        "source_span_id": "srcspan_574c12f3e5071d18dcb4",
+        "source_char_range": [
+          75679,
+          76176
+        ],
+        "statement_char_range": [
+          75691,
+          76166
+        ],
+        "source_line_range": [
+          1181,
+          1189
+        ],
+        "env_name": "prp",
+        "latex_label": "prpproject",
+        "section": "Causal Cones in Spin Dimension One",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{Prp} \\label{prpproject} Let $\\nu'_+>0$ and $\\nu'_-=(1-\\nu'_+)\\leq0$ denote the non-trivial eigenvalues of $y$. Then the eigenvalues~$\\nu'_1,\\nu'_2$ of the operator~$\\pi_xy\\pi_x$, ordered by size~$\\nu'_1 \\leq \\nu'_2$, satisfy the inequalities \\begin{align}\\label{eq:restriction_projected_evs} \\nu'_- \\leq \\nu'_1 \\leq 0 \\leq \\nu'_2 \\leq \\nu'_+ \\:. \\end{align} Furthermore, the trace of the projected operator is bounded by \\[ \\nu'_-\\leq tr \\big( \\pi_xy\\pi_x \\big) \\leq \\nu'_+ \\:. \\] \\end{Prp}",
+        "definitions": [
+          "Let $y\\in{\\mat Exact theorem source span: \\begin{Prp} \\label{prpproject} Let $\\nu'_+>0$ and $\\nu'_-=(1-\\nu'_+)\\leq0$ denote the non-trivial eigenvalues of $y$.",
+          "Assume conversely that both eigenvalues are, for example, strictly positive, \\[ \\nu'_1, \\nu'_2 > 0 \\:."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{."
+        ],
+        "nearby_claims": [
+          "theorem source span: \\begin{Prp} \\label{prpproject} Let $\\nu'_+>0$ and $\\nu'_-=(1-\\nu'_+)\\leq0$ denote the non-trivial eigenvalues of $y$.",
+          "lemma follows readily from the min-max principle (see for example~\\cite[Section~XIII."
+        ],
+        "context_excerpt": "Paper glossary memory: - Felix: \\newcommand\\Felix[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{F}}: #1}} - H_i^1: simply the matrix~$B^1_i + (B^1_i)^{*}$ with all diagonal entries set to zero (these diagonal entries describe irrelevan - Niki: \\newcommand\\Niki[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{N}}: #1}} - Robert: \\newcommand\\Robert[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{R}}: #1}} - S^2: s the unit sphere in~$\\R^3$) - S^4: given asymptotically by \\begin{align} m &= \\frac{\\delta_4\\: \\mu(S^4)}{\\mu \\big( B^4_{\\vartheta_{\\max}/2} \\big)} \\: \\Big( - bookmark: \\newcommand\\bookmark{\\marginpar {\\flushleft\\sffamily\\footnotesize bookmark {\\tt{Felix}}}} - f: sufficiently large - g: monotone increasing in~$X$ - m: known yet - mpar: \\newcommand\\mpar[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize #1}} - x: the basis vector~$e_1$ and that~$y = \\cos \\vartheta\\ - y: spacelike separated from $x$ if and only if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Declared notation/macros: - \\newcommand{\\vspace*{.5em} \\noindent \\thanks}{\\vspace*{.5em} \\noindent \\thanks} - \\newcommand{\\begin{equation}}{\\begin{equation}} - \\newcommand{\\end{equation}}{\\end{equation}} - \\newcommand{\\begin{proof}}{\\begin{proof}} - \\newcommand{\\end{proof} \\noindent}{\\end{proof} \\noindent} - \\newcommand{\\ \\hfill $\\Diamond$}{\\ \\hfill $\\Diamond$} - \\newcommand{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;}{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;} - \\newcommand{\\langle}{\\langle} Nearby source context: mbda_1 \\lambda_2 = \\frac{1}{256}\\: (1+\\tau)^2 (1-\\tau)^2 \\:, \\] and thus \\[ \\bigg( \\sum_{i=1}^{2n} \\big|\\lambda^{xy}_i \\big| \\bigg)^2 = \\frac{1}{16}\\: (1+\\tau)^2 (1-\\tau)^2 \\:. \\] Integrating over~$x$ and~$y$ gives the leading term in~\\eqref{Tform}. The pa",
+        "translation_statement_schema": {
+          "objects": [
+            "ν'_+",
+            "ν'_-",
+            "ν'_1",
+            "ν'_2",
+            "π_xyπ_x",
+            "tr(π_xyπ_x)"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "ν'_+ > 0",
+            "ν'_- = (1 - ν'_+) ≤ 0"
+          ],
+          "claim": "The eigenvalues ν'_1, ν'_2 of the operator π_xyπ_x, ordered by size ν'_1 ≤ ν'_2, satisfy ν'_- ≤ ν'_1 ≤ 0 ≤ ν'_2 ≤ ν'_+ and the trace of the projected operator is bounded by ν'_- ≤ tr(π_xyπ_x) ≤ ν'_+.",
+          "symbols": [
+            "ν'_+",
+            "ν'_-",
+            "ν'_1",
+            "ν'_2",
+            "π_xyπ_x",
+            "tr(π_xyπ_x)",
+            "≤",
+            ">"
+          ],
+          "constraints": [],
+          "theorem_intent": "Bounding the eigenvalues and trace of the projected operator π_xyπ_x based on the eigenvalues of y."
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "e49efe548bb7693f",
+      "source_span_id": "srcspan_574c12f3e5071d18dcb4"
+    },
+    {
+      "theorem_name": "lemmalargef",
+      "lean_file": "/home/projectx/BDDM/output/2201.06382.lean",
+      "lean_statement": "theorem lemmalargef (f m n : ℝ) (rho : ℝ) (h : f ≥ m * n) : S rho ≥ 1 / (2 * m * n ^ 3)",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h",
+          "lean_expr": "(h : f ≥ m * n)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2201.06382",
+        "section": "",
+        "label": "lemmalargef",
+        "cited_refs": [
+          "asl2021analysis",
+          "baydin2018automatic",
+          "bierler",
+          "bjorken",
+          "cfs",
+          "cfsweblink",
+          "continuum",
+          "conway+sloane",
+          "dice2014",
+          "dice2018",
+          "discrete",
+          "gaugefix",
+          "guo2018nonsmooth",
+          "harris2020numpy",
+          "hunter2007matplotlib",
+          "intro",
+          "jax2018github",
+          "jet",
+          "lawson+michelsohn",
+          "lewis2009nonsmooth",
+          "lewis2013nonsmooth",
+          "nocedal2006numerical",
+          "peskin+schroeder",
+          "powell1976some",
+          "reed+simon4",
+          "review",
+          "saff+kuijlaars",
+          "sloane",
+          "small",
+          "snygg",
+          "sphere",
+          "support",
+          "vanrossum2009python",
+          "welch"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_59fda29e.lean:9:28: error: unexpected token ')'; expected term",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T10:47:21Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_8fe4b44be18d2909038f7bf1",
+      "canonical_theorem_id": "cth_52be061db4d43f482d4c8848",
+      "alignment_pair_id": "align_6b4a619e71d7e76fc6f64910",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{lemmalargef}\nAssume that\n\\begin{equation} \\label{flower}\nf \\geq mn  \\:.\n\\end{equation}\nThen the minimum the causal action~\\eqref{Sdef} is bounded below by\n\\begin{equation} \\label{Slower}\n{\\mathcal{S}}(\\rho) \\geq {\\mathcal{S}}_{\\min} := \\frac{1}{2m n^3}\\:.\n\\end{equation}\nThe lower bound is attained by a weighted counting measure.",
+        "normalized_natural_language_theorem": "Assumptions: f ≥ mn Conclusion: S(ρ) ≥ S_min := 1 / (2 m n^3)",
+        "lean_statement": "theorem lemmalargef (f m n : ℝ) (rho : ℝ) (h : f ≥ m * n) : S rho ≥ 1 / (2 * m * n ^ 3)",
+        "extracted_assumptions": [
+          "f ≥ mn"
+        ],
+        "extracted_conclusion": "S(ρ) ≥ S_min := 1 / (2 m n^3)",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_8fe4b44be18d2909038f7bf1",
+          "alignment_pair_id": "align_6b4a619e71d7e76fc6f64910",
+          "paper_text_coverage": 0.6364,
+          "lean_text_coverage": 0.6364,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::lemmalargef",
+      "context_pack": {
+        "theorem_name": "lemmalargef",
+        "original_latex_theorem": "\\label{lemmalargef}\nAssume that\n\\begin{equation} \\label{flower}\nf \\geq mn  \\:.\n\\end{equation}\nThen the minimum the causal action~\\eqref{Sdef} is bounded below by\n\\begin{equation} \\label{Slower}\n{\\mathcal{S}}(\\rho) \\geq {\\mathcal{S}}_{\\min} := \\frac{1}{2m n^3}\\:.\n\\end{equation}\nThe lower bound is attained by a weighted counting measure.",
+        "source_file": "/tmp/desol_arxiv_cycle/2201.06382/expanded_source/numerics.tex",
+        "source_span_id": "srcspan_ab760af3c9ebcecf3573",
+        "source_char_range": [
+          98767,
+          99126
+        ],
+        "statement_char_range": [
+          98779,
+          99116
+        ],
+        "source_line_range": [
+          1450,
+          1460
+        ],
+        "env_name": "prp",
+        "latex_label": "lemmalargef",
+        "section": "Analytic Results",
+        "cited_refs": [
+          "Sdef"
+        ],
+        "exact_source_excerpt": "\\begin{Prp} \\label{lemmalargef} Assume that \\begin{equation} \\label{flower} f \\geq mn \\:. \\end{equation} Then the minimum the causal action~\\eqref{Sdef} is bounded below by \\begin{equation} \\label{Slower} {\\mathcal{S}}(\\rho) \\geq {\\mathcal{S}}_{\\min} := \\frac{1}{2m n^3}\\:. \\end{equation} The lower bound is attained by a weighted counting measure. \\end{Prp}",
+        "definitions": [
+          "Let $\\rho=\\sum_{i=1}^m \\frac1m\\delta_{x_i}$ be a normalized equal-weighted counting measure on ${\\mathscr{F}}$ in spin dimension $n=1$ for which all operators~$x_i$ have rank one.",
+          "Assume that \\begin{equation} \\label{flower} f \\geq mn \\:."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "Assuming no prior knowledge about the minimizer that we could encode directly into parameter values, we start with random initial parameter values from the following distributions."
+        ],
+        "nearby_claims": [
+          "theorem statements: - \\label{lemma:n1Sbound} Let $\\rho=\\sum_{i=1}^m \\frac1m\\delta_{x_i}$ be a normalized equal-weighted counting measure on ${\\mathscr{F}}$ in spin dimension $n=1$ for which all operators~$x_i$ have rank one.",
+          "theorem source span: \\begin{Prp} \\label{lemmalargef} Assume that \\begin{equation} \\label{flower} f \\geq mn \\:."
+        ],
+        "context_excerpt": "Paper glossary memory: - Felix: \\newcommand\\Felix[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{F}}: #1}} - H_i^1: simply the matrix~$B^1_i + (B^1_i)^{*}$ with all diagonal entries set to zero (these diagonal entries describe irrelevan - Niki: \\newcommand\\Niki[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{N}}: #1}} - Robert: \\newcommand\\Robert[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{R}}: #1}} - S^2: s the unit sphere in~$\\R^3$) - S^4: given asymptotically by \\begin{align} m &= \\frac{\\delta_4\\: \\mu(S^4)}{\\mu \\big( B^4_{\\vartheta_{\\max}/2} \\big)} \\: \\Big( - bookmark: \\newcommand\\bookmark{\\marginpar {\\flushleft\\sffamily\\footnotesize bookmark {\\tt{Felix}}}} - f: sufficiently large - g: monotone increasing in~$X$ - m: known yet - mpar: \\newcommand\\mpar[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize #1}} - x: the basis vector~$e_1$ and that~$y = \\cos \\vartheta\\ - y: spacelike separated from $x$ if and only if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Nearby theorem statements: - \\label{lemma:n1Sbound} Let $\\rho=\\sum_{i=1}^m \\frac1m\\delta_{x_i}$ be a normalized equal-weighted counting measure on ${\\mathscr{F}}$ in spin dimension $n=1$ for which all operators~$x_i$ have rank one. Then \\begin{align}\\label{eq:S_n1_minfty} {\\mathcal{S}} (\\ Declared notation/macros: - \\newcommand{\\vspace*{.5em} \\noindent \\thanks}{\\vspace*{.5em} \\noindent \\thanks} - \\newcommand{\\begin{equation}}{\\begin{equation}} - \\newcommand{\\end{equation}}{\\end{equation}} - \\newcommand{\\begin{proof}}{\\begin{proof}} - \\newcommand{\\end{proof} \\noindent}{\\end{proof} \\noindent} - \\newcommand{\\ \\hfill $\\Diamond$}{\\ \\hfill $\\Diamond$} - \\newcommand{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;}{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;} - \\newcommand{\\langle",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_59fda29e.lean:9:28: error: unexpected token ')'; expected term",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "f",
+            "m",
+            "n",
+            "ρ",
+            "S",
+            "S_min"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "f ≥ mn"
+          ],
+          "claim": "S(ρ) ≥ S_min := 1 / (2 m n^3)",
+          "symbols": [
+            "f",
+            "m",
+            "n",
+            "ρ",
+            "S",
+            "S_min",
+            "≥",
+            "1",
+            "2",
+            "3"
+          ],
+          "constraints": [],
+          "theorem_intent": "lower bound on causal action"
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "a630af314ef97b30",
+      "source_span_id": "srcspan_ab760af3c9ebcecf3573"
+    },
+    {
+      "theorem_name": "lemma_n1Sbound",
+      "lean_file": "/home/projectx/BDDM/output/2201.06382.lean",
+      "lean_statement": "theorem lemma_n1Sbound {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] (rho : Measure alpha) (m : ℕ) (f : ℕ) (x : Fin m → alpha) (v : Fin m → alpha) (hrho : rho = ∑ i : Fin m, (1 / ↑m) • (Measure.dirac (x i))) (hx : ∀ i, x i = v i ⊗ v i) (hv : ∀ i, ‖v i‖ = 1) (hf : f ≥ 1) : 𝒮 rho ≥ 1 / (↑f * (↑f + 1))",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "NormedAddCommGroup",
+          "lean_expr": "[NormedAddCommGroup alpha]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "InnerProductSpace",
+          "lean_expr": "[InnerProductSpace ℝ alpha]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "hx",
+          "lean_expr": "(hx : ∀ i, x i = v i ⊗ v i)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hv",
+          "lean_expr": "(hv : ∀ i, ‖v i‖ = 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hf",
+          "lean_expr": "(hf : f ≥ 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2201.06382",
+        "section": "",
+        "label": "lemma:n1Sbound",
+        "cited_refs": [
+          "asl2021analysis",
+          "baydin2018automatic",
+          "bierler",
+          "bjorken",
+          "cfs",
+          "cfsweblink",
+          "continuum",
+          "conway+sloane",
+          "dice2014",
+          "dice2018",
+          "discrete",
+          "gaugefix",
+          "guo2018nonsmooth",
+          "harris2020numpy",
+          "hunter2007matplotlib",
+          "intro",
+          "jax2018github",
+          "jet",
+          "lawson+michelsohn",
+          "lewis2009nonsmooth",
+          "lewis2013nonsmooth",
+          "nocedal2006numerical",
+          "peskin+schroeder",
+          "powell1976some",
+          "reed+simon4",
+          "review",
+          "saff+kuijlaars",
+          "sloane",
+          "small",
+          "snygg",
+          "sphere",
+          "support",
+          "vanrossum2009python",
+          "welch"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_04f3caa9.lean:9:119: error: unexpected token ')'; expected term",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T10:47:21Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_33b095bd4b6aef112828b572",
+      "canonical_theorem_id": "cth_76e868b3131c8f738b59482f",
+      "alignment_pair_id": "align_07b7c3b55d77f393a7d04c44",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{lemma:n1Sbound}\nLet $\\rho=\\sum_{i=1}^m \\frac1m\\delta_{x_i}$ be a normalized equal-weighted counting measure on ${\\mathscr{F}}$ in spin dimension $n=1$ for which all operators~$x_i$ have rank one. Then\n\\begin{align}\\label{eq:S_n1_minfty}\n{\\mathcal{S}} (\\rho)\\geq\\frac1{f(f+1)}.\n\\end{align}",
+        "normalized_natural_language_theorem": "Quantifiers: ∑_{i=1}^m; ∀i Assumptions: ρ is a normalized equal-weighted counting measure on 𝒯; n=1; all operators x_i have rank one Conclusion: 𝒮(ρ) ≥ 1/(f(f+1))",
+        "lean_statement": "theorem lemma_n1Sbound {alpha : Type*} [NormedAddCommGroup alpha] [InnerProductSpace ℝ alpha] (rho : Measure alpha) (m : ℕ) (f : ℕ) (x : Fin m → alpha) (v : Fin m → alpha) (hrho : rho = ∑ i : Fin m, (1 / ↑m) • (Measure.dirac (x i))) (hx : ∀ i, x i = v i ⊗ v i) (hv : ∀ i, ‖v i‖ = 1) (hf : f ≥ 1) : 𝒮 rho ≥ 1 / (↑f * (↑f + 1))",
+        "extracted_assumptions": [
+          "ρ is a normalized equal-weighted counting measure on 𝒯",
+          "n=1",
+          "all operators x_i have rank one"
+        ],
+        "extracted_conclusion": "𝒮(ρ) ≥ 1/(f(f+1))",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_33b095bd4b6aef112828b572",
+          "alignment_pair_id": "align_07b7c3b55d77f393a7d04c44",
+          "paper_text_coverage": 0.2778,
+          "lean_text_coverage": 0.2381,
+          "missing_assumptions": [
+            "all operators x_i have rank one"
+          ],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::lemma_n1Sbound",
+      "context_pack": {
+        "theorem_name": "lemma_n1Sbound",
+        "original_latex_theorem": "\\label{lemma:n1Sbound}\nLet $\\rho=\\sum_{i=1}^m \\frac1m\\delta_{x_i}$ be a normalized equal-weighted counting measure on ${\\mathscr{F}}$ in spin dimension $n=1$ for which all operators~$x_i$ have rank one. Then\n\\begin{align}\\label{eq:S_n1_minfty}\n{\\mathcal{S}} (\\rho)\\geq\\frac1{f(f+1)}.\n\\end{align}",
+        "source_file": "/tmp/desol_arxiv_cycle/2201.06382/expanded_source/numerics.tex",
+        "source_span_id": "srcspan_c839376c3ed874e45ce2",
+        "source_char_range": [
+          102799,
+          103119
+        ],
+        "statement_char_range": [
+          102812,
+          103107
+        ],
+        "source_line_range": [
+          1513,
+          1518
+        ],
+        "env_name": "lemma",
+        "latex_label": "lemma:n1Sbound",
+        "section": "Analytic Results",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{Lemma}\\label{lemma:n1Sbound} Let $\\rho=\\sum_{i=1}^m \\frac1m\\delta_{x_i}$ be a normalized equal-weighted counting measure on ${\\mathscr{F}}$ in spin dimension $n=1$ for which all operators~$x_i$ have rank one. Then \\begin{align}\\label{eq:S_n1_minfty} {\\mathcal{S}} (\\rho)\\geq\\frac1{f(f+1)}. \\end{align} \\end{Lemma}",
+        "definitions": [
+          "Let $\\rho=\\sum_{i=1}^m \\frac1m\\delta_{x_i}$ be a normalized equal-weighted counting measure on ${\\mathscr{F}}$ in spin dimension $n=1$ for which all operators~$x_i$ have rank one.",
+          "Let $\\rho=\\sum_{i=1}^m \\frac1m\\delta_{x_i}$ be a normalized equal-weighted counting measure on ${\\mathscr{F}}$ in spin dimension $n=1$ for which all operators~$x_i$ have rank one."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - \\label{lemma:n1Sbound} Let $\\rho=\\sum_{i=1}^m \\frac1m\\delta_{x_i}$ be a normalized equal-weighted counting measure on ${\\mathscr{F}}$ in spin dimension $n=1$ for which all operators~$x_i$ have rank one.",
+          "Lemma}\\label{lemma:n1Sbound} Let $\\rho=\\sum_{i=1}^m \\frac1m\\delta_{x_i}$ be a normalized equal-weighted counting measure on ${\\mathscr{F}}$ in spin dimension $n=1$ for which all operators~$x_i$ have rank one.",
+          "Lemma} Local proof sketch: Since the operators~$x_i$ have rank one and~$tr x_i=1$, all the~$x_i$ are projection operators to one-dimensional subspaces in~$\\mathscr{H}$, i."
+        ],
+        "context_excerpt": "Paper glossary memory: - Felix: \\newcommand\\Felix[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{F}}: #1}} - H_i^1: simply the matrix~$B^1_i + (B^1_i)^{*}$ with all diagonal entries set to zero (these diagonal entries describe irrelevan - Niki: \\newcommand\\Niki[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{N}}: #1}} - Robert: \\newcommand\\Robert[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize {\\tt{R}}: #1}} - S^2: s the unit sphere in~$\\R^3$) - S^4: given asymptotically by \\begin{align} m &= \\frac{\\delta_4\\: \\mu(S^4)}{\\mu \\big( B^4_{\\vartheta_{\\max}/2} \\big)} \\: \\Big( - bookmark: \\newcommand\\bookmark{\\marginpar {\\flushleft\\sffamily\\footnotesize bookmark {\\tt{Felix}}}} - f: sufficiently large - g: monotone increasing in~$X$ - m: known yet - mpar: \\newcommand\\mpar[1]{\\marginpar {\\flushleft\\sffamily\\footnotesize #1}} - x: the basis vector~$e_1$ and that~$y = \\cos \\vartheta\\ - y: spacelike separated from $x$ if and only if \\beq \\label{relcausal} (\\tau^2-1)(y_1^2+y_2^2)>(y_3+y_0 \\tau)^2 - y_0: depicted on the left of Figure~\\ref{figlightcone2} Nearby theorem statements: - \\label{lemma:n1Sbound} Let $\\rho=\\sum_{i=1}^m \\frac1m\\delta_{x_i}$ be a normalized equal-weighted counting measure on ${\\mathscr{F}}$ in spin dimension $n=1$ for which all operators~$x_i$ have rank one. Then \\begin{align}\\label{eq:S_n1_minfty} {\\mathcal{S}} (\\ Declared notation/macros: - \\newcommand{\\vspace*{.5em} \\noindent \\thanks}{\\vspace*{.5em} \\noindent \\thanks} - \\newcommand{\\begin{equation}}{\\begin{equation}} - \\newcommand{\\end{equation}}{\\end{equation}} - \\newcommand{\\begin{proof}}{\\begin{proof}} - \\newcommand{\\end{proof} \\noindent}{\\end{proof} \\noindent} - \\newcommand{\\ \\hfill $\\Diamond$}{\\ \\hfill $\\Diamond$} - \\newcommand{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;}{\\;\\;\\;\\;\\;\\;\\;\\;\\;\\;} - \\newcommand{\\langle",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_04f3caa9.lean:9:119: error: unexpected token ')'; expected term",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "ρ",
+            "δ_{x_i}",
+            "𝒮(ρ)",
+            "f",
+            "x_i"
+          ],
+          "quantifiers": [
+            "∑_{i=1}^m",
+            "∀i"
+          ],
+          "assumptions": [
+            "ρ is a normalized equal-weighted counting measure on 𝒯",
+            "n=1",
+            "all operators x_i have rank one"
+          ],
+          "claim": "𝒮(ρ) ≥ 1/(f(f+1))",
+          "symbols": [
+            "ρ",
+            "δ_{x_i}",
+            "𝒮",
+            "f",
+            "x_i"
+          ],
+          "constraints": [
+            "ρ = ∑_{i=1}^m (1/m) δ_{x_i}",
+            "tr x_i = 1"
+          ],
+          "theorem_intent": "lower bound on the causal action 𝒮(ρ)"
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:lemma_n1Sbound"
+      ],
+      "axiom_debt_hash": "2e921db2444c08cf",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "305a0dccd9ea421e",
+      "source_span_id": "srcspan_c839376c3ed874e45ce2"
+    }
+  ]
+}

@@ -1,0 +1,499 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-05-15T19:34:22Z",
+  "pipeline_commit": "d4ca9b1f997e008ada220a72f7ae467b7f5f8397",
+  "toolchain_versions": {
+    "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
+    "python": "unknown",
+    "mistral_model": "labs-leanstral-2603"
+  },
+  "paper_id": "1807.10976",
+  "source_label": "1807.10976",
+  "prove_mode": "auto",
+  "model": "labs-leanstral-2603",
+  "entry_count": 2,
+  "compiler_feedback_repair_run_id": "arxiv_to_lean_1807.10976_1778873580_883822",
+  "compiler_feedback_repair_run_dataset": "/home/projectx/BDDM/output/flywheel/runs/arxiv_to_lean_1807.10976_1778873580_883822/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset_summary": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset_summary.json",
+  "entries": [
+    {
+      "theorem_name": "mainresult",
+      "lean_file": "/home/projectx/BDDM/output/1807.10976.lean",
+      "lean_statement": "theorem mainresult : HasExtensionProperty (MetricSpace ℝ) (fun f => Isometry f)",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "1807.10976",
+        "section": "",
+        "label": "mainresult",
+        "cited_refs": [
+          "Aranda2017",
+          "Evans3",
+          "Hubicka2016",
+          "Hubicka2017designs",
+          "Hubicka2017sauer",
+          "Hubicka2017sauerconnant",
+          "Konecny2018b",
+          "Nevsetvril1977",
+          "Nevsetvril2007",
+          "Pestov2008",
+          "Ribes1993",
+          "Sabok",
+          "Siniora",
+          "Vershikprivate",
+          "eppatwographs",
+          "hall1949",
+          "herwig2000",
+          "hodkinson",
+          "hodkinson2003",
+          "mackey1966",
+          "otto2017",
+          "rosendal2011",
+          "solecki2005",
+          "solecki2009",
+          "vershik2008"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_031488d2.lean:9:21: error: Function expected at\n  HasExtensionProperty\nbut this term has type\n  Type\n\nNote: Expected a function because this term is being applied to the argument\n  (MetricSpace ℝ)",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-15T19:34:22Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_0e748cd21e48d2a52e165c0d",
+      "canonical_theorem_id": "cth_446ee94e1b720e91e1bf7dd0",
+      "alignment_pair_id": "align_883cd6ae6099bd1444d0a7cd",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "[Solecki~\\cite{solecki2005}, Vershik~\\cite{vershik2008}]\n\\label{mainresult}\nThe class of all finite metric spaces has the extension property for partial\nisometries.",
+        "normalized_natural_language_theorem": "Conclusion: The class of all finite metric spaces has the extension property for partial isometries.",
+        "lean_statement": "theorem mainresult : HasExtensionProperty (MetricSpace ℝ) (fun f => Isometry f)",
+        "extracted_assumptions": [],
+        "extracted_conclusion": "The class of all finite metric spaces has the extension property for partial isometries.",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_0e748cd21e48d2a52e165c0d",
+          "alignment_pair_id": "align_883cd6ae6099bd1444d0a7cd",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::mainresult",
+      "context_pack": {
+        "theorem_name": "mainresult",
+        "original_latex_theorem": "[Solecki~\\cite{solecki2005}, Vershik~\\cite{vershik2008}]\n\\label{mainresult}\nThe class of all finite metric spaces has the extension property for partial\nisometries.",
+        "source_file": "/tmp/desol_arxiv_cycle/1807.10976/expanded_source/metric-rev-fin.tex",
+        "source_span_id": "srcspan_de31ed43094ab75b5a46",
+        "source_char_range": [
+          2453,
+          2646
+        ],
+        "statement_char_range": [
+          2468,
+          2632
+        ],
+        "source_line_range": [
+          65,
+          69
+        ],
+        "env_name": "theorem",
+        "latex_label": "mainresult",
+        "section": "Introduction",
+        "cited_refs": [
+          "solecki2005",
+          "vershik2008"
+        ],
+        "exact_source_excerpt": "\\begin{theorem}[Solecki~\\cite{solecki2005}, Vershik~\\cite{vershik2008}] \\label{mainresult} The class of all finite metric spaces has the extension property for partial isometries. \\end{theorem}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - [Solecki~\\cite{solecki2005}, Vershik~\\cite{vershik2008}] \\label{mainresult} The class of all finite metric spaces has the extension property for partial isometries.",
+          "theorem]{Question} \\newtheorem{problem}[theorem]{Problem} \\newtheorem{fact}[theorem]{Fact} \\newcommand{\\overbar}[1]{\\mkern 1.",
+          "theorem source span: \\begin{theorem}[Solecki~\\cite{solecki2005}, Vershik~\\cite{vershik2008}] \\label{mainresult} The class of all finite metric spaces has the extension property for partial isometries."
+        ],
+        "context_excerpt": "Paper glossary memory: - C_i: called \\emph{bad} if $|M|=i+1$ and $\\str{C}_i$ induces a non-metric cycle on $M$ - Fraisse: \\def\\Fraisse{Fra\\\"{\\i}ss\\' e} - M: bad because $\\str C_i$ induces a non-metric cycle on $M$ - dom: \\def\\dom{\\mathop{\\mathrm{Dom}}\\nolimits} - posreals: \\def\\posreals{\\mathbb R^{>0}} - str: \\def\\str#1{\\mathbf {#1}} Nearby theorem statements: - [Solecki~\\cite{solecki2005}, Vershik~\\cite{vershik2008}] \\label{mainresult} The class of all finite metric spaces has the extension property for partial isometries. Declared notation/macros: - \\newcommand{\\overbar}[1]{\\mkern 1.5mu\\overline{\\mkern-1.5mu#1\\mkern-1.5mu}\\mkern 1.5mu} - \\def\\mathop{\\mathrm{Dom}}\\nolimits{\\mathop{\\mathrm{Dom}}\\nolimits} - \\def\\mathbb R^{>0}{\\mathbb R^{>0}} - \\def\\mathbf {#1}#1{\\mathbf {#1}} Nearby source context: stion}[theorem]{Question} \\newtheorem{problem}[theorem]{Problem} \\newtheorem{fact}[theorem]{Fact} \\newcommand{\\overbar}[1]{\\mkern 1.5mu\\overline{\\mkern-1.5mu#1\\mkern-1.5mu}\\mkern 1.5mu} \\def\\mathop{\\mathrm{Dom}}\\nolimits{\\mathop{\\mathrm{Dom}}\\nolimits} \\def\\mathbb R^{>0}{\\mathbb R^{>0}} \\def\\mathbf {#1}#1{\\mathbf {#1}} \\defFra\\\"{\\i}ss\\' e{Fra\\\"{\\i}ss\\' e} \\begin{document} \\bibliographystyle{alpha} \\title[]{A combinatorial proof of the extension property for partial isometries} \\authors{ \\author[J. Hubi\\v cka]{Jan Hubi\\v cka} \\address{Department of Applied Mathematics (KAM)\\\\ Charles University\\\\ Prague, Czech Republic} \\email{hubicka@kam.mff.cuni.cz} \\author[M. Kone\\v cn\\'y]{Mat\\v ej Kone\\v cn\\'y} \\address{Charles University\\\\ Prague, Czech Republic} \\email{matejkon@gmail.com} \\author[J. Ne\\v set\\v ril]{Jaroslav Ne\\v set\\v ril} \\address{Computer Science Institute of Charles University (IUUK)\\\\ Charles University\\\\ Prague, Czech Republic} \\email{nesetril@iuuk.mff.cuni.cz} \\tha",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_031488d2.lean:9:21: error: Function expected at\n  HasExtensionProperty\nbut this term has type\n  Type\n\nNote: Expected a function because this term is being applied to the argument\n  (MetricSpace ℝ)",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "finite metric spaces"
+          ],
+          "quantifiers": [],
+          "assumptions": [],
+          "claim": "The class of all finite metric spaces has the extension property for partial isometries.",
+          "symbols": [],
+          "constraints": [],
+          "theorem_intent": "extension property for partial isometries"
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "65a65061a1c0103f",
+      "source_span_id": "srcspan_de31ed43094ab75b5a46"
+    },
+    {
+      "theorem_name": "prop_eppa1",
+      "lean_file": "/home/projectx/BDDM/output/1807.10976.lean",
+      "lean_statement": "theorem prop_eppa1 {V : Type*} [Fintype V] (G : SimpleGraph V) (w : V → V → ℝ) (hG : ∀ x y, 0 < w x y) :\n    ∃ (H : SimpleGraph V) (w' : V → V → ℝ) (hH : ∀ x y, 0 < w' x y),\n      (∀ x y, G.Adj x y ↔ H.Adj x y) ∧\n      (∀ f : V → V, (∀ x y, G.Adj x y ↔ H.Adj (f x) (f y)) → ∃ g : V → V, (∀ x y, G.Adj x y ↔ H.Adj (g x) (g y)) ∧ ∀ x, f x = g x) ∧\n      (∀ x y, G.Adj x y → w x y = w' x y)",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "Fintype",
+          "lean_expr": "[Fintype V]",
+          "grounding": "GROUNDED_MATHLIB",
+          "grounding_source": "Mathlib",
+          "trust_class": "TRUST_MATHLIB",
+          "trust_reference": "mathlib"
+        },
+        {
+          "label": "hG",
+          "lean_expr": "(hG : ∀ x y, 0 < w x y)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hH",
+          "lean_expr": "(hH : ∀ x y, 0 < w' x y)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "1807.10976",
+        "section": "",
+        "label": "prop:eppa1",
+        "cited_refs": [
+          "Aranda2017",
+          "Evans3",
+          "Hubicka2016",
+          "Hubicka2017designs",
+          "Hubicka2017sauer",
+          "Hubicka2017sauerconnant",
+          "Konecny2018b",
+          "Nevsetvril1977",
+          "Nevsetvril2007",
+          "Pestov2008",
+          "Ribes1993",
+          "Sabok",
+          "Siniora",
+          "Vershikprivate",
+          "eppatwographs",
+          "hall1949",
+          "herwig2000",
+          "hodkinson",
+          "hodkinson2003",
+          "mackey1966",
+          "otto2017",
+          "rosendal2011",
+          "solecki2005",
+          "solecki2009",
+          "vershik2008"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:semantic_policy_hard_block",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-15T19:34:22Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_a268cb617086d948c2f6236e",
+      "canonical_theorem_id": "cth_d14c9a31056d03dd5b8cc040",
+      "alignment_pair_id": "align_629ce1e5785bdae37d6ce96d",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{prop:eppa1}\nFor every finite $\\mathbb R^{>0}$-edge-labelled graph $\\mathbf {A}$ there exists a finite \n$\\mathbb R^{>0}$-edge-labelled graph $\\mathbf {B}$ containing $\\mathbf {A}$ as an induced subgraph such\nthat every partial automorphism of $\\mathbf {A}$ extends to an automorphism of\n$\\mathbf {B}$.",
+        "normalized_natural_language_theorem": "Quantifiers: For every; there exists Conclusion: $\\mathbf {B}$ contains $\\mathbf {A}$ as an induced subgraph and every partial automorphism of $\\mathbf {A}$ extends to an automorphism of $\\mathbf {B}$",
+        "lean_statement": "theorem prop_eppa1 {V : Type*} [Fintype V] (G : SimpleGraph V) (w : V → V → ℝ) (hG : ∀ x y, 0 < w x y) :\n    ∃ (H : SimpleGraph V) (w' : V → V → ℝ) (hH : ∀ x y, 0 < w' x y),\n      (∀ x y, G.Adj x y ↔ H.Adj x y) ∧\n      (∀ f : V → V, (∀ x y, G.Adj x y ↔ H.Adj (f x) (f y)) → ∃ g : V → V, (∀ x y, G.Adj x y ↔ H.Adj (g x) (g y)) ∧ ∀ x, f x = g x) ∧\n      (∀ x y, G.Adj x y → w x y = w' x y)",
+        "extracted_assumptions": [
+          "[Fintype V]",
+          "(hG : ∀ x y, 0 < w x y)",
+          "(hH : ∀ x y, 0 < w' x y)"
+        ],
+        "extracted_conclusion": "$\\mathbf {B}$ contains $\\mathbf {A}$ as an induced subgraph and every partial automorphism of $\\mathbf {A}$ extends to an automorphism of $\\mathbf {B}$",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_a268cb617086d948c2f6236e",
+          "alignment_pair_id": "align_629ce1e5785bdae37d6ce96d",
+          "paper_text_coverage": 0.0833,
+          "lean_text_coverage": 0.05,
+          "missing_assumptions": [],
+          "added_assumptions": [
+            "hG: ∀ x y, 0 < w x y",
+            "hH: ∀ x y, 0 < w' x y"
+          ],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::prop_eppa1",
+      "context_pack": {
+        "theorem_name": "prop_eppa1",
+        "original_latex_theorem": "\\label{prop:eppa1}\nFor every finite $\\mathbb R^{>0}$-edge-labelled graph $\\mathbf {A}$ there exists a finite \n$\\mathbb R^{>0}$-edge-labelled graph $\\mathbf {B}$ containing $\\mathbf {A}$ as an induced subgraph such\nthat every partial automorphism of $\\mathbf {A}$ extends to an automorphism of\n$\\mathbf {B}$.",
+        "source_file": "/tmp/desol_arxiv_cycle/1807.10976/expanded_source/metric-rev-fin.tex",
+        "source_span_id": "srcspan_64af6f917c819341df76",
+        "source_char_range": [
+          12964,
+          13295
+        ],
+        "statement_char_range": [
+          12977,
+          13284
+        ],
+        "source_line_range": [
+          199,
+          205
+        ],
+        "env_name": "prop",
+        "latex_label": "prop:eppa1",
+        "section": "Notation and preliminaries",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{prop} \\label{prop:eppa1} For every finite $\\mathbb R^{>0}$-edge-labelled graph $\\mathbf {A}$ there exists a finite $\\mathbb R^{>0}$-edge-labelled graph $\\mathbf {B}$ containing $\\mathbf {A}$ as an induced subgraph such that every partial automorphism of $\\mathbf {A}$ extends to an automorphism of $\\mathbf {B}$. \\end{prop}",
+        "definitions": [
+          "Assume, to the contrary, that there is a pair of vertices $x,y$ connected by an edge in $\\mathbf {G}$ where the labels differs."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "If $\\mathbf {G}$ contains a non-metric cycle with the longest edge between $x$ and $y$, it is easy to see that distance of $x$, $y$ in $\\mkern 1.",
+          "if $\\mathbf {G}$ contains no induced non-metric cycles then it is a subgraph of $\\mkern 1."
+        ],
+        "nearby_claims": [],
+        "context_excerpt": "Paper glossary memory: - C_i: called \\emph{bad} if $|M|=i+1$ and $\\str{C}_i$ induces a non-metric cycle on $M$ - Fraisse: \\def\\Fraisse{Fra\\\"{\\i}ss\\' e} - M: bad because $\\str C_i$ induces a non-metric cycle on $M$ - dom: \\def\\dom{\\mathop{\\mathrm{Dom}}\\nolimits} - posreals: \\def\\posreals{\\mathbb R^{>0}} - str: \\def\\str#1{\\mathbf {#1}} Declared notation/macros: - \\newcommand{\\overbar}[1]{\\mkern 1.5mu\\overline{\\mkern-1.5mu#1\\mkern-1.5mu}\\mkern 1.5mu} - \\def\\mathop{\\mathrm{Dom}}\\nolimits{\\mathop{\\mathrm{Dom}}\\nolimits} - \\def\\mathbb R^{>0}{\\mathbb R^{>0}} - \\def\\mathbf {#1}#1{\\mathbf {#1}} Nearby source context: n 1.5mu\\overline{\\mkern-1.5mu\\mathbf {G}\\mkern-1.5mu}\\mkern 1.5mu}(x,y),d_{\\mkern 1.5mu\\overline{\\mkern-1.5mu\\mathbf {G}\\mkern-1.5mu}\\mkern 1.5mu}(y,z)$, that is, the triangle inequality holds, and thus $\\mkern 1.5mu\\overline{\\mkern-1.5mu\\mathbf {G}\\mkern-1.5mu}\\mkern 1.5mu$ indeed is a metric space. If $\\mathbf {G}$ contains a non-metric cycle with the longest edge between $x$ and $y$, it is easy to see that distance of $x$, $y$ in $\\mkern 1.5mu\\overline{\\mkern-1.5mu\\mathbf {G}\\mkern-1.5mu}\\mkern 1.5mu$ is strictly smaller than the distance of $x$ and $y$ in $\\mathbf {G}$. Therefore $\\str G$ is not a subgraph of $\\mkern 1.5mu\\overline{\\mkern-1.5mu\\str G\\mkern-1.5mu}\\mkern 1.5mu$. Next we show that if $\\mathbf {G}$ contains no induced non-metric cycles then it is a subgraph of $\\mkern 1.5mu\\overline{\\mkern-1.5mu\\mathbf {G}\\mkern-1.5mu}\\mkern 1.5mu$. Assume, to the contrary, that there is a pair of vertices $x,y$ connected by an edge in $\\mathbf {G}$ where the labels differs. Because $x,y$ is also a path connecting $x$ and $y$ in $\\str G$, we know that the label of $x,y$ in $\\mathbf {G}$ is greater than the length of shortest path connecting $x,y$, hence they togethe",
+        "translation_statement_schema": {
+          "objects": [
+            "finite $\\mathbb R^{>0}$-edge-labelled graph $\\mathbf {A}$",
+            "finite $\\mathbb R^{>0}$-edge-labelled graph $\\mathbf {B}$"
+          ],
+          "quantifiers": [
+            "For every",
+            "there exists"
+          ],
+          "assumptions": [],
+          "claim": "$\\mathbf {B}$ contains $\\mathbf {A}$ as an induced subgraph and every partial automorphism of $\\mathbf {A}$ extends to an automorphism of $\\mathbf {B}$",
+          "symbols": [
+            "$\\mathbb R^{>0}$",
+            "$\\mathbf {A}$",
+            "$\\mathbf {B}$"
+          ],
+          "constraints": [],
+          "theorem_intent": "extension of partial automorphisms"
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:semantic_policy_hard_block"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "d6264d7a67f6d0ee",
+      "source_span_id": "srcspan_64af6f917c819341df76"
+    }
+  ]
+}
