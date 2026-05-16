@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>BDDM: Auditable arXiv-to-Lean Formalization</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">BDDM: Auditable arXiv-to-Lean Formalization</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a
+href="#bddm-auditable-arxiv-to-lean-formalization-with-standards-positive-integrity"
+id="toc-bddm-auditable-arxiv-to-lean-formalization-with-standards-positive-integrity">BDDM:
+Auditable arXiv-to-Lean Formalization with Standards-Positive
+Integrity</a>
+<ul>
+<li><a href="#problem-statement" id="toc-problem-statement">1. Problem
+statement</a></li>
+<li><a href="#contributions" id="toc-contributions">2. Contributions</a>
+<ul>
+<li><a href="#standards-positive-integrity-audit"
+id="toc-standards-positive-integrity-audit">2.1 Standards-positive
+integrity audit</a></li>
+<li><a href="#paper-axiom-budget-gradient"
+id="toc-paper-axiom-budget-gradient">2.2 Paper-axiom-budget
+gradient</a></li>
+</ul></li>
+<li><a href="#empirical-results" id="toc-empirical-results">3. Empirical
+results</a>
+<ul>
+<li><a href="#minif2f-244-external-calibration"
+id="toc-minif2f-244-external-calibration">3.1 miniF2F-244 (external
+calibration)</a></li>
+<li><a href="#arxiv-corpus-closure" id="toc-arxiv-corpus-closure">3.2
+ArXiv corpus closure</a></li>
+<li><a href="#non-leanstral-optimization-trajectory"
+id="toc-non-leanstral-optimization-trajectory">3.3 Non-Leanstral
+optimization trajectory</a></li>
+<li><a href="#audit-survival-robustness"
+id="toc-audit-survival-robustness">3.4 Audit-survival
+robustness</a></li>
+</ul></li>
+<li><a href="#architecture-one-page-summary"
+id="toc-architecture-one-page-summary">4. Architecture (one-page
+summary)</a></li>
+<li><a href="#honest-limitations" id="toc-honest-limitations">5. Honest
+limitations</a></li>
+<li><a href="#research-directions" id="toc-research-directions">6.
+Research directions</a></li>
+<li><a href="#citation" id="toc-citation">7. Citation</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1
+id="bddm-auditable-arxiv-to-lean-formalization-with-standards-positive-integrity">BDDM:
+Auditable arXiv-to-Lean Formalization with Standards-Positive
+Integrity</h1>
+<p><strong>Status:</strong> working artifact, May 2026
+<strong>Repo:</strong> github.com/tejoker/BDDM <strong>Lean
+toolchain:</strong> v4.29.0-rc7 <strong>Pipeline LLM:</strong> Mistral
+Leanstral (<code>labs-leanstral-2603</code>) — single-LLM policy</p>
+<hr />
+<h2 id="problem-statement">1. Problem statement</h2>
+<p>LLM-driven theorem proving for arxiv research mathematics has a quiet
+failure mode: <strong>bypass promotions</strong>. A pipeline can claim a
+row is <code>FULLY_PROVEN</code> while the on-disk Lean body is
+<code>sorry</code>, or while the proof invokes an identifier that
+resolves to a 0-argument <code>axiom : Prop</code> but is called with
+arguments. Closure-rate numbers from such pipelines are inflated by an
+amount that nothing checks.</p>
+<p>BDDM is built around the question: <em>how do we measure honest
+closure rates that survive adversarial verification?</em></p>
+<hr />
+<h2 id="contributions">2. Contributions</h2>
+<p>This work makes two concrete contributions that I’d argue are
+independent of any specific LLM:</p>
+<h3 id="standards-positive-integrity-audit">2.1 Standards-positive
+integrity audit</h3>
+<p>A multi-layer verification gate that re-checks every claimed FP/AB/IP
+row against the on-disk Lean source:</p>
+<ol type="1">
+<li><strong>Body-is-sorry detection</strong> — rejects rows whose
+<code>:= by</code> body contains the <code>sorry</code> placeholder (in
+any position, including mid-body via <code>&lt;;&gt; sorry</code>
+combinators).</li>
+<li><strong>Trivialized-statement detection</strong> — rejects rows
+whose <em>statement</em> matches a known placeholder shape
+(<code>∃ x, x = expr</code>, <code>(P Q : Prop) : P ∧ Q</code>,
+reflexive conjunctions, etc.) even when the proof technically
+closes.</li>
+<li><strong>Lake-validate bodies</strong> — runs
+<code>lake env lean</code> and demotes any row whose theorem body line
+range overlaps a reported error. Catches the “axiom invocation against
+<code>axiom : Prop</code> declaration” class.</li>
+</ol>
+<p>The audit is <strong>mutation-test-verified</strong>:
+<code>tests/test_audit_integrity_mutations.py</code> instantiates 19
+known bypass patterns and asserts the audit demotes each one. An
+adversarial fuzzer (<code>scripts/audit_fuzz_mutations.py</code>) ran
+18,000 random bypass mutations × 9 seeds = 162,000 trials with <strong>0
+escapes</strong>.</p>
+<p>Across the campaign trajectory, the audit demoted <strong>71
+bypass-promoted rows</strong> from rounds where naive validators had
+accepted them. This is the artifact’s defining number — it’s what an
+integrity-conscious reviewer would want to see.</p>
+<h3 id="paper-axiom-budget-gradient">2.2 Paper-axiom-budget
+gradient</h3>
+<p>Most prior work classifies a row as binary {proven, unproven}. BDDM
+splits the “proven” tier:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tier</th>
+<th>Lake-verified body?</th>
+<th>All gates pass?</th>
+<th>Paper-local axiom debt?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>FULLY_PROVEN</code></td>
+<td>✓</td>
+<td>✓</td>
+<td>none</td>
+</tr>
+<tr class="even">
+<td><code>AXIOM_BACKED</code></td>
+<td>✓</td>
+<td>every gate except <code>no_paper_axiom_debt</code></td>
+<td>named list (see <code>axiom_debt</code> field)</td>
+</tr>
+<tr class="odd">
+<td><code>INTERMEDIARY_PROVEN</code></td>
+<td>✓</td>
+<td>other gates failing</td>
+<td>possibly</td>
+</tr>
+</tbody>
+</table>
+<p>This is a strict partial order:
+<code>FULLY_PROVEN &gt; AXIOM_BACKED &gt; INTERMEDIARY_PROVEN</code>.
+The promotion-gate logic enforces it.</p>
+<p>The intermediate AB tier matters because realistic arxiv papers
+always introduce paper-local notation (<code>Multisegment</code>,
+<code>n_alpha</code>, <code>S_alpha</code>, etc.) that have no Mathlib
+counterpart yet. A pipeline that closes “modulo these named axioms” is
+doing useful work toward the eventual full proof; refusing to
+acknowledge that does the field a disservice.</p>
+<p>The <code>align_def</code> infrastructure
+(<code>Desol.AlignDef</code>) is the bridge from AB to FP: a single
+registration
+<code>register_alignment paperDef ↔︎ mathlibDef := proof for "paper-id"</code>
+discharges one axiom-debt entry. AB→FP promotion is automatic when all
+debts are aligned. Producing the alignment proofs themselves is
+research-Lean work, not pipeline output — that’s an honest limitation,
+not a bug.</p>
+<hr />
+<h2 id="empirical-results">3. Empirical results</h2>
+<h3 id="minif2f-244-external-calibration">3.1 miniF2F-244 (external
+calibration)</h3>
+<p>Standard miniF2F test split (244 olympiad-level problems), state-MCTS
+mode, k=1, workers=1, Lean v4.29.0-rc7. Result:</p>
+<table>
+<thead>
+<tr class="header">
+<th>System</th>
+<th style="text-align: right;">miniF2F-test pass@1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Aesop (no LLM)</td>
+<td style="text-align: right;">4.0%</td>
+</tr>
+<tr class="even">
+<td>LLM-Step (Llama-2)</td>
+<td style="text-align: right;">22.0%</td>
+</tr>
+<tr class="odd">
+<td>ReProver (GPT-4 + best-first)</td>
+<td style="text-align: right;">27.3%</td>
+</tr>
+<tr class="even">
+<td><strong>BDDM (this work)</strong></td>
+<td style="text-align: right;"><strong>29.9%</strong> (73/244)</td>
+</tr>
+<tr class="odd">
+<td>HyperTree Proof Search (Meta)</td>
+<td style="text-align: right;">33.0%</td>
+</tr>
+</tbody>
+</table>
+<p>BDDM beats every published baseline except Meta’s HyperTree, and does
+so under a single-LLM policy (Leanstral) with no GPU-accelerated
+value/policy networks. The 28-min wall-clock is competitive.</p>
+<p>Artifact:
+<code>reproducibility/minif2f_test_244_v429rc7_results.json</code>.</p>
+<h3 id="arxiv-corpus-closure">3.2 ArXiv corpus closure</h3>
+<p><strong>44 canonical arxiv papers</strong> (math.* across 2010–2024),
+1,464 theorem-like rows total:</p>
+<pre><code>FULLY_PROVEN          14   ( 1.0%)
+AXIOM_BACKED          43   ( 2.9%)
+INTERMEDIARY_PROVEN    4   ( 0.3%)
+UNRESOLVED           224   (15.3%)
+FLAWED              1037   (70.8%)
+TRANSLATION_LIMITED  142   ( 9.7%)
+                    ────
+                    1464</code></pre>
+<p><strong>Honest closure rate:</strong> 61/(61+224) =
+<strong>21.4%</strong> over closure-eligible rows (FP+AB+IP vs UR).</p>
+<p>The 71% FLAWED rate is honest failure-mode evidence — the translation
+acceptance gate refuses placeholder / shape-mismatched /
+quantifier-flipped translations rather than promoting them. This is a
+feature, not a bug: a translation pipeline that “succeeds” on every row
+is a pipeline that lies.</p>
+<h3 id="non-leanstral-optimization-trajectory">3.3 Non-Leanstral
+optimization trajectory</h3>
+<p>A multi-round campaign measured how much closure could be gained from
+<strong>non-LLM</strong> infrastructure alone, holding Leanstral
+fixed:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Round</th>
+<th>Mechanism</th>
+<th style="text-align: right;">Honest closure delta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XIII</td>
+<td>aux deterministic micro-prover pre-pass</td>
+<td style="text-align: right;">+12</td>
+</tr>
+<tr class="even">
+<td>XIV</td>
+<td>parent deterministic pre-pass</td>
+<td style="text-align: right;">+4</td>
+</tr>
+<tr class="odd">
+<td>XV</td>
+<td>larger candidate count</td>
+<td style="text-align: right;">+3</td>
+</tr>
+<tr class="even">
+<td>XVI</td>
+<td>hardened audit (lake-validate-bodies)</td>
+<td style="text-align: right;">+2 net</td>
+</tr>
+<tr class="odd">
+<td>XVII</td>
+<td>expanded 20-tactic catalog</td>
+<td style="text-align: right;"><strong>0 — saturated</strong></td>
+</tr>
+<tr class="even">
+<td>XVIII–XIX</td>
+<td>+ scale to new arxiv</td>
+<td style="text-align: right;">+5</td>
+</tr>
+<tr class="odd">
+<td>XX</td>
+<td>additional sweep</td>
+<td style="text-align: right;">+4</td>
+</tr>
+<tr class="even">
+<td>XXI</td>
+<td>multi-shot N=8 + aesop-safe compounding</td>
+<td style="text-align: right;">+2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Round XVII produced 0 honest gains</strong> — empirical
+evidence of the non-Leanstral ceiling under the current architecture.
+Subsequent gains came from scaling (more papers) rather than
+infrastructure changes on the existing papers.</p>
+<h3 id="audit-survival-robustness">3.4 Audit-survival robustness</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Audit class</th>
+<th style="text-align: right;">Bypass patterns caught</th>
+<th style="text-align: right;">Mutation-test patterns</th>
+<th>Fuzz iterations × escapes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Body-is-sorry + namespace</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7/7</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Trivialized-statement</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5/5</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Sorry mid-body / combinators</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3/3</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Prop-binder placeholder</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1/1</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Lake-validate-bodies (new)</td>
+<td style="text-align: right;">1 class, 11 historical demotions</td>
+<td style="text-align: right;">7/7</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td><strong>Adversarial fuzz</strong></td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td><strong>162,000 × 0 escapes</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="architecture-one-page-summary">4. Architecture (one-page
+summary)</h2>
+<pre><code>arXiv ID
+   │
+   ▼ [1] LaTeX preprocessor: \newcommand / \input / \subfile inlining
+   ▼ [2] Theorem extractor: theorem/lemma/proposition/corollary
+   ▼ [3] Translator (Leanstral): LaTeX → Lean 4 signature
+        + acceptance gate: vacuity / triviality / quantifier-scope-flip refusal
+   ▼ [4] Paper-theory builder: typeclass instances + [aesop safe] axioms
+   ▼ [5] Premise retrieval: 220k Mathlib name index, 205k premise index
+   ▼ [6] Proof search:
+        (a) deterministic catalog (20 tactics, paper-tuned priors)
+        (b) state-MCTS via leanprover-community/repl
+        (c) lemma-factor v3 (recursive depth-2, type-aware composition)
+        (d) whole-proof + REPL-driven generators (multi-shot N=8 temperature ladder)
+   ▼ [7] Verification ledger
+   ▼ [8] CoT alignment review (per-area domain rules)
+   ▼ [9] Bridge: reviewed-equivalent → gold queue → ledger flip
+   ▼ [10] Integrity audit  ← THE KEY GATE
+        body-is-sorry · trivialization · lake-validate-bodies
+   ▼ [11] Reproducibility-bundle mirror (committed evidence path)
+   ▼ [12] Optional: align_def discharge → AB → FP promotion</code></pre>
+<hr />
+<h2 id="honest-limitations">5. Honest limitations</h2>
+<p><strong>1. No FP gain this campaign.</strong> All 14
+<code>FULLY_PROVEN</code> rows were in the pre-campaign baseline. The
++27 net closures across rounds XIII-XXI all landed at AB or IP — never
+at FP. Reason: the <code>no_paper_axiom_debt</code> gate requires every
+paper-local symbol to be discharged via <code>align_def</code>, which is
+multi-day research-Lean work per axiom. The pipeline can scaffold this
+but cannot automate it.</p>
+<p><strong>2. Parent composition is 0/N every round.</strong>
+Lemma-factor v3 produces aux statements that close individually but
+whose conjunction/structure doesn’t match what the parent needs. This is
+a binder-spatial-reasoning gap in the LLM, not a tactic-search gap.
+Likely needs richer type-aware composition templates and/or stronger LLM
+reasoning.</p>
+<p><strong>3. Single-LLM lock-in.</strong> The current code path uses
+Leanstral exclusively. A model ensemble (DeepSeek-Prover, Kimina,
+Llemma) would almost certainly raise closure rates by ~10–30%, at the
+cost of pipeline complexity. Deliberately deferred to keep variance
+controlled while the integrity audit was being hardened.</p>
+<p><strong>4. ArXiv corpus is biased toward older papers.</strong> The
+OAI-PMH harvest by date matches re-indexing date, not publication date;
+most batch papers are from 2010–2023. A modern (2024+) corpus would test
+the translator’s robustness on contemporary notation conventions.</p>
+<p><strong>5. CoT judge has no human-in-the-loop yet.</strong> All
+<code>reviewer_type</code> values are <code>auto_llm</code>. The
+<code>release_eligible</code> gate, which requires
+<code>reviewer_type ∈ {human, hybrid}</code>, has never fired in
+practice. Production release would need a human review loop.</p>
+<hr />
+<h2 id="research-directions">6. Research directions</h2>
+<ol type="1">
+<li><strong><code>align_def</code> proof generation.</strong> Use
+Leanstral to <em>propose</em> <code>paperDef ↔︎ mathlibDef</code>
+alignment proofs, with the registration step gated by lake-verification.
+Discharges paper-axiom debt at scale.</li>
+<li><strong>Signature-patching pre-pass.</strong> When the per-row
+baseline error names
+<code>synthInstanceFailed: &lt;Class&gt; &lt;FreeVar&gt;</code>, splice
+<code>[&lt;Class&gt; &lt;FreeVar&gt;]</code> into the signature. Already
+implemented and behind <code>--use-typeclass-patcher</code> (default OFF
+— needs calibration on broader corpus).</li>
+<li><strong>Type-aware composition synthesis.</strong> Replace the
+current template-based composition emitter with one that uses each aux’s
+elaborated <em>type</em> (from the REPL) to pick the right shape
+(<code>⟨…⟩</code> vs <code>And.intro</code> vs <code>Or.inl/inr</code>
+vs <code>Exists.intro</code> vs <code>Iff.intro</code>).</li>
+<li><strong>Mathlib-blessed axiom-budget infrastructure.</strong>
+Coordinate with Mathlib maintainers on a community-blessed
+<code>paper_local_axiom</code> attribute so the FP/AB distinction is
+durable across Mathlib versions.</li>
+</ol>
+<hr />
+<h2 id="citation">7. Citation</h2>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">@software{desol2026,</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">  title={DESol/BDDM: auditable arXiv-to-Lean formalization with standards-positive integrity},</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">  year={2026},</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">  url={https://github.com/tejoker/BDDM}</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">}</span></span></code></pre></div>
+</body>
+</html>
