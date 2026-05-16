@@ -699,10 +699,13 @@ def generate_proof_candidate(
 
 # --- Multi-shot parallel proof attempts ----------------------------------
 
-# Default temperature ladder for N=5. The first slot stays at 0.0 so the
-# multi-shot mode is a strict superset of the deterministic single-shot
-# baseline; subsequent slots step through diverse sampling levels.
-DEFAULT_MULTI_SHOT_TEMPERATURES: tuple[float, ...] = (0.0, 0.3, 0.5, 0.7, 0.9)
+# Default temperature ladder for N up to 8. The first slot stays at 0.0 so
+# the multi-shot mode is a strict superset of the deterministic single-shot
+# baseline; subsequent slots step through diverse sampling levels at finer
+# granularity so N=8 sees genuine variance (vs. repeating the last entry).
+DEFAULT_MULTI_SHOT_TEMPERATURES: tuple[float, ...] = (
+    0.0, 0.15, 0.30, 0.45, 0.60, 0.75, 0.90, 1.00,
+)
 
 
 def _resolve_multi_shot_temperatures(

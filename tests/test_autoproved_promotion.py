@@ -323,6 +323,22 @@ def test_render_namespace_qualified_name_short() -> None:
     assert "theorem thm_z__autoproved" in decl
 
 
+def test_render_tags_aesop_safe_apply() -> None:
+    """Autoproved closures carry the ``@[aesop safe apply]`` attribute
+    so downstream sweeps' aesop calls can use them as hints — closure
+    compounding. The attribute must precede the theorem header."""
+    decl, _name = ap.render_autoproved_decl(
+        theorem_name="thm_compound",
+        lean_statement="theorem thm_compound (n : ℕ) : 0 ≤ n := by sorry",
+        proof_body="exact Nat.zero_le n",
+    )
+    assert decl.startswith("@[aesop safe apply]\n")
+    # The attribute must be on its own line BEFORE the `theorem` keyword.
+    attr_line, _rest = decl.split("\n", 1)
+    assert attr_line == "@[aesop safe apply]"
+    assert "\ntheorem thm_compound__autoproved" in decl
+
+
 # --- Path helper -----------------------------------------------------------
 
 

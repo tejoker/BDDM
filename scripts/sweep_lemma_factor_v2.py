@@ -2267,13 +2267,16 @@ def main() -> int:
     parser.add_argument(
         "--multi-shot-samples",
         type=int,
-        default=3,
+        default=8,
         help=(
             "Number of parallel proof candidates to sample from Leanstral "
-            "for the parent first-pass (with diverse temperatures 0.0/0.3/0.5/0.7/0.9). "
-            "Each candidate is independently validated via the isolated-elaboration "
-            "gate; the first survivor short-circuits the loop. 1 = legacy "
-            "single-shot deterministic behaviour. Default 3."
+            "for the parent first-pass (with diverse temperatures "
+            "0.0/0.15/0.30/0.45/0.60/0.75/0.90/1.00). Each candidate is "
+            "independently validated via the isolated-elaboration gate; the "
+            "first survivor short-circuits the loop. 1 = legacy single-shot "
+            "deterministic behaviour. Default 8 (post-Round-XX bump from 3 "
+            "after confirming the deterministic catalog ceiling — more "
+            "temperature variance is the remaining Leanstral lever)."
         ),
     )
     parser.add_argument("--summary", default="output/lemma_factor_v2_sweep_summary.json")

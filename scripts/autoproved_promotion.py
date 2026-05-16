@@ -182,12 +182,15 @@ def render_autoproved_decl(
 
     The output is a single Lean ``theorem <name>__autoproved ... := by
     <indented body>`` block, ready for insertion into the autoproved
-    section.
+    section. The decl is tagged ``@[aesop safe apply]`` so subsequent
+    sweeps' aesop calls can use it as a hint — closure compounding.
+    Standards-positive: the audit still independently verifies every
+    promotion; the attribute only helps downstream proof search.
     """
     short = _theorem_short_name(theorem_name)
     auto_name = f"{short}{AUTOPROVED_SUFFIX}"
     sig = _rename_theorem_head(lean_statement, auto_name)
-    decl = f"{sig} := by\n{_indent_proof_body(proof_body)}\n"
+    decl = f"@[aesop safe apply]\n{sig} := by\n{_indent_proof_body(proof_body)}\n"
     return decl, auto_name
 
 
