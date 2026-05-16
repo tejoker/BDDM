@@ -1,0 +1,1259 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-05-16T13:02:54Z",
+  "pipeline_commit": "3736fa420266772f571c3bf567cb2f37669b6a93",
+  "toolchain_versions": {
+    "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
+    "python": "unknown",
+    "mistral_model": "labs-leanstral-2603"
+  },
+  "paper_id": "2212.12622",
+  "source_label": "2212.12622",
+  "prove_mode": "auto",
+  "model": "labs-leanstral-2603",
+  "entry_count": 4,
+  "compiler_feedback_repair_run_id": "arxiv_to_lean_2212.12622_1778936040_1675739",
+  "compiler_feedback_repair_run_dataset": "/home/projectx/BDDM/output/flywheel/runs/arxiv_to_lean_2212.12622_1778936040_1675739/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset_summary": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset_summary.json",
+  "entries": [
+    {
+      "theorem_name": "ex_hankel",
+      "lean_file": "/home/projectx/BDDM/output/2212.12622.lean",
+      "lean_statement": "theorem ex_hankel (m_0 m_1 m_2 : ℝ) (h_m1 : m_1 = 1/2) (h_m2 : m_2 = 1/2) (h_m1_alt : m_1 = 1/2) (h_m2_alt : m_2 = 1/3) (h_m0 : m_0 = 1) (h_H1_under : m_1 = 1/2) (h_H1_over : m_0 - m_1 = 1/2) (h_H2_under : m_0 * m_2 - m_1 * m_1 = 1/4) (h_H2_over : m_1 - m_2 = 0) (h_H1_under_alt : m_1 = 1/2) (h_H1_over_alt : m_0 - m_1 = 1/2) (h_H2_under_alt : m_0 * m_2 - m_1 * m_1 = 1/12) (h_H2_over_alt : m_1 - m_2 = 1/6) : (m_1 > 0 ∧ m_0 - m_1 > 0 ∧ m_0 * m_2 - m_1 * m_1 > 0 ∧ m_1 - m_2 = 0) ∨ (m_1 > 0 ∧ m_0 - m_1 > 0 ∧ m_0 * m_2 - m_1 * m_1 > 0 ∧ m_1 - m_2 > 0)",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h_m1",
+          "lean_expr": "(h_m1 : m_1 = 1/2)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_m2",
+          "lean_expr": "(h_m2 : m_2 = 1/2)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_m1_alt",
+          "lean_expr": "(h_m1_alt : m_1 = 1/2)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_m2_alt",
+          "lean_expr": "(h_m2_alt : m_2 = 1/3)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_m0",
+          "lean_expr": "(h_m0 : m_0 = 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_H1_under",
+          "lean_expr": "(h_H1_under : m_1 = 1/2)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_H1_over",
+          "lean_expr": "(h_H1_over : m_0 - m_1 = 1/2)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_H2_under",
+          "lean_expr": "(h_H2_under : m_0 * m_2 - m_1 * m_1 = 1/4)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_H2_over",
+          "lean_expr": "(h_H2_over : m_1 - m_2 = 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_H1_under_alt",
+          "lean_expr": "(h_H1_under_alt : m_1 = 1/2)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_H1_over_alt",
+          "lean_expr": "(h_H1_over_alt : m_0 - m_1 = 1/2)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_H2_under_alt",
+          "lean_expr": "(h_H2_under_alt : m_0 * m_2 - m_1 * m_1 = 1/12)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_H2_over_alt",
+          "lean_expr": "(h_H2_over_alt : m_1 - m_2 = 1/6)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2212.12622",
+        "section": "",
+        "label": "ex:hankel",
+        "cited_refs": [
+          "NOVIINVERARDI2003frac",
+          "Rcz2006AMB",
+          "chang1993normal",
+          "dette1997theory",
+          "gil1951note",
+          "guruacharya2018approximation",
+          "haenggi2016meta",
+          "haenggi2018efficient",
+          "kapur1989maximum",
+          "li1995pointwise",
+          "markoff1884demonstration",
+          "mason2002chebyshev",
+          "mna2008hausdorff",
+          "mnatsakanov2003some",
+          "penson2022exact",
+          "pollard1972convergence",
+          "schoenberg1973remark",
+          "shohat1950problem",
+          "szeg1939orthogonal",
+          "tagliani1999hausdorff",
+          "wang2001image",
+          "wang2022cm",
+          "widder1931necessary",
+          "zelen1954bounds"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:semantic_policy_hard_block",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T13:02:54Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_37db1d220bb4c362dbdc32ba",
+      "canonical_theorem_id": "cth_fa8a64002af165fec3364046",
+      "alignment_pair_id": "align_e9b56931c0bd816c61c3b31d",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "[Two sequences with $n = 2$]\\label{ex:hankel}\n \t{\\leavevmode\n \t\t\\begin{enumerate}\n \t\t\t\\item For $\\mathbf{m}= (1, 1/2, 1/2)$, we have\n \t\t\t\\begin{align*}\n \t\t\t\t\\underline{ {H}}_{1} = m_1 = 1/2 > 0,\\quad\\overline{H}_{1} = m_0 - m_1 = 1/2>0,\\\\\n \t\t\t\t\\underline{ {H}}_{2} = \\begin{vmatrix}\n \t\t\t\t\tm_0 & m_1\\\\\n \t\t\t\t\tm_1 & m_2\n \t\t\t\t\\end{vmatrix} = 1/4 >0,\\quad\\overline{H}_{2} = \n \t\t\t\tm_1 - m_2 = 0.\n \t\t\t\\end{align*}\n \t\t\tThe uniquely determined discrete distribution has only two jumps, one at $0$ and one at $1$. Hence the probability density function (pdf) is $\\frac{1}{2} \\delta(x) + \\frac{1}{2} \\delta(x-1)$.\n \t\t\t\\item For $\\mathbf{m} = (1, 1/2, 1/3)$, we have\n \t\t\t\\begin{align*}\n \t\t\t\t\\underline{ {H}}_{1}  = m_1= 1/2 > 0,\\quad\\overline{H}_{1}= m_0 - m_1= 1/2  >0,\\\\\n \t\t\t\t\\underline{ {H}}_{2} = \\begin{vmatrix}\n \t\t\t\t\tm_0 & m_1\\\\\n \t\t\t\t\tm_1 & m_2\n \t\t\t\t\\end{vmatrix} = 1/12 >0,\\quad\\overline{H}_{2} = \n \t\t\t\tm_1 - m_2 = 1/6 >0.\n \t\t\t\\end{align*}\n \t\t\tThere are infinitely many solutions since all Hankel determinants are positive, such as $f(x) = 1 $ and $f(x) = \\frac{1}{2} \\delta\\left(x- \\left(3+\\sqrt{3}\\right)/6 \\right) + \\frac{1}{2} \\delta\\left(x- \\left(3-\\sqrt{3}\\right)/6 \\right) $. \n \t\t\\end{enumerate}\n \t}",
+        "normalized_natural_language_theorem": "Assumptions: [Two sequences with $n = 2$]\\label{ex:hankel} {\\leavevmode \\begin{enumerate} \\item For $\\mathbf{m}= (1, 1/2, 1/2)$, we have \\begin{align*} \\underline{ {H}}_{1} = m_1 = 1/2 > 0,\\quad\\overline{H}_{1} = m_0 - m_1 = 1/2>0,\\\\ \\underline{ {H}}_{2} = \\begin{vmatrix} m_0 & m_1\\\\ m_1 & m_2 \\end{vmatrix} = 1/4 >0,\\quad\\overline{H}_{2} = m_1 - m_2 = 0.; \\item For $\\mathbf{m} = (1, 1/2, 1/3)$, we have \\begin{align*} \\underline{ {H}}_{1} = m_1= 1/2 > 0,\\quad\\overline{H}_{1}= m_0 - m_1= 1/2 >0,\\\\ \\underline{ {H}}_{2} = \\begin{vmatrix} m_0 & m_1\\\\ m_1 & m_2 \\end{vmatrix} = 1/12 >0,\\quad\\overline{H}_{2} = m_1 - m_2 = 1/6 >0. Conclusion: \\end{align*} The uniquely determined discrete distribution has only two jumps, one at $0$ and one at $1$. Hence the probability density function (pdf) is $\\frac{1}{2} \\delta(x) + \\frac{1}{2} \\delta(x-1)$. \\end{align*} There are infinitely many solutions since all Hankel determinants are positive, such as $f(x) = 1 $ and $f(x) = \\frac{1}{2} \\delta\\left(x- \\left(3+\\sqrt{3}\\right)/6 \\right) + \\frac{1}{2} \\delta\\left(x- \\left(3-\\sqrt{3}\\right)/6 \\right) $. \\end{enumerate} }",
+        "lean_statement": "theorem ex_hankel (m_0 m_1 m_2 : ℝ) (h_m1 : m_1 = 1/2) (h_m2 : m_2 = 1/2) (h_m1_alt : m_1 = 1/2) (h_m2_alt : m_2 = 1/3) (h_m0 : m_0 = 1) (h_H1_under : m_1 = 1/2) (h_H1_over : m_0 - m_1 = 1/2) (h_H2_under : m_0 * m_2 - m_1 * m_1 = 1/4) (h_H2_over : m_1 - m_2 = 0) (h_H1_under_alt : m_1 = 1/2) (h_H1_over_alt : m_0 - m_1 = 1/2) (h_H2_under_alt : m_0 * m_2 - m_1 * m_1 = 1/12) (h_H2_over_alt : m_1 - m_2 = 1/6) : (m_1 > 0 ∧ m_0 - m_1 > 0 ∧ m_0 * m_2 - m_1 * m_1 > 0 ∧ m_1 - m_2 = 0) ∨ (m_1 > 0 ∧ m_0 - m_1 > 0 ∧ m_0 * m_2 - m_1 * m_1 > 0 ∧ m_1 - m_2 > 0)",
+        "extracted_assumptions": [
+          "[Two sequences with $n = 2$]\\label{ex:hankel} {\\leavevmode \\begin{enumerate} \\item For $\\mathbf{m}= (1, 1/2, 1/2)$, we have \\begin{align*} \\underline{ {H}}_{1} = m_1 = 1/2 > 0,\\quad\\overline{H}_{1} = m_0 - m_1 = 1/2>0,\\\\ \\underline{ {H}}_{2} = \\begin{vmatrix} m_0 & m_1\\\\ m_1 & m_2 \\end{vmatrix} = 1/4 >0,\\quad\\overline{H}_{2} = m_1 - m_2 = 0.",
+          "\\item For $\\mathbf{m} = (1, 1/2, 1/3)$, we have \\begin{align*} \\underline{ {H}}_{1} = m_1= 1/2 > 0,\\quad\\overline{H}_{1}= m_0 - m_1= 1/2 >0,\\\\ \\underline{ {H}}_{2} = \\begin{vmatrix} m_0 & m_1\\\\ m_1 & m_2 \\end{vmatrix} = 1/12 >0,\\quad\\overline{H}_{2} = m_1 - m_2 = 1/6 >0."
+        ],
+        "extracted_conclusion": "\\end{align*} The uniquely determined discrete distribution has only two jumps, one at $0$ and one at $1$. Hence the probability density function (pdf) is $\\frac{1}{2} \\delta(x) + \\frac{1}{2} \\delta(x-1)$. \\end{align*} There are infinitely many solutions since all Hankel determinants are positive, such as $f(x) = 1 $ and $f(x) = \\frac{1}{2} \\delta\\left(x- \\left(3+\\sqrt{3}\\right)/6 \\right) + \\frac{1}{2} \\delta\\left(x- \\left(3-\\sqrt{3}\\right)/6 \\right) $. \\end{enumerate} }",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_37db1d220bb4c362dbdc32ba",
+          "alignment_pair_id": "align_e9b56931c0bd816c61c3b31d",
+          "paper_text_coverage": 0.1695,
+          "lean_text_coverage": 0.4,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::ex_hankel",
+      "context_pack": {
+        "theorem_name": "ex_hankel",
+        "original_latex_theorem": "[Two sequences with $n = 2$]\\label{ex:hankel}\n \t{\\leavevmode\n \t\t\\begin{enumerate}\n \t\t\t\\item For $\\mathbf{m}= (1, 1/2, 1/2)$, we have\n \t\t\t\\begin{align*}\n \t\t\t\t\\underline{ {H}}_{1} = m_1 = 1/2 > 0,\\quad\\overline{H}_{1} = m_0 - m_1 = 1/2>0,\\\\\n \t\t\t\t\\underline{ {H}}_{2} = \\begin{vmatrix}\n \t\t\t\t\tm_0 & m_1\\\\\n \t\t\t\t\tm_1 & m_2\n \t\t\t\t\\end{vmatrix} = 1/4 >0,\\quad\\overline{H}_{2} = \n \t\t\t\tm_1 - m_2 = 0.\n \t\t\t\\end{align*}\n \t\t\tThe uniquely determined discrete distribution has only two jumps, one at $0$ and one at $1$. Hence the probability density function (pdf) is $\\frac{1}{2} \\delta(x) + \\frac{1}{2} \\delta(x-1)$.\n \t\t\t\\item For $\\mathbf{m} = (1, 1/2, 1/3)$, we have\n \t\t\t\\begin{align*}\n \t\t\t\t\\underline{ {H}}_{1}  = m_1= 1/2 > 0,\\quad\\overline{H}_{1}= m_0 - m_1= 1/2  >0,\\\\\n \t\t\t\t\\underline{ {H}}_{2} = \\begin{vmatrix}\n \t\t\t\t\tm_0 & m_1\\\\\n \t\t\t\t\tm_1 & m_2\n \t\t\t\t\\end{vmatrix} = 1/12 >0,\\quad\\overline{H}_{2} = \n \t\t\t\tm_1 - m_2 = 1/6 >0.\n \t\t\t\\end{align*}\n \t\t\tThere are infinitely many solutions since all Hankel determinants are positive, such as $f(x) = 1 $ and $f(x) = \\frac{1}{2} \\delta\\left(x- \\left(3+\\sqrt{3}\\right)/6 \\right) + \\frac{1}{2} \\delta\\left(x- \\left(3-\\sqrt{3}\\right)/6 \\right) $. \n \t\t\\end{enumerate}\n \t}",
+        "source_file": "/tmp/desol_arxiv_cycle/2212.12622/expanded_source/Arxiv_XW_MH_Survey_v2.tex",
+        "source_span_id": "srcspan_2f44ca27ff0210542081",
+        "source_char_range": [
+          12396,
+          13621
+        ],
+        "statement_char_range": [
+          12408,
+          13609
+        ],
+        "source_line_range": [
+          210,
+          235
+        ],
+        "env_name": "exam",
+        "latex_label": "ex:hankel",
+        "section": "Existence and uniqueness of solutions",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{Exam}[Two sequences with $n = 2$]\\label{ex:hankel} {\\leavevmode \\begin{enumerate} \\item For $\\mathbf{m}= (1, 1/2, 1/2)$, we have \\begin{align*} \\underline{ {H}}_{1} = m_1 = 1/2 > 0,\\quad\\overline{H}_{1} = m_0 - m_1 = 1/2>0,\\\\ \\underline{ {H}}_{2} = \\begin{vmatrix} m_0 & m_1\\\\ m_1 & m_2 \\end{vmatrix} = 1/4 >0,\\quad\\overline{H}_{2} = m_1 - m_2 = 0. \\end{align*} The uniquely determined discrete distribution has only two jumps, one at $0$ and one at $1$. Hence the probability density function (pdf) is $\\frac{1}{2} \\delta(x) + \\frac{1}{2} \\delta(x-1)$. \\item For $\\mathbf{m} = (1, 1/2, 1/3)$, we have \\begin{align*} \\underline{ {H}}_{1} = m_1= 1/2 > 0,\\quad\\overline{H}_{1}= m_0 - m_1= 1/2 >0,\\\\ \\underline{ {H}}_{2} = \\begin{vmatrix} m_0 & m_1\\\\ m_1 & m_2 \\end{vmatrix} = 1/12 >0,\\quad\\overline{H}_{2} = m_1 - m_2 = 1/6 >0. \\end{align*} There are infinitely many solutions since all Hankel determinants are positive, such as $f(x) = 1 $ and $f(x) = \\frac{1}{2} \\delta\\left(x- \\left(3+\\sqrt{3}\\right)/6 \\right) + \\frac{1}{2} \\delta\\left(x- \\left(3-\\sqrt{3}\\right)/6 \\right) $. \\end{enumerate} } \\end{Exam}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [
+          "if $\\underline{H}_{l}$ and $\\overline{H}_l$ are non-negative for all $l \\in [n]$.",
+          "if and only if there exists an $l \\in [n]$ such that $ \\underline{ {H}}_l = 0$ or $ \\overline{H}_{l} = 0$.",
+          "If the solution is unique, $ \\underline{ {H}}_k = \\overline{H}_{k} = 0$ for all $k >l$, and the distribution is discrete and uniquely determined by the first $l$ moments."
+        ],
+        "nearby_claims": [],
+        "context_excerpt": "Paper glossary memory: - F: right-continuous and increasing with $F(0^-) = 0$ and $F(1) = 1$ - F_2: defined as the $\\mathcal{L}_{\\infty}\\mbox{-}\\text{norm}$ of $F_1$ and $F_2$ over $[0 - X: \\begin{align} \\phi_X(s) & = \\mathbb{E}[\\exp(jsX)] - doubleunderline: \\def\\doubleunderline#1{\\underline{\\underline{#1}}} - f: said to be c - m_0: not counted) for different methods and different types of decays - x: discretized to $\\mathcal{U}_{50} = \\{ i/50 Declared notation/macros: - \\newcommand{\\ubar}[1]{\\text{\\b{$#1$}}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathcal{U}}{\\mathcal{U}} - \\DeclareMathOperator*{arg\\,min}{arg\\,min} - \\DeclareMathOperator{int}{int} - \\newcommand{\\norm}[1]{\\left\\lVert#1\\right\\rVert} - \\newcommand{\\abs}[1]{\\lvert#1\\rvert} Nearby source context: ts, defined by \\begin{align} \\underline{H}_{l} & \\triangleq \\begin{cases} \\begin{vmatrix} m_0 & \\dots & m_{l/2} \\\\ \\vdots & \\ddots & \\vdots \\\\ m_{l/2} & \\dots & m_{l} \\end{vmatrix}, \\quad\\text{even } l,\\\\ \\vspace{0.005\\textheight}\\\\ \\begin{vmatrix} m_1 & \\dots & m_{(l+1)/2} \\\\ \\vdots & \\ddots & \\vdots \\\\ m_{(l+1)/2} & \\dots & m_{l} \\end{vmatrix}, \\quad\\text{odd }l, \\end{cases} \\end{align} \\begin{align} \\overline{H}_l & \\triangleq \\begin{cases} \\begin{vmatrix} m_1 - m_2 & \\dots & m_{l/2} - m_{l/2+1}\\\\ \\vdots & \\ddots & \\vdots \\\\ m_{l/2} - m_{l/2+1} & \\dots & m_{l-1}-m_{l} \\end{vmatrix}, \\quad\\text{even } l,\\\\ \\vspace{0.005\\textheight}\\\\ \\begin{vmatrix} m_0- m_1 & \\dots & m_{(l-1)/2} - m_{(l+1)/2}\\\\ \\vdots & \\ddots & \\vdots \\\\ m_{(l-1)/2} - m_{(l+1)/2} & \\dots & m_{l-1}-m_{l} \\end{vmatrix}, \\quad\\text{ odd }l. \\end{cases} \\end{align} A solution exists if $\\underline{H}_{l}$ and $\\overline{H}_l$ are non-negative for all $l \\in [n]$. Furthermore, the solution is unique",
+        "translation_statement_schema": {
+          "objects": [
+            "For",
+            "H",
+            "Hankel",
+            "Hence",
+            "The",
+            "There",
+            "Two",
+            "align",
+            "all",
+            "and",
+            "are",
+            "as"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "[Two sequences with $n = 2$]\\label{ex:hankel} {\\leavevmode \\begin{enumerate} \\item For $\\mathbf{m}= (1, 1/2, 1/2)$, we have \\begin{align*} \\underline{ {H}}_{1} = m_1 = 1/2 > 0,\\quad\\overline{H}_{1} = m_0 - m_1 = 1/2>0,\\\\ \\underline{ {H}}_{2} = \\begin{vmatrix} m_0 & m_1\\\\ m_1 & m_2 \\end{vmatrix} = 1/4 >0,\\quad\\overline{H}_{2} = m_1 - m_2 = 0.",
+            "\\item For $\\mathbf{m} = (1, 1/2, 1/3)$, we have \\begin{align*} \\underline{ {H}}_{1} = m_1= 1/2 > 0,\\quad\\overline{H}_{1}= m_0 - m_1= 1/2 >0,\\\\ \\underline{ {H}}_{2} = \\begin{vmatrix} m_0 & m_1\\\\ m_1 & m_2 \\end{vmatrix} = 1/12 >0,\\quad\\overline{H}_{2} = m_1 - m_2 = 1/6 >0."
+          ],
+          "claim": "\\end{align*} The uniquely determined discrete distribution has only two jumps, one at $0$ and one at $1$. Hence the probability density function (pdf) is $\\frac{1}{2} \\delta(x) + \\frac{1}{2} \\delta(x-1)$. \\end{align*} There are infinitely many solutions since all Hankel determinants are positive, such as $f(x) = 1 $ and $f(x) = \\frac{1}{2} \\delta\\left(x- \\left(3+\\sqrt{3}\\right)/6 \\right) + \\frac{1}{2} \\delta\\left(x- \\left(3-\\sqrt{3}\\right)/6 \\right) $. \\end{enumerate} }",
+          "symbols": [
+            "For",
+            "H",
+            "Hankel",
+            "Hence",
+            "The",
+            "There",
+            "Two",
+            "align",
+            "all",
+            "and",
+            "are",
+            "as",
+            "at",
+            "begin",
+            "delta",
+            "density",
+            "determinants",
+            "determined",
+            "discrete",
+            "distribution",
+            "end",
+            "enumerate",
+            "ex",
+            "f"
+          ],
+          "constraints": [
+            "f(x) = \\frac{1}{2} \\delta\\left(x- \\left(3+\\sqrt{3}\\right)/6 \\right) + \\frac{1}{2} \\delta\\left(x- \\left(3-\\sqrt{3}\\right)/6 \\right)",
+            "\\underline{ {H}}_{1} = m_1 = 1/2 > 0,\\quad\\overline{H}_{1} = m_0 - m_1 = 1/2>0,\\\\ \\underline{ {H}}_{2} = \\begin{vmatrix} m_0 m_1\\\\ m_1 m_2 \\end{vmatrix} = 1/4 >0,\\quad\\overline{H}_{2} = m_1 - m_2 = 0.",
+            "\\underline{ {H}}_{1} = m_1= 1/2 > 0,\\quad\\overline{H}_{1}= m_0 - m_1= 1/2 >0,\\\\ \\underline{ {H}}_{2} = \\begin{vmatrix} m_0 m_1\\\\ m_1 m_2 \\end{vmatrix} = 1/12 >0,\\quad\\overline{H}_{2} = m_1 - m_2 = 1/6 >0."
+          ],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "n = 2",
+            "\\mathbf{m}= (1, 1/2, 1/2)",
+            "\\mathbf{m} = (1, 1/2, 1/3)",
+            "f(x) = 1",
+            "f(x) = \\frac{1}{2} \\delta\\left(x- \\left(3+\\sqrt{3}\\right)/6 \\right) + \\frac{1}{2} \\delta\\left(x- \\left(3-\\sqrt{3}\\right)/6 \\right)",
+            "\\underline{ {H}}_{1} = m_1 = 1/2 > 0,\\quad\\overline{H}_{1} = m_0 - m_1 = 1/2>0,\\\\ \\underline{ {H}}_{2} = \\begin{vmatrix} m_0 m_1\\\\ m_1 m_2 \\end{vmatrix} = 1/4 >0,\\quad\\overline{H}_{2} = m_1 - m_2 = 0."
+          ]
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:m_0",
+        "paper_definition_stub:m_1",
+        "paper_definition_stub:m_2",
+        "paper_definition_stub:h_H1_over",
+        "paper_definition_stub:h_H1_over_alt",
+        "paper_definition_stub:h_H1_under",
+        "paper_definition_stub:h_H1_under_alt",
+        "paper_definition_stub:h_H2_over",
+        "paper_definition_stub:h_H2_over_alt",
+        "paper_definition_stub:h_H2_under",
+        "paper_definition_stub:h_H2_under_alt",
+        "paper_definition_stub:h_m0",
+        "paper_definition_stub:h_m1",
+        "paper_definition_stub:h_m1_alt",
+        "paper_definition_stub:h_m2",
+        "paper_definition_stub:h_m2_alt"
+      ],
+      "axiom_debt_hash": "d05adc8e862bdbb6",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:semantic_policy_hard_block"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "f21dd9e3b781620d",
+      "source_span_id": "srcspan_2f44ca27ff0210542081"
+    },
+    {
+      "theorem_name": "exam_beta",
+      "lean_file": "/home/projectx/BDDM/output/2212.12622.lean",
+      "lean_statement": "theorem exam_beta (alpha beta : ℝ) (n : ℕ) (halpha : 0 < alpha) (hbeta : 0 < beta) (hn : 0 < n) : ∃ C1 C2 : ℝ, 0 < C1 ∧ 0 < C2 ∧ ∀ (n : ℕ), C1 * (n : ℝ)^(-beta) ≤ ∏ r ∈ Finset.range n, (alpha + r) / (alpha + beta + r) ∧ ∏ r ∈ Finset.range n, (alpha + r) / (alpha + beta + r) ≤ C2 * (n : ℝ)^(-beta)",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "halpha",
+          "lean_expr": "(halpha : 0 < alpha)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hbeta",
+          "lean_expr": "(hbeta : 0 < beta)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hn",
+          "lean_expr": "(hn : 0 < n)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2212.12622",
+        "section": "",
+        "label": "exam:beta",
+        "cited_refs": [
+          "NOVIINVERARDI2003frac",
+          "Rcz2006AMB",
+          "chang1993normal",
+          "dette1997theory",
+          "gil1951note",
+          "guruacharya2018approximation",
+          "haenggi2016meta",
+          "haenggi2018efficient",
+          "kapur1989maximum",
+          "li1995pointwise",
+          "markoff1884demonstration",
+          "mason2002chebyshev",
+          "mna2008hausdorff",
+          "mnatsakanov2003some",
+          "penson2022exact",
+          "pollard1972convergence",
+          "schoenberg1973remark",
+          "shohat1950problem",
+          "szeg1939orthogonal",
+          "tagliani1999hausdorff",
+          "wang2001image",
+          "wang2022cm",
+          "widder1931necessary",
+          "zelen1954bounds"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:claim_shape_mismatch:ineq->forall",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T13:02:54Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_24883d8008b21ec22c4f2180",
+      "canonical_theorem_id": "cth_37284e40edac11805480f473",
+      "alignment_pair_id": "align_aa6608c086a39ff4a31f29e7",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "[Beta distributions]\\label{exam:beta} \n\tFor $X \\sim \\operatorname{Beta}(\\alpha, \\beta)$, \n\t\\begin{align}\n\t\tm_n & =\\prod_{r = 0}^{n-1} \\frac{\\alpha +r}{\\alpha + \\beta +r}  = \\frac{\\Gamma(\\alpha + n ) }{\\Gamma(\\alpha ) } \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha + \\beta +n  ) }. \n\t\\end{align} \n\tBy Stirling's formula, as $n \\to \\infty$,  \n\t\\begin{align}\n\t\tm_n & \\sim e^\\beta\\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) }\\sqrt{\\frac{\\alpha + n-1}{\\alpha + \\beta + n-1}} \\frac{(\\alpha + n-1)^{\\alpha + n-1}  }{  (\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\\n\t\t& \\sim e^\\beta \\frac{\\Gamma(\\alpha + \\beta  ) }{\\Gamma(\\alpha ) } \\frac{(\\alpha + n-1)^{\\alpha + n-1}}{(\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\\n\t\t& \\sim   n^{-\\beta}, \\quad \\text{as } \\left(1+\\frac{\\beta}{x}\\right)^{x} \\to e^\\beta, \\, x\\to \\infty. \n\t\\end{align}\n\tThus, $m_n = \\Theta(n^{-\\beta})$.",
+        "normalized_natural_language_theorem": "Assumptions: [Beta distributions]\\label{exam:beta} For $X \\sim \\operatorname{Beta}(\\alpha, \\beta)$, \\begin{align} m_n & =\\prod_{r = 0}^{n-1} \\frac{\\alpha +r}{\\alpha + \\beta +r} = \\frac{\\Gamma(\\alpha + n ) }{\\Gamma(\\alpha ) } \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha + \\beta +n ) }. Conclusion: \\end{align} By Stirling's formula, as $n \\to \\infty$, \\begin{align} m_n & \\sim e^\\beta\\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) }\\sqrt{\\frac{\\alpha + n-1}{\\alpha + \\beta + n-1}} \\frac{(\\alpha + n-1)^{\\alpha + n-1} }{ (\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\ & \\sim e^\\beta \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) } \\frac{(\\alpha + n-1)^{\\alpha + n-1}}{(\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\ & \\sim n^{-\\beta}, \\quad \\text{as } \\left(1+\\frac{\\beta}{x}\\right)^{x} \\t",
+        "lean_statement": "theorem exam_beta (alpha beta : ℝ) (n : ℕ) (halpha : 0 < alpha) (hbeta : 0 < beta) (hn : 0 < n) : ∃ C1 C2 : ℝ, 0 < C1 ∧ 0 < C2 ∧ ∀ (n : ℕ), C1 * (n : ℝ)^(-beta) ≤ ∏ r ∈ Finset.range n, (alpha + r) / (alpha + beta + r) ∧ ∏ r ∈ Finset.range n, (alpha + r) / (alpha + beta + r) ≤ C2 * (n : ℝ)^(-beta)",
+        "extracted_assumptions": [
+          "[Beta distributions]\\label{exam:beta} For $X \\sim \\operatorname{Beta}(\\alpha, \\beta)$, \\begin{align} m_n & =\\prod_{r = 0}^{n-1} \\frac{\\alpha +r}{\\alpha + \\beta +r} = \\frac{\\Gamma(\\alpha + n ) }{\\Gamma(\\alpha ) } \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha + \\beta +n ) }."
+        ],
+        "extracted_conclusion": "\\end{align} By Stirling's formula, as $n \\to \\infty$, \\begin{align} m_n & \\sim e^\\beta\\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) }\\sqrt{\\frac{\\alpha + n-1}{\\alpha + \\beta + n-1}} \\frac{(\\alpha + n-1)^{\\alpha + n-1} }{ (\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\ & \\sim e^\\beta \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) } \\frac{(\\alpha + n-1)^{\\alpha + n-1}}{(\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\ & \\sim n^{-\\beta}, \\quad \\text{as } \\left(1+\\frac{\\beta}{x}\\right)^{x} \\t",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_24883d8008b21ec22c4f2180",
+          "alignment_pair_id": "align_aa6608c086a39ff4a31f29e7",
+          "paper_text_coverage": 0.1613,
+          "lean_text_coverage": 0.3125,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::exam_beta",
+      "context_pack": {
+        "theorem_name": "exam_beta",
+        "original_latex_theorem": "[Beta distributions]\\label{exam:beta} \n\tFor $X \\sim \\operatorname{Beta}(\\alpha, \\beta)$, \n\t\\begin{align}\n\t\tm_n & =\\prod_{r = 0}^{n-1} \\frac{\\alpha +r}{\\alpha + \\beta +r}  = \\frac{\\Gamma(\\alpha + n ) }{\\Gamma(\\alpha ) } \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha + \\beta +n  ) }. \n\t\\end{align} \n\tBy Stirling's formula, as $n \\to \\infty$,  \n\t\\begin{align}\n\t\tm_n & \\sim e^\\beta\\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) }\\sqrt{\\frac{\\alpha + n-1}{\\alpha + \\beta + n-1}} \\frac{(\\alpha + n-1)^{\\alpha + n-1}  }{  (\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\\n\t\t& \\sim e^\\beta \\frac{\\Gamma(\\alpha + \\beta  ) }{\\Gamma(\\alpha ) } \\frac{(\\alpha + n-1)^{\\alpha + n-1}}{(\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\\n\t\t& \\sim   n^{-\\beta}, \\quad \\text{as } \\left(1+\\frac{\\beta}{x}\\right)^{x} \\to e^\\beta, \\, x\\to \\infty. \n\t\\end{align}\n\tThus, $m_n = \\Theta(n^{-\\beta})$.",
+        "source_file": "/tmp/desol_arxiv_cycle/2212.12622/expanded_source/Arxiv_XW_MH_Survey_v2.tex",
+        "source_span_id": "srcspan_c7f5927315931beafcd6",
+        "source_char_range": [
+          51206,
+          52104
+        ],
+        "statement_char_range": [
+          51218,
+          52093
+        ],
+        "source_line_range": [
+          702,
+          714
+        ],
+        "env_name": "exam",
+        "latex_label": "exam:beta",
+        "section": "Moment sequences and their rates of decay",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{Exam}[Beta distributions]\\label{exam:beta} For $X \\sim \\operatorname{Beta}(\\alpha, \\beta)$, \\begin{align} m_n & =\\prod_{r = 0}^{n-1} \\frac{\\alpha +r}{\\alpha + \\beta +r} = \\frac{\\Gamma(\\alpha + n ) }{\\Gamma(\\alpha ) } \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha + \\beta +n ) }. \\end{align} By Stirling's formula, as $n \\to \\infty$, \\begin{align} m_n & \\sim e^\\beta\\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) }\\sqrt{\\frac{\\alpha + n-1}{\\alpha + \\beta + n-1}} \\frac{(\\alpha + n-1)^{\\alpha + n-1} }{ (\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\ & \\sim e^\\beta \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) } \\frac{(\\alpha + n-1)^{\\alpha + n-1}}{(\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\ & \\sim n^{-\\beta}, \\quad \\text{as } \\left(1+\\frac{\\beta}{x}\\right)^{x} \\to e^\\beta, \\, x\\to \\infty. \\end{align} Thus, $m_n = \\Theta(n^{-\\beta})$. \\end{Exam}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [
+          "if it is given by analytic expressions."
+        ],
+        "nearby_claims": [],
+        "context_excerpt": "Paper glossary memory: - F: right-continuous and increasing with $F(0^-) = 0$ and $F(1) = 1$ - F_2: defined as the $\\mathcal{L}_{\\infty}\\mbox{-}\\text{norm}$ of $F_1$ and $F_2$ over $[0 - X: \\begin{align} \\phi_X(s) & = \\mathbb{E}[\\exp(jsX)] - doubleunderline: \\def\\doubleunderline#1{\\underline{\\underline{#1}}} - f: said to be c - m_0: not counted) for different methods and different types of decays - x: discretized to $\\mathcal{U}_{50} = \\{ i/50 Declared notation/macros: - \\newcommand{\\ubar}[1]{\\text{\\b{$#1$}}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathcal{U}}{\\mathcal{U}} - \\DeclareMathOperator*{arg\\,min}{arg\\,min} - \\DeclareMathOperator{int}{int} - \\newcommand{\\norm}[1]{\\left\\lVert#1\\right\\rVert} - \\newcommand{\\abs}[1]{\\lvert#1\\rvert} Nearby source context: ^{l} \\binom{k}{j} \\binom{k}{k-j} \\binom{k-j}{k-l}\\mathbbm{1}(l\\leq k), \\quad k, l \\in [n]_0. \\end{align} $\\mathbf{\\hat{A}}$ is a lower triangular matrix. As for the BM method, the transform matrix needs to be calculated only once for the desired level of accuracy, and the above matrix-vector multiplication requires $\\frac{(n+1)(n+2)}{2}$ multiplications. More details about the accuracy requirements will be given in \\Cref{sec:accuracyHMT}. \\section{Generation of moment sequences and performance evaluation} To compare the performance of different HMTs, moment sequences and corresponding functions serving as the ground truth are needed. The problem of generating representative moment sequences is non-trivial since the probability that sequences i.i.d.~ on $[0,1]^n$ are moment sequences is about $2^{-n^2}$ \\cite[Eq.~1.2]{chang1993normal}. In this section, we provide three different ways to solve it: The first one generates uniformly distributed integer moment sequences",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "claim_shape_mismatch:ineq->forall",
+          "status": "FLAWED",
+          "failure_kind": "false_or_ambiguous_statement",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok",
+            "claim_equivalent"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "Beta",
+            "By",
+            "For",
+            "Gamma",
+            "Stirling",
+            "Theta",
+            "Thus",
+            "X",
+            "align",
+            "alpha",
+            "as",
+            "begin"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "[Beta distributions]\\label{exam:beta} For $X \\sim \\operatorname{Beta}(\\alpha, \\beta)$, \\begin{align} m_n & =\\prod_{r = 0}^{n-1} \\frac{\\alpha +r}{\\alpha + \\beta +r} = \\frac{\\Gamma(\\alpha + n ) }{\\Gamma(\\alpha ) } \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha + \\beta +n ) }."
+          ],
+          "claim": "\\end{align} By Stirling's formula, as $n \\to \\infty$, \\begin{align} m_n & \\sim e^\\beta\\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) }\\sqrt{\\frac{\\alpha + n-1}{\\alpha + \\beta + n-1}} \\frac{(\\alpha + n-1)^{\\alpha + n-1} }{ (\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\ & \\sim e^\\beta \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) } \\frac{(\\alpha + n-1)^{\\alpha + n-1}}{(\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\ & \\sim n^{-\\beta}, \\quad \\text{as } \\left(1+\\frac{\\beta}{x}\\right)^{x} \\t",
+          "symbols": [
+            "Beta",
+            "By",
+            "For",
+            "Gamma",
+            "Stirling",
+            "Theta",
+            "Thus",
+            "X",
+            "align",
+            "alpha",
+            "as",
+            "begin",
+            "beta",
+            "distributions",
+            "e",
+            "end",
+            "exam",
+            "formula",
+            "frac",
+            "infty",
+            "label",
+            "left",
+            "m_n",
+            "n"
+          ],
+          "constraints": [
+            "m_n \\sim e^\\beta\\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) }\\sqrt{\\frac{\\alpha + n-1}{\\alpha + \\beta + n-1}} \\frac{(\\alpha + n-1)^{\\alpha + n-1} }{ (\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\ \\sim e^\\beta \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha ) } \\frac{(\\alpha + n-1)^{\\alpha + n-1}}{(\\alpha + \\beta + n-1)^{\\alpha + \\beta + n-1}}, \\\\ \\sim n^{-\\beta}, \\quad \\text{as } \\left(1+\\frac{\\beta}{x}\\right)^{x} \\to e^\\beta, \\, x\\to \\infty."
+          ],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "m_n = \\Theta(n^{-\\beta})",
+            "m_n =\\prod_{r = 0}^{n-1} \\frac{\\alpha +r}{\\alpha + \\beta +r} = \\frac{\\Gamma(\\alpha + n ) }{\\Gamma(\\alpha ) } \\frac{\\Gamma(\\alpha + \\beta ) }{\\Gamma(\\alpha + \\beta +n ) }."
+          ]
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:claim_shape_mismatch"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "d7567708f43a2186",
+      "source_span_id": "srcspan_c7f5927315931beafcd6"
+    },
+    {
+      "theorem_name": "exam_12",
+      "lean_file": "/home/projectx/BDDM/output/2212.12622.lean",
+      "lean_statement": "theorem exam_12 (s : ℝ) (n : ℕ) (s1 : ℝ) (h0 : 0 < s) (h1 : s < 1) (h2 : s1 > Real.log (1 / s)) (f : ℝ → ℝ) (hf : ∀ x, f x = 2 * x / s ^ 2 * if x ∈ Set.Icc 0 s then 1 else 0) : 2 * s ^ n / (n + 2) = Real.exp (-Real.log (1 / s) * n) ∧ 2 * s ^ n / (n + 2) = Real.exp (-s1 * n)",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h0",
+          "lean_expr": "(h0 : 0 < s)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h1",
+          "lean_expr": "(h1 : s < 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hf",
+          "lean_expr": "(hf : ∀ x, f x = 2 * x / s ^ 2 * if x ∈ Set.Icc 0 s then 1 else 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2212.12622",
+        "section": "",
+        "label": "exam_12",
+        "cited_refs": [
+          "NOVIINVERARDI2003frac",
+          "Rcz2006AMB",
+          "chang1993normal",
+          "dette1997theory",
+          "gil1951note",
+          "guruacharya2018approximation",
+          "haenggi2016meta",
+          "haenggi2018efficient",
+          "kapur1989maximum",
+          "li1995pointwise",
+          "markoff1884demonstration",
+          "mason2002chebyshev",
+          "mna2008hausdorff",
+          "mnatsakanov2003some",
+          "penson2022exact",
+          "pollard1972convergence",
+          "schoenberg1973remark",
+          "shohat1950problem",
+          "szeg1939orthogonal",
+          "tagliani1999hausdorff",
+          "wang2001image",
+          "wang2022cm",
+          "widder1931necessary",
+          "zelen1954bounds"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:claim_shape_mismatch:forall->eq",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T13:02:54Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_9120d2222aca5e1245991c83",
+      "canonical_theorem_id": "cth_b1ac4b76621b704403f8bd44",
+      "alignment_pair_id": "align_ea7ccf01173561f3ea12d6e9",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "[]\n\tLet the density function be $f(x) = 2 x/s^2  \\mathbf{1}_{[0,s]}(x)$ with $0<s< 1$. Then $m_n =  2 s^n /(n+2) = O(\\exp(-\\log(1/s) n )) = \\Omega(\\exp(-s_1 n ))$ for all $s_1 > \\log(1/s)$.",
+        "normalized_natural_language_theorem": "Quantifiers: forall Assumptions: [] Let the density function be $f(x) = 2 x/s^2 \\mathbf{1}_{[0,s]}(x)$ with $0<s< 1$.; Then $m_n = 2 s^n /(n+2) = O(\\exp(-\\log(1/s) n )) = \\Omega(\\exp(-s_1 n ))$ for all $s_1 > \\log(1/s)$. Conclusion: f(x) = 2 x/s^2 \\mathbf{1}_{[0,s]}(x); m_n = 2 s^n /(n+2) = O(\\exp(-\\log(1/s) n )) = \\Omega(\\exp(-s_1 n ))",
+        "lean_statement": "theorem exam_12 (s : ℝ) (n : ℕ) (s1 : ℝ) (h0 : 0 < s) (h1 : s < 1) (h2 : s1 > Real.log (1 / s)) (f : ℝ → ℝ) (hf : ∀ x, f x = 2 * x / s ^ 2 * if x ∈ Set.Icc 0 s then 1 else 0) : 2 * s ^ n / (n + 2) = Real.exp (-Real.log (1 / s) * n) ∧ 2 * s ^ n / (n + 2) = Real.exp (-s1 * n)",
+        "extracted_assumptions": [
+          "[] Let the density function be $f(x) = 2 x/s^2 \\mathbf{1}_{[0,s]}(x)$ with $0<s< 1$.",
+          "Then $m_n = 2 s^n /(n+2) = O(\\exp(-\\log(1/s) n )) = \\Omega(\\exp(-s_1 n ))$ for all $s_1 > \\log(1/s)$."
+        ],
+        "extracted_conclusion": "f(x) = 2 x/s^2 \\mathbf{1}_{[0,s]}(x); m_n = 2 s^n /(n+2) = O(\\exp(-\\log(1/s) n )) = \\Omega(\\exp(-s_1 n ))",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_9120d2222aca5e1245991c83",
+          "alignment_pair_id": "align_ea7ccf01173561f3ea12d6e9",
+          "paper_text_coverage": 0.4762,
+          "lean_text_coverage": 0.4762,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "compatible",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::exam_12",
+      "context_pack": {
+        "theorem_name": "exam_12",
+        "original_latex_theorem": "[]\n\tLet the density function be $f(x) = 2 x/s^2  \\mathbf{1}_{[0,s]}(x)$ with $0<s< 1$. Then $m_n =  2 s^n /(n+2) = O(\\exp(-\\log(1/s) n )) = \\Omega(\\exp(-s_1 n ))$ for all $s_1 > \\log(1/s)$.",
+        "source_file": "/tmp/desol_arxiv_cycle/2212.12622/expanded_source/Arxiv_XW_MH_Survey_v2.tex",
+        "source_span_id": "srcspan_21384e518b7699f9dcbc",
+        "source_char_range": [
+          52107,
+          52319
+        ],
+        "statement_char_range": [
+          52119,
+          52308
+        ],
+        "source_line_range": [
+          716,
+          718
+        ],
+        "env_name": "exam",
+        "latex_label": "",
+        "section": "Moment sequences and their rates of decay",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{Exam}[] Let the density function be $f(x) = 2 x/s^2 \\mathbf{1}_{[0,s]}(x)$ with $0<s< 1$. Then $m_n = 2 s^n /(n+2) = O(\\exp(-\\log(1/s) n )) = \\Omega(\\exp(-s_1 n ))$ for all $s_1 > \\log(1/s)$. \\end{Exam}",
+        "definitions": [
+          "Let the density function be $f(x) = 2 x/s^2 \\mathbf{1}_{[0,s]}(x)$ with $0<s< 1$."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if it is given by analytic expressions."
+        ],
+        "nearby_claims": [
+          "theorem source span: \\begin{Exam}[] Let the density function be $f(x) = 2 x/s^2 \\mathbf{1}_{[0,s]}(x)$ with $0<s< 1$."
+        ],
+        "context_excerpt": "Paper glossary memory: - F: right-continuous and increasing with $F(0^-) = 0$ and $F(1) = 1$ - F_2: defined as the $\\mathcal{L}_{\\infty}\\mbox{-}\\text{norm}$ of $F_1$ and $F_2$ over $[0 - X: \\begin{align} \\phi_X(s) & = \\mathbb{E}[\\exp(jsX)] - doubleunderline: \\def\\doubleunderline#1{\\underline{\\underline{#1}}} - f: said to be c - m_0: not counted) for different methods and different types of decays - x: discretized to $\\mathcal{U}_{50} = \\{ i/50 Declared notation/macros: - \\newcommand{\\ubar}[1]{\\text{\\b{$#1$}}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathcal{U}}{\\mathcal{U}} - \\DeclareMathOperator*{arg\\,min}{arg\\,min} - \\DeclareMathOperator{int}{int} - \\newcommand{\\norm}[1]{\\left\\lVert#1\\right\\rVert} - \\newcommand{\\abs}[1]{\\lvert#1\\rvert} Nearby source context: to solve it: The first one generates uniformly distributed integer moment sequences; the other two generate moments from either analytic expressions of moments or analytic expressions of cdfs. In these two cases, the parameters are randomized. We use the exact cdf as the reference function if it is given by analytic expressions. Otherwise, we use the GP approximations as the reference functions. \\subsection{Moment sequences and their rates of decay}\\label{sec:rateofdecay} As discussed in \\Cref{sec:cm}, the CM method is able to fully recover discrete distributions with a finite number of jumps, while other methods, such as the ME method, are unable to do that. This indicates that different HMTs may have different performance for different types of distributions, classified by the decay order of the sequence. We first give some examples of moment sequences of common distributions. \\begin{Exam}[Beta distributions]\\label{exam:beta} For $X \\sim \\operatorname{Beta}(\\alph",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "claim_shape_mismatch:forall->eq",
+          "status": "FLAWED",
+          "failure_kind": "false_or_ambiguous_statement",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok",
+            "claim_equivalent"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "Let",
+            "O",
+            "Omega",
+            "Then",
+            "all",
+            "be",
+            "density",
+            "exp",
+            "f",
+            "for",
+            "function",
+            "log"
+          ],
+          "quantifiers": [
+            "forall"
+          ],
+          "assumptions": [
+            "[] Let the density function be $f(x) = 2 x/s^2 \\mathbf{1}_{[0,s]}(x)$ with $0<s< 1$.",
+            "Then $m_n = 2 s^n /(n+2) = O(\\exp(-\\log(1/s) n )) = \\Omega(\\exp(-s_1 n ))$ for all $s_1 > \\log(1/s)$."
+          ],
+          "claim": "f(x) = 2 x/s^2 \\mathbf{1}_{[0,s]}(x); m_n = 2 s^n /(n+2) = O(\\exp(-\\log(1/s) n )) = \\Omega(\\exp(-s_1 n ))",
+          "symbols": [
+            "Let",
+            "O",
+            "Omega",
+            "Then",
+            "all",
+            "be",
+            "density",
+            "exp",
+            "f",
+            "for",
+            "function",
+            "log",
+            "m_n",
+            "mathbf",
+            "n",
+            "s",
+            "s_1",
+            "the",
+            "with",
+            "x"
+          ],
+          "constraints": [
+            "0<s< 1",
+            "s_1 > \\log(1/s)"
+          ],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "f(x) = 2 x/s^2 \\mathbf{1}_{[0,s]}(x)",
+            "m_n = 2 s^n /(n+2) = O(\\exp(-\\log(1/s) n )) = \\Omega(\\exp(-s_1 n ))"
+          ]
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:exam_12",
+        "paper_definition_stub:h0",
+        "paper_definition_stub:h1",
+        "paper_definition_stub:h2",
+        "paper_definition_stub:s1"
+      ],
+      "axiom_debt_hash": "cbf44f99ced9b7bb",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:claim_shape_mismatch"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "5d54235f59a20b3c",
+      "source_span_id": "srcspan_21384e518b7699f9dcbc"
+    },
+    {
+      "theorem_name": "lem_chuang",
+      "lean_file": "/home/projectx/BDDM/output/2212.12622.lean",
+      "lean_statement": "theorem lem_chuang (n : ℕ) (m : Fin n → ℝ) (p : Fin n → ℝ) (hm : ∀ k : Fin n, m k ∈ Set.Icc 0 1) (hp : ∀ k : Fin n, p k ∈ Set.Ioo 0 1) : ∀ k : Fin n, p k ∣ (m k) ∧ p k ∣ (m k) ∧ p k ∣ (m k)",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "hm",
+          "lean_expr": "(hm : ∀ k : Fin n, m k ∈ Set.Icc 0 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hp",
+          "lean_expr": "(hp : ∀ k : Fin n, p k ∈ Set.Ioo 0 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2212.12622",
+        "section": "",
+        "label": "lem:chuang",
+        "cited_refs": [
+          "NOVIINVERARDI2003frac",
+          "Rcz2006AMB",
+          "chang1993normal",
+          "dette1997theory",
+          "gil1951note",
+          "guruacharya2018approximation",
+          "haenggi2016meta",
+          "haenggi2018efficient",
+          "kapur1989maximum",
+          "li1995pointwise",
+          "markoff1884demonstration",
+          "mason2002chebyshev",
+          "mna2008hausdorff",
+          "mnatsakanov2003some",
+          "penson2022exact",
+          "pollard1972convergence",
+          "schoenberg1973remark",
+          "shohat1950problem",
+          "szeg1939orthogonal",
+          "tagliani1999hausdorff",
+          "wang2001image",
+          "wang2022cm",
+          "widder1931necessary",
+          "zelen1954bounds"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_699c9cf6.lean:9:31: error: unexpected token ')'; expected term",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T13:02:54Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_fb2effc390a7368676d18880",
+      "canonical_theorem_id": "cth_b5b101237117ff08d4ffa37c",
+      "alignment_pair_id": "align_823ce2c405f2c1474a95e8ee",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "[{\\cite[Thm.~1.3]{chang1993normal}}]\\label{lem:chuang}\n\tFor a uniformly distributed random vector $\\left(m_k\\right)_{k \\in [n]} $ on the moment space $\\mathcal{M}_n$, the corresponding canonical moments $p_k$, $k \\in [n]$, are independent and beta distributed as\n\t\\begin{align*}\n\t\tp_k \\sim \\mathrm{Beta}(n - k +1, n-k+1), \\quad k \\in [n].\n\t\\end{align*}",
+        "normalized_natural_language_theorem": "Quantifiers: for all k ∈ [n]; k ∈ [n] Assumptions: uniformly distributed random vector (m_k)_{k ∈ [n]} on the moment space M_n Conclusion: the corresponding canonical moments p_k, k ∈ [n], are independent and beta distributed as p_k ~ Beta(n - k + 1, n - k + 1)",
+        "lean_statement": "theorem lem_chuang (n : ℕ) (m : Fin n → ℝ) (p : Fin n → ℝ) (hm : ∀ k : Fin n, m k ∈ Set.Icc 0 1) (hp : ∀ k : Fin n, p k ∈ Set.Ioo 0 1) : ∀ k : Fin n, p k ∣ (m k) ∧ p k ∣ (m k) ∧ p k ∣ (m k)",
+        "extracted_assumptions": [
+          "uniformly distributed random vector (m_k)_{k ∈ [n]} on the moment space M_n"
+        ],
+        "extracted_conclusion": "the corresponding canonical moments p_k, k ∈ [n], are independent and beta distributed as p_k ~ Beta(n - k + 1, n - k + 1)",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_fb2effc390a7368676d18880",
+          "alignment_pair_id": "align_823ce2c405f2c1474a95e8ee",
+          "paper_text_coverage": 0.1429,
+          "lean_text_coverage": 0.2,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "compatible",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::lem_chuang",
+      "context_pack": {
+        "theorem_name": "lem_chuang",
+        "original_latex_theorem": "[{\\cite[Thm.~1.3]{chang1993normal}}]\\label{lem:chuang}\n\tFor a uniformly distributed random vector $\\left(m_k\\right)_{k \\in [n]} $ on the moment space $\\mathcal{M}_n$, the corresponding canonical moments $p_k$, $k \\in [n]$, are independent and beta distributed as\n\t\\begin{align*}\n\t\tp_k \\sim \\mathrm{Beta}(n - k +1, n-k+1), \\quad k \\in [n].\n\t\\end{align*}",
+        "source_file": "/tmp/desol_arxiv_cycle/2212.12622/expanded_source/Arxiv_XW_MH_Survey_v2.tex",
+        "source_span_id": "srcspan_23edcd243bdbec53ebe2",
+        "source_char_range": [
+          55882,
+          56255
+        ],
+        "statement_char_range": [
+          55893,
+          56245
+        ],
+        "source_line_range": [
+          765,
+          770
+        ],
+        "env_name": "lem",
+        "latex_label": "lem:chuang",
+        "section": "Moment Space",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{Lem}[{\\cite[Thm.~1.3]{chang1993normal}}]\\label{lem:chuang} For a uniformly distributed random vector $\\left(m_k\\right)_{k \\in [n]} $ on the moment space $\\mathcal{M}_n$, the corresponding canonical moments $p_k$, $k \\in [n]$, are independent and beta distributed as \\begin{align*} p_k \\sim \\mathrm{Beta}(n - k +1, n-k+1), \\quad k \\in [n]. \\end{align*} \\end{Lem}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem source span: \\begin{Lem}[{\\cite[Thm."
+        ],
+        "context_excerpt": "Paper glossary memory: - F: right-continuous and increasing with $F(0^-) = 0$ and $F(1) = 1$ - F_2: defined as the $\\mathcal{L}_{\\infty}\\mbox{-}\\text{norm}$ of $F_1$ and $F_2$ over $[0 - X: \\begin{align} \\phi_X(s) & = \\mathbb{E}[\\exp(jsX)] - doubleunderline: \\def\\doubleunderline#1{\\underline{\\underline{#1}}} - f: said to be c - m_0: not counted) for different methods and different types of decays - x: discretized to $\\mathcal{U}_{50} = \\{ i/50 Declared notation/macros: - \\newcommand{\\ubar}[1]{\\text{\\b{$#1$}}} - \\newcommand{\\mathbb{P}}{\\mathbb{P}} - \\newcommand{\\mathbb{E}}{\\mathbb{E}} - \\newcommand{\\mathcal{U}}{\\mathcal{U}} - \\DeclareMathOperator*{arg\\,min}{arg\\,min} - \\DeclareMathOperator{int}{int} - \\newcommand{\\norm}[1]{\\left\\lVert#1\\right\\rVert} - \\newcommand{\\abs}[1]{\\lvert#1\\rvert} Nearby source context: gn} \\mathcal{M} \\triangleq \\{\\left(m_1(\\lambda), m_2(\\lambda), ...\\right), \\lambda \\in \\Lambda\\}. \\end{align} The set of the projection onto the first $n$ coordinates of all elements in $\\mathcal{M}$ is denoted by $\\mathcal{M}_n$. Now we recall how to establish a one-to-one mapping from the moment space $int \\mathcal{M}$ onto the set $(0,1)^\\mathbb{N}$ \\cite{chang1993normal}, where $int \\mathcal{M}$ denotes the interior of the set $\\mathcal{M}$. For a given sequence $\\left(m_k\\right)_{k \\in [n-1]} \\in \\mathcal{M}_{n-1}$, the achievable lower and upper bounds for $m_n$ are defined as \\begin{align} m_n^- \\triangleq \\min \\{ m_n(\\lambda), \\lambda \\in \\Lambda \\text{ with } m_k(\\lambda) = m_k \\text{ for } k \\in [n-1]\\}, \\\\ m_n^+ \\triangleq \\max \\{ m_n(\\lambda), \\lambda \\in \\Lambda \\text{ with } m_k(\\lambda) = m_k \\text{ for } k \\in [n-1]\\}. \\end{align} Note that $m_1^- =0 $ and $m_1^+ = 1$. $m_n^-$ and $m_n^+$, $n \\geq 2$, can be obtained by taking the infimum and suprem",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_699c9cf6.lean:9:31: error: unexpected token ')'; expected term",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "random vector (m_k)_{k ∈ [n]}",
+            "moment space M_n",
+            "canonical moments p_k",
+            "Beta distribution"
+          ],
+          "quantifiers": [
+            "for all k ∈ [n]",
+            "k ∈ [n]"
+          ],
+          "assumptions": [
+            "uniformly distributed random vector (m_k)_{k ∈ [n]} on the moment space M_n"
+          ],
+          "claim": "the corresponding canonical moments p_k, k ∈ [n], are independent and beta distributed as p_k ~ Beta(n - k + 1, n - k + 1)",
+          "symbols": [
+            "m_k",
+            "M_n",
+            "p_k",
+            "Beta",
+            "n - k + 1"
+          ],
+          "constraints": [
+            "k ∈ [n]"
+          ],
+          "theorem_intent": "characterization of canonical moments distribution"
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "413b65fec7187bef",
+      "source_span_id": "srcspan_23edcd243bdbec53ebe2"
+    }
+  ]
+}
