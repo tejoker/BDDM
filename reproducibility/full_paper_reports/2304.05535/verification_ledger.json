@@ -1,0 +1,1042 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-05-16T15:48:33Z",
+  "pipeline_commit": "3a420548f68cd2913af9d4bb8a09b58339eb4c87",
+  "toolchain_versions": {
+    "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
+    "python": "unknown",
+    "mistral_model": "labs-leanstral-2603"
+  },
+  "paper_id": "2304.05535",
+  "source_label": "2304.05535",
+  "prove_mode": "auto",
+  "model": "labs-leanstral-2603",
+  "entry_count": 4,
+  "compiler_feedback_repair_run_id": "arxiv_to_lean_2304.05535_1778946395_1774848",
+  "compiler_feedback_repair_run_dataset": "/home/projectx/BDDM/output/flywheel/runs/arxiv_to_lean_2304.05535_1778946395_1774848/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset_summary": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset_summary.json",
+  "entries": [
+    {
+      "theorem_name": "thm_example",
+      "lean_file": "/home/projectx/BDDM/output/2304.05535.lean",
+      "lean_statement": "theorem thm_example (d : ℕ) : ¬∃ (f : Fin (d + 1) × Fin (d + 2) → EuclideanSpace ℝ (Fin d)), IsMisalignedOrder (f)",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2304.05535",
+        "section": "",
+        "label": "thm:example",
+        "cited_refs": [
+          "ALON2014",
+          "AM22",
+          "BMS97",
+          "GIS2011",
+          "GUNTER96",
+          "SCHAEFER2013"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_16cc6742.lean:9:93: error: Function expected at\n  IsMisalignedOrder\nbut this term has type\n  Prop\n\nNote: Expected a function because this term is being applied to the argument\n  (f)",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T15:48:33Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_523289b9df04bb303646ed32",
+      "canonical_theorem_id": "cth_91fdbf1df21c40327dfe0c10",
+      "alignment_pair_id": "align_74c9b51a7c50097b01776721",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{thm:example}\n\tNo {misaligned} order on $[d+1]\\times[d+2]$ is realizable in $\\mathbb R^d$.",
+        "normalized_natural_language_theorem": "Conclusion: No misaligned order on [d+1]×[d+2] is realizable in ℝ^d",
+        "lean_statement": "theorem thm_example (d : ℕ) : ¬∃ (f : Fin (d + 1) × Fin (d + 2) → EuclideanSpace ℝ (Fin d)), IsMisalignedOrder (f)",
+        "extracted_assumptions": [],
+        "extracted_conclusion": "No misaligned order on [d+1]×[d+2] is realizable in ℝ^d",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_523289b9df04bb303646ed32",
+          "alignment_pair_id": "align_74c9b51a7c50097b01776721",
+          "paper_text_coverage": 0.375,
+          "lean_text_coverage": 0.3,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "compatible",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::thm_example",
+      "context_pack": {
+        "theorem_name": "thm_example",
+        "original_latex_theorem": "\\label{thm:example}\n\tNo {misaligned} order on $[d+1]\\times[d+2]$ is realizable in $\\mathbb R^d$.",
+        "source_file": "/tmp/desol_arxiv_cycle/2304.05535/expanded_source/arxiv.tex",
+        "source_span_id": "srcspan_21bdd7f531f802f0c4e1",
+        "source_char_range": [
+          8630,
+          8747
+        ],
+        "statement_char_range": [
+          8641,
+          8737
+        ],
+        "source_line_range": [
+          126,
+          128
+        ],
+        "env_name": "thm",
+        "latex_label": "thm:example",
+        "section": "Definitions and main result statement",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{thm}\\label{thm:example} No {misaligned} order on $[d+1]\\times[d+2]$ is realizable in $\\mathbb R^d$. \\end{thm}",
+        "definitions": [
+          "Definition \\ref{def:order} can be interpreted as follows.",
+          "Definition \\ref{def:order}, (as a torus)."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - Note that this construction produces \\begin{equation*} (d+1)!\\left(d!(d-1)!\\cdots 1!\\right)^2 \\end{equation*} {misaligned} orders.",
+          "theorem source span: \\begin{thm}\\label{thm:example} No {misaligned} order on $[d+1]\\times[d+2]$ is realizable in $\\mathbb R^d$."
+        ],
+        "context_excerpt": "Paper glossary memory: - C: a cone - C_i: $(i - H: the hyperplane spanned by $Q'$ - L: a non-empty convex set - L_1: the Manhattan distance between the permutations $p = (n_0 - P: closer to $q_0$ than to $q_{d+1}$ - Q: closer to $p_i$ - X: a finite subset of $\\R^d$ - d: precisely $n$ - n: small compared to $d$ - y: contained in $L_j^+$ - y_i: in the interior of a cone - z: a convex combination of the $x_i$ with $i\\neq j$ Nearby theorem statements: - Note that this construction produces \\begin{equation*} (d+1)!\\left(d!(d-1)!\\cdots 1!\\right)^2 \\end{equation*} {misaligned} orders. However, this is still quite small compared to the total number of possible orders. Declared notation/macros: - \\newcommand{\\mathbb R}{\\mathbb R} - \\newcommand{\\norm}[1]{\\left\\lVert #1 \\right\\rVert} - \\newcommand{misaligned}{misaligned} - \\DeclareMathOperator{conv}{conv} - \\DeclareMathOperator{int}{int} Nearby source context: on*} (i,j) < (k,l) \\iff \\varphi((i,j)) < \\varphi((k,l)). \\end{equation*} We may then visualize the order $<$ with a table as in Figure~\\ref{fig:table}. The properties from Definition \\ref{def:order} can be interpreted as follows. Property 1 states that in every row, the element on the diagonal is the smallest and increases as we move to the right. After reaching the end of the table, we continue from the leftmost element until we meet the diagonal again. Property 2 is similar but for the first $d+1$ columns. For the last column, Property 3 implies that the elements decrease from top to bottom. Figure \\ref{fig:table} shows a visual representation of this. \\begin{figure} \\begin{center} \\includegraphics{diagonal_monotone.pdf} \\end{center} \\caption{Left: The arrows represent order restrictions of Definition \\ref{def:order}, (as a torus). Right: An example for $d=4$ of a {misalig",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_16cc6742.lean:9:93: error: Function expected at\n  IsMisalignedOrder\nbut this term has type\n  Prop\n\nNote: Expected a function because this term is being applied to the argument\n  (f)",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "misaligned order",
+            "[d+1]×[d+2]",
+            "ℝ^d"
+          ],
+          "quantifiers": [],
+          "assumptions": [],
+          "claim": "No misaligned order on [d+1]×[d+2] is realizable in ℝ^d",
+          "symbols": [
+            "[d+1]×[d+2]",
+            "ℝ^d"
+          ],
+          "constraints": [],
+          "theorem_intent": "realizability of orders in Euclidean space"
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "cf7da9d975536112",
+      "source_span_id": "srcspan_21bdd7f531f802f0c4e1"
+    },
+    {
+      "theorem_name": "lem_circum",
+      "lean_file": "/home/projectx/BDDM/output/2304.05535.lean",
+      "lean_statement": "theorem lem_circum {d : ℕ} (X Y : Finset (Fin (d + 1) → ℝ)) (hX : X.card = d + 1) (hY : Y.card = d + 1)\n    (hgen : ∀ x ∈ X, ∀ y ∈ Y, ∀ x' ∈ X, ∀ y' ∈ Y, (x, y) ≠ (x', y') → ‖y - x‖ ≠ ‖y' - x'‖)\n    (horder : ∀ i : Fin (d + 1), ∀ j k : Fin (d + 1), j ≠ k → ‖(Y.toList.get ⟨i.val, by omega⟩) - (X.toList.get ⟨j.val, by omega⟩)‖ < ‖(Y.toList.get ⟨i.val, by omega⟩) - (X.toList.get ⟨k.val, by omega⟩)‖) :\n    circumCenter X ∈ interior (convexHull ℝ (Y : Set (Fin (d + 1) → ℝ)))",
+      "status": "TRANSLATION_LIMITED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "missing_definition",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "hX",
+          "lean_expr": "(hX : X.card = d + 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hY",
+          "lean_expr": "(hY : Y.card = d + 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2304.05535",
+        "section": "",
+        "label": "lem:circum",
+        "cited_refs": [
+          "ALON2014",
+          "AM22",
+          "BMS97",
+          "GIS2011",
+          "GUNTER96",
+          "SCHAEFER2013"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:unresolved_identifier_or_missing_paper_local_theory",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T15:48:33Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "identifiers_resolve_or_declared",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_c86518dd451644d1bb8fa3e6",
+      "canonical_theorem_id": "cth_893ac9397b9228073d2f1820",
+      "alignment_pair_id": "align_b0ebef5ddd15d8d658c33fe6",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{lem:circum}\n\tLet $X=\\{x_0,\\dots,x_d\\}$ and $Y=\\{y_0,\\dots,y_d\\}$ be subsets of $\\mathbb R^d$ in general position such that every pair of points in $X\\times Y$ determines a unique distance. Suppose that for every $i$\n\t\\begin{equation*}\n\t\t\\left\\lVert #1 \\right\\rVert{y_i-x_i}<\\left\\lVert #1 \\right\\rVert{y_i-x_{i+1}}<\\dots<\\left\\lVert #1 \\right\\rVert{y_i-x_{i-1}},\n\t\\end{equation*}\n\twhere the indices are taken mod $d+1$. Then $O(X)$ is in the interior of $conv(Y)$.",
+        "normalized_natural_language_theorem": "Assumptions: \\label{lem:circum} Let $X=\\{x_0,\\dots,x_d\\}$ and $Y=\\{y_0,\\dots,y_d\\}$ be subsets of $\\mathbb R^d$ in general position such that every pair of points in $X\\times Y$ determines a unique distance.; Suppose that for every $i$ \\begin{equation*} \\left\\lVert #1 \\right\\rVert{y_i-x_i}<\\left\\lVert #1 \\right\\rVert{y_i-x_{i+1}}<\\dots<\\left\\lVert #1 \\right\\rVert{y_i-x_{i-1}}, \\end{equation*} where the indices are taken mod $d+1$. Conclusion: Then $O(X)$ is in the interior of $conv(Y)$.",
+        "lean_statement": "theorem lem_circum {d : ℕ} (X Y : Finset (Fin (d + 1) → ℝ)) (hX : X.card = d + 1) (hY : Y.card = d + 1)\n    (hgen : ∀ x ∈ X, ∀ y ∈ Y, ∀ x' ∈ X, ∀ y' ∈ Y, (x, y) ≠ (x', y') → ‖y - x‖ ≠ ‖y' - x'‖)\n    (horder : ∀ i : Fin (d + 1), ∀ j k : Fin (d + 1), j ≠ k → ‖(Y.toList.get ⟨i.val, by omega⟩) - (X.toList.get ⟨j.val, by omega⟩)‖ < ‖(Y.toList.get ⟨i.val, by omega⟩) - (X.toList.get ⟨k.val, by omega⟩)‖) :\n    circumCenter X ∈ interior (convexHull ℝ (Y : Set (Fin (d + 1) → ℝ)))",
+        "extracted_assumptions": [
+          "\\label{lem:circum} Let $X=\\{x_0,\\dots,x_d\\}$ and $Y=\\{y_0,\\dots,y_d\\}$ be subsets of $\\mathbb R^d$ in general position such that every pair of points in $X\\times Y$ determines a unique distance.",
+          "Suppose that for every $i$ \\begin{equation*} \\left\\lVert #1 \\right\\rVert{y_i-x_i}<\\left\\lVert #1 \\right\\rVert{y_i-x_{i+1}}<\\dots<\\left\\lVert #1 \\right\\rVert{y_i-x_{i-1}}, \\end{equation*} where the indices are taken mod $d+1$."
+        ],
+        "extracted_conclusion": "Then $O(X)$ is in the interior of $conv(Y)$.",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "type_mismatch",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_c86518dd451644d1bb8fa3e6",
+          "alignment_pair_id": "align_b0ebef5ddd15d8d658c33fe6",
+          "paper_text_coverage": 0.1333,
+          "lean_text_coverage": 0.2222,
+          "missing_assumptions": [
+            "\\label{lem:circum} Let $X=\\{x_0,\\dots,x_d\\}$ and $Y=\\{y_0,\\dots,y_d\\}$ be subsets of $\\mathbb R^d$ in general position such that every pair of points in $X\\times Y$ determines a unique distance."
+          ],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::lem_circum",
+      "context_pack": {
+        "theorem_name": "lem_circum",
+        "original_latex_theorem": "\\label{lem:circum}\n\tLet $X=\\{x_0,\\dots,x_d\\}$ and $Y=\\{y_0,\\dots,y_d\\}$ be subsets of $\\mathbb R^d$ in general position such that every pair of points in $X\\times Y$ determines a unique distance. Suppose that for every $i$\n\t\\begin{equation*}\n\t\t\\left\\lVert #1 \\right\\rVert{y_i-x_i}<\\left\\lVert #1 \\right\\rVert{y_i-x_{i+1}}<\\dots<\\left\\lVert #1 \\right\\rVert{y_i-x_{i-1}},\n\t\\end{equation*}\n\twhere the indices are taken mod $d+1$. Then $O(X)$ is in the interior of $conv(Y)$.",
+        "source_file": "/tmp/desol_arxiv_cycle/2304.05535/expanded_source/arxiv.tex",
+        "source_span_id": "srcspan_736c5c121ece2e48dc61",
+        "source_char_range": [
+          10762,
+          11254
+        ],
+        "statement_char_range": [
+          10773,
+          11244
+        ],
+        "source_line_range": [
+          159,
+          165
+        ],
+        "env_name": "lem",
+        "latex_label": "lem:circum",
+        "section": "Definitions and main result statement",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{lem}\\label{lem:circum} Let $X=\\{x_0,\\dots,x_d\\}$ and $Y=\\{y_0,\\dots,y_d\\}$ be subsets of $\\mathbb R^d$ in general position such that every pair of points in $X\\times Y$ determines a unique distance. Suppose that for every $i$ \\begin{equation*} \\left\\lVert #1 \\right\\rVert{y_i-x_i}<\\left\\lVert #1 \\right\\rVert{y_i-x_{i+1}}<\\dots<\\left\\lVert #1 \\right\\rVert{y_i-x_{i-1}}, \\end{equation*} where the indices are taken mod $d+1$. Then $O(X)$ is in the interior of $conv(Y)$. \\end{lem}",
+        "definitions": [
+          "Assume, for the sake of contradiction, that $P=\\{p_0,\\dots,p_d\\}$ and $Q=\\{q_0,\\dots,q_{d+1}\\}$ are subsets of $\\mathbb R^d$ which induce a {misaligned} order on $[d+1]\\times [d+2]$.",
+          "let $Q_i = Q\\setminus \\{q_i\\}$.",
+          "Definition \\ref{def:order} we deduce the following: \\begin{enumerate} \\item\\label{obs1} Every point in $P$ is closer to $q_0$ than to $q_{d+1}$.",
+          "Let $M(x,y)$ denote the perpendicular bisector (hyperplane) of segment $\\overline{xy}$.",
+          "Let $X=\\{x_0,\\dots,x_d\\}$ and $Y=\\{y_0,\\dots,y_d\\}$ be subsets of $\\mathbb R^d$ in general position such that every pair of points in $X\\times Y$ determines a unique distance.",
+          "assume that $O(X)$ is the origin so that the hyperplanes $M(x_i,x_j)$ pass through the origin.",
+          "Let $C_i$ be the cone that contains $y_i$."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "If $i\\in[d]$, then $q_{i+1}$ and $q_{d+1}$ are closer to $p_{i+1}$ than to $p_i$, but every other point in $Q$ is closer to $p_i$."
+        ],
+        "nearby_claims": [
+          "theorem statements: - Note that this construction produces \\begin{equation*} (d+1)!\\left(d!(d-1)!\\cdots 1!\\right)^2 \\end{equation*} {misaligned} orders.",
+          "theorem source span: \\begin{lem}\\label{lem:circum} Let $X=\\{x_0,\\dots,x_d\\}$ and $Y=\\{y_0,\\dots,y_d\\}$ be subsets of $\\mathbb R^d$ in general position such that every pair of points in $X\\times Y$ determines a unique distance."
+        ],
+        "context_excerpt": "Paper glossary memory: - C: a cone - C_i: $(i - H: the hyperplane spanned by $Q'$ - L: a non-empty convex set - L_1: the Manhattan distance between the permutations $p = (n_0 - P: closer to $q_0$ than to $q_{d+1}$ - Q: closer to $p_i$ - X: a finite subset of $\\R^d$ - d: precisely $n$ - n: small compared to $d$ - y: contained in $L_j^+$ - y_i: in the interior of a cone - z: a convex combination of the $x_i$ with $i\\neq j$ Nearby theorem statements: - Note that this construction produces \\begin{equation*} (d+1)!\\left(d!(d-1)!\\cdots 1!\\right)^2 \\end{equation*} {misaligned} orders. However, this is still quite small compared to the total number of possible orders. Declared notation/macros: - \\newcommand{\\mathbb R}{\\mathbb R} - \\newcommand{\\norm}[1]{\\left\\lVert #1 \\right\\rVert} - \\newcommand{misaligned}{misaligned} - \\DeclareMathOperator{conv}{conv} - \\DeclareMathOperator{int}{int} Nearby source context: denote by $O(X)$ the circumcenter of $X$. Assume, for the sake of contradiction, that $P=\\{p_0,\\dots,p_d\\}$ and $Q=\\{q_0,\\dots,q_{d+1}\\}$ are subsets of $\\mathbb R^d$ which induce a {misaligned} order on $[d+1]\\times [d+2]$. For each $i\\in[d+1]$, let $Q_i = Q\\setminus \\{q_i\\}$. Our goal is to arrive at a contradiction by showing that $O(P)$ must be both inside and outside the simplex $conv(Q_{d+1})$. We begin by noting some properties that sets $P$ and $Q$ must satisfy as a consequence of inducing a {misaligned} ordering. \\begin{obs}\\label{obs:dm} From Definition \\ref{def:order} we deduce the following: \\begin{enumerate} \\item\\label{obs1} Every point in $P$ is closer to $q_0$ than to $q_{d+1}$. \\item\\label{obs2} If $i\\in[d]$, then $q_{i+1}$ and $q_{d+1}$ are closer to $p_{i+1}$ than to $p_i$, but every other point in $Q$ is closer to $p_i$. \\end{enumerate} \\end{obs} Let $M(x",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "unresolved_identifier_or_missing_paper_local_theory",
+          "status": "TRANSLATION_LIMITED",
+          "failure_kind": "missing_definition",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "identifiers_resolve_or_declared"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "Let",
+            "O",
+            "R",
+            "Suppose",
+            "Then",
+            "X",
+            "Y",
+            "a",
+            "and",
+            "are",
+            "be",
+            "begin"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "\\label{lem:circum} Let $X=\\{x_0,\\dots,x_d\\}$ and $Y=\\{y_0,\\dots,y_d\\}$ be subsets of $\\mathbb R^d$ in general position such that every pair of points in $X\\times Y$ determines a unique distance.",
+            "Suppose that for every $i$ \\begin{equation*} \\left\\lVert #1 \\right\\rVert{y_i-x_i}<\\left\\lVert #1 \\right\\rVert{y_i-x_{i+1}}<\\dots<\\left\\lVert #1 \\right\\rVert{y_i-x_{i-1}}, \\end{equation*} where the indices are taken mod $d+1$."
+          ],
+          "claim": "Then $O(X)$ is in the interior of $conv(Y)$.",
+          "symbols": [
+            "Let",
+            "O",
+            "R",
+            "Suppose",
+            "Then",
+            "X",
+            "Y",
+            "a",
+            "and",
+            "are",
+            "be",
+            "begin",
+            "circum",
+            "conv",
+            "d",
+            "determines",
+            "distance",
+            "dots",
+            "end",
+            "equation",
+            "every",
+            "for",
+            "general",
+            "i"
+          ],
+          "constraints": [
+            "\\left\\lVert #1 \\right\\rVert{y_i-x_i}<\\left\\lVert #1 \\right\\rVert{y_i-x_{i+1}}<\\dots<\\left\\lVert #1 \\right\\rVert{y_i-x_{i-1}},"
+          ],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "X=\\{x_0,\\dots,x_d\\}",
+            "Y=\\{y_0,\\dots,y_d\\}"
+          ]
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:omega"
+      ],
+      "axiom_debt_hash": "17f455d14527f9da",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "edaa934e729c7097",
+      "source_span_id": "srcspan_736c5c121ece2e48dc61"
+    },
+    {
+      "theorem_name": "lem_coro4",
+      "lean_file": "/home/projectx/BDDM/output/2304.05535.lean",
+      "lean_statement": "theorem lem_coro4 {d : ℕ} (X : Finset (Fin (d + 1) → ℝ)) (O : Fin (d + 1) → ℝ)\n    (L : Fin (d + 1) → (Fin (d + 1) → ℝ) → Prop) (hX : ∀ i j, i ≠ j → X.card = d + 1)\n    (hO : O ∈ interior (convexHull ℝ (X : Set (Fin (d + 1) → ℝ))))\n    (hL : ∀ i j, i ≠ j → L i ≠ L j) (hO_not_L0 : ¬L 0 O)\n    (hx : ∀ i, (∀ j, j ≠ i → ¬L j (X i)) ∧ L i (X i)) :\n    O ∈ ⋂ i, {y | L i y} ⊆ convexHull ℝ (X : Set (Fin (d + 1) → ℝ))",
+      "status": "TRANSLATION_LIMITED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "missing_definition",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "hX",
+          "lean_expr": "(hX : ∀ i j, i ≠ j → X.card = d + 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hL",
+          "lean_expr": "(hL : ∀ i j, i ≠ j → L i ≠ L j)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hO_not_L0",
+          "lean_expr": "(hO_not_L0 : ¬L 0 O)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2304.05535",
+        "section": "",
+        "label": "lem:coro4",
+        "cited_refs": [
+          "ALON2014",
+          "AM22",
+          "BMS97",
+          "GIS2011",
+          "GUNTER96",
+          "SCHAEFER2013"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:unresolved_identifier_or_missing_paper_local_theory",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T15:48:33Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "identifiers_resolve_or_declared",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_541a3ed85d2ca44694dc69c8",
+      "canonical_theorem_id": "cth_bd4229e877b911532cdb4e50",
+      "alignment_pair_id": "align_a1ac2e10137f4eb39481cc28",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{lem:coro4}\n\tLet $X=\\{x_0,\\dots, x_d\\}\\subset\\mathbb R^d$ be a set of points in general position, $O$ be a point in the interior of $conv(X)$ and $L_0,\\dots,L_d\\subset\\mathbb R^d$ be hyperplanes in general position. For each $i\\in[d+1]$, define $L_i^+$ as a closed halfspace bounded by $L_i$ that contains $O$ and define $L_i^-$ as the closure of its complement. Assume that $O\\not\\in L_0$ and\n\t\\begin{equation*}\n\t\tx_i\\in \\left(\\bigcap_{j\\neq i} L_j^-\\right)\\cap L_i^+.\n\t\\end{equation*}\n\tThen\n\t\\begin{equation*}\n\t\tO\\in\\bigcap_{i\\in[d+1]}L_i^+\\subsetconv(X).\n\t\\end{equation*}",
+        "normalized_natural_language_theorem": "Quantifiers: for each i ∈ [d+1]; Let X = {x_0, ..., x_d} Assumptions: X is a set of points in general position; O is a point in the interior of conv(X); L_0, ..., L_d are hyperplanes in general position; O ∉ L_0; x_i ∈ (∩_{j≠i} L_j^-) ∩ L_i^+ Conclusion: O ∈ ∩_{i∈[d+1]} L_i^+ ⊂ conv(X)",
+        "lean_statement": "theorem lem_coro4 {d : ℕ} (X : Finset (Fin (d + 1) → ℝ)) (O : Fin (d + 1) → ℝ)\n    (L : Fin (d + 1) → (Fin (d + 1) → ℝ) → Prop) (hX : ∀ i j, i ≠ j → X.card = d + 1)\n    (hO : O ∈ interior (convexHull ℝ (X : Set (Fin (d + 1) → ℝ))))\n    (hL : ∀ i j, i ≠ j → L i ≠ L j) (hO_not_L0 : ¬L 0 O)\n    (hx : ∀ i, (∀ j, j ≠ i → ¬L j (X i)) ∧ L i (X i)) :\n    O ∈ ⋂ i, {y | L i y} ⊆ convexHull ℝ (X : Set (Fin (d + 1) → ℝ))",
+        "extracted_assumptions": [
+          "X is a set of points in general position",
+          "O is a point in the interior of conv(X)",
+          "L_0, ..., L_d are hyperplanes in general position",
+          "O ∉ L_0",
+          "x_i ∈ (∩_{j≠i} L_j^-) ∩ L_i^+"
+        ],
+        "extracted_conclusion": "O ∈ ∩_{i∈[d+1]} L_i^+ ⊂ conv(X)",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_541a3ed85d2ca44694dc69c8",
+          "alignment_pair_id": "align_a1ac2e10137f4eb39481cc28",
+          "paper_text_coverage": 0.32,
+          "lean_text_coverage": 0.3478,
+          "missing_assumptions": [
+            "L_0, ..., L_d are hyperplanes in general position"
+          ],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::lem_coro4",
+      "context_pack": {
+        "theorem_name": "lem_coro4",
+        "original_latex_theorem": "\\label{lem:coro4}\n\tLet $X=\\{x_0,\\dots, x_d\\}\\subset\\mathbb R^d$ be a set of points in general position, $O$ be a point in the interior of $conv(X)$ and $L_0,\\dots,L_d\\subset\\mathbb R^d$ be hyperplanes in general position. For each $i\\in[d+1]$, define $L_i^+$ as a closed halfspace bounded by $L_i$ that contains $O$ and define $L_i^-$ as the closure of its complement. Assume that $O\\not\\in L_0$ and\n\t\\begin{equation*}\n\t\tx_i\\in \\left(\\bigcap_{j\\neq i} L_j^-\\right)\\cap L_i^+.\n\t\\end{equation*}\n\tThen\n\t\\begin{equation*}\n\t\tO\\in\\bigcap_{i\\in[d+1]}L_i^+\\subsetconv(X).\n\t\\end{equation*}",
+        "source_file": "/tmp/desol_arxiv_cycle/2304.05535/expanded_source/arxiv.tex",
+        "source_span_id": "srcspan_7aa8b69416b9de4e1176",
+        "source_char_range": [
+          17038,
+          17639
+        ],
+        "statement_char_range": [
+          17049,
+          17629
+        ],
+        "source_line_range": [
+          242,
+          251
+        ],
+        "env_name": "lem",
+        "latex_label": "lem:coro4",
+        "section": "Definitions and main result statement",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{lem}\\label{lem:coro4} Let $X=\\{x_0,\\dots, x_d\\}\\subset\\mathbb R^d$ be a set of points in general position, $O$ be a point in the interior of $conv(X)$ and $L_0,\\dots,L_d\\subset\\mathbb R^d$ be hyperplanes in general position. For each $i\\in[d+1]$, define $L_i^+$ as a closed halfspace bounded by $L_i$ that contains $O$ and define $L_i^-$ as the closure of its complement. Assume that $O\\not\\in L_0$ and \\begin{equation*} x_i\\in \\left(\\bigcap_{j\\neq i} L_j^-\\right)\\cap L_i^+. \\end{equation*} Then \\begin{equation*} O\\in\\bigcap_{i\\in[d+1]}L_i^+\\subsetconv(X). \\end{equation*} \\end{lem}",
+        "definitions": [
+          "let $Q' = Q\\setminus\\{q_0,q_{d+1}\\}$ and let $H$ denote the hyperplane spanned by $Q'$.",
+          "Let $B_{d+1}$ the ball with center $Q_0$ bounded by $S_0$.",
+          "let $S_{d+1}$ be the circumsphere of $Q_{d+1}$ and let $B_{d+1}$ be the ball with center $O(Q_{d+1})$ bounded by $S_{d+1}$.",
+          "Let $X=\\{x_0,\\dots, x_d\\}\\subset\\mathbb R^d$ be a set of points in general position, $O$ be a point in the interior of $conv(X)$ and $L_0,\\dots,L_d\\subset\\mathbb R^d$ be hyperplanes in general position.",
+          "Assume that $O\\not\\in L_0$ and \\begin{equation*} x_i\\in \\left(\\bigcap_{j\\neq i} L_j^-\\right)\\cap L_i^+."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [],
+        "context_excerpt": "Paper glossary memory: - C: a cone - C_i: $(i - H: the hyperplane spanned by $Q'$ - L: a non-empty convex set - L_1: the Manhattan distance between the permutations $p = (n_0 - P: closer to $q_0$ than to $q_{d+1}$ - Q: closer to $p_i$ - X: a finite subset of $\\R^d$ - d: precisely $n$ - n: small compared to $d$ - y: contained in $L_j^+$ - y_i: in the interior of a cone - z: a convex combination of the $x_i$ with $i\\neq j$ Declared notation/macros: - \\newcommand{\\mathbb R}{\\mathbb R} - \\newcommand{\\norm}[1]{\\left\\lVert #1 \\right\\rVert} - \\newcommand{misaligned}{misaligned} - \\DeclareMathOperator{conv}{conv} - \\DeclareMathOperator{int}{int} Nearby source context: : \\begin{align*} O(P)&\\inconv(Q_{d+1}),\\\\ O(Q_{d+1})&\\inconv(P)\\text{ and}\\\\ O(Q_0)&\\inconv(P). \\end{align*} Now let $Q' = Q\\setminus\\{q_0,q_{d+1}\\}$ and let $H$ denote the hyperplane spanned by $Q'$. Next we prove that $q_0$ and $q_{d+1}$ must lie in the same open halfspace bounded by $H$. Consider the circumsphere $S_0$ of $Q_0$. Let $B_{d+1}$ the ball with center $Q_0$ bounded by $S_0$. Notice that $q_{d+1} \\in S_0$. Analogously, let $S_{d+1}$ be the circumsphere of $Q_{d+1}$ and let $B_{d+1}$ be the ball with center $O(Q_{d+1})$ bounded by $S_{d+1}$. Notice that $q_0 \\in S_{d+1}$. Since both $O(Q_{0})$ and $O(Q_{d+1})$ lie in $conv(P)$, part (\\ref{obs1}) of Observation \\ref{obs:dm} implies that both $O(Q_0)$ and $O(Q_{d+1})$ are closer to $q_0$ than to $q_{d+1}$. Therefore $q_0 \\in B_{0}$ and $q_{d+1} \\notin B_{d+1}$. This means that \\begin{align} q_{0} & \\in S_{d+1}\\cap B_{0},\\nonumber\\\\ q_{d+1} & \\in S_{0}\\setminus B_{d+1}\\label{eq:notin} \\end{align} and consequently $q_0$ and $q_{d+1}$ are on the same side of $H$ (see Figure~\\ref{fig:intersectingspheres}). \\begin{figure} \\begin{center} \\includegraphics{inte",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "unresolved_identifier_or_missing_paper_local_theory",
+          "status": "TRANSLATION_LIMITED",
+          "failure_kind": "missing_definition",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "identifiers_resolve_or_declared"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "X",
+            "O",
+            "L_0",
+            "L_d",
+            "L_i^+",
+            "L_i^-",
+            "conv(X)"
+          ],
+          "quantifiers": [
+            "for each i ∈ [d+1]",
+            "Let X = {x_0, ..., x_d}"
+          ],
+          "assumptions": [
+            "X is a set of points in general position",
+            "O is a point in the interior of conv(X)",
+            "L_0, ..., L_d are hyperplanes in general position",
+            "O ∉ L_0",
+            "x_i ∈ (∩_{j≠i} L_j^-) ∩ L_i^+"
+          ],
+          "claim": "O ∈ ∩_{i∈[d+1]} L_i^+ ⊂ conv(X)",
+          "symbols": [
+            "X",
+            "O",
+            "L_i",
+            "L_i^+",
+            "L_i^-",
+            "conv(X)",
+            "∩",
+            "∈",
+            "⊂"
+          ],
+          "constraints": [
+            "points in general position",
+            "hyperplanes in general position",
+            "O in interior of conv(X)",
+            "O ∉ L_0"
+          ],
+          "theorem_intent": "To show that O is contained in the intersection of all closed halfspaces L_i^+ and that this intersection is a subset of the convex hull of X."
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:hO_not_L0"
+      ],
+      "axiom_debt_hash": "686b01782ec4a3ad",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "4026a35ed57fdf81",
+      "source_span_id": "srcspan_7aa8b69416b9de4e1176"
+    },
+    {
+      "theorem_name": "prop_7",
+      "lean_file": "/home/projectx/BDDM/output/2304.05535.lean",
+      "lean_statement": "theorem prop_7 (d : ℕ) (h_d : d ≥ 4) :\n  ∃ P : Finset (Fin (d + 3) → ℝ),\n    P.card = d + 3 ∧\n    (∀ p ∈ P, ∀ q ∈ P, p ≠ q → ∃! r : ℝ, r = ‖p - q‖) ∧\n    (∀ (i j : Fin (d + 3)), (i, j) ∈ (Finset.univ.powersetCard 2 : Finset (Fin (d + 3) × Fin (d + 3))) →\n      (∀ (k l : Fin (d + 3)), (k, l) ∈ (Finset.univ.powersetCard 2 : Finset (Fin (d + 3) × Fin (d + 3))) →\n        ((k, l) ∈ (Finset.univ.powersetCard 2 : Finset (Fin (d + 3) × Fin (d + 3))).filter (fun x : Fin (d + 3) × Fin (d + 3) => x.1.val < d ∧ x.2.val < d) → (i, j) < (k, l)) ∧\n        ((i, j) ∈ (Finset.univ.powersetCard 2 : Finset (Fin (d + 3) × Fin (d + 3))).filter (fun x : Fin (d + 3) × Fin (d + 3) => x.1.val < d ∧ (x.2.val = d ∨ x.2.val = d + 1 ∨ x.2.val = d + 2)) → (k, l) ∈ (Finset.univ.powersetCard 2 : Finset (Fin (d + 3) × Fin (d + 3))) → (i, j) < (k, l))))",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h_d",
+          "lean_expr": "(h_d : d ≥ 4)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2304.05535",
+        "section": "",
+        "label": "prop_7",
+        "cited_refs": [
+          "ALON2014",
+          "AM22",
+          "BMS97",
+          "GIS2011",
+          "GUNTER96",
+          "SCHAEFER2013"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:claim_shape_mismatch:ineq->exists",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T15:48:33Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_f05a41a910f5a70489f6a7e7",
+      "canonical_theorem_id": "cth_3665444ec119db5871829d73",
+      "alignment_pair_id": "align_92d92742471c0305c1e7d21b",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "[Counterexample to Proposition 5 from \\cite{AM22}]\n\tLet $d\\ge 4$. Then there is a set $P=\\{p_0,\\dots,p_{d+2}\\}$ of points in $\\mathbb R^d$ in general position such that each pair of distinct points in $P$ defines a unique distance and the order that $P$ induces on $\\binom{[d+3]}{2}$ satisfies the following conditions:\n\t\\begin{enumerate}\n\t\t\\item for any $(i, j)\\in \\binom{[d]}{2}$ and $(k, l) \\in \\binom{[d+3]}{2} \\setminus \\binom{[d]}{2}$ we have $(k, l) < (i, j)$, and\n\t\t\\item for any $(i, j)\\in [d]\\times \\{d,d+1,d+2\\}$ and $(k, l) \\in \\binom{[d+3]}{2}\\setminus([d]\\times \\{d,d+1,d+2\\})$ we have $(i, j) < (k, l)$.\n\t\\end{enumerate}",
+        "normalized_natural_language_theorem": "Quantifiers: for any (i, j) in binomial([d], 2); for any (k, l) in binomial([d+3], 2) \\ {binomial([d], 2)}; for any (i, j) in [d] x {d, d+1, d+2}; for any (k, l) in binomial([d+3], 2) \\ ([d] x {d, d+1, d+2}) Assumptions: d >= 4 Conclusion: There exists a set P of d+3 points in R^d in general position such that each pair of distinct points defines a unique distance and the order induced on binomial([d+3], 2) satisfies the given conditions.",
+        "lean_statement": "theorem prop_7 (d : ℕ) (h_d : d ≥ 4) :\n  ∃ P : Finset (Fin (d + 3) → ℝ),\n    P.card = d + 3 ∧\n    (∀ p ∈ P, ∀ q ∈ P, p ≠ q → ∃! r : ℝ, r = ‖p - q‖) ∧\n    (∀ (i j : Fin (d + 3)), (i, j) ∈ (Finset.univ.powersetCard 2 : Finset (Fin (d + 3) × Fin (d + 3))) →\n      (∀ (k l : Fin (d + 3)), (k, l) ∈ (Finset.univ.powersetCard 2 : Finset (Fin (d + 3) × Fin (d + 3))) →\n        ((k, l) ∈ (Finset.univ.powersetCard 2 : Finset (Fin (d + 3) × Fin (d + 3))).filter (fun x : Fin (d + 3) × Fin (d + 3) => x.1.val < d ∧ x.2.val < d) → (i, j) < (k, l)) ∧\n        ((i, j) ∈ (Finset.univ.powersetCard 2 : Finset (Fin (d + 3) × Fin (d + 3))).filter (fun x : Fin (d + 3) × Fin (d + 3) => x.1.val < d ∧ (x.2.val = d ∨ x.2.val = d + 1 ∨ x.2.val = d + 2)) → (k, l) ∈ (Finset.univ.powersetCard 2 : Finset (Fin (d + 3) × Fin (d + 3))) → (i, j) < (k, l))))",
+        "extracted_assumptions": [
+          "d >= 4"
+        ],
+        "extracted_conclusion": "There exists a set P of d+3 points in R^d in general position such that each pair of distinct points defines a unique distance and the order induced on binomial([d+3], 2) satisfies the given conditions.",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "type_mismatch",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_f05a41a910f5a70489f6a7e7",
+          "alignment_pair_id": "align_92d92742471c0305c1e7d21b",
+          "paper_text_coverage": 0.3939,
+          "lean_text_coverage": 0.5,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "compatible",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::prop_7",
+      "context_pack": {
+        "theorem_name": "prop_7",
+        "original_latex_theorem": "[Counterexample to Proposition 5 from \\cite{AM22}]\n\tLet $d\\ge 4$. Then there is a set $P=\\{p_0,\\dots,p_{d+2}\\}$ of points in $\\mathbb R^d$ in general position such that each pair of distinct points in $P$ defines a unique distance and the order that $P$ induces on $\\binom{[d+3]}{2}$ satisfies the following conditions:\n\t\\begin{enumerate}\n\t\t\\item for any $(i, j)\\in \\binom{[d]}{2}$ and $(k, l) \\in \\binom{[d+3]}{2} \\setminus \\binom{[d]}{2}$ we have $(k, l) < (i, j)$, and\n\t\t\\item for any $(i, j)\\in [d]\\times \\{d,d+1,d+2\\}$ and $(k, l) \\in \\binom{[d+3]}{2}\\setminus([d]\\times \\{d,d+1,d+2\\})$ we have $(i, j) < (k, l)$.\n\t\\end{enumerate}",
+        "source_file": "/tmp/desol_arxiv_cycle/2304.05535/expanded_source/arxiv.tex",
+        "source_span_id": "srcspan_b7877a5a387ba35be3a1",
+        "source_char_range": [
+          19742,
+          20400
+        ],
+        "statement_char_range": [
+          19754,
+          20389
+        ],
+        "source_line_range": [
+          276,
+          282
+        ],
+        "env_name": "prop",
+        "latex_label": "",
+        "section": "Definitions and main result statement",
+        "cited_refs": [
+          "AM22"
+        ],
+        "exact_source_excerpt": "\\begin{prop}[Counterexample to Proposition 5 from \\cite{AM22}] Let $d\\ge 4$. Then there is a set $P=\\{p_0,\\dots,p_{d+2}\\}$ of points in $\\mathbb R^d$ in general position such that each pair of distinct points in $P$ defines a unique distance and the order that $P$ induces on $\\binom{[d+3]}{2}$ satisfies the following conditions: \\begin{enumerate} \\item for any $(i, j)\\in \\binom{[d]}{2}$ and $(k, l) \\in \\binom{[d+3]}{2} \\setminus \\binom{[d]}{2}$ we have $(k, l) < (i, j)$, and \\item for any $(i, j)\\in [d]\\times \\{d,d+1,d+2\\}$ and $(k, l) \\in \\binom{[d+3]}{2}\\setminus([d]\\times \\{d,d+1,d+2\\})$ we have $(i, j) < (k, l)$. \\end{enumerate} \\end{prop}",
+        "definitions": [
+          "assume $d>1$.",
+          "Let $L:=\\bigcap_{i\\in[d+1]} L_i^+$.",
+          "Assume to the contrary that there exists a point $y$ in $L$ with $y\\notin conv(X)$.",
+          "assume $y\\in int(L)$, since $L$ is a non-empty convex set, the hyperplanes $L_i$ are in general position (so $int(L)$ is not empty), and $conv(X)$ is closed.",
+          "Let $d\\ge 4$."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if $O,y\\in L_j$ which contradicts our choice of $y$."
+        ],
+        "nearby_claims": [
+          "Lemma \\ref{lem:circum}, $O(P)$ is contained in the interior of $conv(Q_{d+1})$ and therefore $O(P)\\not\\in H$.",
+          "Lemma \\ref{lem:coro4} with $O=O(P)$, $x_i=q_i$, $L_0=H$ and $L_i=M(p_{i-1},p_i)$ to conclude that $q_{d+1}\\inconv(Q_{d+1})\\subset B_{d+1}$, which contradicts \\eqref{eq:notin}.",
+          "theorem source span: \\begin{prop}[Counterexample to Proposition 5 from \\cite{AM22}] Let $d\\ge 4$."
+        ],
+        "context_excerpt": "Paper glossary memory: - C: a cone - C_i: $(i - H: the hyperplane spanned by $Q'$ - L: a non-empty convex set - L_1: the Manhattan distance between the permutations $p = (n_0 - P: closer to $q_0$ than to $q_{d+1}$ - Q: closer to $p_i$ - X: a finite subset of $\\R^d$ - d: precisely $n$ - n: small compared to $d$ - y: contained in $L_j^+$ - y_i: in the interior of a cone - z: a convex combination of the $x_i$ with $i\\neq j$ Declared notation/macros: - \\newcommand{\\mathbb R}{\\mathbb R} - \\newcommand{\\norm}[1]{\\left\\lVert #1 \\right\\rVert} - \\newcommand{misaligned}{misaligned} - \\DeclareMathOperator{conv}{conv} - \\DeclareMathOperator{int}{int} Nearby source context: f} The statement is trivial for $d=1$, so assume $d>1$. Let $L:=\\bigcap_{i\\in[d+1]} L_i^+$. Assume to the contrary that there exists a point $y$ in $L$ with $y\\notin conv(X)$. Note that we may assume $y\\in int(L)$, since $L$ is a non-empty convex set, the hyperplanes $L_i$ are in general position (so $int(L)$ is not empty), and $conv(X)$ is closed. As $y\\not\\inconv(X)$ but $O \\in conv(X)$, there exists a point $z\\in int(L)$ in the segment between $O$ and $y$ which lies in the boundary of $conv(X)$. Therefore there is some $j\\in[d+1]$ such that $z$ is a convex combination of the $x_i$ with $i\\neq j$. Since $x_i\\in L_j^-$ for $i\\neq j$, we conclude that $z\\in L_j^-$. But the segment between $O$ and $y$ is contained in $L_j^+$. The only way it can have a point, besides $O$ and $y$, in $L_j^-$ is if $O,y\\in L_j$ which contradicts our choice of $y$. \\end{proof} As consequence of Lemma \\ref{lem:circum}, $O(P)$ is contained in the interior of $conv(Q_{d+1})$ and therefore $O(P)\\not\\in H$. Then, we can apply Lemma \\ref{lem:coro4} with $O=O(P)$, $x_i=q_i$, $L_0=H$ and $L_i=M(p_{i-1},p_i)$ to conclude that $q_{d+1}\\inconv(Q",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "claim_shape_mismatch:ineq->exists",
+          "status": "FLAWED",
+          "failure_kind": "false_or_ambiguous_statement",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok",
+            "claim_equivalent"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "set P",
+            "points in R^d",
+            "general position",
+            "pair of distinct points",
+            "unique distance",
+            "order induced on binomial([d+3], 2)",
+            "conditions"
+          ],
+          "quantifiers": [
+            "for any (i, j) in binomial([d], 2)",
+            "for any (k, l) in binomial([d+3], 2) \\ {binomial([d], 2)}",
+            "for any (i, j) in [d] x {d, d+1, d+2}",
+            "for any (k, l) in binomial([d+3], 2) \\ ([d] x {d, d+1, d+2})"
+          ],
+          "assumptions": [
+            "d >= 4"
+          ],
+          "claim": "There exists a set P of d+3 points in R^d in general position such that each pair of distinct points defines a unique distance and the order induced on binomial([d+3], 2) satisfies the given conditions.",
+          "symbols": [
+            "d",
+            "P",
+            "R^d",
+            "binomial([d], 2)",
+            "binomial([d+3], 2)",
+            "[d]",
+            "[d+3]",
+            "<"
+          ],
+          "constraints": [],
+          "theorem_intent": "Counterexample to Proposition 5 from AM22"
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:claim_shape_mismatch"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "cda7b3bc32bd5fe6",
+      "source_span_id": "srcspan_b7877a5a387ba35be3a1"
+    }
+  ]
+}

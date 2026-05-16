@@ -774,7 +774,7 @@ def run_benchmark(
         seconds_per_problem=round(elapsed / n, 1),
         api_calls_per_problem=round(total_api_calls / n, 1),
         model=model,
-        retrieval_index=retrieval_index,
+        retrieval_index=retrieval_index_path,
         retrieval_top_k=retrieval_top_k,
         lean_timeout_s=lean_timeout,
         mode=mode,

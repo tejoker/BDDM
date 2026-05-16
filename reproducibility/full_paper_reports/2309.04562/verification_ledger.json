@@ -1,0 +1,2766 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-05-16T16:57:39Z",
+  "pipeline_commit": "af0e6ebcf7ed524339e7dffc1fc45937535c401d",
+  "toolchain_versions": {
+    "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
+    "python": "unknown",
+    "mistral_model": "labs-leanstral-2603"
+  },
+  "paper_id": "2309.04562",
+  "source_label": "2309.04562",
+  "prove_mode": "auto",
+  "model": "labs-leanstral-2603",
+  "entry_count": 9,
+  "compiler_feedback_repair_run_id": "arxiv_to_lean_2309.04562_1778950484_1935694",
+  "compiler_feedback_repair_run_dataset": "/home/projectx/BDDM/output/flywheel/runs/arxiv_to_lean_2309.04562_1778950484_1935694/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset_summary": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset_summary.json",
+  "entries": [
+    {
+      "theorem_name": "prop_span_symp_eigenvectors",
+      "lean_file": "/home/projectx/BDDM/output/2309.04562.lean",
+      "lean_statement": "theorem prop_span_symp_eigenvectors (A : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (d : ℝ) (k : ℕ) (u v : Fin k → ℝ) (alpha beta : Fin k → ℝ) (hA : IsSymplectic A) (hd : d > 0) (hEigen : ∀ i : Fin k, IsSymplecticEigenvectorPair A d (u i, v i)) (hNormalized : ∀ i : Fin k, (u i)^2 + (v i)^2 = 1) : IsSymplecticEigenvectorPair A d (∑ i : Fin k, (alpha i * u i + beta i * v i), ∑ i : Fin k, (-beta i * u i + alpha i * v i))",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "hA",
+          "lean_expr": "(hA : IsSymplectic A)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hd",
+          "lean_expr": "(hd : d > 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2309.04562",
+        "section": "",
+        "label": "prop:span_symp_eigenvectors",
+        "cited_refs": [
+          "Bhandari1985",
+          "HIAI2018129",
+          "adesso2004extremal",
+          "ando1989",
+          "arnold1989graduate",
+          "bhat2019real",
+          "bhatia2015symplectic",
+          "bhatia2020schur",
+          "bhatia_jain_2021",
+          "chen2005gaussian",
+          "degosson",
+          "dms",
+          "folland1989harmonic",
+          "friedland2015equality",
+          "hofer",
+          "horn1954doubly",
+          "horn2012matrix",
+          "hsiang2022entanglement",
+          "huang2023",
+          "huang_mishra",
+          "ikramov2018symplectic",
+          "incollection1",
+          "jain2021sums",
+          "jm",
+          "john2022interlacing",
+          "kato2013perturbation",
+          "krantz2002primer",
+          "lidskii1950characteristic",
+          "ma_bhatia",
+          "marshall1979inequalities",
+          "massey2014optimal",
+          "mishra2020first",
+          "mishra2023",
+          "nicacio2021williamson",
+          "p",
+          "paradan2022",
+          "preprint1",
+          "report1",
+          "schur1923uber",
+          "serafini2017quantum",
+          "simon1999congruences",
+          "son2021symplectic",
+          "thesis1",
+          "weyl_inequalities",
+          "wielandt1955",
+          "williamson1936algebraic"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_8988eab9.lean:9:82: error: unexpected token ')'; expected term",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T16:57:38Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_0ae58c558cf6f56c6865d079",
+      "canonical_theorem_id": "cth_d8481594103ef72c3ef8185c",
+      "alignment_pair_id": "align_be7e3604544bde7ce2bfde8b",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{prop:span_symp_eigenvectors}\n    Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$. \n    Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenvalue $d$. \n    Any non-zero pair of vectors $(u,v)$ of the form $u = \\sum_{\\ell=1}^k (\\alpha_\\ell u_\\ell+\\beta_\\ell v_\\ell)$ and $v=\\sum_{\\ell=1}^k (-\\beta_\\ell u_\\ell+\\alpha_\\ell v_\\ell)$ is also a symplectic eigenvector pair of $A$ corresponding to $d$.",
+        "normalized_natural_language_theorem": "Assumptions: \\label{prop:span_symp_eigenvectors} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$.; Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenvalue $d$. Conclusion: Any non-zero pair of vectors $(u,v)$ of the form $u = \\sum_{\\ell=1}^k (\\alpha_\\ell u_\\ell+\\beta_\\ell v_\\ell)$ and $v=\\sum_{\\ell=1}^k (-\\beta_\\ell u_\\ell+\\alpha_\\ell v_\\ell)$ is also a symplectic eigenvector pair of $A$ corresponding to $d$.",
+        "lean_statement": "theorem prop_span_symp_eigenvectors (A : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (d : ℝ) (k : ℕ) (u v : Fin k → ℝ) (alpha beta : Fin k → ℝ) (hA : IsSymplectic A) (hd : d > 0) (hEigen : ∀ i : Fin k, IsSymplecticEigenvectorPair A d (u i, v i)) (hNormalized : ∀ i : Fin k, (u i)^2 + (v i)^2 = 1) : IsSymplecticEigenvectorPair A d (∑ i : Fin k, (alpha i * u i + beta i * v i), ∑ i : Fin k, (-beta i * u i + alpha i * v i))",
+        "extracted_assumptions": [
+          "\\label{prop:span_symp_eigenvectors} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$.",
+          "Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenvalue $d$."
+        ],
+        "extracted_conclusion": "Any non-zero pair of vectors $(u,v)$ of the form $u = \\sum_{\\ell=1}^k (\\alpha_\\ell u_\\ell+\\beta_\\ell v_\\ell)$ and $v=\\sum_{\\ell=1}^k (-\\beta_\\ell u_\\ell+\\alpha_\\ell v_\\ell)$ is also a symplectic eigenvector pair of $A$ corresponding to $d$.",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_0ae58c558cf6f56c6865d079",
+          "alignment_pair_id": "align_be7e3604544bde7ce2bfde8b",
+          "paper_text_coverage": 0.1905,
+          "lean_text_coverage": 0.3636,
+          "missing_assumptions": [
+            "Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenvalue $d$."
+          ],
+          "added_assumptions": [
+            "hA: IsSymplectic A"
+          ],
+          "conclusion_relation": "compatible",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::prop_span_symp_eigenvectors",
+      "context_pack": {
+        "theorem_name": "prop_span_symp_eigenvectors",
+        "original_latex_theorem": "\\label{prop:span_symp_eigenvectors}\n    Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$. \n    Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenvalue $d$. \n    Any non-zero pair of vectors $(u,v)$ of the form $u = \\sum_{\\ell=1}^k (\\alpha_\\ell u_\\ell+\\beta_\\ell v_\\ell)$ and $v=\\sum_{\\ell=1}^k (-\\beta_\\ell u_\\ell+\\alpha_\\ell v_\\ell)$ is also a symplectic eigenvector pair of $A$ corresponding to $d$.",
+        "source_file": "/tmp/desol_arxiv_cycle/2309.04562/expanded_source/mishra_equality.tex",
+        "source_span_id": "srcspan_7aca400651c403d269a2",
+        "source_char_range": [
+          15760,
+          16321
+        ],
+        "statement_char_range": [
+          15779,
+          16303
+        ],
+        "source_line_range": [
+          282,
+          286
+        ],
+        "env_name": "proposition",
+        "latex_label": "prop:span_symp_eigenvectors",
+        "section": "Equality in symplectic Weyl's inequalities",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{proposition}\\label{prop:span_symp_eigenvectors} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$. Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenvalue $d$. Any non-zero pair of vectors $(u,v)$ of the form $u = \\sum_{\\ell=1}^k (\\alpha_\\ell u_\\ell+\\beta_\\ell v_\\ell)$ and $v=\\sum_{\\ell=1}^k (-\\beta_\\ell u_\\ell+\\alpha_\\ell v_\\ell)$ is also a symplectic eigenvector pair of $A$ corresponding to $d$. \\end{proposition}",
+        "definitions": [
+          "Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$.",
+          "Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $i,j \\in \\{1,\\ldots, n\\}$ be any indices such that $i+j-1 \\leq n$.",
+          "Let $\\mathbb{H}_n(\\mathbb{C})$ denote the set of $n \\times n$ complex Hermitian matrices.",
+          "let $\\lambda_1(X) \\geq \\cdots \\geq \\lambda_n(X)$ denote the eigenvalues of $X$ in the descending order.",
+          "Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if and only if there is a common eigenvector of $X$, $Y$, and $X+Y$ corresponding to their eigenvalues $\\lambda_i(X)$, $\\lambda_{j}(Y)$, and $\\lambda_{i+j-1}(X+Y)$.",
+          "Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenvalue $d$."
+        ],
+        "nearby_claims": [
+          "theorem statements: - \\label{prop:span_symp_eigenvectors} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$.",
+          "theorem source span: \\begin{proposition}\\label{prop:span_symp_eigenvectors} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$."
+        ],
+        "context_excerpt": "Paper glossary memory: - D: an $n\\times n$ diagonal matrix with positive diagonal entries $d_1(A) \\leq \\cdots \\leq d_n(A)$ - E: said to be a doubly stochastic matrix if its $(i - F: said to be a doubly superstochastic matrix % if its $(i - N: an orthosymplectic matrix - Q: a doubly superstochastic matrix if and only if there exists a doubly stochastic matrix $E$ such that $E_{ij} \\leq F - x: \\textit{ weakly supermajorized} by $y$ Nearby theorem statements: - \\label{prop:span_symp_eigenvectors} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$. Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenv - \\label{thm:symp_weyl_equalities} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $i,j \\in \\{1,\\ldots, n\\}$ be any indices such that $i+j-1 \\leq n$. Then the equality holds in \\eqref{symp_weyl_inequalities}, i.e., \\begin{equation}\\label{symp_weyl_equalities} d_{ Nearby source context: %%%%%%%%%%%%%%%%%% \\section{Equality in symplectic Weyl's inequalities}\\label{sec:symplectic_weyl_equality} Let $\\mathbb{H}_n(\\mathbb{C})$ denote the set of $n \\times n$ complex Hermitian matrices. For $X \\in \\mathbb{H}_n(\\mathbb{C})$, let $\\lambda_1(X) \\geq \\cdots \\geq \\lambda_n(X)$ denote the eigenvalues of $X$ in the descending order. The famous Weyl's eigenvalue inequalities \\cite{weyl_inequalities} for Hermitian matrices state that for any $X,Y \\in \\mathbb{H}_n(\\mathbb{C})$ and indices $i,j \\in \\{1,\\ldots, n\\}$ such that $i+j-1 \\leq n$, we have \\begin{align}\\label{weyl_inequalities} \\lambda_{i+j-1}(X+Y) \\leq \\lambda_i(X) + \\lambda_{j}(Y). \\end{align} See Section~III.2 of \\cite{ma_bhatia}. In the work of Massey~et al.~\\cite{massey2014optimal}, it was shown that the equality i",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_8988eab9.lean:9:82: error: unexpected token ')'; expected term",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "A",
+            "Any",
+            "Let",
+            "P",
+            "R",
+            "Suppose",
+            "a",
+            "alpha",
+            "also",
+            "and",
+            "are",
+            "be"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "\\label{prop:span_symp_eigenvectors} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$.",
+            "Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenvalue $d$."
+          ],
+          "claim": "Any non-zero pair of vectors $(u,v)$ of the form $u = \\sum_{\\ell=1}^k (\\alpha_\\ell u_\\ell+\\beta_\\ell v_\\ell)$ and $v=\\sum_{\\ell=1}^k (-\\beta_\\ell u_\\ell+\\alpha_\\ell v_\\ell)$ is also a symplectic eigenvector pair of $A$ corresponding to $d$.",
+          "symbols": [
+            "A",
+            "Any",
+            "Let",
+            "P",
+            "R",
+            "Suppose",
+            "a",
+            "alpha",
+            "also",
+            "and",
+            "are",
+            "be",
+            "beta",
+            "common",
+            "corresponding",
+            "d",
+            "eigenvalue",
+            "eigenvector",
+            "eigenvectors",
+            "ell",
+            "form",
+            "in",
+            "is",
+            "k"
+          ],
+          "constraints": [
+            "d>0"
+          ],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "u = \\sum_{\\ell=1}^k (\\alpha_\\ell u_\\ell+\\beta_\\ell v_\\ell)",
+            "v=\\sum_{\\ell=1}^k (-\\beta_\\ell u_\\ell+\\alpha_\\ell v_\\ell)"
+          ]
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "e58625257320763f",
+      "source_span_id": "srcspan_7aca400651c403d269a2"
+    },
+    {
+      "theorem_name": "thm_symp_weyl_equalities",
+      "lean_file": "/home/projectx/BDDM/output/2309.04562.lean",
+      "lean_statement": "theorem thm_symp_weyl_equalities {n : ℕ} (A B : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (i j : Fin n)\n    (hA : ∃ (D : Matrix (Fin n) (Fin n) ℝ) (N : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ),\n      A = NT * (Matrix.fromBlocks D (0 : Matrix (Fin n) (Fin n) ℝ) (0 : Matrix (Fin n) (Fin n) ℝ) D) * N ∧\n      Monotone (D.diag)) (hB : ∃ (D : Matrix (Fin n) (Fin n) ℝ) (N : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ),\n      B = NT * (Matrix.fromBlocks D (0 : Matrix (Fin n) (Fin n) ℝ) (0 : Matrix (Fin n) (Fin n) ℝ) D) * N ∧\n      Monotone (D.diag))\n    (hij : (i.val + j.val - 1) ≤ n) :\n    ∃ (dA : ℕ → ℝ) (dB : ℕ → ℝ) (dAB : ℕ → ℝ),\n      (∀ k, dA k ≤ dA (k + 1)) ∧ (∀ k, dB k ≤ dB (k + 1)) ∧ (∀ k, dAB k ≤ dAB (k + 1)) ∧\n      dAB (i.val + j.val - 1) = dA i.val + dB j.val ↔\n    ∃ (u v : Fin (2 * n) → ℝ), ∃ (dA : ℕ → ℝ) (dB : ℕ → ℝ) (dAB : ℕ → ℝ),\n      (∀ k, dA k ≤ dA (k + 1)) ∧ (∀ k, dB k ≤ dB (k + 1)) ∧ (∀ k, dAB k ≤ dAB (k + 1)) ∧\n      (A.mulVec u = (dA i.val • u : Fin (2 * n) → ℝ) ∧ A.mulVec v = (dA i.val • v : Fin (2 * n) → ℝ)) ∧\n      (B.mulVec u = (dB j.val • u : Fin (2 * n) → ℝ) ∧ B.mulVec v = (dB j.val • v : Fin (2 * n) → ℝ)) ∧\n      ((A + B).mulVec u = (dAB (i.val + j.val - 1) • u : Fin (2 * n) → ℝ) ∧ (A + B).mulVec v = (dAB (i.val + j.val - 1) • v : Fin (2 * n) → ℝ))",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2309.04562",
+        "section": "",
+        "label": "thm:symp_weyl_equalities",
+        "cited_refs": [
+          "Bhandari1985",
+          "HIAI2018129",
+          "adesso2004extremal",
+          "ando1989",
+          "arnold1989graduate",
+          "bhat2019real",
+          "bhatia2015symplectic",
+          "bhatia2020schur",
+          "bhatia_jain_2021",
+          "chen2005gaussian",
+          "degosson",
+          "dms",
+          "folland1989harmonic",
+          "friedland2015equality",
+          "hofer",
+          "horn1954doubly",
+          "horn2012matrix",
+          "hsiang2022entanglement",
+          "huang2023",
+          "huang_mishra",
+          "ikramov2018symplectic",
+          "incollection1",
+          "jain2021sums",
+          "jm",
+          "john2022interlacing",
+          "kato2013perturbation",
+          "krantz2002primer",
+          "lidskii1950characteristic",
+          "ma_bhatia",
+          "marshall1979inequalities",
+          "massey2014optimal",
+          "mishra2020first",
+          "mishra2023",
+          "nicacio2021williamson",
+          "p",
+          "paradan2022",
+          "preprint1",
+          "report1",
+          "schur1923uber",
+          "serafini2017quantum",
+          "simon1999congruences",
+          "son2021symplectic",
+          "thesis1",
+          "weyl_inequalities",
+          "wielandt1955",
+          "williamson1936algebraic"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: e fully determined before Lean will try to resolve the typeclass.\n\nHint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T16:57:38Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_c5d82f8f521dc71658994afc",
+      "canonical_theorem_id": "cth_2ae123b4e105fb4c1ab55028",
+      "alignment_pair_id": "align_ffc9372fd519b555ea49d7f1",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{thm:symp_weyl_equalities}\n    Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $i,j \\in \\{1,\\ldots, n\\}$ be any indices such that $i+j-1 \\leq n$. \n    Then the equality holds in \\eqref{symp_weyl_inequalities}, i.e.,\n    \\begin{equation}\\label{symp_weyl_equalities}\n        d_{i+j-1}(A+B) = d_i(A) + d_j(B),\n    \\end{equation}\n    if and only if there exists a common normalized symplectic eigenvector pair of $A$, $B$, and $A+B$ corresponding to their symplectic eigenvalues $d_i(A)$, $d_j(B)$, and $d_{i+j-1}(A+B)$.",
+        "normalized_natural_language_theorem": "Quantifiers: any indices Assumptions: A, B ∈ P_{2n}(R); i, j ∈ {1, ..., n}; i + j - 1 ≤ n Conclusion: d_{i+j-1}(A+B) = d_i(A) + d_j(B) if and only if there exists a common normalized symplectic eigenvector pair of A, B, and A+B corresponding to their symplectic eigenvalues d_i(A), d_j(B), and d_{i+j-1}(A+B)",
+        "lean_statement": "theorem thm_symp_weyl_equalities {n : ℕ} (A B : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (i j : Fin n)\n    (hA : ∃ (D : Matrix (Fin n) (Fin n) ℝ) (N : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ),\n      A = NT * (Matrix.fromBlocks D (0 : Matrix (Fin n) (Fin n) ℝ) (0 : Matrix (Fin n) (Fin n) ℝ) D) * N ∧\n      Monotone (D.diag)) (hB : ∃ (D : Matrix (Fin n) (Fin n) ℝ) (N : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ),\n      B = NT * (Matrix.fromBlocks D (0 : Matrix (Fin n) (Fin n) ℝ) (0 : Matrix (Fin n) (Fin n) ℝ) D) * N ∧\n      Monotone (D.diag))\n    (hij : (i.val + j.val - 1) ≤ n) :\n    ∃ (dA : ℕ → ℝ) (dB : ℕ → ℝ) (dAB : ℕ → ℝ),\n      (∀ k, dA k ≤ dA (k + 1)) ∧ (∀ k, dB k ≤ dB (k + 1)) ∧ (∀ k, dAB k ≤ dAB (k + 1)) ∧\n      dAB (i.val + j.val - 1) = dA i.val + dB j.val ↔\n    ∃ (u v : Fin (2 * n) → ℝ), ∃ (dA : ℕ → ℝ) (dB : ℕ → ℝ) (dAB : ℕ → ℝ),\n      (∀ k, dA k ≤ dA (k + 1)) ∧ (∀ k, dB k ≤ dB (k + 1)) ∧ (∀ k, dAB k ≤ dAB (k + 1)) ∧\n      (A.mulVec u = (dA i.val • u : Fin (2 * n) → ℝ) ∧ A.mulVec v = (dA i.val • v : Fin (2 * n) → ℝ)) ∧\n      (B.mulVec u = (dB j.val • u : Fin (2 * n) → ℝ) ∧ B.mulVec v = (dB j.val • v : Fin (2 * n) → ℝ)) ∧\n      ((A + B).mulVec u = (dAB (i.val + j.val - 1) • u : Fin (2 * n) → ℝ) ∧ (A + B).mulVec v = (dAB (i.val + j.val - 1) • v : Fin (2 * n) → ℝ))",
+        "extracted_assumptions": [
+          "A, B ∈ P_{2n}(R)",
+          "i, j ∈ {1, ..., n}",
+          "i + j - 1 ≤ n"
+        ],
+        "extracted_conclusion": "d_{i+j-1}(A+B) = d_i(A) + d_j(B) if and only if there exists a common normalized symplectic eigenvector pair of A, B, and A+B corresponding to their symplectic eigenvalues d_i(A), d_j(B), and d_{i+j-1}(A+B)",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_c5d82f8f521dc71658994afc",
+          "alignment_pair_id": "align_ffc9372fd519b555ea49d7f1",
+          "paper_text_coverage": 0.2692,
+          "lean_text_coverage": 0.2333,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "compatible",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::thm_symp_weyl_equalities",
+      "context_pack": {
+        "theorem_name": "thm_symp_weyl_equalities",
+        "original_latex_theorem": "\\label{thm:symp_weyl_equalities}\n    Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $i,j \\in \\{1,\\ldots, n\\}$ be any indices such that $i+j-1 \\leq n$. \n    Then the equality holds in \\eqref{symp_weyl_inequalities}, i.e.,\n    \\begin{equation}\\label{symp_weyl_equalities}\n        d_{i+j-1}(A+B) = d_i(A) + d_j(B),\n    \\end{equation}\n    if and only if there exists a common normalized symplectic eigenvector pair of $A$, $B$, and $A+B$ corresponding to their symplectic eigenvalues $d_i(A)$, $d_j(B)$, and $d_{i+j-1}(A+B)$.",
+        "source_file": "/tmp/desol_arxiv_cycle/2309.04562/expanded_source/mishra_equality.tex",
+        "source_span_id": "srcspan_b197471cba4b5a7987c4",
+        "source_char_range": [
+          17123,
+          17674
+        ],
+        "statement_char_range": [
+          17138,
+          17659
+        ],
+        "source_line_range": [
+          301,
+          308
+        ],
+        "env_name": "theorem",
+        "latex_label": "thm:symp_weyl_equalities",
+        "section": "Equality in symplectic Weyl's inequalities",
+        "cited_refs": [
+          "symp_weyl_inequalities"
+        ],
+        "exact_source_excerpt": "\\begin{theorem}\\label{thm:symp_weyl_equalities} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $i,j \\in \\{1,\\ldots, n\\}$ be any indices such that $i+j-1 \\leq n$. Then the equality holds in \\eqref{symp_weyl_inequalities}, i.e., \\begin{equation}\\label{symp_weyl_equalities} d_{i+j-1}(A+B) = d_i(A) + d_j(B), \\end{equation} if and only if there exists a common normalized symplectic eigenvector pair of $A$, $B$, and $A+B$ corresponding to their symplectic eigenvalues $d_i(A)$, $d_j(B)$, and $d_{i+j-1}(A+B)$. \\end{theorem}",
+        "definitions": [
+          "Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$.",
+          "Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $i,j \\in \\{1,\\ldots, n\\}$ be any indices such that $i+j-1 \\leq n$.",
+          "Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$.",
+          "Let $(u,v)$ be a pair of non-zero vectors in the given form.",
+          "Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $i,j \\in \\{1,\\ldots, n\\}$ be any indices such that $i+j-1 \\leq n$."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenvalue $d$.",
+          "if there exists a common normalized symplectic eigenvector pair of $A$, $B$, and $A+B$ corresponding to their symplectic eigenvalues $d_i(A)$, $d_j(B)$, and $d_{i+j-1}(A+B)$."
+        ],
+        "nearby_claims": [
+          "theorem statements: - \\label{prop:span_symp_eigenvectors} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$.",
+          "proposition}\\label{prop:span_symp_eigenvectors} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$.",
+          "proposition} %----------------------------------------------------------------------------------------------------------------------% \\begin{proof} Let $(u,v)$ be a pair of non-zero vectors in the given form.",
+          "theorem source span: \\begin{theorem}\\label{thm:symp_weyl_equalities} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $i,j \\in \\{1,\\ldots, n\\}$ be any indices such that $i+j-1 \\leq n$."
+        ],
+        "context_excerpt": "Paper glossary memory: - D: an $n\\times n$ diagonal matrix with positive diagonal entries $d_1(A) \\leq \\cdots \\leq d_n(A)$ - E: said to be a doubly stochastic matrix if its $(i - F: said to be a doubly superstochastic matrix % if its $(i - N: an orthosymplectic matrix - Q: a doubly superstochastic matrix if and only if there exists a doubly stochastic matrix $E$ such that $E_{ij} \\leq F - x: \\textit{ weakly supermajorized} by $y$ Nearby theorem statements: - \\label{prop:span_symp_eigenvectors} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$. Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenv - \\label{thm:symp_weyl_equalities} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $i,j \\in \\{1,\\ldots, n\\}$ be any indices such that $i+j-1 \\leq n$. Then the equality holds in \\eqref{symp_weyl_inequalities}, i.e., \\begin{equation}\\label{symp_weyl_equalities} d_{ Nearby source context: \\end{align} In this section, we derive a necessary and sufficient condition for the equality to hold in \\eqref{symp_weyl_inequalities}. Interestingly, the condition obtained is analogous to that of the eigenvalues. The following observation will be useful in proving the main result of the section. %----------------------------------------------------------------------------------------------------------------------% \\begin{proposition}\\label{prop:span_symp_eigenvectors} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and let $d>0$ be a symplectic eigenvalue of $A$. Suppose $(u_1,v_1),\\ldots, (u_k, v_k)$ are normalized symplectic eigenvector pairs of $A$ corresponding to the common symplectic eigenvalue $d$. Any non-zero pair of vectors $(u,v)$ of the form $u = \\sum_{\\ell=1}^k (\\alpha_\\el",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: e fully determined before Lean will try to resolve the typeclass.\n\nHint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "A",
+            "B",
+            "i",
+            "j",
+            "d_{i+j-1}(A+B)",
+            "d_i(A)",
+            "d_j(B)"
+          ],
+          "quantifiers": [
+            "any indices"
+          ],
+          "assumptions": [
+            "A, B ∈ P_{2n}(R)",
+            "i, j ∈ {1, ..., n}",
+            "i + j - 1 ≤ n"
+          ],
+          "claim": "d_{i+j-1}(A+B) = d_i(A) + d_j(B) if and only if there exists a common normalized symplectic eigenvector pair of A, B, and A+B corresponding to their symplectic eigenvalues d_i(A), d_j(B), and d_{i+j-1}(A+B)",
+          "symbols": [
+            "P_{2n}(R)",
+            "d_{i+j-1}(A+B)",
+            "d_i(A)",
+            "d_j(B)",
+            "J"
+          ],
+          "constraints": [
+            "i + j - 1 ≤ n"
+          ],
+          "theorem_intent": "characterization of equality condition in symplectic Weyl inequality"
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "3241dc749d8174c3",
+      "source_span_id": "srcspan_b197471cba4b5a7987c4"
+    },
+    {
+      "theorem_name": "thm_equality_sym_lidskii_inequalities",
+      "lean_file": "/home/projectx/BDDM/output/2309.04562.lean",
+      "lean_statement": "theorem thm_equality_sym_lidskii_inequalities (A B : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (i : Fin k → Fin n) (k n : ℕ) (hA : 0 < n) (hk : 0 < k) (hi : StrictMono i) (hi_bound : ∀ j, i j < n) : (∑ j, d (i j) (A + B) = ∑ j, d (i j) A + ∑ j, d j B) ↔ (∀ t ∈ Set.Icc 0 1, ∑ j, d (i j) (A + t • B) = ∑ j, d (i j) A + t * ∑ j, d j B) ∧ (∃ a : Fin (r + 1) → ℝ, StrictMono a ∧ a 0 = 0 ∧ a r = 1 ∧ ∀ ℓ, ∀ t ∈ Set.Ioo (a (ℓ - 1)) (a ℓ), ∃ M : Matrix (Fin (2 * n)) (Fin (2 * k)) ℝ, IsSymplectic M ∧ (∀ j, d (i j) (A + t • B) = d (i j) (M^T * (A + t • B) * M)) ∧ Matrix.trace (M^T * A * M) = 2 * ∑ j, d (i j) A ∧ Matrix.trace (M^T * B * M) = 2 * ∑ j, d j B)",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "hA",
+          "lean_expr": "(hA : 0 < n)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hk",
+          "lean_expr": "(hk : 0 < k)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hi",
+          "lean_expr": "(hi : StrictMono i)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hi_bound",
+          "lean_expr": "(hi_bound : ∀ j, i j < n)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2309.04562",
+        "section": "",
+        "label": "thm:equality-sym-lidskii-inequalities",
+        "cited_refs": [
+          "Bhandari1985",
+          "HIAI2018129",
+          "adesso2004extremal",
+          "ando1989",
+          "arnold1989graduate",
+          "bhat2019real",
+          "bhatia2015symplectic",
+          "bhatia2020schur",
+          "bhatia_jain_2021",
+          "chen2005gaussian",
+          "degosson",
+          "dms",
+          "folland1989harmonic",
+          "friedland2015equality",
+          "hofer",
+          "horn1954doubly",
+          "horn2012matrix",
+          "hsiang2022entanglement",
+          "huang2023",
+          "huang_mishra",
+          "ikramov2018symplectic",
+          "incollection1",
+          "jain2021sums",
+          "jm",
+          "john2022interlacing",
+          "kato2013perturbation",
+          "krantz2002primer",
+          "lidskii1950characteristic",
+          "ma_bhatia",
+          "marshall1979inequalities",
+          "massey2014optimal",
+          "mishra2020first",
+          "mishra2023",
+          "nicacio2021williamson",
+          "p",
+          "paradan2022",
+          "preprint1",
+          "report1",
+          "schur1923uber",
+          "serafini2017quantum",
+          "simon1999congruences",
+          "son2021symplectic",
+          "thesis1",
+          "weyl_inequalities",
+          "wielandt1955",
+          "williamson1936algebraic"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:claim_shape_mismatch:exists->iff",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T16:57:38Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_a174c6dffbc64a966a01d0b4",
+      "canonical_theorem_id": "cth_a092561fe897258e0f58782e",
+      "alignment_pair_id": "align_9a8d7eefc76622f04ac95527",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{thm:equality-sym-lidskii-inequalities}\n    Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices. \n    The following statements are equivalent:\n    \\begin{itemize}\n\t\\item [(i)] \n\t\tThe equality in \\eqref{eq:sym-lidskii-inequality} holds, that is,\n\t\t\\begin{align}\\label{eq:sym-lidskii-equality}\n    \t\t\t\\sum_{j=1}^{k} d_{i_j}(A+B) = \\sum_{j=1}^{k} d_{i_j}(A)+\\sum_{j=1}^{k} d_{j}(B).\n\t\t\\end{align}\n\t\\item [(ii)] \n\t\tFor all $t \\in [0,1]$, we have\n\t\t\\begin{align}\\label{eq:sym:lidskii-linear}\n          \t\t\\sum_{j=1}^{k} d_{i_j}(A+tB) = \\sum_{j=1}^{k} d_{i_j}(A)+t\\sum_{j=1}^{k} d_{j}(B).\n\t\t\\end{align} \n\t\\item [(iii)] \n\t\tThere exist positive numbers $0=a_0<a_1<\\cdots < a_r=1$ such that the following properties hold:\n\t\tfor all $\\ell \\in \\{1,\\ldots, r\\}$ and $t \\in (a_{\\ell-1}, a_\\ell)$, there exists $M(t) \\in \\operatorname{Sp}(2n, 2k)$ \tsuch that the columns of $M(t)$ form symplectic eigenvector pairs of $A+t B$ corresponding to the symplectic eigenvalues $d_{i_1}(A+t B), \\ldots, d_{i_k}(A+t B)$, and it satisfies \n\t\t\\begin{align}\n           \t\t\\operatorname{Tr}\\! \\left[M(t)^T A M(t) \\right]\n\t\t\t\t&= 2\\sum_{j=1}^{k} d_{i_j}(A), \\label{eq1:conditions-equality-sym-lidskii} \\\\\n          \t\t\\operatorname{Tr}\\!\\left[M(t)^T B M(t) \\right]\n\t\t\t\t&=2\\sum_{j=1}^{k} d_{j}(B). \\label{eq2:conditions-equality-sym-lidskii}\n\t\t\\end{align} \n    \\end{itemize}",
+        "normalized_natural_language_theorem": "Quantifiers: forall; exists Assumptions: \\label{thm:equality-sym-lidskii-inequalities} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices.; \\end{align} \\item [(ii)] For all $t \\in [0,1]$, we have \\begin{align}\\label{eq:sym:lidskii-linear} \\sum_{j=1}^{k} d_{i_j}(A+tB) = \\sum_{j=1}^{k} d_{i_j}(A)+t\\sum_{j=1}^{k} d_{j}(B).; \\end{align} \\item [(iii)] There exist positive numbers $0=a_0<a_1<\\cdots < a_r=1$ such that the following properties hold: for all $\\ell \\in \\{1,\\ldots, r\\}$ and $t \\in (a_{\\ell-1}, a_\\ell)$, there exists $M(t) \\in \\operatorname{Sp}(2n, 2k)$ such that the columns of $M(t)$ form symplectic eigenvector pairs of $A+t B$ corresponding to the symplectic eigenvalues $d_{i_1}(A+t B), \\ldots, d_{i_k}(A+t B)$, and it satisfies \\begin{align} \\operatorname{Tr}\\! \\left[M(t)^T A M(t) \\right] &= 2\\sum_{j=1}^{k} d_{i_j}(A), \\label{eq1:conditions-equality-sym-lidskii} \\\\ \\operatorname{Tr}\\!\\left[M(t)^T B M(t) \\right] &=2\\sum_{j=1}^{k} d_{j}(B). Conclusion: The following statements are equivalent: \\begin{itemize} \\item [(i)] The equality in \\eqref{eq:sym-lidskii-inequality} holds, that is, \\begin{align}\\label{eq:sym-lidskii-equality} \\sum_{j=1}^{k} d_{i_j}(A+B) = \\sum_{j=1}^{k} d_{i_j}(A)+\\sum_{j=1}^{k} d_{j}(B). \\label{eq2:conditions-equality-sym-lidskii} \\end{align} \\end{itemize}",
+        "lean_statement": "theorem thm_equality_sym_lidskii_inequalities (A B : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (i : Fin k → Fin n) (k n : ℕ) (hA : 0 < n) (hk : 0 < k) (hi : StrictMono i) (hi_bound : ∀ j, i j < n) : (∑ j, d (i j) (A + B) = ∑ j, d (i j) A + ∑ j, d j B) ↔ (∀ t ∈ Set.Icc 0 1, ∑ j, d (i j) (A + t • B) = ∑ j, d (i j) A + t * ∑ j, d j B) ∧ (∃ a : Fin (r + 1) → ℝ, StrictMono a ∧ a 0 = 0 ∧ a r = 1 ∧ ∀ ℓ, ∀ t ∈ Set.Ioo (a (ℓ - 1)) (a ℓ), ∃ M : Matrix (Fin (2 * n)) (Fin (2 * k)) ℝ, IsSymplectic M ∧ (∀ j, d (i j) (A + t • B) = d (i j) (M^T * (A + t • B) * M)) ∧ Matrix.trace (M^T * A * M) = 2 * ∑ j, d (i j) A ∧ Matrix.trace (M^T * B * M) = 2 * ∑ j, d j B)",
+        "extracted_assumptions": [
+          "\\label{thm:equality-sym-lidskii-inequalities} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices.",
+          "\\end{align} \\item [(ii)] For all $t \\in [0,1]$, we have \\begin{align}\\label{eq:sym:lidskii-linear} \\sum_{j=1}^{k} d_{i_j}(A+tB) = \\sum_{j=1}^{k} d_{i_j}(A)+t\\sum_{j=1}^{k} d_{j}(B).",
+          "\\end{align} \\item [(iii)] There exist positive numbers $0=a_0<a_1<\\cdots < a_r=1$ such that the following properties hold: for all $\\ell \\in \\{1,\\ldots, r\\}$ and $t \\in (a_{\\ell-1}, a_\\ell)$, there exists $M(t) \\in \\operatorname{Sp}(2n, 2k)$ such that the columns of $M(t)$ form symplectic eigenvector pairs of $A+t B$ corresponding to the symplectic eigenvalues $d_{i_1}(A+t B), \\ldots, d_{i_k}(A+t B)$, and it satisfies \\begin{align} \\operatorname{Tr}\\! \\left[M(t)^T A M(t) \\right] &= 2\\sum_{j=1}^{k} d_{i_j}(A), \\label{eq1:conditions-equality-sym-lidskii} \\\\ \\operatorname{Tr}\\!\\left[M(t)^T B M(t) \\right] &=2\\sum_{j=1}^{k} d_{j}(B)."
+        ],
+        "extracted_conclusion": "The following statements are equivalent: \\begin{itemize} \\item [(i)] The equality in \\eqref{eq:sym-lidskii-inequality} holds, that is, \\begin{align}\\label{eq:sym-lidskii-equality} \\sum_{j=1}^{k} d_{i_j}(A+B) = \\sum_{j=1}^{k} d_{i_j}(A)+\\sum_{j=1}^{k} d_{j}(B). \\label{eq2:conditions-equality-sym-lidskii} \\end{align} \\end{itemize}",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_a174c6dffbc64a966a01d0b4",
+          "alignment_pair_id": "align_9a8d7eefc76622f04ac95527",
+          "paper_text_coverage": 0.1646,
+          "lean_text_coverage": 0.4483,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "compatible",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::thm_equality_sym_lidskii_inequalities",
+      "context_pack": {
+        "theorem_name": "thm_equality_sym_lidskii_inequalities",
+        "original_latex_theorem": "\\label{thm:equality-sym-lidskii-inequalities}\n    Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices. \n    The following statements are equivalent:\n    \\begin{itemize}\n\t\\item [(i)] \n\t\tThe equality in \\eqref{eq:sym-lidskii-inequality} holds, that is,\n\t\t\\begin{align}\\label{eq:sym-lidskii-equality}\n    \t\t\t\\sum_{j=1}^{k} d_{i_j}(A+B) = \\sum_{j=1}^{k} d_{i_j}(A)+\\sum_{j=1}^{k} d_{j}(B).\n\t\t\\end{align}\n\t\\item [(ii)] \n\t\tFor all $t \\in [0,1]$, we have\n\t\t\\begin{align}\\label{eq:sym:lidskii-linear}\n          \t\t\\sum_{j=1}^{k} d_{i_j}(A+tB) = \\sum_{j=1}^{k} d_{i_j}(A)+t\\sum_{j=1}^{k} d_{j}(B).\n\t\t\\end{align} \n\t\\item [(iii)] \n\t\tThere exist positive numbers $0=a_0<a_1<\\cdots < a_r=1$ such that the following properties hold:\n\t\tfor all $\\ell \\in \\{1,\\ldots, r\\}$ and $t \\in (a_{\\ell-1}, a_\\ell)$, there exists $M(t) \\in \\operatorname{Sp}(2n, 2k)$ \tsuch that the columns of $M(t)$ form symplectic eigenvector pairs of $A+t B$ corresponding to the symplectic eigenvalues $d_{i_1}(A+t B), \\ldots, d_{i_k}(A+t B)$, and it satisfies \n\t\t\\begin{align}\n           \t\t\\operatorname{Tr}\\! \\left[M(t)^T A M(t) \\right]\n\t\t\t\t&= 2\\sum_{j=1}^{k} d_{i_j}(A), \\label{eq1:conditions-equality-sym-lidskii} \\\\\n          \t\t\\operatorname{Tr}\\!\\left[M(t)^T B M(t) \\right]\n\t\t\t\t&=2\\sum_{j=1}^{k} d_{j}(B). \\label{eq2:conditions-equality-sym-lidskii}\n\t\t\\end{align} \n    \\end{itemize}",
+        "source_file": "/tmp/desol_arxiv_cycle/2309.04562/expanded_source/mishra_equality.tex",
+        "source_span_id": "srcspan_525ba327b70d4cdb5059",
+        "source_char_range": [
+          25701,
+          27131
+        ],
+        "statement_char_range": [
+          25716,
+          27117
+        ],
+        "source_line_range": [
+          405,
+          429
+        ],
+        "env_name": "theorem",
+        "latex_label": "thm:equality-sym-lidskii-inequalities",
+        "section": "Equality in symplectic Lidskii's inequalities",
+        "cited_refs": [
+          "eq:sym-lidskii-inequality"
+        ],
+        "exact_source_excerpt": "\\begin{theorem}\\label{thm:equality-sym-lidskii-inequalities} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices. The following statements are equivalent: \\begin{itemize} \\item [(i)] The equality in \\eqref{eq:sym-lidskii-inequality} holds, that is, \\begin{align}\\label{eq:sym-lidskii-equality} \\sum_{j=1}^{k} d_{i_j}(A+B) = \\sum_{j=1}^{k} d_{i_j}(A)+\\sum_{j=1}^{k} d_{j}(B). \\end{align} \\item [(ii)] For all $t \\in [0,1]$, we have \\begin{align}\\label{eq:sym:lidskii-linear} \\sum_{j=1}^{k} d_{i_j}(A+tB) = \\sum_{j=1}^{k} d_{i_j}(A)+t\\sum_{j=1}^{k} d_{j}(B). \\end{align} \\item [(iii)] There exist positive numbers $0=a_0<a_1<\\cdots < a_r=1$ such that the following properties hold: for all $\\ell \\in \\{1,\\ldots, r\\}$ and $t \\in (a_{\\ell-1}, a_\\ell)$, there exists $M(t) \\in \\operatorname{Sp}(2n, 2k)$ such that the columns of $M(t)$ form symplectic eigenvector pairs of $A+t B$ corresponding to the symplectic eigenvalues $d_{i_1}(A+t B), \\ldots, d_{i_k}(A+t B)$, and it satisfies \\begin{align} \\operatorname{Tr}\\! \\left[M(t)^T A M(t) \\right] &= 2\\sum_{j=1}^{k} d_{i_j}(A), \\label{eq1:conditions-equality-sym-lidskii} \\\\ \\operatorname{Tr}\\!\\left[M(t)^T B M(t) \\right] &=2\\sum_{j=1}^{k} d_{j}(B). \\label{eq2:conditions-equality-sym-lidskii} \\end{align} \\end{itemize} \\end{theorem}",
+        "definitions": [
+          "Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices.",
+          "Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "theorem statements: - \\label{thm:equality-sym-lidskii-inequalities} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices.",
+          "Proposition~\\ref{prop:span_symp_eigenvectors} that $(x, x')$ is a normalized symplectic eigenvector pair of $A$ corresponding to the symplectic eigenvalue $d_i(A)$.",
+          "theorem states necess Exact theorem source span: \\begin{theorem}\\label{thm:equality-sym-lidskii-inequalities} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices."
+        ],
+        "context_excerpt": "Paper glossary memory: - D: an $n\\times n$ diagonal matrix with positive diagonal entries $d_1(A) \\leq \\cdots \\leq d_n(A)$ - E: said to be a doubly stochastic matrix if its $(i - F: said to be a doubly superstochastic matrix % if its $(i - N: an orthosymplectic matrix - Q: a doubly superstochastic matrix if and only if there exists a doubly stochastic matrix $E$ such that $E_{ij} \\leq F - x: \\textit{ weakly supermajorized} by $y$ Nearby theorem statements: - \\label{thm:equality-sym-lidskii-inequalities} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices. The following statements are equivalent: \\begin{itemize} \\item [(i)] The equality in \\eqref{eq:sym-lidskii- Nearby source context: n follows from Proposition~\\ref{prop:span_symp_eigenvectors} that $(x, x')$ is a normalized symplectic eigenvector pair of $A$ corresponding to the symplectic eigenvalue $d_i(A)$. A similar argument shows that $(x,x')$ is a normalized symplectic eigenvector pair of $B$ corresponding to the symplectic eigenvalue $d_j(B)$. \\end{proof} %----------------------------------------------------------------------------------------------------------------------% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \\section{Equality in symplectic Lidskii's inequalities}\\label{sec:symplectic_lidskii_equalities} The well-known Lidskii's inequalities \\cite{lidskii1950characteristic, wielandt1955} for eigenvalues are given as follows: for any $X,Y \\in \\mathbb{H}_n(\\mathbb{C})$ and distinct indices $1 \\leq i_1 < \\cdots < i_k \\leq n$, we have \\begin{align}\\label{eq:lidskii-inequality} \\sum_{j=1}^{k} \\lambda_{i_j}(X+Y) \\leq \\sum_{j=1}^{k} \\lambda_{i_j}(X)+\\sum_{j=1}^{k} \\lambda_{j}(Y). \\end{align} A symplectic analog of the Lidskii's inequalities was gi",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "claim_shape_mismatch:exists->iff",
+          "status": "FLAWED",
+          "failure_kind": "false_or_ambiguous_statement",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok",
+            "claim_equivalent"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "A",
+            "B",
+            "For",
+            "Let",
+            "M",
+            "P",
+            "R",
+            "Sp",
+            "T",
+            "The",
+            "There",
+            "Tr"
+          ],
+          "quantifiers": [
+            "forall",
+            "exists"
+          ],
+          "assumptions": [
+            "\\label{thm:equality-sym-lidskii-inequalities} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices.",
+            "\\end{align} \\item [(ii)] For all $t \\in [0,1]$, we have \\begin{align}\\label{eq:sym:lidskii-linear} \\sum_{j=1}^{k} d_{i_j}(A+tB) = \\sum_{j=1}^{k} d_{i_j}(A)+t\\sum_{j=1}^{k} d_{j}(B).",
+            "\\end{align} \\item [(iii)] There exist positive numbers $0=a_0<a_1<\\cdots < a_r=1$ such that the following properties hold: for all $\\ell \\in \\{1,\\ldots, r\\}$ and $t \\in (a_{\\ell-1}, a_\\ell)$, there exists $M(t) \\in \\operatorname{Sp}(2n, 2k)$ such that the columns of $M(t)$ form symplectic eigenvector pairs of $A+t B$ corresponding to the symplectic eigenvalues $d_{i_1}(A+t B), \\ldots, d_{i_k}(A+t B)$, and it satisfies \\begin{align} \\operatorname{Tr}\\! \\left[M(t)^T A M(t) \\right] &= 2\\sum_{j=1}^{k} d_{i_j}(A), \\label{eq1:conditions-equality-sym-lidskii} \\\\ \\operatorname{Tr}\\!\\left[M(t)^T B M(t) \\right] &=2\\sum_{j=1}^{k} d_{j}(B)."
+          ],
+          "claim": "The following statements are equivalent: \\begin{itemize} \\item [(i)] The equality in \\eqref{eq:sym-lidskii-inequality} holds, that is, \\begin{align}\\label{eq:sym-lidskii-equality} \\sum_{j=1}^{k} d_{i_j}(A+B) = \\sum_{j=1}^{k} d_{i_j}(A)+\\sum_{j=1}^{k} d_{j}(B). \\label{eq2:conditions-equality-sym-lidskii} \\end{align} \\end{itemize}",
+          "symbols": [
+            "A",
+            "B",
+            "For",
+            "Let",
+            "M",
+            "P",
+            "R",
+            "Sp",
+            "T",
+            "The",
+            "There",
+            "Tr",
+            "a",
+            "a_0",
+            "a_1",
+            "a_r",
+            "align",
+            "all",
+            "and",
+            "any",
+            "are",
+            "be",
+            "begin",
+            "cdots"
+          ],
+          "constraints": [
+            "1 \\leq i_1 < \\cdots < i_k \\leq n",
+            "0=a_0<a_1<\\cdots < a_r=1",
+            "\\operatorname{Tr}\\! \\left[M(t)^T A M(t) \\right] = 2\\sum_{j=1}^{k} d_{i_j}(A), \\\\ \\operatorname{Tr}\\!\\left[M(t)^T B M(t) \\right] =2\\sum_{j=1}^{k} d_{j}(B)."
+          ],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "0=a_0<a_1<\\cdots < a_r=1",
+            "\\sum_{j=1}^{k} d_{i_j}(A+B) = \\sum_{j=1}^{k} d_{i_j}(A)+\\sum_{j=1}^{k} d_{j}(B).",
+            "\\sum_{j=1}^{k} d_{i_j}(A+tB) = \\sum_{j=1}^{k} d_{i_j}(A)+t\\sum_{j=1}^{k} d_{j}(B).",
+            "\\operatorname{Tr}\\! \\left[M(t)^T A M(t) \\right] = 2\\sum_{j=1}^{k} d_{i_j}(A), \\\\ \\operatorname{Tr}\\!\\left[M(t)^T B M(t) \\right] =2\\sum_{j=1}^{k} d_{j}(B)."
+          ]
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:a"
+      ],
+      "axiom_debt_hash": "5e295cb99a07e286",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:claim_shape_mismatch"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "2490a6eba89984cc",
+      "source_span_id": "srcspan_525ba327b70d4cdb5059"
+    },
+    {
+      "theorem_name": "prop_inv_sym_subspace_property",
+      "lean_file": "/home/projectx/BDDM/output/2309.04562.lean",
+      "lean_statement": "theorem prop_inv_sym_subspace_property {n k : ℕ} (A : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (U : Finset (Fin (2 * n))) (hU_dim : U.card = 2 * k) (hU_symplectic : ∀ (i j : Fin (2 * n)), i ∈ U → j ∈ U → (i : ℝ) * (j : ℝ) = 0) (hU_invariant : ∀ (i : Fin (2 * n)), i ∈ U → (JA) i ∈ U) : ∃ (b : Fin (2 * k) → Fin (2 * n)) (gamma : Fin k → ℝ), (∀ (i j : Fin (2 * k)), (b i : ℝ) * (b j : ℝ) = if i = j then 1 else 0) ∧ (∀ (i : Fin k), (A (b i) = gamma i * (b (i + k))) ∧ (A (b (i + k)) = -gamma i * (b i)))",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "hU_dim",
+          "lean_expr": "(hU_dim : U.card = 2 * k)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2309.04562",
+        "section": "",
+        "label": "prop:inv_sym_subspace_property",
+        "cited_refs": [
+          "Bhandari1985",
+          "HIAI2018129",
+          "adesso2004extremal",
+          "ando1989",
+          "arnold1989graduate",
+          "bhat2019real",
+          "bhatia2015symplectic",
+          "bhatia2020schur",
+          "bhatia_jain_2021",
+          "chen2005gaussian",
+          "degosson",
+          "dms",
+          "folland1989harmonic",
+          "friedland2015equality",
+          "hofer",
+          "horn1954doubly",
+          "horn2012matrix",
+          "hsiang2022entanglement",
+          "huang2023",
+          "huang_mishra",
+          "ikramov2018symplectic",
+          "incollection1",
+          "jain2021sums",
+          "jm",
+          "john2022interlacing",
+          "kato2013perturbation",
+          "krantz2002primer",
+          "lidskii1950characteristic",
+          "ma_bhatia",
+          "marshall1979inequalities",
+          "massey2014optimal",
+          "mishra2020first",
+          "mishra2023",
+          "nicacio2021williamson",
+          "p",
+          "paradan2022",
+          "preprint1",
+          "report1",
+          "schur1923uber",
+          "serafini2017quantum",
+          "simon1999congruences",
+          "son2021symplectic",
+          "thesis1",
+          "weyl_inequalities",
+          "wielandt1955",
+          "williamson1936algebraic"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_c571a331.lean:9:40: error: unexpected token '}'; expected term",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T16:57:38Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_36a1320f0f10cc06940558a0",
+      "canonical_theorem_id": "cth_70fa83ff13ba68593ea6eca6",
+      "alignment_pair_id": "align_742df1ee834c8f1b6e20c82b",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{prop:inv_sym_subspace_property}\n    \\sloppy    \n    Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$. \n    If $\\mathscr{U}$ is an invariant subspace of $JA$ then there exists a symplectic basis $\\{u_1,\\ldots, u_k, v_1,\\ldots, v_k\\}$ of $\\mathscr{U}$ such that $(u_1, v_1),\\ldots, (u_k, v_k)$ are symplectic eigenvector pairs of $A$ corresponding to some symplectic eigenvalues $\\gamma_1 \\leq \\cdots \\leq \\gamma_k$ of $A$.",
+        "normalized_natural_language_theorem": "Quantifiers: Let; there exists Assumptions: A ∈ ℙ_{2n}(ℝ); 𝒰 is a 2k-dimensional symplectic subspace of ℝ^{2n}; 𝒰 is an invariant subspace of JA Conclusion: there exists a symplectic basis {u_1, ..., u_k, v_1, ..., v_k} of 𝒰 such that (u_1, v_1), ..., (u_k, v_k) are symplectic eigenvector pairs of A corresponding to some symplectic eigenvalues γ_1 ≤ ... ≤ γ_k of A",
+        "lean_statement": "theorem prop_inv_sym_subspace_property {n k : ℕ} (A : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (U : Finset (Fin (2 * n))) (hU_dim : U.card = 2 * k) (hU_symplectic : ∀ (i j : Fin (2 * n)), i ∈ U → j ∈ U → (i : ℝ) * (j : ℝ) = 0) (hU_invariant : ∀ (i : Fin (2 * n)), i ∈ U → (JA) i ∈ U) : ∃ (b : Fin (2 * k) → Fin (2 * n)) (gamma : Fin k → ℝ), (∀ (i j : Fin (2 * k)), (b i : ℝ) * (b j : ℝ) = if i = j then 1 else 0) ∧ (∀ (i : Fin k), (A (b i) = gamma i * (b (i + k))) ∧ (A (b (i + k)) = -gamma i * (b i)))",
+        "extracted_assumptions": [
+          "A ∈ ℙ_{2n}(ℝ)",
+          "𝒰 is a 2k-dimensional symplectic subspace of ℝ^{2n}",
+          "𝒰 is an invariant subspace of JA"
+        ],
+        "extracted_conclusion": "there exists a symplectic basis {u_1, ..., u_k, v_1, ..., v_k} of 𝒰 such that (u_1, v_1), ..., (u_k, v_k) are symplectic eigenvector pairs of A corresponding to some symplectic eigenvalues γ_1 ≤ ... ≤ γ_k of A",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_36a1320f0f10cc06940558a0",
+          "alignment_pair_id": "align_742df1ee834c8f1b6e20c82b",
+          "paper_text_coverage": 0.2609,
+          "lean_text_coverage": 0.2609,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::prop_inv_sym_subspace_property",
+      "context_pack": {
+        "theorem_name": "prop_inv_sym_subspace_property",
+        "original_latex_theorem": "\\label{prop:inv_sym_subspace_property}\n    \\sloppy    \n    Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$. \n    If $\\mathscr{U}$ is an invariant subspace of $JA$ then there exists a symplectic basis $\\{u_1,\\ldots, u_k, v_1,\\ldots, v_k\\}$ of $\\mathscr{U}$ such that $(u_1, v_1),\\ldots, (u_k, v_k)$ are symplectic eigenvector pairs of $A$ corresponding to some symplectic eigenvalues $\\gamma_1 \\leq \\cdots \\leq \\gamma_k$ of $A$.",
+        "source_file": "/tmp/desol_arxiv_cycle/2309.04562/expanded_source/mishra_equality.tex",
+        "source_span_id": "srcspan_3cd52443a711d819a4c1",
+        "source_char_range": [
+          34880,
+          35418
+        ],
+        "statement_char_range": [
+          34899,
+          35399
+        ],
+        "source_line_range": [
+          526,
+          530
+        ],
+        "env_name": "proposition",
+        "latex_label": "prop:inv_sym_subspace_property",
+        "section": "Equality in symplectic Lidskii's inequalities",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{proposition}\\label{prop:inv_sym_subspace_property} \\sloppy Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$. If $\\mathscr{U}$ is an invariant subspace of $JA$ then there exists a symplectic basis $\\{u_1,\\ldots, u_k, v_1,\\ldots, v_k\\}$ of $\\mathscr{U}$ such that $(u_1, v_1),\\ldots, (u_k, v_k)$ are symplectic eigenvector pairs of $A$ corresponding to some symplectic eigenvalues $\\gamma_1 \\leq \\cdots \\leq \\gamma_k$ of $A$. \\end{proposition}",
+        "definitions": [
+          "Let $A$, $\\mathscr{U}$, and $\\gamma_1,\\ldots, \\gamma_k$ be as in Proposition~\\ref{prop:inv_sym_subspace_property}.",
+          "Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$.",
+          "Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$ that is invariant under $A+tB$ for all $t \\in [0,1]$.",
+          "Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if the given necessary condition for the equality to hold in symplectic Lidskii's inequality \\eqref{eq:sym-lidskii-inequality} is sufficient as well."
+        ],
+        "nearby_claims": [
+          "Proposition~\\ref{prop:inv_sym_subspace_property}.",
+          "theorem statements: - \\label{prop:inv_sym_subspace_property} \\sloppy Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$.",
+          "theorem source span: \\begin{proposition}\\label{prop:inv_sym_subspace_property} \\sloppy Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$."
+        ],
+        "context_excerpt": "Paper glossary memory: - D: an $n\\times n$ diagonal matrix with positive diagonal entries $d_1(A) \\leq \\cdots \\leq d_n(A)$ - E: said to be a doubly stochastic matrix if its $(i - F: said to be a doubly superstochastic matrix % if its $(i - N: an orthosymplectic matrix - Q: a doubly superstochastic matrix if and only if there exists a doubly stochastic matrix $E$ such that $E_{ij} \\leq F - x: \\textit{ weakly supermajorized} by $y$ Relevant definitions/notation blocks: - Let $A$, $\\mathscr{U}$, and $\\gamma_1,\\ldots, \\gamma_k$ be as in Proposition~\\ref{prop:inv_sym_subspace_property}. We call $\\gamma_1,\\ldots, \\gamma_k$ the symplectic eigenvalues of $A$ associated with $\\mathscr{U}$. Nearby theorem statements: - \\label{prop:inv_sym_subspace_property} \\sloppy Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$. If $\\mathscr{U}$ is an invariant subspace of $JA$ then there exists a symplectic basis $\\{u - \\label{prop:piecewise-analyticity-sym-subspace} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$ that is invariant under $A+tB$ for all $t \\in [0,1]$. Let $\\gamma_{1}(t)\\leq \\cdots \\leq Nearby source context: the equality holds in the Lidskii's inequality \\eqref{eq:lidskii-inequality} if and only if there exist $k$-dimensional subspaces $\\mathscr{X}_1 ,\\ldots, \\mathscr{X}_r \\subset \\mathbb{C}^n$ and positive numbers $0=b_0< b_1<\\cdots < b_r=1$ satisfying the following conditions: \\begin{itemize} \\item [(i)] The subspaces $\\mathscr{X}_1 ,\\ldots, \\mathscr{X}_r$ are invariant under both $X$ and $Y$. \\item [(ii)] Each subspace $\\mathscr{X}_\\ell$ for $\\ell \\in \\{1,\\ldots, r\\}$ is spanned by $k$ orthonormal eigenvectors of $Y$ correspondin",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_c571a331.lean:9:40: error: unexpected token '}'; expected term",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "A",
+            "ℝ",
+            "ℙ_{2n}(ℝ)",
+            "ℝ^{2n}",
+            "𝒰",
+            "u_1, ..., u_k",
+            "v_1, ..., v_k",
+            "JA",
+            "γ_1, ..., γ_k"
+          ],
+          "quantifiers": [
+            "Let",
+            "there exists"
+          ],
+          "assumptions": [
+            "A ∈ ℙ_{2n}(ℝ)",
+            "𝒰 is a 2k-dimensional symplectic subspace of ℝ^{2n}",
+            "𝒰 is an invariant subspace of JA"
+          ],
+          "claim": "there exists a symplectic basis {u_1, ..., u_k, v_1, ..., v_k} of 𝒰 such that (u_1, v_1), ..., (u_k, v_k) are symplectic eigenvector pairs of A corresponding to some symplectic eigenvalues γ_1 ≤ ... ≤ γ_k of A",
+          "symbols": [
+            "A",
+            "ℝ",
+            "ℙ_{2n}(ℝ)",
+            "ℝ^{2n}",
+            "𝒰",
+            "u_1, ..., u_k",
+            "v_1, ..., v_k",
+            "JA",
+            "γ_1, ..., γ_k"
+          ],
+          "constraints": [
+            "2k-dimensional",
+            "symplectic subspace",
+            "invariant subspace",
+            "symplectic basis",
+            "symplectic eigenvector pairs",
+            "symplectic eigenvalues"
+          ],
+          "theorem_intent": "existence of symplectic basis with symplectic eigenvector pairs under given conditions"
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:hU_dim",
+        "paper_definition_stub:hU_invariant",
+        "paper_definition_stub:hU_symplectic"
+      ],
+      "axiom_debt_hash": "37ba75db678382b2",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "994a2bc8da65a93a",
+      "source_span_id": "srcspan_3cd52443a711d819a4c1"
+    },
+    {
+      "theorem_name": "prop_piecewise_analyticity_sym_subspace",
+      "lean_file": "/home/projectx/BDDM/output/2309.04562.lean",
+      "lean_statement": "theorem prop_piecewise_analyticity_sym_subspace (A B : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (k : ℕ) (U : Submodule ℝ (Fin (2 * n) → ℝ)) (gamma : Fin k → ℝ → ℝ) (hA : A.IsSymplectic) (hB : B.IsSymplectic) (hU_dim : Module.rank ℝ U = 2 * k) (hU_symp : U.IsSymplectic) (hU_inv : ∀ t ∈ Set.Icc (0 : ℝ) 1, (A + t • B).IsSymplectic ∧ U.IsInvariantUnder (A + t • B)) (hgamma_order : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ i j : Fin k, i.val < j.val → gamma i t ≤ gamma j t) (hgamma_symp : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ i : Fin k, gamma i t ∈ {lam | ∃ v ∈ U, v ≠ 0 ∧ (A + t • B) v = lam • v}) : ∀ i : Fin k, ContinuousOn (gamma i) (Set.Icc (0 : ℝ) 1) ∧ ∀ t ∈ Set.Icc (0 : ℝ) 1, ∃ eps > 0, AnalyticOn (gamma i) (Set.Ioo (max 0 (t - eps)) (min 1 (t + eps)))",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "hA",
+          "lean_expr": "(hA : A.IsSymplectic)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hB",
+          "lean_expr": "(hB : B.IsSymplectic)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hU_dim",
+          "lean_expr": "(hU_dim : Module.rank ℝ U = 2 * k)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hU_symp",
+          "lean_expr": "(hU_symp : U.IsSymplectic)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2309.04562",
+        "section": "",
+        "label": "prop:piecewise-analyticity-sym-subspace",
+        "cited_refs": [
+          "Bhandari1985",
+          "HIAI2018129",
+          "adesso2004extremal",
+          "ando1989",
+          "arnold1989graduate",
+          "bhat2019real",
+          "bhatia2015symplectic",
+          "bhatia2020schur",
+          "bhatia_jain_2021",
+          "chen2005gaussian",
+          "degosson",
+          "dms",
+          "folland1989harmonic",
+          "friedland2015equality",
+          "hofer",
+          "horn1954doubly",
+          "horn2012matrix",
+          "hsiang2022entanglement",
+          "huang2023",
+          "huang_mishra",
+          "ikramov2018symplectic",
+          "incollection1",
+          "jain2021sums",
+          "jm",
+          "john2022interlacing",
+          "kato2013perturbation",
+          "krantz2002primer",
+          "lidskii1950characteristic",
+          "ma_bhatia",
+          "marshall1979inequalities",
+          "massey2014optimal",
+          "mishra2020first",
+          "mishra2023",
+          "nicacio2021williamson",
+          "p",
+          "paradan2022",
+          "preprint1",
+          "report1",
+          "schur1923uber",
+          "serafini2017quantum",
+          "simon1999congruences",
+          "son2021symplectic",
+          "thesis1",
+          "weyl_inequalities",
+          "wielandt1955",
+          "williamson1936algebraic"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:claim_shape_mismatch:ineq->exists",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T16:57:38Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_8a94dffab01202feddbd1194",
+      "canonical_theorem_id": "cth_9b6a106ec77acd9fe1e3d67c",
+      "alignment_pair_id": "align_794455ae4dcc12b55f8beb3c",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{prop:piecewise-analyticity-sym-subspace}\n    Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$ that is invariant under $A+tB$ for all $t \\in [0,1]$. \n    Let $\\gamma_{1}(t)\\leq \\cdots \\leq \\gamma_{k}(t)$ be the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}$ for $t \\in  [0,1]$. \n    Then the maps $\\gamma_{i}:[0,1] \\to \\mathbb{R}$ for $i=1,\\ldots,k$ are piecewise analytic.",
+        "normalized_natural_language_theorem": "Assumptions: A, B ∈ P_{2n}(R); U is a 2k-dimensional symplectic subspace of R^{2n}; U is invariant under A+tB for all t ∈ [0,1] Conclusion: The maps gamma_i:[0,1] → R for i=1,…,k are piecewise analytic",
+        "lean_statement": "theorem prop_piecewise_analyticity_sym_subspace (A B : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (k : ℕ) (U : Submodule ℝ (Fin (2 * n) → ℝ)) (gamma : Fin k → ℝ → ℝ) (hA : A.IsSymplectic) (hB : B.IsSymplectic) (hU_dim : Module.rank ℝ U = 2 * k) (hU_symp : U.IsSymplectic) (hU_inv : ∀ t ∈ Set.Icc (0 : ℝ) 1, (A + t • B).IsSymplectic ∧ U.IsInvariantUnder (A + t • B)) (hgamma_order : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ i j : Fin k, i.val < j.val → gamma i t ≤ gamma j t) (hgamma_symp : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ i : Fin k, gamma i t ∈ {lam | ∃ v ∈ U, v ≠ 0 ∧ (A + t • B) v = lam • v}) : ∀ i : Fin k, ContinuousOn (gamma i) (Set.Icc (0 : ℝ) 1) ∧ ∀ t ∈ Set.Icc (0 : ℝ) 1, ∃ eps > 0, AnalyticOn (gamma i) (Set.Ioo (max 0 (t - eps)) (min 1 (t + eps)))",
+        "extracted_assumptions": [
+          "A, B ∈ P_{2n}(R)",
+          "U is a 2k-dimensional symplectic subspace of R^{2n}",
+          "U is invariant under A+tB for all t ∈ [0,1]"
+        ],
+        "extracted_conclusion": "The maps gamma_i:[0,1] → R for i=1,…,k are piecewise analytic",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_8a94dffab01202feddbd1194",
+          "alignment_pair_id": "align_794455ae4dcc12b55f8beb3c",
+          "paper_text_coverage": 0.375,
+          "lean_text_coverage": 0.225,
+          "missing_assumptions": [],
+          "added_assumptions": [
+            "hA: A.IsSymplectic"
+          ],
+          "conclusion_relation": "compatible",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::prop_piecewise_analyticity_sym_subspace",
+      "context_pack": {
+        "theorem_name": "prop_piecewise_analyticity_sym_subspace",
+        "original_latex_theorem": "\\label{prop:piecewise-analyticity-sym-subspace}\n    Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$ that is invariant under $A+tB$ for all $t \\in [0,1]$. \n    Let $\\gamma_{1}(t)\\leq \\cdots \\leq \\gamma_{k}(t)$ be the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}$ for $t \\in  [0,1]$. \n    Then the maps $\\gamma_{i}:[0,1] \\to \\mathbb{R}$ for $i=1,\\ldots,k$ are piecewise analytic.",
+        "source_file": "/tmp/desol_arxiv_cycle/2309.04562/expanded_source/mishra_equality.tex",
+        "source_span_id": "srcspan_9256c01a2d4b6445059b",
+        "source_char_range": [
+          39048,
+          39555
+        ],
+        "statement_char_range": [
+          39067,
+          39537
+        ],
+        "source_line_range": [
+          571,
+          575
+        ],
+        "env_name": "proposition",
+        "latex_label": "prop:piecewise-analyticity-sym-subspace",
+        "section": "Equality in symplectic Lidskii's inequalities",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{proposition}\\label{prop:piecewise-analyticity-sym-subspace} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$ that is invariant under $A+tB$ for all $t \\in [0,1]$. Let $\\gamma_{1}(t)\\leq \\cdots \\leq \\gamma_{k}(t)$ be the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}$ for $t \\in [0,1]$. Then the maps $\\gamma_{i}:[0,1] \\to \\mathbb{R}$ for $i=1,\\ldots,k$ are piecewise analytic. \\end{proposition}",
+        "definitions": [
+          "Let $A$, $\\mathscr{U}$, and $\\gamma_1,\\ldots, \\gamma_k$ be as in Proposition~\\ref{prop:inv_sym_subspace_property}.",
+          "Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$.",
+          "Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$ that is invariant under $A+tB$ for all $t \\in [0,1]$.",
+          "definition} Let $A$, $\\mathscr{U}$, and $\\gamma_1,\\ldots, \\gamma_k$ be as in Proposition~\\ref{prop:inv_sym_subspace_property}.",
+          "Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$ that is invariant under $A+tB$ for all $t \\in [0,1]$.",
+          "Let $\\gamma_{1}(t)\\leq \\cdots \\leq \\gamma_{k}(t)$ be the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}$ for $t \\in [0,1]$."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "Proposition~\\ref{prop:inv_sym_subspace_property}.",
+          "theorem statements: - \\label{prop:inv_sym_subspace_property} \\sloppy Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$.",
+          "Proposition~\\ref{prop:piecewise-analyticity-sym-subspace}, the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}$ can be arranged analytically as functions of $t \\in [0,1]$.",
+          "Proposition~\\ref{prop:inv_sym_subspace_property}."
+        ],
+        "context_excerpt": "Paper glossary memory: - D: an $n\\times n$ diagonal matrix with positive diagonal entries $d_1(A) \\leq \\cdots \\leq d_n(A)$ - E: said to be a doubly stochastic matrix if its $(i - F: said to be a doubly superstochastic matrix % if its $(i - N: an orthosymplectic matrix - Q: a doubly superstochastic matrix if and only if there exists a doubly stochastic matrix $E$ such that $E_{ij} \\leq F - x: \\textit{ weakly supermajorized} by $y$ Relevant definitions/notation blocks: - Let $A$, $\\mathscr{U}$, and $\\gamma_1,\\ldots, \\gamma_k$ be as in Proposition~\\ref{prop:inv_sym_subspace_property}. We call $\\gamma_1,\\ldots, \\gamma_k$ the symplectic eigenvalues of $A$ associated with $\\mathscr{U}$. Nearby theorem statements: - \\label{prop:inv_sym_subspace_property} \\sloppy Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$. If $\\mathscr{U}$ is an invariant subspace of $JA$ then there exists a symplectic basis $\\{u - \\label{prop:piecewise-analyticity-sym-subspace} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$ that is invariant under $A+tB$ for all $t \\in [0,1]$. Let $\\gamma_{1}(t)\\leq \\cdots \\leq - It is not clear if by assuming the given hypotheses of Proposition~\\ref{prop:piecewise-analyticity-sym-subspace}, the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}$ can be arranged analytically as functions of $t \\in [0,1]$. This is because the Nearby source context: leq \\gamma_k$. Proposition~2.3 of \\cite{jm} then implies that the set $\\{x_1, \\ldots, x_k, y_1,\\ldots, y_k\\} \\subset \\mathscr{U}$ is symplectically orthogonal, and $(x_i, y_i)$ is a symplectic eigenvector pair of $A$ corresponding to its symplectic eigenvalue $\\gamma_i$ ",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "claim_shape_mismatch:ineq->exists",
+          "status": "FLAWED",
+          "failure_kind": "false_or_ambiguous_statement",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok",
+            "claim_equivalent"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "A",
+            "B",
+            "P_{2n}(R)",
+            "U",
+            "R^{2n}",
+            "gamma_1(t)",
+            "gamma_k(t)",
+            "t"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "A, B ∈ P_{2n}(R)",
+            "U is a 2k-dimensional symplectic subspace of R^{2n}",
+            "U is invariant under A+tB for all t ∈ [0,1]"
+          ],
+          "claim": "The maps gamma_i:[0,1] → R for i=1,…,k are piecewise analytic",
+          "symbols": [
+            "A",
+            "B",
+            "P_{2n}(R)",
+            "U",
+            "R^{2n}",
+            "gamma_i(t)",
+            "t",
+            "≤"
+          ],
+          "constraints": [
+            "2k-dimensional symplectic subspace",
+            "t ∈ [0,1]",
+            "gamma_1(t) ≤ ... ≤ gamma_k(t)"
+          ],
+          "theorem_intent": "piecewise analyticity of symplectic eigenvalues"
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:hU_dim",
+        "paper_definition_stub:hU_inv",
+        "paper_definition_stub:hU_symp"
+      ],
+      "axiom_debt_hash": "12d5f9df4020da70",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:claim_shape_mismatch"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "3ed2d62d95d0b5ae",
+      "source_span_id": "srcspan_9256c01a2d4b6445059b"
+    },
+    {
+      "theorem_name": "thm_necessary_sym_lidskii",
+      "lean_file": "/home/projectx/BDDM/output/2309.04562.lean",
+      "lean_statement": "theorem thm_necessary_sym_lidskii (A B : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (i : Fin k → Fin n) (hA : A.IsSymplectic) (hB : B.IsSymplectic) (hI : StrictMono i) (hI_bound : ∀ j, i j < n) (h_eq : SymplecticLidskiiInequality A B i = 0) : ∃ (U : Fin r → Submodule ℝ (Fin (2 * n))) (a : Fin (r + 1) → ℝ), (∀ ℓ, (U ℓ).IsSymplectic) ∧ (∀ ℓ, (U ℓ).dim = 2 * k) ∧ (∀ ℓ, (JA * (U ℓ)) ⊆ (U ℓ)) ∧ (∀ ℓ, (JB * (U ℓ)) ⊆ (U ℓ)) ∧ (∀ ℓ, ∃ (b c : ℝ), b < c ∧ b ∈ Set.Icc (a ℓ) (a (ℓ + 1)) ∧ c ∈ Set.Icc (a ℓ) (a (ℓ + 1)) ∧ ∀ t ∈ Set.Icc b c, (SymplecticEigenvalues (A + t • B) (U ℓ)) = Finset.image (fun i => d_i (A + t • B)) (Finset.range k))",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "hA",
+          "lean_expr": "(hA : A.IsSymplectic)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hB",
+          "lean_expr": "(hB : B.IsSymplectic)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hI",
+          "lean_expr": "(hI : StrictMono i)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hI_bound",
+          "lean_expr": "(hI_bound : ∀ j, i j < n)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "h_eq",
+          "lean_expr": "(h_eq : SymplecticLidskiiInequality A B i = 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2309.04562",
+        "section": "",
+        "label": "thm:necessary-sym-lidskii",
+        "cited_refs": [
+          "Bhandari1985",
+          "HIAI2018129",
+          "adesso2004extremal",
+          "ando1989",
+          "arnold1989graduate",
+          "bhat2019real",
+          "bhatia2015symplectic",
+          "bhatia2020schur",
+          "bhatia_jain_2021",
+          "chen2005gaussian",
+          "degosson",
+          "dms",
+          "folland1989harmonic",
+          "friedland2015equality",
+          "hofer",
+          "horn1954doubly",
+          "horn2012matrix",
+          "hsiang2022entanglement",
+          "huang2023",
+          "huang_mishra",
+          "ikramov2018symplectic",
+          "incollection1",
+          "jain2021sums",
+          "jm",
+          "john2022interlacing",
+          "kato2013perturbation",
+          "krantz2002primer",
+          "lidskii1950characteristic",
+          "ma_bhatia",
+          "marshall1979inequalities",
+          "massey2014optimal",
+          "mishra2020first",
+          "mishra2023",
+          "nicacio2021williamson",
+          "p",
+          "paradan2022",
+          "preprint1",
+          "report1",
+          "schur1923uber",
+          "serafini2017quantum",
+          "simon1999congruences",
+          "son2021symplectic",
+          "thesis1",
+          "weyl_inequalities",
+          "wielandt1955",
+          "williamson1936algebraic"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_daa2b8a7.lean:9:292: error: unexpected token ')'; expected term",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T16:57:38Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_c8433a16043fe9e9d31311b1",
+      "canonical_theorem_id": "cth_e317594b35eea233b56a8c49",
+      "alignment_pair_id": "align_f0c77784a41ff5884e2f6e55",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{thm:necessary-sym-lidskii}\n    Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices such that equality holds in the symplectic Lidskii's inequality \\eqref{eq:sym-lidskii-inequality}.\n    Then there exist $2k$-dimensional symplectic subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r \\subset \\mathbb{R}^{2n}$ and positive numbers $0=a_0<a_1<\\cdots < a_{r}=1$ satisfying the following conditions:\n    \\begin{itemize}\n        \\item [(i)] The subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r$ are invariant under both $JA$ and $JB$.\n        \\item [(ii)] Each subspace $\\mathscr{U}_\\ell$ for $\\ell = 1,\\ldots, r$ has a symplectic basis consisting of symplectic eigenvector pairs of $B$ corresponding to the symplectic eigenvalues $d_1(B),\\ldots, d_k(B)$. \n        \\item [(iii)] \\sloppy For each $\\ell \\in \\{1,\\ldots, r\\}$, there exists a non-trivial subinterval $[b_{\\ell}, c_{\\ell}] \\subset [a_{\\ell-1}, a_\\ell]$ such that for all $t \\in [b_{\\ell}, c_{\\ell}]$, the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}_\\ell$ are $d_{i_1}(A+tB), \\ldots, d_{i_k}(A+tB)$.\n    \\end{itemize}",
+        "normalized_natural_language_theorem": "Quantifiers: forall; exists Assumptions: \\label{thm:necessary-sym-lidskii} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices such that equality holds in the symplectic Lidskii's inequality \\eqref{eq:sym-lidskii-inequality}.; \\item [(ii)] Each subspace $\\mathscr{U}_\\ell$ for $\\ell = 1,\\ldots, r$ has a symplectic basis consisting of symplectic eigenvector pairs of $B$ corresponding to the symplectic eigenvalues $d_1(B),\\ldots, d_k(B)$.; \\item [(iii)] \\sloppy For each $\\ell \\in \\{1,\\ldots, r\\}$, there exists a non-trivial subinterval $[b_{\\ell}, c_{\\ell}] \\subset [a_{\\ell-1}, a_\\ell]$ such that for all $t \\in [b_{\\ell}, c_{\\ell}]$, the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}_\\ell$ are $d_{i_1}(A+tB), \\ldots, d_{i_k}(A+tB)$. Conclusion: Then there exist $2k$-dimensional symplectic subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r \\subset \\mathbb{R}^{2n}$ and positive numbers $0=a_0<a_1<\\cdots < a_{r}=1$ satisfying the following conditions: \\begin{itemize} \\item [(i)] The subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r$ are invariant under both $JA$ and $JB$. \\end{itemize}",
+        "lean_statement": "theorem thm_necessary_sym_lidskii (A B : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (i : Fin k → Fin n) (hA : A.IsSymplectic) (hB : B.IsSymplectic) (hI : StrictMono i) (hI_bound : ∀ j, i j < n) (h_eq : SymplecticLidskiiInequality A B i = 0) : ∃ (U : Fin r → Submodule ℝ (Fin (2 * n))) (a : Fin (r + 1) → ℝ), (∀ ℓ, (U ℓ).IsSymplectic) ∧ (∀ ℓ, (U ℓ).dim = 2 * k) ∧ (∀ ℓ, (JA * (U ℓ)) ⊆ (U ℓ)) ∧ (∀ ℓ, (JB * (U ℓ)) ⊆ (U ℓ)) ∧ (∀ ℓ, ∃ (b c : ℝ), b < c ∧ b ∈ Set.Icc (a ℓ) (a (ℓ + 1)) ∧ c ∈ Set.Icc (a ℓ) (a (ℓ + 1)) ∧ ∀ t ∈ Set.Icc b c, (SymplecticEigenvalues (A + t • B) (U ℓ)) = Finset.image (fun i => d_i (A + t • B)) (Finset.range k))",
+        "extracted_assumptions": [
+          "\\label{thm:necessary-sym-lidskii} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices such that equality holds in the symplectic Lidskii's inequality \\eqref{eq:sym-lidskii-inequality}.",
+          "\\item [(ii)] Each subspace $\\mathscr{U}_\\ell$ for $\\ell = 1,\\ldots, r$ has a symplectic basis consisting of symplectic eigenvector pairs of $B$ corresponding to the symplectic eigenvalues $d_1(B),\\ldots, d_k(B)$.",
+          "\\item [(iii)] \\sloppy For each $\\ell \\in \\{1,\\ldots, r\\}$, there exists a non-trivial subinterval $[b_{\\ell}, c_{\\ell}] \\subset [a_{\\ell-1}, a_\\ell]$ such that for all $t \\in [b_{\\ell}, c_{\\ell}]$, the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}_\\ell$ are $d_{i_1}(A+tB), \\ldots, d_{i_k}(A+tB)$."
+        ],
+        "extracted_conclusion": "Then there exist $2k$-dimensional symplectic subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r \\subset \\mathbb{R}^{2n}$ and positive numbers $0=a_0<a_1<\\cdots < a_{r}=1$ satisfying the following conditions: \\begin{itemize} \\item [(i)] The subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r$ are invariant under both $JA$ and $JB$. \\end{itemize}",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_c8433a16043fe9e9d31311b1",
+          "alignment_pair_id": "align_f0c77784a41ff5884e2f6e55",
+          "paper_text_coverage": 0.1707,
+          "lean_text_coverage": 0.3684,
+          "missing_assumptions": [],
+          "added_assumptions": [
+            "hA: A.IsSymplectic"
+          ],
+          "conclusion_relation": "compatible",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::thm_necessary_sym_lidskii",
+      "context_pack": {
+        "theorem_name": "thm_necessary_sym_lidskii",
+        "original_latex_theorem": "\\label{thm:necessary-sym-lidskii}\n    Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices such that equality holds in the symplectic Lidskii's inequality \\eqref{eq:sym-lidskii-inequality}.\n    Then there exist $2k$-dimensional symplectic subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r \\subset \\mathbb{R}^{2n}$ and positive numbers $0=a_0<a_1<\\cdots < a_{r}=1$ satisfying the following conditions:\n    \\begin{itemize}\n        \\item [(i)] The subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r$ are invariant under both $JA$ and $JB$.\n        \\item [(ii)] Each subspace $\\mathscr{U}_\\ell$ for $\\ell = 1,\\ldots, r$ has a symplectic basis consisting of symplectic eigenvector pairs of $B$ corresponding to the symplectic eigenvalues $d_1(B),\\ldots, d_k(B)$. \n        \\item [(iii)] \\sloppy For each $\\ell \\in \\{1,\\ldots, r\\}$, there exists a non-trivial subinterval $[b_{\\ell}, c_{\\ell}] \\subset [a_{\\ell-1}, a_\\ell]$ such that for all $t \\in [b_{\\ell}, c_{\\ell}]$, the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}_\\ell$ are $d_{i_1}(A+tB), \\ldots, d_{i_k}(A+tB)$.\n    \\end{itemize}",
+        "source_file": "/tmp/desol_arxiv_cycle/2309.04562/expanded_source/mishra_equality.tex",
+        "source_span_id": "srcspan_4c1c275d1565dcaa12fd",
+        "source_char_range": [
+          42540,
+          43713
+        ],
+        "statement_char_range": [
+          42555,
+          43699
+        ],
+        "source_line_range": [
+          599,
+          607
+        ],
+        "env_name": "theorem",
+        "latex_label": "thm:necessary-sym-lidskii",
+        "section": "Equality in symplectic Lidskii's inequalities",
+        "cited_refs": [
+          "eq:sym-lidskii-inequality"
+        ],
+        "exact_source_excerpt": "\\begin{theorem}\\label{thm:necessary-sym-lidskii} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices such that equality holds in the symplectic Lidskii's inequality \\eqref{eq:sym-lidskii-inequality}. Then there exist $2k$-dimensional symplectic subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r \\subset \\mathbb{R}^{2n}$ and positive numbers $0=a_0<a_1<\\cdots < a_{r}=1$ satisfying the following conditions: \\begin{itemize} \\item [(i)] The subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r$ are invariant under both $JA$ and $JB$. \\item [(ii)] Each subspace $\\mathscr{U}_\\ell$ for $\\ell = 1,\\ldots, r$ has a symplectic basis consisting of symplectic eigenvector pairs of $B$ corresponding to the symplectic eigenvalues $d_1(B),\\ldots, d_k(B)$. \\item [(iii)] \\sloppy For each $\\ell \\in \\{1,\\ldots, r\\}$, there exists a non-trivial subinterval $[b_{\\ell}, c_{\\ell}] \\subset [a_{\\ell-1}, a_\\ell]$ such that for all $t \\in [b_{\\ell}, c_{\\ell}]$, the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}_\\ell$ are $d_{i_1}(A+tB), \\ldots, d_{i_k}(A+tB)$. \\end{itemize} \\end{theorem}",
+        "definitions": [
+          "Let $A$, $\\mathscr{U}$, and $\\gamma_1,\\ldots, \\gamma_k$ be as in Proposition~\\ref{prop:inv_sym_subspace_property}.",
+          "Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$ that is invariant under $A+tB$ for all $t \\in [0,1]$.",
+          "Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices such that equality holds in the symplectic Lidskii's inequality \\eqref{eq:sym-lidskii-inequality}.",
+          "Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices such that equality holds in the symplectic Lidskii's inequality \\eqref{eq:sym-lidskii-inequality}."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [
+          "Proposition~\\ref{prop:inv_sym_subspace_property}.",
+          "Proposition~\\ref{prop:piecewise-analyticity-sym-subspace}, the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}$ can be arranged analytically as functions of $t \\in [0,1]$.",
+          "Proposition~\\ref{prop:piecewise-analyticity-sym-subspace}, the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}$ can be arranged analytically as functions of $t \\in [0,1]$."
+        ],
+        "context_excerpt": "Paper glossary memory: - D: an $n\\times n$ diagonal matrix with positive diagonal entries $d_1(A) \\leq \\cdots \\leq d_n(A)$ - E: said to be a doubly stochastic matrix if its $(i - F: said to be a doubly superstochastic matrix % if its $(i - N: an orthosymplectic matrix - Q: a doubly superstochastic matrix if and only if there exists a doubly stochastic matrix $E$ such that $E_{ij} \\leq F - x: \\textit{ weakly supermajorized} by $y$ Relevant definitions/notation blocks: - Let $A$, $\\mathscr{U}$, and $\\gamma_1,\\ldots, \\gamma_k$ be as in Proposition~\\ref{prop:inv_sym_subspace_property}. We call $\\gamma_1,\\ldots, \\gamma_k$ the symplectic eigenvalues of $A$ associated with $\\mathscr{U}$. Nearby theorem statements: - \\label{prop:piecewise-analyticity-sym-subspace} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $\\mathscr{U}$ be a $2k$-dimensional symplectic subspace of $\\mathbb{R}^{2n}$ that is invariant under $A+tB$ for all $t \\in [0,1]$. Let $\\gamma_{1}(t)\\leq \\cdots \\leq - It is not clear if by assuming the given hypotheses of Proposition~\\ref{prop:piecewise-analyticity-sym-subspace}, the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}$ can be arranged analytically as functions of $t \\in [0,1]$. This is because the - \\label{thm:necessary-sym-lidskii} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices such that equality holds in the symplectic Lidskii's inequality \\eqref{eq:sym-lidskii-inequality}. Then there exist $2k$ Nearby source context: d_n(A+tB),-d_1(A+tB),\\ldots, -d_n(A+tB)\\}$ for all $t \\in (a_{\\ell-1}, a_\\ell)$ \\cite[Lemma~2.2]{jm}, it follows from the elementary theory of analytic functions \\cite[Chapter~1]{krantz2002primer} that there exist distinct indices $\\rho_1 \\ldots, \\rho_k \\in \\{1,\\ldots, 2",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_daa2b8a7.lean:9:292: error: unexpected token ')'; expected term",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "A",
+            "B",
+            "Each",
+            "For",
+            "JA",
+            "JB",
+            "Let",
+            "Lidskii",
+            "P",
+            "R",
+            "The",
+            "Then"
+          ],
+          "quantifiers": [
+            "forall",
+            "exists"
+          ],
+          "assumptions": [
+            "\\label{thm:necessary-sym-lidskii} Let $A, B \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $1 \\leq i_1 < \\cdots < i_k \\leq n$ be any distinct indices such that equality holds in the symplectic Lidskii's inequality \\eqref{eq:sym-lidskii-inequality}.",
+            "\\item [(ii)] Each subspace $\\mathscr{U}_\\ell$ for $\\ell = 1,\\ldots, r$ has a symplectic basis consisting of symplectic eigenvector pairs of $B$ corresponding to the symplectic eigenvalues $d_1(B),\\ldots, d_k(B)$.",
+            "\\item [(iii)] \\sloppy For each $\\ell \\in \\{1,\\ldots, r\\}$, there exists a non-trivial subinterval $[b_{\\ell}, c_{\\ell}] \\subset [a_{\\ell-1}, a_\\ell]$ such that for all $t \\in [b_{\\ell}, c_{\\ell}]$, the symplectic eigenvalues of $A+tB$ associated with $\\mathscr{U}_\\ell$ are $d_{i_1}(A+tB), \\ldots, d_{i_k}(A+tB)$."
+          ],
+          "claim": "Then there exist $2k$-dimensional symplectic subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r \\subset \\mathbb{R}^{2n}$ and positive numbers $0=a_0<a_1<\\cdots < a_{r}=1$ satisfying the following conditions: \\begin{itemize} \\item [(i)] The subspaces $\\mathscr{U}_1,\\ldots, \\mathscr{U}_r$ are invariant under both $JA$ and $JB$. \\end{itemize}",
+          "symbols": [
+            "A",
+            "B",
+            "Each",
+            "For",
+            "JA",
+            "JB",
+            "Let",
+            "Lidskii",
+            "P",
+            "R",
+            "The",
+            "Then",
+            "U",
+            "a",
+            "a_0",
+            "a_1",
+            "all",
+            "and",
+            "any",
+            "are",
+            "associated",
+            "b",
+            "basis",
+            "be"
+          ],
+          "constraints": [
+            "1 \\leq i_1 < \\cdots < i_k \\leq n",
+            "0=a_0<a_1<\\cdots < a_{r}=1"
+          ],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "0=a_0<a_1<\\cdots < a_{r}=1",
+            "\\ell = 1,\\ldots, r"
+          ]
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:a",
+        "paper_definition_stub:hI_bound"
+      ],
+      "axiom_debt_hash": "90793c06460fa365",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "3284235c917b9757",
+      "source_span_id": "srcspan_4c1c275d1565dcaa12fd"
+    },
+    {
+      "theorem_name": "lemma_doubly_stochastic",
+      "lean_file": "/home/projectx/BDDM/output/2309.04562.lean",
+      "lean_statement": "theorem lemma_doubly_stochastic {n : ℕ} (x y : Fin n → ℝ) :\n    x ≺ y ↔ ∃ E : Matrix (Fin n) (Fin n) ℝ, IsDoublyStochastic E ∧ x = E.mulVec y",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2309.04562",
+        "section": "",
+        "label": "lemma:doubly-stochastic",
+        "cited_refs": [
+          "Bhandari1985",
+          "HIAI2018129",
+          "adesso2004extremal",
+          "ando1989",
+          "arnold1989graduate",
+          "bhat2019real",
+          "bhatia2015symplectic",
+          "bhatia2020schur",
+          "bhatia_jain_2021",
+          "chen2005gaussian",
+          "degosson",
+          "dms",
+          "folland1989harmonic",
+          "friedland2015equality",
+          "hofer",
+          "horn1954doubly",
+          "horn2012matrix",
+          "hsiang2022entanglement",
+          "huang2023",
+          "huang_mishra",
+          "ikramov2018symplectic",
+          "incollection1",
+          "jain2021sums",
+          "jm",
+          "john2022interlacing",
+          "kato2013perturbation",
+          "krantz2002primer",
+          "lidskii1950characteristic",
+          "ma_bhatia",
+          "marshall1979inequalities",
+          "massey2014optimal",
+          "mishra2020first",
+          "mishra2023",
+          "nicacio2021williamson",
+          "p",
+          "paradan2022",
+          "preprint1",
+          "report1",
+          "schur1923uber",
+          "serafini2017quantum",
+          "simon1999congruences",
+          "son2021symplectic",
+          "thesis1",
+          "weyl_inequalities",
+          "wielandt1955",
+          "williamson1936algebraic"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:claim_shape_mismatch:iff->eq",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T16:57:38Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_e15c9ae6bed70f64468a6f3c",
+      "canonical_theorem_id": "cth_c834c6eef42d02c441eca7de",
+      "alignment_pair_id": "align_875d0dc0412896b3ef91d173",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{lemma:doubly-stochastic}\n    Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec y$ if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$.",
+        "normalized_natural_language_theorem": "Quantifiers: for all; there exists Conclusion: x ≺ y if and only if there exists an n × n doubly stochastic matrix E such that x = Ey",
+        "lean_statement": "theorem lemma_doubly_stochastic {n : ℕ} (x y : Fin n → ℝ) :\n    x ≺ y ↔ ∃ E : Matrix (Fin n) (Fin n) ℝ, IsDoublyStochastic E ∧ x = E.mulVec y",
+        "extracted_assumptions": [],
+        "extracted_conclusion": "x ≺ y if and only if there exists an n × n doubly stochastic matrix E such that x = Ey",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_e15c9ae6bed70f64468a6f3c",
+          "alignment_pair_id": "align_875d0dc0412896b3ef91d173",
+          "paper_text_coverage": 0.4615,
+          "lean_text_coverage": 0.5,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::lemma_doubly_stochastic",
+      "context_pack": {
+        "theorem_name": "lemma_doubly_stochastic",
+        "original_latex_theorem": "\\label{lemma:doubly-stochastic}\n    Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec y$ if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$.",
+        "source_file": "/tmp/desol_arxiv_cycle/2309.04562/expanded_source/mishra_equality.tex",
+        "source_span_id": "srcspan_49503677d511dfd41f65",
+        "source_char_range": [
+          52125,
+          52327
+        ],
+        "statement_char_range": [
+          52138,
+          52315
+        ],
+        "source_line_range": [
+          686,
+          688
+        ],
+        "env_name": "lemma",
+        "latex_label": "lemma:doubly-stochastic",
+        "section": "Majorization in symplectic Schur--Horn weak supermajorization",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{lemma}\\label{lemma:doubly-stochastic} Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec y$ if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$. \\end{lemma}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [
+          "if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$.",
+          "if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$.",
+          "if % \\begin{align}\\label{eq:submajorization} % \\sum_{i=1}^k x^{\\downarrow}_i \\leq \\sum_{i=1}^k y^{\\downarrow}_i, \\quad \\text{for } 1 \\leq k \\leq n.",
+          "if the equality in \\eqref{eq:supmajorization} holds for $k=n$, then $x$ is said to be \\textit{ majorized} by $y$ and is written as $x \\prec y$.",
+          "if and only if $x$ is both, weakly submajorized as well as weakly supermajorized by $y$.",
+          "if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$."
+        ],
+        "nearby_claims": [
+          "theorem statements: - \\label{lemma:doubly-stochastic} Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec y$ if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$.",
+          "lemma:doubly-superstochastic} % Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec^w y$ if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$.",
+          "theorem (Theorem~3) given in \\cite{bhatia2020schur}.",
+          "theorem source span: \\begin{lemma}\\label{lemma:doubly-stochastic} Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec y$ if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$."
+        ],
+        "context_excerpt": "Paper glossary memory: - D: an $n\\times n$ diagonal matrix with positive diagonal entries $d_1(A) \\leq \\cdots \\leq d_n(A)$ - E: said to be a doubly stochastic matrix if its $(i - F: said to be a doubly superstochastic matrix % if its $(i - N: an orthosymplectic matrix - Q: a doubly superstochastic matrix if and only if there exists a doubly stochastic matrix $E$ such that $E_{ij} \\leq F - x: \\textit{ weakly supermajorized} by $y$ Nearby theorem statements: - \\label{lemma:doubly-stochastic} Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec y$ if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$. - \\label{lemma:doubly-superstochastic} % Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec^w y$ if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$. % - \\label{rem:proof_correction} There is a typo in the proof of the aforementioned symplectic Schur--Horn theorem (Theorem~3) given in \\cite{bhatia2020schur}. The proof works when the diagonal entries of the $2n \\times 2n$ matrix $M_{\\alpha}$ are replaced with $\\ Nearby source context: 1,\\ldots, n. \\end{align} % Then $x$ is said to be \\textit{ weakly submajorized} by $y$, written as $x\\prec_w y$, if % \\begin{align}\\label{eq:submajorization} % \\sum_{i=1}^k x^{\\downarrow}_i \\leq \\sum_{i=1}^k y^{\\downarrow}_i, \\quad \\text{for } 1 \\leq k \\leq n. % \\end{align} In addition, if the equality in \\eqref{eq:supmajorization} holds for $k=n$, then $x$ is said to be \\textit{ majorized} by $y$ and is written as $x \\prec y$. % It is easy to prove that $x$ is majorized by $y$ if and only if $x$ is both, weakly submajorized as well as weakly supermajorized by $y$. See \\cite{marshall1979inequalities} for a comprehensive theory of majorization. An $n \\times n$ real matrix $E$ i",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "claim_shape_mismatch:iff->eq",
+          "status": "FLAWED",
+          "failure_kind": "false_or_ambiguous_statement",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok",
+            "claim_equivalent"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "x",
+            "y",
+            "E"
+          ],
+          "quantifiers": [
+            "for all",
+            "there exists"
+          ],
+          "assumptions": [],
+          "claim": "x ≺ y if and only if there exists an n × n doubly stochastic matrix E such that x = Ey",
+          "symbols": [
+            "≺",
+            "∈",
+            "ℝⁿ",
+            "Ey"
+          ],
+          "constraints": [
+            "E is doubly stochastic"
+          ],
+          "theorem_intent": "characterization of majorization via doubly stochastic matrices"
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:claim_shape_mismatch"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "758fc64d2c0f7c85",
+      "source_span_id": "srcspan_49503677d511dfd41f65"
+    },
+    {
+      "theorem_name": "lemma_doubly_superstochastic",
+      "lean_file": "/home/projectx/BDDM/output/2309.04562.lean",
+      "lean_statement": "theorem lemma_doubly_superstochastic {n : ℕ} (x y : Fin n → ℝ) :\n    x ≺w y ↔ ∃ F : Matrix (Fin n) (Fin n) ℝ, IsDoublySuperstochastic F ∧ x = F.mulVec y",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2309.04562",
+        "section": "",
+        "label": "lemma:doubly-superstochastic",
+        "cited_refs": [
+          "Bhandari1985",
+          "HIAI2018129",
+          "adesso2004extremal",
+          "ando1989",
+          "arnold1989graduate",
+          "bhat2019real",
+          "bhatia2015symplectic",
+          "bhatia2020schur",
+          "bhatia_jain_2021",
+          "chen2005gaussian",
+          "degosson",
+          "dms",
+          "folland1989harmonic",
+          "friedland2015equality",
+          "hofer",
+          "horn1954doubly",
+          "horn2012matrix",
+          "hsiang2022entanglement",
+          "huang2023",
+          "huang_mishra",
+          "ikramov2018symplectic",
+          "incollection1",
+          "jain2021sums",
+          "jm",
+          "john2022interlacing",
+          "kato2013perturbation",
+          "krantz2002primer",
+          "lidskii1950characteristic",
+          "ma_bhatia",
+          "marshall1979inequalities",
+          "massey2014optimal",
+          "mishra2020first",
+          "mishra2023",
+          "nicacio2021williamson",
+          "p",
+          "paradan2022",
+          "preprint1",
+          "report1",
+          "schur1923uber",
+          "serafini2017quantum",
+          "simon1999congruences",
+          "son2021symplectic",
+          "thesis1",
+          "weyl_inequalities",
+          "wielandt1955",
+          "williamson1936algebraic"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:claim_shape_mismatch:iff->eq",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T16:57:38Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_10e330bf7272be2c32093720",
+      "canonical_theorem_id": "cth_2419a78ce93d9b2f6f9cec6d",
+      "alignment_pair_id": "align_760011f9012c5c129112edde",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{lemma:doubly-superstochastic}\n%    Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec^w y$ if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$.\n%",
+        "normalized_natural_language_theorem": "Quantifiers: for all; there exists Assumptions: x, y ∈ ℝⁿ Conclusion: x ≺ʷ y if and only if there exists an n × n doubly superstochastic matrix F such that x = Fy",
+        "lean_statement": "theorem lemma_doubly_superstochastic {n : ℕ} (x y : Fin n → ℝ) :\n    x ≺w y ↔ ∃ F : Matrix (Fin n) (Fin n) ℝ, IsDoublySuperstochastic F ∧ x = F.mulVec y",
+        "extracted_assumptions": [
+          "x, y ∈ ℝⁿ"
+        ],
+        "extracted_conclusion": "x ≺ʷ y if and only if there exists an n × n doubly superstochastic matrix F such that x = Fy",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_10e330bf7272be2c32093720",
+          "alignment_pair_id": "align_760011f9012c5c129112edde",
+          "paper_text_coverage": 0.4286,
+          "lean_text_coverage": 0.4615,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "matched",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::lemma_doubly_superstochastic",
+      "context_pack": {
+        "theorem_name": "lemma_doubly_superstochastic",
+        "original_latex_theorem": "\\label{lemma:doubly-superstochastic}\n%    Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec^w y$ if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$.\n%",
+        "source_file": "/tmp/desol_arxiv_cycle/2309.04562/expanded_source/mishra_equality.tex",
+        "source_span_id": "srcspan_c4123d19bebf8b3c0ab3",
+        "source_char_range": [
+          52376,
+          52593
+        ],
+        "statement_char_range": [
+          52389,
+          52581
+        ],
+        "source_line_range": [
+          690,
+          692
+        ],
+        "env_name": "lemma",
+        "latex_label": "lemma:doubly-superstochastic",
+        "section": "Majorization in symplectic Schur--Horn weak supermajorization",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{lemma}\\label{lemma:doubly-superstochastic} % Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec^w y$ if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$. % \\end{lemma}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [
+          "if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$.",
+          "if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$.",
+          "if the equality in \\eqref{eq:supmajorization} holds for $k=n$, then $x$ is said to be \\textit{ majorized} by $y$ and is written as $x \\prec y$.",
+          "if and only if $x$ is both, weakly submajorized as well as weakly supermajorized by $y$.",
+          "if and only if there exists a doubly stochastic matrix $E$ such that $E_{ij} \\leq F_{ij}$ for all $i,j=1,\\ldots, n$.",
+          "if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$."
+        ],
+        "nearby_claims": [
+          "theorem statements: - \\label{lemma:doubly-stochastic} Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec y$ if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$.",
+          "lemma:doubly-superstochastic} % Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec^w y$ if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$.",
+          "theorem (Theorem~3) given in \\cite{bhatia2020schur}.",
+          "Theorem~1 of \\cite{Bhandari1985}.",
+          "theorem source span: \\begin{lemma}\\label{lemma:doubly-superstochastic} % Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec^w y$ if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$."
+        ],
+        "context_excerpt": "Paper glossary memory: - D: an $n\\times n$ diagonal matrix with positive diagonal entries $d_1(A) \\leq \\cdots \\leq d_n(A)$ - E: said to be a doubly stochastic matrix if its $(i - F: said to be a doubly superstochastic matrix % if its $(i - N: an orthosymplectic matrix - Q: a doubly superstochastic matrix if and only if there exists a doubly stochastic matrix $E$ such that $E_{ij} \\leq F - x: \\textit{ weakly supermajorized} by $y$ Nearby theorem statements: - \\label{lemma:doubly-stochastic} Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec y$ if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$. - \\label{lemma:doubly-superstochastic} % Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec^w y$ if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$. % - \\label{rem:proof_correction} There is a typo in the proof of the aforementioned symplectic Schur--Horn theorem (Theorem~3) given in \\cite{bhatia2020schur}. The proof works when the diagonal entries of the $2n \\times 2n$ matrix $M_{\\alpha}$ are replaced with $\\ Nearby source context: 1 \\leq k \\leq n. % \\end{align} In addition, if the equality in \\eqref{eq:supmajorization} holds for $k=n$, then $x$ is said to be \\textit{ majorized} by $y$ and is written as $x \\prec y$. % It is easy to prove that $x$ is majorized by $y$ if and only if $x$ is both, weakly submajorized as well as weakly supermajorized by $y$. See \\cite{marshall1979inequalities} for a comprehensive theory of majorization. An $n \\times n$ real matrix $E$ is said to be a doubly stochastic matrix if its $(i,j)$th entries $E_{ij}$ are non-negative for $i,j=1,\\ldots, n$ such that \\begin{align} \\sum_{j=1}^n E_{ij}=1, \\quad \\text{for } i=1, \\ldots, n, \\\\ \\sum_{i=1}^n E_{ij}=1, \\quad \\text{for } j=1,\\l",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "claim_shape_mismatch:iff->eq",
+          "status": "FLAWED",
+          "failure_kind": "false_or_ambiguous_statement",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok",
+            "claim_equivalent"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "x",
+            "y",
+            "F"
+          ],
+          "quantifiers": [
+            "for all",
+            "there exists"
+          ],
+          "assumptions": [
+            "x, y ∈ ℝⁿ"
+          ],
+          "claim": "x ≺ʷ y if and only if there exists an n × n doubly superstochastic matrix F such that x = Fy",
+          "symbols": [
+            "≺ʷ",
+            "ℝⁿ"
+          ],
+          "constraints": [
+            "F is doubly superstochastic"
+          ],
+          "theorem_intent": "characterization of weak supermajorization via doubly superstochastic matrices"
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:claim_shape_mismatch"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "2cbd8f86ff2c6aa6",
+      "source_span_id": "srcspan_c4123d19bebf8b3c0ab3"
+    },
+    {
+      "theorem_name": "thm_sym_schur_horn",
+      "lean_file": "/home/projectx/BDDM/output/2309.04562.lean",
+      "lean_statement": "theorem thm_sym_schur_horn (n : ℕ) (A : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (D : Matrix (Fin n) (Fin n) ℝ) (hA : A ⊤ = A ∧ ∀ i, 0 < A i i) (hD : D.diag = fun i => A (Fin.castLE (by omega) i) (Fin.castLE (by omega) i)) (N : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (hN : N ⊤ * N = 1) : delta_c A ≺ d_s A ↔ ∃ (N : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ), A = N * (D ⊕ D) * N ⊤",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "hA",
+          "lean_expr": "(hA : A ⊤ = A ∧ ∀ i, 0 < A i i)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        },
+        {
+          "label": "hN",
+          "lean_expr": "(hN : N ⊤ * N = 1)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2309.04562",
+        "section": "",
+        "label": "thm:sym_schur_horn",
+        "cited_refs": [
+          "Bhandari1985",
+          "HIAI2018129",
+          "adesso2004extremal",
+          "ando1989",
+          "arnold1989graduate",
+          "bhat2019real",
+          "bhatia2015symplectic",
+          "bhatia2020schur",
+          "bhatia_jain_2021",
+          "chen2005gaussian",
+          "degosson",
+          "dms",
+          "folland1989harmonic",
+          "friedland2015equality",
+          "hofer",
+          "horn1954doubly",
+          "horn2012matrix",
+          "hsiang2022entanglement",
+          "huang2023",
+          "huang_mishra",
+          "ikramov2018symplectic",
+          "incollection1",
+          "jain2021sums",
+          "jm",
+          "john2022interlacing",
+          "kato2013perturbation",
+          "krantz2002primer",
+          "lidskii1950characteristic",
+          "ma_bhatia",
+          "marshall1979inequalities",
+          "massey2014optimal",
+          "mishra2020first",
+          "mishra2023",
+          "nicacio2021williamson",
+          "p",
+          "paradan2022",
+          "preprint1",
+          "report1",
+          "schur1923uber",
+          "serafini2017quantum",
+          "simon1999congruences",
+          "son2021symplectic",
+          "thesis1",
+          "weyl_inequalities",
+          "wielandt1955",
+          "williamson1936algebraic"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_bebcc9e3.lean:9:27: error: unexpected token ')'; expected term",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T16:57:39Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_852e527bd5a5cd8210498eca",
+      "canonical_theorem_id": "cth_32cdeadbccd67126c17a58df",
+      "alignment_pair_id": "align_91b43e17947e347068a3a605",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{thm:sym_schur_horn}\n    Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $D$ be the $n \\times n$ diagonal matrix with diagonal entries $d_1(A),\\ldots, d_n(A)$. \n    We have  $\\Delta_c(A) \\prec d_s(A)$ if and only if $A=N (D \\oplus D)N^T$ for some $2n \\times 2n$ orthosymplectic matrix $N$.",
+        "normalized_natural_language_theorem": "Assumptions: A ∈ ℙ₂ₙ(ℝ); D is an n×n diagonal matrix with diagonal entries d₁(A),…,dₙ(A) Conclusion: Δ_c(A) ≺ d_s(A) if and only if A = N (D ⊕ D) Nᵀ for some 2n×2n orthosymplectic matrix N",
+        "lean_statement": "theorem thm_sym_schur_horn (n : ℕ) (A : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (D : Matrix (Fin n) (Fin n) ℝ) (hA : A ⊤ = A ∧ ∀ i, 0 < A i i) (hD : D.diag = fun i => A (Fin.castLE (by omega) i) (Fin.castLE (by omega) i)) (N : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ) (hN : N ⊤ * N = 1) : delta_c A ≺ d_s A ↔ ∃ (N : Matrix (Fin (2 * n)) (Fin (2 * n)) ℝ), A = N * (D ⊕ D) * N ⊤",
+        "extracted_assumptions": [
+          "A ∈ ℙ₂ₙ(ℝ)",
+          "D is an n×n diagonal matrix with diagonal entries d₁(A),…,dₙ(A)"
+        ],
+        "extracted_conclusion": "Δ_c(A) ≺ d_s(A) if and only if A = N (D ⊕ D) Nᵀ for some 2n×2n orthosymplectic matrix N",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_852e527bd5a5cd8210498eca",
+          "alignment_pair_id": "align_91b43e17947e347068a3a605",
+          "paper_text_coverage": 0.3846,
+          "lean_text_coverage": 0.2273,
+          "missing_assumptions": [
+            "A ∈ ℙ₂ₙ(ℝ)"
+          ],
+          "added_assumptions": [
+            "hA: A ⊤ = A ∧ ∀ i, 0 < A i i",
+            "hD: D.diag = fun i => A (Fin.castLE (by omega"
+          ],
+          "conclusion_relation": "matched",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::thm_sym_schur_horn",
+      "context_pack": {
+        "theorem_name": "thm_sym_schur_horn",
+        "original_latex_theorem": "\\label{thm:sym_schur_horn}\n    Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $D$ be the $n \\times n$ diagonal matrix with diagonal entries $d_1(A),\\ldots, d_n(A)$. \n    We have  $\\Delta_c(A) \\prec d_s(A)$ if and only if $A=N (D \\oplus D)N^T$ for some $2n \\times 2n$ orthosymplectic matrix $N$.",
+        "source_file": "/tmp/desol_arxiv_cycle/2309.04562/expanded_source/mishra_equality.tex",
+        "source_span_id": "srcspan_4a969aa45119edd60b53",
+        "source_char_range": [
+          56419,
+          56739
+        ],
+        "statement_char_range": [
+          56434,
+          56725
+        ],
+        "source_line_range": [
+          743,
+          746
+        ],
+        "env_name": "theorem",
+        "latex_label": "thm:sym_schur_horn",
+        "section": "Majorization in symplectic Schur--Horn weak supermajorization",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{theorem}\\label{thm:sym_schur_horn} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $D$ be the $n \\times n$ diagonal matrix with diagonal entries $d_1(A),\\ldots, d_n(A)$. We have $\\Delta_c(A) \\prec d_s(A)$ if and only if $A=N (D \\oplus D)N^T$ for some $2n \\times 2n$ orthosymplectic matrix $N$. \\end{theorem}",
+        "definitions": [
+          "Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $D$ be the $n \\times n$ diagonal matrix with diagonal entries $d_1(A),\\ldots, d_n(A)$."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$.",
+          "if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$.",
+          "if and only if $A=N (D \\oplus D)N^T$ for some $2n \\times 2n$ orthosymplectic matrix $N$."
+        ],
+        "nearby_claims": [
+          "theorem statements: - \\label{lemma:doubly-stochastic} Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec y$ if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$.",
+          "lemma:doubly-superstochastic} % Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec^w y$ if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$.",
+          "theorem (Theorem~3) given in \\cite{bhatia2020schur}.",
+          "theorem source span: \\begin{theorem}\\label{thm:sym_schur_horn} Let $A \\in \\mathbb{P}_{2n}(\\mathbb{R})$ and $D$ be the $n \\times n$ diagonal matrix with diagonal entries $d_1(A),\\ldots, d_n(A)$."
+        ],
+        "context_excerpt": "Paper glossary memory: - D: an $n\\times n$ diagonal matrix with positive diagonal entries $d_1(A) \\leq \\cdots \\leq d_n(A)$ - E: said to be a doubly stochastic matrix if its $(i - F: said to be a doubly superstochastic matrix % if its $(i - N: an orthosymplectic matrix - Q: a doubly superstochastic matrix if and only if there exists a doubly stochastic matrix $E$ such that $E_{ij} \\leq F - x: \\textit{ weakly supermajorized} by $y$ Nearby theorem statements: - \\label{lemma:doubly-stochastic} Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec y$ if and only if there exists an $n \\times n$ doubly stochastic matrix $E$ such that $x=Ey$. - \\label{lemma:doubly-superstochastic} % Given $x, y \\in \\mathbb{R}^n$, we have $x \\prec^w y$ if and only if there exists an $n \\times n$ doubly superstochastic matrix $F$ such that $x=Fy$. % - \\label{rem:proof_correction} There is a typo in the proof of the aforementioned symplectic Schur--Horn theorem (Theorem~3) given in \\cite{bhatia2020schur}. The proof works when the diagonal entries of the $2n \\times 2n$ matrix $M_{\\alpha}$ are replaced with $\\ Nearby source context: tries of the $2n \\times 2n$ matrix $M_{\\alpha}$ are replaced with $\\sqrt{\\alpha_1}, \\ldots, \\sqrt{\\alpha_n}, \\sqrt{\\alpha_1^{-1}}, \\ldots, \\sqrt{\\alpha_n^{-1}}$, where $\\alpha=({\\alpha_1}, \\ldots, {\\alpha_n})$ is an $n$-vector with positive entries. \\end{remark} %----------------------------------------------------------------------------------------------------------------------% %----------------------------------------------------------------------------------------------------------------------% \\begin{remark}\\label{remark} There are three other known symplectic analogs of the Schur--Horn theorem. These Schur--Horn type theorems are given by replacing $\\Delta_c(A)$ in \\eqr",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_bebcc9e3.lean:9:27: error: unexpected token ')'; expected term",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "A",
+            "D",
+            "N"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "A ∈ ℙ₂ₙ(ℝ)",
+            "D is an n×n diagonal matrix with diagonal entries d₁(A),…,dₙ(A)"
+          ],
+          "claim": "Δ_c(A) ≺ d_s(A) if and only if A = N (D ⊕ D) Nᵀ for some 2n×2n orthosymplectic matrix N",
+          "symbols": [
+            "Δ_c(A)",
+            "d_s(A)",
+            "⊕",
+            "Nᵀ"
+          ],
+          "constraints": [],
+          "theorem_intent": "Characterization of when the vector Δ_c(A) is majorized by d_s(A) in terms of a decomposition involving an orthosymplectic matrix."
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:omega"
+      ],
+      "axiom_debt_hash": "17f455d14527f9da",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "9dd8994e41d0524a",
+      "source_span_id": "srcspan_4a969aa45119edd60b53"
+    }
+  ]
+}

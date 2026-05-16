@@ -1,0 +1,786 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-05-16T18:14:18Z",
+  "pipeline_commit": "af0e6ebcf7ed524339e7dffc1fc45937535c401d",
+  "toolchain_versions": {
+    "lean": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
+    "python": "unknown",
+    "mistral_model": "labs-leanstral-2603"
+  },
+  "paper_id": "2312.03885",
+  "source_label": "2312.03885",
+  "prove_mode": "auto",
+  "model": "labs-leanstral-2603",
+  "entry_count": 3,
+  "compiler_feedback_repair_run_id": "arxiv_to_lean_2312.03885_1778955191_2108737",
+  "compiler_feedback_repair_run_dataset": "/home/projectx/BDDM/output/flywheel/runs/arxiv_to_lean_2312.03885_1778955191_2108737/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset.jsonl",
+  "compiler_feedback_repair_dataset_summary": "/home/projectx/BDDM/output/flywheel/compiler_feedback_repair_dataset_summary.json",
+  "entries": [
+    {
+      "theorem_name": "meth_order2",
+      "lean_file": "/home/projectx/BDDM/output/2312.03885.lean",
+      "lean_statement": "theorem meth_order2 (theta_t U_t I_P_S η_t H_t D_t g_t lam_int t : ℝ) :\n    theta_{t + 1} = theta_t - U_t * I_P_S * η_t^* ∧\n    η_t^* = (H_t + (lam_int / 2) * ‖D_t * η_t^*‖ * D_t ^ 2)⁻1 * g_t ∧\n    ∀ η, ‖D_t * η‖ ≤ ‖D_t * η_t^*‖",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2312.03885",
+        "section": "",
+        "label": "meth:order2",
+        "cited_refs": [
+          "amari1998natural",
+          "arora2019fine",
+          "birgin2017worst",
+          "cauchy1847methode",
+          "clevert2015fast",
+          "dangel2023backpropagation",
+          "dieudonne_foundations_1960",
+          "du2019gradient",
+          "gill1981practical",
+          "goldfarb2020practical",
+          "gower2019rsn",
+          "gupta2018shampoo",
+          "hanzely2020stochastic",
+          "jacot2018neural",
+          "kornblith2019similarity",
+          "lecun1998gradient",
+          "lee2019wide",
+          "lu2018block",
+          "luenberger2008linear",
+          "martens2015optimizing",
+          "mei2022generalization",
+          "nash1984newton",
+          "nesterov2006cubic",
+          "nocedal1999numerical",
+          "nonomura2021randomized",
+          "ollivier2015riemannian",
+          "pearlmutter1994fast",
+          "ren2021tensor",
+          "sagun2018empirical",
+          "simonyan2014very",
+          "wang1998second",
+          "yang2021tensor",
+          "yao2021adahessian",
+          "yuan2022sketched",
+          "zhang2022all"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:raw_latex_leak:latex_subscript_braces",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T18:14:18Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_6e1d8473ed0e9b548f3e20c3",
+      "canonical_theorem_id": "cth_f970de54481d5a899ecfde57",
+      "alignment_pair_id": "align_4775fd7e15677bbf9aa79755",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{meth:order2}\n\tTraining step $\\btheta_{t + 1} = \\btheta_t - \\bU_t \\bI_{P:S} \\bfeta_t^*$, where\n\t$\\bfeta_t^*$ is the solution with the largest norm $\\|\\bD_{t} \\bfeta\\|$ of the equation:\n\t$\\bfeta =\n\t\t\\left(\\bar{\\bH}_{t} + \\frac{\\lambda_{\\mathrm{int}}}{2} \\|\\bD_{t} \\bfeta\\| \n\t\t\\bD_{t}^2\\right)^{-1}\\bar{\\bg}_{t}$.",
+        "normalized_natural_language_theorem": "Conclusion: θ_{t+1} = θ_t - U_t I_{P:S} η_t^*, where η_t^* is the solution with the largest norm ||D_t η|| of the equation η = (H_t + (λ_int/2) ||D_t η|| D_t^2)^{-1} g_t",
+        "lean_statement": "theorem meth_order2 (theta_t U_t I_P_S η_t H_t D_t g_t lam_int t : ℝ) :\n    theta_{t + 1} = theta_t - U_t * I_P_S * η_t^* ∧\n    η_t^* = (H_t + (lam_int / 2) * ‖D_t * η_t^*‖ * D_t ^ 2)⁻1 * g_t ∧\n    ∀ η, ‖D_t * η‖ ≤ ‖D_t * η_t^*‖",
+        "extracted_assumptions": [],
+        "extracted_conclusion": "θ_{t+1} = θ_t - U_t I_{P:S} η_t^*, where η_t^* is the solution with the largest norm ||D_t η|| of the equation η = (H_t + (λ_int/2) ||D_t η|| D_t^2)^{-1} g_t",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "syntax_error",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_6e1d8473ed0e9b548f3e20c3",
+          "alignment_pair_id": "align_4775fd7e15677bbf9aa79755",
+          "paper_text_coverage": 0.4118,
+          "lean_text_coverage": 0.5,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "compatible",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::meth_order2",
+      "context_pack": {
+        "theorem_name": "meth_order2",
+        "original_latex_theorem": "\\label{meth:order2}\n\tTraining step $\\btheta_{t + 1} = \\btheta_t - \\bU_t \\bI_{P:S} \\bfeta_t^*$, where\n\t$\\bfeta_t^*$ is the solution with the largest norm $\\|\\bD_{t} \\bfeta\\|$ of the equation:\n\t$\\bfeta =\n\t\t\\left(\\bar{\\bH}_{t} + \\frac{\\lambda_{\\mathrm{int}}}{2} \\|\\bD_{t} \\bfeta\\| \n\t\t\\bD_{t}^2\\right)^{-1}\\bar{\\bg}_{t}$.",
+        "source_file": "/tmp/desol_arxiv_cycle/2312.03885/expanded_source/main.tex",
+        "source_span_id": "srcspan_f3b64492648c3292fb2f",
+        "source_char_range": [
+          33412,
+          33757
+        ],
+        "statement_char_range": [
+          33427,
+          33744
+        ],
+        "source_line_range": [
+          725,
+          731
+        ],
+        "env_name": "method",
+        "latex_label": "meth:order2",
+        "section": "Properties",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{method} \\label{meth:order2} Training step $\\btheta_{t + 1} = \\btheta_t - \\bU_t \\bI_{P:S} \\bfeta_t^*$, where $\\bfeta_t^*$ is the solution with the largest norm $\\|\\bD_{t} \\bfeta\\|$ of the equation: $\\bfeta = \\left(\\bar{\\bH}_{t} + \\frac{\\lambda_{\\mathrm{int}}}{2} \\|\\bD_{t} \\bfeta\\| \\bD_{t}^2\\right)^{-1}\\bar{\\bg}_{t}$. \\end{method}",
+        "definitions": [
+          "Let $\\bD := \\mathrm{Diag}(|D_1|^{1/3}, \\cdots, |D_S|^{1/3}) \\in \\mathbb{R}^S$."
+        ],
+        "notations": [],
+        "local_assumptions": [],
+        "nearby_claims": [],
+        "context_excerpt": "Paper glossary memory: - N_e: the number of training steps per epoch - P_i: the size of the tensor $\\bU^i$ (or of $\\bT^i$) and $0_{P_i}$ is the null tensor of size $P_i$ - P_s: the number of coefficients of the tensor $\\bT^s$ - S: small enough - T: strictly convex if - T^i_k: the $k$-th coordinate of $\\bT^i$ and $U^i_k$ is the $k$-th coordinate of $\\bU^i$ - f: strongly anisotropic - l: put in the $\\tilde{s}$-block if $l \\% k = \\tilde{s}$ Declared notation/macros: - \\newcommand{(\\Letter)}{(\\Letter)} - \\newcommand{\\todo}[1]{{\\color{red} #1}} - \\newcommand{\\upreva}[1]{{\\color{blue} #1}} - \\newcommand{\\uprevb}[1]{{\\color{red} #1}} - \\DeclareMathOperator*{arg\\,max}{arg\\,max} - \\DeclareMathOperator*{arg\\,min}{arg\\,min} - \\newcommand*\\bDelta{\\boldsymbol{\\Delta}} - \\newcommand*\\bmu{\\boldsymbol{\\mu}} Nearby source context: has to take into account order-3 information, and regularize $\\bar{\\bH}$ so that the resulting update remains in a region around $\\btheta_t$ where the cubic term of the Taylor approximation is negligible. In practice, we propose an anisotropic version of Nesterov's cubic regularization \\cite{nesterov2006cubic}. \\paragraph{Anisotropic Nesterov cubic regularization.} By using the technique presented in Section \\ref{sec:short:higher_order}, the diagonal coefficients $(D_1, \\cdots, D_S)$ of $\\mathbf{D}_{\\btheta}^{(3)}(\\bu) \\in \\mathbb{R}^{S \\times S \\times S}$ are available with little computational cost. Let $\\bD := \\mathrm{Diag}(|D_1|^{1/3}, \\cdots, |D_S|^{1/3}) \\in \\mathbb{R}^S$. We modify the method of \\cite{nesterov2006cubic} by integrating an anisotropic factor $\\mathbf{D}$ into the cubic term. Thus, our goal is to minimize according to $\\bfeta$ the function $T$: $T(\\bfeta) := - \\bfeta^T \\bar{\\bg} + \\frac{1}{2} \\bfeta \\bar{\\bH} \\bfeta + \\frac{\\lambda_{\\mathr",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "raw_latex_leak:latex_subscript_braces",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok",
+            "claim_equivalent"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "θ",
+            "U",
+            "I",
+            "η",
+            "H",
+            "D",
+            "g",
+            "λ_int"
+          ],
+          "quantifiers": [],
+          "assumptions": [],
+          "claim": "θ_{t+1} = θ_t - U_t I_{P:S} η_t^*, where η_t^* is the solution with the largest norm ||D_t η|| of the equation η = (H_t + (λ_int/2) ||D_t η|| D_t^2)^{-1} g_t",
+          "symbols": [
+            "θ",
+            "U",
+            "I",
+            "η",
+            "H",
+            "D",
+            "g",
+            "λ_int",
+            "P",
+            "S",
+            "t"
+          ],
+          "constraints": [],
+          "theorem_intent": "Define the training step update rule using anisotropic Nesterov cubic regularization"
+        }
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "b18de55e5db32e1e",
+      "source_span_id": "srcspan_f3b64492648c3292fb2f"
+    },
+    {
+      "theorem_name": "assump_invariance",
+      "lean_file": "/home/projectx/BDDM/output/2312.03885.lean",
+      "lean_statement": "theorem assump_invariance : False",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "false_or_ambiguous_statement",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [],
+      "provenance": {
+        "paper_id": "2312.03885",
+        "section": "",
+        "label": "assump:invariance",
+        "cited_refs": [
+          "amari1998natural",
+          "arora2019fine",
+          "birgin2017worst",
+          "cauchy1847methode",
+          "clevert2015fast",
+          "dangel2023backpropagation",
+          "dieudonne_foundations_1960",
+          "du2019gradient",
+          "gill1981practical",
+          "goldfarb2020practical",
+          "gower2019rsn",
+          "gupta2018shampoo",
+          "hanzely2020stochastic",
+          "jacot2018neural",
+          "kornblith2019similarity",
+          "lecun1998gradient",
+          "lee2019wide",
+          "lu2018block",
+          "luenberger2008linear",
+          "martens2015optimizing",
+          "mei2022generalization",
+          "nash1984newton",
+          "nesterov2006cubic",
+          "nocedal1999numerical",
+          "nonomura2021randomized",
+          "ollivier2015riemannian",
+          "pearlmutter1994fast",
+          "ren2021tensor",
+          "sagun2018empirical",
+          "simonyan2014very",
+          "wang1998second",
+          "yang2021tensor",
+          "yao2021adahessian",
+          "yuan2022sketched",
+          "zhang2022all"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:semantic_policy_hard_block",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T18:14:18Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": true,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "claim_equivalent",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "independent_semantic_equivalence_evidence"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_86a5b2aa0ce5a9092cf112a3",
+      "canonical_theorem_id": "cth_e25416f8743c6564e03b088a",
+      "alignment_pair_id": "align_f84d9e11f00fd0ee672e3192",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{assump:invariance}\n\tWe assume that $\\bU_t$ is computed in such a way that $\\tilde{\\bU}_t = \\mathbf{J} \\bU_t$\n\tat every step.",
+        "normalized_natural_language_theorem": "We assume that bU_t is computed in such a way that tilde bU_t = mathbf J bU_t at every step.",
+        "lean_statement": "theorem assump_invariance : False",
+        "extracted_assumptions": [],
+        "extracted_conclusion": "False",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "schema_stage_missing",
+          "statement_repair_needed:schema_fallback",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_86a5b2aa0ce5a9092cf112a3",
+          "alignment_pair_id": "align_f84d9e11f00fd0ee672e3192",
+          "paper_text_coverage": 0.0,
+          "lean_text_coverage": 0.0,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "trivial_target",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::assump_invariance",
+      "context_pack": {
+        "theorem_name": "assump_invariance",
+        "original_latex_theorem": "\\label{assump:invariance}\n\tWe assume that $\\bU_t$ is computed in such a way that $\\tilde{\\bU}_t = \\mathbf{J} \\bU_t$\n\tat every step.",
+        "source_file": "/tmp/desol_arxiv_cycle/2312.03885/expanded_source/main.tex",
+        "source_span_id": "srcspan_46e061d425496ccb692c",
+        "source_char_range": [
+          67696,
+          67863
+        ],
+        "statement_char_range": [
+          67715,
+          67846
+        ],
+        "source_line_range": [
+          1478,
+          1481
+        ],
+        "env_name": "assumption",
+        "latex_label": "assump:invariance",
+        "section": "Claim",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{assumption} \\label{assump:invariance} We assume that $\\bU_t$ is computed in such a way that $\\tilde{\\bU}_t = \\mathbf{J} \\bU_t$ at every step. \\end{assumption}",
+        "definitions": [
+          "let $\\bar{\\mathbf{J}} = \\mathrm{Diag}(a_1, \\cdots, a_S)$.",
+          "assume that $\\bU_t$ is computed in such a way that $\\tilde{\\bU}_t = \\mathbf{J} \\bU_t$ at every step."
+        ],
+        "notations": [],
+        "local_assumptions": [
+          "if $l \\% k = \\tilde{s}$ Nearby theorem statements: - \\label{thm:rate} The method has a linear rate of convergence."
+        ],
+        "nearby_claims": [
+          "theorem statements: - \\label{thm:rate} The method has a linear rate of convergence.",
+          "theorem source span: \\begin{assumption} \\label{assump:invariance} We assume that $\\bU_t$ is computed in such a way that $\\tilde{\\bU}_t = \\mathbf{J} \\bU_t$ at every step."
+        ],
+        "context_excerpt": "Paper glossary memory: - N_e: the number of training steps per epoch - P_i: the size of the tensor $\\bU^i$ (or of $\\bT^i$) and $0_{P_i}$ is the null tensor of size $P_i$ - P_s: the number of coefficients of the tensor $\\bT^s$ - S: small enough - T: strictly convex if - T^i_k: the $k$-th coordinate of $\\bT^i$ and $U^i_k$ is the $k$-th coordinate of $\\bU^i$ - f: strongly anisotropic - l: put in the $\\tilde{s}$-block if $l \\% k = \\tilde{s}$ Nearby theorem statements: - \\label{thm:rate} The method has a linear rate of convergence. For any $\\btheta_{t} \\neq 0$: \\begin{align*} \\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} \\leq \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) , \\end{align*} where $a_s = \\min \\mathrm{Sp} Declared notation/macros: - \\newcommand{(\\Letter)}{(\\Letter)} - \\newcommand{\\todo}[1]{{\\color{red} #1}} - \\newcommand{\\upreva}[1]{{\\color{blue} #1}} - \\newcommand{\\uprevb}[1]{{\\color{red} #1}} - \\DeclareMathOperator*{arg\\,max}{arg\\,max} - \\DeclareMathOperator*{arg\\,min}{arg\\,min} - \\newcommand*\\bDelta{\\boldsymbol{\\Delta}} - \\newcommand*\\bmu{\\boldsymbol{\\mu}} Nearby source context: actical side, the standard parameterization is preferred over the NTK one because it leads to better results, both in terms of training and generalization. So, there is no consensus about the best layer-wise parameterization. Thus, ensuring that a method is invariant by layer-wise affine reparameterization guarantees that its behavior remains the same whatever the choice of the user (standard or NTK parameterization). \\subsection{Claim} We consider a parameter $\\tilde{\\btheta}$ such that $\\btheta = \\varphi(\\tilde{\\btheta})$, where $\\varphi$ is an invertible map, affine on each subset of parameters. Therefore, its Jacobian is: $\\mathbf{J} = \\mathrm{Diag}(\\alpha_1, \\cdots, \\alp",
+        "translation_statement_schema": {}
+      },
+      "axiom_debt": [],
+      "axiom_debt_hash": "",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "repair_candidate",
+      "statement_fidelity_blockers": [
+        "statement_validity:bad_translation_artifact",
+        "statement_validity_reason:false_target_without_source_contradiction"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "1cf38ef069b8d8da",
+      "source_span_id": "srcspan_46e061d425496ccb692c"
+    },
+    {
+      "theorem_name": "thm_rate",
+      "lean_file": "/home/projectx/BDDM/output/2312.03885.lean",
+      "lean_statement": "theorem thm_rate (theta_t theta_t_plus_1 : ℕ) (h : theta_t ≠ 0) :\n    (caL theta_t_plus_1 : ℝ) / (caL theta_t : ℝ) ≤ sSup (fun s => ((A_s - a_s) ^ 2 : ℝ) / ((A_s + a_s) ^ 2 : ℝ))",
+      "status": "FLAWED",
+      "step_verdict": "INCOMPLETE",
+      "failure_origin": "FORMALIZATION_ERROR",
+      "failure_kind": "elaboration_failure",
+      "trust_class": "TRUST_PLACEHOLDER",
+      "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,translation_fidelity_ok,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
+      "promotion_gate_passed": false,
+      "step_obligations": [],
+      "assumptions": [
+        {
+          "label": "h",
+          "lean_expr": "(h : theta_t ≠ 0)",
+          "grounding": "GROUNDED_INTERNAL_KG",
+          "grounding_source": "local_hypothesis",
+          "trust_class": "TRUST_INTERNAL_PROVED",
+          "trust_reference": "internal_kg"
+        }
+      ],
+      "provenance": {
+        "paper_id": "2312.03885",
+        "section": "",
+        "label": "thm:rate",
+        "cited_refs": [
+          "amari1998natural",
+          "arora2019fine",
+          "birgin2017worst",
+          "cauchy1847methode",
+          "clevert2015fast",
+          "dangel2023backpropagation",
+          "dieudonne_foundations_1960",
+          "du2019gradient",
+          "gill1981practical",
+          "goldfarb2020practical",
+          "gower2019rsn",
+          "gupta2018shampoo",
+          "hanzely2020stochastic",
+          "jacot2018neural",
+          "kornblith2019similarity",
+          "lecun1998gradient",
+          "lee2019wide",
+          "lu2018block",
+          "luenberger2008linear",
+          "martens2015optimizing",
+          "mei2022generalization",
+          "nash1984newton",
+          "nesterov2006cubic",
+          "nocedal1999numerical",
+          "nonomura2021randomized",
+          "ollivier2015riemannian",
+          "pearlmutter1994fast",
+          "ren2021tensor",
+          "sagun2018empirical",
+          "simonyan2014very",
+          "wang1998second",
+          "yang2021tensor",
+          "yao2021adahessian",
+          "yuan2022sketched",
+          "zhang2022all"
+        ]
+      },
+      "proof_text": "",
+      "first_failing_step": -1,
+      "error_message": "translation_acceptance_gate:lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_24597d82.lean:10:66: error: Type mismatch\n  (A_s - a_s) ^ 2 / (A_s + a_s) ^ 2\nhas type\n  ℝ\nbut is expected to have type\n  Prop",
+      "proof_mode": "auto",
+      "proof_method": "translation_limited",
+      "rounds_used": 0,
+      "time_s": 0.0,
+      "timestamp": "2026-05-16T18:14:18Z",
+      "validation_gates": {
+        "lean_proof_closed": false,
+        "step_verdict_verified": false,
+        "assumptions_grounded": true,
+        "provenance_linked": true,
+        "translation_fidelity_ok": false,
+        "status_alignment_ok": true,
+        "dependency_trust_complete": true,
+        "reproducible_env": true,
+        "claim_equivalent": false,
+        "independent_semantic_equivalence_evidence": false,
+        "semantic_adversarial_checks_passed": true,
+        "no_paper_axiom_debt": false,
+        "statement_alignment_exact": false,
+        "statement_alignment_not_unrelated": true,
+        "translation_acceptance_gate": false
+      },
+      "gate_failures": [
+        "translation_acceptance_gate",
+        "translation_fidelity_ok",
+        "lean_proof_closed",
+        "step_verdict_verified",
+        "claim_equivalent",
+        "independent_semantic_equivalence_evidence",
+        "no_paper_axiom_debt"
+      ],
+      "claim_equivalence_verdict": "unclear",
+      "claim_equivalence_notes": [
+        "translation_unvalidated",
+        "insufficient_semantic_evidence"
+      ],
+      "statement_alignment_class": "diagnostic",
+      "paper_statement_id": "pstmt_3e2cd6833e9508e9567a0a7f",
+      "canonical_theorem_id": "cth_e7f337f02a4a73669b6ebc54",
+      "alignment_pair_id": "align_95950d55b01fdaa9e77f3495",
+      "translation_fidelity_score": 0.2,
+      "status_alignment_score": 0.8,
+      "semantic_equivalence_artifact": {
+        "original_latex_theorem": "\\label{thm:rate}\n\tThe method has a linear rate of convergence. For any $\\btheta_{t} \\neq 0$:\n\t\\begin{align*}\n\t\\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} \\leq \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) ,\n\t\\end{align*}\n\twhere $a_s = \\min \\mathrm{Sp}(\\bH_s)$ and $A_s = \\max \\mathrm{Sp}(\\bH_s)$. \n\tMoreover, this rate is optimal, since it is possible to build $\\btheta_t$\n\tsuch that:\n\t\\begin{align*}\n\t\\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} = \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) .\n\t\\end{align*}",
+        "normalized_natural_language_theorem": "Assumptions: For any $\\btheta_{t} \\neq 0$: \\begin{align*} \\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} \\leq \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) , \\end{align*} where $a_s = \\min \\mathrm{Sp}(\\bH_s)$ and $A_s = \\max \\mathrm{Sp}(\\bH_s)$. Conclusion: \\label{thm:rate} The method has a linear rate of convergence. Moreover, this rate is optimal, since it is possible to build $\\btheta_t$ such that: \\begin{align*} \\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} = \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) . \\end{align*}",
+        "lean_statement": "theorem thm_rate (theta_t theta_t_plus_1 : ℕ) (h : theta_t ≠ 0) :\n    (caL theta_t_plus_1 : ℝ) / (caL theta_t : ℝ) ≤ sSup (fun s => ((A_s - a_s) ^ 2 : ℝ) / ((A_s + a_s) ^ 2 : ℝ))",
+        "extracted_assumptions": [
+          "For any $\\btheta_{t} \\neq 0$: \\begin{align*} \\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} \\leq \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) , \\end{align*} where $a_s = \\min \\mathrm{Sp}(\\bH_s)$ and $A_s = \\max \\mathrm{Sp}(\\bH_s)$."
+        ],
+        "extracted_conclusion": "\\label{thm:rate} The method has a linear rate of convergence. Moreover, this rate is optimal, since it is possible to build $\\btheta_t$ such that: \\begin{align*} \\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} = \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) . \\end{align*}",
+        "equivalence_verdict": "unclear",
+        "reviewer_evaluator_evidence": [
+          "formalization_unvalidated",
+          "type_mismatch",
+          "schema_stage_used",
+          "statement_repair_needed:schema_fallback",
+          "review_required_hard",
+          "translation_unvalidated",
+          "insufficient_semantic_evidence",
+          "claim_equivalence_note:translation_unvalidated",
+          "claim_equivalence_note:insufficient_semantic_evidence"
+        ],
+        "adversarial_checks": {
+          "lean_theorem_weaker": {
+            "passed": true,
+            "evidence": []
+          },
+          "trivialized_by_hypothesis": {
+            "passed": true,
+            "evidence": []
+          },
+          "domain_object_replaced_by_prop": {
+            "passed": true,
+            "evidence": []
+          },
+          "analytic_estimate_tautology": {
+            "passed": true,
+            "evidence": []
+          },
+          "quantifiers_erased": {
+            "passed": true,
+            "evidence": []
+          }
+        },
+        "independent_semantic_evidence": false,
+        "alignment_class": "diagnostic",
+        "alignment_decision": {
+          "alignment_class": "diagnostic",
+          "confidence": 0.9,
+          "reasons": [
+            "translation_unvalidated",
+            "diagnostic_or_translation_artifact"
+          ],
+          "evidence_sources": [
+            "source_span",
+            "canonical_lean_statement"
+          ],
+          "paper_statement_id": "pstmt_3e2cd6833e9508e9567a0a7f",
+          "alignment_pair_id": "align_95950d55b01fdaa9e77f3495",
+          "paper_text_coverage": 0.1053,
+          "lean_text_coverage": 0.3333,
+          "missing_assumptions": [],
+          "added_assumptions": [],
+          "conclusion_relation": "mismatch",
+          "diagnostic": true,
+          "schema_version": "1.0"
+        },
+        "schema_version": "1.0"
+      },
+      "review_required": true,
+      "review_queue_id": "review::thm_rate",
+      "context_pack": {
+        "theorem_name": "thm_rate",
+        "original_latex_theorem": "\\label{thm:rate}\n\tThe method has a linear rate of convergence. For any $\\btheta_{t} \\neq 0$:\n\t\\begin{align*}\n\t\\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} \\leq \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) ,\n\t\\end{align*}\n\twhere $a_s = \\min \\mathrm{Sp}(\\bH_s)$ and $A_s = \\max \\mathrm{Sp}(\\bH_s)$. \n\tMoreover, this rate is optimal, since it is possible to build $\\btheta_t$\n\tsuch that:\n\t\\begin{align*}\n\t\\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} = \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) .\n\t\\end{align*}",
+        "source_file": "/tmp/desol_arxiv_cycle/2312.03885/expanded_source/main.tex",
+        "source_span_id": "srcspan_8ddd2e5432571ca52b92",
+        "source_char_range": [
+          72038,
+          72605
+        ],
+        "statement_char_range": [
+          72054,
+          72591
+        ],
+        "source_line_range": [
+          1584,
+          1595
+        ],
+        "env_name": "theorem",
+        "latex_label": "thm:rate",
+        "section": "Convergence rate in a simple case",
+        "cited_refs": [],
+        "exact_source_excerpt": "\\begin{theorem} \\label{thm:rate} The method has a linear rate of convergence. For any $\\btheta_{t} \\neq 0$: \\begin{align*} \\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} \\leq \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) , \\end{align*} where $a_s = \\min \\mathrm{Sp}(\\bH_s)$ and $A_s = \\max \\mathrm{Sp}(\\bH_s)$. Moreover, this rate is optimal, since it is possible to build $\\btheta_t$ such that: \\begin{align*} \\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} = \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) . \\end{align*} \\end{theorem}",
+        "definitions": [],
+        "notations": [],
+        "local_assumptions": [
+          "if $l \\% k = \\tilde{s}$ Nearby theorem statements: - \\label{thm:rate} The method has a linear rate of convergence."
+        ],
+        "nearby_claims": [
+          "theorem statements: - \\label{thm:rate} The method has a linear rate of convergence.",
+          "theorem source span: \\begin{theorem} \\label{thm:rate} The method has a linear rate of convergence."
+        ],
+        "context_excerpt": "Paper glossary memory: - N_e: the number of training steps per epoch - P_i: the size of the tensor $\\bU^i$ (or of $\\bT^i$) and $0_{P_i}$ is the null tensor of size $P_i$ - P_s: the number of coefficients of the tensor $\\bT^s$ - S: small enough - T: strictly convex if - T^i_k: the $k$-th coordinate of $\\bT^i$ and $U^i_k$ is the $k$-th coordinate of $\\bU^i$ - f: strongly anisotropic - l: put in the $\\tilde{s}$-block if $l \\% k = \\tilde{s}$ Nearby theorem statements: - \\label{thm:rate} The method has a linear rate of convergence. For any $\\btheta_{t} \\neq 0$: \\begin{align*} \\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} \\leq \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) , \\end{align*} where $a_s = \\min \\mathrm{Sp} - For a given $\\bH$, better convergence rates can be achieved by reducing the $(\\gamma_s)_s$, that is, choosing partitions $(\\mathcal{I}_s)_s$ such that, for all $s$, the eigenvalues $(h_{p})_{p \\in \\mathcal{I}_s}$ are not too spread out. - To achieve good convergence rates, one should have some access to the eigenspectrum of the Hessian, in order to group together the indices of eigenvalues having the same order of magnitude. Declared notation/macros: - \\newcommand{(\\Letter)}{(\\Letter)} - \\newcommand{\\todo}[1]{{\\color{red} #1}} - \\newcommand{\\upreva}[1]{{\\color{blue} #1}} - \\newcommand{\\uprevb}[1]{{\\color{red} #1}} - \\DeclareMathOperator*{arg\\,max}{arg\\,max} - \\DeclareMathOperator*{arg\\,min}{arg\\,min} - \\newcommand*\\bDelta{\\boldsymbol{\\Delta}} - \\newcommand*\\bmu{\\boldsymbol{\\mu}} Nearby source context: bfeta}_* \\\\ &=\\tilde{\\btheta}_t - \\tilde{\\bU}_t \\bI_{P:S} \\tilde{\\mathbf{J}}^{-2} \\bfeta_* , \\end{align*} which can be rewritten: \\begin{align} \\mathbf{J}^{-1} \\btheta_{t + 1} &= \\mathbf{J}^{-1} \\btheta_{t} - \\bU \\mathbf{J} \\bI_{P:S} \\tilde{\\mathbf{J}}^",
+        "translation_acceptance_gate": {
+          "accepted": false,
+          "reason": "lean_elaboration_failed: /home/projectx/BDDM/Desol/_tmp_validate_24597d82.lean:10:66: error: Type mismatch\n  (A_s - a_s) ^ 2 / (A_s + a_s) ^ 2\nhas type\n  ℝ\nbut is expected to have type\n  Prop",
+          "status": "FLAWED",
+          "failure_kind": "elaboration_failure",
+          "gate_failures": [
+            "translation_acceptance_gate",
+            "translation_fidelity_ok"
+          ]
+        },
+        "translation_statement_schema": {
+          "objects": [
+            "A_s",
+            "For",
+            "Moreover",
+            "Sp",
+            "The",
+            "a",
+            "a_s",
+            "align",
+            "and",
+            "any",
+            "bH_s",
+            "begin"
+          ],
+          "quantifiers": [],
+          "assumptions": [
+            "For any $\\btheta_{t} \\neq 0$: \\begin{align*} \\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} \\leq \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) , \\end{align*} where $a_s = \\min \\mathrm{Sp}(\\bH_s)$ and $A_s = \\max \\mathrm{Sp}(\\bH_s)$."
+          ],
+          "claim": "\\label{thm:rate} The method has a linear rate of convergence. Moreover, this rate is optimal, since it is possible to build $\\btheta_t$ such that: \\begin{align*} \\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} = \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) . \\end{align*}",
+          "symbols": [
+            "A_s",
+            "For",
+            "Moreover",
+            "Sp",
+            "The",
+            "a",
+            "a_s",
+            "align",
+            "and",
+            "any",
+            "bH_s",
+            "begin",
+            "btheta",
+            "btheta_t",
+            "build",
+            "caL",
+            "convergence",
+            "end",
+            "frac",
+            "has",
+            "is",
+            "it",
+            "label",
+            "left"
+          ],
+          "constraints": [
+            "\\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} \\leq \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) ,",
+            "\\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} = \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) ."
+          ],
+          "theorem_intent": "literal_scaffold_from_latex",
+          "equations": [
+            "a_s = \\min \\mathrm{Sp}(\\bH_s)",
+            "A_s = \\max \\mathrm{Sp}(\\bH_s)",
+            "\\frac{\\caL(\\btheta_{t + 1})}{\\caL(\\btheta_{t})} = \\max_s\\left(\\frac{(A_s - a_s)^2}{(A_s + a_s)^2} \\right) ."
+          ]
+        }
+      },
+      "axiom_debt": [
+        "paper_definition_stub:theta_t_plus_1"
+      ],
+      "axiom_debt_hash": "a0cab3bcff8baa48",
+      "closure_claim": "not_closed",
+      "proof_eligible": false,
+      "statement_fidelity_verdict": "blocked",
+      "statement_fidelity_blockers": [
+        "statement_validity:claim_review_pending",
+        "statement_validity_reason:lean_proof_closed",
+        "statement_validity_reason:step_verdict_verified",
+        "statement_validity_reason:translation_fidelity_ok",
+        "statement_validity_reason:claim_equivalent",
+        "statement_validity_reason:independent_semantic_equivalence_evidence",
+        "statement_validity_reason:no_paper_axiom_debt"
+      ],
+      "statement_fidelity_source": "none",
+      "source_content_hash": "3cd116da74d9813d",
+      "source_span_id": "srcspan_8ddd2e5432571ca52b92"
+    }
+  ]
+}
