@@ -245,6 +245,15 @@ def h2 : ℝ := 0
 -- Local lemmas / theorem-like facts.
 -- Explicit axioms / unresolved paper assumptions.
 
+
+-- Auto-stubbed paper-local symbols (paper_theory_symbol_stubber.py)
+-- Each stub is real formalization debt: axioms / sorry-bodied
+-- defs. The integrity audit's trivialization detector is the
+-- final arbiter on any subsequent closure.
+-- `import` is unknown and its usage couldn't be classified; emitting `axiom import : Prop`. Real formalization debt; audit's trivialization detector is the final arbiter.
+axiom import : Prop
+attribute [aesop safe apply] import
+
 end Paper_2306_03200
 
 export Paper_2306_03200 (L2Space omega infty C a baselineskip0 c_1 cdotE_4 cong0 conj_67 d2 e4 e8 eis_2 eis_4 eis_6 f_L frac12 frac14 frac32 g2 g4 ge0 ge1 ge12 kE_k mu_2 n1 n2 n3 n4 n5 n6 n7 omega_R omega_T omega_Y p_1 p_2 pi_J pi_T positivity_1 positivity_2 psi_L que_3 s_1 s_1' s_2 s_2' sigma_1 sigma_3 sigma_5 sum_L t_0 t_1 t_2 tfrac12 tfrac32 theta to0 u_1 u_2 utf8 genus_and_reducibility_of_Severi_variety genus_V_R_L hE8 hB_g hB_bisec hB_genus hB_height h_isolated_singularities_1 h_local_analytic_equations_2 hPi_norm h_B_Wei h_L h_Pi hB_irr hB_nodes hB_sing p_has_A_d_singularity_in_ Γ_is_reduced inst_1 h_irreducible_rational_bisection_1 h_source_2_2 omega_X j_II j_II_ n0 tT_reg paper_2306_03200_prop_overline_M_v_G_smooth_submanifold Γ_p k1 hM_v_G h_Tilde_T h_j_II h_intersection_transverse_3 h_simple_telltale_cycle_1 h_I g_L theta_q2 s1 s2 h_s1_eq_s2 h_s1_ne_s2 sigma1 coeff_of_q_pow_g_plus_2_in_series coeff_of_q_pow_g_plus_2_minus_2m_in_series h0 h1 h2)

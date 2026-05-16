@@ -1,0 +1,4425 @@
+{
+  "schema_version": "1.0.0",
+  "split": "test",
+  "n_problems": 244,
+  "k": 1,
+  "pass_at_1": 0.29918032786885246,
+  "pass_at_k": 0.29918032786885246,
+  "total_solved": 73,
+  "total_attempts": 244,
+  "elapsed_seconds": 1704.6,
+  "timestamp": "20260516T185407",
+  "per_problem": [
+    {
+      "id": "mathd_algebra_478",
+      "name": "mathd_algebra_478",
+      "solved": true,
+      "best_proof": "rw [h\u2081, h\u2082, h\u2083]\nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "rw [h\u2081, h\u2082, h\u2083]\nlinarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 9.79,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "numbertheory_4x3m7y3neq2003",
+      "name": "numbertheory_4x3m7y3neq2003",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.5s | iterations=24 expanded=4",
+          "error_category": "other",
+          "elapsed_s": 6.87,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1983_p1",
+      "name": "aime_1983_p1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.1s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 7.87,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12_2001_p5",
+      "name": "amc12_2001_p5",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token '!'; expected ')', ',' or ':'",
+          "error_category": "other",
+          "elapsed_s": 9.95,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_141",
+      "name": "mathd_algebra_141",
+      "solved": true,
+      "best_proof": "nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "nlinarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 10.64,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_3",
+      "name": "mathd_numbertheory_3",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 4.13,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1969_p2",
+      "name": "imo_1969_p2",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 4.14,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_44",
+      "name": "mathd_algebra_44",
+      "solved": true,
+      "best_proof": "constructor\nlinarith\nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "constructor\nlinarith\nlinarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 6.57,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_209",
+      "name": "mathd_algebra_209",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.3s | iterations=24 expanded=3",
+          "error_category": "other",
+          "elapsed_s": 8.37,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_1124",
+      "name": "mathd_numbertheory_1124",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 6.2,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1983_p6",
+      "name": "imo_1983_p6",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.4s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.81,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_237",
+      "name": "mathd_numbertheory_237",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 4.07,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_33",
+      "name": "mathd_algebra_33",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.8s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.95,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2021_p3",
+      "name": "amc12b_2021_p3",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.2s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 7.35,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_299",
+      "name": "mathd_numbertheory_299",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.71,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2020_p2",
+      "name": "amc12b_2020_p2",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.81,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_sqineq_unitcircatbpabsamblt1",
+      "name": "algebra_sqineq_unitcircatbpabsamblt1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.5s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.5,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1977_p6",
+      "name": "imo_1977_p6",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.8s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 6.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_419",
+      "name": "mathd_algebra_419",
+      "solved": true,
+      "best_proof": "rw [h\u2080, h\u2081]\nnorm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "rw [h\u2080, h\u2081]\nnorm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 6.52,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2020_p10",
+      "name": "amc12a_2020_p10",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 4.92,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1960_p2",
+      "name": "imo_1960_p2",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.1s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 8.94,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_427",
+      "name": "mathd_numbertheory_427",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.98,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "numbertheory_x5neqy2p4",
+      "name": "numbertheory_x5neqy2p4",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.7s | iterations=24 expanded=4",
+          "error_category": "other",
+          "elapsed_s": 6.62,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_398",
+      "name": "mathd_algebra_398",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.95,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1963_p5",
+      "name": "imo_1963_p5",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.3s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.32,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_430",
+      "name": "mathd_numbertheory_430",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.9s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 6.09,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_459",
+      "name": "mathd_algebra_459",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.4s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.54,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "induction_12dvd4expnp1p20",
+      "name": "induction_12dvd4expnp1p20",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 6.7s | iterations=24 expanded=8",
+          "error_category": "other",
+          "elapsed_s": 11.78,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_320",
+      "name": "mathd_algebra_320",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 6.6s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 10.84,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_137",
+      "name": "mathd_algebra_137",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.1s | iterations=24 expanded=4",
+          "error_category": "other",
+          "elapsed_s": 7.1,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1997_p5",
+      "name": "imo_1997_p5",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.9s | iterations=24 expanded=4",
+          "error_category": "other",
+          "elapsed_s": 7.02,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_277",
+      "name": "mathd_numbertheory_277",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.8s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.87,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_559",
+      "name": "mathd_numbertheory_559",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.81,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_160",
+      "name": "mathd_algebra_160",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.84,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_24",
+      "name": "mathd_algebra_24",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.97,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_176",
+      "name": "mathd_algebra_176",
+      "solved": true,
+      "best_proof": "ring",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "ring",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.81,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "induction_nfactltnexpnm1ngt3",
+      "name": "induction_nfactltnexpnm1ngt3",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.8s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.86,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_208",
+      "name": "mathd_algebra_208",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 6.7s | iterations=24 expanded=10",
+          "error_category": "other",
+          "elapsed_s": 10.71,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_353",
+      "name": "mathd_numbertheory_353",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.9,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "numbertheory_notequiv2i2jasqbsqdiv8",
+      "name": "numbertheory_notequiv2i2jasqbsqdiv8",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.6s | iterations=24 expanded=6",
+          "error_category": "other",
+          "elapsed_s": 7.55,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_156",
+      "name": "mathd_algebra_156",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.3s | iterations=24 expanded=3",
+          "error_category": "other",
+          "elapsed_s": 7.69,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_12",
+      "name": "mathd_numbertheory_12",
+      "solved": true,
+      "best_proof": "rfl",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "rfl",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.87,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_345",
+      "name": "mathd_numbertheory_345",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.52,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_447",
+      "name": "mathd_numbertheory_447",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_328",
+      "name": "mathd_numbertheory_328",
+      "solved": true,
+      "best_proof": "norm_num\nomega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num\nomega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 6.15,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_451",
+      "name": "mathd_numbertheory_451",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.94,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1997_p9",
+      "name": "aime_1997_p9",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 5.5s | iterations=24 expanded=7",
+          "error_category": "other",
+          "elapsed_s": 9.47,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_sqineq_at2malt1",
+      "name": "algebra_sqineq_at2malt1",
+      "solved": true,
+      "best_proof": "nlinarith [sq_nonneg (a - 1)]",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "nlinarith [sq_nonneg (a - 1)]",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.47,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_apbmpcneq0_aeq0anbeq0anceq0",
+      "name": "algebra_apbmpcneq0_aeq0anbeq0anceq0",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 6.5s | iterations=24 expanded=4",
+          "error_category": "other",
+          "elapsed_s": 10.49,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_171",
+      "name": "mathd_algebra_171",
+      "solved": true,
+      "best_proof": "rw [h\u2080]\nnorm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "rw [h\u2080]\nnorm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.2,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_227",
+      "name": "mathd_numbertheory_227",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.9s | iterations=24 expanded=8",
+          "error_category": "other",
+          "elapsed_s": 7.84,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_188",
+      "name": "mathd_algebra_188",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.6s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.57,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_765",
+      "name": "mathd_numbertheory_765",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.63,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1959_p1",
+      "name": "imo_1959_p1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.3s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 7.22,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_175",
+      "name": "mathd_numbertheory_175",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.54,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "numbertheory_fxeq4powxp6powxp9powx_f2powmdvdf2pown",
+      "name": "numbertheory_fxeq4powxp6powxp9powx_f2powmdvdf2pown",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.5s | iterations=24 expanded=7",
+          "error_category": "other",
+          "elapsed_s": 7.5,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1992_p1",
+      "name": "imo_1992_p1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.2s | iterations=24 expanded=3",
+          "error_category": "other",
+          "elapsed_s": 6.2,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1982_p1",
+      "name": "imo_1982_p1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 7.1s | iterations=24 expanded=6",
+          "error_category": "other",
+          "elapsed_s": 11.13,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1987_p5",
+      "name": "aime_1987_p5",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.9s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.86,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_346",
+      "name": "mathd_algebra_346",
+      "solved": true,
+      "best_proof": "norm_num [h\u2080, h\u2081]",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num [h\u2080, h\u2081]",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.79,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_487",
+      "name": "mathd_algebra_487",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 7.3s | iterations=24 expanded=9",
+          "error_category": "other",
+          "elapsed_s": 11.31,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_728",
+      "name": "mathd_numbertheory_728",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.61,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_184",
+      "name": "mathd_algebra_184",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 4.6s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 8.61,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_552",
+      "name": "mathd_numbertheory_552",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.97,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2021_p9",
+      "name": "amc12b_2021_p9",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.94,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1994_p3",
+      "name": "aime_1994_p3",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.7s | iterations=24 expanded=4",
+          "error_category": "other",
+          "elapsed_s": 6.68,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_215",
+      "name": "mathd_algebra_215",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 4.0,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_293",
+      "name": "mathd_numbertheory_293",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.77,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_769",
+      "name": "mathd_numbertheory_769",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.59,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_452",
+      "name": "mathd_algebra_452",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 7.8s | iterations=24 expanded=9",
+          "error_category": "other",
+          "elapsed_s": 11.7,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_5",
+      "name": "mathd_numbertheory_5",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.0s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 6.03,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_207",
+      "name": "mathd_numbertheory_207",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.59,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_342",
+      "name": "mathd_numbertheory_342",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.55,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_483",
+      "name": "mathd_numbertheory_483",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 126.8s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 130.39,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2020_p21",
+      "name": "amc12b_2020_p21",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 4.6s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 8.57,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2003_p5",
+      "name": "amc12a_2003_p5",
+      "solved": true,
+      "best_proof": "norm_num [Nat.ofDigits] at h\u2081\nomega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num [Nat.ofDigits] at h\u2081\nomega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.79,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_495",
+      "name": "mathd_numbertheory_495",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 16.7s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 20.68,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_296",
+      "name": "mathd_algebra_296",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.63,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_abpbcpcageq3_sumaonsqrtapbgeq3onsqrt2",
+      "name": "algebra_abpbcpcageq3_sumaonsqrtapbgeq3onsqrt2",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.3s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.32,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_2varlineareq_fp3zeq11_3tfm1m5zeqn68_feqn10_zeq7",
+      "name": "algebra_2varlineareq_fp3zeq11_3tfm1m5zeqn68_feqn10_zeq7",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 9.5s | iterations=24 expanded=14",
+          "error_category": "other",
+          "elapsed_s": 13.54,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_247",
+      "name": "mathd_numbertheory_247",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.2,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "induction_pord1p1on2powklt5on2",
+      "name": "induction_pord1p1on2powklt5on2",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.95,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_107",
+      "name": "mathd_algebra_107",
+      "solved": true,
+      "best_proof": "nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "nlinarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.18,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "numbertheory_2pownm1prime_nprime",
+      "name": "numbertheory_2pownm1prime_nprime",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 5.7s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 9.62,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_412",
+      "name": "mathd_algebra_412",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.75,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2013_p4",
+      "name": "amc12a_2013_p4",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 6.3s | iterations=24 expanded=15",
+          "error_category": "other",
+          "elapsed_s": 10.23,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_392",
+      "name": "mathd_algebra_392",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 4.4s | iterations=24 expanded=6",
+          "error_category": "other",
+          "elapsed_s": 8.32,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_314",
+      "name": "mathd_numbertheory_314",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.5s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.5,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "induction_prod1p1onk3le3m1onn",
+      "name": "induction_prod1p1onk3le3m1onn",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 4.0,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_343",
+      "name": "mathd_numbertheory_343",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.92,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_756",
+      "name": "mathd_algebra_756",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2002_p7",
+      "name": "amc12b_2002_p7",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.6s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.56,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_80",
+      "name": "mathd_algebra_80",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.7s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.67,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_457",
+      "name": "mathd_numbertheory_457",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.9s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 6.87,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12_2000_p12",
+      "name": "amc12_2000_p12",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.7s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.66,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_135",
+      "name": "mathd_numbertheory_135",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.2s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 7.17,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_275",
+      "name": "mathd_algebra_275",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_388",
+      "name": "mathd_algebra_388",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.84,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2020_p7",
+      "name": "amc12a_2020_p7",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 4.02,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "induction_sumkexp3eqsumksq",
+      "name": "induction_sumkexp3eqsumksq",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1981_p6",
+      "name": "imo_1981_p6",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 6.1s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 10.08,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_263",
+      "name": "mathd_algebra_263",
+      "solved": true,
+      "best_proof": "nlinarith [Real.sqrt_nonneg (19 + 3 * y), Real.sq_sqrt (show 0 \u2264 19 + 3 * y by linarith)]",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "nlinarith [Real.sqrt_nonneg (19 + 3 * y), Real.sq_sqrt (show 0 \u2264 19 + 3 * y by linarith)]",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 6.83,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_34",
+      "name": "mathd_numbertheory_34",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.69,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_764",
+      "name": "mathd_numbertheory_764",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.93,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2021_p4",
+      "name": "amc12b_2021_p4",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.0s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 6.89,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1962_p2",
+      "name": "imo_1962_p2",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 10.2s | iterations=24 expanded=3",
+          "error_category": "other",
+          "elapsed_s": 14.17,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_170",
+      "name": "mathd_algebra_170",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.5s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 6.45,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_432",
+      "name": "mathd_algebra_432",
+      "solved": true,
+      "best_proof": "ring",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "ring",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.76,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_598",
+      "name": "mathd_algebra_598",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.95,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_bleqa_apbon2msqrtableqambsqon8b",
+      "name": "algebra_bleqa_apbon2msqrtableqambsqon8b",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.6s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 7.59,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_276",
+      "name": "mathd_algebra_276",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 12.0s | iterations=24 expanded=15",
+          "error_category": "other",
+          "elapsed_s": 15.97,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2021_p14",
+      "name": "amc12a_2021_p14",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 4.0,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_sum1onsqrt2to1onsqrt10000lt198",
+      "name": "algebra_sum1onsqrt2to1onsqrt10000lt198",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 4.03,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_618",
+      "name": "mathd_numbertheory_618",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 11.0s | iterations=24 expanded=12",
+          "error_category": "other",
+          "elapsed_s": 14.97,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2020_p4",
+      "name": "amc12a_2020_p4",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.7s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.64,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2020_p6",
+      "name": "amc12b_2020_p6",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token '!'; expected ')', ',' or ':'",
+          "error_category": "other",
+          "elapsed_s": 3.96,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_435",
+      "name": "mathd_numbertheory_435",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 9.3s | iterations=24 expanded=9",
+          "error_category": "other",
+          "elapsed_s": 13.23,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_others_exirrpowirrrat",
+      "name": "algebra_others_exirrpowirrrat",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 4.0,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_427",
+      "name": "mathd_algebra_427",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.97,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_76",
+      "name": "mathd_algebra_76",
+      "solved": true,
+      "best_proof": "norm_num [Int.even_iff, Int.odd_iff, h\u2080, h\u2081]",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num [Int.even_iff, Int.odd_iff, h\u2080, h\u2081]",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.04,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_99",
+      "name": "mathd_numbertheory_99",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.83,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_9onxpypzleqsum2onxpy",
+      "name": "algebra_9onxpypzleqsum2onxpy",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.9s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.79,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_233",
+      "name": "mathd_numbertheory_233",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 7.3s | iterations=24 expanded=13",
+          "error_category": "other",
+          "elapsed_s": 11.26,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_absapbon1pabsapbleqsumabsaon1pabsa",
+      "name": "algebra_absapbon1pabsapbleqsumabsaon1pabsa",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.9s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.93,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1984_p6",
+      "name": "imo_1984_p6",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.5s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.49,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_2001_p6",
+      "name": "imo_2001_p6",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.2s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.15,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_321",
+      "name": "mathd_numbertheory_321",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.8s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.77,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_17",
+      "name": "mathd_algebra_17",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 5.2s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 9.21,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_153",
+      "name": "mathd_algebra_153",
+      "solved": true,
+      "best_proof": "rw [h\u2080]\nnorm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "rw [h\u2080]\nnorm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 6.53,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_sqineq_unitcircatbpamblt1",
+      "name": "algebra_sqineq_unitcircatbpamblt1",
+      "solved": true,
+      "best_proof": "nlinarith [sq_nonneg (a - b), sq_nonneg (a + b - 1), sq_nonneg (a - 1), sq_nonneg (b - 1)]",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "nlinarith [sq_nonneg (a - b), sq_nonneg (a + b - 1), sq_nonneg (a - 1), sq_nonneg (b - 1)]",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 6.62,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2021_p18",
+      "name": "amc12a_2021_p18",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 6.5s | iterations=24 expanded=7",
+          "error_category": "other",
+          "elapsed_s": 10.42,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_329",
+      "name": "mathd_algebra_329",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.76,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "induction_pprime_pdvdapowpma",
+      "name": "induction_pprime_pdvdapowpma",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.0s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.94,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2021_p9",
+      "name": "amc12a_2021_p9",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.94,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1984_p1",
+      "name": "aime_1984_p1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2021_p22",
+      "name": "amc12a_2021_p22",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.95,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_229",
+      "name": "mathd_numbertheory_229",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.59,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_100",
+      "name": "mathd_numbertheory_100",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 17.0s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 20.98,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_313",
+      "name": "mathd_algebra_313",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 10.8s | iterations=24 expanded=13",
+          "error_category": "other",
+          "elapsed_s": 14.7,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2002_p4",
+      "name": "amc12b_2002_p4",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.3s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 7.18,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2002_p6",
+      "name": "amc12a_2002_p6",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.0s | iterations=24 expanded=3",
+          "error_category": "other",
+          "elapsed_s": 5.96,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2003_p23",
+      "name": "amc12a_2003_p23",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.97,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_129",
+      "name": "mathd_algebra_129",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.5s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.52,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2021_p18",
+      "name": "amc12b_2021_p18",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 11.8s | iterations=24 expanded=17",
+          "error_category": "other",
+          "elapsed_s": 15.74,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_484",
+      "name": "mathd_algebra_484",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.94,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_551",
+      "name": "mathd_numbertheory_551",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.56,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_304",
+      "name": "mathd_algebra_304",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.57,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2021_p8",
+      "name": "amc12a_2021_p8",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.4s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.45,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_ineq_nto1onlt2m1on",
+      "name": "algebra_ineq_nto1onlt2m1on",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.3s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 7.19,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2002_p19",
+      "name": "amc12b_2002_p19",
+      "solved": true,
+      "best_proof": "nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "nlinarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.32,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_341",
+      "name": "mathd_numbertheory_341",
+      "solved": true,
+      "best_proof": "norm_num at h\u2081\nomega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num at h\u2081\nomega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.61,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_711",
+      "name": "mathd_numbertheory_711",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.3s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.29,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2020_p22",
+      "name": "amc12b_2020_p22",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 4.0,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_113",
+      "name": "mathd_algebra_113",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.8s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.78,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2020_p9",
+      "name": "amc12a_2020_p9",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.97,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12_2000_p1",
+      "name": "amc12_2000_p1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.4s | iterations=24 expanded=3",
+          "error_category": "other",
+          "elapsed_s": 6.38,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2021_p19",
+      "name": "amc12a_2021_p19",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.96,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_amgm_sumasqdivbgeqsuma",
+      "name": "algebra_amgm_sumasqdivbgeqsuma",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 6.4s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 10.37,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_212",
+      "name": "mathd_numbertheory_212",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.54,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_320",
+      "name": "mathd_numbertheory_320",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.77,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_125",
+      "name": "mathd_algebra_125",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.01,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "induction_1pxpownlt1pnx",
+      "name": "induction_1pxpownlt1pnx",
+      "solved": true,
+      "best_proof": "apply one_add_mul_le_pow\nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "apply one_add_mul_le_pow\nlinarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.67,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_148",
+      "name": "mathd_algebra_148",
+      "solved": true,
+      "best_proof": "have h2 : f 2 = c * 2 ^ 3 - 9 * 2 + 3 := h\u2080 2\nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "have h2 : f 2 = c * 2 ^ 3 - 9 * 2 + 3 := h\u2080 2\nlinarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.79,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2019_p12",
+      "name": "amc12a_2019_p12",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 5.3s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 9.34,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "induction_11div10tonmn1ton",
+      "name": "induction_11div10tonmn1ton",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 4.3s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 8.25,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_amgm_sum1toneqn_prod1tonleq1",
+      "name": "algebra_amgm_sum1toneqn_prod1tonleq1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1985_p6",
+      "name": "imo_1985_p6",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.3s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.31,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2020_p15",
+      "name": "amc12a_2020_p15",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: Unknown constant `Complex.abs`",
+          "error_category": "invalid_symbol",
+          "elapsed_s": 3.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_332",
+      "name": "mathd_algebra_332",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 5.0s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 8.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_cubrtrp1oncubrtreq3_rcubp1onrcubeq5778",
+      "name": "algebra_cubrtrp1oncubrtreq3_rcubp1onrcubeq5778",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.9s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.92,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_293",
+      "name": "mathd_algebra_293",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 10.3s | iterations=24 expanded=19",
+          "error_category": "other",
+          "elapsed_s": 14.32,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_440",
+      "name": "mathd_algebra_440",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.82,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_254",
+      "name": "mathd_numbertheory_254",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.56,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12_2000_p6",
+      "name": "amc12_2000_p6",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.5s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 7.46,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1988_p8",
+      "name": "aime_1988_p8",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 11.4s | iterations=24 expanded=12",
+          "error_category": "other",
+          "elapsed_s": 15.45,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_114",
+      "name": "mathd_algebra_114",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 5.3s | iterations=24 expanded=9",
+          "error_category": "other",
+          "elapsed_s": 9.29,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_2019_p1",
+      "name": "imo_2019_p1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.8s | iterations=24 expanded=6",
+          "error_category": "other",
+          "elapsed_s": 7.8,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_513",
+      "name": "mathd_algebra_513",
+      "solved": true,
+      "best_proof": "constructor\nlinarith\nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "constructor\nlinarith\nlinarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 6.2,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_143",
+      "name": "mathd_algebra_143",
+      "solved": true,
+      "best_proof": "norm_num [h\u2080, h\u2081]",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num [h\u2080, h\u2081]",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.74,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_354",
+      "name": "mathd_algebra_354",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.77,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1984_p7",
+      "name": "aime_1984_p7",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.9s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 6.95,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_246",
+      "name": "mathd_algebra_246",
+      "solved": true,
+      "best_proof": "norm_num [h\u2080] at h\u2082 \u22a2\nlinarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num [h\u2080] at h\u2082 \u22a2\nlinarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.72,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1983_p3",
+      "name": "aime_1983_p3",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "numbertheory_3pow2pownm1mod2pownp3eq2pownp2",
+      "name": "numbertheory_3pow2pownm1mod2pownp3eq2pownp2",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.9s | iterations=24 expanded=6",
+          "error_category": "other",
+          "elapsed_s": 7.9,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_85",
+      "name": "mathd_numbertheory_85",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.58,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12_2001_p21",
+      "name": "amc12_2001_p21",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token '!'; expected ')'",
+          "error_category": "other",
+          "elapsed_s": 3.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_239",
+      "name": "mathd_numbertheory_239",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 4.02,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2002_p2",
+      "name": "amc12b_2002_p2",
+      "solved": true,
+      "best_proof": "rw [h\u2080]\nnorm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "rw [h\u2080]\nnorm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.12,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_196",
+      "name": "mathd_algebra_196",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 4.0,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_342",
+      "name": "mathd_algebra_342",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.98,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_517",
+      "name": "mathd_numbertheory_517",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.56,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2009_p7",
+      "name": "amc12a_2009_p7",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.7s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.68,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_270",
+      "name": "mathd_algebra_270",
+      "solved": true,
+      "best_proof": "norm_num [h\u2080]",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num [h\u2080]",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.72,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2021_p12",
+      "name": "amc12a_2021_p12",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 5.7s | iterations=24 expanded=9",
+          "error_category": "other",
+          "elapsed_s": 9.82,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_362",
+      "name": "mathd_algebra_362",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.3s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 6.33,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_521",
+      "name": "mathd_numbertheory_521",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.8s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.75,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2002_p13",
+      "name": "amc12a_2002_p13",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.5s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 6.48,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1964_p2",
+      "name": "imo_1964_p2",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.1s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 7.09,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_289",
+      "name": "mathd_algebra_289",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.9s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.89,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2021_p3",
+      "name": "amc12a_2021_p3",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.71,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2008_p25",
+      "name": "amc12a_2008_p25",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 6.6s | iterations=24 expanded=9",
+          "error_category": "other",
+          "elapsed_s": 10.53,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_apbpceq2_abpbcpcaeq1_aleq1on3anbleq1ancleq4on3",
+      "name": "algebra_apbpceq2_abpbcpcaeq1_aleq1on3anbleq1ancleq4on3",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 6.0s | iterations=24 expanded=8",
+          "error_category": "other",
+          "elapsed_s": 9.91,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_66",
+      "name": "mathd_numbertheory_66",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.49,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2021_p1",
+      "name": "amc12b_2021_p1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.98,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_apbon2pownleqapownpbpowon2",
+      "name": "algebra_apbon2pownleqapownpbpowon2",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.7s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.7,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1968_p5_1",
+      "name": "imo_1968_p5_1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.6s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.5,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1990_p15",
+      "name": "aime_1990_p15",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.6s | iterations=24 expanded=4",
+          "error_category": "other",
+          "elapsed_s": 7.73,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_235",
+      "name": "mathd_numbertheory_235",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.6,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2020_p13",
+      "name": "amc12b_2020_p13",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.97,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12b_2021_p13",
+      "name": "amc12b_2021_p13",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 4.02,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_234",
+      "name": "mathd_numbertheory_234",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 2.9s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 6.86,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "numbertheory_aoddbdiv4asqpbsqmod8eq1",
+      "name": "numbertheory_aoddbdiv4asqpbsqmod8eq1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.7s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 7.62,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_222",
+      "name": "mathd_numbertheory_222",
+      "solved": true,
+      "best_proof": "norm_num at h\u2080 h\u2081\nnorm_num at h\u2080 h\u2081\nnorm_num at h\u2080 h\u2081 \u22a2\nnlinarith [Nat.gcd_mul_lcm 120 b, h\u2080, h\u2081]",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num at h\u2080 h\u2081\nnorm_num at h\u2080 h\u2081\nnorm_num at h\u2080 h\u2081 \u22a2\nnlinarith [Nat.gcd_mul_lcm 120 b, h\u2080, h\u2081]",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 7.26,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1999_p11",
+      "name": "aime_1999_p11",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.98,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_359",
+      "name": "mathd_algebra_359",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.77,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1965_p2",
+      "name": "imo_1965_p2",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.9s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.92,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_288",
+      "name": "mathd_algebra_288",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 11.1s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 15.15,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_127",
+      "name": "mathd_numbertheory_127",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.94,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imo_1974_p3",
+      "name": "imo_1974_p3",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.98,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1991_p9",
+      "name": "aime_1991_p9",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 8.1s | iterations=24 expanded=9",
+          "error_category": "other",
+          "elapsed_s": 12.15,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2009_p6",
+      "name": "amc12a_2009_p6",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.97,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_158",
+      "name": "mathd_algebra_158",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.94,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "algebra_absxm1pabsxpabsxp1eqxp2_0leqxleq1",
+      "name": "algebra_absxm1pabsxpabsxp1eqxp2_0leqxleq1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 4.3s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 8.3,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1990_p4",
+      "name": "aime_1990_p4",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.7s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.65,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_541",
+      "name": "mathd_numbertheory_541",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 3.5s | iterations=24 expanded=4",
+          "error_category": "other",
+          "elapsed_s": 7.4,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_314",
+      "name": "mathd_algebra_314",
+      "solved": true,
+      "best_proof": "norm_num",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.65,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "imosl_2007_algebra_p6",
+      "name": "imosl_2007_algebra_p6",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.94,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12_2000_p20",
+      "name": "amc12_2000_p20",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.8s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.8,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_302",
+      "name": "mathd_algebra_302",
+      "solved": true,
+      "best_proof": "norm_num [pow_two, Complex.ext_iff, Complex.I_mul_I]",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num [pow_two, Complex.ext_iff, Complex.I_mul_I]",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.18,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1983_p2",
+      "name": "aime_1983_p2",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.9s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 5.86,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_139",
+      "name": "mathd_algebra_139",
+      "solved": true,
+      "best_proof": "norm_num [h\u2080]",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "norm_num [h\u2080]",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.88,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2021_p25",
+      "name": "amc12a_2021_p25",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected identifier; expected command",
+          "error_category": "other",
+          "elapsed_s": 3.99,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "amc12a_2020_p25",
+      "name": "amc12a_2020_p25",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "REPL failed to open proof: unexpected token 'in'; expected ','",
+          "error_category": "other",
+          "elapsed_s": 3.98,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_150",
+      "name": "mathd_numbertheory_150",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 0.7s | iterations=24 expanded=1",
+          "error_category": "other",
+          "elapsed_s": 4.69,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1989_p8",
+      "name": "aime_1989_p8",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 5.1,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_296",
+      "name": "mathd_numbertheory_296",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 7.0s | iterations=24 expanded=5",
+          "error_category": "other",
+          "elapsed_s": 10.98,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_142",
+      "name": "mathd_algebra_142",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.92,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "numbertheory_exk2powkeqapb2mulbpa2_aeq1",
+      "name": "numbertheory_exk2powkeqapb2mulbpa2_aeq1",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.7s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.63,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_400",
+      "name": "mathd_algebra_400",
+      "solved": true,
+      "best_proof": "linarith",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "linarith",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.84,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "aime_1995_p7",
+      "name": "aime_1995_p7",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 12.7s | iterations=24 expanded=7",
+          "error_category": "other",
+          "elapsed_s": 16.71,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_185",
+      "name": "mathd_numbertheory_185",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.89,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_441",
+      "name": "mathd_algebra_441",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 7.4s | iterations=24 expanded=16",
+          "error_category": "other",
+          "elapsed_s": 11.4,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_numbertheory_582",
+      "name": "mathd_numbertheory_582",
+      "solved": true,
+      "best_proof": "omega",
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": true,
+          "proof": "omega",
+          "error": "",
+          "error_category": "none",
+          "elapsed_s": 4.6,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    },
+    {
+      "id": "mathd_algebra_338",
+      "name": "mathd_algebra_338",
+      "solved": false,
+      "best_proof": null,
+      "attempts": [
+        {
+          "attempt": 0,
+          "success": false,
+          "proof": "",
+          "error": "FAILED | 1.4s | iterations=24 expanded=2",
+          "error_category": "other",
+          "elapsed_s": 5.33,
+          "mode": "state-mcts",
+          "api_calls": 0
+        }
+      ]
+    }
+  ],
+  "baselines": {
+    "ReProver (GPT-4 + best-first)": 0.273,
+    "HyperTree Proof Search (Meta)": 0.33,
+    "LLM-Step (Llama-2)": 0.22,
+    "Aesop (tactic, no LLM)": 0.04
+  },
+  "total_api_calls": 0,
+  "total_tokens_in": 0,
+  "total_tokens_out": 0,
+  "seconds_per_problem": 7.0,
+  "api_calls_per_problem": 0.0,
+  "model": "labs-leanstral-2603",
+  "retrieval_index": "data/mathlib_embeddings",
+  "retrieval_top_k": 12,
+  "lean_timeout_s": 120,
+  "mode": "state-mcts",
+  "git_commit": "c4ea1e8cd90153fab8d6df94571116fa4f982eae",
+  "lean_version": "Lean (version 4.29.0-rc7, x86_64-unknown-linux-gnu, commit f5d7f18743eac341c4fa6e86abc5056d6ece40f4, Release)",
+  "python_version": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]"
+}
