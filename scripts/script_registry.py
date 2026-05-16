@@ -963,6 +963,16 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "reliability",
         "summary": "Audits ledger rows for gate consistency: cleans spurious gate_failures (e.g. claim_review_pending rows incorrectly flagged) without weakening any gate. Standards-positive: a gate that should fire still fires.",
     },
+    "type_aware_factor.py": {
+        "tier": "official_support",
+        "category": "proof_search",
+        "summary": "Syntactic destructure of parent theorem targets (top-level ∧ / ↔ splits) before LLM factoring. Round-XII through XXI showed 0/26 LLM-proposed compositions succeeded; type-aware destructure emits aux whose types compose to the parent BY CONSTRUCTION. The LLM only proves each aux, not invents the factorization. Wired into sweep_lemma_factor_v2 as a fast-path before factor_long_theorem_v2 (CLI: --type-aware-factor / --no-type-aware-factor, default ON). 20 hermetic tests pin the destructure shapes.",
+    },
+    "auto_align_proposer.py": {
+        "tier": "official_support",
+        "category": "review",
+        "summary": "Auto-proposes trivial align_def discharges for paper-local symbols blocking AB→FP promotion. Reads canonical AB rows' axiom_debt, parses paper-theory stubs to infer alignment shape (= 0, = Set.univ, = fun _ => 0, etc.), generates Lean alignment theorems, iteratively lake-validates dropping failing theorems, appends survivors to output/corpus/alignments.json. Standards-positive: no alignment registered unless its proof actually compiles. Result this campaign: +6 honest FP promotions (FP 14 → 20), audit caught 7 spurious sorry-bodied bypasses.",
+    },
     "aux_deterministic_prover.py": {
         "tier": "official_support",
         "category": "proof_search",

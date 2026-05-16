@@ -64,6 +64,11 @@ except Exception:
     aux_det = None  # type: ignore[assignment]
 
 try:
+    import type_aware_factor as taf  # type: ignore[import-not-found]
+except Exception:
+    taf = None  # type: ignore[assignment]
+
+try:
     from mistralai import Mistral  # type: ignore[import-not-found]
 except Exception:
     try:
@@ -146,6 +151,15 @@ _PROMOTE_AUX_AS_ROWS: bool = False
 # ablation studies. Round-XII data: aux closure rate was 4/192 (~2%); many
 # of those failed aux are shape-shallow (linarith/positivity/aesop-closable).
 _USE_AUX_DETERMINISTIC_PREPASS: bool = True
+
+# When True (default), the parent's target is destructured syntactically
+# (top-level ``∧`` / ``↔`` / ``∀ … →`` splits) BEFORE invoking the LLM
+# factoring prompt. Aux derived this way have types that compose to the
+# parent BY CONSTRUCTION — the LLM only needs to prove each aux, not
+# invent the factorization. Round-XII through XXI showed 0/26 LLM-proposed
+# compositions succeeded; this is the targeted fix. Flipped by
+# ``--no-type-aware-factor`` for ablation.
+_USE_TYPE_AWARE_FACTOR: bool = True
 
 
 def _select_validator(
@@ -1488,8 +1502,80 @@ def _sweep_paper(
                     report["details"].append(per_row)
                     continue
 
+        # --- Type-aware destructure (fast path, no LLM call) ------------
+        # Runs FIRST: if the parent's target is a top-level conjunction or
+        # bi-implication, emit aux whose conjunction is the parent BY
+        # CONSTRUCTION. The LLM only needs to prove each aux, not invent
+        # the factorization. Falls through to LLM-based factoring if the
+        # destructure doesn't match.
+        factor_records: list[dict[str, Any]] = []
+        if _USE_TYPE_AWARE_FACTOR and taf is not None:
+            try:
+                ta_specs = taf.destructure(lean_stmt)
+            except Exception as exc:
+                ta_specs = []
+                per_row["stages"].append({
+                    "stage": "type_aware_destructure_error",
+                    "err": str(exc)[:160],
+                })
+            if ta_specs:
+                # Reuse lemma_factor_v2's parent-statement parser for the
+                # shape labels (matches the rest of the sweep's bookkeeping).
+                _ta_parsed_name, _ta_binders, _ta_target = lfv2.split_parent_statement(lean_stmt)
+                _ta_shape = lfv2.detect_target_shape(_ta_target)
+                _ta_shape_fine = lfv2.detect_target_shape_fine(_ta_target)
+                for spec in ta_specs:
+                    rec = {
+                        "aux_name": spec.name,
+                        "aux_signature": spec.signature,
+                        "compose_hint": f"type_aware:{spec.shape}",
+                        "rejected": [],
+                        "compose_strategy": "type_aware",
+                        "overall_reasoning": "type-aware destructure of parent target",
+                        "overall_confidence": 1.0,
+                        "elaboration_ok": None,
+                        "elaboration_error": "",
+                        "protocol": "type_aware_factor",
+                        "paper_id": paper_id,
+                        "parent_theorem_name": (short or name).rsplit(".", 1)[-1],
+                        "parent_binder_block": _ta_binders,
+                        "parent_target": _ta_target,
+                        "parent_target_shape": _ta_shape,
+                        "parent_target_shape_fine": _ta_shape_fine,
+                    }
+                    # Elaboration-validate the aux signature exactly like the
+                    # LLM-based path does. Any aux that doesn't elaborate is
+                    # rejected; the sweep falls back to LLM factoring below.
+                    try:
+                        elab_ok, elab_err = _validate_aux(spec.signature)
+                    except Exception:
+                        elab_ok, elab_err = False, "elab_validator_exception"
+                    rec["elaboration_ok"] = bool(elab_ok)
+                    rec["elaboration_error"] = (elab_err or "")[-1024:]
+                    if not elab_ok:
+                        rec["rejected"].append("elaboration_gate")
+                    factor_records.append(rec)
+                per_row["stages"].append({
+                    "stage": "type_aware_destructure",
+                    "n_aux": len(ta_specs),
+                    "shapes": list({s.shape for s in ta_specs}),
+                    "elaborated": sum(1 for r in factor_records if not r["rejected"]),
+                })
+                bucket_counts["type_aware_factor_aux_proposed"] = (
+                    bucket_counts.get("type_aware_factor_aux_proposed", 0) + len(ta_specs)
+                )
+                # If at least 2 aux elaborate, accept the type-aware path
+                # outright (skip LLM factoring). If fewer, fall through to
+                # the LLM path — but the type-aware aux remain in the
+                # record list so they get a chance to close.
+                _elaborated_ta = [r for r in factor_records if not r["rejected"]]
+                if len(_elaborated_ta) >= 2:
+                    factor_records = _elaborated_ta
+                    per_row["stages"].append({"stage": "type_aware_factor_short_circuit"})
+
         # --- Factor pass: lemma-factor-v2 -------------------------------
-        try:
+        if not factor_records:
+          try:
             factor_records = lfv2.factor_long_theorem_v2(
                 paper_id=paper_id,
                 theorem_name=short or name,
@@ -1500,7 +1586,7 @@ def _sweep_paper(
                 model=model,
                 validate_elaboration=_validate_aux,
             )
-        except Exception as exc:
+          except Exception as exc:
             per_row["stages"].append({"stage": "factor_transport_error", "err": str(exc)[:200]})
             bucket_counts["transport_errors"] += 1
             if signature_patch_state["applied"]:
@@ -2342,6 +2428,20 @@ def main() -> int:
         ),
     )
     parser.add_argument(
+        "--type-aware-factor",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Destructure the parent target syntactically (top-level "
+            "∧ / ↔ splits) BEFORE invoking the LLM factoring prompt. "
+            "Aux derived this way have types that compose to the parent "
+            "BY CONSTRUCTION — the LLM only needs to prove each aux, not "
+            "invent the factorization. Falls through to LLM-based "
+            "factoring when the destructure doesn't match a known shape. "
+            "Default ON. Round-XXII data validates the yield."
+        ),
+    )
+    parser.add_argument(
         "--aux-deterministic-prepass",
         action=argparse.BooleanOptionalAction,
         default=True,
@@ -2359,12 +2459,20 @@ def main() -> int:
     args = parser.parse_args()
 
     # Wire the validator selector before any sweep work begins.
-    global _USE_FAST_VALIDATION, _DIFFERENTIAL_REMAINING, _AUTO_PROMOTE_TO_CURATED, _PROMOTE_AUX_AS_ROWS, _USE_AUX_DETERMINISTIC_PREPASS
+    global _USE_FAST_VALIDATION, _DIFFERENTIAL_REMAINING, _AUTO_PROMOTE_TO_CURATED, _PROMOTE_AUX_AS_ROWS, _USE_AUX_DETERMINISTIC_PREPASS, _USE_TYPE_AWARE_FACTOR
     _USE_FAST_VALIDATION = bool(args.use_fast_validation) and _lvc is not None
     _DIFFERENTIAL_REMAINING = max(0, int(args.differential_check_first)) if _USE_FAST_VALIDATION else 0
     _AUTO_PROMOTE_TO_CURATED = bool(args.auto_promote_to_curated) and autoprom is not None
     _PROMOTE_AUX_AS_ROWS = bool(args.promote_aux_as_rows) and paux is not None
     _USE_AUX_DETERMINISTIC_PREPASS = bool(args.aux_deterministic_prepass) and aux_det is not None
+    _USE_TYPE_AWARE_FACTOR = bool(args.type_aware_factor) and taf is not None
+    if args.type_aware_factor and taf is None:
+        print(
+            "[type-aware-factor] requested but module unavailable — skipping",
+            flush=True,
+        )
+    if _USE_TYPE_AWARE_FACTOR:
+        print("[type-aware-factor] enabled", flush=True)
     if args.aux_deterministic_prepass and aux_det is None:
         print(
             "[aux-deterministic-prepass] requested but module unavailable — skipping",
