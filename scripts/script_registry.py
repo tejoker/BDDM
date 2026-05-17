@@ -973,6 +973,11 @@ SCRIPT_REGISTRY: dict[str, dict[str, str]] = {
         "category": "review",
         "summary": "Auto-proposes trivial align_def discharges for paper-local symbols blocking AB→FP promotion. Reads canonical AB rows' axiom_debt, parses paper-theory stubs to infer alignment shape (= 0, = Set.univ, = fun _ => 0, etc.), generates Lean alignment theorems, iteratively lake-validates dropping failing theorems, appends survivors to output/corpus/alignments.json. Standards-positive: no alignment registered unless its proof actually compiles. Result this campaign: +6 honest FP promotions (FP 14 → 20), audit caught 7 spurious sorry-bodied bypasses.",
     },
+    "discharge_aligned_debts.py": {
+        "tier": "official_support",
+        "category": "review",
+        "summary": "Direct discharge pass: walks every canonical AB/IP row's axiom_debt, matches against output/corpus/alignments.json, moves matched entries to discharged_axiom_debt, and re-classifies status via _promotion_status. Complements apply_reviews_to_ledger.py which is gated on review-corpus entries; this script processes all proof-claiming rows. Standards-positive: only updates axiom_debt + status; never changes proof_text or validation_gates.",
+    },
     "aux_deterministic_prover.py": {
         "tier": "official_support",
         "category": "proof_search",

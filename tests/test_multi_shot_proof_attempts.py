@@ -155,7 +155,10 @@ def test_none_valid_returns_full_sorted_list() -> None:
     # All elaboration_ok=False; sort key is temperature asc.
     temps = [c["temperature"] for c in out]
     assert temps == sorted(temps)
-    assert temps == [0.0, 0.3, 0.5, 0.7, 0.9]
+    # Post-Round-XXI: temperature ladder extended to 8-step
+    # (0.0, 0.15, 0.30, 0.45, 0.60, 0.75, 0.90, 1.00). With n_samples=5
+    # we take the first 5 entries.
+    assert temps == [0.0, 0.15, 0.30, 0.45, 0.60]
     assert all(c["elaboration_ok"] is False for c in out)
     assert all(c["elaboration_error"] == "no_match" for c in out)
     # All 5 calls were made (no short-circuit).
@@ -168,7 +171,8 @@ def test_none_valid_returns_full_sorted_list() -> None:
 
 def test_temperature_diversification_in_dispatched_calls() -> None:
     """The 5 dispatched calls must use DISTINCT temperatures matching the
-    default ladder (0.0, 0.3, 0.5, 0.7, 0.9). Same lean_statement input,
+    default ladder (post-Round-XXI: 8-step ladder, first 5 entries
+    0.0, 0.15, 0.30, 0.45, 0.60). Same lean_statement input,
     different `temperature` kwarg per call."""
     contents = [_proof_response(f"sample_{i}") for i in range(5)]
     client = FakeClient(contents)
@@ -182,7 +186,7 @@ def test_temperature_diversification_in_dispatched_calls() -> None:
     )
     assert len(out) == 5
     temps_called = [call["temperature"] for call in client.chat.calls]
-    assert temps_called == [0.0, 0.3, 0.5, 0.7, 0.9]
+    assert temps_called == [0.0, 0.15, 0.30, 0.45, 0.60]
     # The same user-message text is used for every call (prompt unchanged).
     user_msgs = [call["messages"][1]["content"] for call in client.chat.calls]
     assert all(m == user_msgs[0] for m in user_msgs)
@@ -305,7 +309,8 @@ def test_rejection_sink_populated_with_winning_metadata() -> None:
     assert len(out) == 1
     assert sink["short_circuited"] is True
     assert sink["winning_sample_idx"] == 1
-    assert sink["winning_temperature"] == pytest.approx(0.3)
+    # Post-Round-XXI 8-step ladder: 2nd entry is 0.15.
+    assert sink["winning_temperature"] == pytest.approx(0.15)
     log = sink["rejection_log"]
     assert len(log) == 1
     assert log[0]["sample_idx"] == 0

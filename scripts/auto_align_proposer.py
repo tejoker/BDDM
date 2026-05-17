@@ -141,14 +141,20 @@ def _count_binders(args_str: str) -> int:
 
 
 def _render_rhs(shape: str, rhs_template: str, args_str: Optional[str]) -> str:
-    """Produce the Lean RHS for the alignment theorem."""
-    if shape == "fun_zero":
+    """Produce the Lean RHS for the alignment theorem.
+
+    Function-shape markers (``fun_zero`` / ``fun_setuniv`` / ``fun_proptrue``)
+    are stored in the ``rhs_template`` field of ``_SHAPES`` and dispatched
+    here to produce an arity-correct ``fun _ _ ... => <body>`` form.
+    Value-shape markers (``(0 : ℝ)`` etc.) pass through unchanged.
+    """
+    if rhs_template == "fun_zero":
         n = _count_binders(args_str or "")
         return "fun " + " ".join(["_"] * max(1, n)) + " => (0 : ℝ)"
-    if shape == "fun_setuniv":
+    if rhs_template == "fun_setuniv":
         n = _count_binders(args_str or "")
         return "fun " + " ".join(["_"] * max(1, n)) + " => Set.univ"
-    if shape == "fun_proptrue":
+    if rhs_template == "fun_proptrue":
         n = _count_binders(args_str or "")
         return "fun " + " ".join(["_"] * max(1, n)) + " => True"
     return rhs_template
