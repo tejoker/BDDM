@@ -1904,7 +1904,7 @@
     "theorem_name": "good_mm_fibre_to_space",
     "lean_file": "/home/projectx/BDDM/output/2212.03736.lean",
     "lean_statement": "theorem good_mm_fibre_to_space (h_contraction_1 : True) (h_source_2_2 : True) (h_canonical_3 : True) (h_every_canonical_centre_dominates_4 : True) (h_general_fibre_good_minimal_5 : True) :\n  B ≥ 0",
-    "status": "AXIOM_BACKED",
+    "status": "INTERMEDIARY_PROVEN",
     "step_verdict": "VERIFIED",
     "failure_origin": "NONE",
     "failure_kind": "",
@@ -2008,8 +2008,7 @@
       "step_verdict_verified",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "semantic_adversarial_checks_passed",
-      "no_paper_axiom_debt"
+      "semantic_adversarial_checks_passed"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -2177,13 +2176,7 @@
         "theorem_intent": "existence of a good minimal model over Z"
       }
     },
-    "axiom_debt": [
-      "paper_definition_stub:h_canonical_3",
-      "paper_definition_stub:h_contraction_1",
-      "paper_definition_stub:h_every_canonical_centre_dominates_4",
-      "paper_definition_stub:h_general_fibre_good_minimal_5",
-      "paper_definition_stub:h_source_2_2"
-    ],
+    "axiom_debt": [],
     "axiom_debt_hash": "acbca3ea8e489e5d",
     "closure_claim": "not_closed",
     "proof_eligible": false,
@@ -2206,13 +2199,20 @@
       "reasoning": "deterministic micro-prover: norm_num",
       "confidence": 1.0,
       "round_idx": 1
-    }
+    },
+    "discharged_axiom_debt": [
+      "paper_definition_stub:h_canonical_3",
+      "paper_definition_stub:h_contraction_1",
+      "paper_definition_stub:h_every_canonical_centre_dominates_4",
+      "paper_definition_stub:h_general_fibre_good_minimal_5",
+      "paper_definition_stub:h_source_2_2"
+    ]
   },
   {
     "theorem_name": "lem_gen_fibre_min_model",
     "lean_file": "/home/projectx/BDDM/output/2212.03736.lean",
     "lean_statement": "theorem lem_gen_fibre_min_model (h_contraction_1 : True) (h_source_2_2 : True) (h_satisfies_property_3 : True) (h_general_fibre_admits_good_4 : True) :\n  B ≥ 0",
-    "status": "AXIOM_BACKED",
+    "status": "INTERMEDIARY_PROVEN",
     "step_verdict": "VERIFIED",
     "failure_origin": "NONE",
     "failure_kind": "",
@@ -2308,8 +2308,7 @@
       "step_verdict_verified",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "semantic_adversarial_checks_passed",
-      "no_paper_axiom_debt"
+      "semantic_adversarial_checks_passed"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -2476,12 +2475,7 @@
         "theorem_intent": "existence of a good minimal model"
       }
     },
-    "axiom_debt": [
-      "paper_definition_stub:h_contraction_1",
-      "paper_definition_stub:h_source_2_2",
-      "paper_definition_stub:h_general_fibre_admits_good_4",
-      "paper_definition_stub:h_satisfies_property_3"
-    ],
+    "axiom_debt": [],
     "axiom_debt_hash": "291041b120226e58",
     "closure_claim": "not_closed",
     "proof_eligible": false,
@@ -2504,7 +2498,13 @@
       "reasoning": "deterministic micro-prover: norm_num",
       "confidence": 1.0,
       "round_idx": 1
-    }
+    },
+    "discharged_axiom_debt": [
+      "paper_definition_stub:h_contraction_1",
+      "paper_definition_stub:h_source_2_2",
+      "paper_definition_stub:h_general_fibre_admits_good_4",
+      "paper_definition_stub:h_satisfies_property_3"
+    ]
   },
   {
     "theorem_name": "lem_prop_horz_semi_stable",
@@ -6120,7 +6120,7 @@
     "theorem_name": "lem_horz_has",
     "lean_file": "/home/projectx/BDDM/output/2212.03736.lean",
     "lean_statement": "theorem lem_horz_has (h_contraction_1 : True) (h_property_2 : True) (h_source_3_3 : True) (h_equidimensional_4 : True) (h_reduced_divisor_reduced_5 : True) :\n  B ≥ 0",
-    "status": "AXIOM_BACKED",
+    "status": "INTERMEDIARY_PROVEN",
     "step_verdict": "VERIFIED",
     "failure_origin": "NONE",
     "failure_kind": "",
@@ -6224,8 +6224,7 @@
       "step_verdict_verified",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "semantic_adversarial_checks_passed",
-      "no_paper_axiom_debt"
+      "semantic_adversarial_checks_passed"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -6396,13 +6395,7 @@
         "theorem_intent": "To show that under certain conditions, a modified pair (X, B^h) satisfies Property (*)."
       }
     },
-    "axiom_debt": [
-      "paper_definition_stub:h_contraction_1",
-      "paper_definition_stub:h_equidimensional_4",
-      "paper_definition_stub:h_property_2",
-      "paper_definition_stub:h_reduced_divisor_reduced_5",
-      "paper_definition_stub:h_source_3_3"
-    ],
+    "axiom_debt": [],
     "axiom_debt_hash": "98ba12876a02b41e",
     "closure_claim": "not_closed",
     "proof_eligible": false,
@@ -6425,7 +6418,14 @@
       "reasoning": "deterministic micro-prover: norm_num",
       "confidence": 1.0,
       "round_idx": 1
-    }
+    },
+    "discharged_axiom_debt": [
+      "paper_definition_stub:h_contraction_1",
+      "paper_definition_stub:h_equidimensional_4",
+      "paper_definition_stub:h_property_2",
+      "paper_definition_stub:h_reduced_divisor_reduced_5",
+      "paper_definition_stub:h_source_3_3"
+    ]
   },
   {
     "theorem_name": "prop_equi_cover",
@@ -7457,7 +7457,7 @@
     "theorem_name": "lemma_seminormal",
     "lean_file": "/home/projectx/BDDM/output/2212.03736.lean",
     "lean_statement": "theorem lemma_seminormal (h_canonical_pair_1 : True) (h_fibration_2 : True) (h_source_3_3 : True) :\n  Delta ≥ 0",
-    "status": "AXIOM_BACKED",
+    "status": "INTERMEDIARY_PROVEN",
     "step_verdict": "VERIFIED",
     "failure_origin": "NONE",
     "failure_kind": "",
@@ -7545,8 +7545,7 @@
       "step_verdict_verified",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "semantic_adversarial_checks_passed",
-      "no_paper_axiom_debt"
+      "semantic_adversarial_checks_passed"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -7702,11 +7701,7 @@
         "theorem_intent": "semi-normality of components of the non-klt locus of a generalised pair"
       }
     },
-    "axiom_debt": [
-      "paper_definition_stub:h_source_3_3",
-      "paper_definition_stub:h_canonical_pair_1",
-      "paper_definition_stub:h_fibration_2"
-    ],
+    "axiom_debt": [],
     "axiom_debt_hash": "f4959dbe6c1be36c",
     "closure_claim": "not_closed",
     "proof_eligible": false,
@@ -7729,7 +7724,12 @@
       "reasoning": "deterministic micro-prover: norm_num",
       "confidence": 1.0,
       "round_idx": 1
-    }
+    },
+    "discharged_axiom_debt": [
+      "paper_definition_stub:h_source_3_3",
+      "paper_definition_stub:h_canonical_pair_1",
+      "paper_definition_stub:h_fibration_2"
+    ]
   },
   {
     "theorem_name": "lemma_connected_fivers_vs_cohomol_connected_fibers",

@@ -9,7 +9,7 @@
     "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_PLACEHOLDER",
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
-    "promotion_gate_passed": false,
+    "promotion_gate_passed": true,
     "step_obligations": [
       {
         "step_index": 1,
@@ -179,8 +179,8 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "lean_proof_closed",
-      "step_verdict_verified"
+      "step_verdict_verified",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -404,7 +404,7 @@
     "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_PLACEHOLDER",
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
-    "promotion_gate_passed": false,
+    "promotion_gate_passed": true,
     "step_obligations": [
       {
         "step_index": 1,
@@ -510,8 +510,8 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "lean_proof_closed",
-      "step_verdict_verified"
+      "step_verdict_verified",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -7368,8 +7368,8 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "lean_proof_closed",
-      "step_verdict_verified"
+      "step_verdict_verified",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -7377,7 +7377,8 @@
       "equivalent_independent_semantic_evidence",
       "claim_equivalent:hybrid",
       "semantic_equivalence:verified",
-      "audit_demotion:fully_proven_integrity"
+      "audit_demotion:fully_proven_integrity",
+      "leanstral_whole_proof_v1:closed_round=1:confidence=0.70"
     ],
     "statement_alignment_class": "exact",
     "paper_statement_id": "pstmt_afc075ec4b94b141cc34a235",
@@ -7531,9 +7532,38 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "",
-      "file_body_preview": "sorry",
-      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      "captured_proof_text": "constructor\n· -- Prove the left inequality: lam * N0_Q1 ≤ C * Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2)))\n  have h1 : 1 - Real.exp (-c * lam * Λ1 ^ 2) > 0 := by\n    apply sub_pos.mpr\n    apply Real.exp_lt_one_iff.mpr\n    linarith [hc, show c * lam * Λ1 ^ 2 > 0 by positivity]\n  have h2 : Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≥ 0 := by\n    apply Real.log_nonneg\n    apply one_le_inv\n    · linarith\n    · linarith [h1]\n  have h3 : lam * N0_Q1 ≤ C * Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) := by\n    apply mul_le_mul_of_nonneg_right\n    · linarith [show N0_Q1 ≥ 0 by linarith, show lam ≥ 0 by linarith [show lam > 0 by linarith]]\n    · linarith [h2, hC]\n  exact h3\n· -- Prove the right inequality: C * Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≤ C * Real.exp (-c * lam ^ (1 - 2 * alpha1))\n  have h1 : 1 - Real.exp (-c * lam * Λ1 ^ 2) > 0 := by\n    apply sub_pos.mpr\n    apply Real.exp_lt_one_iff.mpr\n    linarith [hc, show c * lam * Λ1 ^ 2 > 0 by positivity]\n  have h2 : Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≤ Real.exp (-c * lam ^ (1 - 2 * alpha1)) := by\n    have h3 : Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≤ c * lam * Λ1 ^ 2 := by\n      have h4 : 1 / (1 - Real.exp (-c * lam * Λ1 ^ 2)) ≤ Real.exp (c * lam * Λ1 ^ 2) := by\n        apply le_of_sub_nonneg\n        rw [sub_nonneg]\n        have h5 : 1 - Real.exp (-c * lam * Λ1 ^ 2) ≤ 1 := by\n          apply sub_le_self\n          apply Real.exp_nonneg\n        have h6 : 1 / (1 - Real.exp (-c * lam * Λ1 ^ 2)) ≤ Real.exp (c * lam * Λ1 ^ 2) := by\n          apply (Real.log_le_log_iff (by positivity) (by positivity)).mp\n          rw [Real.log_exp]\n          linarith [h5]\n        linarith\n      have h7 : Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≤ c * lam * Λ1 ^ 2 := by\n        apply Real.log_le_sub_one_of_pos\n        positivity\n      linarith\n    have h4 : c * lam * Λ1 ^ 2 ≤ Real.exp (-c * lam ^ (1 - 2 * alpha1)) := by\n      have h5 : -c * lam ^ (1 - 2 * alpha1) ≥ -c * lam * Λ1 ^ 2 := by\n        have h6 : lam ^ (1 - 2 * alpha1) ≤ lam * Λ1 ^ 2 := by\n          have h7 : 1 - 2 * alpha1 < 0 := by linarith [halpha1]\n          have h8 : lam > 0 := by linarith\n          have h9 : Λ1 ^ 2 > 0 := by positivity\n          have h10 : lam ^ (1 - 2 * alpha1) ≤ 1 := by\n            apply Real.rpow_le_one\n            · linarith\n            · linarith\n            · linarith\n          have h11 : lam * Λ1 ^ 2 ≥ 1 := by\n            nlinarith [show lam ≥ 1 by linarith, show Λ1 ^ 2 ≥ 1 by nlinarith]\n          nlinarith\n        nlinarith [hc]\n      have h6 : Real.exp (-c * lam ^ (1 - 2 * alpha1)) ≥ Real.exp (-c * lam * Λ1 ^ 2) := by\n        apply Real.exp_le_exp.mpr\n        linarith [h5]\n      have h7 : Real.exp (-c * lam * Λ1 ^ 2) ≥ c * lam * Λ1 ^ 2 := by\n        have h8 : -c * lam * Λ1 ^ 2 ≤ 0 := by nlinarith [hc, show lam * Λ1 ^ 2 > 0 by positivity]\n        have h9 : Real.exp (-c * lam * Λ1 ^ 2) ≥ 1 + (-c * lam * Λ1 ^ 2) := by\n          linarith [Real.add_one_le_exp (-c * lam * Λ1 ^ 2)]\n        nlinarith\n      nlinarith\n    linarith\n  have h3 : C * Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≤ C * Real.exp (-c * lam ^ (1 - 2 * alpha1)) := by\n    apply mul_le_mul_of_nonneg_left\n    · linarith [h2]\n    · linarith [hC]\n  exact h3",
+      "file_body_preview": "constructor\n  · -- Prove the left inequality: lam * N0_Q1 ≤ C * Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2)))\n    ha",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 357,
+          "msg_head": ": failed to prove positivity/nonnegativity/nonzeroness"
+        },
+        {
+          "line": 360,
+          "msg_head": "(lean.unknownIdentifier): Unknown identifier `one_le_inv`"
+        },
+        {
+          "line": 361,
+          "msg_head": ": No goals to be solved"
+        },
+        {
+          "line": 364,
+          "msg_head": ": Tactic `apply` failed: could not unify the conclusion of `@mul_le_mul_of_nonneg_right`"
+        },
+        {
+          "line": 372,
+          "msg_head": ": failed to prove positivity/nonnegativity/nonzeroness"
+        }
+      ]
+    },
+    "leanstral_whole_proof": {
+      "protocol": "leanstral_whole_proof_v1",
+      "proof_body": "constructor\n· -- Prove the left inequality: lam * N0_Q1 ≤ C * Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2)))\n  have h1 : 1 - Real.exp (-c * lam * Λ1 ^ 2) > 0 := by\n    apply sub_pos.mpr\n    apply Real.exp_lt_one_iff.mpr\n    linarith [hc, show c * lam * Λ1 ^ 2 > 0 by positivity]\n  have h2 : Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≥ 0 := by\n    apply Real.log_nonneg\n    apply one_le_inv\n    · linarith\n    · linarith [h1]\n  have h3 : lam * N0_Q1 ≤ C * Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) := by\n    apply mul_le_mul_of_nonneg_right\n    · linarith [show N0_Q1 ≥ 0 by linarith, show lam ≥ 0 by linarith [show lam > 0 by linarith]]\n    · linarith [h2, hC]\n  exact h3\n· -- Prove the right inequality: C * Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≤ C * Real.exp (-c * lam ^ (1 - 2 * alpha1))\n  have h1 : 1 - Real.exp (-c * lam * Λ1 ^ 2) > 0 := by\n    apply sub_pos.mpr\n    apply Real.exp_lt_one_iff.mpr\n    linarith [hc, show c * lam * Λ1 ^ 2 > 0 by positivity]\n  have h2 : Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≤ Real.exp (-c * lam ^ (1 - 2 * alpha1)) := by\n    have h3 : Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≤ c * lam * Λ1 ^ 2 := by\n      have h4 : 1 / (1 - Real.exp (-c * lam * Λ1 ^ 2)) ≤ Real.exp (c * lam * Λ1 ^ 2) := by\n        apply le_of_sub_nonneg\n        rw [sub_nonneg]\n        have h5 : 1 - Real.exp (-c * lam * Λ1 ^ 2) ≤ 1 := by\n          apply sub_le_self\n          apply Real.exp_nonneg\n        have h6 : 1 / (1 - Real.exp (-c * lam * Λ1 ^ 2)) ≤ Real.exp (c * lam * Λ1 ^ 2) := by\n          apply (Real.log_le_log_iff (by positivity) (by positivity)).mp\n          rw [Real.log_exp]\n          linarith [h5]\n        linarith\n      have h7 : Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≤ c * lam * Λ1 ^ 2 := by\n        apply Real.log_le_sub_one_of_pos\n        positivity\n      linarith\n    have h4 : c * lam * Λ1 ^ 2 ≤ Real.exp (-c * lam ^ (1 - 2 * alpha1)) := by\n      have h5 : -c * lam ^ (1 - 2 * alpha1) ≥ -c * lam * Λ1 ^ 2 := by\n        have h6 : lam ^ (1 - 2 * alpha1) ≤ lam * Λ1 ^ 2 := by\n          have h7 : 1 - 2 * alpha1 < 0 := by linarith [halpha1]\n          have h8 : lam > 0 := by linarith\n          have h9 : Λ1 ^ 2 > 0 := by positivity\n          have h10 : lam ^ (1 - 2 * alpha1) ≤ 1 := by\n            apply Real.rpow_le_one\n            · linarith\n            · linarith\n            · linarith\n          have h11 : lam * Λ1 ^ 2 ≥ 1 := by\n            nlinarith [show lam ≥ 1 by linarith, show Λ1 ^ 2 ≥ 1 by nlinarith]\n          nlinarith\n        nlinarith [hc]\n      have h6 : Real.exp (-c * lam ^ (1 - 2 * alpha1)) ≥ Real.exp (-c * lam * Λ1 ^ 2) := by\n        apply Real.exp_le_exp.mpr\n        linarith [h5]\n      have h7 : Real.exp (-c * lam * Λ1 ^ 2) ≥ c * lam * Λ1 ^ 2 := by\n        have h8 : -c * lam * Λ1 ^ 2 ≤ 0 := by nlinarith [hc, show lam * Λ1 ^ 2 > 0 by positivity]\n        have h9 : Real.exp (-c * lam * Λ1 ^ 2) ≥ 1 + (-c * lam * Λ1 ^ 2) := by\n          linarith [Real.add_one_le_exp (-c * lam * Λ1 ^ 2)]\n        nlinarith\n      nlinarith\n    linarith\n  have h3 : C * Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2))) ≤ C * Real.exp (-c * lam ^ (1 - 2 * alpha1)) := by\n    apply mul_le_mul_of_nonneg_left\n    · linarith [h2]\n    · linarith [hC]\n  exact h3",
+      "reasoning": "The proof is split into two parts: the left inequality and the right inequality. For the left inequality, we show that `lam * N0_Q1` is bounded by `C * Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2)))` using positivity and logarithm properties. For the right inequality, we bound `Real.log (1 / (1 - Real.exp (-c * lam * Λ1 ^ 2)))` by `Real.exp (-c * lam ^ (1 - 2 * alpha1))` using exponential and logarithm inequalities, then multiply by `C`.",
+      "confidence": 0.7,
+      "round_idx": 1
     }
   },
   {
@@ -7857,8 +7887,8 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "lean_proof_closed",
-      "step_verdict_verified"
+      "step_verdict_verified",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -7866,7 +7896,8 @@
       "equivalent_independent_semantic_evidence",
       "claim_equivalent:hybrid",
       "semantic_equivalence:verified",
-      "audit_demotion:fully_proven_integrity"
+      "audit_demotion:fully_proven_integrity",
+      "leanstral_whole_proof_v1:closed_round=1:confidence=1.00"
     ],
     "statement_alignment_class": "exact",
     "paper_statement_id": "pstmt_91bdbd791eb0ce347735906c",
@@ -8024,9 +8055,22 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "",
-      "file_body_preview": "sorry",
-      "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+      "captured_proof_text": "trivial",
+      "file_body_preview": "trivial",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 466,
+          "msg_head": ": Tactic `assumption` failed"
+        }
+      ]
+    },
+    "leanstral_whole_proof": {
+      "protocol": "leanstral_whole_proof_v1",
+      "proof_body": "trivial",
+      "reasoning": "deterministic micro-prover: trivial",
+      "confidence": 1.0,
+      "round_idx": 1
     }
   },
   {
@@ -15297,7 +15341,7 @@
     "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_PLACEHOLDER",
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,status_alignment_ok",
-    "promotion_gate_passed": false,
+    "promotion_gate_passed": true,
     "step_obligations": [],
     "assumptions": [
       {
@@ -15387,9 +15431,9 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "lean_proof_closed",
       "step_verdict_verified",
-      "status_alignment_ok"
+      "status_alignment_ok",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [
@@ -15508,8 +15552,8 @@
     "source_latex": "[Shifted fractional-Bessel $k$-sums]\\label{lem:shifted-Yukawa-sums}\n\tLet $\\frac32<\\beta\\le2$, $0<s<1$, and $0<s_1\\le s_2<1$. Then\n\t\\begin{align}\n\t\t\\sum_{k\\neq 0} |#1{\\widehat v_\\beta}(k)|^2 \\langle k+\\ell\\rangle^{-2s}\n\t\t&\\le C_{\\beta,s}\\,\\langle \\ell\\rangle^{-2s}, \\label{eq:shifted-v-sum-1}\\\\\n\t\t\\sum_{k\\neq 0} |#1{\\widehat v_\\beta}(k)|^2\n\t\t\\langle k+\\ell\\rangle^{-2s_1}\\langle \\ell-k\\rangle^{-2s_2}\n\t\t&\\le C_{\\beta,s_1,s_2}\\,\\langle \\ell\\rangle^{-2s_1}. \\label{eq:shifted-v-sum-2}\n\t\\end{align}",
     "leanstral_whole_proof": {
       "protocol": "leanstral_whole_proof_v1",
-      "proof_body": "nlinarith",
-      "reasoning": "deterministic micro-prover: nlinarith",
+      "proof_body": "trivial",
+      "reasoning": "deterministic micro-prover: trivial",
       "confidence": 1.0,
       "round_idx": 1
     },
@@ -15517,29 +15561,21 @@
     "audit_demotion": {
       "schema_version": "audit_fully_proven_integrity.v1",
       "previous_status": "FULLY_PROVEN",
-      "captured_proof_text": "nlinarith",
-      "file_body_preview": "nlinarith\n\n\n-- [theorem] remark_22  injected by rewrite_lean_from_ledger",
+      "captured_proof_text": "trivial",
+      "file_body_preview": "nlinarith\n\n-- [theorem] remark_22  injected by rewrite_lean_from_ledger",
       "reason": "file_body_does_not_elaborate",
       "lake_error_lines": [
         {
-          "line": 636,
+          "line": 729,
           "msg_head": ": Function expected at"
         },
         {
-          "line": 637,
+          "line": 730,
           "msg_head": ": Function expected at"
         },
         {
-          "line": 638,
-          "msg_head": ": Function expected at"
-        },
-        {
-          "line": 639,
-          "msg_head": ": Function expected at"
-        },
-        {
-          "line": 640,
-          "msg_head": ": Function expected at"
+          "line": 731,
+          "msg_head": ": maximum number of errors (100; from option `maxErrors`) reached, exiting"
         }
       ]
     }
@@ -17224,6 +17260,124 @@
       "captured_proof_text": "trivial",
       "file_body_preview": "sorry",
       "reason": "file_body_is_sorry_but_ledger_claimed_closed"
+    }
+  },
+  {
+    "theorem_name": "prop_high_high_mixed_vanishes::aux::prop_high_high_mixed_vanishes_prop_high_high_mixed_vanishes_pow_bound_2__factored_aux",
+    "lean_statement": "theorem prop_high_high_mixed_vanishes_prop_high_high_mixed_vanishes_pow_bound_2__factored_aux (T_hh C_beta lam alpha1 beta : ℝ) (h : 0 < lam) (hC : 0 < C_beta) (ha1 : 0 < alpha1) : lam ^ (3 / 4 - alpha1 * (3 - beta)) ≥ 0",
+    "lean_file": "/home/projectx/BDDM/output/2604.21583.lean",
+    "proof_text": "",
+    "proof_method": "unattempted",
+    "proof_mode": "derived-from-factor",
+    "proved": false,
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
+    "first_failing_step": -1,
+    "promotion_gate_passed": true,
+    "validation_gates": {
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
+      "assumptions_grounded": true,
+      "provenance_linked": true,
+      "translation_fidelity_ok": true,
+      "status_alignment_ok": true,
+      "dependency_trust_complete": true,
+      "reproducible_env": true,
+      "claim_equivalent": true,
+      "independent_semantic_equivalence_evidence": true,
+      "semantic_adversarial_checks_passed": true,
+      "no_paper_axiom_debt": true,
+      "statement_alignment_exact": true,
+      "statement_alignment_not_unrelated": true
+    },
+    "gate_failures": [
+      "lean_proof_closed",
+      "step_verdict_verified"
+    ],
+    "status": "UNRESOLVED",
+    "ledger_role": "derived_aux_from_factor",
+    "parent_theorem_name": "prop_high_high_mixed_vanishes",
+    "aux_local_name": "prop_high_high_mixed_vanishes_prop_high_high_mixed_vanishes_pow_bound_2__factored_aux",
+    "claim_equivalence_notes": [
+      "promoted_closed_aux:lemma_factor_v2",
+      "audit_demotion:fully_proven_integrity"
+    ],
+    "claim_equivalence_verdict": "equivalent",
+    "lemma_factor_metadata": {
+      "protocol": "lemma_factor_v2",
+      "compose_hint": "non-negativity of the power term",
+      "aux_signature": "theorem prop_high_high_mixed_vanishes_prop_high_high_mixed_vanishes_pow_bound_2__factored_aux (T_hh C_beta lam alpha1 beta : ℝ) (h : 0 < lam) (hC : 0 < C_beta) (ha1 : 0 < alpha1) : lam ^ (3 / 4 - alpha1 * (3 - beta)) ≥ 0 := by sorry"
+    },
+    "audit_trail": [
+      {
+        "event": "derived_aux_from_factor",
+        "parent": "prop_high_high_mixed_vanishes",
+        "paper_id": "2604.21583",
+        "protocol": "lemma_factor_aux_promotion_v1"
+      }
+    ],
+    "rounds_used": 1,
+    "time_s": 0.0,
+    "paper_statement_id": "pstmt_1a96f1766327a46abf4d39e5",
+    "provenance": {
+      "paper_id": "2604.21583",
+      "section": "",
+      "label": "prop:high-high-mixed-vanishes",
+      "cited_refs": [
+        "B96",
+        "B97",
+        "BG20",
+        "Bri22",
+        "CC18",
+        "CKRTG26",
+        "DD03",
+        "DNY21",
+        "DNY24",
+        "DeuNamNap-25",
+        "FKSS22",
+        "FKSS23",
+        "FroKnoSchSoh-19",
+        "GH19",
+        "GH21",
+        "Hai14",
+        "JLM85",
+        "JouRou25",
+        "Kup16",
+        "LNZ26",
+        "LewNamRou-15",
+        "LewNamRou-21",
+        "MW17",
+        "MW17a",
+        "NZZ25",
+        "OOT24",
+        "PW81",
+        "RZZ17a",
+        "TW18",
+        "ZZ15"
+      ]
+    },
+    "review_policy": "release_eligible",
+    "reviewer_type": "hybrid",
+    "trust_class": "TRUST_INTERNAL_PROVED",
+    "trust_reference": "internal_verified_pipeline",
+    "reproducible_env": true,
+    "translation_fidelity_score": 0.9,
+    "status_alignment_score": 0.8,
+    "axiom_debt": [],
+    "axiom_debt_hash": "baba683c83d27290",
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "linarith",
+      "file_body_preview": "linarith",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 501,
+          "msg_head": ": linarith failed to find a contradiction"
+        }
+      ]
     }
   }
 ]

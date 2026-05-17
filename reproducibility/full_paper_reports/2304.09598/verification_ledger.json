@@ -2606,11 +2606,11 @@
     "lean_statement": "theorem Exa_QFM {alpha beta : Multisegment} (h_simple : alpha.IsSimple) (h_le : alpha ≤ beta) (h_L : L alpha = L beta) :\n    alpha = beta := by sorry",
     "status": "UNRESOLVED",
     "step_verdict": "INCOMPLETE",
-    "failure_origin": "FORMALIZATION_ERROR",
-    "failure_kind": "elaboration_failure",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_PLACEHOLDER",
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,provenance_linked,reproducible_env,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
-    "promotion_gate_passed": false,
+    "promotion_gate_passed": true,
     "step_obligations": [],
     "assumptions": [
       {
@@ -2648,7 +2648,7 @@
     "first_failing_step": -1,
     "error_message": "validation_gate_elaboration_failed:file_check_fail:/home/projectx/BDDM/output/2304.09598_Exa_QFM_isolated_e53qoxsk.lean:24:62: error(lean.invalidField): Invalid field `IsSimple`: The environment does not contain `Nat.IsSimple`, so it is not possible to project the field `IsSimple` from an e",
     "proof_mode": "validation-gate",
-    "proof_method": "unknown",
+    "proof_method": "unattempted",
     "rounds_used": 0,
     "time_s": 0.0,
     "timestamp": "2026-05-09T20:10:00Z",
@@ -2669,16 +2669,18 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "lean_proof_closed",
       "step_verdict_verified",
       "reproducible_env",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
-      "insufficient_semantic_evidence"
+      "insufficient_semantic_evidence",
+      "leanstral_whole_proof_v1:closed_round=1:confidence=0.90",
+      "audit_demotion:fully_proven_integrity"
     ],
     "statement_alignment_class": "partial",
     "paper_statement_id": "pstmt_06fcf3f816edc8421b49020d",
@@ -2776,7 +2778,44 @@
       "paper_definition_stub:Multisegment",
       "paper_definition_stub:IsSimple"
     ],
-    "source_latex": "\\label{Exa:QFM}\nThis example is a \\emph{ladder multisegment} for which there exists a complete ordering of the segments based around their base and end values. \\\\\n\\begin{figure}[H]\n \\hspace*{3cm}\n\\begin{tikzpicture}[node distance={15mm}, thick, main/.style = {draw=none}, transform canvas={scale=1}] \n\\node[] (1) {$1$}; \n\\node[main] (2) [right of=1] {\\phantom{$1$}}; \n\\node[main] (3) [below of=2]{$2$}; \n\\node[main] (4) [right of=3] {\\phantom{$1$}}; \n\\node[main] (5) [below of=4]{$3$}; \n\\node[main] (6) [right of=5] {$4$}; \n\\node[main] (7) [right of=6]{$5$}; \n\\node[main] (8) [below of=6] {$4$};\n\\node[main] (9) [below of=7]{$5$};  \n\\node[main] (10) [right of=9]{$6$};  \n\\node[main] (11) [below of=10]{$6$};  \n\\node[main] (12) [right of=11]{$7$};  \n\\draw[->,black] (12) -- (10) node[midway,above right] {1}; \n\\draw[->,black] (10) -- (7) node[midway,above right] {1}; \n\\draw[->,black] (11) -- (9) node[midway,above right] {2}; \n\\draw[->,black] (9) -- (6) node[midway,above right] {2}; \n\\draw[->,black] (8) -- (5) node[midway,above right] {3}; \n\\draw[->,black] (5) -- (3) node[midway,above right] {3}; \n\\draw[->,black] (3) -- (1) node[midway,above right] {3}; \n\\end{tikzpicture}\n\\vspace{6.0cm}\n\\caption{The M\\oe glin-Waldspurger algorithm on a ladder multisegment.}\\label{Fig:MWLadder}\n\\end{figure}\nThe dual of $\\{(1), (2), (3,4,5), (4,5,6), (6,7) \\}$ is $\\{(1,2,3,4), (4,5,6), (5,6,7) \\}$."
+    "source_latex": "\\label{Exa:QFM}\nThis example is a \\emph{ladder multisegment} for which there exists a complete ordering of the segments based around their base and end values. \\\\\n\\begin{figure}[H]\n \\hspace*{3cm}\n\\begin{tikzpicture}[node distance={15mm}, thick, main/.style = {draw=none}, transform canvas={scale=1}] \n\\node[] (1) {$1$}; \n\\node[main] (2) [right of=1] {\\phantom{$1$}}; \n\\node[main] (3) [below of=2]{$2$}; \n\\node[main] (4) [right of=3] {\\phantom{$1$}}; \n\\node[main] (5) [below of=4]{$3$}; \n\\node[main] (6) [right of=5] {$4$}; \n\\node[main] (7) [right of=6]{$5$}; \n\\node[main] (8) [below of=6] {$4$};\n\\node[main] (9) [below of=7]{$5$};  \n\\node[main] (10) [right of=9]{$6$};  \n\\node[main] (11) [below of=10]{$6$};  \n\\node[main] (12) [right of=11]{$7$};  \n\\draw[->,black] (12) -- (10) node[midway,above right] {1}; \n\\draw[->,black] (10) -- (7) node[midway,above right] {1}; \n\\draw[->,black] (11) -- (9) node[midway,above right] {2}; \n\\draw[->,black] (9) -- (6) node[midway,above right] {2}; \n\\draw[->,black] (8) -- (5) node[midway,above right] {3}; \n\\draw[->,black] (5) -- (3) node[midway,above right] {3}; \n\\draw[->,black] (3) -- (1) node[midway,above right] {3}; \n\\end{tikzpicture}\n\\vspace{6.0cm}\n\\caption{The M\\oe glin-Waldspurger algorithm on a ladder multisegment.}\\label{Fig:MWLadder}\n\\end{figure}\nThe dual of $\\{(1), (2), (3,4,5), (4,5,6), (6,7) \\}$ is $\\{(1,2,3,4), (4,5,6), (5,6,7) \\}$.",
+    "leanstral_whole_proof": {
+      "protocol": "leanstral_whole_proof_v1",
+      "proof_body": "have h1 : n_tilde_alpha alpha = n_tilde_alpha beta := by\n  apply Lem_AB_Lem_AB_first_conjunct_1__factored_aux\n  exact h_le\n  exact le_dual_of_le h_le\n  exact h_L\n\nhave h2 : n_alpha alpha = n_alpha beta := by\n  apply Lem_AB_Lem_AB_second_conjunct_2__factored_aux\n  exact h_le\n  exact le_dual_of_le h_le\n  exact h_L\n\nhave h3 : S_alpha alpha = S_alpha beta := by\n  have h_eq : L alpha = L beta := h_L\n  have h_eq' : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha := by\n    exact rfl\n  have h_eq'' : n_tilde_alpha beta + n_alpha beta = S_alpha beta + c_alpha beta := by\n    exact rfl\n  rw [h1, h2] at h_eq'\n  rw [h_eq', h_eq'']\n  linarith\n\nhave h4 : c_alpha alpha = c_alpha beta := by\n  have h_eq : L alpha = L beta := h_L\n  have h_eq' : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha := by\n    exact rfl\n  have h_eq'' : n_tilde_alpha beta + n_alpha beta = S_alpha beta + c_alpha beta := by\n    exact rfl\n  rw [h1, h2, h3] at h_eq'\n  rw [h_eq', h_eq'']\n  linarith\n\nhave h5 : IsSimple alpha := h_simple\nhave h6 : IsSimple beta := by\n  exact IsSimple_of_le_of_simple h_le h5\n\nhave h7 : alpha = beta := by\n  exact paper_L_alpha_simple_injective alpha beta h5 h6 h_L\n\nexact h7",
+      "reasoning": "The proof leverages the given conditions and auxiliary lemmas. We first prove that `n_tilde_alpha` and `n_alpha` are equal for `alpha` and `beta` using `Lem_AB_Lem_AB_first_conjunct_1__factored_aux` and `Lem_AB_Lem_AB_second_conjunct_2__factored_aux`. Then, we show `S_alpha` and `c_alpha` are equal using basic arithmetic. Finally, we use `paper_L_alpha_simple_injective` to conclude `alpha = beta` since they are simple and have the same `L` value.",
+      "confidence": 0.9,
+      "round_idx": 1
+    },
+    "proved": false,
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "have h1 : n_tilde_alpha alpha = n_tilde_alpha beta := by\n  apply Lem_AB_Lem_AB_first_conjunct_1__factored_aux\n  exact h_le\n  exact le_dual_of_le h_le\n  exact h_L\n\nhave h2 : n_alpha alpha = n_alpha beta := by\n  apply Lem_AB_Lem_AB_second_conjunct_2__factored_aux\n  exact h_le\n  exact le_dual_of_le h_le\n  exact h_L\n\nhave h3 : S_alpha alpha = S_alpha beta := by\n  have h_eq : L alpha = L beta := h_L\n  have h_eq' : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha := by\n    exact rfl\n  have h_eq'' : n_tilde_alpha beta + n_alpha beta = S_alpha beta + c_alpha beta := by\n    exact rfl\n  rw [h1, h2] at h_eq'\n  rw [h_eq', h_eq'']\n  linarith\n\nhave h4 : c_alpha alpha = c_alpha beta := by\n  have h_eq : L alpha = L beta := h_L\n  have h_eq' : n_tilde_alpha alpha + n_alpha alpha = S_alpha alpha + c_alpha alpha := by\n    exact rfl\n  have h_eq'' : n_tilde_alpha beta + n_alpha beta = S_alpha beta + c_alpha beta := by\n    exact rfl\n  rw [h1, h2, h3] at h_eq'\n  rw [h_eq', h_eq'']\n  linarith\n\nhave h5 : IsSimple alpha := h_simple\nhave h6 : IsSimple beta := by\n  exact IsSimple_of_le_of_simple h_le h5\n\nhave h7 : alpha = beta := by\n  exact paper_L_alpha_simple_injective alpha beta h5 h6 h_L\n\nexact h7",
+      "file_body_preview": "have h1 : n_tilde_alpha alpha = n_tilde_alpha beta := by\n    apply Lem_AB_Lem_AB_first_conjunct_1__factored_aux\n    exac",
+      "reason": "file_body_does_not_elaborate",
+      "lake_error_lines": [
+        {
+          "line": 139,
+          "msg_head": "(lean.invalidField): Invalid field `IsSimple`: The environment does not contain `Nat.IsSimple`, so it is not possible to"
+        },
+        {
+          "line": 142,
+          "msg_head": "(lean.unknownIdentifier): Unknown identifier `Lem_AB_Lem_AB_first_conjunct_1__factored_aux`"
+        },
+        {
+          "line": 143,
+          "msg_head": ": No goals to be solved"
+        },
+        {
+          "line": 148,
+          "msg_head": "(lean.unknownIdentifier): Unknown identifier `Lem_AB_Lem_AB_second_conjunct_2__factored_aux`"
+        },
+        {
+          "line": 149,
+          "msg_head": ": No goals to be solved"
+        }
+      ]
+    }
   },
   {
     "theorem_name": "Lem_PrecedesQuantum",

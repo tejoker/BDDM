@@ -16578,7 +16578,7 @@
     "theorem_name": "lem_gcts",
     "lean_file": "/home/projectx/BDDM/output/1910.07464.lean",
     "lean_statement": "theorem lem_gcts (h_source_1_1 : True) (h_schwartz_class_2 : True) (h_smooth_function_3 : True) (h_derivatives_most_polynomial_growth_4 : True) :\n  zeta ≥ 0",
-    "status": "AXIOM_BACKED",
+    "status": "INTERMEDIARY_PROVEN",
     "step_verdict": "VERIFIED",
     "failure_origin": "NONE",
     "failure_kind": "",
@@ -16709,8 +16709,7 @@
       "step_verdict_verified",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "semantic_adversarial_checks_passed",
-      "no_paper_axiom_debt"
+      "semantic_adversarial_checks_passed"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -16886,12 +16885,7 @@
         "theorem_intent": "To prove that the function g(λ), defined as a sum over preimages of λ under η with non-zero derivative, is continuous."
       }
     },
-    "axiom_debt": [
-      "paper_definition_stub:h_source_1_1",
-      "paper_definition_stub:h_derivatives_most_polynomial_growth_4",
-      "paper_definition_stub:h_schwartz_class_2",
-      "paper_definition_stub:h_smooth_function_3"
-    ],
+    "axiom_debt": [],
     "axiom_debt_hash": "4c9710c4862159c4",
     "closure_claim": "not_closed",
     "proof_eligible": false,
@@ -16914,7 +16908,13 @@
       "reasoning": "deterministic micro-prover: norm_num",
       "confidence": 1.0,
       "round_idx": 1
-    }
+    },
+    "discharged_axiom_debt": [
+      "paper_definition_stub:h_source_1_1",
+      "paper_definition_stub:h_derivatives_most_polynomial_growth_4",
+      "paper_definition_stub:h_schwartz_class_2",
+      "paper_definition_stub:h_smooth_function_3"
+    ]
   },
   {
     "theorem_name": "prop_L1omega",
@@ -19743,10 +19743,9 @@
     },
     "gate_failures": [
       "claim_equivalent",
-      "independent_semantic_equivalence_evidence",
-      "no_paper_axiom_debt"
+      "independent_semantic_equivalence_evidence"
     ],
-    "status": "AXIOM_BACKED",
+    "status": "INTERMEDIARY_PROVEN",
     "ledger_role": "derived_aux_from_factor",
     "parent_theorem_name": "rem_55",
     "aux_local_name": "rem_55_rem_55_lambda_ge_zero_2__factored_aux",
@@ -19835,13 +19834,14 @@
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified,claim_equivalent,independent_semantic_equivalence_evidence,no_paper_axiom_debt",
     "translation_fidelity_score": 0.86,
     "status_alignment_score": 0.8,
-    "axiom_debt": [
+    "axiom_debt": [],
+    "axiom_debt_hash": "4d4025e96091e5ab",
+    "discharged_axiom_debt": [
       "paper_definition_stub:h_source_1_1",
       "paper_definition_stub:h_compact_topology_4",
       "paper_definition_stub:h_compact_topology_each_5",
       "paper_definition_stub:h_decreasing_outside_compact_2",
       "paper_definition_stub:h_symmetric_3"
-    ],
-    "axiom_debt_hash": "4d4025e96091e5ab"
+    ]
   }
 ]

@@ -1836,7 +1836,7 @@
       "reason": "file_body_does_not_elaborate",
       "lake_error_lines": [
         {
-          "line": 66,
+          "line": 70,
           "msg_head": "(lean.unknownIdentifier): Unknown identifier `f`"
         }
       ]
@@ -1855,6 +1855,14 @@
         "sha": "dd5128980bba4bed803fd8254a209543e76ccf3f197239be4b90a582812b7891",
         "autoproved_name": "rem_status_emphasis__autoproved",
         "status": "written",
+        "protocol": "autoproved_promotion_v1"
+      },
+      {
+        "event": "autoproved_promotion",
+        "file": "/home/projectx/BDDM/Desol/PaperProofs/Paper_2604_21884.lean",
+        "sha": "dd5128980bba4bed803fd8254a209543e76ccf3f197239be4b90a582812b7891",
+        "autoproved_name": "rem_status_emphasis__autoproved",
+        "status": "idempotent",
         "protocol": "autoproved_promotion_v1"
       },
       {

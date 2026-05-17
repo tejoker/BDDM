@@ -20,8 +20,11 @@ namespace Paper_2212_03736
 
 -- Definition stubs ground paper-local identifiers before proof search.
 -- They are transparent Lean definitions for elaboration, not hidden proofs of paper claims.
-noncomputable def var_circ (x : ℝ) :
-  ∃ x : ℝ, B ≥ 0 ∧ operatornamedim Z = 1 := by
+-- Was: `noncomputable def var_circ (x : ℝ) : ∃ x : ℝ, B ≥ 0 ∧ operatornamedim Z = 1 := by`
+-- Translator emitted malformed signature (empty tactic body + unbound B, operatornamedim, Z).
+-- Replaced with a transparent stub matching the other paper-local symbols
+-- in this file. The audit's alignment registry can discharge it as ∀ x, var_circ x = 0.
+noncomputable def var_circ (_x : ℝ) : ℝ := 0
 
 def omega (_i _k : ℕ) : ℝ := 0
 

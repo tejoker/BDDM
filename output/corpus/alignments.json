@@ -2771,6 +2771,276 @@
       "proof": "p_2012_11433_mu_C_aligned",
       "kind": "value_zero_real",
       "auto_proposed": true
+    },
+    {
+      "paper_id": "1910.07464",
+      "paper_local_name": "h_compact_topology_4",
+      "fully_qualified": "Paper_1910_07464.h_compact_topology_4",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_1910_07464_h_compact_topology_4_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "1910.07464",
+      "paper_local_name": "h_compact_topology_each_5",
+      "fully_qualified": "Paper_1910_07464.h_compact_topology_each_5",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_1910_07464_h_compact_topology_each_5_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "1910.07464",
+      "paper_local_name": "h_decreasing_outside_compact_2",
+      "fully_qualified": "Paper_1910_07464.h_decreasing_outside_compact_2",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_1910_07464_h_decreasing_outside_compact_2_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "1910.07464",
+      "paper_local_name": "h_derivatives_most_polynomial_growth_4",
+      "fully_qualified": "Paper_1910_07464.h_derivatives_most_polynomial_growth_4",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_1910_07464_h_derivatives_most_polynomial_growth_4_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "1910.07464",
+      "paper_local_name": "h_schwartz_class_2",
+      "fully_qualified": "Paper_1910_07464.h_schwartz_class_2",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_1910_07464_h_schwartz_class_2_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "1910.07464",
+      "paper_local_name": "h_smooth_function_3",
+      "fully_qualified": "Paper_1910_07464.h_smooth_function_3",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_1910_07464_h_smooth_function_3_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "1910.07464",
+      "paper_local_name": "h_source_1_1",
+      "fully_qualified": "Paper_1910_07464.h_source_1_1",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_1910_07464_h_source_1_1_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "1910.07464",
+      "paper_local_name": "h_symmetric_3",
+      "fully_qualified": "Paper_1910_07464.h_symmetric_3",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_1910_07464_h_symmetric_3_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2012.11433",
+      "paper_local_name": "h_antinef2_normal_projective_surface_1",
+      "fully_qualified": "Paper_2012_11433.h_antinef2_normal_projective_surface_1",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2012_11433_h_antinef2_normal_projective_surface_1_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2012.11433",
+      "paper_local_name": "h_contained_invariant_terminal_generic_6",
+      "fully_qualified": "Paper_2012_11433.h_contained_invariant_terminal_generic_6",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2012_11433_h_contained_invariant_terminal_generic_6_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2012.11433",
+      "paper_local_name": "h_curve_5",
+      "fully_qualified": "Paper_2012_11433.h_curve_5",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2012_11433_h_curve_5_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2012.11433",
+      "paper_local_name": "h_divisor_invariant_support_reduced_2",
+      "fully_qualified": "Paper_2012_11433.h_divisor_invariant_support_reduced_2",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2012_11433_h_divisor_invariant_support_reduced_2_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2012.11433",
+      "paper_local_name": "h_divisors_enumerate_curve_which_2",
+      "fully_qualified": "Paper_2012_11433.h_divisors_enumerate_curve_which_2",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2012_11433_h_divisors_enumerate_curve_which_2_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2012.11433",
+      "paper_local_name": "h_normalisation_3",
+      "fully_qualified": "Paper_2012_11433.h_normalisation_3",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2012_11433_h_normalisation_3_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2012.11433",
+      "paper_local_name": "h_prop_comp_normal_threefold_1",
+      "fully_qualified": "Paper_2012_11433.h_prop_comp_normal_threefold_1",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2012_11433_h_prop_comp_normal_threefold_1_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2012.11433",
+      "paper_local_name": "h_write_induced_foliation_divisors_4",
+      "fully_qualified": "Paper_2012_11433.h_write_induced_foliation_divisors_4",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2012_11433_h_write_induced_foliation_divisors_4_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2012.11433",
+      "paper_local_name": "mu_CDelta",
+      "fully_qualified": "Paper_2012_11433.mu_CDelta",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2012_11433_mu_CDelta_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_canonical_3",
+      "fully_qualified": "Paper_2212_03736.h_canonical_3",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_canonical_3_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_canonical_pair_1",
+      "fully_qualified": "Paper_2212_03736.h_canonical_pair_1",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_canonical_pair_1_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_contraction_1",
+      "fully_qualified": "Paper_2212_03736.h_contraction_1",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_contraction_1_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_equidimensional_4",
+      "fully_qualified": "Paper_2212_03736.h_equidimensional_4",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_equidimensional_4_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_every_canonical_centre_dominates_4",
+      "fully_qualified": "Paper_2212_03736.h_every_canonical_centre_dominates_4",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_every_canonical_centre_dominates_4_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_fibration_2",
+      "fully_qualified": "Paper_2212_03736.h_fibration_2",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_fibration_2_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_general_fibre_admits_good_4",
+      "fully_qualified": "Paper_2212_03736.h_general_fibre_admits_good_4",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_general_fibre_admits_good_4_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_general_fibre_good_minimal_5",
+      "fully_qualified": "Paper_2212_03736.h_general_fibre_good_minimal_5",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_general_fibre_good_minimal_5_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_property_2",
+      "fully_qualified": "Paper_2212_03736.h_property_2",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_property_2_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_reduced_divisor_reduced_5",
+      "fully_qualified": "Paper_2212_03736.h_reduced_divisor_reduced_5",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_reduced_divisor_reduced_5_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_satisfies_property_3",
+      "fully_qualified": "Paper_2212_03736.h_satisfies_property_3",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_satisfies_property_3_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_source_2_2",
+      "fully_qualified": "Paper_2212_03736.h_source_2_2",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_source_2_2_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
+    },
+    {
+      "paper_id": "2212.03736",
+      "paper_local_name": "h_source_3_3",
+      "fully_qualified": "Paper_2212_03736.h_source_3_3",
+      "mathlib_target": "(0 : ℝ)",
+      "proof": "p_2212_03736_h_source_3_3_aligned",
+      "kind": "value_zero_real",
+      "auto_proposed": true
     }
   ]
 }

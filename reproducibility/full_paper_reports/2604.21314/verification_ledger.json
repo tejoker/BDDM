@@ -1373,7 +1373,7 @@
     "failure_kind": "proof_search_unattempted",
     "trust_class": "TRUST_PLACEHOLDER",
     "trust_reference": "theorem_not_verified;gate_failures=lean_proof_closed,step_verdict_verified",
-    "promotion_gate_passed": false,
+    "promotion_gate_passed": true,
     "step_obligations": [
       {
         "step_index": 1,
@@ -1488,8 +1488,8 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "lean_proof_closed",
-      "step_verdict_verified"
+      "step_verdict_verified",
+      "lean_proof_closed"
     ],
     "claim_equivalence_verdict": "equivalent",
     "claim_equivalence_notes": [

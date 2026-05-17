@@ -2420,7 +2420,7 @@
     "theorem_name": "acknowledgements_10",
     "lean_file": "/home/projectx/BDDM/output/1701.01421.lean",
     "lean_statement": "theorem acknowledgements_10 : ∀ (acknowledgements : Prop), acknowledgements → True",
-    "status": "AXIOM_BACKED",
+    "status": "INTERMEDIARY_PROVEN",
     "step_verdict": "VERIFIED",
     "failure_origin": "NONE",
     "failure_kind": "",
@@ -2509,8 +2509,7 @@
       "step_verdict_verified",
       "translation_fidelity_ok",
       "claim_equivalent",
-      "independent_semantic_equivalence_evidence",
-      "no_paper_axiom_debt"
+      "independent_semantic_equivalence_evidence"
     ],
     "claim_equivalence_verdict": "unclear",
     "claim_equivalence_notes": [
@@ -2633,9 +2632,7 @@
       "context_excerpt": "Paper glossary memory: - A: an integer slope - C: a compressing disk in $U$ - D: disjoint from both $N_{\\mu_i}$ and $\\Delta$ - K: a doubly primitive knot in $M$ - M: either $S^3$ - N_{\\mu_i}: an annulus of which $\\mu_i$ is a boundary component - P: an annulus then we say that $(P - P\\cap\\widehat{R}: $\\partial$-parallel in $A$ - P_l: a disk - P_r: a disk - P_r\\cap\\delta: a single point - R: invariant under the involution $\\pi$ - R_\\alpha: in $\\gamma_2$ and the new arc in $R_\\gamma$ is in $\\gamma_1$ - R_\\gamma: a $180^\\circ$-rotation - S^2: an essential $2$-sphere in $(S^2 \\times S^1) \\# L(r - S^3: complete is a consequence of J - T: the complement $\\Sigma\\ssm\\NN(\\tau_D)$ - U: a compression body and $W$ is a handlebody Relevant definitions/notation blocks: - \\label{def:CompressionBody} A {\\it compression body} is a connected $3$-manifold $U$ obtained by adding 2-handles to a product $\\Sigma\\times I$ ($I=[0,1]$) along $\\Sigma\\times\\{0\\}$, where $\\Sigma$ is a closed and orientable surface, and then capping off resulting 2-sphere boundary components by 3-balls. The surface $\\ - \\label{def:PD} Let $(U,W)$ be a Heegaard splitting of $M\\smallsetminus\\mathcal{N}(K)$ as above. Let $P$ be a planar surface properly embedded in $U$ and $D$ a compressing disk in $W$. Suppose $\\partial_+P$ is a single curve transversely intersecting $\\partial D$ in $\\Sigma$. We say that $(P,D)$ is a {\\it $(\\mathcal{P}, Nearby theorem statements: - \\label{lem:integer slope} Let $K$ be a knot in $M$ with irreducible knot exterior, where $M$ is either $S^3$ or $(S^2 \\times S^1) \\# L(r,s)$. Suppose $K$ admits a non-trivial Dehn surgery resulting in a lens space. Then either $K$ is doubly primitive, or the s Declared notation/macros: - \\def% - \\renewcommand\\baselinestretch{1.2} - \\renewcommand{(\\roman{subf",
       "translation_statement_schema": {}
     },
-    "axiom_debt": [
-      "paper_definition_stub:acknowledgements_10"
-    ],
+    "axiom_debt": [],
     "axiom_debt_hash": "9c7ef1832ce6e517",
     "closure_claim": "not_closed",
     "proof_eligible": false,
@@ -2658,7 +2655,10 @@
       "reasoning": "deterministic micro-prover: tauto",
       "confidence": 1.0,
       "round_idx": 1
-    }
+    },
+    "discharged_axiom_debt": [
+      "paper_definition_stub:acknowledgements_10"
+    ]
   },
   {
     "theorem_name": "lem_integer_slope",

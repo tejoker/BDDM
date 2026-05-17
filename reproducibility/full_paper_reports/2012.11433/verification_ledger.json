@@ -23178,13 +23178,15 @@
     "translation_fidelity_score": 0.86,
     "status_alignment_score": 0.8,
     "axiom_debt": [
+      "paper_symbol:Θ"
+    ],
+    "axiom_debt_hash": "ff712bcff9a46f1d",
+    "discharged_axiom_debt": [
       "paper_definition_stub:mu_C",
       "paper_definition_stub:h_antinef2_normal_projective_surface_1",
       "paper_definition_stub:h_divisors_enumerate_curve_which_2",
-      "paper_definition_stub:mu_CDelta",
-      "paper_symbol:Θ"
-    ],
-    "axiom_debt_hash": "ff712bcff9a46f1d"
+      "paper_definition_stub:mu_CDelta"
+    ]
   },
   {
     "theorem_name": "prop_adj_comp::aux::prop_adj_comp_prop_adj_comp_first_1__factored_aux",
@@ -23274,6 +23276,11 @@
     "translation_fidelity_score": 0.86,
     "status_alignment_score": 0.8,
     "axiom_debt": [
+      "paper_symbol:Γ",
+      "paper_symbol:Θ"
+    ],
+    "axiom_debt_hash": "02a131eef02b1f25",
+    "discharged_axiom_debt": [
       "paper_definition_stub:mu_C",
       "paper_definition_stub:mu_CDelta",
       "paper_definition_stub:h_contained_invariant_terminal_generic_6",
@@ -23281,11 +23288,8 @@
       "paper_definition_stub:h_divisor_invariant_support_reduced_2",
       "paper_definition_stub:h_normalisation_3",
       "paper_definition_stub:h_prop_comp_normal_threefold_1",
-      "paper_definition_stub:h_write_induced_foliation_divisors_4",
-      "paper_symbol:Γ",
-      "paper_symbol:Θ"
-    ],
-    "axiom_debt_hash": "02a131eef02b1f25"
+      "paper_definition_stub:h_write_induced_foliation_divisors_4"
+    ]
   },
   {
     "theorem_name": "prop_adj_comp::aux::prop_adj_comp_prop_adj_comp_second_2__factored_aux",
@@ -23375,6 +23379,11 @@
     "translation_fidelity_score": 0.86,
     "status_alignment_score": 0.8,
     "axiom_debt": [
+      "paper_symbol:Γ",
+      "paper_symbol:Θ"
+    ],
+    "axiom_debt_hash": "02a131eef02b1f25",
+    "discharged_axiom_debt": [
       "paper_definition_stub:mu_C",
       "paper_definition_stub:mu_CDelta",
       "paper_definition_stub:h_contained_invariant_terminal_generic_6",
@@ -23382,10 +23391,7 @@
       "paper_definition_stub:h_divisor_invariant_support_reduced_2",
       "paper_definition_stub:h_normalisation_3",
       "paper_definition_stub:h_prop_comp_normal_threefold_1",
-      "paper_definition_stub:h_write_induced_foliation_divisors_4",
-      "paper_symbol:Γ",
-      "paper_symbol:Θ"
-    ],
-    "axiom_debt_hash": "02a131eef02b1f25"
+      "paper_definition_stub:h_write_induced_foliation_divisors_4"
+    ]
   }
 ]

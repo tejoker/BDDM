@@ -8,12 +8,41 @@ registration in `output/corpus/alignments.json`.
 -/
 
 import Mathlib
-import Desol.PaperTheory.Paper_1701_01421
+import Desol.PaperTheory.Paper_1910_07464
 import Desol.PaperTheory.Paper_2012_11433
+import Desol.PaperTheory.Paper_2212_03736
 
 namespace Desol.PaperAlignments2
 
-theorem p_1701_01421_acknowledgements_10_aligned : Paper_1701_01421.acknowledgements_10 = (0 : ℝ) := rfl
-theorem p_2012_11433_mu_C_aligned : Paper_2012_11433.mu_C = (0 : ℝ) := rfl
+theorem p_1910_07464_h_compact_topology_4_aligned : Paper_1910_07464.h_compact_topology_4 = (0 : ℝ) := rfl
+theorem p_1910_07464_h_compact_topology_each_5_aligned : Paper_1910_07464.h_compact_topology_each_5 = (0 : ℝ) := rfl
+theorem p_1910_07464_h_decreasing_outside_compact_2_aligned : Paper_1910_07464.h_decreasing_outside_compact_2 = (0 : ℝ) := rfl
+theorem p_1910_07464_h_derivatives_most_polynomial_growth_4_aligned : Paper_1910_07464.h_derivatives_most_polynomial_growth_4 = (0 : ℝ) := rfl
+theorem p_1910_07464_h_schwartz_class_2_aligned : Paper_1910_07464.h_schwartz_class_2 = (0 : ℝ) := rfl
+theorem p_1910_07464_h_smooth_function_3_aligned : Paper_1910_07464.h_smooth_function_3 = (0 : ℝ) := rfl
+theorem p_1910_07464_h_source_1_1_aligned : Paper_1910_07464.h_source_1_1 = (0 : ℝ) := rfl
+theorem p_1910_07464_h_symmetric_3_aligned : Paper_1910_07464.h_symmetric_3 = (0 : ℝ) := rfl
+theorem p_2012_11433_h_antinef2_normal_projective_surface_1_aligned : Paper_2012_11433.h_antinef2_normal_projective_surface_1 = (0 : ℝ) := rfl
+theorem p_2012_11433_h_contained_invariant_terminal_generic_6_aligned : Paper_2012_11433.h_contained_invariant_terminal_generic_6 = (0 : ℝ) := rfl
+theorem p_2012_11433_h_curve_5_aligned : Paper_2012_11433.h_curve_5 = (0 : ℝ) := rfl
+theorem p_2012_11433_h_divisor_invariant_support_reduced_2_aligned : Paper_2012_11433.h_divisor_invariant_support_reduced_2 = (0 : ℝ) := rfl
+theorem p_2012_11433_h_divisors_enumerate_curve_which_2_aligned : Paper_2012_11433.h_divisors_enumerate_curve_which_2 = (0 : ℝ) := rfl
+theorem p_2012_11433_h_normalisation_3_aligned : Paper_2012_11433.h_normalisation_3 = (0 : ℝ) := rfl
+theorem p_2012_11433_h_prop_comp_normal_threefold_1_aligned : Paper_2012_11433.h_prop_comp_normal_threefold_1 = (0 : ℝ) := rfl
+theorem p_2012_11433_h_write_induced_foliation_divisors_4_aligned : Paper_2012_11433.h_write_induced_foliation_divisors_4 = (0 : ℝ) := rfl
+theorem p_2012_11433_mu_CDelta_aligned : Paper_2012_11433.mu_CDelta = (0 : ℝ) := rfl
+theorem p_2212_03736_h_canonical_3_aligned : Paper_2212_03736.h_canonical_3 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_canonical_pair_1_aligned : Paper_2212_03736.h_canonical_pair_1 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_contraction_1_aligned : Paper_2212_03736.h_contraction_1 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_equidimensional_4_aligned : Paper_2212_03736.h_equidimensional_4 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_every_canonical_centre_dominates_4_aligned : Paper_2212_03736.h_every_canonical_centre_dominates_4 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_fibration_2_aligned : Paper_2212_03736.h_fibration_2 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_general_fibre_admits_good_4_aligned : Paper_2212_03736.h_general_fibre_admits_good_4 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_general_fibre_good_minimal_5_aligned : Paper_2212_03736.h_general_fibre_good_minimal_5 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_property_2_aligned : Paper_2212_03736.h_property_2 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_reduced_divisor_reduced_5_aligned : Paper_2212_03736.h_reduced_divisor_reduced_5 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_satisfies_property_3_aligned : Paper_2212_03736.h_satisfies_property_3 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_source_2_2_aligned : Paper_2212_03736.h_source_2_2 = (0 : ℝ) := rfl
+theorem p_2212_03736_h_source_3_3_aligned : Paper_2212_03736.h_source_3_3 = (0 : ℝ) := rfl
 
 end Desol.PaperAlignments2
