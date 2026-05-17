@@ -5796,18 +5796,18 @@
     "theorem_name": "Cor_Quant::aux::Cor_Quant_Cor_Quant_iff_fwd_1__type_aware_aux_1__factored_aux",
     "lean_statement": "theorem Cor_Quant_Cor_Quant_iff_fwd_1__type_aware_aux_1__factored_aux (x : ℝ) (h_is_not_a_ladder_multisegment_1 : True) : (∃ x : ℝ, x = x) → (∃ x : ℝ, x = x)",
     "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
-    "proof_text": "tauto",
-    "proof_method": "lemma_factor_aux_promotion_v1",
+    "proof_text": "",
+    "proof_method": "unattempted",
     "proof_mode": "derived-from-factor",
-    "proved": true,
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "proved": false,
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "first_failing_step": -1,
     "promotion_gate_passed": true,
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -5824,14 +5824,17 @@
     "gate_failures": [
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "semantic_adversarial_checks_passed"
+      "semantic_adversarial_checks_passed",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
-    "status": "INTERMEDIARY_PROVEN",
+    "status": "UNRESOLVED",
     "ledger_role": "derived_aux_from_factor",
     "parent_theorem_name": "Cor_Quant",
     "aux_local_name": "Cor_Quant_Cor_Quant_iff_fwd_1__type_aware_aux_1__factored_aux",
     "claim_equivalence_notes": [
-      "promoted_closed_aux:lemma_factor_v2"
+      "promoted_closed_aux:lemma_factor_v2",
+      "audit_demotion:fully_proven_integrity"
     ],
     "claim_equivalence_verdict": "unclear",
     "lemma_factor_metadata": {
@@ -5867,24 +5870,31 @@
     "translation_fidelity_score": 0.99,
     "status_alignment_score": 0.8,
     "axiom_debt": [],
-    "axiom_debt_hash": ""
+    "axiom_debt_hash": "",
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "tauto",
+      "file_body_preview": "tauto",
+      "reason": "trivialized_statement"
+    }
   },
   {
     "theorem_name": "Cor_Quant::aux::Cor_Quant_Cor_Quant_iff_bwd_2__type_aware_aux_2__factored_aux",
     "lean_statement": "theorem Cor_Quant_Cor_Quant_iff_bwd_2__type_aware_aux_2__factored_aux (x : ℝ) (h_is_not_a_ladder_multisegment_1 : True) : (∃ x : ℝ, x = x) → (∃ x : ℝ, x = x)",
     "lean_file": "/home/projectx/BDDM/output/2304.09598.lean",
-    "proof_text": "tauto",
-    "proof_method": "lemma_factor_aux_promotion_v1",
+    "proof_text": "",
+    "proof_method": "unattempted",
     "proof_mode": "derived-from-factor",
-    "proved": true,
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "proved": false,
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "first_failing_step": -1,
     "promotion_gate_passed": true,
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -5901,14 +5911,17 @@
     "gate_failures": [
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "semantic_adversarial_checks_passed"
+      "semantic_adversarial_checks_passed",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
-    "status": "INTERMEDIARY_PROVEN",
+    "status": "UNRESOLVED",
     "ledger_role": "derived_aux_from_factor",
     "parent_theorem_name": "Cor_Quant",
     "aux_local_name": "Cor_Quant_Cor_Quant_iff_bwd_2__type_aware_aux_2__factored_aux",
     "claim_equivalence_notes": [
-      "promoted_closed_aux:lemma_factor_v2"
+      "promoted_closed_aux:lemma_factor_v2",
+      "audit_demotion:fully_proven_integrity"
     ],
     "claim_equivalence_verdict": "unclear",
     "lemma_factor_metadata": {
@@ -5944,6 +5957,13 @@
     "translation_fidelity_score": 0.99,
     "status_alignment_score": 0.8,
     "axiom_debt": [],
-    "axiom_debt_hash": ""
+    "axiom_debt_hash": "",
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "tauto",
+      "file_body_preview": "tauto",
+      "reason": "trivialized_statement"
+    }
   }
 ]

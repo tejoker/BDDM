@@ -159,6 +159,33 @@ def _is_trivial_target(target: str) -> bool:
     return False
 
 
+def _target_has_outer_binder(target: str) -> bool:
+    """True when the target begins with an outer ``∃`` or ``∀`` quantifier.
+
+    Splitting a top-level ``∧`` inside ``∃ x, A x ∧ B x`` is UNSOUND:
+    both conjuncts share the witness ``x``, so emitting independent aux
+    ``∃ x, A x`` and ``B x`` (the latter has ``x`` as a free variable)
+    loses the shared-witness constraint. The bug surfaced in Round-XXII:
+    the destructure produced aux like ``∃ C_omega : ℝ, 0 < C_omega``
+    (trivially true via ``⟨1, _⟩``) when the real obligation was the
+    full ``∃ C_omega : ℝ, 0 < C_omega ∧ <non-trivial property>``.
+
+    For ``∀``, the analogous issue: splitting ``∀ x, A x ∧ B x`` into
+    ``∀ x, A x`` and ``∀ x, B x`` is technically sound but loses the
+    parent's intended composition path (the LLM might prove them
+    independently when the parent really wants a single ``intro x``
+    followed by a conjunction proof).
+
+    Conservative rule: refuse destructure for any target starting with
+    ``∃`` or ``∀``. Caller falls back to the LLM-based factoring.
+    """
+    s = target.lstrip()
+    if not s:
+        return False
+    # ∃ in Unicode is the only existential quantifier Lean uses; same for ∀.
+    return s.startswith("∃") or s.startswith("∀")
+
+
 def _render_aux_decl(
     *, parent_name: str, idx: int, binders: str, target: str, shape: str,
 ) -> AuxSpec:
@@ -212,12 +239,21 @@ def destructure_iff(
 
 def destructure(lean_statement: str) -> list[AuxSpec]:
     """Top-level entrypoint. Returns destructured aux specs, or empty
-    list if the parent target doesn't match a handled shape."""
+    list if the parent target doesn't match a handled shape.
+
+    Refuses destructure when the target begins with an outer ``∃``/``∀``
+    binder — see `_target_has_outer_binder` for the soundness argument.
+    The Round-XXII bypass discovery validated this gate: splitting
+    ``∃ x, A x ∧ B x`` into ``∃ x, A x`` (closes trivially with witness 1)
+    and ``B x`` (loses ``x``) is mathematically wrong.
+    """
     parsed = _split_parent(lean_statement)
     if not parsed:
         return []
     name, binders, target = parsed
     if _is_trivial_target(target):
+        return []
+    if _target_has_outer_binder(target):
         return []
     # Bare name keyed off the parent (collapse namespace).
     base = name.rsplit(".", 1)[-1]

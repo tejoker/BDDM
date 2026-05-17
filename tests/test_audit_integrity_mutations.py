@@ -363,6 +363,20 @@ def test_mutation_unresolved_rows_not_touched() -> None:
         "∃ X : Prop, X ↔ True",
         "f X = f X ∧ g Y = g Y",
         "∀ (P Q : Prop), P ∧ Q",
+        # Round-XXII bypass class: tautological implication body → body.
+        # The bare-identifier form was already caught by a prior regex;
+        # these are the GENERALIZED form (any LHS == RHS), which the
+        # commit alongside this test added.
+        "theorem t : (∃ x : ℝ, x = x) → (∃ x : ℝ, x = x)",
+        "theorem t : (P ∧ Q) → (P ∧ Q)",
+        "theorem t : (a + b = c) → (a + b = c)",
+        # Round-XXII bypass class: existential-of-trivial-inequality.
+        # Emitted by the destructure soundness bug; closes trivially
+        # with ⟨1, by norm_num⟩.
+        "∃ C : ℝ, 0 < C",
+        "∃ x : ℕ, 0 ≤ x",
+        "∃ y : ℝ, y > 0",
+        "∃ z : Real, z ≥ 0",
     ],
 )
 def test_mutation_trivialized_signature_detection_parametrized(trivialized_stmt: str) -> None:

@@ -1712,6 +1712,35 @@ def _is_trivialized_signature(sig: str) -> bool:
         return True
     if re.fullmatch(r"([A-Za-z_][A-Za-z0-9_']*)\s*(?:→|->)\s*\1", target):
         return True
+    # General tautological implication: `Body → Body` where LHS and RHS
+    # are syntactically identical (modulo whitespace). The proof is `id`
+    # or `fun h => h` — zero mathematical content. Generalizes the
+    # ident-only check above to arbitrary bodies, catching e.g.
+    # `(∃ x : ℝ, x = x) → (∃ x : ℝ, x = x)` (Round-XXII bypass class).
+    # We require a TOP-LEVEL `→` split (no nesting inside brackets), so
+    # that `∀ x, P x → P x` (genuinely tautological once you intro) is
+    # also recognised, but `P → Q → P` is not (the second `→` is at a
+    # different level).
+    _depth = 0
+    _split_at = -1
+    for _i, _ch in enumerate(target):
+        if _ch in "([{⟨":
+            _depth += 1
+        elif _ch in ")]}⟩":
+            _depth = max(0, _depth - 1)
+        elif _depth == 0 and target[_i:_i + 1] == "→":
+            _split_at = _i
+            break
+        elif _depth == 0 and target[_i:_i + 2] == "->":
+            _split_at = _i
+            break
+    if _split_at > 0:
+        _lhs = target[:_split_at].strip()
+        _rhs = target[_split_at + (2 if target[_split_at:_split_at + 2] == "->" else 1):].strip()
+        _lhs_n = re.sub(r"\s+", " ", _lhs)
+        _rhs_n = re.sub(r"\s+", " ", _rhs)
+        if _lhs_n and _lhs_n == _rhs_n:
+            return True
     # Nonempty Unit — Exa-type schema placeholder
     if "nonempty (unit)" in target or "nonempty unit" in target:
         return True
@@ -1731,6 +1760,20 @@ def _is_trivialized_signature(sig: str) -> bool:
         return True
     # Fallback `∃ x : ℝ, 0 ≤ x` and `∃ C : ℝ, 0 ≤ C` (same shape).
     if re.fullmatch(r"∃\s+[a-zA-Z_]\w*\s*:\s*ℝ\s*,\s*\(?\s*0\s*≤\s*[a-zA-Z_]\w*\s*\)?", target):
+        return True
+    # Generalized existential-of-trivial-inequality:
+    # `∃ x : T, 0 < x`, `∃ x : T, 0 ≤ x`, `∃ x : T, x > 0`, `∃ x : T, x ≥ 0`,
+    # for any binder type T (ℝ, ℕ, ℂ, Real, Nat, etc.). These all close
+    # trivially via `⟨1, by norm_num⟩` or analogous — zero mathematical
+    # content. Round-XXII destructure bug emitted these from `∃ x, A x ∧ B x`
+    # parents (shared-witness loss); the bug is fixed in
+    # type_aware_factor.destructure, but the audit gate is the
+    # belt-and-suspenders guard.
+    if re.fullmatch(
+        r"∃\s+\(?\s*([a-zA-Z_]\w*)\s*:\s*[A-Za-zℝℕℤℚℂ_][\w.]*\s*\)?\s*,\s*"
+        r"\(?\s*(?:0\s*(?:<|≤|>|≥)\s*\1|\1\s*(?:<|>|≤|≥)\s*0)\s*\)?",
+        target,
+    ):
         return True
     # Single-var inequality with no quantifier, no hypotheses, no math
     # content: `T > 0`, `t > 0`, `n ≥ 0` etc. These slip past the

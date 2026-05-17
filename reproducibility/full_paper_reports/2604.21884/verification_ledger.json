@@ -9825,18 +9825,18 @@
     "theorem_name": "thm_pathwise_fluct::aux::thm_pathwise_fluct_thm_pathwise_fluct_C_omega_pos_1__factored_aux",
     "lean_statement": "theorem thm_pathwise_fluct_thm_pathwise_fluct_C_omega_pos_1__factored_aux (alpha s2 theta kappa : ℝ) (ha : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0) (hkappa : 0 < kappa) : ∃ C_omega : ℝ, 0 < C_omega",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-    "proof_text": "refine ⟨1, by norm_num⟩",
-    "proof_method": "lemma_factor_aux_promotion_v1",
+    "proof_text": "",
+    "proof_method": "unattempted",
     "proof_mode": "derived-from-factor",
-    "proved": true,
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "proved": false,
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "first_failing_step": -1,
     "promotion_gate_passed": true,
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -9851,14 +9851,17 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
-    "status": "AXIOM_BACKED",
+    "status": "UNRESOLVED",
     "ledger_role": "derived_aux_from_factor",
     "parent_theorem_name": "thm_pathwise_fluct",
     "aux_local_name": "thm_pathwise_fluct_thm_pathwise_fluct_C_omega_pos_1__factored_aux",
     "claim_equivalence_notes": [
-      "promoted_closed_aux:lemma_factor_v2"
+      "promoted_closed_aux:lemma_factor_v2",
+      "audit_demotion:fully_proven_integrity"
     ],
     "claim_equivalence_verdict": "equivalent",
     "lemma_factor_metadata": {
@@ -9910,7 +9913,14 @@
       "paper_local_lemma:DyadicBlockBound",
       "paper_definition_stub:s2",
       "paper_definition_stub:theta"
-    ]
+    ],
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "refine ⟨1, by norm_num⟩",
+      "file_body_preview": "tauto",
+      "reason": "trivialized_statement"
+    }
   },
   {
     "theorem_name": "thm_operator_main::aux::thm_operator_main_thm_operator_main_exponent_neg_1__factored_aux",
@@ -9988,18 +9998,18 @@
     "theorem_name": "thm_pathwise_fluct::aux::thm_pathwise_fluct_thm_pathwise_fluct_conjunct_1__type_aware_aux_1__factored_aux",
     "lean_statement": "theorem thm_pathwise_fluct_thm_pathwise_fluct_conjunct_1__type_aware_aux_1__factored_aux (alpha s2 theta kappa : ℝ)\n    (ha : 6 - 8 * alpha + 2 * s2 + 3 * theta < 0)\n    (hkappa : 0 < kappa) : ∃ C_omega : ℝ, 0 < C_omega",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-    "proof_text": "tauto",
-    "proof_method": "lemma_factor_aux_promotion_v1",
+    "proof_text": "",
+    "proof_method": "unattempted",
     "proof_mode": "derived-from-factor",
-    "proved": true,
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "proved": false,
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "first_failing_step": -1,
     "promotion_gate_passed": true,
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -10014,14 +10024,17 @@
       "statement_alignment_not_unrelated": true
     },
     "gate_failures": [
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
-    "status": "AXIOM_BACKED",
+    "status": "UNRESOLVED",
     "ledger_role": "derived_aux_from_factor",
     "parent_theorem_name": "thm_pathwise_fluct",
     "aux_local_name": "thm_pathwise_fluct_thm_pathwise_fluct_conjunct_1__type_aware_aux_1__factored_aux",
     "claim_equivalence_notes": [
-      "promoted_closed_aux:lemma_factor_v2"
+      "promoted_closed_aux:lemma_factor_v2",
+      "audit_demotion:fully_proven_integrity"
     ],
     "claim_equivalence_verdict": "equivalent",
     "lemma_factor_metadata": {
@@ -10068,24 +10081,31 @@
     "translation_fidelity_score": 0.9,
     "status_alignment_score": 0.8,
     "axiom_debt": [],
-    "axiom_debt_hash": "a974ef98d292f109"
+    "axiom_debt_hash": "a974ef98d292f109",
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "tauto",
+      "file_body_preview": "tauto",
+      "reason": "trivialized_statement"
+    }
   },
   {
     "theorem_name": "thm_operator_main::aux::thm_operator_main_thm_operator_main_conjunct_1__type_aware_aux_1__factored_aux",
     "lean_statement": "theorem thm_operator_main_thm_operator_main_conjunct_1__type_aware_aux_1__factored_aux (alpha eps s2 theta T : ℝ)\n    (halpha : (3:ℝ)/4 < alpha) (hT : 0 < T ∧ T ≤ 1)\n    (heps : 0 < eps) (htheta : 0 < theta ∧ theta < 1) (hs2 : 0 < s2)\n    (hs2_bound : s2 < 4 * alpha - 3 - (3/2) * theta - eps) : ∃ C : ℝ, 0 < C",
     "lean_file": "/home/projectx/BDDM/output/2604.21884.lean",
-    "proof_text": "tauto",
-    "proof_method": "lemma_factor_aux_promotion_v1",
+    "proof_text": "",
+    "proof_method": "unattempted",
     "proof_mode": "derived-from-factor",
-    "proved": true,
-    "step_verdict": "VERIFIED",
-    "failure_origin": "NONE",
-    "failure_kind": "",
+    "proved": false,
+    "step_verdict": "INCOMPLETE",
+    "failure_origin": "PROOF_SEARCH_ERROR",
+    "failure_kind": "proof_search_unattempted",
     "first_failing_step": -1,
     "promotion_gate_passed": true,
     "validation_gates": {
-      "lean_proof_closed": true,
-      "step_verdict_verified": true,
+      "lean_proof_closed": false,
+      "step_verdict_verified": false,
       "assumptions_grounded": true,
       "provenance_linked": true,
       "translation_fidelity_ok": true,
@@ -10103,14 +10123,17 @@
       "reproducible_env",
       "claim_equivalent",
       "independent_semantic_equivalence_evidence",
-      "no_paper_axiom_debt"
+      "no_paper_axiom_debt",
+      "lean_proof_closed",
+      "step_verdict_verified"
     ],
-    "status": "AXIOM_BACKED",
+    "status": "UNRESOLVED",
     "ledger_role": "derived_aux_from_factor",
     "parent_theorem_name": "thm_operator_main",
     "aux_local_name": "thm_operator_main_thm_operator_main_conjunct_1__type_aware_aux_1__factored_aux",
     "claim_equivalence_notes": [
-      "promoted_closed_aux:lemma_factor_v2"
+      "promoted_closed_aux:lemma_factor_v2",
+      "audit_demotion:fully_proven_integrity"
     ],
     "claim_equivalence_verdict": "unclear",
     "lemma_factor_metadata": {
@@ -10140,6 +10163,13 @@
     "translation_fidelity_score": 0.8,
     "status_alignment_score": 0.8,
     "axiom_debt": [],
-    "axiom_debt_hash": "539dfbc09e708525"
+    "axiom_debt_hash": "539dfbc09e708525",
+    "audit_demotion": {
+      "schema_version": "audit_fully_proven_integrity.v1",
+      "previous_status": "FULLY_PROVEN",
+      "captured_proof_text": "tauto",
+      "file_body_preview": "tauto",
+      "reason": "trivialized_statement"
+    }
   }
 ]

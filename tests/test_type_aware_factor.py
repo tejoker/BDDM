@@ -180,6 +180,40 @@ def test_destructure_unsupported_shape_returns_empty() -> None:
     assert specs == []
 
 
+def test_destructure_refuses_outer_existential_with_conjunction_body() -> None:
+    """Round-XXII bug: splitting `∃ x, A x ∧ B x` on top-level ∧ is
+    UNSOUND because both conjuncts share the witness x. The destructure
+    must refuse this shape and let the caller fall back to LLM factoring."""
+    specs = destructure(
+        "theorem foo (h : 0 < n) : ∃ C : ℝ, 0 < C ∧ C ≤ n := by sorry"
+    )
+    assert specs == []
+
+
+def test_destructure_refuses_outer_universal_with_conjunction_body() -> None:
+    specs = destructure(
+        "theorem foo : ∀ x : ℝ, x > 0 ∧ x + 1 > 1 := by sorry"
+    )
+    assert specs == []
+
+
+def test_destructure_refuses_outer_existential_with_iff_body() -> None:
+    """Even ↔ destructure is refused under outer ∃ — the shared witness
+    constraint applies symmetrically."""
+    specs = destructure(
+        "theorem foo : ∃ X : Prop, X ↔ X := by sorry"
+    )
+    assert specs == []
+
+
+def test_destructure_still_works_for_top_level_conjunction_without_outer_binder() -> None:
+    # Sanity: removing the outer ∃ should re-enable destructure.
+    specs = destructure(
+        "theorem foo (n : ℕ) (h : 0 < n) : n > 0 ∧ n + 1 > 1 := by sorry"
+    )
+    assert len(specs) == 2
+
+
 # ---------------------------------------------------------------------------
 # compose_template
 # ---------------------------------------------------------------------------
