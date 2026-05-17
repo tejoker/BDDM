@@ -73,16 +73,22 @@ Artifact: `reproducibility/minif2f_test_244_v429rc7_results.json`.
 
 ```
 FULLY_PROVEN          20   ( 1.4%)
-AXIOM_BACKED          39   ( 2.7%)
-INTERMEDIARY_PROVEN    6   ( 0.4%)
-UNRESOLVED           224   (15.3%)
+AXIOM_BACKED          29   ( 2.0%)
+INTERMEDIARY_PROVEN   11   ( 0.8%)
+UNRESOLVED           230   (15.7%)
 FLAWED              1037   (70.8%)
 TRANSLATION_LIMITED  142   ( 9.7%)
                     ────
                     1464
 ```
 
-**Honest closure rate:** 65/(65+224) = **22.5%** over closure-eligible rows (FP+AB+IP vs UR).
+**Honest closure rate:** 60/(60+230) = **20.7%** over closure-eligible rows (FP+AB+IP vs UR).
+
+The drop from a previously-claimed 22.5% reflects two integrity-audit hardening passes:
+1. Round-XXII destructure soundness fix + tautological-implication / existential-of-trivial-inequality patterns added to `_is_trivialized_signature` → **−5 bypasses caught**.
+2. `scripts/discharge_aligned_debts.py` + AB→IP reclassification → **7 rows correctly moved out of AB** (they had other gate failures besides axiom_debt; strict AB rule requires axiom_debt to be the *sole* blocker).
+
+Total honest-correction count this campaign: **90 historical mis-classifications caught and demoted**.
 
 The 71% FLAWED rate is honest failure-mode evidence — the translation acceptance gate refuses placeholder / shape-mismatched / quantifier-flipped translations rather than promoting them. This is a feature, not a bug: a translation pipeline that "succeeds" on every row is a pipeline that lies.
 
